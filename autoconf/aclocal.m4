@@ -1,6 +1,7 @@
 dnl local autoconf macros
 dnl Bruno Haible 2001-02-04
 dnl Marcus Daniels 1997-04-10
+dnl Sam Steingold 2002
 dnl
 AC_PREREQ(2.52)dnl
 dnl
@@ -315,10 +316,10 @@ changequote(,)dnl
   i[4567]86 )
     host_cpu=i386
     ;;
-  alphaev[4-7] | alphaev56 | alphapca5[67] )
+  alphaev[4-7] | alphaev56 | alphapca5[67] | alphaev6[78] )
     host_cpu=alpha
     ;;
-  hppa1.0 | hppa1.1 | hppa2.0 )
+  hppa1.0 | hppa1.1 | hppa2.0* )
     host_cpu=hppa
     ;;
   powerpc )
@@ -326,6 +327,9 @@ changequote(,)dnl
     ;;
   c1 | c2 | c32 | c34 | c38 | c4 )
     host_cpu=convex
+    ;;
+  arm* )
+    host_cpu=arm
     ;;
 changequote([,])dnl
   mips )
@@ -415,6 +419,7 @@ cl_cv_c_struct_return_static=no,
 dnl When cross-compiling, don't assume anything.
 dnl There are even weirder return value passing conventions than pcc.
 cl_cv_c_struct_return_static="guessing no")
+CFLAGS="$save_CFLAGS"
 ])
 case "$cl_cv_c_struct_return_static" in
   *yes) AC_DEFINE(__PCC_STRUCT_RETURN__) ;;
@@ -436,7 +441,6 @@ cl_cv_c_struct_return_small=no,
 dnl When cross-compiling, don't assume anything.
 dnl There are even weirder return value passing conventions than pcc.
 cl_cv_c_struct_return_small="guessing no")
-CFLAGS="$save_CFLAGS"
 ])
 case "$cl_cv_c_struct_return_small" in
   *yes) AC_DEFINE(__SMALL_STRUCT_RETURN__) ;;
@@ -471,13 +475,9 @@ AC_TRY_RUN([int main()
 /* long longs don't work right with gcc-2.7.2 on m68k */
 /* long longs don't work right with gcc-2.7.2 on rs6000: avcall/tests.c gets
    miscompiled. */
-#ifdef __GNUC__
 #if defined(__m68k__) || (defined(_IBMR2) || defined(__powerpc))
-#if (__GNUC__ == 2)
-#if (__GNUC_MINOR__ <= 7)
+#if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ <= 7)
   exit(1);
-#endif
-#endif
 #endif
 #endif
   { long x = 944938507; long y = 737962842; long z = 162359677;
