@@ -9,18 +9,19 @@ dnl From Bruno Haible, Marcus Daniels.
 
 AC_PREREQ(2.13)
 
-AC_DEFUN([CL_CODEEXEC],
-[AC_CACHE_CHECK([whether code in malloc'ed memory is executable], cl_cv_codeexec, [
+AC_DEFUN([FFCALL_CODEEXEC],
+[AC_CACHE_CHECK([whether code in malloc'ed memory is executable],
+ffcall_cv_codeexec, [
 dnl The test below does not work on host=hppa*-hp-hpux* because on this system
 dnl function pointers are actually pointers into(!) a two-pointer struct.
 dnl The test below does not work on host=rs6000-*-* because on this system
 dnl function pointers are actually pointers to a three-pointer struct.
 case "$host_os" in
-  hpux*) cl_cv_codeexec="guessing yes" ;;
+  hpux*) ffcall_cv_codeexec="guessing yes" ;;
   *)
 case "$host_cpu_abi"-"$host_os" in
   # On host=rs6000-*-aix3.2.5 malloc'ed memory is indeed not executable.
-  powerpc-aix*) cl_cv_codeexec="guessing no" ;;
+  powerpc-aix*) ffcall_cv_codeexec="guessing no" ;;
   *)
 AC_TRY_RUN(GL_NOCRASH[
 #include <sys/types.h>
@@ -33,14 +34,15 @@ int main ()
   char* funcopy = (char*) malloc(size);
   int i;
   for (i = 0; i < size; i++) { funcopy[i] = ((char*)&fun)[i]; }
-  exit(!((*(int(*)())funcopy)() == 31415926));
-}}], cl_cv_codeexec=yes, cl_cv_codeexec=no, cl_cv_codeexec="guessing yes")
+  return !((*(int(*)())funcopy)() == 31415926);
+}}], ffcall_cv_codeexec=yes, ffcall_cv_codeexec=no,
+ffcall_cv_codeexec="guessing yes")
   ;;
 esac
   ;;
 esac
 ])
-case "$cl_cv_codeexec" in
+case "$ffcall_cv_codeexec" in
   *yes) AC_DEFINE(CODE_EXECUTABLE) ;;
   *no)  ;;
 esac

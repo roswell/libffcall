@@ -1,5 +1,8 @@
 2008-07-03  Sam Steingold  <sds@gnu.org>
 
+
+2008-07-03  Sam Steingold  <sds@gnu.org>
+
 	* m4/smallstruct.m4 (FFCALL_SMALL_STRUCT_RETURN): rename from
 	CL_SMALL_STRUCT_RETURN; use ffcall_cv_* instead of cl_cv_*;
 	use return instead of exit()
@@ -9,6 +12,8 @@
 	* m4/ireg.m4 (FFCALL_IREG_FLOAT_RETURN): remame from
 	CL_IREG_FLOAT_RETURN; use ffcall_cv_* instead of cl_cv_*;
 	use return instead of exit()
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): renamed from CL_CODEEXEC
+	use ffcall_cv_* instead of cl_cv_*; use return instead of exit()
 
 2008-07-03  Sam Steingold  <sds@gnu.org>
 
