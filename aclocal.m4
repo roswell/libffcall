@@ -361,7 +361,7 @@ dnl most platforms with floating-point unit, including m68k-linux.
 ffcall_cv_c_float_return_ireg="guessing no")
 ])
 case "$ffcall_cv_c_float_return_ireg" in
-  *yes) AC_DEFINE([__IREG_FLOAT_RETURN__]) ;;
+  *yes) AC_DEFINE(__IREG_FLOAT_RETURN__) ;;
   *no) ;;
 esac
 ])
