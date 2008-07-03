@@ -154,9 +154,6 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
-#ifdef OPEN_NEEDS_SYS_FILE_H
-#include <sys/file.h>
-#endif
 #endif
 
 /* Declare shmget(), shmat(), shmctl(). */
