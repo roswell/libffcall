@@ -69,6 +69,7 @@ aclocal.m4 : $(wildcard m4/*.m4) $(CONFIGURES_IN)
 AUTOCONF_FILES = aclocal.m4
 AUTOCONF = autoconf
 AUTOCONF_CACHE = autom4te.cache
+AUTOHEADER = autoheader
 
 SUBDIRS_CONFIGURE = . avcall vacall trampoline callback \
 	callback/vacall_r callback/trampoline_r
