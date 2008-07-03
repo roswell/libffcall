@@ -17,7 +17,7 @@ echo data > conftestfile
 if ln conftestfile conftestdata 2>/dev/null; then
   cl_cv_prog_LN=ln
 else
-  cl_cv_prog_LN="$cl_cv_prog_cp"
+  cl_cv_prog_LN="cp -p"
 fi
 rm -f conftestdata conftestfile
 ])
