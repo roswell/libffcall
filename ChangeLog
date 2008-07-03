@@ -1,5 +1,17 @@
 2008-07-03  Sam Steingold  <sds@gnu.org>
 
+
+2008-07-03  Sam Steingold  <sds@gnu.org>
+
+	* m4/smallstruct.m4 (FFCALL_SMALL_STRUCT_RETURN): rename from
+	CL_SMALL_STRUCT_RETURN; use ffcall_cv_* instead of cl_cv_*;
+	use return instead of exit()
+	* m4/pccstruct.m4 (FFCALL_PCC_STRUCT_RETURN): rename from
+	CL_PCC_STRUCT_RETURN; use ffcall_cv_* instead of cl_cv_*;
+	use return instead of exit()
+
+2008-07-03  Sam Steingold  <sds@gnu.org>
+
 	* Makefile.devel (build-aux-update): new target
 
 2008-07-02  Sam Steingold  <sds@gnu.org>
