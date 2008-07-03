@@ -1,3 +1,7 @@
+2008-07-03  Sam Steingold  <sds@gnu.org>
+
+	* Makefile.devel (build-aux-update): new target
+
 2008-07-02  Sam Steingold  <sds@gnu.org>
 
 	* Makefile.devel (gnulib-imported, update-gnulib): new targets

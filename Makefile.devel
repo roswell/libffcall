@@ -17,8 +17,7 @@ all : aclocal.m4 configures \
 	callback/vacall_r/vacall-i386-msvc.c \
 	callback/trampoline_r/config.h.msvc \
 	callback/trampoline_r/config.h.mingw32 \
-	build-aux/config.guess build-aux/config.sub build-aux/ltmain.sh \
-	build-aux/install-sh
+	build-aux-update
 
 GNULIB_CVS_ROOT = :pserver:anonymous@pserver.git.sv.gnu.org:/gnulib.git
 GNULIB_CVS_REPOSITORY = HEAD
@@ -47,6 +46,25 @@ gnulib-imported : update-gnulib force
 	    fi; \
 	  fi; \
 	done
+
+# It is important to get ltmain.sh and libtool.m4 from the same version of
+# libtool. Don't rely on what's installed in /usr/share or similar.
+LIBTOOL_VERSION = 2.2
+LIBTOOL_SOURCE_FILE = libtool-$(LIBTOOL_VERSION).tar.gz
+LIBTOOL_SOURCE_URL = http://ftp.gnu.org/gnu/libtool/$(LIBTOOL_SOURCE_FILE)
+GNULIB_AUX=config.guess config.sub install-sh
+# it is important not to have "*.m4" targets with ": force" dependencies
+# because otherwise every make will rebuild all configures
+build-aux-update : update-gnulib force
+	for f in $(GNULIB_AUX); do \
+	  cp -afuv $(GNULIB_CHECKOUT)/build-aux/$$f build-aux; \
+	done
+	test -f $(LIBTOOL_SOURCE_FILE) || wget $(LIBTOOL_SOURCE_URL)
+	rm -rf libtool-$(LIBTOOL_VERSION)
+	gunzip -c < $(LIBTOOL_SOURCE_FILE) | tar xf -
+	cp -afuv libtool-$(LIBTOOL_VERSION)/libltdl/config/ltmain.sh build-aux/ltmain.sh
+	cp -afuv libtool-$(LIBTOOL_VERSION)/libltdl/m4/libtool.m4 m4/libtool.m4
+	rm -rf libtool-$(LIBTOOL_VERSION) $(LIBTOOL_SOURCE_FILE)
 
 
 
