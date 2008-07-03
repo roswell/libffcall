@@ -49,7 +49,7 @@ changequote(,)dnl
     ;;
 changequote([,])dnl
   mips )
-    AC_CACHE_CHECK([for 64-bit MIPS], cl_cv_host_mips64, [
+    AC_CACHE_CHECK([for 64-bit MIPS], ffcall_cv_host_mips64, [
 AC_EGREP_CPP(yes,
 [#if defined(_MIPS_SZLONG)
 #if (_MIPS_SZLONG == 64)
@@ -57,12 +57,12 @@ AC_EGREP_CPP(yes,
   yes
 #endif
 #endif
-], cl_cv_host_mips64=yes, cl_cv_host_mips64=no)
+], ffcall_cv_host_mips64=yes, ffcall_cv_host_mips64=no)
 ])
-if test $cl_cv_host_mips64 = yes; then
+if test $ffcall_cv_host_mips64 = yes; then
   host_cpu_abi=mips64
 else
-  AC_CACHE_CHECK([for MIPS with n32 ABI], cl_cv_host_mipsn32, [
+  AC_CACHE_CHECK([for MIPS with n32 ABI], ffcall_cv_host_mipsn32, [
 dnl Strictly speaking, the MIPS ABI (-32 or -n32) is independent from the CPU
 dnl identification (-mips[12] or -mips[34]). But -n32 is commonly used together
 dnl with -mips3, and it's easier to test the CPU identification.
@@ -70,9 +70,9 @@ AC_EGREP_CPP(yes,
 [#if __mips >= 3
   yes
 #endif
-], cl_cv_host_mipsn32=yes, cl_cv_host_mipsn32=no)
+], ffcall_cv_host_mipsn32=yes, ffcall_cv_host_mipsn32=no)
 ])
-if test $cl_cv_host_mipsn32 = yes; then
+if test $ffcall_cv_host_mipsn32 = yes; then
   host_cpu_abi=mipsn32
 else
   host_cpu_abi=mips
@@ -81,14 +81,14 @@ fi
     ;;
 dnl On powerpc64 systems, the C compiler may still be generating 32-bit code.
   powerpc64 )
-    AC_CACHE_CHECK([for 64-bit PowerPC], cl_cv_host_powerpc64, [
+    AC_CACHE_CHECK([for 64-bit PowerPC], ffcall_cv_host_powerpc64, [
 AC_EGREP_CPP(yes,
 [#if defined(__powerpc64__) || defined(_ARCH_PPC64)
   yes
 #endif
-], cl_cv_host_powerpc64=yes, cl_cv_host_powerpc64=no)
+], ffcall_cv_host_powerpc64=yes, ffcall_cv_host_powerpc64=no)
 ])
-if test $cl_cv_host_powerpc64 = yes; then
+if test $ffcall_cv_host_powerpc64 = yes; then
   host_cpu_abi=powerpc64
 else
   host_cpu_abi=powerpc
@@ -97,14 +97,14 @@ fi
 dnl UltraSPARCs running Linux have `uname -m` = "sparc64", but the C compiler
 dnl still generates 32-bit code.
   sparc | sparc64 )
-    AC_CACHE_CHECK([for 64-bit SPARC], cl_cv_host_sparc64, [
+    AC_CACHE_CHECK([for 64-bit SPARC], ffcall_cv_host_sparc64, [
 AC_EGREP_CPP(yes,
 [#if defined(__sparcv9) || defined(__arch64__)
   yes
 #endif
-], cl_cv_host_sparc64=yes, cl_cv_host_sparc64=no)
+], ffcall_cv_host_sparc64=yes, ffcall_cv_host_sparc64=no)
 ])
-if test $cl_cv_host_sparc64 = yes; then
+if test $ffcall_cv_host_sparc64 = yes; then
   host_cpu_abi=sparc64
 else
   host_cpu_abi=sparc
@@ -112,14 +112,14 @@ fi
     ;;
 dnl On x86_64 systems, the C compiler may still be generating 32-bit code.
   x86_64 )
-    AC_CACHE_CHECK([for 64-bit x86_64], cl_cv_host_x86_64, [
+    AC_CACHE_CHECK([for 64-bit x86_64], ffcall_cv_host_x86_64, [
 AC_EGREP_CPP(yes,
 [#if defined(__LP64__) || defined(__x86_64__) || defined(__amd64__)
   yes
 #endif
-], cl_cv_host_x86_64=yes, cl_cv_host_x86_64=no)
+], ffcall_cv_host_x86_64=yes, ffcall_cv_host_x86_64=no)
 ])
-if test $cl_cv_host_x86_64 = yes; then
+if test $ffcall_cv_host_x86_64 = yes; then
   host_cpu_abi=x86_64
 else
   host_cpu_abi=i386
