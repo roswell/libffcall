@@ -4,7 +4,7 @@
 SHELL = /bin/sh
 MAKE = make
 
-all : autoconf/aclocal.m4 configures \
+all : aclocal.m4 configures \
 	avcall/avcall.h.msvc avcall/avcall.h.mingw32 \
 	avcall/avcall-i386-msvc.c avcall/avcall-i386-mingw32.c \
 	vacall/config.h.msvc vacall/config.h.mingw32 vacall/vacall.h.msvc \
@@ -43,37 +43,39 @@ m4/mmap.m4 : $(CLISP_DIR)/src/m4/mmap.m4 ; cp -p $< $@-t && mv $@-t $@
 m4/mprotect.m4 : $(CLISP_DIR)/src/m4/mprotect.m4 ; cp -p $< $@-t && mv $@-t $@
 m4/shm.m4 : $(CLISP_DIR)/src/m4/shm.m4 ; cp -p $< $@-t && mv $@-t $@
 
-autoconf/aclocal.m4 : $(wildcard m4/*.m4)
-	{ echo 'AC_INIT'; cat $(CONFIGURES_IN) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADER(\)'; } > autoconf/configure.in
-	cd autoconf && aclocal --output=aclocal.m4 --acdir=../m4
-	rm -f autoconf/configure.in
+aclocal.m4 : $(wildcard m4/*.m4)
+	{ echo 'AC_INIT'; cat $(CONFIGURES_IN) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADER(\)'; } > configure.ac
+	mv configure.in configure.in-save
+	aclocal --output=aclocal.m4 -I `pwd`/m4
+	mv configure.in-save configure.in
+	rm -f configure.ac
 
 configures : $(CONFIGURES)
 
-AUTOCONF_FILES = autoconf/aclocal.m4
+AUTOCONF_FILES = aclocal.m4
 AUTOCONF = autoconf
 AUTOCONF_CACHE = autom4te.cache
 
 configure : configure.in $(AUTOCONF_FILES)
-	$(AUTOCONF) --include=autoconf
+	$(AUTOCONF) --include=.
 
 avcall/configure : avcall/configure.in $(AUTOCONF_FILES)
-	cd avcall ; $(AUTOCONF) --include=../autoconf
+	cd avcall ; $(AUTOCONF) --include=../
 
 vacall/configure : vacall/configure.in $(AUTOCONF_FILES)
-	cd vacall ; $(AUTOCONF) --include=../autoconf
+	cd vacall ; $(AUTOCONF) --include=../
 
 trampoline/configure : trampoline/configure.in $(AUTOCONF_FILES)
-	cd trampoline ; $(AUTOCONF) --include=../autoconf
+	cd trampoline ; $(AUTOCONF) --include=../
 
 callback/configure : callback/configure.in $(AUTOCONF_FILES)
-	cd callback ; $(AUTOCONF) --include=../autoconf
+	cd callback ; $(AUTOCONF) --include=../
 
 callback/vacall_r/configure : callback/vacall_r/configure.in $(AUTOCONF_FILES)
-	cd callback/vacall_r ; $(AUTOCONF) --include=../../autoconf
+	cd callback/vacall_r ; $(AUTOCONF) --include=../../
 
 callback/trampoline_r/configure : callback/trampoline_r/configure.in $(AUTOCONF_FILES)
-	cd callback/trampoline_r ; $(AUTOCONF) --include=../../autoconf
+	cd callback/trampoline_r ; $(AUTOCONF) --include=../../
 
 check-configures : $(CONFIGURES)
 	set -e; for f in $(CONFIGURES); do bash -x -n $$f; done

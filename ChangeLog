@@ -1,5 +1,10 @@
 2008-07-02  Sam Steingold  <sds@gnu.org>
 
+	* Makefile.devel, aclocal.m4: move autoconf/aclocal.m4 to aclocal.m4
+	* aclocal/autoconf.m4: remove
+
+2008-07-02  Sam Steingold  <sds@gnu.org>
+
 	* m4/ffcall-pccstruct.m4, m4/ffcall-smallstruct.m4, m4/ffcall-ireg.m4:
 	* m4/ffcall-codeexec.m4: remove "ffcall-" prefix
 	* Makefile.devel: update
