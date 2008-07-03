@@ -25,6 +25,15 @@ AC_REQUIRE([CL_SHM])dnl
 AC_REQUIRE([FFCALL_CODEEXEC])dnl
 ])
 
+dnl Expands to the "extern ..." prefix used for system declarations.
+dnl AC_LANG_EXTERN()
+AC_DEFUN([AC_LANG_EXTERN],
+[extern
+#ifdef __cplusplus
+"C"
+#endif
+])
+
 AC_DEFUN([FFCALL_CANONICAL_HOST_CPU],
 [AC_REQUIRE([AC_CANONICAL_HOST])AC_REQUIRE([AC_PROG_CC])
 case "$host_cpu" in
