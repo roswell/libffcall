@@ -3,6 +3,7 @@
 	* m4/ln.m4: update from clisp
 	* m4/cp.m4: removed
 	* m4/getpagesize.m4: update from clisp
+	* m4/general.m4: update from clisp
 
 2008-07-02  Sam Steingold  <sds@gnu.org>
 
