@@ -20,6 +20,36 @@ all : aclocal.m4 configures \
 	build-aux/config.guess build-aux/config.sub build-aux/ltmain.sh \
 	build-aux/install-sh
 
+GNULIB_CVS_ROOT = :pserver:anonymous@pserver.git.sv.gnu.org:/gnulib.git
+GNULIB_CVS_REPOSITORY = HEAD
+GNULIB_CHECKOUT := gnulib
+update-gnulib:
+	if test -d $(GNULIB_CHECKOUT); then \
+	  cd $(GNULIB_CHECKOUT) && \
+	  cvs update -d -P; \
+	else \
+	  cvs -d "$(GNULIB_CVS_ROOT)" checkout -d $(GNULIB_CHECKOUT) $(GNULIB_CVS_REPOSITORY); \
+	fi
+
+gnulib-imported : update-gnulib force
+	$(RM) configure.ac; ln -sv configure.in configure.ac
+	$(GNULIB_CHECKOUT)/gnulib-tool --import --source-base=gllib \
+		--m4-base=glm4 --aux-dir=build-aux --no-changelog \
+		longlong nocrash
+	$(RM) configure.ac
+	rm -fv build-aux/.cvsignore glm4/.cvsignore
+	cd src/glm4; \
+	for f in *.m4; do \
+	  if test -f ../m4/$$f; then \
+	    echo == $$f; \
+	    if cmp $$f ../m4/$$f; then \
+	      cd ../m4; cvs rm -f $$f; cd ../glm4; \
+	    fi; \
+	  fi; \
+	done
+
+
+
 CONFIGURES = configure avcall/configure vacall/configure trampoline/configure callback/configure callback/vacall_r/configure callback/trampoline_r/configure
 CONFIGURES_IN = configure.in avcall/configure.in vacall/configure.in trampoline/configure.in callback/configure.in callback/vacall_r/configure.in callback/trampoline_r/configure.in
 
