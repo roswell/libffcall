@@ -1,4 +1,4 @@
-dnl Copyright (C) 1993-2005 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2008 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -9,8 +9,9 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ(2.13)
 
-AC_DEFUN([CL_PCC_STRUCT_RETURN],
-[AC_CACHE_CHECK([for pcc non-reentrant struct return convention], cl_cv_c_struct_return_static, [
+AC_DEFUN([FFCALL_PCC_STRUCT_RETURN],
+[AC_CACHE_CHECK([for pcc non-reentrant struct return convention],
+ffcall_cv_c_struct_return_static, [
 save_CFLAGS="$CFLAGS"
 test $CC_GCC = true && CFLAGS="$CFLAGS -O0"
 AC_TRY_RUN(GL_NOCRASH[
@@ -25,14 +26,14 @@ int main()
   foo* fooptr2;
   foo1 = foofun(); fooptr1 = (*fun)(&foo1);
   foo2 = foofun(); fooptr2 = (*fun)(&foo2);
-  exit(!(fooptr1 == fooptr2 && fooptr1->c == 5358));
-}}], cl_cv_c_struct_return_static=yes, cl_cv_c_struct_return_static=no,
+  return !(fooptr1 == fooptr2 && fooptr1->c == 5358);
+}}], ffcall_cv_c_struct_return_static=yes, ffcall_cv_c_struct_return_static=no,
 dnl When cross-compiling, don't assume anything.
 dnl There are even weirder return value passing conventions than pcc.
-cl_cv_c_struct_return_static="guessing no")
+ffcall_cv_c_struct_return_static="guessing no")
 CFLAGS="$save_CFLAGS"
 ])
-case "$cl_cv_c_struct_return_static" in
+case "$ffcall_cv_c_struct_return_static" in
   *yes) AC_DEFINE(__PCC_STRUCT_RETURN__) ;;
   *no) ;;
 esac
