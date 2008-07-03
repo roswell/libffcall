@@ -23,24 +23,6 @@ all : aclocal.m4 configures \
 CONFIGURES = configure avcall/configure vacall/configure trampoline/configure callback/configure callback/vacall_r/configure callback/trampoline_r/configure
 CONFIGURES_IN = configure.in avcall/configure.in vacall/configure.in trampoline/configure.in callback/configure.in callback/vacall_r/configure.in callback/trampoline_r/configure.in
 
-CLISP_DIR = ..
-
-build-aux/% : $(CLISP_DIR)/src/build-aux/% ; cp -p $< $@-t && mv $@-t $@
-
-m4/general.m4 : $(CLISP_DIR)/src/m4/general.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/proto.m4 : $(CLISP_DIR)/src/m4/proto.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/cc-gcc.m4 : $(CLISP_DIR)/src/m4/cc-gcc.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/as-underscore.m4 : $(CLISP_DIR)/src/m4/as-underscore.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/nocrash.m4 : $(CLISP_DIR)/src/m4/nocrash.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/longlong.m4 : $(CLISP_DIR)/src/glm4/longlong.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/cc-void.m4 : $(CLISP_DIR)/src/m4/cc-void.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/getpagesize.m4 : $(CLISP_DIR)/src/m4/getpagesize.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/mach-vm.m4 : $(CLISP_DIR)/src/m4/mach-vm.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/openflags.m4 : $(CLISP_DIR)/src/m4/openflags.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/mmap.m4 : $(CLISP_DIR)/src/m4/mmap.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/mprotect.m4 : $(CLISP_DIR)/src/m4/mprotect.m4 ; cp -p $< $@-t && mv $@-t $@
-m4/shm.m4 : $(CLISP_DIR)/src/m4/shm.m4 ; cp -p $< $@-t && mv $@-t $@
-
 aclocal.m4 : $(wildcard m4/*.m4)
 	{ echo 'AC_INIT'; cat $(CONFIGURES_IN) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADER(\)'; } > configure.ac
 	mv configure.in configure.in-save

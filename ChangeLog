@@ -8,6 +8,7 @@
 
 	* Makefile.devel, aclocal.m4: move autoconf/aclocal.m4 to aclocal.m4
 	* aclocal/autoconf.m4: remove
+	* Makefile.devel (CLISP_DIR): remove
 
 2008-07-02  Sam Steingold  <sds@gnu.org>
 
