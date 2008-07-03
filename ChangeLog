@@ -6,6 +6,7 @@
 	* m4/general.m4: update from clisp
 	* m4/mmap.m4: update from clisp
 	* m4/mprotect.m4: update from clisp
+	* m4/proto.m4: update from clisp
 
 2008-07-02  Sam Steingold  <sds@gnu.org>
 

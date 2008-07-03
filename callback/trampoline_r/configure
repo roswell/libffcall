@@ -19958,11 +19958,7 @@ extern
 "C"
 #endif
 
-#if defined(__STDC__) || defined(__cplusplus)
 int getpagesize();
-#else
-cl_cv_proto_getpagesize_ret
-#endif
 
 int
 main ()
@@ -19990,12 +19986,12 @@ $as_echo "$ac_try_echo") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
-  int="size_t"
+  cl_cv_proto_getpagesize_ret="int"
 else
   $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	int=""
+	cl_cv_proto_getpagesize_ret="size_t"
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
