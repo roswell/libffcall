@@ -92,18 +92,19 @@ dnl From Bruno Haible, Marcus Daniels.
 
 AC_PREREQ(2.13)
 
-AC_DEFUN([CL_CODEEXEC],
-[AC_CACHE_CHECK([whether code in malloc'ed memory is executable], cl_cv_codeexec, [
+AC_DEFUN([FFCALL_CODEEXEC],
+[AC_CACHE_CHECK([whether code in malloc'ed memory is executable],
+ffcall_cv_codeexec, [
 dnl The test below does not work on host=hppa*-hp-hpux* because on this system
 dnl function pointers are actually pointers into(!) a two-pointer struct.
 dnl The test below does not work on host=rs6000-*-* because on this system
 dnl function pointers are actually pointers to a three-pointer struct.
 case "$host_os" in
-  hpux*) cl_cv_codeexec="guessing yes" ;;
+  hpux*) ffcall_cv_codeexec="guessing yes" ;;
   *)
 case "$host_cpu_abi"-"$host_os" in
   # On host=rs6000-*-aix3.2.5 malloc'ed memory is indeed not executable.
-  powerpc-aix*) cl_cv_codeexec="guessing no" ;;
+  powerpc-aix*) ffcall_cv_codeexec="guessing no" ;;
   *)
 AC_TRY_RUN(GL_NOCRASH[
 #include <sys/types.h>
@@ -116,14 +117,15 @@ int main ()
   char* funcopy = (char*) malloc(size);
   int i;
   for (i = 0; i < size; i++) { funcopy[i] = ((char*)&fun)[i]; }
-  exit(!((*(int(*)())funcopy)() == 31415926));
-}}], cl_cv_codeexec=yes, cl_cv_codeexec=no, cl_cv_codeexec="guessing yes")
+  return !((*(int(*)())funcopy)() == 31415926);
+}}], ffcall_cv_codeexec=yes, ffcall_cv_codeexec=no,
+ffcall_cv_codeexec="guessing yes")
   ;;
 esac
   ;;
 esac
 ])
-case "$cl_cv_codeexec" in
+case "$ffcall_cv_codeexec" in
   *yes) AC_DEFINE(CODE_EXECUTABLE) ;;
   *no)  ;;
 esac
@@ -140,29 +142,12 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ(2.61)
 
-dnl without AC_MSG_...:   with AC_MSG_... and caching:
-dnl   AC_COMPILE_IFELSE      CL_COMPILE_CHECK
-dnl   AC_LINK_IFELSE         CL_LINK_CHECK
-dnl Usage:
-dnl AC_xxx_IFELSE(PROGRAM, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
-dnl CL_xxx_CHECK(ECHO-TEXT, CACHE-ID, PROGRAM,
-dnl              ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND])
-
-dnl 3 next macros avoid aclocal warnings about wrong macro order
-AC_DEFUN([CL_MODULE_COMMON_CHECKS],
-[AC_REQUIRE([AC_PROG_CC])dnl
-AC_REQUIRE([AC_PROG_CPP])dnl
-AC_REQUIRE([AC_GNU_SOURCE])dnl
-AC_REQUIRE([AC_USE_SYSTEM_EXTENSIONS])dnl
-AC_CHECK_HEADERS(time.h sys/time.h)
-])
-
-AC_DEFUN([CL_FFCALL_COMMON_LIBTOOL],
+AC_DEFUN([FFCALL_COMMON_LIBTOOL],
 [AC_REQUIRE([AM_DISABLE_SHARED])dnl
 AC_REQUIRE([AM_PROG_LIBTOOL])dnl
 ])
 
-AC_DEFUN([CL_FFCALL_COMMON_TRAMPOLINE],
+AC_DEFUN([FFCALL_COMMON_TRAMPOLINE],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_REQUIRE([CL_GETPAGESIZE])dnl
 AC_REQUIRE([CL_MACH_VM])dnl
@@ -170,7 +155,7 @@ AC_REQUIRE([CL_MMAP])dnl
 AC_REQUIRE([CL_MPROTECT])dnl
 AC_REQUIRE([CL_SHM_H])dnl
 AC_REQUIRE([CL_SHM])dnl
-AC_REQUIRE([CL_CODEEXEC])dnl
+AC_REQUIRE([FFCALL_CODEEXEC])dnl
 ])
 
 AC_DEFUN([CL_CHECK],[dnl
@@ -179,7 +164,6 @@ AC_DEFUN([CL_CHECK],[dnl
   AS_IF([test $$3 = yes], [$6], [$7])
 ])
 
-AC_DEFUN([CL_COMPILE_CHECK], [CL_CHECK([AC_COMPILE_IFELSE],$@)])
 AC_DEFUN([CL_LINK_CHECK], [CL_CHECK([AC_LINK_IFELSE],$@)])
 
 dnl Expands to the "extern ..." prefix used for system declarations.
@@ -191,123 +175,13 @@ AC_DEFUN([AC_LANG_EXTERN],
 #endif
 ])
 
-AC_DEFUN([CL_CC_WORKS],
-[AC_CACHE_CHECK(whether CC works at all, cl_cv_prog_cc_works, [
-AC_LANG_PUSH(C)
-AC_RUN_IFELSE(AC_LANG_PROGRAM([],[]),
-[cl_cv_prog_cc_works=yes], [cl_cv_prog_cc_works=no],
-AC_LINK_IFELSE(AC_LANG_PROGRAM([],[]),
-[cl_cv_prog_cc_works=yes], [cl_cv_prog_cc_works=no]))
-AC_LANG_POP(C)
-])
-if test "$cl_cv_prog_cc_works" = no; then
-AC_MSG_FAILURE([Installation or configuration problem: C compiler cannot create executables.])
-fi
-])
-
 AC_DEFUN([CL_CONFIG_SUBDIRS],
 [dnl No AC_CONFIG_AUX_DIR_DEFAULT, so we don't need install.sh.
 AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])
 AC_CONFIG_SUBDIRS([$1])dnl
 ])
 
-AC_DEFUN([CL_CANONICAL_HOST_CPU],
-[AC_REQUIRE([AC_CANONICAL_HOST])AC_REQUIRE([AC_PROG_CC])
-case "$host_cpu" in
-changequote(,)dnl
-  i[4567]86 )
-    host_cpu_instructionset=i386
-    ;;
-  alphaev[4-8] | alphaev56 | alphapca5[67] | alphaev6[78] )
-    host_cpu_instructionset=alpha
-    ;;
-  hppa1.0 | hppa1.1 | hppa2.0* | hppa64 )
-    host_cpu_instructionset=hppa
-    ;;
-  rs6000 )
-    host_cpu_instructionset=powerpc
-    ;;
-  c1 | c2 | c32 | c34 | c38 | c4 )
-    host_cpu_instructionset=convex
-    ;;
-  arm* )
-    host_cpu_instructionset=arm
-    ;;
-changequote([,])dnl
-  mips )
-    AC_CACHE_CHECK([for 64-bit MIPS], cl_cv_host_mips64, [
-AC_EGREP_CPP(yes,
-[#if defined(_MIPS_SZLONG)
-#if (_MIPS_SZLONG == 64)
-/* We should also check for (_MIPS_SZPTR == 64), but gcc keeps this at 32. */
-  yes
-#endif
-#endif
-], cl_cv_host_mips64=yes, cl_cv_host_mips64=no)
-])
-if test $cl_cv_host_mips64 = yes; then
-  host_cpu_instructionset=mips64
-fi
-    ;;
-dnl On powerpc64 systems, the C compiler may still be generating 32-bit code.
-  powerpc64 )
-    AC_CACHE_CHECK([for 64-bit PowerPC], cl_cv_host_powerpc64, [
-AC_EGREP_CPP(yes,
-[#if defined(__powerpc64__) || defined(_ARCH_PPC64)
-  yes
-#endif
-], cl_cv_host_powerpc64=yes, cl_cv_host_powerpc64=no)
-])
-if test $cl_cv_host_powerpc64 = yes; then
-  host_cpu_instructionset=powerpc64
-else
-  host_cpu_instructionset=powerpc
-fi
-    ;;
-dnl UltraSPARCs running Linux have `uname -m` = "sparc64", but the C compiler
-dnl still generates 32-bit code.
-  sparc | sparc64 )
-    AC_CACHE_CHECK([for 64-bit SPARC], cl_cv_host_sparc64, [
-AC_EGREP_CPP(yes,
-[#if defined(__sparcv9) || defined(__arch64__)
-  yes
-#endif
-], cl_cv_host_sparc64=yes, cl_cv_host_sparc64=no)
-])
-if test $cl_cv_host_sparc64 = yes; then
-  host_cpu_instructionset=sparc64
-else
-  host_cpu_instructionset=sparc
-fi
-    ;;
-dnl On x86_64 systems, the C compiler may still be generating 32-bit code.
-  x86_64 )
-    AC_CACHE_CHECK([for 64-bit x86_64], cl_cv_host_x86_64, [
-AC_EGREP_CPP(yes,
-[#if defined(__LP64__) || defined(__x86_64__) || defined(__amd64__)
-  yes
-#endif
-], cl_cv_host_x86_64=yes, cl_cv_host_x86_64=no)
-])
-if test $cl_cv_host_x86_64 = yes; then
-  host_cpu_instructionset=x86_64
-else
-  host_cpu_instructionset=i386
-fi
-    ;;
-  *)
-    host_cpu_instructionset=$host_cpu
-    ;;
-esac
-dnl was AC_DEFINE_UNQUOTED(__${host_cpu}__) but KAI C++ 3.2d doesn't like this
-cat >> confdefs.h <<EOF
-#ifndef __${host_cpu_instructionset}__
-#define __${host_cpu_instructionset}__ 1
-#endif
-EOF
-])
-
-AC_DEFUN([CL_CANONICAL_HOST_CPU_FOR_FFCALL],
+AC_DEFUN([FFCALL_CANONICAL_HOST_CPU],
 [AC_REQUIRE([AC_CANONICAL_HOST])AC_REQUIRE([AC_PROG_CC])
 case "$host_cpu" in
 changequote(,)dnl
@@ -331,7 +205,7 @@ changequote(,)dnl
     ;;
 changequote([,])dnl
   mips )
-    AC_CACHE_CHECK([for 64-bit MIPS], cl_cv_host_mips64, [
+    AC_CACHE_CHECK([for 64-bit MIPS], ffcall_cv_host_mips64, [
 AC_EGREP_CPP(yes,
 [#if defined(_MIPS_SZLONG)
 #if (_MIPS_SZLONG == 64)
@@ -339,12 +213,12 @@ AC_EGREP_CPP(yes,
   yes
 #endif
 #endif
-], cl_cv_host_mips64=yes, cl_cv_host_mips64=no)
+], ffcall_cv_host_mips64=yes, ffcall_cv_host_mips64=no)
 ])
-if test $cl_cv_host_mips64 = yes; then
+if test $ffcall_cv_host_mips64 = yes; then
   host_cpu_abi=mips64
 else
-  AC_CACHE_CHECK([for MIPS with n32 ABI], cl_cv_host_mipsn32, [
+  AC_CACHE_CHECK([for MIPS with n32 ABI], ffcall_cv_host_mipsn32, [
 dnl Strictly speaking, the MIPS ABI (-32 or -n32) is independent from the CPU
 dnl identification (-mips[12] or -mips[34]). But -n32 is commonly used together
 dnl with -mips3, and it's easier to test the CPU identification.
@@ -352,9 +226,9 @@ AC_EGREP_CPP(yes,
 [#if __mips >= 3
   yes
 #endif
-], cl_cv_host_mipsn32=yes, cl_cv_host_mipsn32=no)
+], ffcall_cv_host_mipsn32=yes, ffcall_cv_host_mipsn32=no)
 ])
-if test $cl_cv_host_mipsn32 = yes; then
+if test $ffcall_cv_host_mipsn32 = yes; then
   host_cpu_abi=mipsn32
 else
   host_cpu_abi=mips
@@ -363,14 +237,14 @@ fi
     ;;
 dnl On powerpc64 systems, the C compiler may still be generating 32-bit code.
   powerpc64 )
-    AC_CACHE_CHECK([for 64-bit PowerPC], cl_cv_host_powerpc64, [
+    AC_CACHE_CHECK([for 64-bit PowerPC], ffcall_cv_host_powerpc64, [
 AC_EGREP_CPP(yes,
 [#if defined(__powerpc64__) || defined(_ARCH_PPC64)
   yes
 #endif
-], cl_cv_host_powerpc64=yes, cl_cv_host_powerpc64=no)
+], ffcall_cv_host_powerpc64=yes, ffcall_cv_host_powerpc64=no)
 ])
-if test $cl_cv_host_powerpc64 = yes; then
+if test $ffcall_cv_host_powerpc64 = yes; then
   host_cpu_abi=powerpc64
 else
   host_cpu_abi=powerpc
@@ -379,14 +253,14 @@ fi
 dnl UltraSPARCs running Linux have `uname -m` = "sparc64", but the C compiler
 dnl still generates 32-bit code.
   sparc | sparc64 )
-    AC_CACHE_CHECK([for 64-bit SPARC], cl_cv_host_sparc64, [
+    AC_CACHE_CHECK([for 64-bit SPARC], ffcall_cv_host_sparc64, [
 AC_EGREP_CPP(yes,
 [#if defined(__sparcv9) || defined(__arch64__)
   yes
 #endif
-], cl_cv_host_sparc64=yes, cl_cv_host_sparc64=no)
+], ffcall_cv_host_sparc64=yes, ffcall_cv_host_sparc64=no)
 ])
-if test $cl_cv_host_sparc64 = yes; then
+if test $ffcall_cv_host_sparc64 = yes; then
   host_cpu_abi=sparc64
 else
   host_cpu_abi=sparc
@@ -394,14 +268,14 @@ fi
     ;;
 dnl On x86_64 systems, the C compiler may still be generating 32-bit code.
   x86_64 )
-    AC_CACHE_CHECK([for 64-bit x86_64], cl_cv_host_x86_64, [
+    AC_CACHE_CHECK([for 64-bit x86_64], ffcall_cv_host_x86_64, [
 AC_EGREP_CPP(yes,
 [#if defined(__LP64__) || defined(__x86_64__) || defined(__amd64__)
   yes
 #endif
-], cl_cv_host_x86_64=yes, cl_cv_host_x86_64=no)
+], ffcall_cv_host_x86_64=yes, ffcall_cv_host_x86_64=no)
 ])
-if test $cl_cv_host_x86_64 = yes; then
+if test $ffcall_cv_host_x86_64 = yes; then
   host_cpu_abi=x86_64
 else
   host_cpu_abi=i386
@@ -460,34 +334,34 @@ AC_CHECK_HEADERS(sys/param.h)
 fi
 ])
 
-dnl Copyright (C) 1993-2005 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2008 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
 dnl that contains a configuration script generated by Autoconf, under
 dnl the same distribution terms as the rest of that program.
 
-dnl From Bruno Haible, Marcus Daniels.
+dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ(2.13)
 
-AC_DEFUN([CL_IREG_FLOAT_RETURN],
-[AC_CACHE_CHECK([whether floats are returned in integer registers], cl_cv_c_float_return_ireg, [
-AC_TRY_RUN(GL_NOCRASH[
+AC_DEFUN([FFCALL_IREG_FLOAT_RETURN],
+[AC_CACHE_CHECK([whether floats are returned in integer registers],
+ffcall_cv_c_float_return_ireg, [AC_TRY_RUN(GL_NOCRASH[
 float x = (float)1.2;
 float y = (float)1.3;
 float fun () { return x*y; }
 int main()
 { nocrash_init();
  {int val = (* (int (*) ()) fun) ();
-  exit (!(val == 0x3FC7AE15 || val == 0x15AEC73F));
-}}], cl_cv_c_float_return_ireg=yes, cl_cv_c_float_return_ireg=no,
+  return !(val == 0x3FC7AE15 || val == 0x15AEC73F);
+}}], ffcall_cv_c_float_return_ireg=yes, ffcall_cv_c_float_return_ireg=no,
 dnl When cross-compiling, assume no, because that's how it comes out on
 dnl most platforms with floating-point unit, including m68k-linux.
-cl_cv_c_float_return_ireg="guessing no")
+ffcall_cv_c_float_return_ireg="guessing no")
 ])
-case "$cl_cv_c_float_return_ireg" in
-  *yes) AC_DEFINE(__IREG_FLOAT_RETURN__) ;;
+case "$ffcall_cv_c_float_return_ireg" in
+  *yes) AC_DEFINE([__IREG_FLOAT_RETURN__]) ;;
   *no) ;;
 esac
 ])
@@ -7175,113 +7049,6 @@ else
 fi
 AC_SUBST(LN_S)])
 
-# longlong.m4 serial 13
-dnl Copyright (C) 1999-2007 Free Software Foundation, Inc.
-dnl This file is free software; the Free Software Foundation
-dnl gives unlimited permission to copy and/or distribute it,
-dnl with or without modifications, as long as this notice is preserved.
-
-dnl From Paul Eggert.
-
-# Define HAVE_LONG_LONG_INT if 'long long int' works.
-# This fixes a bug in Autoconf 2.61, but can be removed once we
-# assume 2.62 everywhere.
-
-# Note: If the type 'long long int' exists but is only 32 bits large
-# (as on some very old compilers), HAVE_LONG_LONG_INT will not be
-# defined. In this case you can treat 'long long int' like 'long int'.
-
-AC_DEFUN([AC_TYPE_LONG_LONG_INT],
-[
-  AC_CACHE_CHECK([for long long int], [ac_cv_type_long_long_int],
-    [AC_LINK_IFELSE(
-       [_AC_TYPE_LONG_LONG_SNIPPET],
-       [dnl This catches a bug in Tandem NonStop Kernel (OSS) cc -O circa 2004.
-	dnl If cross compiling, assume the bug isn't important, since
-	dnl nobody cross compiles for this platform as far as we know.
-	AC_RUN_IFELSE(
-	  [AC_LANG_PROGRAM(
-	     [[@%:@include <limits.h>
-	       @%:@ifndef LLONG_MAX
-	       @%:@ define HALF \
-			(1LL << (sizeof (long long int) * CHAR_BIT - 2))
-	       @%:@ define LLONG_MAX (HALF - 1 + HALF)
-	       @%:@endif]],
-	     [[long long int n = 1;
-	       int i;
-	       for (i = 0; ; i++)
-		 {
-		   long long int m = n << i;
-		   if (m >> i != n)
-		     return 1;
-		   if (LLONG_MAX / 2 < m)
-		     break;
-		 }
-	       return 0;]])],
-	  [ac_cv_type_long_long_int=yes],
-	  [ac_cv_type_long_long_int=no],
-	  [ac_cv_type_long_long_int=yes])],
-       [ac_cv_type_long_long_int=no])])
-  if test $ac_cv_type_long_long_int = yes; then
-    AC_DEFINE([HAVE_LONG_LONG_INT], 1,
-      [Define to 1 if the system has the type `long long int'.])
-  fi
-])
-
-# Define HAVE_UNSIGNED_LONG_LONG_INT if 'unsigned long long int' works.
-# This fixes a bug in Autoconf 2.61, but can be removed once we
-# assume 2.62 everywhere.
-
-# Note: If the type 'unsigned long long int' exists but is only 32 bits
-# large (as on some very old compilers), AC_TYPE_UNSIGNED_LONG_LONG_INT
-# will not be defined. In this case you can treat 'unsigned long long int'
-# like 'unsigned long int'.
-
-AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
-[
-  AC_CACHE_CHECK([for unsigned long long int],
-    [ac_cv_type_unsigned_long_long_int],
-    [AC_LINK_IFELSE(
-       [_AC_TYPE_LONG_LONG_SNIPPET],
-       [ac_cv_type_unsigned_long_long_int=yes],
-       [ac_cv_type_unsigned_long_long_int=no])])
-  if test $ac_cv_type_unsigned_long_long_int = yes; then
-    AC_DEFINE([HAVE_UNSIGNED_LONG_LONG_INT], 1,
-      [Define to 1 if the system has the type `unsigned long long int'.])
-  fi
-])
-
-# Expands to a C program that can be used to test for simultaneous support
-# of 'long long' and 'unsigned long long'. We don't want to say that
-# 'long long' is available if 'unsigned long long' is not, or vice versa,
-# because too many programs rely on the symmetry between signed and unsigned
-# integer types (excluding 'bool').
-AC_DEFUN([_AC_TYPE_LONG_LONG_SNIPPET],
-[
-  AC_LANG_PROGRAM(
-    [[/* For now, do not test the preprocessor; as of 2007 there are too many
-	 implementations with broken preprocessors.  Perhaps this can
-	 be revisited in 2012.  In the meantime, code should not expect
-	 #if to work with literals wider than 32 bits.  */
-      /* Test literals.  */
-      long long int ll = 9223372036854775807ll;
-      long long int nll = -9223372036854775807LL;
-      unsigned long long int ull = 18446744073709551615ULL;
-      /* Test constant expressions.   */
-      typedef int a[((-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
-		     ? 1 : -1)];
-      typedef int b[(18446744073709551615ULL <= (unsigned long long int) -1
-		     ? 1 : -1)];
-      int i = 63;]],
-    [[/* Test availability of runtime routines for shift and division.  */
-      long long int llmax = 9223372036854775807ll;
-      unsigned long long int ullmax = 18446744073709551615ull;
-      return ((ll << 63) | (ll >> 63) | (ll < i) | (ll > i)
-	      | (llmax / ll) | (llmax % ll)
-	      | (ull << 63) | (ull >> 63) | (ull << i) | (ull >> i)
-	      | (ullmax / ull) | (ullmax % ull));]])
-])
-
 dnl -*- Autoconf -*-
 dnl Copyright (C) 1993-2003 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
@@ -7542,111 +7309,7 @@ fi
 fi
 ])
 
-dnl Copyright (C) 2005 Free Software Foundation, Inc.
-dnl This file is free software, distributed under the terms of the GNU
-dnl General Public License.  As a special exception to the GNU General
-dnl Public License, this file may be distributed as part of a program
-dnl that contains a configuration script generated by Autoconf, under
-dnl the same distribution terms as the rest of that program.
-
-dnl Based on libsigsegv, from Bruno Haible and Paolo Bonzini.
-
-AC_PREREQ(2.13)
-
-dnl Expands to some code for use in .c programs that will cause the configure
-dnl test to exit instead of crashing. This is useful to avoid triggering
-dnl action from a background debugger and to avoid core dumps.
-dnl Usage:   ...
-dnl          ]GL_NOCRASH[
-dnl          ...
-dnl          int main() { nocrash_init(); ... }
-AC_DEFUN([GL_NOCRASH],[[
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-]])
-
-dnl Copyright (C) 1993-2005 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2008 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -7657,8 +7320,9 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ(2.13)
 
-AC_DEFUN([CL_PCC_STRUCT_RETURN],
-[AC_CACHE_CHECK([for pcc non-reentrant struct return convention], cl_cv_c_struct_return_static, [
+AC_DEFUN([FFCALL_PCC_STRUCT_RETURN],
+[AC_CACHE_CHECK([for pcc non-reentrant struct return convention],
+ffcall_cv_c_struct_return_static, [
 save_CFLAGS="$CFLAGS"
 test $CC_GCC = true && CFLAGS="$CFLAGS -O0"
 AC_TRY_RUN(GL_NOCRASH[
@@ -7673,14 +7337,14 @@ int main()
   foo* fooptr2;
   foo1 = foofun(); fooptr1 = (*fun)(&foo1);
   foo2 = foofun(); fooptr2 = (*fun)(&foo2);
-  exit(!(fooptr1 == fooptr2 && fooptr1->c == 5358));
-}}], cl_cv_c_struct_return_static=yes, cl_cv_c_struct_return_static=no,
+  return !(fooptr1 == fooptr2 && fooptr1->c == 5358);
+}}], ffcall_cv_c_struct_return_static=yes, ffcall_cv_c_struct_return_static=no,
 dnl When cross-compiling, don't assume anything.
 dnl There are even weirder return value passing conventions than pcc.
-cl_cv_c_struct_return_static="guessing no")
+ffcall_cv_c_struct_return_static="guessing no")
 CFLAGS="$save_CFLAGS"
 ])
-case "$cl_cv_c_struct_return_static" in
+case "$ffcall_cv_c_struct_return_static" in
   *yes) AC_DEFINE(__PCC_STRUCT_RETURN__) ;;
   *no) ;;
 esac
@@ -7791,34 +7455,34 @@ case "$cl_cv_sys_shm_works" in
 esac
 ])
 
-dnl Copyright (C) 1993-2005 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2008 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
 dnl that contains a configuration script generated by Autoconf, under
 dnl the same distribution terms as the rest of that program.
 
-dnl From Bruno Haible, Marcus Daniels.
+dnl From Bruno Haible, Marcus Daniels, Sam Steingol.
 
 AC_PREREQ(2.13)
 
-AC_DEFUN([CL_SMALL_STRUCT_RETURN],
-[AC_CACHE_CHECK([whether small structs are returned in registers], cl_cv_c_struct_return_small, [
-AC_TRY_RUN(GL_NOCRASH[
+AC_DEFUN([FFCALL_SMALL_STRUCT_RETURN],
+[AC_CACHE_CHECK([whether small structs are returned in registers],
+ffcall_cv_c_struct_return_small, [AC_TRY_RUN(GL_NOCRASH[
 typedef struct { long x; } foo; long y;
 foo foofun () { foo f; f.x = y; return f; }
 long (*fun) () = (long (*) ()) foofun;
-int main()
-{ nocrash_init();
-  y = 37; if ((*fun)() != 37) exit(1);
-  y = 55; if ((*fun)() != 55) exit(1);
-  exit(0);
-}], cl_cv_c_struct_return_small=yes, cl_cv_c_struct_return_small=no,
+int main() {
+  nocrash_init();
+  y = 37; if ((*fun)() != 37) return 1;
+  y = 55; if ((*fun)() != 55) return 1;
+  return 0;
+}], ffcall_cv_c_struct_return_small=yes, ffcall_cv_c_struct_return_small=no,
 dnl When cross-compiling, don't assume anything.
 dnl There are even weirder return value passing conventions than pcc.
-cl_cv_c_struct_return_small="guessing no")
+ffcall_cv_c_struct_return_small="guessing no")
 ])
-case "$cl_cv_c_struct_return_small" in
+case "$ffcall_cv_c_struct_return_small" in
   *yes) AC_DEFINE(__SMALL_STRUCT_RETURN__) ;;
   *no) ;;
 esac

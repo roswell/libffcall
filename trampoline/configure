@@ -3615,7 +3615,7 @@ case "$host_cpu" in
   mips )
     { $as_echo "$as_me:$LINENO: checking for 64-bit MIPS" >&5
 $as_echo_n "checking for 64-bit MIPS... " >&6; }
-if test "${cl_cv_host_mips64+set}" = set; then
+if test "${ffcall_cv_host_mips64+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
 
@@ -3635,22 +3635,22 @@ cat >>conftest.$ac_ext <<_ACEOF
 _ACEOF
 if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "yes" >/dev/null 2>&1; then
-  cl_cv_host_mips64=yes
+  ffcall_cv_host_mips64=yes
 else
-  cl_cv_host_mips64=no
+  ffcall_cv_host_mips64=no
 fi
 rm -f conftest*
 
 
 fi
-{ $as_echo "$as_me:$LINENO: result: $cl_cv_host_mips64" >&5
-$as_echo "$cl_cv_host_mips64" >&6; }
-if test $cl_cv_host_mips64 = yes; then
+{ $as_echo "$as_me:$LINENO: result: $ffcall_cv_host_mips64" >&5
+$as_echo "$ffcall_cv_host_mips64" >&6; }
+if test $ffcall_cv_host_mips64 = yes; then
   host_cpu_abi=mips64
 else
   { $as_echo "$as_me:$LINENO: checking for MIPS with n32 ABI" >&5
 $as_echo_n "checking for MIPS with n32 ABI... " >&6; }
-if test "${cl_cv_host_mipsn32+set}" = set; then
+if test "${ffcall_cv_host_mipsn32+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
 
@@ -3667,17 +3667,17 @@ cat >>conftest.$ac_ext <<_ACEOF
 _ACEOF
 if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "yes" >/dev/null 2>&1; then
-  cl_cv_host_mipsn32=yes
+  ffcall_cv_host_mipsn32=yes
 else
-  cl_cv_host_mipsn32=no
+  ffcall_cv_host_mipsn32=no
 fi
 rm -f conftest*
 
 
 fi
-{ $as_echo "$as_me:$LINENO: result: $cl_cv_host_mipsn32" >&5
-$as_echo "$cl_cv_host_mipsn32" >&6; }
-if test $cl_cv_host_mipsn32 = yes; then
+{ $as_echo "$as_me:$LINENO: result: $ffcall_cv_host_mipsn32" >&5
+$as_echo "$ffcall_cv_host_mipsn32" >&6; }
+if test $ffcall_cv_host_mipsn32 = yes; then
   host_cpu_abi=mipsn32
 else
   host_cpu_abi=mips
@@ -3687,7 +3687,7 @@ fi
   powerpc64 )
     { $as_echo "$as_me:$LINENO: checking for 64-bit PowerPC" >&5
 $as_echo_n "checking for 64-bit PowerPC... " >&6; }
-if test "${cl_cv_host_powerpc64+set}" = set; then
+if test "${ffcall_cv_host_powerpc64+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
 
@@ -3704,17 +3704,17 @@ cat >>conftest.$ac_ext <<_ACEOF
 _ACEOF
 if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "yes" >/dev/null 2>&1; then
-  cl_cv_host_powerpc64=yes
+  ffcall_cv_host_powerpc64=yes
 else
-  cl_cv_host_powerpc64=no
+  ffcall_cv_host_powerpc64=no
 fi
 rm -f conftest*
 
 
 fi
-{ $as_echo "$as_me:$LINENO: result: $cl_cv_host_powerpc64" >&5
-$as_echo "$cl_cv_host_powerpc64" >&6; }
-if test $cl_cv_host_powerpc64 = yes; then
+{ $as_echo "$as_me:$LINENO: result: $ffcall_cv_host_powerpc64" >&5
+$as_echo "$ffcall_cv_host_powerpc64" >&6; }
+if test $ffcall_cv_host_powerpc64 = yes; then
   host_cpu_abi=powerpc64
 else
   host_cpu_abi=powerpc
@@ -3723,7 +3723,7 @@ fi
   sparc | sparc64 )
     { $as_echo "$as_me:$LINENO: checking for 64-bit SPARC" >&5
 $as_echo_n "checking for 64-bit SPARC... " >&6; }
-if test "${cl_cv_host_sparc64+set}" = set; then
+if test "${ffcall_cv_host_sparc64+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
 
@@ -3740,17 +3740,17 @@ cat >>conftest.$ac_ext <<_ACEOF
 _ACEOF
 if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "yes" >/dev/null 2>&1; then
-  cl_cv_host_sparc64=yes
+  ffcall_cv_host_sparc64=yes
 else
-  cl_cv_host_sparc64=no
+  ffcall_cv_host_sparc64=no
 fi
 rm -f conftest*
 
 
 fi
-{ $as_echo "$as_me:$LINENO: result: $cl_cv_host_sparc64" >&5
-$as_echo "$cl_cv_host_sparc64" >&6; }
-if test $cl_cv_host_sparc64 = yes; then
+{ $as_echo "$as_me:$LINENO: result: $ffcall_cv_host_sparc64" >&5
+$as_echo "$ffcall_cv_host_sparc64" >&6; }
+if test $ffcall_cv_host_sparc64 = yes; then
   host_cpu_abi=sparc64
 else
   host_cpu_abi=sparc
@@ -3759,7 +3759,7 @@ fi
   x86_64 )
     { $as_echo "$as_me:$LINENO: checking for 64-bit x86_64" >&5
 $as_echo_n "checking for 64-bit x86_64... " >&6; }
-if test "${cl_cv_host_x86_64+set}" = set; then
+if test "${ffcall_cv_host_x86_64+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
 
@@ -3776,17 +3776,17 @@ cat >>conftest.$ac_ext <<_ACEOF
 _ACEOF
 if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
   $EGREP "yes" >/dev/null 2>&1; then
-  cl_cv_host_x86_64=yes
+  ffcall_cv_host_x86_64=yes
 else
-  cl_cv_host_x86_64=no
+  ffcall_cv_host_x86_64=no
 fi
 rm -f conftest*
 
 
 fi
-{ $as_echo "$as_me:$LINENO: result: $cl_cv_host_x86_64" >&5
-$as_echo "$cl_cv_host_x86_64" >&6; }
-if test $cl_cv_host_x86_64 = yes; then
+{ $as_echo "$as_me:$LINENO: result: $ffcall_cv_host_x86_64" >&5
+$as_echo "$ffcall_cv_host_x86_64" >&6; }
+if test $ffcall_cv_host_x86_64 = yes; then
   host_cpu_abi=x86_64
 else
   host_cpu_abi=i386
@@ -4859,91 +4859,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-$mmap_prog_1
+GL_NOCRASH$mmap_prog_1
   int flags = MAP_ANON | MAP_PRIVATE;
   int fd = -1;
   nocrash_init();
@@ -4995,91 +4911,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-$mmap_prog_1
+GL_NOCRASH$mmap_prog_1
   int flags = MAP_ANONYMOUS | MAP_PRIVATE;
   int fd = -1;
   nocrash_init();
@@ -5131,91 +4963,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-$mmap_prog_1
+GL_NOCRASH$mmap_prog_1
 #ifndef MAP_FILE
 #define MAP_FILE 0
 #endif
@@ -5274,91 +5022,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-#define FOR_SUN4_29
+GL_NOCRASH#define FOR_SUN4_29
 $mmap_prog_1
 #ifndef MAP_FILE
 #define MAP_FILE 0
@@ -5642,91 +5306,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-$mprotect_prog
+GL_NOCRASH$mprotect_prog
   nocrash_init();
   if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0) exit(0);
   foo = *fault_address; /* this should cause an exception or signal */
@@ -5778,91 +5358,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-$mprotect_prog
+GL_NOCRASH$mprotect_prog
   nocrash_init();
   if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0) exit(0);
   *fault_address = 'z'; /* this should cause an exception or signal */
@@ -5914,91 +5410,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-$mprotect_prog
+GL_NOCRASH$mprotect_prog
   nocrash_init();
   if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0) exit(0);
   *fault_address = 'z'; /* this should cause an exception or signal */
@@ -6050,91 +5462,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-$mprotect_prog
+GL_NOCRASH$mprotect_prog
   nocrash_init();
   if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0) exit(1);
   if (mprotect(page_align(fault_address),pagesize,PROT_READ|PROT_WRITE) < 0) exit(1);
@@ -6723,19 +6051,19 @@ esac
 
 { $as_echo "$as_me:$LINENO: checking whether code in malloc'ed memory is executable" >&5
 $as_echo_n "checking whether code in malloc'ed memory is executable... " >&6; }
-if test "${cl_cv_codeexec+set}" = set; then
+if test "${ffcall_cv_codeexec+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
 
 case "$host_os" in
-  hpux*) cl_cv_codeexec="guessing yes" ;;
+  hpux*) ffcall_cv_codeexec="guessing yes" ;;
   *)
 case "$host_cpu_abi"-"$host_os" in
   # On host=rs6000-*-aix3.2.5 malloc'ed memory is indeed not executable.
-  powerpc-aix*) cl_cv_codeexec="guessing no" ;;
+  powerpc-aix*) ffcall_cv_codeexec="guessing no" ;;
   *)
 if test "$cross_compiling" = yes; then
-  cl_cv_codeexec="guessing yes"
+  ffcall_cv_codeexec="guessing yes"
 else
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -6743,91 +6071,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-
-#include <stdlib.h>
-#if defined __MACH__ && defined __APPLE__
-/* Avoid a crash on MacOS X.  */
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/thread_status.h>
-#include <mach/exception.h>
-#include <mach/task.h>
-#include <pthread.h>
-/* The exception port on which our thread listens.  */
-static mach_port_t our_exception_port;
-/* The main function of the thread listening for exceptions of type
-   EXC_BAD_ACCESS.  */
-static void *
-mach_exception_thread (void *arg)
-{
-  /* Buffer for a message to be received.  */
-  struct {
-    mach_msg_header_t head;
-    mach_msg_body_t msgh_body;
-    char data[1024];
-  } msg;
-  mach_msg_return_t retval;
-  /* Wait for a message on the exception port.  */
-  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
-                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
-  if (retval != MACH_MSG_SUCCESS)
-    abort ();
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-  mach_port_t self = mach_task_self ();
-  /* Allocate a port on which the thread shall listen for exceptions.  */
-  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
-      == KERN_SUCCESS) {
-    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
-    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
-                                MACH_MSG_TYPE_MAKE_SEND)
-        == KERN_SUCCESS) {
-      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
-         for us.  */
-      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
-      /* Create the thread listening on the exception port.  */
-      pthread_attr_t attr;
-      pthread_t thread;
-      if (pthread_attr_init (&attr) == 0
-          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
-          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
-        pthread_attr_destroy (&attr);
-        /* Replace the exception port info for these exceptions with our own.
-           Note that we replace the exception port for the entire task, not only
-           for a particular thread.  This has the effect that when our exception
-           port gets the message, the thread specific exception port has already
-           been asked, and we don't need to bother about it.
-           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
-        task_set_exception_ports (self, mask, our_exception_port,
-                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
-      }
-    }
-  }
-}
-#else
-/* Avoid a crash on POSIX systems.  */
-#include <signal.h>
-/* A POSIX signal handler.  */
-static void
-exception_handler (int sig)
-{
-  exit (1);
-}
-static void
-nocrash_init (void)
-{
-#ifdef SIGSEGV
-  signal (SIGSEGV, exception_handler);
-#endif
-#ifdef SIGBUS
-  signal (SIGBUS, exception_handler);
-#endif
-}
-#endif
-
+GL_NOCRASH
 #include <sys/types.h>
 /* declare malloc() */
 #include <stdlib.h>
@@ -6838,7 +6082,7 @@ int main ()
   char* funcopy = (char*) malloc(size);
   int i;
   for (i = 0; i < size; i++) { funcopy[i] = ((char*)&fun)[i]; }
-  exit(!((*(int(*)())funcopy)() == 31415926));
+  return !((*(int(*)())funcopy)() == 31415926);
 }}
 _ACEOF
 rm -f conftest$ac_exeext
@@ -6863,14 +6107,14 @@ $as_echo "$ac_try_echo") >&5
   ac_status=$?
   $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  cl_cv_codeexec=yes
+  ffcall_cv_codeexec=yes
 else
   $as_echo "$as_me: program exited with status $ac_status" >&5
 $as_echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
 ( exit $ac_status )
-cl_cv_codeexec=no
+ffcall_cv_codeexec=no
 fi
 rm -rf conftest.dSYM
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
@@ -6883,9 +6127,9 @@ esac
 esac
 
 fi
-{ $as_echo "$as_me:$LINENO: result: $cl_cv_codeexec" >&5
-$as_echo "$cl_cv_codeexec" >&6; }
-case "$cl_cv_codeexec" in
+{ $as_echo "$as_me:$LINENO: result: $ffcall_cv_codeexec" >&5
+$as_echo "$ffcall_cv_codeexec" >&6; }
+case "$ffcall_cv_codeexec" in
   *yes) cat >>confdefs.h <<\_ACEOF
 #define CODE_EXECUTABLE 1
 _ACEOF
