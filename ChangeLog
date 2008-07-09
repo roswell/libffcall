@@ -1,3 +1,8 @@
+2008-07-08  Sam Steingold  <sds@gnu.org>
+
+	* Makefile.devel (SUBDIRS_CONFIGURE): use $(CURDIR) instead of .
+	(%/configure): use "&&" instead of ";"
+
 2008-07-03  Sam Steingold  <sds@gnu.org>
 
 	* Makefile.devel (all): split into a few manageable targets
