@@ -1,3 +1,11 @@
+2008-07-13  Sam Steingold  <sds@gnu.org>
+
+	* glm4/gnulib-cache.m4, glm4/gnulib-common.m4, glm4/gnulib-comp.m4:
+	* glm4/gnulib-tool.m4, glm4/onceonly.m4: added from gnulib
+	* glm4/nocrash.m4: updated from gnulib
+	* Makefile.devel (gnulib-imported): remove gllib
+	* configure.ac: call gl_EARLY and gl_INIT
+
 2008-07-08  Sam Steingold  <sds@gnu.org>
 
 	* Makefile.devel (SUBDIRS_CONFIGURE): use $(CURDIR) instead of .

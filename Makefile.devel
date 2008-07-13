@@ -27,8 +27,8 @@ gnulib-imported : update-gnulib force
 		--m4-base=glm4 --aux-dir=build-aux --no-changelog \
 		longlong nocrash
 	$(RM) configure.ac
-	rm -fv build-aux/.cvsignore glm4/.cvsignore
-	cd src/glm4; \
+	rm -fvr build-aux/.cvsignore glm4/.cvsignore gllib/
+	cd glm4; \
 	for f in *.m4; do \
 	  if test -f ../m4/$$f; then \
 	    echo == $$f; \

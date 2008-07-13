@@ -3,6 +3,8 @@ dnl  Bruno Haible 24.10.1997
 dnl
 AC_INIT(trampoline/trampoline.h.in)
 AC_PROG_MAKE_SET
+gl_EARLY
+gl_INIT
 dnl This piece of sed script replaces every line containing '@subdir@'
 dnl by several consecutive lines, each referencing one subdir.
 extrasub="$extrasub"'
