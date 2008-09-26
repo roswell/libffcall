@@ -3,6 +3,7 @@
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-1999 Bruno Haible, <bruno@clisp.org>
+  Copyright 2005 Thiemo Seufer  <ths@debian.org>
 
   This is free software distributed under the GNU General Public
   Licence described in the file COPYING. Contact the author if
@@ -49,108 +50,122 @@ register func_pointer	t9	__asm__("$25");
 int
 __builtin_avcall(av_alist* l)
 {
-  register __avword*	sp	__asm__("$sp");  /* C names for registers */
-  register __avword	iret2	__asm__("$3");
-  register float	fret	__asm__("$f0");
-  register double	dret	__asm__("$f0");
+  register __avword*	sp __asm__("$sp");  /* C names for registers */
+  register __avword	iret2_tmp __asm__("$3");
+  register float	fret_tmp __asm__("$f0");
+  register double	dret_tmp __asm__("$f0");
   __avword *space = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword));	/* big space for child's stack frame */
   __avword *argframe = (__avword*)sp;	/* stack offset for argument list is 0 */
   int arglen = l->aptr - l->args;
-  __avword i;
+  int i;
+  __avword iret;
+  long long iret2;
+  float fret;
+  double dret;
 
-  if (l->flags & __AV_FLOAT_1)		/* push leading float args */
-  {
-    __asm__("l.d $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,floatarg[0]));
-    if (l->flags & __AV_FLOAT_2)
-      __asm__("l.d $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,floatarg[1]));
-  }
+  /* load leading float args */
+  if (l->flags & __AV_FLOAT_1)
+    __asm__("l.s $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,floatarg[0]));
+  if (l->flags & __AV_DOUBLE_1)
+    __asm__("l.d $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,doublearg[0]));
+  if ((l->flags & __AV_FLOAT_2) && (l->flags & (__AV_FLOAT_1 | __AV_DOUBLE_1)))
+    __asm__("l.s $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,floatarg[1]));
+  if ((l->flags & __AV_DOUBLE_2) && (l->flags & (__AV_FLOAT_1 | __AV_DOUBLE_1)))
+    __asm__("l.d $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,doublearg[1]));
 
   for (i = 4; i < arglen; i++)		/* push excess function args */
     argframe[i] = l->args[i];
 
-  i = (*(t9 = l->func))(l->args[0], l->args[1],  /* call function with 1st 4 args */
-			l->args[2], l->args[3]);
+  iret = (*(t9 = l->func))(l->args[0], l->args[1],  /* call function with 1st 4 args */
+			   l->args[2], l->args[3]);
+  iret2 = iret2_tmp;
+  fret = fret_tmp;
+  dret = dret_tmp;
 
   /* save return value */
-  if (l->rtype == __AVvoid) {
-  } else
-  if (l->rtype == __AVword) {
-    RETURN(__avword, i);
-  } else
-  if (l->rtype == __AVchar) {
-    RETURN(char, i);
-  } else
-  if (l->rtype == __AVschar) {
-    RETURN(signed char, i);
-  } else
-  if (l->rtype == __AVuchar) {
-    RETURN(unsigned char, i);
-  } else
-  if (l->rtype == __AVshort) {
-    RETURN(short, i);
-  } else
-  if (l->rtype == __AVushort) {
-    RETURN(unsigned short, i);
-  } else
-  if (l->rtype == __AVint) {
-    RETURN(int, i);
-  } else
-  if (l->rtype == __AVuint) {
-    RETURN(unsigned int, i);
-  } else
-  if (l->rtype == __AVlong) {
-    RETURN(long, i);
-  } else
-  if (l->rtype == __AVulong) {
-    RETURN(unsigned long, i);
-  } else
-  if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
-    ((__avword*)l->raddr)[0] = i;
+  switch (l->rtype) {
+  default:
+  case __AVvoid:
+    break;
+  case __AVword:
+    RETURN(__avword, iret);
+    break;
+  case __AVchar:
+    RETURN(char, iret);
+    break;
+  case __AVschar:
+    RETURN(signed char, iret);
+    break;
+  case __AVuchar:
+    RETURN(unsigned char, iret);
+    break;
+  case __AVshort:
+    RETURN(short, iret);
+    break;
+  case __AVushort:
+    RETURN(unsigned short, iret);
+    break;
+  case __AVint:
+    RETURN(int, iret);
+    break;
+  case __AVuint:
+    RETURN(unsigned int, iret);
+    break;
+  case __AVlong:
+    RETURN(long, iret);
+    break;
+  case __AVulong:
+    RETURN(unsigned long, iret);
+    break;
+  case __AVlonglong:
+  case __AVulonglong:
+    ((__avword*)l->raddr)[0] = (__avword)(iret);
     ((__avword*)l->raddr)[1] = iret2;
-  } else
-  if (l->rtype == __AVfloat) {
+    break;
+  case __AVfloat:
     RETURN(float, fret);
-  } else
-  if (l->rtype == __AVdouble) {
+    break;
+  case __AVdouble:
     RETURN(double, dret);
-  } else
-  if (l->rtype == __AVvoidp) {
-    RETURN(void*, i);
-  } else
-  if (l->rtype == __AVstruct) {
+    break;
+  case __AVvoidp:
+    RETURN(void*, (__avword)iret);
+    break;
+  case __AVstruct:
     if (l->flags & __AV_PCC_STRUCT_RETURN) {
       /* pcc struct return convention: need a  *(TYPE*)l->raddr = *(TYPE*)i;  */
       if (l->rsize == sizeof(char)) {
-        RETURN(char, *(char*)i);
+        RETURN(char, *(char*)(__avword)iret);
       } else
       if (l->rsize == sizeof(short)) {
-        RETURN(short, *(short*)i);
+        RETURN(short, *(short*)(__avword)iret);
       } else
       if (l->rsize == sizeof(int)) {
-        RETURN(int, *(int*)i);
+        RETURN(int, *(int*)(__avword)iret);
       } else
       if (l->rsize == sizeof(double)) {
-        ((int*)l->raddr)[0] = ((int*)i)[0];
-        ((int*)l->raddr)[1] = ((int*)i)[1];
+        ((int*)l->raddr)[0] = ((int*)(__avword)iret)[0];
+        ((int*)l->raddr)[1] = ((int*)(__avword)iret)[1];
       } else {
         int n = (l->rsize + sizeof(__avword)-1)/sizeof(__avword);
         while (--n >= 0)
-          ((__avword*)l->raddr)[n] = ((__avword*)i)[n];
+          ((__avword*)l->raddr)[n] = ((__avword*)(__avword)iret)[n];
       }
     } else {
       /* normal struct return convention */
       if (l->flags & __AV_SMALL_STRUCT_RETURN) {
         if (l->rsize == sizeof(char)) {
-          RETURN(char, i);
+          RETURN(char, iret);
         } else
         if (l->rsize == sizeof(short)) {
-          RETURN(short, i);
+          RETURN(short, iret);
         } else
         if (l->rsize == sizeof(int)) {
-          RETURN(int, i);
+          RETURN(int, iret);
         }
       }
     }
+    break;
   }
   return 0;
 }

@@ -71,7 +71,7 @@ changequote(,)dnl
     host_cpu_abi=arm
     ;;
 changequote([,])dnl
-  mips )
+  mips* )
     AC_CACHE_CHECK([for 64-bit MIPS], ffcall_cv_host_mips64, [
 AC_EGREP_CPP(yes,
 [#if defined(_MIPS_SZLONG)

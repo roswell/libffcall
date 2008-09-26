@@ -237,11 +237,7 @@ extern void __TR_clear_cache();
 #define TRAMP_LENGTH 14
 #define TRAMP_ALIGN 16
 #endif
-#if defined(__mips__) && !defined(__mipsn32__)
-#define TRAMP_LENGTH 24
-#define TRAMP_ALIGN 4
-#endif
-#ifdef __mipsn32__
+#if defined(__mips__) || defined(__mipsn32__) && !defined(__mips64__)
 #define TRAMP_LENGTH 24
 #define TRAMP_ALIGN 4
 #endif
@@ -464,41 +460,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   *(long *)  (function + 2)
 #endif
-#if defined(__mips__) && !defined(__mipsn32__)
-  /* function:
-   *    li $2,<data>&0xffff0000		3C 02 hi16(<data>)
-   *    ori $2,$2,<data>&0xffff		34 42 lo16(<data>)
-   *    li $25,<address>&0xffff0000	3C 19 hi16(<address>)
-   *    ori $25,$25,<address>&0xffff	37 39 lo16(<address>)
-   *    j $25				03 20 00 08
-   *    nop				00 00 00 00
-   */
-  /* What about big endian / little endian ?? */
-  *(short *) (function + 0) = 0x3C02;
-  *(short *) (function + 2) = (unsigned long) data >> 16;
-  *(short *) (function + 4) = 0x3442;
-  *(short *) (function + 6) = (unsigned long) data & 0xffff;
-  *(short *) (function + 8) = 0x3C19;
-  *(short *) (function +10) = (unsigned long) address >> 16;
-  *(short *) (function +12) = 0x3739;
-  *(short *) (function +14) = (unsigned long) address & 0xffff;
-  *(long *)  (function +16) = 0x03200008;
-  *(long *)  (function +20) = 0x00000000;
-#define is_tramp(function)  \
-  *(unsigned short *) (function + 0) == 0x3C02 && \
-  *(unsigned short *) (function + 4) == 0x3442 && \
-  *(unsigned short *) (function + 8) == 0x3C19 && \
-  *(unsigned short *) (function +12) == 0x3739 && \
-  *(unsigned long *)  (function +16) == 0x03200008 && \
-  *(unsigned long *)  (function +20) == 0x00000000
-#define hilo(hiword,loword)  \
-  (((unsigned long) (hiword) << 16) | (unsigned long) (loword))
-#define tramp_address(function)  \
-  hilo(*(unsigned short *) (function +10), *(unsigned short *) (function +14))
-#define tramp_data(function)  \
-  hilo(*(unsigned short *) (function + 2), *(unsigned short *) (function + 6))
-#endif
-#ifdef __mipsn32__
+#if defined(__mips__) || defined(__mipsn32__) && !defined(__mips64__)
   /* function:
    *    lw $2,16($25)			8F 22 00 10
    *    lw $25,20($25)			8F 39 00 14
@@ -507,7 +469,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    *    .word <data>			<data>
    *    .word <address>			<address>
    */
-  /* What about big endian / little endian ?? */
   *(unsigned int *) (function + 0) = 0x8F220010;
   *(unsigned int *) (function + 4) = 0x8F390014;
   *(unsigned int *) (function + 8) = 0x03200008;
@@ -515,10 +476,10 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned int *) (function +16) = (unsigned int) data;
   *(unsigned int *) (function +20) = (unsigned int) address;
 #define is_tramp(function)  \
-  *(int *)          (function + 0) == 0x8F220010 && \
-  *(int *)          (function + 4) == 0x8F390014 && \
-  *(int *)          (function + 8) == 0x03200008 && \
-  *(int *)          (function +12) == 0x00000000
+  *(unsigned int *) (function + 0) == 0x8F220010 && \
+  *(unsigned int *) (function + 4) == 0x8F390014 && \
+  *(unsigned int *) (function + 8) == 0x03200008 && \
+  *(unsigned int *) (function +12) == 0x00000000
 #define tramp_address(function)  \
   *(unsigned int *) (function +20)
 #define tramp_data(function)  \
@@ -602,14 +563,17 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    *    .dword <data>			<data>
    *    .dword <address>		<address>
    */
-  /* What about big endian / little endian ?? */
-  *(long *)          (function + 0) = 0xDF220010DF390018L;
-  *(long *)          (function + 8) = 0x0320000800000000L;
+  *(unsigned int *)  (function + 0) = 0xDF220010;
+  *(unsigned int *)  (function + 4) = 0xDF390018;
+  *(unsigned int *)  (function + 8) = 0x03200008;
+  *(unsigned int *)  (function +12) = 0x00000000;
   *(unsigned long *) (function +16) = (unsigned long) data;
   *(unsigned long *) (function +24) = (unsigned long) address;
 #define is_tramp(function)  \
-  *(long *)          (function + 0) == 0xDF220010DF390018L && \
-  *(long *)          (function + 8) == 0x0320000800000000L
+  *(unsigned int *)  (function + 0) == 0xDF220010 && \
+  *(unsigned int *)  (function + 4) == 0xDF390018 && \
+  *(unsigned int *)  (function + 8) == 0x03200008 && \
+  *(unsigned int *)  (function +12) == 0x00000000
 #define tramp_address(function)  \
   *(unsigned long *) (function +24)
 #define tramp_data(function)  \
