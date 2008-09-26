@@ -49,7 +49,7 @@ top_builddir = .
 all : all-subdirs callback.h vacall_r.h trampoline_r.h libcallback.la $(srcdir)/callback.3 $(srcdir)/callback.html
 
 all-subdirs : force
-	cd @subdir@; $(MAKE) all
+	cd @subdir@ && $(MAKE) all
 
 callback.h :
 	$(LN_S) $(srcdir)/callback.h.in callback.h
@@ -66,14 +66,14 @@ libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
 install-lib : all force
-	cd @subdir@; $(MAKE) install-lib libdir='$(libdir)' includedir='$(includedir)'
+	cd @subdir@ && $(MAKE) install-lib libdir='$(libdir)' includedir='$(includedir)'
 	mkdir -p $(libdir)
 	$(LIBTOOL_INSTALL) $(INSTALL_DATA) libcallback.la $(libdir)/libcallback.la
 	mkdir -p $(includedir)
 	$(INSTALL_DATA) callback.h $(includedir)/callback.h
 
 install : force
-	cd @subdir@; $(MAKE) install
+	cd @subdir@ && $(MAKE) install
 	mkdir -p $(DESTDIR)$(prefix)
 	mkdir -p $(DESTDIR)$(exec_prefix)
 	mkdir -p $(DESTDIR)$(libdir)
@@ -88,7 +88,7 @@ install : force
 	$(INSTALL_DATA) $(srcdir)/callback.html $(DESTDIR)$(htmldir)/callback.html
 
 installdirs : force
-	cd @subdir@; $(MAKE) installdirs
+	cd @subdir@ && $(MAKE) installdirs
 	mkdir -p $(DESTDIR)$(prefix)
 	mkdir -p $(DESTDIR)$(exec_prefix)
 	mkdir -p $(DESTDIR)$(libdir)
@@ -99,7 +99,7 @@ installdirs : force
 	mkdir -p $(DESTDIR)$(htmldir)
 
 uninstall : force
-	cd @subdir@; $(MAKE) uninstall
+	cd @subdir@ && $(MAKE) uninstall
 	$(LIBTOOL_UNINSTALL) $(RM) $(DESTDIR)$(libdir)/libcallback.la
 	$(RM) $(DESTDIR)$(includedir)/callback.h
 	$(RM) $(DESTDIR)$(mandir)/man3/callback.3
@@ -115,7 +115,7 @@ minitests : minitests.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libcallback.la -o minitests
 
 check-subdirs : force
-	cd @subdir@; $(MAKE) check
+	cd @subdir@ && $(MAKE) check
 
 check : all check-subdirs minitests
 	./minitests > minitests.out
@@ -132,7 +132,7 @@ tests : tests.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libcallback.la -o tests
 
 extracheck-subdirs : force
-	cd @subdir@; $(MAKE) extracheck
+	cd @subdir@ && $(MAKE) extracheck
 
 extracheck : all extracheck-subdirs tests
 	./tests > tests.out
@@ -140,10 +140,10 @@ extracheck : all extracheck-subdirs tests
 	test '!' -s tests.output.$(HOST)
 
 mostlyclean : force
-	cd @subdir@; $(MAKE) mostlyclean
+	cd @subdir@ && $(MAKE) mostlyclean
 
 clean-subdirs : force
-	cd @subdir@; $(MAKE) clean
+	cd @subdir@ && $(MAKE) clean
 
 clean : clean-subdirs
 	$(RM) *.o *.lo core
@@ -153,13 +153,13 @@ clean : clean-subdirs
 	$(RM) tests.o tests.s tests tests.out
 
 distclean-subdirs : force
-	cd @subdir@; if test -f Makefile; then $(MAKE) distclean; fi
+	cd @subdir@ && if test -f Makefile; then $(MAKE) distclean; fi
 
 distclean : clean distclean-subdirs
 	$(RM) config.status config.log config.cache Makefile libtool minitests.output.* tests.output.*
 
 maintainer-clean-subdirs : force
-	cd @subdir@; if test -f Makefile; then $(MAKE) maintainer-clean; fi
+	cd @subdir@ && if test -f Makefile; then $(MAKE) maintainer-clean; fi
 
 maintainer-clean : distclean maintainer-clean-subdirs
 	$(RM) config.status config.log config.cache Makefile

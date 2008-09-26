@@ -12,25 +12,25 @@ callback.man : callback.3
 	$(ROFF_MAN) callback.3 > callback.man
 
 vacall_r/config.h.msvc : vacall_r/config.h.in
-	cd vacall_r ; $(MAKE) -f Makefile.devel config.h.msvc
+	cd vacall_r && $(MAKE) -f Makefile.devel config.h.msvc
 
 vacall_r/config.h.mingw32 : vacall_r/config.h.in
-	cd vacall_r ; $(MAKE) -f Makefile.devel config.h.mingw32
+	cd vacall_r && $(MAKE) -f Makefile.devel config.h.mingw32
 
 vacall_r/vacall_r.h.msvc : vacall_r/vacall_r.h.in
-	cd vacall_r ; $(MAKE) -f Makefile.devel vacall_r.h.msvc
+	cd vacall_r && $(MAKE) -f Makefile.devel vacall_r.h.msvc
 
 vacall_r/vacall_r.h.mingw32 : vacall_r/vacall_r.h.in
-	cd vacall_r ; $(MAKE) -f Makefile.devel vacall_r.h.mingw32
+	cd vacall_r && $(MAKE) -f Makefile.devel vacall_r.h.mingw32
 
 vacall_r/vacall-i386-msvc.c : vacall_r/vacall-i386-macro.S vacall_r/asmi386.sh
-	cd vacall_r ; $(MAKE) -f Makefile.devel vacall-i386-msvc.c
+	cd vacall_r && $(MAKE) -f Makefile.devel vacall-i386-msvc.c
 
 vacall_r/vacall-i386-mingw32.c : vacall_r/vacall-i386-macro.S vacall_r/asmi386.sh
-	cd vacall_r ; $(MAKE) -f Makefile.devel vacall-i386-mingw32.c
+	cd vacall_r && $(MAKE) -f Makefile.devel vacall-i386-mingw32.c
 
 trampoline_r/config.h.msvc : trampoline_r/config.h.in
-	cd trampoline_r ; $(MAKE) -f Makefile.devel config.h.msvc
+	cd trampoline_r && $(MAKE) -f Makefile.devel config.h.msvc
 
 trampoline_r/config.h.mingw32 : trampoline_r/config.h.in
-	cd trampoline_r ; $(MAKE) -f Makefile.devel config.h.mingw32
+	cd trampoline_r && $(MAKE) -f Makefile.devel config.h.mingw32
