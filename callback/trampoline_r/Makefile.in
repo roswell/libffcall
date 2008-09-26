@@ -99,6 +99,9 @@ cache-sparc64.s : $(srcdir)/cache-sparc.S
 cache-alpha.lo : $(srcdir)/cache-alpha.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-alpha.s
 
+cache-arm.lo : $(srcdir)/cache-arm.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-arm.s
+
 cache-hppa.lo : $(srcdir)/cache-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
 

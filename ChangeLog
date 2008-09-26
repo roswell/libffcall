@@ -1,5 +1,16 @@
 2008-09-26  Sam Steingold  <sds@gnu.org>
 
+	* callback/trampoline_r/Makefile.in, callback/trampoline_r/cache-arm.c:
+	* callback/trampoline_r/cache-arm.s, callback/trampoline_r/configure.in:
+	* callback/trampoline_r/tramp-arm.s, callback/trampoline_r/tramp-mips.s:
+	* callback/trampoline_r/trampoline.c, trampoline/cache-arm.c:
+	* trampoline/cache-arm.s, trampoline/configure.in:
+	* trampoline/tramp-arm.s, trampoline/trampoline.c:
+	add arm support from Jonathan Olson (debian 1.10-2)
+	https://savannah.gnu.org/bugs/?func=detailitem&item_id=9468
+
+2008-09-26  Sam Steingold  <sds@gnu.org>
+
 	* avcall/avcall-mips.S, avcall/avcall-mips.c, avcall/avcall.h.in:
 	* callback/trampoline_r/trampoline.c, callback/vacall_r/vacall_r.h.in:
 	* m4/general.m4, trampoline/trampoline.c, vacall/vacall.h.in:

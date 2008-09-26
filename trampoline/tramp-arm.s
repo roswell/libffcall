@@ -23,13 +23,11 @@ _tramp:
 	@ Immediate constants are a problem. I take the indirect load approach
 	@ because I don't want 4 instructions for each constant.
 	stmfd	sp!,{r0}
-	ldr	r0,[pc,#_data-.-8]
-	ldr	ip,[r0,#0]
-	ldr	r0,[pc,#_variable-.-8]
-	str	ip,[r0,#0]
-	ldmfd	sp!,{r0}^
-	ldr	ip,[pc,#_function-.-8]
-	ldr	pc,[ip,#0]
+	ldr	r0,[pc,#12]
+	ldr	ip,[pc,#12]
+	str	r0,[ip]
+	ldmfd	sp!,{r0}
+	ldr	pc,[pc,#4]
 
 	.global	_data
 	.align	0

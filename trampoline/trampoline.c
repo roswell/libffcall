@@ -275,7 +275,7 @@ extern void __TR_clear_cache();
 #define TRAMP_BIAS 2
 #endif
 #ifdef __arm__
-#define TRAMP_LENGTH 44
+#define TRAMP_LENGTH 36
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __powerpcsysv4__
@@ -852,46 +852,43 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
 #endif
 #ifdef __arm__
   /* function:
-   *    stmfd   sp!,{r0}			E92D0001
-   *    ldr     r0,[pc,#_data-.-8]		E59F0014
-   *    ldr     ip,[r0,#0]			E590C000
-   *    ldr     r0,[pc,#_variable-.-8]		E59F0010
-   *    str     ip,[r0,#0]			E580C000
-   *    ldmfd   sp!,{r0}^			E8FD0001
-   *    ldr     ip,[pc,#_function-.-8]		E59FC008
-   *    ldr     pc,[ip,#0]			E59CF000
+   *	stmfd	sp!,{r0}		E92D0001
+   * 	ldr	r0,[pc,#16]		E59F000C
+   *	ldr	ip,[pc,#16]		E59FC00C
+   *	str	r0,[ip]			E58C0000
+   *	ldmfd	sp!,{r0}		E8BD0001
+   *	ldr	pc,[pc,#4]		E59FF004
    * _data:
-   *    .word   <data>				<data>
+   *	.word	<data>
    * _variable:
-   *    .word   <variable>			<variable>
+   *	.word	<variable>
    * _function:
-   *    .word   <address>			<address>
+   *	.word	<address>
    */
-  { static long code [8] =
-      { 0xE92D0001, 0xE59F0014, 0xE590C000, 0xE59F0010,
-        0xE580C000, 0xE8FD0001, 0xE59FC008, 0xE59CF000
-      };
-    int i;
-    for (i=0; i<8; i++) { ((long *) function)[i] = code[i]; }
-    ((long *) function)[8] = (long) data;
-    ((long *) function)[9] = (long) variable;
-    ((long *) function)[10] = (long) address;
+  {
+    ((long *) function)[0] = 0xE92D0001;
+    ((long *) function)[1] = 0xE59F000C;
+    ((long *) function)[2] = 0xE59FC00C;
+    ((long *) function)[3] = 0xE58C0000;
+    ((long *) function)[4] = 0xE8BD0001;
+    ((long *) function)[5] = 0xE59FF004;
+    ((long *) function)[6] = (long)data;
+    ((long *) function)[7] = (long)variable;
+    ((long *) function)[8] = (long)address;
   }
 #define is_tramp(function)  \
-  ((long *) function)[0] == 0xE92D0001 && \
-  ((long *) function)[1] == 0xE59F0014 && \
-  ((long *) function)[2] == 0xE590C000 && \
-  ((long *) function)[3] == 0xE59F0010 && \
-  ((long *) function)[4] == 0xE580C000 && \
-  ((long *) function)[5] == 0xE8FD0001 && \
-  ((long *) function)[6] == 0xE59FC008 && \
-  ((long *) function)[7] == 0xE59CF000
+    ((long *) function)[0] == 0xE92D0001 && \
+    ((long *) function)[1] == 0xE59F000C && \
+    ((long *) function)[2] == 0xE59FC00C && \
+    ((long *) function)[3] == 0xE58C0000 && \
+    ((long *) function)[4] == 0xE8BD0001 && \
+    ((long *) function)[5] == 0xE59FF004
 #define tramp_address(function)  \
-  ((long *) function)[10]
-#define tramp_variable(function)  \
-  ((long *) function)[9]
-#define tramp_data(function)  \
   ((long *) function)[8]
+#define tramp_variable(function)  \
+  ((long *) function)[7]
+#define tramp_data(function)  \
+  ((long *) function)[6]
 #endif
 #ifdef __powerpcsysv4__
   /* function:
@@ -1283,7 +1280,7 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
   __TR_clear_cache(function,function+TRAMP_LENGTH-1);
 #endif
 #ifdef __arm__
-  /* This CPU does not have a separate instruction cache. (I think.) */
+  __TR_clear_cache(function,function+TRAMP_LENGTH);
 #endif
 #if defined(__powerpc__) && !defined(__powerpc64__)
   __TR_clear_cache(function);

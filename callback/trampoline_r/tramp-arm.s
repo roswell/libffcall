@@ -22,19 +22,15 @@ pc	.req	r15
 _tramp:
 	@ Immediate constants are a problem. I take the indirect load approach
 	@ because I don't want 4 instructions for each constant.
-	ldr	ip,[pc,#_function-.-8]
-	ldr	ip,[ip,#0]
-	stmfd	sp!,{ip}
-	ldr	ip,[pc,#_data-.-8]
-	ldr	ip,[ip,#0]
-	ldmfd	sp!,{pc}^
+	add	ip,pc,#8
+	ldr	pc,[pc]
 
 	.global	_data
 	.align	0
 _data:
 	.word	0x73554711
 
-	.global	_function
 	.align	0
 _function:
 	.word	0xbabebec0
+	.global	_function

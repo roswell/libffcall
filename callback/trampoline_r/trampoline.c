@@ -271,7 +271,7 @@ extern void __TR_clear_cache();
 #define TRAMP_BIAS 2
 #endif
 #ifdef __arm__
-#define TRAMP_LENGTH 32
+#define TRAMP_LENGTH 16
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __powerpcsysv4__
@@ -749,37 +749,26 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __arm__
   /* function:
-   *    ldr     ip,[pc,#_function-.-8]		E59FC014
-   *    ldr     ip,[ip,#0]			E59CC000  ??Is this correct??
-   *    stmfd   sp!,{ip}			E92D1000
-   *    ldr     ip,[pc,#_data-.-8]		E59FC004
-   *    ldr     ip,[ip,#0]			E59CC000  ??Is this correct??
-   *    ldmfd   sp!,{pc}^			E8FD8000
+   *	add	r12,pc,#8			E28FC008
+   *	ldr	pc,[pc]				E59FF000
    * _data:
-   *    .word   <data>				<data>
+   *	.word	<data>
    * _function:
-   *    .word   <address>			<address>
+   *	.word	<address>
    */
-  { static long code [6] =
-      { 0xE59FC014, 0xE59CC000, 0xE92D1000, 0xE59FC004,
-        0xE59CC000, 0xE8FD8000
-      };
-    int i;
-    for (i=0; i<6; i++) { ((long *) function)[i] = code[i]; }
-    ((long *) function)[6] = (long) data;
-    ((long *) function)[7] = (long) address;
+  {
+    ((long *) function)[0] = 0xE28FC008;
+    ((long *) function)[1] = 0xE59FF000;
+    ((long *) function)[2] = (long) data;
+    ((long *) function)[3] = (long) address;
   }
 #define is_tramp(function)  \
-  ((long *) function)[0] == 0xE59FC014 && \
-  ((long *) function)[1] == 0xE59CC000 && \
-  ((long *) function)[2] == 0xE92D1000 && \
-  ((long *) function)[3] == 0xE59FC004 && \
-  ((long *) function)[4] == 0xE59CC000 && \
-  ((long *) function)[5] == 0xE8FD8000
+  ((long *) function)[0] == 0xE28FC004 && \
+  ((long *) function)[1] == 0xE51FF004
 #define tramp_address(function)  \
-  ((long *) function)[7]
+  ((long *) function)[3]
 #define tramp_data(function)  \
-  ((long *) function)[6]
+  ((long *) function)[2]
 #endif
 #ifdef __powerpcsysv4__
 #ifdef __NetBSD__
@@ -1136,7 +1125,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   __TR_clear_cache(function,function+TRAMP_LENGTH-1);
 #endif
 #ifdef __arm__
-  /* This CPU does not have a separate instruction cache. (I think.) */
+  __TR_clear_cache(function,function+TRAMP_LENGTH);
 #endif
 #if defined(__powerpc__) && !defined(__powerpc64__)
   __TR_clear_cache(function);

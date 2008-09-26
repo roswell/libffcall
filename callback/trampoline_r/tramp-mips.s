@@ -17,12 +17,12 @@
 	.globl	tramp
 	.ent	tramp
 tramp:
-	li	$2,0x73550000
-	ori	$2,$2,0x4711
-	li	$25,0xbabe0000
-	ori	$25,$25,0xbec0
+	/* We can assume that our own address (=tramp) is in $25. */
+	lw	$2,$LC0-tramp($25)
+	lw	$25,$LC1-tramp($25)
 	/* The called function expects to see its own address in $25. */
 	j	$25
-	/* Some Mips hardware running Irix-4.0.5 needs this nop. */
-	nop
+	 nop
+$LC0:	.word	0x73554711
+$LC1:	.word	0xbabebec0
 	.end	tramp
