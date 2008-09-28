@@ -1,3 +1,8 @@
+2008-09-28  Sam Steingold  <sds@gnu.org>
+
+	* Makefile.devel (aclocal.m4): include glm4 (this defined gl_EARLY
+	and gl_INIT and fixes make check on x86_64)
+
 2008-09-26  Sam Steingold  <sds@gnu.org>
 
 	* avcall/avcall-ia64.s, avcall/avcall.h.in:
