@@ -3772,7 +3772,7 @@ case "$host_cpu" in
   arm* )
     host_cpu_abi=arm
     ;;
-  mips )
+  mips* )
     { $as_echo "$as_me:$LINENO: checking for 64-bit MIPS" >&5
 $as_echo_n "checking for 64-bit MIPS... " >&6; }
 if test "${ffcall_cv_host_mips64+set}" = set; then

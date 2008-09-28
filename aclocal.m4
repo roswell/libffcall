@@ -1,7 +1,7 @@
-# generated automatically by aclocal 1.10.1 -*- Autoconf -*-
+# generated automatically by aclocal 1.9.6 -*- Autoconf -*-
 
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-# 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
+# 2005  Free Software Foundation, Inc.
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -10,6 +10,526 @@
 # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
+
+# AM_CONDITIONAL                                            -*- Autoconf -*-
+
+# Copyright (C) 1997, 2000, 2001, 2003, 2004, 2005
+# Free Software Foundation, Inc.
+#
+# This file is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# serial 7
+
+# AM_CONDITIONAL(NAME, SHELL-CONDITION)
+# -------------------------------------
+# Define a conditional.
+AC_DEFUN([AM_CONDITIONAL],
+[AC_PREREQ(2.52)dnl
+ ifelse([$1], [TRUE],  [AC_FATAL([$0: invalid condition: $1])],
+	[$1], [FALSE], [AC_FATAL([$0: invalid condition: $1])])dnl
+AC_SUBST([$1_TRUE])
+AC_SUBST([$1_FALSE])
+if $2; then
+  $1_TRUE=
+  $1_FALSE='#'
+else
+  $1_TRUE='#'
+  $1_FALSE=
+fi
+AC_CONFIG_COMMANDS_PRE(
+[if test -z "${$1_TRUE}" && test -z "${$1_FALSE}"; then
+  AC_MSG_ERROR([[conditional "$1" was never defined.
+Usually this means the macro was only invoked conditionally.]])
+fi])])
+
+# gnulib-common.m4 serial 5
+dnl Copyright (C) 2007-2008 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+
+# gl_COMMON
+# is expanded unconditionally through gnulib-tool magic.
+AC_DEFUN([gl_COMMON], [
+  dnl Use AC_REQUIRE here, so that the code is expanded once only.
+  AC_REQUIRE([gl_COMMON_BODY])
+])
+AC_DEFUN([gl_COMMON_BODY], [
+  AH_VERBATIM([isoc99_inline],
+[/* Work around a bug in Apple GCC 4.0.1 build 5465: In C99 mode, it supports
+   the ISO C 99 semantics of 'extern inline' (unlike the GNU C semantics of
+   earlier versions), but does not display it by setting __GNUC_STDC_INLINE__.
+   __APPLE__ && __MACH__ test for MacOS X.
+   __APPLE_CC__ tests for the Apple compiler and its version.
+   __STDC_VERSION__ tests for the C99 mode.  */
+#if defined __APPLE__ && defined __MACH__ && __APPLE_CC__ >= 5465 && !defined __cplusplus && __STDC_VERSION__ >= 199901L && !defined __GNUC_STDC_INLINE__
+# define __GNUC_STDC_INLINE__ 1
+#endif])
+])
+
+# gl_MODULE_INDICATOR([modulename])
+# defines a C macro indicating the presence of the given module.
+AC_DEFUN([gl_MODULE_INDICATOR],
+[
+  AC_DEFINE([GNULIB_]translit([$1],[abcdefghijklmnopqrstuvwxyz./-],[ABCDEFGHIJKLMNOPQRSTUVWXYZ___]), [1],
+    [Define to 1 when using the gnulib module ]$1[.])
+])
+
+# m4_foreach_w
+# is a backport of autoconf-2.59c's m4_foreach_w.
+# Remove this macro when we can assume autoconf >= 2.60.
+m4_ifndef([m4_foreach_w],
+  [m4_define([m4_foreach_w],
+    [m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])])])
+
+# AC_PROG_MKDIR_P
+# is a backport of autoconf-2.60's AC_PROG_MKDIR_P.
+# Remove this macro when we can assume autoconf >= 2.60.
+m4_ifdef([AC_PROG_MKDIR_P], [], [
+  AC_DEFUN([AC_PROG_MKDIR_P],
+    [AC_REQUIRE([AM_PROG_MKDIR_P])dnl defined by automake
+     MKDIR_P='$(mkdir_p)'
+     AC_SUBST([MKDIR_P])])])
+
+# AC_C_RESTRICT
+# This definition overrides the AC_C_RESTRICT macro from autoconf 2.60..2.61,
+# so that mixed use of GNU C and GNU C++ and mixed use of Sun C and Sun C++
+# works.
+# This definition can be removed once autoconf >= 2.62 can be assumed.
+AC_DEFUN([AC_C_RESTRICT],
+[AC_CACHE_CHECK([for C/C++ restrict keyword], ac_cv_c_restrict,
+  [ac_cv_c_restrict=no
+   # The order here caters to the fact that C++ does not require restrict.
+   for ac_kw in __restrict __restrict__ _Restrict restrict; do
+     AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+      [[typedef int * int_ptr;
+	int foo (int_ptr $ac_kw ip) {
+	return ip[0];
+       }]],
+      [[int s[1];
+	int * $ac_kw t = s;
+	t[0] = 0;
+	return foo(t)]])],
+      [ac_cv_c_restrict=$ac_kw])
+     test "$ac_cv_c_restrict" != no && break
+   done
+  ])
+ AH_VERBATIM([restrict],
+[/* Define to the equivalent of the C99 'restrict' keyword, or to
+   nothing if this is not supported.  Do not define if restrict is
+   supported directly.  */
+#undef restrict
+/* Work around a bug in Sun C++: it does not support _Restrict, even
+   though the corresponding Sun C compiler does, which causes
+   "#define restrict _Restrict" in the previous line.  Perhaps some future
+   version of Sun C++ will work with _Restrict; if so, it'll probably
+   define __RESTRICT, just as Sun C does.  */
+#if defined __SUNPRO_CC && !defined __RESTRICT
+# define _Restrict
+#endif])
+ case $ac_cv_c_restrict in
+   restrict) ;;
+   no) AC_DEFINE([restrict], []) ;;
+   *)  AC_DEFINE_UNQUOTED([restrict], [$ac_cv_c_restrict]) ;;
+ esac
+])
+
+# DO NOT EDIT! GENERATED AUTOMATICALLY!
+# Copyright (C) 2002-2008 Free Software Foundation, Inc.
+#
+# This file is free software, distributed under the terms of the GNU
+# General Public License.  As a special exception to the GNU General
+# Public License, this file may be distributed as part of a program
+# that contains a configuration script generated by Autoconf, under
+# the same distribution terms as the rest of that program.
+#
+# Generated by gnulib-tool.
+#
+# This file represents the compiled summary of the specification in
+# gnulib-cache.m4. It lists the computed macro invocations that need
+# to be invoked from configure.ac.
+# In projects using CVS, this file can be treated like other built files.
+
+
+# This macro should be invoked from ./configure.ac, in the section
+# "Checks for programs", right after AC_PROG_CC, and certainly before
+# any checks for libraries, header files, types and library functions.
+AC_DEFUN([gl_EARLY],
+[
+  m4_pattern_forbid([^gl_[A-Z]])dnl the gnulib macro namespace
+  m4_pattern_allow([^gl_ES$])dnl a valid locale name
+  m4_pattern_allow([^gl_LIBOBJS$])dnl a variable
+  m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
+  AC_REQUIRE([AC_PROG_RANLIB])
+])
+
+# This macro should be invoked from ./configure.ac, in the section
+# "Check for header files, types and library functions".
+AC_DEFUN([gl_INIT],
+[
+  AM_CONDITIONAL([GL_COND_LIBTOOL], [false])
+  gl_cond_libtool=false
+  gl_libdeps=
+  gl_ltlibdeps=
+  m4_pushdef([AC_LIBOBJ], m4_defn([gl_LIBOBJ]))
+  m4_pushdef([AC_REPLACE_FUNCS], m4_defn([gl_REPLACE_FUNCS]))
+  m4_pushdef([AC_LIBSOURCES], m4_defn([gl_LIBSOURCES]))
+  m4_pushdef([gl_LIBSOURCES_LIST], [])
+  m4_pushdef([gl_LIBSOURCES_DIR], [])
+  gl_COMMON
+  gl_source_base='gllib'
+  AC_REQUIRE([AC_TYPE_LONG_LONG_INT])
+  AC_REQUIRE([AC_TYPE_UNSIGNED_LONG_LONG_INT])
+  m4_ifval(gl_LIBSOURCES_LIST, [
+    m4_syscmd([test ! -d ]m4_defn([gl_LIBSOURCES_DIR])[ ||
+      for gl_file in ]gl_LIBSOURCES_LIST[ ; do
+        if test ! -r ]m4_defn([gl_LIBSOURCES_DIR])[/$gl_file ; then
+          echo "missing file ]m4_defn([gl_LIBSOURCES_DIR])[/$gl_file" >&2
+          exit 1
+        fi
+      done])dnl
+      m4_if(m4_sysval, [0], [],
+        [AC_FATAL([expected source file, required through AC_LIBSOURCES, not found])])
+  ])
+  m4_popdef([gl_LIBSOURCES_DIR])
+  m4_popdef([gl_LIBSOURCES_LIST])
+  m4_popdef([AC_LIBSOURCES])
+  m4_popdef([AC_REPLACE_FUNCS])
+  m4_popdef([AC_LIBOBJ])
+  AC_CONFIG_COMMANDS_PRE([
+    gl_libobjs=
+    gl_ltlibobjs=
+    if test -n "$gl_LIBOBJS"; then
+      # Remove the extension.
+      sed_drop_objext='s/\.o$//;s/\.obj$//'
+      for i in `for i in $gl_LIBOBJS; do echo "$i"; done | sed "$sed_drop_objext" | sort | uniq`; do
+        gl_libobjs="$gl_libobjs $i.$ac_objext"
+        gl_ltlibobjs="$gl_ltlibobjs $i.lo"
+      done
+    fi
+    AC_SUBST([gl_LIBOBJS], [$gl_libobjs])
+    AC_SUBST([gl_LTLIBOBJS], [$gl_ltlibobjs])
+  ])
+  gltests_libdeps=
+  gltests_ltlibdeps=
+  m4_pushdef([AC_LIBOBJ], m4_defn([gltests_LIBOBJ]))
+  m4_pushdef([AC_REPLACE_FUNCS], m4_defn([gltests_REPLACE_FUNCS]))
+  m4_pushdef([AC_LIBSOURCES], m4_defn([gltests_LIBSOURCES]))
+  m4_pushdef([gltests_LIBSOURCES_LIST], [])
+  m4_pushdef([gltests_LIBSOURCES_DIR], [])
+  gl_COMMON
+  gl_source_base='tests'
+  m4_ifval(gltests_LIBSOURCES_LIST, [
+    m4_syscmd([test ! -d ]m4_defn([gltests_LIBSOURCES_DIR])[ ||
+      for gl_file in ]gltests_LIBSOURCES_LIST[ ; do
+        if test ! -r ]m4_defn([gltests_LIBSOURCES_DIR])[/$gl_file ; then
+          echo "missing file ]m4_defn([gltests_LIBSOURCES_DIR])[/$gl_file" >&2
+          exit 1
+        fi
+      done])dnl
+      m4_if(m4_sysval, [0], [],
+        [AC_FATAL([expected source file, required through AC_LIBSOURCES, not found])])
+  ])
+  m4_popdef([gltests_LIBSOURCES_DIR])
+  m4_popdef([gltests_LIBSOURCES_LIST])
+  m4_popdef([AC_LIBSOURCES])
+  m4_popdef([AC_REPLACE_FUNCS])
+  m4_popdef([AC_LIBOBJ])
+  AC_CONFIG_COMMANDS_PRE([
+    gltests_libobjs=
+    gltests_ltlibobjs=
+    if test -n "$gltests_LIBOBJS"; then
+      # Remove the extension.
+      sed_drop_objext='s/\.o$//;s/\.obj$//'
+      for i in `for i in $gltests_LIBOBJS; do echo "$i"; done | sed "$sed_drop_objext" | sort | uniq`; do
+        gltests_libobjs="$gltests_libobjs $i.$ac_objext"
+        gltests_ltlibobjs="$gltests_ltlibobjs $i.lo"
+      done
+    fi
+    AC_SUBST([gltests_LIBOBJS], [$gltests_libobjs])
+    AC_SUBST([gltests_LTLIBOBJS], [$gltests_ltlibobjs])
+  ])
+  LIBGNU_LIBDEPS="$gl_libdeps"
+  AC_SUBST([LIBGNU_LIBDEPS])
+  LIBGNU_LTLIBDEPS="$gl_ltlibdeps"
+  AC_SUBST([LIBGNU_LTLIBDEPS])
+])
+
+# Like AC_LIBOBJ, except that the module name goes
+# into gl_LIBOBJS instead of into LIBOBJS.
+AC_DEFUN([gl_LIBOBJ], [
+  AS_LITERAL_IF([$1], [gl_LIBSOURCES([$1.c])])dnl
+  gl_LIBOBJS="$gl_LIBOBJS $1.$ac_objext"
+])
+
+# Like AC_REPLACE_FUNCS, except that the module name goes
+# into gl_LIBOBJS instead of into LIBOBJS.
+AC_DEFUN([gl_REPLACE_FUNCS], [
+  m4_foreach_w([gl_NAME], [$1], [AC_LIBSOURCES(gl_NAME[.c])])dnl
+  AC_CHECK_FUNCS([$1], , [gl_LIBOBJ($ac_func)])
+])
+
+# Like AC_LIBSOURCES, except the directory where the source file is
+# expected is derived from the gnulib-tool parameterization,
+# and alloca is special cased (for the alloca-opt module).
+# We could also entirely rely on EXTRA_lib..._SOURCES.
+AC_DEFUN([gl_LIBSOURCES], [
+  m4_foreach([_gl_NAME], [$1], [
+    m4_if(_gl_NAME, [alloca.c], [], [
+      m4_define([gl_LIBSOURCES_DIR], [gllib])
+      m4_append([gl_LIBSOURCES_LIST], _gl_NAME, [ ])
+    ])
+  ])
+])
+
+# Like AC_LIBOBJ, except that the module name goes
+# into gltests_LIBOBJS instead of into LIBOBJS.
+AC_DEFUN([gltests_LIBOBJ], [
+  AS_LITERAL_IF([$1], [gltests_LIBSOURCES([$1.c])])dnl
+  gltests_LIBOBJS="$gltests_LIBOBJS $1.$ac_objext"
+])
+
+# Like AC_REPLACE_FUNCS, except that the module name goes
+# into gltests_LIBOBJS instead of into LIBOBJS.
+AC_DEFUN([gltests_REPLACE_FUNCS], [
+  m4_foreach_w([gl_NAME], [$1], [AC_LIBSOURCES(gl_NAME[.c])])dnl
+  AC_CHECK_FUNCS([$1], , [gltests_LIBOBJ($ac_func)])
+])
+
+# Like AC_LIBSOURCES, except the directory where the source file is
+# expected is derived from the gnulib-tool parameterization,
+# and alloca is special cased (for the alloca-opt module).
+# We could also entirely rely on EXTRA_lib..._SOURCES.
+AC_DEFUN([gltests_LIBSOURCES], [
+  m4_foreach([_gl_NAME], [$1], [
+    m4_if(_gl_NAME, [alloca.c], [], [
+      m4_define([gltests_LIBSOURCES_DIR], [tests])
+      m4_append([gltests_LIBSOURCES_LIST], _gl_NAME, [ ])
+    ])
+  ])
+])
+
+# This macro records the list of files which have been installed by
+# gnulib-tool and may be removed by future gnulib-tool invocations.
+AC_DEFUN([gl_FILE_LIST], [
+  lib/dummy.c
+  m4/gnulib-common.m4
+  m4/longlong.m4
+  m4/nocrash.m4
+  m4/onceonly.m4
+])
+
+# longlong.m4 serial 13
+dnl Copyright (C) 1999-2007 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+
+dnl From Paul Eggert.
+
+# Define HAVE_LONG_LONG_INT if 'long long int' works.
+# This fixes a bug in Autoconf 2.61, but can be removed once we
+# assume 2.62 everywhere.
+
+# Note: If the type 'long long int' exists but is only 32 bits large
+# (as on some very old compilers), HAVE_LONG_LONG_INT will not be
+# defined. In this case you can treat 'long long int' like 'long int'.
+
+AC_DEFUN([AC_TYPE_LONG_LONG_INT],
+[
+  AC_CACHE_CHECK([for long long int], [ac_cv_type_long_long_int],
+    [AC_LINK_IFELSE(
+       [_AC_TYPE_LONG_LONG_SNIPPET],
+       [dnl This catches a bug in Tandem NonStop Kernel (OSS) cc -O circa 2004.
+	dnl If cross compiling, assume the bug isn't important, since
+	dnl nobody cross compiles for this platform as far as we know.
+	AC_RUN_IFELSE(
+	  [AC_LANG_PROGRAM(
+	     [[@%:@include <limits.h>
+	       @%:@ifndef LLONG_MAX
+	       @%:@ define HALF \
+			(1LL << (sizeof (long long int) * CHAR_BIT - 2))
+	       @%:@ define LLONG_MAX (HALF - 1 + HALF)
+	       @%:@endif]],
+	     [[long long int n = 1;
+	       int i;
+	       for (i = 0; ; i++)
+		 {
+		   long long int m = n << i;
+		   if (m >> i != n)
+		     return 1;
+		   if (LLONG_MAX / 2 < m)
+		     break;
+		 }
+	       return 0;]])],
+	  [ac_cv_type_long_long_int=yes],
+	  [ac_cv_type_long_long_int=no],
+	  [ac_cv_type_long_long_int=yes])],
+       [ac_cv_type_long_long_int=no])])
+  if test $ac_cv_type_long_long_int = yes; then
+    AC_DEFINE([HAVE_LONG_LONG_INT], 1,
+      [Define to 1 if the system has the type `long long int'.])
+  fi
+])
+
+# Define HAVE_UNSIGNED_LONG_LONG_INT if 'unsigned long long int' works.
+# This fixes a bug in Autoconf 2.61, but can be removed once we
+# assume 2.62 everywhere.
+
+# Note: If the type 'unsigned long long int' exists but is only 32 bits
+# large (as on some very old compilers), AC_TYPE_UNSIGNED_LONG_LONG_INT
+# will not be defined. In this case you can treat 'unsigned long long int'
+# like 'unsigned long int'.
+
+AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
+[
+  AC_CACHE_CHECK([for unsigned long long int],
+    [ac_cv_type_unsigned_long_long_int],
+    [AC_LINK_IFELSE(
+       [_AC_TYPE_LONG_LONG_SNIPPET],
+       [ac_cv_type_unsigned_long_long_int=yes],
+       [ac_cv_type_unsigned_long_long_int=no])])
+  if test $ac_cv_type_unsigned_long_long_int = yes; then
+    AC_DEFINE([HAVE_UNSIGNED_LONG_LONG_INT], 1,
+      [Define to 1 if the system has the type `unsigned long long int'.])
+  fi
+])
+
+# Expands to a C program that can be used to test for simultaneous support
+# of 'long long' and 'unsigned long long'. We don't want to say that
+# 'long long' is available if 'unsigned long long' is not, or vice versa,
+# because too many programs rely on the symmetry between signed and unsigned
+# integer types (excluding 'bool').
+AC_DEFUN([_AC_TYPE_LONG_LONG_SNIPPET],
+[
+  AC_LANG_PROGRAM(
+    [[/* For now, do not test the preprocessor; as of 2007 there are too many
+	 implementations with broken preprocessors.  Perhaps this can
+	 be revisited in 2012.  In the meantime, code should not expect
+	 #if to work with literals wider than 32 bits.  */
+      /* Test literals.  */
+      long long int ll = 9223372036854775807ll;
+      long long int nll = -9223372036854775807LL;
+      unsigned long long int ull = 18446744073709551615ULL;
+      /* Test constant expressions.   */
+      typedef int a[((-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
+		     ? 1 : -1)];
+      typedef int b[(18446744073709551615ULL <= (unsigned long long int) -1
+		     ? 1 : -1)];
+      int i = 63;]],
+    [[/* Test availability of runtime routines for shift and division.  */
+      long long int llmax = 9223372036854775807ll;
+      unsigned long long int ullmax = 18446744073709551615ull;
+      return ((ll << 63) | (ll >> 63) | (ll < i) | (ll > i)
+	      | (llmax / ll) | (llmax % ll)
+	      | (ull << 63) | (ull >> 63) | (ull << i) | (ull >> i)
+	      | (ullmax / ull) | (ullmax % ull));]])
+])
+
+# nocrash.m4 serial 1
+dnl Copyright (C) 2005 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+
+dnl Based on libsigsegv, from Bruno Haible and Paolo Bonzini.
+
+AC_PREREQ(2.13)
+
+dnl Expands to some code for use in .c programs that will cause the configure
+dnl test to exit instead of crashing. This is useful to avoid triggering
+dnl action from a background debugger and to avoid core dumps.
+dnl Usage:   ...
+dnl          ]GL_NOCRASH[
+dnl          ...
+dnl          int main() { nocrash_init(); ... }
+AC_DEFUN([GL_NOCRASH],[[
+#include <stdlib.h>
+#if defined __MACH__ && defined __APPLE__
+/* Avoid a crash on MacOS X.  */
+#include <mach/mach.h>
+#include <mach/mach_error.h>
+#include <mach/thread_status.h>
+#include <mach/exception.h>
+#include <mach/task.h>
+#include <pthread.h>
+/* The exception port on which our thread listens.  */
+static mach_port_t our_exception_port;
+/* The main function of the thread listening for exceptions of type
+   EXC_BAD_ACCESS.  */
+static void *
+mach_exception_thread (void *arg)
+{
+  /* Buffer for a message to be received.  */
+  struct {
+    mach_msg_header_t head;
+    mach_msg_body_t msgh_body;
+    char data[1024];
+  } msg;
+  mach_msg_return_t retval;
+  /* Wait for a message on the exception port.  */
+  retval = mach_msg (&msg.head, MACH_RCV_MSG | MACH_RCV_LARGE, 0, sizeof (msg),
+                     our_exception_port, MACH_MSG_TIMEOUT_NONE, MACH_PORT_NULL);
+  if (retval != MACH_MSG_SUCCESS)
+    abort ();
+  exit (1);
+}
+static void
+nocrash_init (void)
+{
+  mach_port_t self = mach_task_self ();
+  /* Allocate a port on which the thread shall listen for exceptions.  */
+  if (mach_port_allocate (self, MACH_PORT_RIGHT_RECEIVE, &our_exception_port)
+      == KERN_SUCCESS) {
+    /* See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/mach_port_insert_right.html.  */
+    if (mach_port_insert_right (self, our_exception_port, our_exception_port,
+                                MACH_MSG_TYPE_MAKE_SEND)
+        == KERN_SUCCESS) {
+      /* The exceptions we want to catch.  Only EXC_BAD_ACCESS is interesting
+         for us.  */
+      exception_mask_t mask = EXC_MASK_BAD_ACCESS;
+      /* Create the thread listening on the exception port.  */
+      pthread_attr_t attr;
+      pthread_t thread;
+      if (pthread_attr_init (&attr) == 0
+          && pthread_attr_setdetachstate (&attr, PTHREAD_CREATE_DETACHED) == 0
+          && pthread_create (&thread, &attr, mach_exception_thread, NULL) == 0) {
+        pthread_attr_destroy (&attr);
+        /* Replace the exception port info for these exceptions with our own.
+           Note that we replace the exception port for the entire task, not only
+           for a particular thread.  This has the effect that when our exception
+           port gets the message, the thread specific exception port has already
+           been asked, and we don't need to bother about it.
+           See http://web.mit.edu/darwin/src/modules/xnu/osfmk/man/task_set_exception_ports.html.  */
+        task_set_exception_ports (self, mask, our_exception_port,
+                                  EXCEPTION_DEFAULT, MACHINE_THREAD_STATE);
+      }
+    }
+  }
+}
+#else
+/* Avoid a crash on POSIX systems.  */
+#include <signal.h>
+/* A POSIX signal handler.  */
+static void
+exception_handler (int sig)
+{
+  exit (1);
+}
+static void
+nocrash_init (void)
+{
+#ifdef SIGSEGV
+  signal (SIGSEGV, exception_handler);
+#endif
+#ifdef SIGBUS
+  signal (SIGBUS, exception_handler);
+#endif
+}
+#endif
+]])
 
 dnl -*- Autoconf -*-
 dnl Copyright (C) 1993-2003 Free Software Foundation, Inc.
@@ -204,7 +724,7 @@ changequote(,)dnl
     host_cpu_abi=arm
     ;;
 changequote([,])dnl
-  mips )
+  mips* )
     AC_CACHE_CHECK([for 64-bit MIPS], ffcall_cv_host_mips64, [
 AC_EGREP_CPP(yes,
 [#if defined(_MIPS_SZLONG)
