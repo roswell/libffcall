@@ -7,7 +7,7 @@ MAKE = make
 .PHONY : all configures update-gnulib gnulib-imported build-aux-update \
 	check-configures config-h-in woe32-h woe32-c
 
-all : build-aux-update gnulib-imported aclocal.m4 check-configures
+all : build-aux-update gnulib-imported aclocal.m4 check-configures \
 	config-h-in woe32-h woe32-c
 
 GNULIB_CVS_ROOT = :pserver:anonymous@pserver.git.sv.gnu.org:/gnulib.git
