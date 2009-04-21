@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2008 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2009 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -16,7 +16,7 @@ AC_CHECK_HEADER(sys/mman.h, , no_mmap=1)dnl
 if test -z "$no_mmap"; then
 AC_CHECK_FUNC(mmap, , no_mmap=1)dnl
 if test -z "$no_mmap"; then
-AC_DEFINE(HAVE_MMAP,,[have <sys/mmap.h> and the mmap() function])
+AC_DEFINE([HAVE_MMAP],[],[have <sys/mmap.h> and the mmap() function])
 AC_CACHE_CHECK(for working mmap, cl_cv_func_mmap_works, [
 case "$host" in
   i[34567]86-*-sysv4*)
@@ -101,7 +101,7 @@ AC_TRY_RUN(GL_NOCRASH[$mmap_prog_1
   nocrash_init();
 $mmap_prog_2
 ], have_mmap_devzero=1
-cl_cv_func_mmap_devzero=yes, 
+cl_cv_func_mmap_devzero=yes,
 retry_mmap=1,
 : # When cross-compiling, don't assume anything.
 )
@@ -128,16 +128,16 @@ cl_cv_func_mmap_works=no
 fi
 ])
 if test "$cl_cv_func_mmap_anon" = yes; then
-AC_DEFINE(HAVE_MMAP_ANON,,[<sys/mman.h> defines MAP_ANON and mmaping with MAP_ANON works])
+AC_DEFINE([HAVE_MMAP_ANON],[],[<sys/mman.h> defines MAP_ANON and mmaping with MAP_ANON works])
 fi
 if test "$cl_cv_func_mmap_anonymous" = yes; then
-AC_DEFINE(HAVE_MMAP_ANONYMOUS,,[<sys/mman.h> defines MAP_ANONYMOUS and mmaping with MAP_ANONYMOUS works])
+AC_DEFINE([HAVE_MMAP_ANONYMOUS],[],[<sys/mman.h> defines MAP_ANONYMOUS and mmaping with MAP_ANONYMOUS works])
 fi
 if test "$cl_cv_func_mmap_devzero" = yes; then
-AC_DEFINE(HAVE_MMAP_DEVZERO,,[mmaping of the special device /dev/zero works])
+AC_DEFINE([HAVE_MMAP_DEVZERO],[],[mmaping of the special device /dev/zero works])
 fi
 if test "$cl_cv_func_mmap_devzero_sun4_29" = yes; then
-AC_DEFINE(HAVE_MMAP_DEVZERO_SUN4_29,,[mmaping of the special device /dev/zero works, but only on addresses < 2^29])
+AC_DEFINE([HAVE_MMAP_DEVZERO_SUN4_29],[],[mmaping of the special device /dev/zero works, but only on addresses < 2^29])
 fi
 fi
 fi

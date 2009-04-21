@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2003 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2009 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -31,7 +31,7 @@ rm -f conftest*
 ])
 if test $cl_cv_prog_as_underscore = yes; then
   AS_UNDERSCORE=true
-  AC_DEFINE(ASM_UNDERSCORE,,[symbols are prefixed by an underscore in assembly language])
+  AC_DEFINE([ASM_UNDERSCORE],[],[symbols are prefixed by an underscore in assembly language])
 else
   AS_UNDERSCORE=false
 fi

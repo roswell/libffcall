@@ -1,3 +1,10 @@
+2009-04-21  Sam Steingold  <sds@gnu.org>
+
+	* m4/as-underscore.m4, m4/codeexec.m4, m4/general.m4:
+	* m4/getpagesize.m4, m4/ireg.m4, m4/mach-vm.m4, m4/mmap.m4:
+	* m4/mprotect.m4, m4/pccstruct.m4, m4/shm.m4, m4/smallstruct.m4:
+	quote AC_DEFINE arguments
+
 2008-09-28  Sam Steingold  <sds@gnu.org>
 
 	* Makefile.devel (aclocal.m4): include glm4 (this defined gl_EARLY

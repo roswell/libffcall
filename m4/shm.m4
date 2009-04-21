@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2003 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2009 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -46,7 +46,7 @@ cl_cv_sys_shm_works="guessing no")
 fi
 case "$cl_cv_sys_shm_works" in
   *yes) have_shm=1
-        AC_DEFINE(HAVE_SHM,,[have <sys/shm.h> and <sys/ipc.h> and shared memory works])
+        AC_DEFINE([HAVE_SHM],[],[have <sys/shm.h> and <sys/ipc.h> and shared memory works])
         AC_CHECK_HEADERS(sys/sysmacros.h)
         ;;
   *) ;;

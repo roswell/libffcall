@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2008 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2009 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -18,7 +18,7 @@ CL_LINK_CHECK([getpagesize], cl_cv_func_getpagesize, [
 #include <unistd.h>
 #endif
 ], [getpagesize();],
-AC_DEFINE(HAVE_GETPAGESIZE,,[have getpagesize()])
+AC_DEFINE([HAVE_GETPAGESIZE],[],[have getpagesize()])
 have_getpagesize=1)dnl
 if test -n "$have_getpagesize"; then
 CL_PROTO([getpagesize], [
@@ -30,7 +30,7 @@ CL_PROTO_RET([
 ], [int getpagesize();],
 cl_cv_proto_getpagesize_ret, int, size_t)
 ], [extern $cl_cv_proto_getpagesize_ret getpagesize (void);])
-AC_DEFINE_UNQUOTED(RETGETPAGESIZETYPE,$cl_cv_proto_getpagesize_ret,[return type of getpagesize()])
+AC_DEFINE_UNQUOTED([RETGETPAGESIZETYPE],$cl_cv_proto_getpagesize_ret,[return type of getpagesize()])
 else
 dnl Otherwise we use PAGESIZE defined in <sys/param.h>.
 dnl But mingw32 doesn't have <sys/param.h>.
