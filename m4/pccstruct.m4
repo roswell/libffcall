@@ -10,9 +10,9 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ(2.13)
 
+AC_DEFUN([PCCSR_DOC],[for pcc non-reentrant struct return convention])
 AC_DEFUN([FFCALL_PCC_STRUCT_RETURN],[dnl
-DOC=["for pcc non-reentrant struct return convention"]
-AC_CACHE_CHECK($DOC, ffcall_cv_c_struct_return_static, [dnl
+AC_CACHE_CHECK(PCCSR_DOC, ffcall_cv_c_struct_return_static, [dnl
 save_CFLAGS="$CFLAGS"
 test $CC_GCC = true && CFLAGS="$CFLAGS -O0"
 AC_TRY_RUN(GL_NOCRASH[
@@ -35,7 +35,7 @@ ffcall_cv_c_struct_return_static="guessing no")
 CFLAGS="$save_CFLAGS"
 ])
 case "$ffcall_cv_c_struct_return_static" in
-  *yes) AC_DEFINE([__PCC_STRUCT_RETURN__], [], $DOC) ;;
+  *yes) AC_DEFINE([__PCC_STRUCT_RETURN__], [], PCCSR_DOC) ;;
   *no) ;;
 esac
 ])

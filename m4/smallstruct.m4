@@ -10,9 +10,9 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ(2.13)
 
+AC_DEFUN([SSR_DOC],[whether small structs are returned in registers])
 AC_DEFUN([FFCALL_SMALL_STRUCT_RETURN],[dnl
-DOC=["whether small structs are returned in registers"]
-AC_CACHE_CHECK($DOC,ffcall_cv_c_struct_return_small,[AC_TRY_RUN(GL_NOCRASH[
+AC_CACHE_CHECK(SSR_DOC,ffcall_cv_c_struct_return_small,[AC_TRY_RUN(GL_NOCRASH[
 typedef struct { long x; } foo; long y;
 foo foofun () { foo f; f.x = y; return f; }
 long (*fun) () = (long (*) ()) foofun;
@@ -27,7 +27,7 @@ dnl There are even weirder return value passing conventions than pcc.
 ffcall_cv_c_struct_return_small="guessing no")
 ])
 case "$ffcall_cv_c_struct_return_small" in
-  *yes) AC_DEFINE([__SMALL_STRUCT_RETURN__], [], $DOC) ;;
+  *yes) AC_DEFINE([__SMALL_STRUCT_RETURN__], [], SSR_DOC) ;;
   *no) ;;
 esac
 ])

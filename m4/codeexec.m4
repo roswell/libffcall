@@ -10,9 +10,8 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ(2.13)
 
-AC_DEFUN([FFCALL_CODEEXEC],[dnl
-DOC=["whether code in malloc'ed memory is executable"]
-AC_CACHE_CHECK($DOC, ffcall_cv_codeexec, [dnl
+AC_DEFUN([CE_DOC],[whether code in malloc()ed memory is executable])
+AC_DEFUN([FFCALL_CODEEXEC],[AC_CACHE_CHECK(CE_DOC, ffcall_cv_codeexec, [dnl
 dnl The test below does not work on host=hppa*-hp-hpux* because on this system
 dnl function pointers are actually pointers into(!) a two-pointer struct.
 dnl The test below does not work on host=rs6000-*-* because on this system
@@ -44,7 +43,7 @@ esac
 esac
 ])
 case "$ffcall_cv_codeexec" in
-  *yes) AC_DEFINE([CODE_EXECUTABLE], [], $DOC) ;;
+  *yes) AC_DEFINE([CODE_EXECUTABLE], [], CE_DOC) ;;
   *no)  ;;
 esac
 ])
