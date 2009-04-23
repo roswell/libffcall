@@ -1,3 +1,8 @@
+2009-04-23  Sam Steingold  <sds@gnu.org>
+
+	* m4/codeexec.m4, m4/ireg.m4, m4/pccstruct.m4, m4/smallstruct.m4:
+	all 3 arguments of AC_DEFINE are now required
+
 2009-04-21  Sam Steingold  <sds@gnu.org>
 
 	* m4/as-underscore.m4, m4/codeexec.m4, m4/general.m4:

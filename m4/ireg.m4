@@ -10,9 +10,9 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ(2.13)
 
-AC_DEFUN([FFCALL_IREG_FLOAT_RETURN],
-[AC_CACHE_CHECK([whether floats are returned in integer registers],
-ffcall_cv_c_float_return_ireg, [AC_TRY_RUN(GL_NOCRASH[
+AC_DEFUN([FFCALL_IREG_FLOAT_RETURN],[dnl
+DOC=["whether floats are returned in integer registers"]
+AC_CACHE_CHECK($DOC, ffcall_cv_c_float_return_ireg, [AC_TRY_RUN(GL_NOCRASH[
 float x = (float)1.2;
 float y = (float)1.3;
 float fun () { return x*y; }
@@ -26,7 +26,7 @@ dnl most platforms with floating-point unit, including m68k-linux.
 ffcall_cv_c_float_return_ireg="guessing no")
 ])
 case "$ffcall_cv_c_float_return_ireg" in
-  *yes) AC_DEFINE([__IREG_FLOAT_RETURN__]) ;;
+  *yes) AC_DEFINE([__IREG_FLOAT_RETURN__], [], $DOC) ;;
   *no) ;;
 esac
 ])
