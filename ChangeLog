@@ -1,5 +1,12 @@
 2009-04-24  Sam Steingold  <sds@gnu.org>
 
+	* Makefile.in, avcall/Makefile.in, callback/Makefile.in,
+	* callback/trampoline_r/Makefile.in, callback/vacall_r/Makefile.in,
+	* trampoline/Makefile.in, vacall/Makefile.in (datarootdir):
+	set to @datarootdir@ to avoid a configure warning
+
+2009-04-24  Sam Steingold  <sds@gnu.org>
+
 	* Makefile.devel (SUBDIRS_CONFIG_H): add avcall and callback
 
 2009-04-24  Sam Steingold  <sds@gnu.org>

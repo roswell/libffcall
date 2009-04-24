@@ -9,6 +9,7 @@ exec_prefix = @exec_prefix@
 libdir = @libdir@
 includedir = @includedir@
 mandir = @mandir@
+datarootdir = @datarootdir@
 
 # Programs used by "make":
 RM = rm -f
