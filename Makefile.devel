@@ -71,8 +71,9 @@ AUTOCONF = autoconf
 AUTOCONF_CACHE = autom4te.cache
 AUTOHEADER = autoheader
 
-SUBDIRS_CONFIGURE = $(CURDIR) avcall vacall trampoline callback \
+SUBDIRS_CONFIG_H = avcall callback trampoline vacall \
 	callback/vacall_r callback/trampoline_r
+SUBDIRS_CONFIGURE = $(CURDIR) $(SUBDIRS_CONFIG_H)
 CONFIGURES = $(patsubst %,%/configure,$(SUBDIRS_CONFIGURE))
 CONFIGURES_IN = $(patsubst %,%.in,$(CONFIGURES))
 
@@ -85,7 +86,6 @@ check-configures : $(CONFIGURES)
 	set -e; for f in $(CONFIGURES); do bash -x -n $$f; done
 	rm -rf `find . -name $(AUTOCONF_CACHE)`;
 
-SUBDIRS_CONFIG_H = vacall trampoline callback/vacall_r callback/trampoline_r
 CONFIG_H_IN = $(patsubst %,%/config.h.in,$(SUBDIRS_CONFIG_H))
 
 config-h-in : $(CONFIG_H_IN)

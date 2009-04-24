@@ -1,5 +1,9 @@
 2009-04-24  Sam Steingold  <sds@gnu.org>
 
+	* Makefile.devel (SUBDIRS_CONFIG_H): add avcall and callback
+
+2009-04-24  Sam Steingold  <sds@gnu.org>
+
 	* VERSION: new file
 	* configure.in: use AC_INIT with the version argument
 	* avcall/Makefile.mingw32: use sed to set LIBFFCALL_VERSION in avcall.h
