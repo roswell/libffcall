@@ -1744,6 +1744,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+ac_config_files="$ac_config_files Makefile"
+
 { $as_echo "$as_me:$LINENO: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 $as_echo_n "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
 set x ${MAKE-make}
@@ -3125,8 +3127,6 @@ d
 
 
 subdirs="$subdirs avcall vacall trampoline callback"
-
-ac_config_files="$ac_config_files Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
