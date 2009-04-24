@@ -5,6 +5,7 @@ dnl
 AC_INIT(libffcall/callback,m4_normalize(m4_esyscmd([cat ../VERSION])))
 AC_CONFIG_SRCDIR(callback.h.in)
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES(Makefile callback.h)
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_GCC_TRADITIONAL
@@ -33,4 +34,4 @@ d
 }
 '
 CL_CONFIG_SUBDIRS(vacall_r trampoline_r)
-AC_OUTPUT(Makefile)
+AC_OUTPUT

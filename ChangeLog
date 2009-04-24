@@ -1,5 +1,12 @@
 2009-04-24  Sam Steingold  <sds@gnu.org>
 
+	* avcall/configure.in, callback/configure.in,
+	* callback/trampoline_r/configure.in, callback/vacall_r/configure.in,
+	* trampoline/configure.in, vacall/configure.in:
+	use AC_CONFIG_FILES instead of AC_OUTPUT with argument
+
+2009-04-24  Sam Steingold  <sds@gnu.org>
+
 	* Makefile.in, avcall/Makefile.in, callback/Makefile.in,
 	* callback/trampoline_r/Makefile.in, callback/vacall_r/Makefile.in,
 	* trampoline/Makefile.in, vacall/Makefile.in (datarootdir):
