@@ -1,7 +1,10 @@
-dnl  AUTOCONF configuration for CALLBACK
-dnl  Bruno Haible 2000-04-02
+dnl AUTOCONF configuration for CALLBACK
+dnl Bruno Haible 2000-04-02
+dnl Sam Steingold 2008-2009
 dnl
-AC_INIT(trampoline_r/trampoline_r.h.in)
+AC_INIT(libffcall/callback,m4_normalize(m4_esyscmd([cat ../VERSION])))
+AC_CONFIG_SRCDIR(callback.h.in)
+AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_GCC_TRADITIONAL

@@ -10,6 +10,9 @@
  * on this software.
  */
 
+#if !defined(LIBFFCALL_VERSION)
+# define LIBFFCALL_VERSION @PACKAGE_VERSION@
+#endif
 
 /* These definitions are adjusted by `configure' automatically. */
 

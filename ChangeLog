@@ -1,3 +1,22 @@
+2009-04-24  Sam Steingold  <sds@gnu.org>
+
+	* VERSION: new file
+	* configure.in: use AC_INIT with the version argument
+	* avcall/Makefile.mingw32: use sed to set LIBFFCALL_VERSION in avcall.h
+	* callback/vacall_r/Makefile.mingw32:
+	use sed to set LIBFFCALL_VERSION in vacall_r.h
+	* vacall/Makefile.mingw32: use sed to set LIBFFCALL_VERSION in vacall.h
+	* avcall/avcall.h.in, callback/callback.h.in,
+	* callback/trampoline_r/trampoline_r.h.in,
+	* callback/vacall_r/vacall_r.h.in,
+	* trampoline/trampoline.h.in, vacall/vacall.h.in:
+	(LIBFFCALL_VERSION): define to @PACKAGE_VERSION@
+	* avcall/configure.in, callback/configure.in,
+	* callback/trampoline_r/configure.in, callback/vacall_r/configure.in,
+	* trampoline/configure.in, vacall/configure.in:
+	use AC_INIT with the version argument,
+	pass [config.h] to AC_CONFIG_HEADERS
+
 2009-04-23  Sam Steingold  <sds@gnu.org>
 
 	* m4/codeexec.m4, m4/ireg.m4, m4/pccstruct.m4, m4/smallstruct.m4:

@@ -10,6 +10,10 @@
  * on this software.
  */
 
+#if !defined(LIBFFCALL_VERSION)
+# define LIBFFCALL_VERSION @PACKAGE_VERSION@
+#endif
+
 #include "vacall_r.h"
 #include "trampoline_r.h"
 

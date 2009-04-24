@@ -27,6 +27,7 @@ AR_FLAGS = rc
 MV = mv
 LN = cp
 RM = rm -f
+SED = sed
 
 # Programs used by "make install":
 INSTALL = @INSTALL@
@@ -43,7 +44,7 @@ all : $(OBJECTS) libavcall.a avcall.h $(srcdir)/avcall.3 $(srcdir)/avcall.html
 
 avcall.h : avcall.h.mingw32
 	$(RM) avcall.h
-	$(LN) avcall.h.mingw32 avcall.h
+	$(SED) 's/@PACKAGE_VERSION@/`cat ../VERSION`/' avcall.h.mingw32 > avcall.h
 
 avcall.o : avcall-$(CPU).o
 	$(RM) avcall.o

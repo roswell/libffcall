@@ -27,6 +27,7 @@ AR_FLAGS = rc
 MV = mv
 LN = cp
 RM = rm -f
+SED = sed
 
 # Programs used by "make install":
 INSTALL = @INSTALL@
@@ -43,7 +44,7 @@ all : $(OBJECTS) libvacall.a vacall.h $(srcdir)/vacall.3 $(srcdir)/vacall.html
 
 vacall.h : vacall.h.mingw32
 	$(RM) vacall.h
-	$(LN) vacall.h.mingw32 vacall.h
+	$(SED) 's/@PACKAGE_VERSION@/`cat ../VERSION`/' vacall.h.mingw32 > vacall.h
 
 config.h : config.h.mingw32
 	$(RM) config.h

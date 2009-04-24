@@ -10,6 +10,10 @@
  * on this software.
  */
 
+#if !defined(LIBFFCALL_VERSION)
+# define LIBFFCALL_VERSION @PACKAGE_VERSION@
+#endif
+
 #ifdef __cplusplus
 typedef int (*__TR_function) (...);
 #else
