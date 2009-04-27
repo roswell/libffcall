@@ -1,4 +1,24 @@
 2009-04-27  Max Lapan  <max.lapan@gmail.com>
+	Sam Steingold  <sds@gnu.org>
+
+	* avcall/Makefile.devel, avcall/Makefile.in, avcall/avcall.h.in,
+        * callback/trampoline_r/Makefile.devel,
+	* callback/trampoline_r/Makefile.in,
+        * callback/trampoline_r/configure.in,
+        * callback/vacall_r/Makefile.devel, callback/vacall_r/Makefile.in,
+        * callback/vacall_r/vacall_r.h.in, trampoline/Makefile.devel,
+	* trampoline/Makefile.in, trampoline/configure.in,
+        * vacall/Makefile.devel, vacall/Makefile.in, vacall/vacall.h.in:
+	Add ARMel support <https://savannah.gnu.org/bugs/?22492>
+	* avcall/avcall-armel.S, avcall/avcall-armel.c,
+	* callback/trampoline_r/cache-armel.c,
+	* callback/trampoline_r/cache-armel.s,
+        * callback/vacall_r/vacall-armel.c, callback/vacall_r/vacall-armel.s,
+        * trampoline/cache-armel.c, trampoline/cache-armel.s,
+        * vacall/vacall-armel.c, vacall/vacall-armel.s:
+	new files
+
+2009-04-27  Max Lapan  <max.lapan@gmail.com>
 
 	* avcall/tests.c, callback/tests.c, vacall/tests.c:
 	#include "config.h" for HAVE_LONG_LONG_INT

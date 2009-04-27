@@ -95,6 +95,12 @@ cache-alpha.o : $(srcdir)/cache-alpha.s
 cache-hppa.o : $(srcdir)/cache-hppa.s
 	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
 
+cache-arm.o : $(srcdir)/cache-arm.s
+	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-arm.s
+
+cache-armel.o : $(srcdir)/cache-armel.s
+	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-armel.s
+
 cache-powerpc.o : $(srcdir)/cache-powerpc-sysv4.s $(srcdir)/cache-powerpc-macos.s
 	case "$(OS)" in \
 	  macos* | darwin*) syntax=macos;; \

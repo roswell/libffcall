@@ -117,6 +117,12 @@ avcall-arm.lo : avcall-arm.s
 avcall-arm.s : $(srcdir)/avcall-arm.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-arm.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-arm.s
 
+avcall-armel.lo : avcall-armel.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-armel.s
+
+avcall-armel.s : $(srcdir)/avcall-armel.S
+	cp $(srcdir)/avcall-armel.S avcall-armel.s
+
 avcall-powerpc.lo : $(srcdir)/avcall-powerpc-aix.old.s $(srcdir)/avcall-powerpc-aix.new.s $(srcdir)/avcall-powerpc-sysv4.s $(srcdir)/avcall-powerpc-macos.s
 	case "$(OS)" in \
 	  aix3*) syntax=aix.old;; \
@@ -223,7 +229,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-arm.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-arm.s avcall-armel.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.o minitests.s minitests minitests.out
 	$(RM) tests.o tests.s tests tests.out

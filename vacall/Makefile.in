@@ -108,6 +108,9 @@ vacall-arm.o : vacall-arm.s
 vacall-arm.s : $(srcdir)/vacall-arm.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-arm.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-arm.s
 
+vacall-armel.o : vacall-armel.s
+	$(CC) @GCC_X_NONE@ -c vacall-armel.s
+
 vacall-powerpc.o : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-aix.new.s $(srcdir)/vacall-powerpc-sysv4.s $(srcdir)/vacall-powerpc-linux.s $(srcdir)/vacall-powerpc-macos.s
 	case "$(OS)" in \
 	  aix3*) syntax=aix.old;; \

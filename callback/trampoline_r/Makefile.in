@@ -103,6 +103,9 @@ cache-alpha.lo : $(srcdir)/cache-alpha.s
 cache-arm.lo : $(srcdir)/cache-arm.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-arm.s
 
+cache-armel.lo : $(srcdir)/cache-armel.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-armel.s
+
 cache-hppa.lo : $(srcdir)/cache-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
 

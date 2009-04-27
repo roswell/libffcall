@@ -93,6 +93,9 @@ cache-powerpc-macos.s : cache-powerpc.c
 cache-convex.s : cache-convex.c
 	$(GCC) -V 2.6.3 -b convex-c2 $(GCCFLAGS) -D__convex__ -S $< -o $@
 
+cache-armel.s : cache-armel.c
+	$(GCC) $(GCCFLAGS)  -fomit-frame-pointer -S cache-armel.c -o cache-armel.s
+
 trampoline_r.man : trampoline_r.3
 	$(ROFF_MAN) trampoline_r.3 > trampoline_r.man
 

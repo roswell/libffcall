@@ -9,7 +9,7 @@ RM = rm -f
 SED = sed
 ROFF_MAN = groff -Tascii -mandoc
 
-all : vacall-i386-macro.S vacall-i386-msvc.c vacall-i386-mingw32.c vacall-m68k.mit.S vacall-m68k.mot.s vacall-mips.S vacall-mipsn32.S vacall-mips64.S vacall-sparc.S vacall-sparc64.S vacall-alpha.s vacall-hppa.s vacall-arm.S vacall-powerpc-aix.old.s vacall-powerpc-aix.new.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-m88k.s vacall-convex.s vacall-ia64.s vacall-x86_64.s vacall.man \
+all : vacall-i386-macro.S vacall-i386-msvc.c vacall-i386-mingw32.c vacall-m68k.mit.S vacall-m68k.mot.s vacall-mips.S vacall-mipsn32.S vacall-mips64.S vacall-sparc.S vacall-sparc64.S vacall-alpha.s vacall-hppa.s vacall-arm.S vacall-armel.s vacall-powerpc-aix.old.s vacall-powerpc-aix.new.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-m88k.s vacall-convex.s vacall-ia64.s vacall-x86_64.s vacall.man \
       vacall.h.msvc config.h.msvc vacall.h.mingw32 config.h.mingw32
 
 vacall-i386-macro.S : vacall-i386.c vacall.h.in asmi386.sh
@@ -68,6 +68,9 @@ vacall-arm.S : vacall-arm.c vacall.h.in asmarm.sh
 	$(GCC) -V 2.6.3 -b arm-acorn-riscix $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-arm.s
 	(echo '#include "asmarm.h"' ; ./asmarm.sh < vacall-arm.s) > vacall-arm.S
 	$(RM) vacall-arm.s
+
+vacall-armel.s : vacall-armel.c vacall.h.in
+	$(GCC) $(GCCFLAGS) -D__arm__ -D__ARMEL__ -DHAVE_LONG_LONG -fomit-frame-pointer -S vacall-armel.c -o vacall-armel.s
 
 vacall-powerpc-aix.old.s : vacall-powerpc.c vacall.h.in
 	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mold-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.old.s

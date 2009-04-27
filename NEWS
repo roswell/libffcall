@@ -4,6 +4,7 @@ New in 1.11
 * Better support for IA64 on Linux (kernel 2.6.16+ and gcc 4.1.0+).
 * Added ARM support from Jonathan Olson (debian 1.10-2).
 * Added MIPSel support from Thiemo Seufer (debian 1.10-2).
+* Added ARMel support from Max Lapan.
 
 New in 1.10
 
