@@ -6918,7 +6918,7 @@ if test ${host_cpu_abi} = powerpc; then
     *) ;;
   esac
 fi
-if test ${host_cpu_abi} = sparc -o ${host_cpu_abi} = sparc64 -o ${host_cpu_abi} = alpha -o ${host_cpu_abi} = hppa -o ${host_cpu_abi} = convex -o ${host_cpu_abi} = arm; then
+if test ${host_cpu_abi} = sparc -o ${host_cpu_abi} = sparc64 -o ${host_cpu_abi} = alpha -o ${host_cpu_abi} = hppa -o ${host_cpu_abi} = convex -o ${host_cpu_abi} = arm -o ${host_cpu_abi} = armel; then
   CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).o'
 fi
 if test ${host_cpu_abi} = powerpc; then
