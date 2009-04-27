@@ -60,7 +60,7 @@ build-aux-update : update-gnulib force
 CURDIR=$(shell pwd)
 
 aclocal.m4 : $(wildcard m4/*.m4) $(wildcard glm4/*.m4) $(CONFIGURES_IN)
-	{ echo 'AC_INIT'; cat $(CONFIGURES_IN) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADER(\)'; } > configure.ac
+	{ echo 'AC_INIT'; cat $(CONFIGURES_IN) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADERS(\|AC_CONFIG_FILES(\)'; } > configure.ac
 	mv configure.in configure.in-save
 	aclocal --output=aclocal.m4 -I `pwd`/m4 -I `pwd`/glm4
 	mv configure.in-save configure.in

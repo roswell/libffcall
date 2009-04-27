@@ -34,6 +34,7 @@
 	* callback/trampoline_r/configure.in, callback/vacall_r/configure.in,
 	* trampoline/configure.in, vacall/configure.in:
 	use AC_CONFIG_FILES instead of AC_OUTPUT with argument
+	* Makefile.devel (aclocal.m4): adjust the grep regexp
 
 2009-04-24  Sam Steingold  <sds@gnu.org>
 
