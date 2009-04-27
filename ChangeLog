@@ -1,3 +1,8 @@
+2009-04-27  Max Lapan  <max.lapan@gmail.com>
+
+	* callback/trampoline_r/trampoline.c (is_tramp) [__arm__]:
+	fix bug in the last patch
+
 2009-04-24  Sam Steingold  <sds@gnu.org>
 
 	* avcall/configure.in, callback/configure.in,
