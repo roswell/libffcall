@@ -1,5 +1,10 @@
 2009-04-27  Max Lapan  <max.lapan@gmail.com>
 
+	* avcall/tests.c, callback/tests.c, vacall/tests.c:
+	#include "config.h" for HAVE_LONG_LONG_INT
+
+2009-04-27  Max Lapan  <max.lapan@gmail.com>
+
 	* callback/trampoline_r/trampoline.c (is_tramp) [__arm__]:
 	fix bug in the last patch
 
