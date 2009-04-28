@@ -1,3 +1,8 @@
+2009-04-28  Sam Steingold  <sds@gnu.org>
+
+	* m4/general.m4 (FFCALL_CACHE_EGREP_CPP): abstracted out of ...
+	(FFCALL_CANONICAL_HOST_CPU): use it
+
 2009-04-27  Max Lapan  <max.lapan@gmail.com>
 	Sam Steingold  <sds@gnu.org>
 
