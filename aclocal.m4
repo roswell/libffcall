@@ -702,6 +702,23 @@ AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])
 AC_CONFIG_SUBDIRS([$1])dnl
 ])
 
+dnl FFCALL_CACHE_EGREP_CPP(what,variable,condition)
+AC_DEFUN([FFCALL_CACHE_EGREP_CPP],
+[AC_CACHE_CHECK([for $1], [$2], [AC_EGREP_CPP(yes,
+[#if $3
+  yes
+#endif
+], [$2=yes], [$2=no])])])
+
+dnl FFCALL_SET_CPU_ABI(what,variable,condition,yes_abi,no_abi)
+AC_DEFUN([FFCALL_SET_CPU_ABI],
+[FFCALL_CACHE_EGREP_CPP([$1],[$2],[$3])
+if test $$2 = yes; then
+  host_cpu_abi=$4
+else
+  host_cpu_abi=$5
+fi])
+
 AC_DEFUN([FFCALL_CANONICAL_HOST_CPU],
 [AC_REQUIRE([AC_CANONICAL_HOST])AC_REQUIRE([AC_PROG_CC])
 case "$host_cpu" in
@@ -723,92 +740,39 @@ changequote(,)dnl
     ;;
 changequote([,])dnl
   arm* )
-    host_cpu_abi=arm
-    AC_CACHE_CHECK([for ARMel], ffcall_cv_host_armel, [AC_EGREP_CPP(yes,
-[#if defined(__ARMEL__)
-  yes
-#endif
-], ffcall_cv_host_armel=yes, ffcall_cv_host_armel=no)])
-    if test $ffcall_cv_host_armel = yes; then
-      host_cpu_abi=armel
-    fi
+    FFCALL_SET_CPU_ABI([ARMel], ffcall_cv_host_armel,
+      [defined(__ARMEL__)],armel,arm)
     ;;
   mips* )
-    AC_CACHE_CHECK([for 64-bit MIPS], ffcall_cv_host_mips64, [
-AC_EGREP_CPP(yes,
-[#if defined(_MIPS_SZLONG)
-#if (_MIPS_SZLONG == 64)
-/* We should also check for (_MIPS_SZPTR == 64), but gcc keeps this at 32. */
-  yes
-#endif
-#endif
-], ffcall_cv_host_mips64=yes, ffcall_cv_host_mips64=no)
-])
-if test $ffcall_cv_host_mips64 = yes; then
-  host_cpu_abi=mips64
-else
-  AC_CACHE_CHECK([for MIPS with n32 ABI], ffcall_cv_host_mipsn32, [
+dnl We should also check for (_MIPS_SZPTR == 64), but gcc keeps this at 32.
+    FFCALL_CACHE_EGREP_CPP([64-bit MIPS], ffcall_cv_host_mips64,
+      [defined(_MIPS_SZLONG) && (_MIPS_SZLONG == 64)])
+    if test $ffcall_cv_host_mips64 = yes; then
+      host_cpu_abi=mips64
+    else
 dnl Strictly speaking, the MIPS ABI (-32 or -n32) is independent from the CPU
 dnl identification (-mips[12] or -mips[34]). But -n32 is commonly used together
 dnl with -mips3, and it's easier to test the CPU identification.
-AC_EGREP_CPP(yes,
-[#if __mips >= 3
-  yes
-#endif
-], ffcall_cv_host_mipsn32=yes, ffcall_cv_host_mipsn32=no)
-])
-if test $ffcall_cv_host_mipsn32 = yes; then
-  host_cpu_abi=mipsn32
-else
-  host_cpu_abi=mips
-fi
-fi
+      FFCALL_SET_CPU_ABI([MIPS with n32 ABI], ffcall_cv_host_mipsn32,
+        [__mips >= 3], mipsn32, mips)
+    fi
     ;;
 dnl On powerpc64 systems, the C compiler may still be generating 32-bit code.
   powerpc64 )
-    AC_CACHE_CHECK([for 64-bit PowerPC], ffcall_cv_host_powerpc64, [
-AC_EGREP_CPP(yes,
-[#if defined(__powerpc64__) || defined(_ARCH_PPC64)
-  yes
-#endif
-], ffcall_cv_host_powerpc64=yes, ffcall_cv_host_powerpc64=no)
-])
-if test $ffcall_cv_host_powerpc64 = yes; then
-  host_cpu_abi=powerpc64
-else
-  host_cpu_abi=powerpc
-fi
+    FFCALL_SET_CPU_ABI([64-bit PowerPC], ffcall_cv_host_powerpc64,
+      [defined(__powerpc64__) || defined(_ARCH_PPC64)], powerpc64, powerpc)
     ;;
 dnl UltraSPARCs running Linux have `uname -m` = "sparc64", but the C compiler
 dnl still generates 32-bit code.
   sparc | sparc64 )
-    AC_CACHE_CHECK([for 64-bit SPARC], ffcall_cv_host_sparc64, [
-AC_EGREP_CPP(yes,
-[#if defined(__sparcv9) || defined(__arch64__)
-  yes
-#endif
-], ffcall_cv_host_sparc64=yes, ffcall_cv_host_sparc64=no)
-])
-if test $ffcall_cv_host_sparc64 = yes; then
-  host_cpu_abi=sparc64
-else
-  host_cpu_abi=sparc
-fi
+    FFCALL_SET_CPU_ABI([64-bit SPARC], ffcall_cv_host_sparc64,
+      [defined(__sparcv9) || defined(__arch64__)], sparc64, sparc)
     ;;
 dnl On x86_64 systems, the C compiler may still be generating 32-bit code.
   x86_64 )
-    AC_CACHE_CHECK([for 64-bit x86_64], ffcall_cv_host_x86_64, [
-AC_EGREP_CPP(yes,
-[#if defined(__LP64__) || defined(__x86_64__) || defined(__amd64__)
-  yes
-#endif
-], ffcall_cv_host_x86_64=yes, ffcall_cv_host_x86_64=no)
-])
-if test $ffcall_cv_host_x86_64 = yes; then
-  host_cpu_abi=x86_64
-else
-  host_cpu_abi=i386
-fi
+    FFCALL_SET_CPU_ABI([64-bit x86_64], ffcall_cv_host_x86_64,
+      [defined(__LP64__) || defined(__x86_64__) || defined(__amd64__)],
+      x86_64, i386)
     ;;
   *)
     host_cpu_abi=$host_cpu
