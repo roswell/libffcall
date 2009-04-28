@@ -10,6 +10,8 @@
 	* trampoline/Makefile.in, trampoline/configure.in,
         * vacall/Makefile.devel, vacall/Makefile.in, vacall/vacall.h.in:
 	Add ARMel support <https://savannah.gnu.org/bugs/?22492>
+	* m4/general.m4 (FFCALL_CANONICAL_HOST_CPU): use AC_EGREP_CPP to
+	distinguish between arm and armel
 	* avcall/avcall-armel.S, avcall/avcall-armel.c,
 	* callback/trampoline_r/cache-armel.c,
 	* callback/trampoline_r/cache-armel.s,

@@ -68,10 +68,18 @@ changequote(,)dnl
   c1 | c2 | c32 | c34 | c38 | c4 )
     host_cpu_abi=convex
     ;;
+changequote([,])dnl
   arm* )
     host_cpu_abi=arm
+    AC_CACHE_CHECK([for ARMel], ffcall_cv_host_armel, [AC_EGREP_CPP(yes,
+[#if defined(__ARMEL__)
+  yes
+#endif
+], ffcall_cv_host_armel=yes, ffcall_cv_host_armel=no)])
+    if test $ffcall_cv_host_armel = yes; then
+      host_cpu_abi=armel
+    fi
     ;;
-changequote([,])dnl
   mips* )
     AC_CACHE_CHECK([for 64-bit MIPS], ffcall_cv_host_mips64, [
 AC_EGREP_CPP(yes,
