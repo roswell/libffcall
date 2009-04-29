@@ -81,7 +81,7 @@ avcall-arm.S : avcall-arm.c avcall.h.in asmarm.sh
 	(echo '#include "asmarm.h"' ; ./asmarm.sh < avcall-arm.s) > avcall-arm.S
 	$(RM) avcall-arm.s
 
-avcall-armel.S : avcall-arm.c avcall.h.in
+avcall-armel.S : avcall-armel.c avcall.h.in
 	$(GCC) $(GCCFLAGS) -D__arm__ -S avcall-armel.c -o avcall-armel.s
 	(echo '#include "asmarm.h"' ; cat < avcall-armel.s) > avcall-armel.S
 	$(RM) avcall-armel.s
