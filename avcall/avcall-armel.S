@@ -116,7 +116,7 @@ __builtin_avcall:
 .L66:
 	ldr	r3, [r4, #8]
 .L64:
-	strh	lr, [r3, #0]	@ movhi 
+	strh	lr, [r3, #0]	@ movhi
 	b	.L7
 .L37:
 	tst	r3, #512
@@ -127,7 +127,7 @@ __builtin_avcall:
 	cmp	r3, #2
 	beq	.L66
 	cmp	r3, #4
-	beq	.L73
+	bls	.L73
 	cmp	r3, #8
 	bne	.L7
 .L72:

@@ -99,7 +99,9 @@ __builtin_avcall(av_alist* l)
     RETURN(void*, i);
   } else
   if (l->rtype == __AVstruct) {
-    /* NB: On arm, all structure sizes are divisible by 4. */
+    /* PCS for ARM (http://infocenter.arm.com/help/topic/com.arm.doc.ihi0042b/IHI0042B_aapcs.pdf):
+       page 19: "A Composite Type not larger than 4 bytes is returned in r0."
+       sizeof({char a[3];}) = 3, so we have to use <= sizeof below */
     if (l->flags & __AV_PCC_STRUCT_RETURN) {
       /* pcc struct return convention: need a  *(TYPE*)l->raddr = *(TYPE*)i;  */
       if (l->rsize == sizeof(char)) { /* can't occur */
@@ -128,7 +130,7 @@ __builtin_avcall(av_alist* l)
         if (l->rsize == sizeof(short)) { /* can't occur */
           RETURN(short, i);
         } else
-        if (l->rsize == sizeof(int)) {
+        if (l->rsize <= sizeof(int)) {
           RETURN(int, i);
         } else
         if (l->rsize == 2*sizeof(__avword)) {
