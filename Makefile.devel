@@ -12,13 +12,16 @@ all : build-aux-update gnulib-imported aclocal.m4 check-configures \
 
 GNULIB_CVS_ROOT = :pserver:anonymous@pserver.git.sv.gnu.org:/gnulib.git
 GNULIB_CVS_REPOSITORY = HEAD
+GNULIB_GIT = git://git.savannah.gnu.org/gnulib.git
 GNULIB_CHECKOUT := gnulib
 update-gnulib :
 	if test -d $(GNULIB_CHECKOUT); then \
 	  cd $(GNULIB_CHECKOUT) && \
-	  cvs update -d -P; \
+	  if test -d .git; then git pull; else cvs update -d -P; fi \
 	else \
-	  cvs -d "$(GNULIB_CVS_ROOT)" checkout -d $(GNULIB_CHECKOUT) $(GNULIB_CVS_REPOSITORY); \
+	  if git --version >/dev/null 2>&1; then \
+	    git clone "$(GNULIB_GIT)" $(GNULIB_CHECKOUT) ; \
+	  else cvs -d "$(GNULIB_CVS_ROOT)" checkout -d $(GNULIB_CHECKOUT) $(GNULIB_CVS_REPOSITORY); fi \
 	fi
 
 gnulib-imported : update-gnulib force

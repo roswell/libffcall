@@ -1,5 +1,9 @@
 2009-10-16  Sam Steingold  <sds@gnu.org>
 
+	* Makefile.devel (update-gnulib): use git when available
+
+2009-10-16  Sam Steingold  <sds@gnu.org>
+
 	* avcall/configure.in, callback/configure.in,
 	* callback/trampoline_r/configure.in, callback/vacall_r/configure.in,
 	* trampoline/configure.in, vacall/configure.in: list the main generated
