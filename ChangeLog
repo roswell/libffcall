@@ -1,5 +1,9 @@
 2009-10-16  Sam Steingold  <sds@gnu.org>
 
+	* glm4/longlong.m4, glm4/nocrash.m4: update from gnulib
+
+2009-10-16  Sam Steingold  <sds@gnu.org>
+
 	* Makefile.devel (update-gnulib): use git when available
 
 2009-10-16  Sam Steingold  <sds@gnu.org>
@@ -137,8 +141,8 @@
 2008-07-13  Sam Steingold  <sds@gnu.org>
 
 	* glm4/gnulib-cache.m4, glm4/gnulib-common.m4, glm4/gnulib-comp.m4:
-	* glm4/gnulib-tool.m4, glm4/onceonly.m4: added from gnulib
-	* glm4/nocrash.m4: updated from gnulib
+	* glm4/gnulib-tool.m4, glm4/onceonly.m4: add from gnulib
+	* glm4/nocrash.m4: update from gnulib
 	* Makefile.devel (gnulib-imported): remove gllib
 	* configure.ac: call gl_EARLY and gl_INIT
 
