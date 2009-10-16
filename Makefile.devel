@@ -128,10 +128,10 @@ vacall/config.h.msvc : vacall/config.h.in
 vacall/config.h.mingw32 : vacall/config.h.in
 	cd vacall && $(MAKE) -f Makefile.devel config.h.mingw32
 
-vacall/vacall.h.msvc : vacall/vacall.h.in
+vacall/vacall.h.msvc : vacall/vacall.h.in VERSION
 	cd vacall && $(MAKE) -f Makefile.devel vacall.h.msvc
 
-vacall/vacall.h.mingw32 : vacall/vacall.h.in
+vacall/vacall.h.mingw32 : vacall/vacall.h.in VERSION
 	cd vacall && $(MAKE) -f Makefile.devel vacall.h.mingw32
 
 vacall/vacall-i386-msvc.c : vacall/vacall-i386-macro.S vacall/asmi386.sh
@@ -152,10 +152,10 @@ callback/vacall_r/config.h.msvc : callback/vacall_r/config.h.in
 callback/vacall_r/config.h.mingw32 : callback/vacall_r/config.h.in
 	cd callback && $(MAKE) -f Makefile.devel vacall_r/config.h.mingw32
 
-callback/vacall_r/vacall_r.h.msvc : callback/vacall_r/vacall_r.h.in
+callback/vacall_r/vacall_r.h.msvc : callback/vacall_r/vacall_r.h.in VERSION
 	cd callback && $(MAKE) -f Makefile.devel vacall_r/vacall_r.h.msvc
 
-callback/vacall_r/vacall_r.h.mingw32 : callback/vacall_r/vacall_r.h.in
+callback/vacall_r/vacall_r.h.mingw32 : callback/vacall_r/vacall_r.h.in VERSION
 	cd callback && $(MAKE) -f Makefile.devel vacall_r/vacall_r.h.mingw32
 
 callback/vacall_r/vacall-i386-msvc.c : callback/vacall_r/vacall-i386-macro.S callback/vacall_r/asmi386.sh

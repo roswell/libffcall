@@ -4,7 +4,10 @@ dnl Sam Steingold 2008-2009
 dnl
 AC_INIT(libffcall/trampoline,m4_normalize(m4_esyscmd([cat ../VERSION])))
 AC_CONFIG_SRCDIR(trampoline.h.in)
-AC_CONFIG_HEADERS([config.h trampoline.h])
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([trampoline.h],
+[sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" trampoline.h > tmp
+mv -f tmp trampoline.h],[LIBFFCALL_VERSION=$PACKAGE_VERSION])
 AC_CONFIG_FILES(Makefile)
 AC_PROG_CC
 AC_PROG_CPP

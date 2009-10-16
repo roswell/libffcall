@@ -107,11 +107,17 @@ vacall-x86_64.s : vacall-x86_64.c vacall_r.h.in
 vacall_r.man : vacall_r.3
 	$(ROFF_MAN) vacall_r.3 > vacall_r.man
 
-vacall_r.h.msvc : vacall_r.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall_r.h.in > vacall_r.h.msvc
+VERSION = $(shell cat ../../VERSION)
 
-vacall_r.h.mingw32 : vacall_r.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall_r.h.in > vacall_r.h.mingw32
+vacall_r.h.msvc : vacall_r.h.in ../../VERSION
+	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
+	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
+	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall_r.h.in > vacall_r.h.msvc
+
+vacall_r.h.mingw32 : vacall_r.h.in ../../VERSION
+	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
+	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
+	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall_r.h.in > vacall_r.h.mingw32
 
 config.h.msvc : config.h.in
 	cp config.h.in config.h.msvc

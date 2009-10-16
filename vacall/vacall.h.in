@@ -11,7 +11,7 @@
  */
 
 #if !defined(LIBFFCALL_VERSION)
-# define LIBFFCALL_VERSION @PACKAGE_VERSION@
+# define LIBFFCALL_VERSION @LIBFFCALL_VERSION@
 #endif
 
 /* These definitions are adjusted by `configure' automatically. */

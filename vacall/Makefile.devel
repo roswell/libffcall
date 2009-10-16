@@ -102,11 +102,17 @@ vacall-x86_64.s : vacall-x86_64.c vacall.h.in
 vacall.man : vacall.3
 	$(ROFF_MAN) vacall.3 > vacall.man
 
-vacall.h.msvc : vacall.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall.h.in > vacall.h.msvc
+VERSION = $(shell cat ../VERSION)
 
-vacall.h.mingw32 : vacall.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall.h.in > vacall.h.mingw32
+vacall.h.msvc : vacall.h.in ../VERSION
+	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
+	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
+	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall.h.in > vacall.h.msvc
+
+vacall.h.mingw32 : vacall.h.in ../VERSION
+	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
+	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
+	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall.h.in > vacall.h.mingw32
 
 config.h.msvc : config.h.in
 	cp config.h.in config.h.msvc

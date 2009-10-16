@@ -1,5 +1,28 @@
 2009-10-16  Sam Steingold  <sds@gnu.org>
 
+	the final fix for LIBFFCALL_VERSION
+	* Makefile.devel (vacall/vacall.h.msvc, vacall/vacall.h.mingw32)
+	(callback/vacall_r/vacall_r.h.msvc)
+	(callback/vacall_r/vacall_r.h.mingw32): depend on VERSION
+	* avcall/avcall.h.in, callback/callback.h.in,
+	* callback/trampoline_r/trampoline_r.h.in, vacall/vacall.h.in,
+	* callback/vacall_r/vacall_r.h.in, trampoline/trampoline.h.in:
+	use @LIBFFCALL_VERSION@ instead of @PACKAGE_VERSION@
+	* avcall/configure.in: additional processing for avcall.h to
+	substitute @LIBFFCALL_VERSION@
+	* callback/configure.in: ditto for callback.h
+	* callback/trampoline_r/configure.in: ditto for trampoline_r.h
+	* callback/vacall_r/configure.in: ditto for vacall_r.h
+	* trampoline/configure.in: ditto for trampoline.h
+	* vacall/configure.in: ditto for vacall.h
+	* callback/vacall_r/Makefile.devel (vacall_r.h.msvc)
+	(vacall_r.h.mingw32): depend on ../../VERSION;
+	substitute @LIBFFCALL_VERSION@
+	* vacall/Makefile.devel (vacall.h.msvc, vacall.h.mingw32): depend
+	on ../VERSION; substitute @LIBFFCALL_VERSION@
+
+2009-10-16  Sam Steingold  <sds@gnu.org>
+
 	* glm4/longlong.m4, glm4/nocrash.m4: update from gnulib
 
 2009-10-16  Sam Steingold  <sds@gnu.org>
