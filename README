@@ -17,7 +17,9 @@ The four packages are:
 
 Installation instructions:
 
-        ./configure
+        mkdir make
+        cd make
+        ./configure --cache-file=config.cache
         make
         make check
         make install
@@ -41,7 +43,7 @@ Files in this package:
     Installation:
 
         configure       configuration script
-        configure.in    autoconf-2.10 source for the configuration script
+        configure.in    autoconf-2.60 source for the configuration script
         autoconf/*      auxiliary configuration scripts
         Makefile.in     Makefile master
 
@@ -60,15 +62,13 @@ on this software.
 
 Distribution:
 
-http://www.haible.de/bruno/gnu/ffcall-1.10.tar.gz
-ftp://ftp.santafe.edu/pub/gnu/ffcall-1.10.tar.gz
+CVS:
+$ cvs -z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/sources/libffcall co ffcall
 
 Bug reports to:
 
-The GNU CLISP bugtracker
-  http://sourceforge.net/tracker/?group_id=1355&atid=101355
-under category "ffcall".
+  https://savannah.gnu.org/bugs/?func=additem&group=libffcall
 
 Homepage:
 
-http://www.haible.de/bruno/packages-ffcall.html
+  http://www.gnu.org/software/libffcall/
