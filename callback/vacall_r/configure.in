@@ -4,8 +4,8 @@ dnl Sam Steingold 2008-2009
 dnl
 AC_INIT(libffcall/vacall_r,m4_normalize(m4_esyscmd([cat ../../VERSION])))
 AC_CONFIG_SRCDIR(vacall_r.h.in)
-AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES(Makefile vacall_r.h)
+AC_CONFIG_HEADERS([config.h vacall_r.h])
+AC_CONFIG_FILES(Makefile)
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_GCC_TRADITIONAL

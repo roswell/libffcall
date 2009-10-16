@@ -1,3 +1,11 @@
+2009-10-16  Sam Steingold  <sds@gnu.org>
+
+	* avcall/configure.in, callback/configure.in,
+	* callback/trampoline_r/configure.in, callback/vacall_r/configure.in,
+	* trampoline/configure.in, vacall/configure.in: list the main generated
+	header (avcall.h et al) in AC_CONFIG_HEADERS, not in AC_CONFIG_FILES
+	fixes the bug#27706 (introduced on 2009-04-24)
+
 2009-04-28  Sam Steingold  <sds@gnu.org>
 
 	* m4/general.m4 (FFCALL_CACHE_EGREP_CPP, FFCALL_SET_CPU_ABI):
@@ -8,22 +16,22 @@
 	Sam Steingold  <sds@gnu.org>
 
 	* avcall/Makefile.devel, avcall/Makefile.in, avcall/avcall.h.in,
-        * callback/trampoline_r/Makefile.devel,
+	* callback/trampoline_r/Makefile.devel,
 	* callback/trampoline_r/Makefile.in,
-        * callback/trampoline_r/configure.in,
-        * callback/vacall_r/Makefile.devel, callback/vacall_r/Makefile.in,
-        * callback/vacall_r/vacall_r.h.in, trampoline/Makefile.devel,
+	* callback/trampoline_r/configure.in,
+	* callback/vacall_r/Makefile.devel, callback/vacall_r/Makefile.in,
+	* callback/vacall_r/vacall_r.h.in, trampoline/Makefile.devel,
 	* trampoline/Makefile.in, trampoline/configure.in,
-        * vacall/Makefile.devel, vacall/Makefile.in, vacall/vacall.h.in:
+	* vacall/Makefile.devel, vacall/Makefile.in, vacall/vacall.h.in:
 	Add ARMel support <https://savannah.gnu.org/bugs/?22492>
 	* m4/general.m4 (FFCALL_CANONICAL_HOST_CPU): use AC_EGREP_CPP to
 	distinguish between arm and armel
 	* avcall/avcall-armel.S, avcall/avcall-armel.c,
 	* callback/trampoline_r/cache-armel.c,
 	* callback/trampoline_r/cache-armel.s,
-        * callback/vacall_r/vacall-armel.c, callback/vacall_r/vacall-armel.s,
-        * trampoline/cache-armel.c, trampoline/cache-armel.s,
-        * vacall/vacall-armel.c, vacall/vacall-armel.s:
+	* callback/vacall_r/vacall-armel.c, callback/vacall_r/vacall-armel.s,
+	* trampoline/cache-armel.c, trampoline/cache-armel.s,
+	* vacall/vacall-armel.c, vacall/vacall-armel.s:
 	new files
 
 2009-04-27  Max Lapan  <max.lapan@gmail.com>
