@@ -1797,7 +1797,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-ac_config_headers="$ac_config_headers config.h trampoline.h"
+ac_config_headers="$ac_config_headers config.h"
+
+ac_config_headers="$ac_config_headers trampoline.h"
 
 ac_config_files="$ac_config_files Makefile"
 
@@ -7837,6 +7839,11 @@ _ASBOX
 
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+#
+# INIT-COMMANDS
+#
+LIBFFCALL_VERSION=$PACKAGE_VERSION
+
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
@@ -8457,6 +8464,12 @@ $as_echo "$as_me: error: could not create -" >&2;}
 
   esac
 
+
+  case $ac_file$ac_mode in
+    "trampoline.h":H) sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" trampoline.h > tmp
+mv -f tmp trampoline.h ;;
+
+  esac
 done # for ac_tag
 
 
