@@ -1795,9 +1795,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-ac_config_headers="$ac_config_headers config.h"
+ac_config_headers="$ac_config_headers config.h vacall.h"
 
-ac_config_files="$ac_config_files Makefile vacall.h"
+ac_config_files="$ac_config_files Makefile"
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -5352,8 +5352,8 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
+    "vacall.h") CONFIG_HEADERS="$CONFIG_HEADERS vacall.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "vacall.h") CONFIG_FILES="$CONFIG_FILES vacall.h" ;;
 
   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
