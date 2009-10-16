@@ -58,8 +58,39 @@ fi])])
 # This macro is traced by Automake.
 AC_DEFUN([_AM_SUBST_NOTMAKE])
 
-# gnulib-common.m4 serial 5
-dnl Copyright (C) 2007-2008 Free Software Foundation, Inc.
+# 00gnulib.m4 serial 2
+dnl Copyright (C) 2009 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+
+dnl This file must be named something that sorts before all other
+dnl gnulib-provided .m4 files.  It is needed until such time as we can
+dnl assume Autoconf 2.64, with its improved AC_DEFUN_ONCE semantics.
+
+# AC_DEFUN_ONCE([NAME], VALUE)
+# ----------------------------
+# Define NAME to expand to VALUE on the first use (whether by direct
+# expansion, or by AC_REQUIRE), and to nothing on all subsequent uses.
+# Avoid bugs in AC_REQUIRE in Autoconf 2.63 and earlier.  This
+# definition is slower than the version in Autoconf 2.64, because it
+# can only use interfaces that existed since 2.59; but it achieves the
+# same effect.  Quoting is necessary to avoid confusing Automake.
+m4_version_prereq([2.63.263], [],
+[m4_define([AC][_DEFUN_ONCE],
+  [AC][_DEFUN([$1],
+    [AC_REQUIRE([_gl_DEFUN_ONCE([$1])],
+      [m4_indir([_gl_DEFUN_ONCE([$1])])])])]dnl
+[AC][_DEFUN([_gl_DEFUN_ONCE([$1])], [$2])])])
+
+# gl_00GNULIB
+# -----------
+# Witness macro that this file has been included.  Needed to force
+# Automake to include this file prior to all other gnulib .m4 files.
+AC_DEFUN([gl_00GNULIB])
+
+# gnulib-common.m4 serial 11
+dnl Copyright (C) 2007-2009 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -68,6 +99,7 @@ dnl with or without modifications, as long as this notice is preserved.
 # is expanded unconditionally through gnulib-tool magic.
 AC_DEFUN([gl_COMMON], [
   dnl Use AC_REQUIRE here, so that the code is expanded once only.
+  AC_REQUIRE([gl_00GNULIB])
   AC_REQUIRE([gl_COMMON_BODY])
 ])
 AC_DEFUN([gl_COMMON_BODY], [
@@ -81,6 +113,16 @@ AC_DEFUN([gl_COMMON_BODY], [
 #if defined __APPLE__ && defined __MACH__ && __APPLE_CC__ >= 5465 && !defined __cplusplus && __STDC_VERSION__ >= 199901L && !defined __GNUC_STDC_INLINE__
 # define __GNUC_STDC_INLINE__ 1
 #endif])
+  AH_VERBATIM([unused_parameter],
+[/* Define as a marker that can be attached to function parameter declarations
+   for parameters that are not used.  This helps to reduce warnings, such as
+   from GCC -Wunused-parameter.  */
+#if __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 7)
+# define _UNUSED_PARAMETER_ __attribute__ ((__unused__))
+#else
+# define _UNUSED_PARAMETER_
+#endif
+])
 ])
 
 # gl_MODULE_INDICATOR([modulename])
@@ -102,7 +144,7 @@ m4_ifndef([m4_foreach_w],
 # is a backport of autoconf-2.60's AC_PROG_MKDIR_P.
 # Remove this macro when we can assume autoconf >= 2.60.
 m4_ifdef([AC_PROG_MKDIR_P], [], [
-  AC_DEFUN([AC_PROG_MKDIR_P],
+  AC_DEFUN_ONCE([AC_PROG_MKDIR_P],
     [AC_REQUIRE([AM_PROG_MKDIR_P])dnl defined by automake
      MKDIR_P='$(mkdir_p)'
      AC_SUBST([MKDIR_P])])])
@@ -113,7 +155,7 @@ m4_ifdef([AC_PROG_MKDIR_P], [], [
 # works.
 # This definition can be removed once autoconf >= 2.62 can be assumed.
 AC_DEFUN([AC_C_RESTRICT],
-[AC_CACHE_CHECK([for C/C++ restrict keyword], ac_cv_c_restrict,
+[AC_CACHE_CHECK([for C/C++ restrict keyword], [ac_cv_c_restrict],
   [ac_cv_c_restrict=no
    # The order here caters to the fact that C++ does not require restrict.
    for ac_kw in __restrict __restrict__ _Restrict restrict; do
@@ -150,8 +192,30 @@ AC_DEFUN([AC_C_RESTRICT],
  esac
 ])
 
+# gl_BIGENDIAN
+# is like AC_C_BIGENDIAN, except that it can be AC_REQUIREd.
+# Note that AC_REQUIRE([AC_C_BIGENDIAN]) does not work reliably because some
+# macros invoke AC_C_BIGENDIAN with arguments.
+AC_DEFUN([gl_BIGENDIAN],
+[
+  AC_C_BIGENDIAN
+])
+
+# gl_CACHE_VAL_SILENT(cache-id, command-to-set-it)
+# is like AC_CACHE_VAL(cache-id, command-to-set-it), except that it does not
+# output a spurious "(cached)" mark in the midst of other configure output.
+# This macro should be used instead of AC_CACHE_VAL when it is not surrounded
+# by an AC_MSG_CHECKING/AC_MSG_RESULT pair.
+AC_DEFUN([gl_CACHE_VAL_SILENT],
+[
+  saved_as_echo_n="$as_echo_n"
+  as_echo_n=':'
+  AC_CACHE_VAL([$1], [$2])
+  as_echo_n="$saved_as_echo_n"
+])
+
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2002-2008 Free Software Foundation, Inc.
+# Copyright (C) 2002-2009 Free Software Foundation, Inc.
 #
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
@@ -329,14 +393,15 @@ AC_DEFUN([gltests_LIBSOURCES], [
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
   lib/dummy.c
+  m4/00gnulib.m4
   m4/gnulib-common.m4
   m4/longlong.m4
   m4/nocrash.m4
   m4/onceonly.m4
 ])
 
-# longlong.m4 serial 13
-dnl Copyright (C) 1999-2007 Free Software Foundation, Inc.
+# longlong.m4 serial 14
+dnl Copyright (C) 1999-2007, 2009 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -383,7 +448,7 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
 	  [ac_cv_type_long_long_int=yes])],
        [ac_cv_type_long_long_int=no])])
   if test $ac_cv_type_long_long_int = yes; then
-    AC_DEFINE([HAVE_LONG_LONG_INT], 1,
+    AC_DEFINE([HAVE_LONG_LONG_INT], [1],
       [Define to 1 if the system has the type `long long int'.])
   fi
 ])
@@ -406,7 +471,7 @@ AC_DEFUN([AC_TYPE_UNSIGNED_LONG_LONG_INT],
        [ac_cv_type_unsigned_long_long_int=yes],
        [ac_cv_type_unsigned_long_long_int=no])])
   if test $ac_cv_type_unsigned_long_long_int = yes; then
-    AC_DEFINE([HAVE_UNSIGNED_LONG_LONG_INT], 1,
+    AC_DEFINE([HAVE_UNSIGNED_LONG_LONG_INT], [1],
       [Define to 1 if the system has the type `unsigned long long int'.])
   fi
 ])
@@ -442,15 +507,15 @@ AC_DEFUN([_AC_TYPE_LONG_LONG_SNIPPET],
 	      | (ullmax / ull) | (ullmax % ull));]])
 ])
 
-# nocrash.m4 serial 1
-dnl Copyright (C) 2005 Free Software Foundation, Inc.
+# nocrash.m4 serial 2
+dnl Copyright (C) 2005, 2009 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
 
 dnl Based on libsigsegv, from Bruno Haible and Paolo Bonzini.
 
-AC_PREREQ(2.13)
+AC_PREREQ([2.13])
 
 dnl Expands to some code for use in .c programs that will cause the configure
 dnl test to exit instead of crashing. This is useful to avoid triggering
