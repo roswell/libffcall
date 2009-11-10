@@ -1,3 +1,8 @@
+2009-11-10  Sam Steingold  <sds@gnu.org>
+
+	* vacall/Makefile.in (vacall-armel.o): vacall-armel.s is in $(srcdir)
+	* callback/vacall_r/Makefile.in (vacall-armel.lo): ditto
+
 2009-10-16  Sam Steingold  <sds@gnu.org>
 
 	the final fix for LIBFFCALL_VERSION
