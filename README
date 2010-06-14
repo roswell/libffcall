@@ -25,6 +25,36 @@ Installation instructions:
         make install
 
 
+Note: you should be able to build with --enable-shared,
+but it makes no sense to do so:
+
+1) it is overkill: libavcall, libvacall, libcallback have less than 1 KB
+   of executable code (most of the real code is in the header files):
+
+$ size libavcall.a
+  text    data     bss     dec     hex filename
+   420       0       0     420     1a4 avcall.o (ex libavcall.a)
+    81       0       0      81      51 structcpy.o (ex libavcall.a)
+$ size libvacall.a
+  text    data     bss     dec     hex filename
+   365       0       0     365     16d vacall.o (ex libvacall.a)
+   203       0       0     203      cb misc.o (ex libvacall.a)
+    81       0       0      81      51 structcpy.o (ex libvacall.a)
+$ size libcallback.a
+  text    data     bss     dec     hex filename
+   379       0       0     379     17b vacall.o (ex libcallback.a)
+   203       0       0     203      cb misc.o (ex libcallback.a)
+    81       0       0      81      51 structcpy.o (ex libcallback.a)
+   287       0       0     287     11f trampoline.o (ex libcallback.a)
+
+When a shared library is loaded, you spend at least 4 KB for its code,
+data and BSS. This is overkill for such a tiny library.
+
+2) The main function here is compiled from non-PIC assembly language.
+   I.e. relocations would remain. The GNU linker supports shared libraries
+   with relocations on x86 systems. But only on x86!
+
+
 Files in this package:
 
     Documentation:
