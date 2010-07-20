@@ -1,3 +1,9 @@
+2010-07-20  Sam Steingold  <sds@gnu.org>
+
+	* callback/trampoline_r/trampoline_r.h.in, trampoline/trampoline.h.in:
+	add autoconf CPU detection block; this fixes trampoline on sparc64/linux
+	Suggested by Valeriy E. Ushakov <uwe@netbsd.org>
+
 2010-07-20  Valeriy E. Ushakov  <uwe@netbsd.org>
 
 	https://savannah.gnu.org/bugs/?22081
