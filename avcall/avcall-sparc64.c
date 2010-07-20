@@ -86,7 +86,6 @@
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
-register void* callee	__asm__("%g2");  /* any global or local register */
 register __avword o0	__asm__("%o0");
 register __avword o1	__asm__("%o1");
 register __avword o2	__asm__("%o2");
@@ -102,83 +101,58 @@ __builtin_avcall(av_alist* l)
   register double dret	__asm__("%f0");  /* %f0,%f1 */
 
   __avword trampoline[6];		/* room for a trampoline */
-  __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
-  __avword *argframe = sp + 17;		/* stack offset for argument list */
   int arglen = l->aptr - l->args;
   __avword i;
 
-  if (l->farg_mask) {
-    /* push leading float args */
-    if (l->farg_mask & (1<<0))
-      __asm__("ld %1(%0),%%f1" : : "p" (l), "i" OFFSETOF(av_alist,args[0]));
-    if (l->farg_mask & (1<<1))
-      __asm__("ld %1(%0),%%f3" : : "p" (l), "i" OFFSETOF(av_alist,args[1]));
-    if (l->farg_mask & (1<<2))
-      __asm__("ld %1(%0),%%f5" : : "p" (l), "i" OFFSETOF(av_alist,args[2]));
-    if (l->farg_mask & (1<<3))
-      __asm__("ld %1(%0),%%f7" : : "p" (l), "i" OFFSETOF(av_alist,args[3]));
-    if (l->farg_mask & (1<<4))
-      __asm__("ld %1(%0),%%f9" : : "p" (l), "i" OFFSETOF(av_alist,args[4]));
-    if (l->farg_mask & (1<<5))
-      __asm__("ld %1(%0),%%f11" : : "p" (l), "i" OFFSETOF(av_alist,args[5]));
-    if (l->farg_mask & (1<<6))
-      __asm__("ld %1(%0),%%f13" : : "p" (l), "i" OFFSETOF(av_alist,args[6]));
-    if (l->farg_mask & (1<<7))
-      __asm__("ld %1(%0),%%f15" : : "p" (l), "i" OFFSETOF(av_alist,args[7]));
-    if (l->farg_mask & (1<<8))
-      __asm__("ld %1(%0),%%f17" : : "p" (l), "i" OFFSETOF(av_alist,args[8]));
-    if (l->farg_mask & (1<<9))
-      __asm__("ld %1(%0),%%f19" : : "p" (l), "i" OFFSETOF(av_alist,args[9]));
-    if (l->farg_mask & (1<<10))
-      __asm__("ld %1(%0),%%f21" : : "p" (l), "i" OFFSETOF(av_alist,args[10]));
-    if (l->farg_mask & (1<<11))
-      __asm__("ld %1(%0),%%f23" : : "p" (l), "i" OFFSETOF(av_alist,args[11]));
-    if (l->farg_mask & (1<<12))
-      __asm__("ld %1(%0),%%f25" : : "p" (l), "i" OFFSETOF(av_alist,args[12]));
-    if (l->farg_mask & (1<<13))
-      __asm__("ld %1(%0),%%f27" : : "p" (l), "i" OFFSETOF(av_alist,args[13]));
-    if (l->farg_mask & (1<<14))
-      __asm__("ld %1(%0),%%f29" : : "p" (l), "i" OFFSETOF(av_alist,args[14]));
-    if (l->farg_mask & (1<<15))
-      __asm__("ld %1(%0),%%f31" : : "p" (l), "i" OFFSETOF(av_alist,args[15]));
-  }
   if (l->darg_mask) {
-    /* push leading double args */
+    /* push leading float/double args */
     if (l->darg_mask & (1<<0))
-      __asm__("ldd %1(%0),%%f0" : : "p" (l), "i" OFFSETOF(av_alist,args[0]));
+      __asm__("ldd [%0+%1],%%f0" : : "p" (l), "i" OFFSETOF(av_alist,args[0]));
     if (l->darg_mask & (1<<1))
-      __asm__("ldd %1(%0),%%f2" : : "p" (l), "i" OFFSETOF(av_alist,args[1]));
+      __asm__("ldd [%0+%1],%%f2" : : "p" (l), "i" OFFSETOF(av_alist,args[1]));
     if (l->darg_mask & (1<<2))
-      __asm__("ldd %1(%0),%%f4" : : "p" (l), "i" OFFSETOF(av_alist,args[2]));
+      __asm__("ldd [%0+%1],%%f4" : : "p" (l), "i" OFFSETOF(av_alist,args[2]));
     if (l->darg_mask & (1<<3))
-      __asm__("ldd %1(%0),%%f6" : : "p" (l), "i" OFFSETOF(av_alist,args[3]));
+      __asm__("ldd [%0+%1],%%f6" : : "p" (l), "i" OFFSETOF(av_alist,args[3]));
     if (l->darg_mask & (1<<4))
-      __asm__("ldd %1(%0),%%f8" : : "p" (l), "i" OFFSETOF(av_alist,args[4]));
+      __asm__("ldd [%0+%1],%%f8" : : "p" (l), "i" OFFSETOF(av_alist,args[4]));
     if (l->darg_mask & (1<<5))
-      __asm__("ldd %1(%0),%%f10" : : "p" (l), "i" OFFSETOF(av_alist,args[5]));
+      __asm__("ldd [%0+%1],%%f10" : : "p" (l), "i" OFFSETOF(av_alist,args[5]));
     if (l->darg_mask & (1<<6))
-      __asm__("ldd %1(%0),%%f12" : : "p" (l), "i" OFFSETOF(av_alist,args[6]));
+      __asm__("ldd [%0+%1],%%f12" : : "p" (l), "i" OFFSETOF(av_alist,args[6]));
     if (l->darg_mask & (1<<7))
-      __asm__("ldd %1(%0),%%f14" : : "p" (l), "i" OFFSETOF(av_alist,args[7]));
+      __asm__("ldd [%0+%1],%%f14" : : "p" (l), "i" OFFSETOF(av_alist,args[7]));
     if (l->darg_mask & (1<<8))
-      __asm__("ldd %1(%0),%%f16" : : "p" (l), "i" OFFSETOF(av_alist,args[8]));
+      __asm__("ldd [%0+%1],%%f16" : : "p" (l), "i" OFFSETOF(av_alist,args[8]));
     if (l->darg_mask & (1<<9))
-      __asm__("ldd %1(%0),%%f18" : : "p" (l), "i" OFFSETOF(av_alist,args[9]));
+      __asm__("ldd [%0+%1],%%f18" : : "p" (l), "i" OFFSETOF(av_alist,args[9]));
     if (l->darg_mask & (1<<10))
-      __asm__("ldd %1(%0),%%f20" : : "p" (l), "i" OFFSETOF(av_alist,args[10]));
+      __asm__("ldd [%0+%1],%%f20" : : "p" (l), "i" OFFSETOF(av_alist,args[10]));
     if (l->darg_mask & (1<<11))
-      __asm__("ldd %1(%0),%%f22" : : "p" (l), "i" OFFSETOF(av_alist,args[11]));
+      __asm__("ldd [%0+%1],%%f22" : : "p" (l), "i" OFFSETOF(av_alist,args[11]));
     if (l->darg_mask & (1<<12))
-      __asm__("ldd %1(%0),%%f24" : : "p" (l), "i" OFFSETOF(av_alist,args[12]));
+      __asm__("ldd [%0+%1],%%f24" : : "p" (l), "i" OFFSETOF(av_alist,args[12]));
     if (l->darg_mask & (1<<13))
-      __asm__("ldd %1(%0),%%f26" : : "p" (l), "i" OFFSETOF(av_alist,args[13]));
+      __asm__("ldd [%0+%1],%%f26" : : "p" (l), "i" OFFSETOF(av_alist,args[13]));
     if (l->darg_mask & (1<<14))
-      __asm__("ldd %1(%0),%%f28" : : "p" (l), "i" OFFSETOF(av_alist,args[14]));
+      __asm__("ldd [%0+%1],%%f28" : : "p" (l), "i" OFFSETOF(av_alist,args[14]));
     if (l->darg_mask & (1<<15))
-      __asm__("ldd %1(%0),%%f30" : : "p" (l), "i" OFFSETOF(av_alist,args[15]));
+      __asm__("ldd [%0+%1],%%f30" : : "p" (l), "i" OFFSETOF(av_alist,args[15]));
   }
 
-  {
+  if (arglen > 6) {
+    /* alloca space is separated from the extra outgoing args area by
+     * the area for compiler temps (addressable with postive offsets from sp)
+     * but they shouldn't be needed for this function, so, effectively,
+     * space returned by alloca is safe to use as the area for extra args.
+     */
+    void *extra_args_area = __builtin_alloca(sizeof(__avword) * (arglen - 6));
+    __avword *argframe = (__avword *)extra_args_area - 6;
+#if 0
+    /* "by construction" */
+    assert(argframe == (void *)((unsigned long)(sp + 16)+2047));
+#endif
+
     int i;
     for (i = 6; i < arglen; i++)	/* push excess function args */
       argframe[i] = l->args[i];
@@ -188,7 +162,7 @@ __builtin_avcall(av_alist* l)
   i = ({ register __avword iret __asm__ ("%o0");
          iret = (*l->func)(l->args[0], l->args[1], l->args[2],
 			   l->args[3], l->args[4], l->args[5]);
-         asm ("nop");	/* struct returning functions skip this instruction */
+         asm __volatile__("nop");	/* struct returning functions skip this instruction */
          iret;
        });
 

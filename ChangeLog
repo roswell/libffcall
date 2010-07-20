@@ -1,3 +1,28 @@
+2010-07-20  Valeriy E. Ushakov  <uwe@netbsd.org>
+
+	https://savannah.gnu.org/bugs/?22081
+	support sparc64 for solaris & *bsd
+	* avcall/avcall-sparc64.c, avcall/avcall.h.in:
+	Kill callee (%g2). Sparc64 doesn't need that code.
+	Delete space[] - gcc optimizes it away anyway, and it doesn't
+	guarantee correct operation even if it's not removed - if compiler
+	allocs it below other local vars on the stack, then calling
+	function with enough arguments will clobber local vars.
+	Instead i've changed the code to use alloca, see the comment in
+	the code for details on why this works. It also doesn't waste 2K
+	of stack on each call, we only grab the space we actually need.
+	I nuked farg_mask. It's not necessary for float args, marking
+	them in darg_mask does the right thing (new av_float). And they
+	just hurt structure passing, where, again, marking up darg_mask
+	does the right thing.
+	* avcall/avcall-saprc64.S: Regenerated with NetBSD gcc4
+	* vacall/vacall-sparc64.S, callback/vacall_r/vacall-sparc64.S:
+	New binutils on sparc64 insist on having global registers properly
+	declared with .register. I've just added the declarations manually
+	w/out actually regenerating the files to demonstrate that's the
+	only change needed there. IF the files are regenerated with a
+	newer compiler you will get them automatically.
+
 2009-11-10  Sam Steingold  <sds@gnu.org>
 
 	* vacall/Makefile.in (vacall-armel.o): vacall-armel.s is in $(srcdir)

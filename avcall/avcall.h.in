@@ -351,8 +351,7 @@ typedef struct
 #if defined(__sparc64__)
   /* store the floating-point arguments in an extra array */
   int			anum;		/* redundant: (LIST).aptr = &(LIST).args[(LIST).anum] */
-  unsigned int		farg_mask;	/* bitmask of those entries in farg[] which have a value */
-  unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a double value */
+  unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a float or double value */
 #endif
 #if defined(__ia64__) || defined(__x86_64__)
   /* store the floating-point arguments in an extra array */
@@ -436,7 +435,6 @@ typedef struct
 #if defined(__sparc64__)
 #define __av_start1(LIST)						\
    (LIST).anum = 0,							\
-   (LIST).farg_mask = 0,						\
    (LIST).darg_mask = 0,						\
    (LIST).aptr = &(LIST).args[0],					\
    (LIST).eptr = &(LIST).args[__AV_ALIST_WORDS],
@@ -902,8 +900,8 @@ typedef struct
  */
 #define av_float(LIST,VAL)						\
   ((LIST).aptr >= __av_eptr(LIST)					\
-   ? -1 : (((LIST).anum < 16 && ((LIST).farg_mask |= (1 << (LIST).anum))), \
-	   (*(float*)(LIST).aptr = (float)(VAL)),			\
+   ? -1 : (((LIST).anum < 16 && ((LIST).darg_mask |= (1 << (LIST).anum))), \
+	   (((float*)(LIST).aptr)[1] = (float)(VAL)),			\
 	   (LIST).anum++,						\
 	   (LIST).aptr++,						\
 	   0))
@@ -1332,10 +1330,8 @@ typedef struct
       ? -1 : (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)((__avword)(LIST).aptr-(TYPE_SIZE)),VAL),\
 	      (LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(__avword)-1) & -(long)sizeof(__avword)),\
 	      ((LIST).anum < 16						\
-		&& ((LIST).farg_mask |= (-1 << (LIST).anum),		\
-		    (LIST).darg_mask |= (-1 << (LIST).anum))),		\
+		&& ((LIST).darg_mask |= (-1 << (LIST).anum))),		\
 	      (LIST).anum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(long)sizeof(__avword))/sizeof(__avword),\
-	      (LIST).farg_mask &= (1 << ((LIST).anum < 16 ? (LIST).anum : 16)) - 1, \
 	      (LIST).darg_mask &= (1 << ((LIST).anum < 16 ? (LIST).anum : 16)) - 1, \
 	      0)))
 #endif

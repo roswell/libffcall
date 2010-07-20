@@ -8,6 +8,8 @@
 	.type	 __vacall_r,$function
 	.proc	020
 __vacall_r:
+	.register       %g2, $scratch
+	.register       %g3, $scratch
 	!$PROLOGUE$ 0
 	save	%sp, -448, %sp
 	!$PROLOGUE$ 1
