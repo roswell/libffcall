@@ -5,6 +5,7 @@ dnl
 AC_INIT(GNU libffcall,m4_normalize(m4_esyscmd([cat VERSION])),https://savannah.gnu.org/projects/libffcall,libffcall)
 AC_CONFIG_SRCDIR(trampoline/trampoline.h.in)
 AC_CONFIG_FILES(Makefile)
+AC_CONFIG_AUX_DIR(build-aux)
 AC_PROG_MAKE_SET
 gl_EARLY
 gl_INIT
