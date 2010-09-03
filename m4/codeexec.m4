@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2009 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2010 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -19,7 +19,7 @@ dnl function pointers are actually pointers to a three-pointer struct.
 case "$host_os" in
   hpux*) ffcall_cv_codeexec="guessing yes" ;;
   *)
-case "$host_cpu_abi"-"$host_os" in
+case "$host_cpu_c_abi"-"$host_os" in
   # On host=rs6000-*-aix3.2.5 malloc'ed memory is indeed not executable.
   powerpc-aix*) ffcall_cv_codeexec="guessing no" ;;
   *)

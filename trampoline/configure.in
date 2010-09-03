@@ -24,29 +24,29 @@ gl_HOST_CPU_C_ABI
 AC_CHECK_HEADERS(unistd_h)
 FFCALL_COMMON_TRAMPOLINE
 CPU_OBJECTS=''
-if test ${host_cpu_abi} = hppa -o ${host_cpu_abi} = powerpc64 -o ${host_cpu_abi} = ia64; then
+if test ${host_cpu_c_abi} = hppa -o ${host_cpu_c_abi} = powerpc64 -o ${host_cpu_c_abi} = ia64; then
   CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).o'
 fi
-if test ${host_cpu_abi} = powerpc; then
+if test ${host_cpu_c_abi} = powerpc; then
   case "${host_os}" in
     aix*) CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).o' ;;
     *) ;;
   esac
 fi
-if test ${host_cpu_abi} = sparc -o ${host_cpu_abi} = sparc64 -o ${host_cpu_abi} = alpha -o ${host_cpu_abi} = hppa -o ${host_cpu_abi} = convex -o ${host_cpu_abi} = arm -o ${host_cpu_abi} = armel; then
+if test ${host_cpu_c_abi} = sparc -o ${host_cpu_c_abi} = sparc64 -o ${host_cpu_c_abi} = alpha -o ${host_cpu_c_abi} = hppa -o ${host_cpu_c_abi} = convex -o ${host_cpu_c_abi} = arm -o ${host_cpu_c_abi} = armel; then
   CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).o'
 fi
-if test ${host_cpu_abi} = powerpc; then
+if test ${host_cpu_c_abi} = powerpc; then
   case "${host_os}" in
     aix*) ;;
     *) CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).o' ;;
   esac
 fi
 AC_SUBST(CPU_OBJECTS)
-if test ${host_cpu_abi} = mips -o ${host_cpu_abi} = mipsn32 -o ${host_cpu_abi} = mips64; then
+if test ${host_cpu_c_abi} = mips -o ${host_cpu_c_abi} = mipsn32 -o ${host_cpu_c_abi} = mips64; then
 AC_CHECK_HEADERS(sys/cachectl.h)
 fi
-if test ${host_cpu_abi} = m88k; then
+if test ${host_cpu_c_abi} = m88k; then
 AC_CHECK_HEADERS(sys/m88kbcs.h)
 fi
 AC_OUTPUT
