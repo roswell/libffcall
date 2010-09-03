@@ -7,6 +7,7 @@
 	use gl_HOST_CPU_C_ABI instead of FFCALL_CANONICAL_HOST_CPU
 	* m4/general.m4: remove FFCALL_CANONICAL_HOST_CPU,
 	FFCALL_CACHE_EGREP_CPP, FFCALL_SET_CPU_ABI
+	* glm4/host-cpu-c-abi.m4: add
 
 2010-07-20  Sam Steingold  <sds@gnu.org>
 
