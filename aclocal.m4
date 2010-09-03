@@ -1,7 +1,7 @@
-# generated automatically by aclocal 1.10.2 -*- Autoconf -*-
+# generated automatically by aclocal 1.11.1 -*- Autoconf -*-
 
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-# 2005, 2006, 2007, 2008  Free Software Foundation, Inc.
+# 2005, 2006, 2007, 2008, 2009  Free Software Foundation, Inc.
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -13,14 +13,14 @@
 
 # AM_CONDITIONAL                                            -*- Autoconf -*-
 
-# Copyright (C) 1997, 2000, 2001, 2003, 2004, 2005, 2006
+# Copyright (C) 1997, 2000, 2001, 2003, 2004, 2005, 2006, 2008
 # Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
-# serial 8
+# serial 9
 
 # AM_CONDITIONAL(NAME, SHELL-CONDITION)
 # -------------------------------------
@@ -33,6 +33,7 @@ AC_SUBST([$1_TRUE])dnl
 AC_SUBST([$1_FALSE])dnl
 _AM_SUBST_NOTMAKE([$1_TRUE])dnl
 _AM_SUBST_NOTMAKE([$1_FALSE])dnl
+m4_define([_AM_COND_VALUE_$1], [$2])dnl
 if $2; then
   $1_TRUE=
   $1_FALSE='#'
@@ -46,11 +47,13 @@ AC_CONFIG_COMMANDS_PRE(
 Usually this means the macro was only invoked conditionally.]])
 fi])])
 
-# Copyright (C) 2006  Free Software Foundation, Inc.
+# Copyright (C) 2006, 2008  Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
+
+# serial 2
 
 # _AM_SUBST_NOTMAKE(VARIABLE)
 # ---------------------------
@@ -58,8 +61,13 @@ fi])])
 # This macro is traced by Automake.
 AC_DEFUN([_AM_SUBST_NOTMAKE])
 
+# AM_SUBST_NOTMAKE(VARIABLE)
+# ---------------------------
+# Public sister of _AM_SUBST_NOTMAKE.
+AC_DEFUN([AM_SUBST_NOTMAKE], [_AM_SUBST_NOTMAKE($@)])
+
 # 00gnulib.m4 serial 2
-dnl Copyright (C) 2009 Free Software Foundation, Inc.
+dnl Copyright (C) 2009-2010 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -89,8 +97,8 @@ m4_version_prereq([2.63.263], [],
 # Automake to include this file prior to all other gnulib .m4 files.
 AC_DEFUN([gl_00GNULIB])
 
-# gnulib-common.m4 serial 11
-dnl Copyright (C) 2007-2009 Free Software Foundation, Inc.
+# gnulib-common.m4 serial 20
+dnl Copyright (C) 2007-2010 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -114,23 +122,83 @@ AC_DEFUN([gl_COMMON_BODY], [
 # define __GNUC_STDC_INLINE__ 1
 #endif])
   AH_VERBATIM([unused_parameter],
-[/* Define as a marker that can be attached to function parameter declarations
-   for parameters that are not used.  This helps to reduce warnings, such as
-   from GCC -Wunused-parameter.  */
+[/* Define as a marker that can be attached to declarations that might not
+    be used.  This helps to reduce warnings, such as from
+    GCC -Wunused-parameter.  */
 #if __GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 7)
-# define _UNUSED_PARAMETER_ __attribute__ ((__unused__))
+# define _GL_UNUSED __attribute__ ((__unused__))
 #else
-# define _UNUSED_PARAMETER_
+# define _GL_UNUSED
 #endif
+/* The name _UNUSED_PARAMETER_ is an earlier spelling, although the name
+   is a misnomer outside of parameter lists.  */
+#define _UNUSED_PARAMETER_ _GL_UNUSED
 ])
+  dnl Preparation for running test programs:
+  dnl Tell glibc to write diagnostics from -D_FORTIFY_SOURCE=2 to stderr, not
+  dnl to /dev/tty, so they can be redirected to log files.  Such diagnostics
+  dnl arise e.g., in the macros gl_PRINTF_DIRECTIVE_N, gl_SNPRINTF_DIRECTIVE_N.
+  LIBC_FATAL_STDERR_=1
+  export LIBC_FATAL_STDERR_
+])
+
+# gl_MODULE_INDICATOR_CONDITION
+# expands to a C preprocessor expression that evaluates to 1 or 0, depending
+# whether a gnulib module that has been requested shall be considered present
+# or not.
+AC_DEFUN([gl_MODULE_INDICATOR_CONDITION], [1])
+
+# gl_MODULE_INDICATOR_SET_VARIABLE([modulename])
+# sets the shell variable that indicates the presence of the given module to
+# a C preprocessor expression that will evaluate to 1.
+AC_DEFUN([gl_MODULE_INDICATOR_SET_VARIABLE],
+[
+  GNULIB_[]m4_translit([[$1]],
+    [abcdefghijklmnopqrstuvwxyz./-],
+    [ABCDEFGHIJKLMNOPQRSTUVWXYZ___])=gl_MODULE_INDICATOR_CONDITION
 ])
 
 # gl_MODULE_INDICATOR([modulename])
-# defines a C macro indicating the presence of the given module.
+# defines a C macro indicating the presence of the given module
+# in a location where it can be used.
+#                                             |  Value  |   Value   |
+#                                             | in lib/ | in tests/ |
+# --------------------------------------------+---------+-----------+
+# Module present among main modules:          |    1    |     1     |
+# --------------------------------------------+---------+-----------+
+# Module present among tests-related modules: |    0    |     1     |
+# --------------------------------------------+---------+-----------+
+# Module not present at all:                  |    0    |     0     |
+# --------------------------------------------+---------+-----------+
 AC_DEFUN([gl_MODULE_INDICATOR],
 [
-  AC_DEFINE([GNULIB_]translit([$1],[abcdefghijklmnopqrstuvwxyz./-],[ABCDEFGHIJKLMNOPQRSTUVWXYZ___]), [1],
-    [Define to 1 when using the gnulib module ]$1[.])
+  AC_DEFINE_UNQUOTED([GNULIB_]m4_translit([[$1]],
+      [abcdefghijklmnopqrstuvwxyz./-],
+      [ABCDEFGHIJKLMNOPQRSTUVWXYZ___]),
+    [gl_MODULE_INDICATOR_CONDITION],
+    [Define to a C preprocessor expression that evaluates to 1 or 0,
+     depending whether the gnulib module $1 shall be considered present.])
+])
+
+# gl_MODULE_INDICATOR_FOR_TESTS([modulename])
+# defines a C macro indicating the presence of the given module
+# in lib or tests. This is useful to determine whether the module
+# should be tested.
+#                                             |  Value  |   Value   |
+#                                             | in lib/ | in tests/ |
+# --------------------------------------------+---------+-----------+
+# Module present among main modules:          |    1    |     1     |
+# --------------------------------------------+---------+-----------+
+# Module present among tests-related modules: |    1    |     1     |
+# --------------------------------------------+---------+-----------+
+# Module not present at all:                  |    0    |     0     |
+# --------------------------------------------+---------+-----------+
+AC_DEFUN([gl_MODULE_INDICATOR_FOR_TESTS],
+[
+  AC_DEFINE([GNULIB_TEST_]m4_translit([[$1]],
+      [abcdefghijklmnopqrstuvwxyz./-],
+      [ABCDEFGHIJKLMNOPQRSTUVWXYZ___]), [1],
+    [Define to 1 when the gnulib module $1 should be tested.])
 ])
 
 # m4_foreach_w
@@ -140,10 +208,25 @@ m4_ifndef([m4_foreach_w],
   [m4_define([m4_foreach_w],
     [m4_foreach([$1], m4_split(m4_normalize([$2]), [ ]), [$3])])])
 
+# AS_VAR_IF(VAR, VALUE, [IF-MATCH], [IF-NOT-MATCH])
+# ----------------------------------------------------
+# Backport of autoconf-2.63b's macro.
+# Remove this macro when we can assume autoconf >= 2.64.
+m4_ifndef([AS_VAR_IF],
+[m4_define([AS_VAR_IF],
+[AS_IF([test x"AS_VAR_GET([$1])" = x""$2], [$3], [$4])])])
+
 # AC_PROG_MKDIR_P
-# is a backport of autoconf-2.60's AC_PROG_MKDIR_P.
-# Remove this macro when we can assume autoconf >= 2.60.
-m4_ifdef([AC_PROG_MKDIR_P], [], [
+# is a backport of autoconf-2.60's AC_PROG_MKDIR_P, with a fix
+# for interoperability with automake-1.9.6 from autoconf-2.62.
+# Remove this macro when we can assume autoconf >= 2.62 or
+# autoconf >= 2.60 && automake >= 1.10.
+m4_ifdef([AC_PROG_MKDIR_P], [
+  dnl For automake-1.9.6 && autoconf < 2.62: Ensure MKDIR_P is AC_SUBSTed.
+  m4_define([AC_PROG_MKDIR_P],
+    m4_defn([AC_PROG_MKDIR_P])[
+    AC_SUBST([MKDIR_P])])], [
+  dnl For autoconf < 2.60: Backport of AC_PROG_MKDIR_P.
   AC_DEFUN_ONCE([AC_PROG_MKDIR_P],
     [AC_REQUIRE([AM_PROG_MKDIR_P])dnl defined by automake
      MKDIR_P='$(mkdir_p)'
@@ -154,6 +237,7 @@ m4_ifdef([AC_PROG_MKDIR_P], [], [
 # so that mixed use of GNU C and GNU C++ and mixed use of Sun C and Sun C++
 # works.
 # This definition can be removed once autoconf >= 2.62 can be assumed.
+m4_if(m4_version_compare(m4_defn([m4_PACKAGE_VERSION]),[2.62]),[-1],[
 AC_DEFUN([AC_C_RESTRICT],
 [AC_CACHE_CHECK([for C/C++ restrict keyword], [ac_cv_c_restrict],
   [ac_cv_c_restrict=no
@@ -161,13 +245,13 @@ AC_DEFUN([AC_C_RESTRICT],
    for ac_kw in __restrict __restrict__ _Restrict restrict; do
      AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
       [[typedef int * int_ptr;
-	int foo (int_ptr $ac_kw ip) {
-	return ip[0];
+        int foo (int_ptr $ac_kw ip) {
+        return ip[0];
        }]],
       [[int s[1];
-	int * $ac_kw t = s;
-	t[0] = 0;
-	return foo(t)]])],
+        int * $ac_kw t = s;
+        t[0] = 0;
+        return foo(t)]])],
       [ac_cv_c_restrict=$ac_kw])
      test "$ac_cv_c_restrict" != no && break
    done
@@ -190,6 +274,7 @@ AC_DEFUN([AC_C_RESTRICT],
    no) AC_DEFINE([restrict], []) ;;
    *)  AC_DEFINE_UNQUOTED([restrict], [$ac_cv_c_restrict]) ;;
  esac
+])
 ])
 
 # gl_BIGENDIAN
@@ -215,7 +300,7 @@ AC_DEFUN([gl_CACHE_VAL_SILENT],
 ])
 
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2002-2009 Free Software Foundation, Inc.
+# Copyright (C) 2002-2010 Free Software Foundation, Inc.
 #
 # This file is free software, distributed under the terms of the GNU
 # General Public License.  As a special exception to the GNU General
@@ -241,6 +326,9 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LIBOBJS$])dnl a variable
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([AC_PROG_RANLIB])
+  # Code from module host-cpu-c-abi:
+  # Code from module longlong:
+  # Code from module nocrash:
 ])
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -251,6 +339,7 @@ AC_DEFUN([gl_INIT],
   gl_cond_libtool=false
   gl_libdeps=
   gl_ltlibdeps=
+  gl_m4_base='glm4'
   m4_pushdef([AC_LIBOBJ], m4_defn([gl_LIBOBJ]))
   m4_pushdef([AC_REPLACE_FUNCS], m4_defn([gl_REPLACE_FUNCS]))
   m4_pushdef([AC_LIBSOURCES], m4_defn([gl_LIBSOURCES]))
@@ -258,8 +347,14 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='gllib'
+  # Code from module host-cpu-c-abi:
+  gl_HOST_CPU_C_ABI
+  # Code from module longlong:
   AC_REQUIRE([AC_TYPE_LONG_LONG_INT])
   AC_REQUIRE([AC_TYPE_UNSIGNED_LONG_LONG_INT])
+  # Code from module nocrash:
+  # Code from module dummy:
+  # End of code from modules
   m4_ifval(gl_LIBSOURCES_LIST, [
     m4_syscmd([test ! -d ]m4_defn([gl_LIBSOURCES_DIR])[ ||
       for gl_file in ]gl_LIBSOURCES_LIST[ ; do
@@ -282,7 +377,7 @@ AC_DEFUN([gl_INIT],
     if test -n "$gl_LIBOBJS"; then
       # Remove the extension.
       sed_drop_objext='s/\.o$//;s/\.obj$//'
-      for i in `for i in $gl_LIBOBJS; do echo "$i"; done | sed "$sed_drop_objext" | sort | uniq`; do
+      for i in `for i in $gl_LIBOBJS; do echo "$i"; done | sed -e "$sed_drop_objext" | sort | uniq`; do
         gl_libobjs="$gl_libobjs $i.$ac_objext"
         gl_ltlibobjs="$gl_ltlibobjs $i.lo"
       done
@@ -299,6 +394,13 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gltests_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='tests'
+changequote(,)dnl
+  gltests_WITNESS=IN_`echo "${PACKAGE-$PACKAGE_TARNAME}" | LC_ALL=C tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ | LC_ALL=C sed -e 's/[^A-Z0-9_]/_/g'`_GNULIB_TESTS
+changequote([, ])dnl
+  AC_SUBST([gltests_WITNESS])
+  gl_module_indicator_condition=$gltests_WITNESS
+  m4_pushdef([gl_MODULE_INDICATOR_CONDITION], [$gl_module_indicator_condition])
+  m4_popdef([gl_MODULE_INDICATOR_CONDITION])
   m4_ifval(gltests_LIBSOURCES_LIST, [
     m4_syscmd([test ! -d ]m4_defn([gltests_LIBSOURCES_DIR])[ ||
       for gl_file in ]gltests_LIBSOURCES_LIST[ ; do
@@ -321,7 +423,7 @@ AC_DEFUN([gl_INIT],
     if test -n "$gltests_LIBOBJS"; then
       # Remove the extension.
       sed_drop_objext='s/\.o$//;s/\.obj$//'
-      for i in `for i in $gltests_LIBOBJS; do echo "$i"; done | sed "$sed_drop_objext" | sort | uniq`; do
+      for i in `for i in $gltests_LIBOBJS; do echo "$i"; done | sed -e "$sed_drop_objext" | sort | uniq`; do
         gltests_libobjs="$gltests_libobjs $i.$ac_objext"
         gltests_ltlibobjs="$gltests_ltlibobjs $i.lo"
       done
@@ -395,13 +497,228 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/dummy.c
   m4/00gnulib.m4
   m4/gnulib-common.m4
+  m4/host-cpu-c-abi.m4
   m4/longlong.m4
   m4/nocrash.m4
   m4/onceonly.m4
 ])
 
+# host-cpu-c-abi.m4 serial 1
+dnl Copyright (C) 2002-2010 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
+dnl gives unlimited permission to copy and/or distribute it,
+dnl with or without modifications, as long as this notice is preserved.
+
+dnl From Bruno Haible and Sam Steingold.
+
+dnl Sets the HOST_CPU_C_ABI variable to the canonical name of the CPU with its
+dnl C language ABI (application binary interface).
+dnl Also defines __${HOST_CPU_C_ABI}__ as a C macro in config.h.
+dnl
+dnl This canonical name can be used to select a particular assembly language
+dnl source file that will interoperate with C code on the given host.
+dnl
+dnl For example:
+dnl * 'i386' and 'sparc' are different canonical names, because code for i386
+dnl   will not run on SPARC CPUs and vice versa. They have different
+dnl   instruction sets.
+dnl * 'sparc' and 'sparc64' are different canonical names, because code for
+dnl   'sparc' and code for 'sparc64' cannot be linked together: 'sparc' code
+dnl   contains 32-bit instructions, whereas 'sparc64' code contains 64-bit
+dnl   instructions. A process on a SPARC CPU can be in 32-bit mode or in 64-bit
+dnl   mode, but not both.
+dnl * 'mips' and 'mipsn32' are different canonical names, because they use
+dnl   different argument passing and return conventions for C functions, and
+dnl   although the instruction set of 'mips' is a large subset of the
+dnl   instruction set of 'mipsn32'.
+dnl * 'mipsn32' and 'mips64' are different canonical names, because they use
+dnl   different sizes for the C types like 'int' and 'void *', and although
+dnl   the instruction sets of 'mipsn32' and 'mips64' are the same.
+dnl * 'arm' and 'armel' are different canonical names, because they use
+dnl   different memory ordering for the C types like 'int', and although
+dnl   the instruction sets of 'arm' and 'armel' are the same.
+dnl * The same name 'i386' is used for CPUs of type i386, i486, i586
+dnl   (Pentium), AMD K7, Pentium II, Pentium IV, etc., because
+dnl   - Instructions that do not exist on all of these CPUs (cmpxchg,
+dnl     MMX, SSE, SSE2, 3DNow! etc.) are not frequently used. If your
+dnl     assembly language source files use such instructions, you will
+dnl     need to make the distinction.
+dnl   - Speed of execution of the common instruction set is reasonable across
+dnl     the entire family of CPUs. If you have assembly language source files
+dnl     that are optimized for particular CPU types (like GNU gmp has), you
+dnl     will need to make the distinction.
+dnl   See <http://en.wikipedia.org/wiki/X86_instruction_listings>.
+AC_DEFUN([gl_HOST_CPU_C_ABI],
+[
+  AC_REQUIRE([AC_CANONICAL_HOST])
+  AC_CACHE_CHECK([host CPU and C ABI], [gl_cv_host_cpu_c_abi],
+    [case "$host_cpu" in
+
+changequote(,)dnl
+       i[4567]86 )
+changequote([,])dnl
+         gl_cv_host_cpu_c_abi=i386
+         ;;
+
+       x86_64 )
+         # On x86_64 systems, the C compiler may still be generating
+         # 32-bit code.
+         AC_EGREP_CPP([yes],
+           [#if defined __LP64__ || defined __x86_64__ || defined __amd64__
+            yes
+            #endif],
+           [gl_cv_host_cpu_c_abi=x86_64],
+           [gl_cv_host_cpu_c_abi=i386])
+         ;;
+
+changequote(,)dnl
+       alphaev[4-8] | alphaev56 | alphapca5[67] | alphaev6[78] )
+changequote([,])dnl
+         gl_cv_host_cpu_c_abi=alpha
+         ;;
+
+       arm* )
+         AC_EGREP_CPP([yes],
+           [#if defined __ARMEL__
+            yes
+            #endif],
+           [gl_cv_host_cpu_c_abi=armel],
+           [gl_cv_host_cpu_c_abi=arm])
+         ;;
+
+       hppa1.0 | hppa1.1 | hppa2.0* | hppa64 )
+         # TODO: Distinguish hppa and hppa64 correctly.
+         gl_cv_host_cpu_c_abi=hppa
+         ;;
+
+       mips* )
+         # We should also check for (_MIPS_SZPTR == 64), but gcc keeps this
+         # at 32.
+         AC_EGREP_CPP([yes],
+           [#if defined _MIPS_SZLONG && (_MIPS_SZLONG == 64)
+            yes
+            #endif],
+           [gl_cv_host_cpu_c_abi=mips64],
+           [# Strictly speaking, the MIPS ABI (-32 or -n32) is independent
+            # from the CPU identification (-mips[12] or -mips[34]). But -n32
+            # is commonly used together with -mips3, and it's easier to test
+            # the CPU identification.
+            AC_EGREP_CPP([yes],
+              [#if __mips >= 3
+               yes
+               #endif],
+              [gl_cv_host_cpu_c_abi=mipsn32],
+              [gl_cv_host_cpu_c_abi=mips])])
+         ;;
+
+       powerpc64 )
+         # On powerpc64 systems, the C compiler may still be generating
+         # 32-bit code.
+         AC_EGREP_CPP([yes],
+           [#if defined __powerpc64__ || defined _ARCH_PPC64
+            yes
+            #endif],
+           [gl_cv_host_cpu_c_abi=powerpc64],
+           [gl_cv_host_cpu_c_abi=powerpc])
+         ;;
+
+       rs6000 )
+         gl_cv_host_cpu_c_abi=powerpc
+         ;;
+
+       # TODO: Distinguish s390 and s390x correctly.
+
+       sparc | sparc64 )
+         # UltraSPARCs running Linux have `uname -m` = "sparc64", but the
+         # C compiler still generates 32-bit code.
+         AC_EGREP_CPP([yes],
+           [#if defined __sparcv9 || defined __arch64__
+            yes
+            #endif],
+           [gl_cv_host_cpu_c_abi=sparc64],
+           [gl_cv_host_cpu_c_abi=sparc])
+         ;;
+
+       *)
+         gl_cv_host_cpu_c_abi="$host_cpu"
+         ;;
+     esac
+    ])
+
+  HOST_CPU_C_ABI="$gl_cv_host_cpu_c_abi"
+  AC_SUBST([HOST_CPU_C_ABI])
+
+  # This was AC_DEFINE_UNQUOTED([__${gl_cv_host_cpu_c_abi}__]) earlier,
+  # but KAI C++ 3.2d doesn't like this.
+  cat >> confdefs.h <<EOF
+#ifndef __${gl_cv_host_cpu_c_abi}__
+#define __${gl_cv_host_cpu_c_abi}__ 1
+#endif
+EOF
+  AH_TOP([/* CPU and C ABI indicator */
+#ifndef __i386__
+#undef __i386__
+#endif
+#ifndef __x86_64__
+#undef __x86_64__
+#endif
+#ifndef __alpha__
+#undef __alpha__
+#endif
+#ifndef __arm__
+#undef __arm__
+#endif
+#ifndef __armel__
+#undef __armel__
+#endif
+#ifndef __hppa__
+#undef __hppa__
+#endif
+#ifndef __hppa64__
+#undef __hppa64__
+#endif
+#ifndef __ia64__
+#undef __ia64__
+#endif
+#ifndef __m68k__
+#undef __m68k__
+#endif
+#ifndef __mips__
+#undef __mips__
+#endif
+#ifndef __mipsn32__
+#undef __mipsn32__
+#endif
+#ifndef __mips64__
+#undef __mips64__
+#endif
+#ifndef __powerpc__
+#undef __powerpc__
+#endif
+#ifndef __powerpc64__
+#undef __powerpc64__
+#endif
+#ifndef __s390__
+#undef __s390__
+#endif
+#ifndef __s390x__
+#undef __s390x__
+#endif
+#ifndef __sh__
+#undef __sh__
+#endif
+#ifndef __sparc__
+#undef __sparc__
+#endif
+#ifndef __sparc64__
+#undef __sparc64__
+#endif
+])
+
+])
+
 # longlong.m4 serial 14
-dnl Copyright (C) 1999-2007, 2009 Free Software Foundation, Inc.
+dnl Copyright (C) 1999-2007, 2009-2010 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -422,30 +739,30 @@ AC_DEFUN([AC_TYPE_LONG_LONG_INT],
     [AC_LINK_IFELSE(
        [_AC_TYPE_LONG_LONG_SNIPPET],
        [dnl This catches a bug in Tandem NonStop Kernel (OSS) cc -O circa 2004.
-	dnl If cross compiling, assume the bug isn't important, since
-	dnl nobody cross compiles for this platform as far as we know.
-	AC_RUN_IFELSE(
-	  [AC_LANG_PROGRAM(
-	     [[@%:@include <limits.h>
-	       @%:@ifndef LLONG_MAX
-	       @%:@ define HALF \
-			(1LL << (sizeof (long long int) * CHAR_BIT - 2))
-	       @%:@ define LLONG_MAX (HALF - 1 + HALF)
-	       @%:@endif]],
-	     [[long long int n = 1;
-	       int i;
-	       for (i = 0; ; i++)
-		 {
-		   long long int m = n << i;
-		   if (m >> i != n)
-		     return 1;
-		   if (LLONG_MAX / 2 < m)
-		     break;
-		 }
-	       return 0;]])],
-	  [ac_cv_type_long_long_int=yes],
-	  [ac_cv_type_long_long_int=no],
-	  [ac_cv_type_long_long_int=yes])],
+        dnl If cross compiling, assume the bug isn't important, since
+        dnl nobody cross compiles for this platform as far as we know.
+        AC_RUN_IFELSE(
+          [AC_LANG_PROGRAM(
+             [[@%:@include <limits.h>
+               @%:@ifndef LLONG_MAX
+               @%:@ define HALF \
+                        (1LL << (sizeof (long long int) * CHAR_BIT - 2))
+               @%:@ define LLONG_MAX (HALF - 1 + HALF)
+               @%:@endif]],
+             [[long long int n = 1;
+               int i;
+               for (i = 0; ; i++)
+                 {
+                   long long int m = n << i;
+                   if (m >> i != n)
+                     return 1;
+                   if (LLONG_MAX / 2 < m)
+                     break;
+                 }
+               return 0;]])],
+          [ac_cv_type_long_long_int=yes],
+          [ac_cv_type_long_long_int=no],
+          [ac_cv_type_long_long_int=yes])],
        [ac_cv_type_long_long_int=no])])
   if test $ac_cv_type_long_long_int = yes; then
     AC_DEFINE([HAVE_LONG_LONG_INT], [1],
@@ -485,30 +802,30 @@ AC_DEFUN([_AC_TYPE_LONG_LONG_SNIPPET],
 [
   AC_LANG_PROGRAM(
     [[/* For now, do not test the preprocessor; as of 2007 there are too many
-	 implementations with broken preprocessors.  Perhaps this can
-	 be revisited in 2012.  In the meantime, code should not expect
-	 #if to work with literals wider than 32 bits.  */
+         implementations with broken preprocessors.  Perhaps this can
+         be revisited in 2012.  In the meantime, code should not expect
+         #if to work with literals wider than 32 bits.  */
       /* Test literals.  */
       long long int ll = 9223372036854775807ll;
       long long int nll = -9223372036854775807LL;
       unsigned long long int ull = 18446744073709551615ULL;
       /* Test constant expressions.   */
       typedef int a[((-9223372036854775807LL < 0 && 0 < 9223372036854775807ll)
-		     ? 1 : -1)];
+                     ? 1 : -1)];
       typedef int b[(18446744073709551615ULL <= (unsigned long long int) -1
-		     ? 1 : -1)];
+                     ? 1 : -1)];
       int i = 63;]],
     [[/* Test availability of runtime routines for shift and division.  */
       long long int llmax = 9223372036854775807ll;
       unsigned long long int ullmax = 18446744073709551615ull;
       return ((ll << 63) | (ll >> 63) | (ll < i) | (ll > i)
-	      | (llmax / ll) | (llmax % ll)
-	      | (ull << 63) | (ull >> 63) | (ull << i) | (ull >> i)
-	      | (ullmax / ull) | (ullmax % ull));]])
+              | (llmax / ll) | (llmax % ll)
+              | (ull << 63) | (ull >> 63) | (ull << i) | (ull >> i)
+              | (ullmax / ull) | (ullmax % ull));]])
 ])
 
 # nocrash.m4 serial 2
-dnl Copyright (C) 2005, 2009 Free Software Foundation, Inc.
+dnl Copyright (C) 2005, 2009, 2010 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
@@ -779,91 +1096,6 @@ AC_DEFUN([CL_CONFIG_SUBDIRS],
 [dnl No AC_CONFIG_AUX_DIR_DEFAULT, so we don't need install.sh.
 AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])
 AC_CONFIG_SUBDIRS([$1])dnl
-])
-
-dnl FFCALL_CACHE_EGREP_CPP(what,variable,condition)
-AC_DEFUN([FFCALL_CACHE_EGREP_CPP],
-[AC_CACHE_CHECK([for $1], [$2], [AC_EGREP_CPP(yes,
-[#if $3
-  yes
-#endif
-], [$2=yes], [$2=no])])])
-
-dnl FFCALL_SET_CPU_ABI(what,variable,condition,yes_abi,no_abi)
-AC_DEFUN([FFCALL_SET_CPU_ABI],
-[FFCALL_CACHE_EGREP_CPP([$1],[$2],[$3])
-if test $$2 = yes; then
-  host_cpu_abi=$4
-else
-  host_cpu_abi=$5
-fi])
-
-AC_DEFUN([FFCALL_CANONICAL_HOST_CPU],
-[AC_REQUIRE([AC_CANONICAL_HOST])AC_REQUIRE([AC_PROG_CC])
-case "$host_cpu" in
-changequote(,)dnl
-  i[4567]86 )
-    host_cpu_abi=i386
-    ;;
-  alphaev[4-8] | alphaev56 | alphapca5[67] | alphaev6[78] )
-    host_cpu_abi=alpha
-    ;;
-  hppa1.0 | hppa1.1 | hppa2.0* | hppa64 )
-    host_cpu_abi=hppa
-    ;;
-  rs6000 )
-    host_cpu_abi=powerpc
-    ;;
-  c1 | c2 | c32 | c34 | c38 | c4 )
-    host_cpu_abi=convex
-    ;;
-changequote([,])dnl
-  arm* )
-    FFCALL_SET_CPU_ABI([ARMel], ffcall_cv_host_armel,
-      [defined(__ARMEL__)],armel,arm)
-    ;;
-  mips* )
-dnl We should also check for (_MIPS_SZPTR == 64), but gcc keeps this at 32.
-    FFCALL_CACHE_EGREP_CPP([64-bit MIPS], ffcall_cv_host_mips64,
-      [defined(_MIPS_SZLONG) && (_MIPS_SZLONG == 64)])
-    if test $ffcall_cv_host_mips64 = yes; then
-      host_cpu_abi=mips64
-    else
-dnl Strictly speaking, the MIPS ABI (-32 or -n32) is independent from the CPU
-dnl identification (-mips[12] or -mips[34]). But -n32 is commonly used together
-dnl with -mips3, and it's easier to test the CPU identification.
-      FFCALL_SET_CPU_ABI([MIPS with n32 ABI], ffcall_cv_host_mipsn32,
-        [__mips >= 3], mipsn32, mips)
-    fi
-    ;;
-dnl On powerpc64 systems, the C compiler may still be generating 32-bit code.
-  powerpc64 )
-    FFCALL_SET_CPU_ABI([64-bit PowerPC], ffcall_cv_host_powerpc64,
-      [defined(__powerpc64__) || defined(_ARCH_PPC64)], powerpc64, powerpc)
-    ;;
-dnl UltraSPARCs running Linux have `uname -m` = "sparc64", but the C compiler
-dnl still generates 32-bit code.
-  sparc | sparc64 )
-    FFCALL_SET_CPU_ABI([64-bit SPARC], ffcall_cv_host_sparc64,
-      [defined(__sparcv9) || defined(__arch64__)], sparc64, sparc)
-    ;;
-dnl On x86_64 systems, the C compiler may still be generating 32-bit code.
-  x86_64 )
-    FFCALL_SET_CPU_ABI([64-bit x86_64], ffcall_cv_host_x86_64,
-      [defined(__LP64__) || defined(__x86_64__) || defined(__amd64__)],
-      x86_64, i386)
-    ;;
-  *)
-    host_cpu_abi=$host_cpu
-    ;;
-esac
-AC_SUBST(host_cpu_abi)
-dnl was AC_DEFINE_UNQUOTED(__${host_cpu}__) but KAI C++ 3.2d doesn't like this
-cat >> confdefs.h <<EOF
-#ifndef __${host_cpu_abi}__
-#define __${host_cpu_abi}__ 1
-#endif
-EOF
 ])
 
 dnl -*- Autoconf -*-
