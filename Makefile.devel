@@ -28,7 +28,7 @@ gnulib-imported : update-gnulib force
 	$(RM) configure.ac; ln -sv configure.in configure.ac
 	$(GNULIB_CHECKOUT)/gnulib-tool --import --source-base=gllib \
 		--m4-base=glm4 --aux-dir=build-aux --no-changelog \
-		longlong nocrash
+		longlong nocrash host-cpu-c-abi
 	$(RM) configure.ac
 	rm -fvr build-aux/.cvsignore glm4/.cvsignore gllib/
 	cd glm4; \

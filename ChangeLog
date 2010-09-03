@@ -1,3 +1,13 @@
+2010-09-03  Sam Steingold  <sds@gnu.org>
+
+	* Makefile.devel (gnulib-imported): also import host-cpu-c-abi
+	* avcall/configure.in, callback/configure.in:
+	* callback/trampoline_r/configure.in, callback/vacall_r/configure.in:
+	* trampoline/configure.in, vacall/configure.in:
+	use gl_HOST_CPU_C_ABI instead of FFCALL_CANONICAL_HOST_CPU
+	* m4/general.m4: remove FFCALL_CANONICAL_HOST_CPU,
+	FFCALL_CACHE_EGREP_CPP, FFCALL_SET_CPU_ABI
+
 2010-07-20  Sam Steingold  <sds@gnu.org>
 
 	* callback/trampoline_r/trampoline_r.h.in, trampoline/trampoline.h.in:

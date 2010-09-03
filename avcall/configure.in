@@ -1,6 +1,6 @@
 dnl AUTOCONF configuration for AVCALL
 dnl Bruno Haible 2000-04-02
-dnl Sam Steingold 2008-2009
+dnl Sam Steingold 2008-2010
 dnl
 AC_INIT(libffcall/avcall,m4_normalize(m4_esyscmd([cat ../VERSION])))
 AC_CONFIG_SRCDIR(avcall.h.in)
@@ -19,7 +19,7 @@ AC_PROG_MAKE_SET
 AC_CONFIG_AUX_DIR(../build-aux)
 AC_PROG_INSTALL
 CL_PROG_LN
-FFCALL_CANONICAL_HOST_CPU
+gl_HOST_CPU_C_ABI
 PACKAGE=avcall
 FFCALL_COMMON_LIBTOOL
 FFCALL_PCC_STRUCT_RETURN

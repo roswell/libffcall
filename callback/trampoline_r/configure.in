@@ -1,6 +1,6 @@
 dnl AUTOCONF configuration for TRAMPOLINE_R
 dnl Bruno Haible 2001-01-27
-dnl Sam Steingold 2008-2009
+dnl Sam Steingold 2008-2010
 dnl
 AC_INIT(libffcall/trampoline_r,m4_normalize(m4_esyscmd([cat ../../VERSION])))
 AC_CONFIG_SRCDIR(trampoline_r.h.in)
@@ -20,7 +20,7 @@ AC_CONFIG_AUX_DIR(../../build-aux)
 AC_PROG_INSTALL
 CL_PROG_LN
 CL_PROG_LN_S
-FFCALL_CANONICAL_HOST_CPU
+gl_HOST_CPU_C_ABI
 PACKAGE=callback
 FFCALL_COMMON_LIBTOOL
 AC_CHECK_HEADERS(unistd_h)
