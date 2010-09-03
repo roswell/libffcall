@@ -20017,7 +20017,7 @@ else
   case "$host_os" in
   hpux*) ffcall_cv_codeexec="guessing yes" ;;
   *)
-case "$host_cpu_abi"-"$host_os" in
+case "$host_cpu_c_abi"-"$host_os" in
   # On host=rs6000-*-aix3.2.5 malloc'ed memory is indeed not executable.
   powerpc-aix*) ffcall_cv_codeexec="guessing no" ;;
   *)
