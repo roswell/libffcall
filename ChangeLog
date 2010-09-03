@@ -15,7 +15,7 @@
 	* avcall/Makefile.in, callback/Makefile.in:
 	* callback/trampoline_r/Makefile.in, callback/vacall_r/Makefile.in:
 	* trampoline/Makefile.in, vacall/Makefile.in,
-	use @host_cpu_c_abi@ instead of @host_cpu_abi@
+	use @HOST_CPU_C_ABI@ instead of @host_cpu_abi@
 	* callback/trampoline_r/configure.in, trampoline/configure.in:
 	* m4/codeexec.m4: use $HOST_CPU_C_ABI instead of $host_cpu_abi
 

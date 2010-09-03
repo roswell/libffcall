@@ -3,7 +3,7 @@
 #### Start of system configuration section. ####
 
 HOST = @host@
-CPU = @host_cpu_c_abi@
+CPU = @HOST_CPU_C_ABI@
 OS = @host_os@
 
 # Directories used by "make":
