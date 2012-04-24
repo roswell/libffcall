@@ -125,7 +125,7 @@ cache-convex.lo : $(srcdir)/cache-convex.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-convex.s
 
 libtrampoline.la : $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS)
+	$(LIBTOOL_LINK) $(CC) -static -o libtrampoline.la -rpath $(libdir) $(OBJECTS)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
@@ -198,5 +198,3 @@ distclean : clean
 maintainer-clean : distclean
 
 force :
-
-

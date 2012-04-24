@@ -1,3 +1,11 @@
+2012-04-24  Sam Steingold  <sds@gnu.org>
+
+	Never build shared libraries: --enable-shared has no effect.
+	* avcall/Makefile.in (libavcall.la): pass -static to LIBTOOL_LINK
+	* callback/Makefile.in (libcallback.la): ditto
+	* callback/trampoline_r/Makefile.in (libtrampoline.la): ditto
+	* callback/vacall_r/Makefile.in (libvacall.la): ditto
+
 2010-09-03  Sam Steingold  <sds@gnu.org>
 
 	* configure.in: call AC_CONFIG_AUX_DIR(build-aux)
