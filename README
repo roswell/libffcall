@@ -19,7 +19,7 @@ Installation instructions:
 
         mkdir make
         cd make
-        ./configure --cache-file=config.cache
+        ../configure --cache-file=config.cache
         make
         make check
         make install
