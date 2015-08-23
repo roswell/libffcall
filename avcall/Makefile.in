@@ -141,6 +141,9 @@ avcall-powerpc.lo : $(srcdir)/avcall-powerpc-aix.old.s $(srcdir)/avcall-powerpc-
 avcall-powerpc64.lo : $(srcdir)/avcall-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-powerpc64.s
 
+avcall-powerpc64le.lo : $(srcdir)/avcall-powerpc64le.s
+	$(LIBTOOL_COMPILE) $(CC) -g @GCC_X_NONE@ -c $(srcdir)/avcall-powerpc64le.s
+
 avcall-m88k.lo : $(srcdir)/avcall-m88k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-m88k.s
 

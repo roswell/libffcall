@@ -27,8 +27,8 @@
 #define __powerpcaix__  /* AIX ABI, just a closure. */
 #endif
 #endif
-#if defined(__powerpc64__)
-/* The only ABI on powerpc64 known so far is the AIX ABI. */
+#if defined(__powerpc64__) && !defined(__powerpc64le__)
+/* The ABI on powerpc64 other than powerpc64le is the AIX ABI. */
 #define __powerpc64aix__  /* AIX ABI, just a closure. */
 #endif
 #if defined(__hppanew__)
@@ -288,6 +288,10 @@ extern void __TR_clear_cache();
 #endif
 #ifdef __powerpc64aix__
 #define TRAMP_LENGTH 48
+#define TRAMP_ALIGN 8
+#endif
+#ifdef __powerpc64le__
+#define TRAMP_LENGTH 64
 #define TRAMP_ALIGN 8
 #endif
 #ifdef __m88k__
@@ -986,6 +990,49 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
 #define tramp_data(function)  \
   ((long *) function)[4]
 #endif
+#ifdef __powerpc64le__
+  /* function:
+   *	std	r3,56(r12)
+   *    ld      r3,32(r12)
+   *    ld	r11,40(r12)
+   *	std	r11,0(r3)
+   *    ld      r3,56(r12)
+   *	ld	r12,48(r12)
+   *	mtctr	r12
+   *	bctr	
+   *    .quad <variable>
+   *    .quad <data>
+   *    .quad <address>
+   *    .quad 0
+   */
+  *(int *)  (function + 0) = 0xF86C0038;  /* std r3,56(r12)  */
+  *(int *)  (function + 4) = 0xE86C0020;  /* ld  r3,32(r12)  */
+  *(int *)  (function + 8) = 0xE96C0028;  /* ld  r11,40(r12) */
+  *(int *)  (function +12) = 0xF9630000;  /* ld  r11,0(r3)   */
+  *(int *)  (function +16) = 0xE86C0038;  /* ld  r3,56(r12)  */
+  *(int *)  (function +20) = 0xE98C0030;  /* ld  r12,48(r12) */
+  *(int *)  (function +24) = 0x7D8903A6;  /* mtctr r12       */
+  *(int *)  (function +28) = 0x4E800420;  /* bctr            */
+  *(long *) (function +32) = (long) variable;
+  *(long *) (function +40) = (long) data;
+  *(long *) (function +48) = (long) address;
+  *(long *) (function +56) = (long) 0x0L;
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0xF86C0038 && \
+  *(unsigned int *) (function + 4) == 0xE86C0020 && \
+  *(unsigned int *) (function + 8) == 0xE96C0028 && \
+  *(unsigned int *) (function +12) == 0xF9630000 && \
+  *(unsigned int *) (function +16) == 0xE86C0038 && \
+  *(unsigned int *) (function +20) == 0xE98C0030 && \
+  *(unsigned int *) (function +24) == 0x7D8903A6 && \
+  *(unsigned int *) (function +28) == 0x4E800420
+#define tramp_address(function)  \
+  ((long *) function)[6]
+#define tramp_variable(function)  \
+  ((long *) function)[4]
+#define tramp_data(function)  \
+  ((long *) function)[5]
+#endif
 #ifdef __m88k__
   /* function:
    *    or.u    #r13,#r0,hi16(<variable>)	5D A0 hi16(<variable>)
@@ -1199,7 +1246,7 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
    * cache. The freshly built trampoline is visible to the data cache, but not
    * maybe not to the instruction cache. This is hairy.
    */
-#if !(defined(__hppanew__) || defined(__powerpcaix__) || defined(__powerpc64aix__) || defined(__ia64__))
+#if !(defined(__hppanew__) || defined(__powerpcaix__) || defined(__powerpc64aix__) || defined(__powerpc64le__) || defined(__ia64__))
   /* Only needed if we really set up machine instructions. */
 #ifdef __i386__
 #if defined(_WIN32)

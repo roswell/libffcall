@@ -27,8 +27,8 @@
 #define __powerpcaix__  /* AIX ABI, just a closure. */
 #endif
 #endif
-#if defined(__powerpc64__)
-/* The only ABI on powerpc64 known so far is the AIX ABI. */
+#if defined(__powerpc64__) && !defined(__powerpc64le__)
+/* The ABI on powerpc64 other than powerpc64le is the AIX ABI. */
 #define __powerpc64aix__  /* AIX ABI, just a closure. */
 #endif
 #if defined(__hppanew__)
@@ -284,6 +284,10 @@ extern void __TR_clear_cache();
 #endif
 #ifdef __powerpc64aix__
 #define TRAMP_LENGTH 40
+#define TRAMP_ALIGN 8
+#endif
+#ifdef __powerpc64le__
+#define TRAMP_LENGTH 32
 #define TRAMP_ALIGN 8
 #endif
 #ifdef __m88k__
@@ -873,6 +877,31 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   ((long *) function)[3]
 #endif
+#ifdef __powerpc64le__
+  /* function:
+   *    ld      r11,16(r12)
+   *    ld      r12,24(r12)
+   *    mtctr   r12
+   *    bctr
+   *    .quad <data>
+   *    .quad <address>
+   */
+  *(int *)  (function + 0) = 0xE96C0010;  /* ld  r11,16(r12) */
+  *(int *)  (function + 4) = 0xE98C0018;  /* ld  r12,24(r12) */
+  *(int *)  (function + 8) = 0x7D8903A6;  /* mtctr r12       */
+  *(int *)  (function +12) = 0x4E800420;  /* bctr            */
+  *(long *) (function +16) = (long) data;
+  *(long *) (function +24) = (long) address;
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0xE96C0010 && \
+  *(unsigned int *) (function + 4) == 0xE98C0018 && \
+  *(unsigned int *) (function + 8) == 0x7D8903A6 && \
+  *(unsigned int *) (function +12) == 0x4E800420
+#define tramp_address(function)  \
+  ((long *) function)[3]
+#define tramp_data(function)  \
+  ((long *) function)[2]
+#endif
 #ifdef __m88k__
   /* function:
    *    or.u    #r11,#r0,hi16(<data>)		5D 60 hi16(<data>)
@@ -1044,7 +1073,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    * cache. The freshly built trampoline is visible to the data cache, but not
    * maybe not to the instruction cache. This is hairy.
    */
-#if !(defined(__hppanew__) || defined(__powerpcaix__) || defined(__powerpc64aix__) || defined(__ia64__))
+#if !(defined(__hppanew__) || defined(__powerpcaix__) || defined(__powerpc64aix__) || defined(__powerpc64le__) || defined(__ia64__))
   /* Only needed if we really set up machine instructions. */
 #ifdef __i386__
 #if defined(_WIN32)

@@ -143,6 +143,9 @@ vacall-powerpc.lo : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-
 vacall-powerpc64.lo : $(srcdir)/vacall-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-powerpc64.s
 
+vacall-powerpc64le.lo : $(srcdir)/vacall-powerpc64le.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-powerpc64le.s
+
 vacall-m88k.lo : $(srcdir)/vacall-m88k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-m88k.s
 

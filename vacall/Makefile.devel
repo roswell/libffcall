@@ -87,6 +87,9 @@ vacall-powerpc-macos.s : vacall-powerpc.c vacall.h.in
 vacall-powerpc64.s : vacall-powerpc64.c vacall.h.in
 	/cross/powerpc64-linux-tools/bin/powerpc64-linux-gcc $(GCCFLAGS) -D__powerpc64__ -S vacall-powerpc64.c -o vacall-powerpc64.s
 
+vacall-powerpc64le.s : vacall-powerpc64le.c vacall.h.in
+	$(GCC) $(GCCFLAGS) -D__powerpc64__ -D__powerpc64le__ -S vacall-powerpc64le.c -o vacall-powerpc64le.s
+
 vacall-m88k.s : vacall-m88k.c vacall.h.in
 	$(GCC) -V 2.95.2 -b m88k-dgux $(GCCFLAGS) -D__m88k__ -S vacall-m88k.c -o vacall-m88k.s
 

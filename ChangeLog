@@ -1,3 +1,8 @@
+2015-08-23  Hernán Erasmo  <dherasmo@gmail.com>
+
+	Added compatibility with ppc64le architecture. Credit goes
+	to Masanori Mitsugi <mitsugi@linux.vnet.ibm.com>
+
 2012-04-24  Sam Steingold  <sds@gnu.org>
 
 	Never build shared libraries: --enable-shared has no effect.

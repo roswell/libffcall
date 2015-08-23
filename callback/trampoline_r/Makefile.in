@@ -82,6 +82,12 @@ tramp-powerpc64.lo : tramp-powerpc64.s
 tramp-powerpc64.s : $(srcdir)/tramp-powerpc64.new.S
 	$(CPP) $(srcdir)/tramp-powerpc64.new.S > tramp-powerpc64.s
 
+tramp-powerpc64le.lo : tramp-powerpc64le.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc64le.s
+
+tramp-powerpc64le.s : $(srcdir)/tramp-powerpc64le.new.S
+	$(CPP) $(srcdir)/tramp-powerpc64le.new.S > tramp-powerpc64le.s
+
 tramp-ia64.lo : $(srcdir)/tramp-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/tramp-ia64.s
 

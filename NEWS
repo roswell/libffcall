@@ -1,3 +1,7 @@
+New in 1.12
+
+* Added ppc64le to the list of supported architectures.
+
 New in 1.11
 
 * Header now define LIBFFCALL_VERSION (to 0x010B).

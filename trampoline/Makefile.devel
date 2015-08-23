@@ -58,6 +58,9 @@ proto-powerpc-macos.s : proto.c
 proto-powerpc64-aix.s : proto64.c
 	/cross/powerpc64-linux-tools/bin/powerpc64-linux-gcc $(GCCFLAGS) -D__powerpc64__ -S proto64.c -o $@
 
+proto-powerpc64le.s : proto64.c
+	$(GCC) $(GCCFLAGS) -D__powerpc64__ -D__powerpc64le__ -S proto64.c -o $@
+
 proto-m88k.s : proto.c
 	$(GCC) -V 2.95.2 -b m88k-dgux $(GCCFLAGS) -D__m88k__ -S proto.c -o $@
 
