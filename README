@@ -100,6 +100,9 @@ Distribution:
 CVS:
 $ cvs -z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/sources/libffcall co ffcall
 
+Tar:
+$ wget https://github.com/libffcall/libffcall/archive/ffcall-1.12.tar.gz
+
 Bug reports to:
 
   https://savannah.gnu.org/bugs/?func=additem&group=libffcall
