@@ -104,4 +104,26 @@ fi
 
 make -f Makefile.maint totally-clean all || exit $?
 
+# Copy files between directories.
+for file in \
+  PORTING \
+  cache.c \
+  cache-alpha.c \
+  cache-alpha.s \
+  cache-arm.c \
+  cache-arm.s \
+  cache-armel.c \
+  cache-armel.s \
+  cache-convex.c \
+  cache-convex.s \
+  cache-hppa.c \
+  cache-hppa.s \
+  cache-powerpc.c \
+  cache-powerpc-macos.s \
+  cache-powerpc-sysv4.s \
+  protexec.c \
+  ; do
+  cp -p trampoline/$file callback/trampoline_r/$file || exit $?
+done
+
 echo "$0: done.  Now you can run './configure'."

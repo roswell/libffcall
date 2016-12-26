@@ -64,19 +64,19 @@ vacall-i386.lo : vacall-i386.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-i386.s
 
 vacall-i386.s : $(srcdir)/vacall-i386-macro.S
-	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#ident' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,% ,%,g' -e 's,\. ,.,g' > vacall-i386.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#ident' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,% ,%,g' -e 's,\. ,.,g' > vacall-i386.s
 
 vacall-sparc.lo : vacall-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-sparc.s
 
 vacall-sparc.s : $(srcdir)/vacall-sparc.S
-	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-sparc.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > vacall-sparc.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-sparc.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > vacall-sparc.s
 
 vacall-sparc64.lo : vacall-sparc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-sparc64.s
 
 vacall-sparc64.s : $(srcdir)/vacall-sparc64.S
-	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-sparc64.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > vacall-sparc64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-sparc64.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > vacall-sparc64.s
 
 vacall-m68k.lo : vacall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-m68k.s
@@ -86,25 +86,25 @@ vacall-m68k.s : $(srcdir)/vacall-m68k.mit.S $(srcdir)/vacall-m68k.mot.s $(srcdir
 	  netbsd*) src=$(srcdir)/vacall-m68k-netbsd.S;; \
 	  *) src=$(srcdir)/vacall-m68k.mit.S;; \
 	esac; \
-	$(CPP) $(ASPFLAGS) $$src | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' | if test @AS_UNDERSCORE@ = true; then sed -e 's/\$$//g'; else sed -e 's/\$$/%/g'; fi > vacall-m68k.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $$src | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' | if test @AS_UNDERSCORE@ = true; then sed -e 's/\$$//g'; else sed -e 's/\$$/%/g'; fi > vacall-m68k.s
 
 vacall-mips.lo : vacall-mips.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-mips.s
 
 vacall-mips.s : $(srcdir)/vacall-mips.S
-	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-mips.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mips.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-mips.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mips.s
 
 vacall-mipsn32.lo : vacall-mipsn32.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-mipsn32.s
 
 vacall-mipsn32.s : $(srcdir)/vacall-mipsn32.S
-	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-mipsn32.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mipsn32.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-mipsn32.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mipsn32.s
 
 vacall-mips64.lo : vacall-mips64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-mips64.s
 
 vacall-mips64.s : $(srcdir)/vacall-mips64.S
-	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-mips64.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mips64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-mips64.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mips64.s
 
 vacall-alpha.lo : $(srcdir)/vacall-alpha.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-alpha.s
@@ -119,7 +119,7 @@ vacall-arm.lo : vacall-arm.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-arm.s
 
 vacall-arm.s : $(srcdir)/vacall-arm.S
-	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-arm.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-arm.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-arm.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-arm.s
 
 vacall-armel.lo : $(srcdir)/vacall-armel.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-armel.s
@@ -161,8 +161,8 @@ vacall-x86_64.lo : $(srcdir)/vacall-x86_64.s
 misc.lo : $(srcdir)/misc.c vacall_r.h config.h
 	$(LIBTOOL_COMPILE) $(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
 
-structcpy.lo : $(srcdir)/structcpy.c
-	$(LIBTOOL_COMPILE) $(CC) $(CFLAGS) -c $(srcdir)/structcpy.c
+structcpy.lo : $(srcdir)/../../common/structcpy.c
+	$(LIBTOOL_COMPILE) $(CC) $(CFLAGS) -c $(srcdir)/../../common/structcpy.c
 
 libvacall.la : $(OBJECTS)
 	$(LIBTOOL_LINK) $(CC) -static -o libvacall.la -rpath $(libdir) $(OBJECTS)

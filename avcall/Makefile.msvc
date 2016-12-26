@@ -78,10 +78,10 @@ avcall.obj : avcall-$(CPU).obj
 
 avcall-i386.obj : $(srcdir)/avcall-i386-msvc.c
 	$(RM) avcall-i386.obj
-	$(CC) -c $(srcdir)/avcall-i386-msvc.c /Foavcall-i386.obj
+	$(CC) -I$(srcdir)/../common -c $(srcdir)/avcall-i386-msvc.c /Foavcall-i386.obj
 
-structcpy.obj : $(srcdir)/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/structcpy.c
+structcpy.obj : $(srcdir)/../common/structcpy.c
+	$(CC) $(CFLAGS) -c $(srcdir)/../common/structcpy.c
 
 !if !$(DLL)
 avcall.lib : $(OBJECTS)
@@ -102,8 +102,8 @@ tests.s : $(srcdir)/tests.c avcall.h
 tests.exe : tests.obj avcall.lib
 	$(CC) $(CFLAGS) tests.obj avcall.lib /Fetests.exe
 
-uniq-u.exe : $(srcdir)/uniq-u.c
-	$(CC) $(CFLAGS) $(srcdir)/uniq-u.c -Feuniq-u.exe
+uniq-u.exe : $(srcdir)/../common/uniq-u.c
+	$(CC) $(CFLAGS) $(srcdir)/../common/uniq-u.c -Feuniq-u.exe
 	$(RM) uniq-u.obj
 
 check : all tests.exe uniq-u.exe

@@ -141,8 +141,8 @@ tests.s : $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
 tests.exe : tests.obj callback.lib
 	$(CC) $(CFLAGS) tests.obj callback.lib /Fetests.exe
 
-uniq-u.exe : $(srcdir)/uniq-u.c
-	$(CC) $(CFLAGS) $(srcdir)/uniq-u.c -Feuniq-u.exe
+uniq-u.exe : $(srcdir)/../common/uniq-u.c
+	$(CC) $(CFLAGS) $(srcdir)/../common/uniq-u.c -Feuniq-u.exe
 	$(RM) uniq-u.obj
 
 check1 : all test1.exe

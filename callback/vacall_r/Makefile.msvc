@@ -82,13 +82,13 @@ vacall.obj : vacall-$(CPU).obj
 
 vacall-i386.obj : $(srcdir)/vacall-i386-msvc.c vacall_r.h
 	$(RM) vacall-i386.obj
-	$(CC) -c $(srcdir)/vacall-i386-msvc.c /Fovacall-i386.obj
+	$(CC) -I$(srcdir)/../../common -c $(srcdir)/vacall-i386-msvc.c /Fovacall-i386.obj
 
 misc.obj : $(srcdir)/misc.c vacall_r.h config.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
 
-structcpy.obj : $(srcdir)/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/structcpy.c
+structcpy.obj : $(srcdir)/../common/structcpy.c
+	$(CC) $(CFLAGS) -c $(srcdir)/../common/structcpy.c
 
 !if !$(DLL)
 vacall.lib : $(OBJECTS)

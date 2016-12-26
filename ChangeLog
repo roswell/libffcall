@@ -1,5 +1,32 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Put duplicated files under version control only once.
+	* autogen.sh: Copy some files from trampoline/ to callback/trampoline_r.
+	* common/asm*.sh: Moved here from avcall/, vacall/, callback/vacall_r.
+	* common/asm*.h: Likewise.
+	* common/reg-struct-return: Likewise.
+	* common/structcpy.c: Likewise.
+	* common/uniq-u.c: Moved here from avcall/, vacall/, callback/.
+	* avcall/Makefile.devel: Update paths of asm*.sh.
+	* avcall/Makefile.in: Add -I options for asm*.h. Update path of structcpy.c.
+	* avcall/Makefile.mingw32: Likewise.
+	* avcall/Makefile.msvc: Likewise. Update path of uniq-u.c.
+	* vacall/Makefile.devel: Update paths of asm*.sh.
+	* vacall/Makefile.in: Add -I options for asm*.h. Update path of structcpy.c.
+	* vacall/Makefile.mingw32: Likewise.
+	* vacall/Makefile.msvc: Likewise. Update path of uniq-u.c.
+	* trampoline/Makefile.devel: Update paths of asm*.sh.
+	* trampoline/Makefile.in: Add -I options for asm*.h.
+	* callback/Makefile.msvc: Update path of uniq-u.c.
+	* callback/vacall_r/Makefile.devel: Update paths of asm*.sh.
+	* callback/vacall_r/Makefile.in: Add -I options for asm*.h. Update path of structcpy.c.
+	* callback/vacall_r/Makefile.mingw32: Likewise.
+	* callback/vacall_r/Makefile.msvc: Likewise.
+	* callback/trampoline_r/Makefile.devel: Update paths of asm*.sh.
+	* callback/trampoline_r/Makefile.in: Add -I options for asm*.h.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Fix dependencies.
 	* avcall/Makefile.devel (avcall-sparc64.S): Depend on asmsparc64.sh,
 	not asmsparc.sh.

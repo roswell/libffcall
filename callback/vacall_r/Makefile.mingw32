@@ -58,13 +58,13 @@ vacall-i386.o : vacall-i386.asm
 	$(CC) -c -x assembler vacall-i386.asm
 
 vacall-i386.asm : $(srcdir)/vacall-i386-macro.S
-	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#ident' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' > vacall-i386.asm
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#ident' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' > vacall-i386.asm
 
 misc.o : $(srcdir)/misc.c vacall_r.h config.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
 
-structcpy.o : $(srcdir)/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/structcpy.c
+structcpy.o : $(srcdir)/../common/structcpy.c
+	$(CC) $(CFLAGS) -c $(srcdir)/../common/structcpy.c
 
 libvacall.a : $(OBJECTS)
 	$(RM) libvacall.a

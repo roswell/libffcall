@@ -82,13 +82,13 @@ vacall.obj : vacall-$(CPU).obj
 
 vacall-i386.obj : $(srcdir)/vacall-i386-msvc.c vacall.h
 	$(RM) vacall-i386.obj
-	$(CC) -c $(srcdir)/vacall-i386-msvc.c /Fovacall-i386.obj
+	$(CC) -I$(srcdir)/../common -c $(srcdir)/vacall-i386-msvc.c /Fovacall-i386.obj
 
 misc.obj : $(srcdir)/misc.c vacall.h config.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
 
-structcpy.obj : $(srcdir)/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/structcpy.c
+structcpy.obj : $(srcdir)/../common/structcpy.c
+	$(CC) $(CFLAGS) -c $(srcdir)/../common/structcpy.c
 
 !if !$(DLL)
 vacall.lib : $(OBJECTS)
@@ -109,8 +109,8 @@ tests.s : $(srcdir)/tests.c vacall.h
 tests.exe : tests.obj vacall.lib
 	$(CC) $(CFLAGS) tests.obj vacall.lib /Fetests.exe
 
-uniq-u.exe : $(srcdir)/uniq-u.c
-	$(CC) $(CFLAGS) $(srcdir)/uniq-u.c -Feuniq-u.exe
+uniq-u.exe : $(srcdir)/../common/uniq-u.c
+	$(CC) $(CFLAGS) $(srcdir)/../common/uniq-u.c -Feuniq-u.exe
 	$(RM) uniq-u.obj
 
 check : all tests.exe uniq-u.exe
