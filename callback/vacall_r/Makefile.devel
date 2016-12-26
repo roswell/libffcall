@@ -52,7 +52,7 @@ vacall-sparc.S : vacall-sparc.c vacall_r.h.in asmsparc.sh
 	(echo '#include "asmsparc.h"' ; ./asmsparc.sh < vacall-sparc.s) > vacall-sparc.S
 	$(RM) vacall-sparc.s
 
-vacall-sparc64.S : vacall-sparc64.c vacall_r.h.in asmsparc.sh
+vacall-sparc64.S : vacall-sparc64.c vacall_r.h.in asmsparc64.sh
 	sparc64-linux-gcc -V 2.95.2 -b sparc64-linux $(GCCFLAGS) -D__sparc64__ -S vacall-sparc64.c -o vacall-sparc64.s
 	(echo '#include "asmsparc.h"' ; ./asmsparc64.sh < vacall-sparc64.s) > vacall-sparc64.S
 	$(RM) vacall-sparc64.s

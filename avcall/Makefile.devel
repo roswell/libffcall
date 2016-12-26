@@ -50,7 +50,7 @@ avcall-sparc.S : avcall-sparc.c avcall.h.in asmsparc.sh
 	(echo '#include "asmsparc.h"' ; ./asmsparc.sh < avcall-sparc.s) > avcall-sparc.S
 	$(RM) avcall-sparc.s
 
-avcall-sparc64.S : avcall-sparc64.c avcall.h.in asmsparc.sh
+avcall-sparc64.S : avcall-sparc64.c avcall.h.in asmsparc64.sh
 	sparc64-linux-gcc -V 2.95.2 -b sparc64-linux $(GCCFLAGS) -D__sparc64__ -S avcall-sparc64.c -o avcall-sparc64.s
 	(echo '#include "asmsparc.h"' ; ./asmsparc64.sh < avcall-sparc64.s) > avcall-sparc64.S
 	$(RM) avcall-sparc64.s

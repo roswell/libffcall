@@ -1,5 +1,15 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Fix dependencies.
+	* avcall/Makefile.devel (avcall-sparc64.S): Depend on asmsparc64.sh,
+	not asmsparc.sh.
+	* vacall/Makefile.devel (vacall-sparc64.S): Likewise.
+	* callback/vacall_r/Makefile.devel (vacall-sparc64.S): Likewise.
+	* callback/Makefile.maint (vacall_r/vacall-i386-*.c): Don't depend on
+	vacall_r/asmi386.sh.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Add missing dependency.
 	* callback/vacall_r/Makefile.devel (vacall-m68k-netbsd.S): Depend on
 	asmm68k.sh.

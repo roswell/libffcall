@@ -26,10 +26,10 @@ vacall_r/vacall_r.h.msvc : vacall_r/vacall_r.h.in
 vacall_r/vacall_r.h.mingw32 : vacall_r/vacall_r.h.in
 	cd vacall_r && $(MAKE) -f Makefile.maint vacall_r.h.mingw32
 
-vacall_r/vacall-i386-msvc.c : vacall_r/vacall-i386-macro.S vacall_r/asmi386.sh
+vacall_r/vacall-i386-msvc.c : vacall_r/vacall-i386-macro.S
 	cd vacall_r && $(MAKE) -f Makefile.maint vacall-i386-msvc.c
 
-vacall_r/vacall-i386-mingw32.c : vacall_r/vacall-i386-macro.S vacall_r/asmi386.sh
+vacall_r/vacall-i386-mingw32.c : vacall_r/vacall-i386-macro.S
 	cd vacall_r && $(MAKE) -f Makefile.maint vacall-i386-mingw32.c
 
 trampoline_r/trampoline_r.man : trampoline_r/trampoline_r.3
