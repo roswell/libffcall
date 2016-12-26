@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2009 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2016 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -11,8 +11,7 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 AC_PREREQ(2.61)
 
 AC_DEFUN([FFCALL_COMMON_LIBTOOL],
-[AC_REQUIRE([AM_DISABLE_SHARED])dnl
-AC_REQUIRE([AM_PROG_LIBTOOL])dnl
+[LT_INIT([disable-shared])dnl
 ])
 
 AC_DEFUN([FFCALL_COMMON_TRAMPOLINE],

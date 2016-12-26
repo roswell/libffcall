@@ -1,5 +1,13 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Switch to libtool-2.4.6.
+	* autogen.sh (LIBTOOL_VERSION): Set to 2.4.6.
+	* Makefile.maint (libtool-imported-files): Import also m4/ltoptions.m4,
+	m4/ltsugar.m4, m4/ltversion.m4, m4/lt~obsolete.m4.
+	* m4/general.m4 (FFCALL_COMMON_LIBTOOL): Invoke LT_INIT.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Switch to autoconf 2.69 and automake 1.15.
 	* Makefile.maint (ACLOCAL, AUTOCONF, AUTOHEADER): Bump version numbers.
 

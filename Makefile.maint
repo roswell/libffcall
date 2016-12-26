@@ -31,7 +31,7 @@ libtool-imported-files : force
 	mkdir libtool.tmp
 	gzip -d -c < "$(LIBTOOL_RELEASE)" | (cd libtool.tmp && tar -xf -)
 	test -d build-aux || mkdir build-aux
-	for destfile in m4/libtool.m4 build-aux/ltmain.sh; do \
+	for destfile in m4/libtool.m4 m4/ltoptions.m4 m4/ltsugar.m4 m4/ltversion.m4 m4/lt~obsolete.m4 build-aux/ltmain.sh; do \
 	  name=`echo $$destfile | sed -e 's|^.*/||'`; \
 	  srcfile=`find libtool.tmp -name $$name -print | sed 1q`; \
 	  if test -n "$$srcfile"; then \

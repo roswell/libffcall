@@ -47,7 +47,7 @@ while :; do
 done
 
 # The newest libtool release version.
-LIBTOOL_VERSION=1.5.22
+LIBTOOL_VERSION=2.4.6
 
 if test $skip_gnulib = false; then
 
