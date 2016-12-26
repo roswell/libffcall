@@ -1,5 +1,11 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Add missing dependency.
+	* callback/vacall_r/Makefile.devel (vacall-m68k-netbsd.S): Depend on
+	asmm68k.sh.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Switch to libtool-2.4.6.
 	* autogen.sh (LIBTOOL_VERSION): Set to 2.4.6.
 	* Makefile.maint (libtool-imported-files): Import also m4/ltoptions.m4,

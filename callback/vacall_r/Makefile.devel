@@ -27,7 +27,7 @@ vacall-m68k.mit.S : vacall-m68k.c vacall_r.h.in asmm68k.sh
 vacall-m68k.mot.s : vacall-m68k.c vacall_r.h.in
 	$(GCC) -V 2.95.2 -b m68k-linux $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k.mot.s
 
-vacall-m68k-netbsd.S : vacall-m68k.c vacall_r.h.in
+vacall-m68k-netbsd.S : vacall-m68k.c vacall_r.h.in asmm68k.sh
 	$(GCC) -V 2.95.2 -b m68k-sun $(GCCFLAGS) -D__m68k__ -D__NetBSD__ -S vacall-m68k.c -o vacall-m68k-netbsd.s
 	(echo '#include "asmm68k.h"' ; ./asmm68k.sh < vacall-m68k-netbsd.s) > vacall-m68k-netbsd.S
 	$(RM) vacall-m68k-netbsd.s
