@@ -1,5 +1,13 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Simplify armel build rule.
+	* avcall/Makefile.devel (avcall-armel.s): Renamed from avcall-armel.S.
+	Simplify.
+	* avcall/Makefile.in (avcall-armel.lo): Use $(srcdir)/avcall-armel.s.
+	(avcall-armel.s): Remove target.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Put duplicated files under version control only once.
 	* autogen.sh: Copy some files from trampoline/ to callback/trampoline_r.
 	* common/asm*.sh: Moved here from avcall/, vacall/, callback/vacall_r.

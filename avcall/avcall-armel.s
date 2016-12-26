@@ -1,4 +1,3 @@
-#include "asmarm.h"
 	.cpu arm10tdmi
 	.fpu softvfp
 	.file	"avcall-armel.c"

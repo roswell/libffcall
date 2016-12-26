@@ -72,10 +72,8 @@ avcall-arm.S : avcall-arm.c avcall.h.in ../common/asmarm.sh
 	(echo '#include "asmarm.h"' ; ../common/asmarm.sh < avcall-arm.s) > avcall-arm.S
 	$(RM) avcall-arm.s
 
-avcall-armel.S : avcall-armel.c avcall.h.in
+avcall-armel.s : avcall-armel.c avcall.h.in
 	$(GCC) $(GCCFLAGS) -D__arm__ -S avcall-armel.c -o avcall-armel.s
-	(echo '#include "asmarm.h"' ; cat < avcall-armel.s) > avcall-armel.S
-	$(RM) avcall-armel.s
 
 avcall-powerpc-aix.old.s : avcall-powerpc.c avcall.h.in
 	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mold-mnemonics $(GCCFLAGS) -D__powerpc__ -S avcall-powerpc.c -o avcall-powerpc-aix.old.s
