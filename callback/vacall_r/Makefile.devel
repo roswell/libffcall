@@ -1,27 +1,23 @@
-# developer -*-Makefile-*-
+# This is the developer's -*-Makefile-*-, not the user's makefile.
+# Do not use it unless you know exactly what you do!
+
+LN = ln -s
+RM = rm -f
+
+# ============ Rules that require cross-compilation tools ============
 
 HOST = i486-linux
 CPU = i386
 GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer -DHAVE_LONG_LONG_INT -DREENTRANT
-LN = ln -s
-RM = rm -f
 SED = sed
-ROFF_MAN = groff -Tascii -mandoc
 
-all : vacall-i386-macro.S vacall-i386-msvc.c vacall-i386-mingw32.c vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd.S vacall-mips.S vacall-mipsn32.S vacall-mips64.S vacall-sparc.S vacall-sparc64.S vacall-alpha.s vacall-hppa.s vacall-arm.S vacall-armel.s vacall-powerpc-aix.old.s vacall-powerpc-aix.new.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-m88k.s vacall-convex.s vacall-ia64.s vacall-x86_64.s \
-      vacall_r.h.msvc config.h.msvc vacall_r.h.mingw32 config.h.mingw32
+precompiled : vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd.S vacall-mips.S vacall-mipsn32.S vacall-mips64.S vacall-sparc.S vacall-sparc64.S vacall-alpha.s vacall-hppa.s vacall-arm.S vacall-armel.s vacall-powerpc-aix.old.s vacall-powerpc-aix.new.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-m88k.s vacall-convex.s vacall-ia64.s vacall-x86_64.s
 
 vacall-i386-macro.S : vacall-i386.c vacall_r.h.in asmi386.sh
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386.s
 	(echo '#include "asmi386.h"' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386.s | ./asmi386.sh) > vacall-i386-macro.S
 	$(RM) vacall-i386.s
-
-vacall-i386-msvc.c : vacall-i386-macro.S
-	(echo '#ifdef _MSC_VER' ; echo '#include "vacall_r.h"' ; echo '#endif' ; cat vacall-i386-macro.S) > vacall-i386-msvc.c
-
-vacall-i386-mingw32.c : vacall-i386-macro.S
-	(echo '#ifdef __MINGW32__' ; echo '#include "vacall_r.h"' ; echo '#endif' ; cat vacall-i386-macro.S) > vacall-i386-mingw32.c
 
 vacall-m68k.mit.S : vacall-m68k.c vacall_r.h.in asmm68k.sh
 	$(GCC) -V 2.95.2 -b m68k-sun $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k.mit.s
@@ -106,24 +102,3 @@ vacall-ia64.s : vacall-ia64.c vacall_r.h.in
 
 vacall-x86_64.s : vacall-x86_64.c vacall_r.h.in
 	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S vacall-x86_64.c -o vacall-x86_64.s
-
-vacall_r.man : vacall_r.3
-	$(ROFF_MAN) vacall_r.3 > vacall_r.man
-
-VERSION = $(shell cat ../../VERSION)
-
-vacall_r.h.msvc : vacall_r.h.in ../../VERSION
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
-	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
-	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall_r.h.in > vacall_r.h.msvc
-
-vacall_r.h.mingw32 : vacall_r.h.in ../../VERSION
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
-	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
-	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall_r.h.in > vacall_r.h.mingw32
-
-config.h.msvc : config.h.in
-	cp config.h.in config.h.msvc
-
-config.h.mingw32 : config.h.in
-	cp config.h.in config.h.mingw32

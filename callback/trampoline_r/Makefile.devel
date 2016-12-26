@@ -1,17 +1,18 @@
-# developer -*-Makefile-*-
+# This is the developer's -*-Makefile-*-, not the user's makefile.
+# Do not use it unless you know exactly what you do!
+
+RM = rm -f
+
+# ============ Rules that require cross-compilation tools ============
 
 HOST = i486-linux
 CPU = i386
 GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer
 ASPREFIX = /usr1/gnu/lib
-RM = rm -f
-ROFF_MAN = groff -Tascii -mandoc
 
-all : proto-i386.s proto-m68k.s proto-m68k-netbsd.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.old.s proto-powerpc-aix.new.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-m88k.s proto-convex.s proto-ia64.c proto-x86_64.c \
-      cache-sparc.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s cache-convex.s \
-      trampoline_r.man \
-      config.h.msvc config.h.mingw32
+precompiled : proto-i386.s proto-m68k.s proto-m68k-netbsd.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.old.s proto-powerpc-aix.new.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-m88k.s proto-convex.s proto-ia64.c proto-x86_64.c \
+      cache-sparc.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s cache-convex.s
 
 proto-i386.s : proto.c
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -S proto.c -o $@
@@ -99,15 +100,6 @@ cache-convex.s : cache-convex.c
 cache-armel.s : cache-armel.c
 	$(GCC) $(GCCFLAGS)  -fomit-frame-pointer -S cache-armel.c -o cache-armel.s
 
-trampoline_r.man : trampoline_r.3
-	$(ROFF_MAN) trampoline_r.3 > trampoline_r.man
-
-config.h.msvc : config.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' -e 's,^#undef STDC_HEADERS$$,#define STDC_HEADERS 1,' -e 's,^#undef HAVE_GETPAGESIZE$$,#define HAVE_GETPAGESIZE 1 /* fake */,' -e 's,^#undef RETGETPAGESIZETYPE$$,#define RETGETPAGESIZETYPE unsigned long,' -e 's,^#undef CODE_EXECUTABLE$$,#define CODE_EXECUTABLE 1,' < config.h.in > config.h.msvc
-
-config.h.mingw32 : config.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' -e 's,^#undef STDC_HEADERS$$,#define STDC_HEADERS 1,' -e 's,^#undef HAVE_GETPAGESIZE$$,#define HAVE_GETPAGESIZE 1 /* fake */,' -e 's,^#undef RETGETPAGESIZETYPE$$,#define RETGETPAGESIZETYPE unsigned long,' -e 's,^#undef CODE_EXECUTABLE$$,#define CODE_EXECUTABLE 1,' < config.h.in > config.h.mingw32
-
 tramp-i386.o : tramp-i386.s
 	$(ASPREFIX)/i486-linux/bin/as tramp-i386.s -o $@
 
@@ -155,4 +147,3 @@ tramp-ia64.o : tramp-ia64.s
 
 tramp-x86_64.o : tramp-x86_64.s
 	$(ASPREFIX)/x86_64-suse-linux/bin/as tramp-x86_64.s -o $@
-

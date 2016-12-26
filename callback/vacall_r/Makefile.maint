@@ -1,0 +1,40 @@
+# maintainer -*-Makefile-*-
+
+LN = ln -s
+RM = rm -f
+
+# ==================== Easily regeneratable files ====================
+
+all : vacall_r.h.msvc config.h.msvc vacall_r.h.mingw32 config.h.mingw32 \
+      vacall-i386-msvc.c vacall-i386-mingw32.c
+
+VERSION = $(shell cat ../../VERSION)
+
+vacall_r.h.msvc : vacall_r.h.in ../../VERSION
+	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
+	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
+	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall_r.h.in > vacall_r.h.msvc
+
+vacall_r.h.mingw32 : vacall_r.h.in ../../VERSION
+	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
+	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
+	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall_r.h.in > vacall_r.h.mingw32
+
+config.h.msvc : config.h.in
+	cp config.h.in config.h.msvc
+
+config.h.mingw32 : config.h.in
+	cp config.h.in config.h.mingw32
+
+vacall-i386-msvc.c : vacall-i386-macro.S
+	(echo '#ifdef _MSC_VER' ; echo '#include "vacall_r.h"' ; echo '#endif' ; cat vacall-i386-macro.S) > vacall-i386-msvc.c
+
+vacall-i386-mingw32.c : vacall-i386-macro.S
+	(echo '#ifdef __MINGW32__' ; echo '#include "vacall_r.h"' ; echo '#endif' ; cat vacall-i386-macro.S) > vacall-i386-mingw32.c
+
+totally-clean : force
+	$(RM) vacall_r.h.msvc config.h.msvc vacall_r.h.mingw32 config.h.mingw32
+	$(RM) vacall-i386-msvc.c vacall-i386-mingw32.c
+
+
+force :
