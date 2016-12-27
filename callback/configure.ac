@@ -28,10 +28,10 @@ extrasub="$extrasub"'
 /@subdir@/{
 h
 g
-s/@subdir@/vacall_r/
+s/@subdir@/vacall_r/g
 p
 g
-s/@subdir@/trampoline_r/
+s/@subdir@/trampoline_r/g
 p
 d
 }

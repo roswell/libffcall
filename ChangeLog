@@ -1,5 +1,35 @@
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
+	Create tarballs through an Automake-like "make dist" command.
+	* Makefile.in (SOURCE_FILES, LIBTOOL_IMPORTED_FILES,
+	GNULIB_IMPORTED_FILES, IMPORTED_FILES, COPIED_FILES, GENERATED_FILES,
+	DISTFILES): New macros.
+	(distdir): New target.
+	(PACKAGE, VERSION, TAR, GZIP): New macros.
+	(dist): New target.
+	* avcall/Makefile.in (SOURCE_FILES, GENERATED_FILES, DISTFILES): New
+	macros.
+	(distdir): New target.
+	* vacall/Makefile.in (SOURCE_FILES, GENERATED_FILES, DISTFILES): New
+	macros.
+	(distdir): New target.
+	* trampoline/Makefile.in (SOURCE_FILES, GENERATED_FILES, DISTFILES):
+	New macros.
+	(distdir): New target.
+	* callback/Makefile.in (SOURCE_FILES, GENERATED_FILES, DISTFILES): New
+	macros.
+	(distdir): New target.
+	* callback/vacall_r/Makefile.in (SOURCE_FILES, GENERATED_FILES,
+	DISTFILES): New macros.
+	(distdir): New target.
+	* callback/trampoline_r/Makefile.in (SOURCE_FILES, GENERATED_FILES,
+	DISTFILES): New macros.
+	(distdir): New target.
+	* configure.ac (extrasub): Replace all occurrences of @subdir@.
+	* callback/configure.ac (extrasub): Likewise.
+
+2016-12-27  Bruno Haible  <bruno@clisp.org>
+
 	Bump version number.
 	* VERSION: Set to 0x010D (= 1.13).
 
