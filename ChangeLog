@@ -1,5 +1,21 @@
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
+	Rename each configure.in to configure.ac.
+	* configure.ac: Renamed from configure.in.
+	* avcall/configure.ac: Renamed from avcall/configure.in.
+	* vacall/configure.ac: Renamed from vacall/configure.in.
+	* trampoline/configure.ac: Renamed from trampoline/configure.in.
+	* callback/configure.ac: Renamed from callback/configure.in.
+	* callback/vacall_r/configure.ac: Renamed from
+	callback/vacall_r/configure.in.
+	* callback/trampoline_r/configure.ac: Renamed from
+	callback/trampoline_r/configure.in.
+	* Makefile.maint (ALL_CONFIGURE_AC): Renamed from ALL_CONFIGURE_IN.
+	(aclocal.m4, configure, %/configure, %/config.h.in): Update.
+	* README, */README: Update.
+
+2016-12-27  Bruno Haible  <bruno@clisp.org>
+
 	Modernize quoting.
 	* NEWS: Quote ‘like this’, not `like this'.
 	* README.os2: Likewise.

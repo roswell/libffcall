@@ -105,24 +105,25 @@ CONFIGURED_SUBDIRS = \
 
 SUBDIRS_CONFIGURE = $(patsubst %,%/configure,$(CONFIGURED_SUBDIRS))
 ALL_CONFIGURE = configure $(SUBDIRS_CONFIGURE)
-ALL_CONFIGURE_IN = $(patsubst %,%.in,$(ALL_CONFIGURE))
+ALL_CONFIGURE_AC = $(patsubst %,%.ac,$(ALL_CONFIGURE))
 
-aclocal.m4 : $(ALL_CONFIGURE_IN) $(wildcard m4/*.m4) $(wildcard glm4/*.m4)
-	{ echo 'AC_INIT'; cat $(ALL_CONFIGURE_IN) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADERS(\|AC_CONFIG_FILES(\)'; } > configure.ac
-	mv configure.in configure.in-save
-	$(ACLOCAL) --output=aclocal.m4 -I m4 -I glm4
-	mv configure.in-save configure.in
-	rm -f configure.ac
+aclocal.m4 : $(ALL_CONFIGURE_AC) $(wildcard m4/*.m4) $(wildcard glm4/*.m4)
+	{ echo 'AC_INIT'; cat $(ALL_CONFIGURE_AC) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADERS(\|AC_CONFIG_FILES(\)'; } > configure.ac-tmp
+	mv configure.ac configure.ac-save && \
+	{ mv configure.ac-tmp configure.ac && \
+	  $(ACLOCAL) --output=aclocal.m4 -I m4 -I glm4; \
+	  ret=$$?; mv configure.ac-save configure.ac; exit $$ret; \
+	}
 
 .PHONY : configures
 configures : $(ALL_CONFIGURE)
 
 AUTOCONF_FILES = aclocal.m4 $(wildcard m4/*.m4) $(wildcard glm4/*.m4)
 
-configure : configure.in $(AUTOCONF_FILES)
+configure : configure.ac $(AUTOCONF_FILES)
 	$(AUTOCONF)
 
-$(SUBDIRS_CONFIGURE) : %/configure : %/configure.in $(AUTOCONF_FILES)
+$(SUBDIRS_CONFIGURE) : %/configure : %/configure.ac $(AUTOCONF_FILES)
 	srcdir=`pwd`; cd $* && $(AUTOCONF) --include="$$srcdir"
 
 .PHONY : check-configures
@@ -135,7 +136,7 @@ ALL_CONFIG_H_IN = $(patsubst %,%/config.h.in,$(CONFIGURED_SUBDIRS))
 .PHONY : config-h-in
 config-h-in : $(ALL_CONFIG_H_IN)
 
-$(ALL_CONFIG_H_IN) : %/config.h.in : %/configure.in $(AUTOCONF_FILES)
+$(ALL_CONFIG_H_IN) : %/config.h.in : %/configure.ac $(AUTOCONF_FILES)
 	srcdir=`pwd`; cd $* && $(AUTOHEADER) --include="$$srcdir"
 
 

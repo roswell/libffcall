@@ -78,7 +78,7 @@ Files in this package:
     Installation:
 
         configure       configuration script
-        configure.in    autoconf-2.60 source for the configuration script
+        configure.ac    autoconf source for the configuration script
         autoconf/*      auxiliary configuration scripts
         Makefile.in     Makefile master
 
