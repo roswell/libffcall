@@ -69,14 +69,14 @@ avcall-i386.s : $(srcdir)/avcall-i386-macro.S
 avcall-sparc.lo : avcall-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc.s
 
-avcall-sparc.s : $(srcdir)/avcall-sparc.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-sparc.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc.s
+avcall-sparc.s : $(srcdir)/avcall-sparc-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc.s
 
 avcall-sparc64.lo : avcall-sparc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc64.s
 
-avcall-sparc64.s : $(srcdir)/avcall-sparc64.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-sparc64.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc64.s
+avcall-sparc64.s : $(srcdir)/avcall-sparc64-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc64.s
 
 avcall-m68k.lo : avcall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-m68k.s
@@ -87,20 +87,20 @@ avcall-m68k.s : $(srcdir)/avcall-m68k.mit.S $(srcdir)/avcall-m68k.mot.s
 avcall-mips.lo : avcall-mips.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-mips.s
 
-avcall-mips.s : $(srcdir)/avcall-mips.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mips.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mips.s
+avcall-mips.s : $(srcdir)/avcall-mips-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mips-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mips.s
 
 avcall-mipsn32.lo : avcall-mipsn32.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-mipsn32.s
 
-avcall-mipsn32.s : $(srcdir)/avcall-mipsn32.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mipsn32.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mipsn32.s
+avcall-mipsn32.s : $(srcdir)/avcall-mipsn32-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mipsn32-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mipsn32.s
 
 avcall-mips64.lo : avcall-mips64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-mips64.s
 
-avcall-mips64.s : $(srcdir)/avcall-mips64.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mips64.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mips64.s
+avcall-mips64.s : $(srcdir)/avcall-mips64-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mips64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mips64.s
 
 avcall-alpha.lo : $(srcdir)/avcall-alpha.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-alpha.s
@@ -114,8 +114,8 @@ avcall-s390.lo : $(srcdir)/avcall-s390.s
 avcall-arm.lo : avcall-arm.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm.s
 
-avcall-arm.s : $(srcdir)/avcall-arm.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-arm.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-arm.s
+avcall-arm.s : $(srcdir)/avcall-arm-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-arm-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-arm.s
 
 avcall-armel.lo : $(srcdir)/avcall-armel.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-armel.s

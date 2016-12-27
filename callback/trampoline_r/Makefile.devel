@@ -12,7 +12,7 @@ GCCFLAGS = -O2 -fomit-frame-pointer
 ASPREFIX = /usr1/gnu/lib
 
 precompiled : proto-i386.s proto-m68k.s proto-m68k-netbsd.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.old.s proto-powerpc-aix.new.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-m88k.s proto-convex.s proto-ia64.c proto-x86_64.c \
-      cache-sparc.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s cache-convex.s
+      cache-sparc-macro.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s cache-convex.s
 
 proto-i386.s : proto.c
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -S proto.c -o $@
@@ -77,9 +77,9 @@ proto-ia64.s : proto64.c
 proto-x86_64.s : proto64.c
 	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S proto64.c -o $@
 
-cache-sparc.S : cache-sparc.c ../../common/asmsparc.sh
+cache-sparc-macro.S : cache-sparc.c ../../common/asmsparc.sh
 	$(GCC) -V 2.95.2 -b sparc-sun $(GCCFLAGS) -D__sparc__ -S $< -o cache-sparc.s
-	(echo '#include "asmsparc.h"' ; ../../common/asmsparc.sh < cache-sparc.s) > cache-sparc.S
+	(echo '#include "asmsparc.h"' ; ../../common/asmsparc.sh < cache-sparc.s) > cache-sparc-macro.S
 	$(RM) cache-sparc.s
 
 cache-alpha.s : cache-alpha.c

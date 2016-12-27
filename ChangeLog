@@ -1,5 +1,26 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Make it possible to build in $(srcdir) on case-insensitive file systems.
+	* avcall/avcall-${cpu}-macro.S: Renamed from avcall/avcall-${cpu}.S.
+	* avcall/Makefile.devel: Update accordingly.
+	* avcall/Makefile.in: Likewise.
+	* vacall/vacall-${cpu}-macro.S: Renamed from vacall/vacall-${cpu}.S.
+	* vacall/Makefile.devel: Update accordingly.
+	* vacall/Makefile.in: Likewise.
+	* trampoline/cache-sparc-macro.S: Renamed from trampoline/cache-sparc.S.
+	* trampoline/Makefile.devel: Update accordingly.
+	* trampoline/Makefile.in: Update accordingly.
+	* callback/vacall_r/vacall-${cpu}-macro.S: Renamed from
+	callback/vacall_r/vacall-${cpu}.S.
+	* callback/vacall_r/Makefile.devel: Update accordingly.
+	* callback/vacall_r/Makefile.in: Likewise.
+	* callback/trampoline_r/cache-sparc-macro.S: Renamed from
+	callback/trampoline_r/cache-sparc.S.
+	* callback/trampoline_r/Makefile.devel: Update accordingly.
+	* callback/trampoline_r/Makefile.in: Update accordingly.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Simplify armel build rule.
 	* avcall/Makefile.devel (avcall-armel.s): Renamed from avcall-armel.S.
 	Simplify.

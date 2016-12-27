@@ -86,14 +86,14 @@ tramp-ia64.o : $(srcdir)/tramp-ia64.s
 cache-sparc.o : cache-sparc.s
 	$(CC) @GCC_X_NONE@ -c cache-sparc.s
 
-cache-sparc.s : $(srcdir)/cache-sparc.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/cache-sparc.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc.s
+cache-sparc.s : $(srcdir)/cache-sparc-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/cache-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc.s
 
 cache-sparc64.o : cache-sparc64.s
 	$(CC) @GCC_X_NONE@ -c cache-sparc64.s
 
-cache-sparc64.s : $(srcdir)/cache-sparc.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/cache-sparc.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc64.s
+cache-sparc64.s : $(srcdir)/cache-sparc-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/cache-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc64.s
 
 cache-alpha.o : $(srcdir)/cache-alpha.s
 	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-alpha.s
