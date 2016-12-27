@@ -147,3 +147,6 @@ tramp-ia64.o : tramp-ia64.s
 
 tramp-x86_64.o : tramp-x86_64.s
 	$(ASPREFIX)/x86_64-suse-linux/bin/as tramp-x86_64.s -o $@
+
+tramp-s390.o : tramp-s390.s
+	$(ASPREFIX)/s390-ibm-linux/bin/as tramp-s390.s -o $@

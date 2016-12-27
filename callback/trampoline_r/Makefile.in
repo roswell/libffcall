@@ -63,9 +63,6 @@ trampoline.lo : $(srcdir)/trampoline.c trampoline_r.h
 tramp-hppa.lo : $(srcdir)/tramp-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/tramp-hppa.s
 
-tramp-s390.lo : $(srcdir)/tramp-s390.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/tramp-s390.s
-
 tramp-powerpc.lo : tramp-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc.s
 

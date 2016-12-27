@@ -1,5 +1,13 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Fix Makefile rules for s390, from 2002-03-24.
+	* trampoline/Makefile.devel (tramp-s390.o): New target.
+	* trampoline/Makefile.in (tramp-s390.o): Remove target.
+	* callback/trampoline_r/Makefile.devel (tramp-s390.o): New target.
+	* callback/trampoline_r/Makefile.in (tramp-s390.lo): Remove target.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Fix "make distclean".
 	* avcall/Makefile.in (distclean): Also remove config.h.
 	* callback/Makefile.in (distclean): Likewise.
