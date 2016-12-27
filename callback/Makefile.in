@@ -157,16 +157,20 @@ clean : force
 	$(RM) -r $(MOSTLYCLEANDIRS)
 	$(RM) $(MOSTLYCLEANFILES)
 
-distclean-subdirs : force
+DISTCLEANFILES = \
+  config.status config.log config.cache Makefile config.h libtool \
+  minitests.output.* tests.output.*
+
+distclean : force
 	cd @subdir@ && if test -f Makefile; then $(MAKE) distclean; fi
+	$(RM) -r $(MOSTLYCLEANDIRS)
+	$(RM) $(MOSTLYCLEANFILES)
+	$(RM) $(DISTCLEANFILES)
 
-distclean : clean distclean-subdirs
-	$(RM) config.status config.log config.cache Makefile config.h libtool minitests.output.* tests.output.*
-
-maintainer-clean-subdirs : force
+maintainer-clean : force
 	cd @subdir@ && if test -f Makefile; then $(MAKE) maintainer-clean; fi
-
-maintainer-clean : distclean maintainer-clean-subdirs
-	$(RM) config.status config.log config.cache Makefile
+	$(RM) -r $(MOSTLYCLEANDIRS)
+	$(RM) $(MOSTLYCLEANFILES)
+	$(RM) $(DISTCLEANFILES)
 
 force :

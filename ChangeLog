@@ -1,5 +1,17 @@
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
+	Avoid unnecessary recursion in "make maintainer-clean".
+	* Makefile.in (DISTCLEANFILES): New variable.
+	(distclean, maintainer-clean): Use it.
+	* callback/Makefile.in (DISTCLEANFILES): New variable.
+	(distclean): Use it. Don't depend on 'clean'. Instead, use
+	MOSTLYCLEANDIRS, MOSTLYCLEANFILES.
+	(maintainer-clean): Don't depend on 'distclean'. Instead, use
+	MOSTLYCLEANDIRS, MOSTLYCLEANFILES, DISTCLEANFILES.
+	(distclean-subdirs, maintainerclean-subdirs): Inline and remove targets.
+
+2016-12-27  Bruno Haible  <bruno@clisp.org>
+
 	Make "make mostlyclean" act like "make clean".
 	* callback/Makefile.in (MOSTLYCLEANDIRS, MOSTLYCLEANFILES): New
 	variables.

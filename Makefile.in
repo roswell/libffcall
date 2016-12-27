@@ -43,13 +43,15 @@ mostlyclean : force
 clean : force
 	cd @subdir@ && $(MAKE) clean
 
+DISTCLEANFILES = config.status config.log config.cache Makefile
+
 distclean : force
 	cd @subdir@; if test -f Makefile; then $(MAKE) distclean; fi
-	$(RM) config.status config.log config.cache Makefile
+	$(RM) $(DISTCLEANFILES)
 
 maintainer-clean : force
 	cd @subdir@; if test -f Makefile; then $(MAKE) maintainer-clean; fi
-	$(RM) config.status config.log config.cache Makefile
+	$(RM) $(DISTCLEANFILES)
 
 force :
 
