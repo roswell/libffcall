@@ -1,5 +1,10 @@
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
+	Bump version number.
+	* VERSION: Set to 0x010D (= 1.13).
+
+2016-12-27  Bruno Haible  <bruno@clisp.org>
+
 	Rename each configure.in to configure.ac.
 	* configure.ac: Renamed from configure.in.
 	* avcall/configure.ac: Renamed from avcall/configure.in.

@@ -1,8 +1,10 @@
-New in 1.12
+New in 1.13:
+
+New in 1.12:
 
 * Added ppc64le to the list of supported architectures.
 
-New in 1.11
+New in 1.11:
 
 * Header now define LIBFFCALL_VERSION (to 0x010B).
 * Better support for IA64 on Linux (kernel 2.6.16+ and gcc 4.1.0+).
@@ -10,7 +12,7 @@ New in 1.11
 * Added MIPSel support from Thiemo Seufer (debian 1.10-2).
 * Added ARMel support from Max Lapan.
 
-New in 1.10
+New in 1.10:
 
 * Added support for PowerPC NetBSD.
 
