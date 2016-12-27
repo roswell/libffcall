@@ -102,8 +102,6 @@ if test $skip_gnulib = false; then
   fi
 fi
 
-make -f Makefile.maint totally-clean all || exit $?
-
 # Copy files between directories.
 for file in \
   PORTING \
@@ -125,5 +123,7 @@ for file in \
   ; do
   cp -p trampoline/$file callback/trampoline_r/$file || exit $?
 done
+
+make -f Makefile.maint totally-clean all || exit $?
 
 echo "$0: done.  Now you can run './configure'."
