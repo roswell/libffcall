@@ -1,5 +1,13 @@
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
+	Make "make mostlyclean" act like "make clean".
+	* callback/Makefile.in (MOSTLYCLEANDIRS, MOSTLYCLEANFILES): New
+	variables.
+	(mostlyclean, clean): Use them.
+	(clean-subdirs): Inline and remove target.
+
+2016-12-27  Bruno Haible  <bruno@clisp.org>
+
 	Fix Makefile rules for powerpc64, from 2006-04-27.
 	* trampoline/Makefile.in (clean): Also remove tramp-powerpc64.s.
 	* callback/trampoline_r/Makefile.in (clean): Likewise.

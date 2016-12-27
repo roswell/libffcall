@@ -140,18 +140,22 @@ extracheck : all extracheck-subdirs tests
 	LC_ALL=C uniq -u < tests.out > tests.output.$(HOST)
 	test '!' -s tests.output.$(HOST)
 
+MOSTLYCLEANDIRS = .libs _libs
+MOSTLYCLEANFILES = \
+  *.o *.lo core \
+  callback.h vacall_r.h trampoline_r.h libcallback.* \
+  minitests.o minitests.s minitests minitests.out \
+  tests.o tests.s tests tests.out
+
 mostlyclean : force
 	cd @subdir@ && $(MAKE) mostlyclean
+	$(RM) -r $(MOSTLYCLEANDIRS)
+	$(RM) $(MOSTLYCLEANFILES)
 
-clean-subdirs : force
+clean : force
 	cd @subdir@ && $(MAKE) clean
-
-clean : clean-subdirs
-	$(RM) *.o *.lo core
-	$(RM) callback.h vacall_r.h trampoline_r.h libcallback.*
-	$(RM) -r .libs _libs
-	$(RM) minitests.o minitests.s minitests minitests.out
-	$(RM) tests.o tests.s tests tests.out
+	$(RM) -r $(MOSTLYCLEANDIRS)
+	$(RM) $(MOSTLYCLEANFILES)
 
 distclean-subdirs : force
 	cd @subdir@ && if test -f Makefile; then $(MAKE) distclean; fi
