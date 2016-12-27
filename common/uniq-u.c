@@ -59,7 +59,7 @@ xrealloc (void *p, size_t n)
   return p;
 }
 
-/* A `struct linebuffer' holds a line of text. */
+/* A ‘struct linebuffer’ holds a line of text. */
 
 struct linebuffer
 {

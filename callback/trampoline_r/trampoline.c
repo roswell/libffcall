@@ -1053,7 +1053,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     if (vm_protect(task_self(),start_addr,len,0,VM_PROT_READ|VM_PROT_WRITE|VM_PROT_EXECUTE) != KERN_SUCCESS)
 #else
 #if defined(__convex__)
-    /* Convex OS calls it `mremap()'. */
+    /* Convex OS calls it ‘mremap()’. */
     mremap(start_addr, &len, PROT_READ|PROT_WRITE|PROT_EXEC, MAP_PRIVATE);
     if (0)
 #else
@@ -1099,7 +1099,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     register unsigned long _len __asm__ ("%d1") = TRAMP_LENGTH;
     __asm__ __volatile__ (
       "move%.l %#0x80000004,%/d0\n\t" /* CC_EXTPURGE | C_IPURGE */
-      "trap #12"                      /* kernel call `cachectl' */
+      "trap #12"                      /* kernel call ‘cachectl’ */
       :
       : "a" (_beg), "d" (_len)
       : "%a0", "%a1", "%d0", "%d1"    /* call-used registers */

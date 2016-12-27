@@ -71,7 +71,7 @@ New in 1.2.1:
 
 New in 1.2:
 
-* Support passing/returning values of type `long long' and `unsigned long long'
+* Support passing/returning values of type ‘long long’ and ‘unsigned long long’
   on platforms which have these types.
 * Support for "stdcall" calling convention on i386.
 * Added support for Cygwin32 and MSVC4 on Win32.

@@ -4,7 +4,7 @@ RM = rm -f
 
 # ==================== Easily regeneratable files ====================
 
-ROFF_MAN = groff -Tascii -mandoc
+ROFF_MAN = groff -Tutf8 -mandoc
 
 all : trampoline.man \
       config.h.msvc config.h.mingw32

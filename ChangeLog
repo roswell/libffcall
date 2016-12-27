@@ -1,5 +1,32 @@
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
+	Modernize quoting.
+	* NEWS: Quote ‘like this’, not `like this'.
+	* README.os2: Likewise.
+	* common/uniq-u.c: Likewise.
+	* avcall/DOC: Likewise.
+	* avcall/avcall-i386.c: Likewise.
+	* avcall/avcall-sparc.c: Likewise.
+	* avcall/avcall-sparc64.c: Likewise.
+	* avcall/avcall.h.in: Likewise.
+	* avcall/avcall.html: Likewise.
+	* vacall/vacall.h.in: Likewise.
+	* callback/trampoline_r/trampoline.c: Likewise.
+	* callback/trampoline_r/trampoline_r.h.in: Likewise.
+	* trampoline/PORTING: Likewise.
+	* trampoline/trampoline.c: Likewise.
+	* trampoline/trampoline.h.in: Likewise.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* configurations/README: Likewise.
+	* avcall/Makefile.maint (ROFF_MAN): Produce UTF-8 output instead of
+	ASCII output.
+	* vacall/Makefile.maint (ROFF_MAN): Likewise.
+	* trampoline/Makefile.maint (ROFF_MAN): Likewise.
+	* callback/Makefile.maint (ROFF_MAN): Likewise.
+	* callback/trampoline_r/Makefile.maint (ROFF_MAN): Likewise.
+
+2016-12-27  Bruno Haible  <bruno@clisp.org>
+
 	Avoid unnecessary recursion in "make maintainer-clean".
 	* Makefile.in (DISTCLEANFILES): New variable.
 	(distclean, maintainer-clean): Use it.

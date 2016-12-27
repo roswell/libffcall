@@ -14,7 +14,7 @@
 # define LIBFFCALL_VERSION @LIBFFCALL_VERSION@
 #endif
 
-/* These definitions are adjusted by `configure' automatically. */
+/* These definitions are adjusted by ‘configure’ automatically. */
 
 /* CPU */
 #ifndef __i386__
@@ -91,7 +91,7 @@
 #undef __CHAR_UNSIGNED__
 #endif
 
-/* End of definitions adjusted by `configure'. */
+/* End of definitions adjusted by ‘configure’. */
 
 
 /* Max # words in argument-list and temporary structure storage.
@@ -308,7 +308,7 @@ enum __VA_alist_flags
 };
 
 /*
- * Definition of the `va_alist' type.
+ * Definition of the ‘va_alist’ type.
  */
 typedef struct
 {
@@ -765,23 +765,23 @@ typedef __va_alist* va_alist;
 #define va_arg_ulong(LIST)	__va_arg(LIST,unsigned long)
 
 #if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__)
-/* `long long' and `long' are identical. */
+/* ‘long long’ and ‘long’ are identical. */
 #define va_arg_longlong		va_arg_long
 #define va_arg_ulonglong	va_arg_ulong
 #elif defined(__mipsn32__)
-/* `long long' fits in __vaword. */
+/* ‘long long’ fits in __vaword. */
 #define va_arg_longlong(LIST)	__va_arg(LIST,long long)
 #define va_arg_ulonglong(LIST)	__va_arg(LIST,unsigned long long)
 #elif defined(__i386__) || defined(__m68k__) || defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__powerpc__) || defined(__m88k__) || defined(__convex__) || defined(__s390__)
-/* `long long's are passed embedded on the arg stack. */
+/* ‘long long’s are passed embedded on the arg stack. */
 #define va_arg_longlong(LIST)	__va_arg_longlong(LIST,long long)
 #define va_arg_ulonglong(LIST)	__va_arg_longlong(LIST,unsigned long long)
 #if defined(__i386__) || defined(__m68k__) || (defined(__arm__) && !defined(__ARMEL__)) || (defined(__powerpc__) && (defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__convex__)
-/* `long long's are (at most) word-aligned. */
+/* ‘long long’s are (at most) word-aligned. */
 #define __va_arg_longlong(LIST,TYPE)	__va_arg(LIST,TYPE)
 #endif
 #if defined(__mips__) || (defined(__powerpc__) && !(defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__m88k__) || defined(__ARMEL__)
-/* `long long's have alignment 8. */
+/* ‘long long’s have alignment 8. */
 #define __va_arg_longlong(LIST,TYPE)					\
   ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(long)__VA_alignof(TYPE)), \
    __va_arg(LIST,TYPE))
@@ -797,7 +797,7 @@ typedef __va_alist* va_alist;
   )
 #endif
 #if defined(__hppa__)
-/* `long long's have alignment 8. */
+/* ‘long long’s have alignment 8. */
 #define __va_arg_longlong(LIST,TYPE)					\
   ((LIST)->aptr = ((LIST)->aptr & -(long)__VA_alignof(TYPE)),		\
    __va_arg(LIST,TYPE))
@@ -820,7 +820,7 @@ typedef __va_alist* va_alist;
 #endif
 
 #if defined(__sparc__) && !defined(__sparc64__)
-/* Beware against unaligned `double' accesses! */
+/* Beware against unaligned ‘double’ accesses! */
 #define va_arg_double(LIST)  \
   (__va_align_double(LIST)						\
    (LIST)->tmp._words[0] = ((__vaword*)((LIST)->aptr))[0],		\

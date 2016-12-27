@@ -1,4 +1,5 @@
 <HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE> AVCALL manual page </TITLE>
 </HEAD>
 <BODY>
@@ -45,7 +46,7 @@ C function on it.
 
 This  set  of macros builds an argument list for a C function
 and  calls  the  function  on  it.  It  significantly
-reduces  the  amount  of `glue' code required for parsers,
+reduces  the  amount  of ‘glue’ code required for parsers,
 debuggers, imbedded interpreters, C extensions to application
 programs  and  other situations where collections of
 functions need  to  be  called  on  lists  of  externally-
@@ -74,8 +75,8 @@ at the top of <SAMP>avcall.h</SAMP>.
 <LI> Initialize the alist with  the  function  address  and
 return  value  pointer (if any). There is a separate macro
 for each simple return type  ([u]char,  [u]short,  [u]int,
-[u]long,  [u]longlong, float,  double, where `u' indicates
-`unsigned'). The macros for functions returning structures
+[u]long,  [u]longlong, float,  double, where ‘u’ indicates
+‘unsigned’). The macros for functions returning structures
 or pointers require an explicit type argument.
 <P>
 E.g.,

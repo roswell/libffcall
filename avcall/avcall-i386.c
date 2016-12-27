@@ -39,7 +39,7 @@
   "ret". (See gcc-2.6.3 macro RETURN_POPS_ARGS.) From our point of view, %esp
   gets magically incremented. A workaround would be to push the return value
   container pointer using an __asm__("pushl %0" : : : ...) instruction.
-  Similarly, when calling functions with `stdcall' linkage, %esp also gets
+  Similarly, when calling functions with ‘stdcall’ linkage, %esp also gets
   incremented: all arguments (including the return value container pointer)
   are popped from the stack.
   ----------------------------------------------------------------------*/

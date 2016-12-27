@@ -38,7 +38,7 @@ DECLARE ALIST -> OPEN ALIST -> SET FLAGS -> PUSH ARGS -> CALL FUNCTION
 
 2) Set any special flags. This is architecture and compiler dependent.
 Sometimes, compiler options must be flagged by #defines before the
-#include <avcall.h>. Usually, however, the `configure' script should
+#include <avcall.h>. Usually, however, the ‘configure’ script should
 have determined which #defines are needed and put them at the head of
 avcall.h.
 

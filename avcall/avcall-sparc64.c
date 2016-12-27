@@ -50,11 +50,11 @@
   Passing of floating point values is handled as follows.
   If a prototype is in scope:
     If the value is in a named argument (i.e. not a stdarg function or a
-    value not part of the `...') then the value is passed in the appropriate
+    value not part of the ‘...’) then the value is passed in the appropriate
     fp reg.
-    If the value is part of the `...' and is passed in one of the first 6
+    If the value is part of the ‘...’ and is passed in one of the first 6
     slots then the value is passed in the appropriate int reg.
-    If the value is part of the `...' and is not passed in one of the first 6
+    If the value is part of the ‘...’ and is not passed in one of the first 6
     slots then the value is passed in memory.
   If a prototype is not in scope:
     If the value is one of the first 6 arguments the value is passed in the
@@ -66,7 +66,7 @@
   Space is left on the stack frame for temporary storage of the register
   arguments as well.
 
-  Integers shorter than `long' are always promoted to word-length
+  Integers shorter than ‘long’ are always promoted to word-length
   (zero-extended or sign-extended, according to their type). Structures
   <= 16 bytes are passed embedded in the argument sequence; bigger structures
   are passed by reference.

@@ -62,7 +62,7 @@ A. a new CPU - how to build the trampoline?
 
 B. a new OS - how to make code in malloc'ed memory executable?
 
-   `configure' will find out whether code stored in malloc'ed memory is
+   ‘configure’ will find out whether code stored in malloc'ed memory is
    executable, or whether virtual memory protections have to be set in order
    to allow this. (The test is pretty simple: it copies a small function
    to malloc'ed memory and tries to executed it. The test could also fail

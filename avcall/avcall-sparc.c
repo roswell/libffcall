@@ -21,7 +21,7 @@
 
   The first 6 words of arguments are passed in integer registers o0-o5
   regardless of type or alignment.  (Registers are windowed: o0-o5 become
-  i0-i5 if the called function executes a `save' instruction.)  Remaining
+  i0-i5 if the called function executes a ‘save’ instruction.)  Remaining
   arguments are pushed onto the stack starting at a fixed offset
   ("argframe"). Space is left on the stack frame for temporary storage of
   the register arguments as well.

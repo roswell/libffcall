@@ -14,7 +14,7 @@
 # define LIBFFCALL_VERSION @LIBFFCALL_VERSION@
 #endif
 
-/* These definitions are adjusted by `configure' automatically. */
+/* These definitions are adjusted by ‘configure’ automatically. */
 
 /* CPU */
 #ifndef __i386__

@@ -5,7 +5,7 @@ MAKE = make
 
 # ==================== Easily regeneratable files ====================
 
-ROFF_MAN = groff -Tascii -mandoc
+ROFF_MAN = groff -Tutf8 -mandoc
 
 all : callback.man \
       vacall_r/config.h.msvc vacall_r/config.h.mingw32 vacall_r/vacall_r.h.msvc vacall_r/vacall_r.h.mingw32 vacall_r/vacall-i386-msvc.c vacall_r/vacall-i386-mingw32.c \
