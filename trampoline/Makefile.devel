@@ -9,6 +9,7 @@ HOST = i486-linux
 CPU = i386
 GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer
+CPP = $(GCC) -E
 ASPREFIX = /usr1/gnu/lib
 
 precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.old.s proto-powerpc-aix.new.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-m88k.s proto-convex.s proto-ia64.s proto-x86_64.s \
@@ -129,6 +130,12 @@ tramp-powerpc-old.o : tramp-powerpc-old.s
 
 tramp-powerpc-sysv4.o : tramp-powerpc-sysv4.s
 	$(ASPREFIX)/ppc-linux/bin/as tramp-powerpc-sysv4.s -o $@
+
+tramp-powerpc64le.o : tramp-powerpc64le.s
+	$(ASPREFIX)/ppc64le-linux/bin/as tramp-powerpc64le.s -o $@
+
+tramp-powerpc64le.s : tramp-powerpc64le.new.S
+	$(CPP) tramp-powerpc64le.new.S > tramp-powerpc64le.s
 
 tramp-m88k.o : tramp-m88k.s
 	$(ASPREFIX)/m88k-coff/bin/as tramp-m88k.s -o $@

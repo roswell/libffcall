@@ -1,5 +1,17 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Fix Makefile rules for powerpc64le, from 2015-08-23.
+	* trampoline/Makefile.devel (CPP): New variable.
+	(tramp-powerpc64le.o, tramp-powerpc64le.s): New targets.
+	* trampoline/Makefile.in (tramp-powerpc64le.o, tramp-powerpc64le.s):
+	Remove targets.
+	* callback/trampoline_r/Makefile.devel (CPP): New variable.
+	(tramp-powerpc64le.o, tramp-powerpc64le.s): New targets.
+	* callback/trampoline_r/Makefile.in (tramp-powerpc64le.lo,
+	tramp-powerpc64le.s): Remove targets.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Fix Makefile rules for s390, from 2002-03-24.
 	* trampoline/Makefile.devel (tramp-s390.o): New target.
 	* trampoline/Makefile.in (tramp-s390.o): Remove target.
