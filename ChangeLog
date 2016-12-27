@@ -1,5 +1,11 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Reorder Makefile targets.
+	* trampoline/Makefile.in: Reorder.
+	* callback/trampoline_r/Makefile.in: Reorder.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Fix Makefile rules for powerpc64le, from 2015-08-23.
 	* trampoline/Makefile.devel (CPP): New variable.
 	(tramp-powerpc64le.o, tramp-powerpc64le.s): New targets.

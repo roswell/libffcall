@@ -92,6 +92,9 @@ cache-alpha.o : $(srcdir)/cache-alpha.s
 cache-hppa.o : $(srcdir)/cache-hppa.s
 	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
 
+cache-convex.o : $(srcdir)/cache-convex.s
+	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-convex.s
+
 cache-arm.o : $(srcdir)/cache-arm.s
 	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-arm.s
 
@@ -104,9 +107,6 @@ cache-powerpc.o : $(srcdir)/cache-powerpc-sysv4.s $(srcdir)/cache-powerpc-macos.
 	  *) syntax=sysv4;; \
 	esac; \
 	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-powerpc-$${syntax}.s ; mv cache-powerpc-$${syntax}.o cache-powerpc.o
-
-cache-convex.o : $(srcdir)/cache-convex.s
-	$(CC) @GCC_X_NONE@ -c $(srcdir)/cache-convex.s
 
 libtrampoline.a : $(OBJECTS)
 	$(RM) libtrampoline.a

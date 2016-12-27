@@ -97,14 +97,17 @@ cache-sparc64.s : $(srcdir)/cache-sparc-macro.S
 cache-alpha.lo : $(srcdir)/cache-alpha.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-alpha.s
 
+cache-hppa.lo : $(srcdir)/cache-hppa.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
+
+cache-convex.lo : $(srcdir)/cache-convex.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-convex.s
+
 cache-arm.lo : $(srcdir)/cache-arm.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-arm.s
 
 cache-armel.lo : $(srcdir)/cache-armel.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-armel.s
-
-cache-hppa.lo : $(srcdir)/cache-hppa.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
 
 cache-powerpc.lo : $(srcdir)/cache-powerpc-sysv4.s $(srcdir)/cache-powerpc-macos.s
 	case "$(OS)" in \
@@ -117,9 +120,6 @@ cache-powerpc.lo : $(srcdir)/cache-powerpc-sysv4.s $(srcdir)/cache-powerpc-macos
 # Note that cache-powerpc-${syntax}.o is kept in place, because in some cases
 # cache-powerpc-${syntax}.lo contains a symbolic reference to it and therefore
 # libtool may want to access it.
-
-cache-convex.lo : $(srcdir)/cache-convex.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-convex.s
 
 libtrampoline.la : $(OBJECTS)
 	$(LIBTOOL_LINK) $(CC) -static -o libtrampoline.la -rpath $(libdir) $(OBJECTS)
