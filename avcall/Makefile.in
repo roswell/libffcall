@@ -235,7 +235,7 @@ clean : force
 	$(RM) tests.o tests.s tests tests.out
 
 distclean : clean
-	$(RM) config.status config.log config.cache Makefile avcall.h libtool minitests.output.* tests.output.*
+	$(RM) config.status config.log config.cache Makefile avcall.h config.h libtool minitests.output.* tests.output.*
 
 maintainer-clean : distclean
 

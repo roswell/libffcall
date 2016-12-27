@@ -1,5 +1,11 @@
 2016-12-26  Bruno Haible  <bruno@clisp.org>
 
+	Fix "make distclean".
+	* avcall/Makefile.in (distclean): Also remove config.h.
+	* callback/Makefile.in (distclean): Likewise.
+
+2016-12-26  Bruno Haible  <bruno@clisp.org>
+
 	Make it possible to build in $(srcdir) on case-insensitive file systems.
 	* avcall/avcall-${cpu}-macro.S: Renamed from avcall/avcall-${cpu}.S.
 	* avcall/Makefile.devel: Update accordingly.

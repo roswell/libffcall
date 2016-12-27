@@ -157,7 +157,7 @@ distclean-subdirs : force
 	cd @subdir@ && if test -f Makefile; then $(MAKE) distclean; fi
 
 distclean : clean distclean-subdirs
-	$(RM) config.status config.log config.cache Makefile libtool minitests.output.* tests.output.*
+	$(RM) config.status config.log config.cache Makefile config.h libtool minitests.output.* tests.output.*
 
 maintainer-clean-subdirs : force
 	cd @subdir@ && if test -f Makefile; then $(MAKE) maintainer-clean; fi
