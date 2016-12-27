@@ -168,7 +168,7 @@ extracheck : check
 mostlyclean : clean
 
 clean : force
-	$(RM) $(OBJECTS) tramp-powerpc.s cache-sparc.s cache-sparc64.s libtrampoline.a core
+	$(RM) $(OBJECTS) tramp-powerpc.s tramp-powerpc64.s cache-sparc.s cache-sparc64.s libtrampoline.a core
 	$(RM) test1.o test1 test2.o test2
 
 distclean : clean
