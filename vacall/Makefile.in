@@ -137,8 +137,11 @@ vacall-convex.o : $(srcdir)/vacall-convex.s
 vacall-ia64.o : $(srcdir)/vacall-ia64.s
 	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-ia64.s
 
-vacall-x86_64.o : $(srcdir)/vacall-x86_64.s
-	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-x86_64.s
+vacall-x86_64.o : vacall-x86_64.s
+	$(CC) @GCC_X_NONE@ -c vacall-x86_64.s
+
+vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-x86_64.s
 
 misc.o : $(srcdir)/misc.c vacall.h config.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
@@ -213,7 +216,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.a core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-arm.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-arm.s vacall-x86_64.s
 	$(RM) minitests.o minitests.s minitests minitests.out
 	$(RM) tests.o tests.s tests tests.out
 
@@ -252,7 +255,7 @@ SOURCE_FILES = \
   vacall-s390.c vacall-s390.s \
   vacall-sparc.c vacall-sparc-macro.S \
   vacall-sparc64.c vacall-sparc64-macro.S \
-  vacall-x86_64.c vacall-x86_64.s \
+  vacall-x86_64.c vacall-x86_64-linux.s vacall-x86_64-macro.S \
   misc.c \
   minitests.c \
   tests.c

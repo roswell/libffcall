@@ -1,5 +1,39 @@
 2016-12-28  Bruno Haible  <bruno@clisp.org>
 
+	Add support for 64-bit mode (x86_64) on Mac OS X.
+	* common/asm-x86_64.sh: New file.
+	* common/asm-x86_64.h: New file.
+	* Makefile.in (SOURCE_FILES): Add them.
+	* avcall/avcall-x86_64-linux.s: Renamed from avcall/avcall-x86_64.s.
+	* avcall/Makefile.devel (avcall-x86_64-linux.s): Renamed from avcall-x86_64.s.
+	(avcall-x86_64-macro.S): New target.
+	* avcall/avcall-x86_64-macro.S: New file, generated through avcall/Makefile.devel.
+	* avcall/Makefile.in (avcall-x86_64.s): New target.
+	(avcall-x86_64.lo): Use it, in the build dir.
+	(clean): Remove it.
+	(SOURCE_FILES): Add avcall-x86_64-linux.s, avcall-x86_64-macro.S. Remove avcall-x86_64.s.
+	* vacall/vacall-x86_64-linux.s: Renamed from vacall/vacall-x86_64.s.
+	* vacall/Makefile.devel (vacall-x86_64-linux.s): Renamed from vacall-x86_64.s.
+	(vacall-x86_64-macro.S): New target.
+	* vacall/vacall-x86_64-macro.S: New file, generated through vacall/Makefile.devel.
+	* vacall/Makefile.in (vacall-x86_64.s): New target.
+	(vacall-x86_64.o): Use it, in the build dir.
+	(clean): Remove it.
+	(SOURCE_FILES): Add vacall-x86_64-linux.s, vacall-x86_64-macro.S. Remove vacall-x86_64.s.
+	* callback/vacall_r/vacall-x86_64-linux.s: Renamed from callback/vacall_r/vacall-x86_64.s.
+	* callback/vacall_r/Makefile.devel (vacall-x86_64-linux.s): Renamed from vacall-x86_64.s.
+	(vacall-x86_64-macro.S): New target.
+	* callback/vacall_r/vacall-x86_64-macro.S: New file, generated through callback/vacall_r/Makefile.devel.
+	* callback/vacall_r/Makefile.in (vacall-x86_64.s): New target.
+	(vacall-x86_64.lo): Use it, in the build dir.
+	(clean): Remove it.
+	(SOURCE_FILES): Add vacall-x86_64-linux.s, vacall-x86_64-macro.S. Remove vacall-x86_64.s.
+	* callback/trampoline_r/test1.c (CHECK_ENV_REGISTER): New macro.
+	(f, main): Use it instead of __GNUC__.
+	* NEWS: Mention the change.
+
+2016-12-28  Bruno Haible  <bruno@clisp.org>
+
 	Rename the asm* files.
 	* common/asm-arm.h: Renamed from common/asmarm.h.
 	* common/asm-arm.sh: Renamed from common/asmarm.sh.

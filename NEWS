@@ -1,5 +1,7 @@
 New in 1.13:
 
+* Added support for 64-bit mode (x86_64) on Mac OS X.
+
 New in 1.12:
 
 * Added ppc64le to the list of supported architectures.

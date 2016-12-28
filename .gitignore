@@ -212,6 +212,7 @@ autom4te.cache/
 /avcall/avcall-mipsn32.s
 /avcall/avcall-mips64.s
 /avcall/avcall-arm.s
+/avcall/avcall-x86_64.s
 /avcall/minitests.o
 /avcall/minitests.s
 /avcall/minitests
@@ -234,6 +235,7 @@ autom4te.cache/
 /vacall/vacall-mipsn32.s
 /vacall/vacall-mips64.s
 /vacall/vacall-arm.s
+/vacall/vacall-x86_64.s
 /vacall/minitests.o
 /vacall/minitests.s
 /vacall/minitests
@@ -302,6 +304,7 @@ autom4te.cache/
 /callback/vacall_r/vacall-mipsn32.s
 /callback/vacall_r/vacall-mips64.s
 /callback/vacall_r/vacall-arm.s
+/callback/vacall_r/vacall-x86_64.s
 # Erased by callback/trampoline_r/Makefile.
 /callback/trampoline_r/trampoline.lo
 /callback/trampoline_r/trampoline.o

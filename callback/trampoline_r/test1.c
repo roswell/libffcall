@@ -16,6 +16,11 @@
 
 #include "trampoline_r.h"
 
+/* Set when we can check that the env register is being passed correctly. */
+#if defined __GNUC__ && !defined __clang__
+#define CHECK_ENV_REGISTER
+#endif
+
 #define MAGIC1  0x9db9af42
 #define MAGIC2  0x614a13c9
 #define MAGIC3  0x7aff3cb4
@@ -33,7 +38,7 @@ int f (void* env, int x)
 int f (int x)
 #endif
 {
-#ifdef __GNUC__
+#ifdef CHECK_ENV_REGISTER
 #ifdef __m68k__
 #ifdef __NetBSD__
 register void* env __asm__("a1");
@@ -94,7 +99,7 @@ register void* env __asm__("r0");
 int main ()
 {
   function cf = alloc_trampoline_r((function)&f, (void*)MAGIC1, (void*)MAGIC2);
-#ifdef __GNUC__
+#ifdef CHECK_ENV_REGISTER
   if ((*cf)(MAGIC4) == MAGIC1+MAGIC2+MAGIC3+MAGIC4)
 #else
   if ((*cf)(MAGIC4) == MAGIC3+MAGIC4)
