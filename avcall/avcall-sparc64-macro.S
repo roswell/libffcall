@@ -1,4 +1,4 @@
-#include "asmsparc.h"
+#include "asm-sparc.h"
 	.file	"avcall-sparc64.c"
 .section	".text"
 	.align 4

@@ -1,3 +1,21 @@
+2016-12-28  Bruno Haible  <bruno@clisp.org>
+
+	Rename the asm* files.
+	* common/asm-arm.h: Renamed from common/asmarm.h.
+	* common/asm-arm.sh: Renamed from common/asmarm.sh.
+	* common/asm-i386.hh: Renamed from common/asmi386.hh.
+	* common/asm-i386.sh: Renamed from common/asmi386.sh.
+	* common/asm-m68k.h: Renamed from common/asmm68k.h.
+	* common/asm-m68k.sh: Renamed from common/asmm68k.sh.
+	* common/asm-mips.h: Renamed from common/asmmips.h.
+	* common/asm-mips.sh: Renamed from common/asmmips.sh.
+	* common/asm-sparc.h: Renamed from common/asmsparc.h.
+	* common/asm-sparc.sh: Renamed from common/asmsparc.sh.
+	* common/asm-sparc64.sh: Renamed from common/asmsparc64.sh.
+	* **/Makefile.devel, **/*.S: Update.
+	* Makefile.maint (common/asm-i386.h): Renamed from common/asmi386.h.
+	* Makefile.in (SOURCE_FILES, GENERATED_FILES): Update.
+
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
 	Add the real source of asmi386.h.

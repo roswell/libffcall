@@ -75,9 +75,9 @@ proto-ia64.s : proto64.c
 proto-x86_64.s : proto64.c
 	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S proto64.c -o $@
 
-cache-sparc-macro.S : cache-sparc.c ../common/asmsparc.sh
+cache-sparc-macro.S : cache-sparc.c ../common/asm-sparc.sh
 	$(GCC) -V 2.95.2 -b sparc-sun $(GCCFLAGS) -D__sparc__ -S $< -o cache-sparc.s
-	(echo '#include "asmsparc.h"' ; ../common/asmsparc.sh < cache-sparc.s) > cache-sparc-macro.S
+	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < cache-sparc.s) > cache-sparc-macro.S
 	$(RM) cache-sparc.s
 
 cache-alpha.s : cache-alpha.c

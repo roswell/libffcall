@@ -1,4 +1,4 @@
-#include "asmsparc.h"
+#include "asm-sparc.h"
 .text
 	.align 4
 	.global C(__TR_clear_cache_4)

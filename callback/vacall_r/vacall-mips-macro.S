@@ -1,4 +1,4 @@
-#include "asmmips.h"
+#include "asm-mips.h"
 	.file	1 "vacall-mips.c"
 	.set	nobopt
 	.text

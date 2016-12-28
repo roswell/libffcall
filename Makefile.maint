@@ -11,7 +11,7 @@ RM = rm -f
 # ==================== Easily regeneratable files ====================
 
 .PHONY : all
-all : aclocal.m4 configures check-configures config-h-in common/asmi386.h force
+all : aclocal.m4 configures check-configures config-h-in common/asm-i386.h force
 	cd avcall && $(MAKE) -f Makefile.maint all
 	cd vacall && $(MAKE) -f Makefile.maint all
 	cd trampoline && $(MAKE) -f Makefile.maint all
@@ -142,8 +142,8 @@ $(ALL_CONFIG_H_IN) : %/config.h.in : %/configure.ac $(AUTOCONF_FILES)
 
 # Other generated files.
 
-common/asmi386.h : common/asmi386.hh
-	sed -e 's,//.*$$,,' < common/asmi386.hh > common/asmi386.h
+common/asm-i386.h : common/asm-i386.hh
+	sed -e 's,//.*$$,,' < common/asm-i386.hh > common/asm-i386.h
 
 
 .PHONY : totally-clean

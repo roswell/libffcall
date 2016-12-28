@@ -77,11 +77,11 @@ SOURCE_FILES = \
   m4/proto.m4 \
   m4/shm.m4 \
   m4/smallstruct.m4 \
-  common/asmarm.sh common/asmarm.h \
-  common/asmi386.sh common/asmi386.hh \
-  common/asmm68k.sh common/asmm68k.h \
-  common/asmmips.sh common/asmmips.h \
-  common/asmsparc.sh common/asmsparc64.sh common/asmsparc.h \
+  common/asm-arm.sh common/asm-arm.h \
+  common/asm-i386.sh common/asm-i386.hh \
+  common/asm-m68k.sh common/asm-m68k.h \
+  common/asm-mips.sh common/asm-mips.h \
+  common/asm-sparc.sh common/asm-sparc64.sh common/asm-sparc.h \
   common/structcpy.c \
   common/uniq-u.c
 # List of distributed files imported from other packages or directories.
@@ -133,7 +133,7 @@ GENERATED_FILES = \
   callback/vacall_r/config.h.in \
   callback/trampoline_r/configure \
   callback/trampoline_r/config.h.in \
-  common/asmi386.h
+  common/asm-i386.h
 # List of distributed files.
 DISTFILES = $(SOURCE_FILES) $(IMPORTED_FILES) $(COPIED_FILES) $(GENERATED_FILES)
 

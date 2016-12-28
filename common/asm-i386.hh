@@ -17,7 +17,7 @@
 //    #include "config.h"
 //    #endif
 // 2. include this file.
-//    #include "asmi386.h"
+//    #include "asm-i386.h"
 // 3. define all assembly language code.
 
 // The three different assembler syntaxes for this CPU are a MAJOR annoyance.

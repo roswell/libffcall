@@ -1,4 +1,4 @@
-#include "asmmips.h"
+#include "asm-mips.h"
 	
 	.set	nobopt
 	.option pic2

@@ -1,4 +1,4 @@
-#include "asmi386.h"
+#include "asm-i386.h"
 TEXT()
 	ALIGN(2)
 GLOBL(C(__builtin_avcall))

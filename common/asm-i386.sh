@@ -1,6 +1,6 @@
 #!/bin/sh
 # Translate the assembler syntax of i386 assembler programs
-# Usage: asmsyntax [-no-C] < gas-asm-file > all-asm-file
+# Usage: asm-i386.sh [-no-C] < gas-asm-file > all-asm-file
 # Warning! All comments are stripped.
 
 tmpscript01=sed$$tmp01

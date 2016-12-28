@@ -1,4 +1,4 @@
-#include "asmsparc.h"
+#include "asm-sparc.h"
 	.file	"vacall-sparc64.c"
 	.version	"01.01"
 .section	".text"

@@ -1,4 +1,4 @@
-#include "asmm68k.h"
+#include "asm-m68k.h"
 .text
 	.even
 .globl C(__vacall_r)
