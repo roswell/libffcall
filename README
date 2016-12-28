@@ -85,9 +85,15 @@ Files in this package:
 
 Copyright notice:
 
-Copyright 1995-2004 Bruno Haible, <bruno@clisp.org>
-Copyright 2000 Adam Fedor <fedor@gnu.org>
-Copyright 2004 Paul Guyot <pguyot@kallisys.net>
+Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>        (original avcall)
+Copyright 1995-2016 Bruno Haible <bruno@clisp.org>                (everything)
+Copyright 1997      Jörg Höhle <Joerg.Hoehle@gmd.de>              (m68k AmigaOS support)
+Copyright 2000      Adam Fedor <fedor@gnu.org>                    (PowerPC MacOS support)
+Copyright 2001-2012 Sam Steingold <sds@gnu.org>                   (build infrastructure)
+Copyright 2001-2002 Gerhard Tonn <GerhardTonn@swol.de> <gt@debian.org> (s390 support)
+Copyright 2004      Paul Guyot <pguyot@kallisys.net>              (PowerPC MacOS support)
+Copyright 2005      Thiemo Seufer <ths@debian.org>                (MIPS EL support)
+Copyright 2015      Masanori Mitsugi <mitsugi@linux.vnet.ibm.com> (PowerPC LE support)
 
 This is free software distributed under the GNU General Public Licence
 described in the file COPYING. Contact the author if you don't have this
