@@ -11,7 +11,7 @@ RM = rm -f
 # ==================== Easily regeneratable files ====================
 
 .PHONY : all
-all : aclocal.m4 configures check-configures config-h-in force
+all : aclocal.m4 configures check-configures config-h-in common/asmi386.h force
 	cd avcall && $(MAKE) -f Makefile.maint all
 	cd vacall && $(MAKE) -f Makefile.maint all
 	cd trampoline && $(MAKE) -f Makefile.maint all
@@ -138,6 +138,12 @@ config-h-in : $(ALL_CONFIG_H_IN)
 
 $(ALL_CONFIG_H_IN) : %/config.h.in : %/configure.ac $(AUTOCONF_FILES)
 	srcdir=`pwd`; cd $* && $(AUTOHEADER) --include="$$srcdir"
+
+
+# Other generated files.
+
+common/asmi386.h : common/asmi386.hh
+	sed -e 's,//.*$$,,' < common/asmi386.hh > common/asmi386.h
 
 
 .PHONY : totally-clean

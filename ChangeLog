@@ -1,5 +1,17 @@
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
+	Add the real source of asmi386.h.
+	* common/asmi386.hh: New file, from GNU clisp.
+	* common/asmi386.h: Remove file.
+	* Makefile.maint (common/asmi386.h): New target. Rule copied from
+	GNU clisp's Makefile.devel.
+	(all): Depend on it.
+	* Makefile.in (SOURCE_FILES): Add common/asmi386.hh. Remove
+	common/asmi386.h.
+	(GENERATED_FILES): Add common/asmi386.h.
+
+2016-12-27  Bruno Haible  <bruno@clisp.org>
+
 	Modernize Cygwin detection.
 	* common/asmi386.h: Test __CYGWIN__, not __CYGWIN32__.
 	From Ken Brown <kbrown@cornell.edu> on 2015-03-05.

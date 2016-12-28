@@ -78,7 +78,7 @@ SOURCE_FILES = \
   m4/shm.m4 \
   m4/smallstruct.m4 \
   common/asmarm.sh common/asmarm.h \
-  common/asmi386.sh common/asmi386.h \
+  common/asmi386.sh common/asmi386.hh \
   common/asmm68k.sh common/asmm68k.h \
   common/asmmips.sh common/asmmips.h \
   common/asmsparc.sh common/asmsparc64.sh common/asmsparc.h \
@@ -132,7 +132,8 @@ GENERATED_FILES = \
   callback/vacall_r/configure \
   callback/vacall_r/config.h.in \
   callback/trampoline_r/configure \
-  callback/trampoline_r/config.h.in
+  callback/trampoline_r/config.h.in \
+  common/asmi386.h
 # List of distributed files.
 DISTFILES = $(SOURCE_FILES) $(IMPORTED_FILES) $(COPIED_FILES) $(GENERATED_FILES)
 
