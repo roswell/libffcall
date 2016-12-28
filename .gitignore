@@ -131,7 +131,7 @@ autom4te.cache/
 /vacall/config.log
 /vacall/config.cache
 /vacall/Makefile
-/vacall/avcall.h
+/vacall/vacall.h
 /vacall/config.h
 /vacall/minitests.output.*
 /vacall/tests.output.*
