@@ -8,7 +8,7 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ(2.61)
+AC_PREREQ([2.61])
 
 AC_DEFUN([FFCALL_COMMON_LIBTOOL],
 [LT_INIT([disable-shared])dnl

@@ -8,10 +8,10 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ(2.57)
+AC_PREREQ([2.57])
 
 AC_DEFUN([CL_MACH_VM],
-[CL_LINK_CHECK([vm_allocate], cl_cv_func_vm,
+[CL_LINK_CHECK([vm_allocate], [cl_cv_func_vm],
  , [vm_allocate(); task_self();],
 AC_DEFINE([HAVE_MACH_VM],[],[have vm_allocate() and task_self() functions])dnl
 )])

@@ -8,12 +8,12 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ(2.57)
+AC_PREREQ([2.57])
 
 AC_DEFUN([CL_AS_UNDERSCORE],
 [AC_BEFORE([$0], [CL_GLOBAL_CONSTRUCTORS])
 m4_pattern_allow([^AS_UNDERSCORE$])
-AC_CACHE_CHECK(for underscore in external names, cl_cv_prog_as_underscore, [
+AC_CACHE_CHECK([for underscore in external names], [cl_cv_prog_as_underscore], [
 cat > conftest.c <<EOF
 #ifdef __cplusplus
 extern "C"
@@ -21,7 +21,7 @@ extern "C"
 int foo() { return 0; }
 EOF
 # look for the assembly language name in the .s file
-AC_TRY_COMMAND(${CC-cc} -S conftest.c) >/dev/null 2>&1
+AC_TRY_COMMAND([${CC-cc} -S conftest.c]) >/dev/null 2>&1
 if grep _foo conftest.s >/dev/null ; then
   cl_cv_prog_as_underscore=yes
 else
@@ -35,5 +35,5 @@ if test $cl_cv_prog_as_underscore = yes; then
 else
   AS_UNDERSCORE=false
 fi
-AC_SUBST(AS_UNDERSCORE)dnl
+AC_SUBST([AS_UNDERSCORE])dnl
 ])

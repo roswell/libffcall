@@ -8,10 +8,10 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ(2.13)
+AC_PREREQ([2.13])
 
 AC_DEFUN([CE_DOC],[whether code in malloc()ed memory is executable])
-AC_DEFUN([FFCALL_CODEEXEC],[AC_CACHE_CHECK(CE_DOC, ffcall_cv_codeexec, [dnl
+AC_DEFUN([FFCALL_CODEEXEC],[AC_CACHE_CHECK([CE_DOC], [ffcall_cv_codeexec], [dnl
 dnl The test below does not work on host=hppa*-hp-hpux* because on this system
 dnl function pointers are actually pointers into(!) a two-pointer struct.
 dnl The test below does not work on host=rs6000-*-* because on this system
@@ -35,8 +35,8 @@ int main ()
   int i;
   for (i = 0; i < size; i++) { funcopy[i] = ((char*)&fun)[i]; }
   return !((*(int(*)())funcopy)() == 31415926);
-}}], ffcall_cv_codeexec=yes, ffcall_cv_codeexec=no,
-ffcall_cv_codeexec="guessing yes")
+}}], [ffcall_cv_codeexec=yes], [ffcall_cv_codeexec=no],
+[ffcall_cv_codeexec="guessing yes"])
   ;;
 esac
   ;;

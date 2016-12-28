@@ -8,16 +8,16 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ(2.57)
+AC_PREREQ([2.57])
 
 AC_DEFUN([CL_MMAP],
 [AC_BEFORE([$0], [CL_MUNMAP])AC_BEFORE([$0], [CL_MPROTECT])
-AC_CHECK_HEADER(sys/mman.h, , no_mmap=1)dnl
+AC_CHECK_HEADER([sys/mman.h], , [no_mmap=1])dnl
 if test -z "$no_mmap"; then
-AC_CHECK_FUNC(mmap, , no_mmap=1)dnl
+AC_CHECK_FUNC([mmap], , [no_mmap=1])dnl
 if test -z "$no_mmap"; then
 AC_DEFINE([HAVE_MMAP],[],[have <sys/mmap.h> and the mmap() function])
-AC_CACHE_CHECK(for working mmap, cl_cv_func_mmap_works, [
+AC_CACHE_CHECK([for working mmap], [cl_cv_func_mmap_works], [
 case "$host" in
   i[34567]86-*-sysv4*)
     # UNIX_SYSV_UHC_1
@@ -78,18 +78,18 @@ AC_TRY_RUN(GL_NOCRASH[$mmap_prog_1
   int fd = -1;
   nocrash_init();
 $mmap_prog_2
-], have_mmap_anon=1
-cl_cv_func_mmap_anon=yes, ,
-: # When cross-compiling, don't assume anything.
+], [have_mmap_anon=1
+cl_cv_func_mmap_anon=yes], ,
+[: # When cross-compiling, don't assume anything.]
 )
 AC_TRY_RUN(GL_NOCRASH[$mmap_prog_1
   int flags = MAP_ANONYMOUS | MAP_PRIVATE;
   int fd = -1;
   nocrash_init();
 $mmap_prog_2
-], have_mmap_anon=1
-cl_cv_func_mmap_anonymous=yes, ,
-: # When cross-compiling, don't assume anything.
+], [have_mmap_anon=1
+cl_cv_func_mmap_anonymous=yes], ,
+[: # When cross-compiling, don't assume anything.]
 )
 AC_TRY_RUN(GL_NOCRASH[$mmap_prog_1
 #ifndef MAP_FILE
@@ -100,10 +100,10 @@ AC_TRY_RUN(GL_NOCRASH[$mmap_prog_1
   if (fd<0) exit(1);
   nocrash_init();
 $mmap_prog_2
-], have_mmap_devzero=1
-cl_cv_func_mmap_devzero=yes,
-retry_mmap=1,
-: # When cross-compiling, don't assume anything.
+], [have_mmap_devzero=1
+cl_cv_func_mmap_devzero=yes],
+[retry_mmap=1],
+[: # When cross-compiling, don't assume anything.]
 )
 if test -n "$retry_mmap"; then
 AC_TRY_RUN(GL_NOCRASH[#define FOR_SUN4_29
@@ -116,9 +116,9 @@ $mmap_prog_1
   if (fd<0) exit(1);
   nocrash_init();
 $mmap_prog_2
-], have_mmap_devzero=1
-cl_cv_func_mmap_devzero_sun4_29=yes, ,
-: # When cross-compiling, don't assume anything.
+], [have_mmap_devzero=1
+cl_cv_func_mmap_devzero_sun4_29=yes], ,
+[: # When cross-compiling, don't assume anything.]
 )
 fi
 if test -n "$have_mmap_anon" -o -n "$have_mmap_devzero"; then

@@ -7,15 +7,15 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels.
 
-AC_PREREQ(2.13)
+AC_PREREQ([2.13])
 
 AC_DEFUN([CL_CC_GCC],
 [AC_REQUIRE([AC_PROG_CPP])
-AC_CACHE_CHECK(whether using GNU C, cl_cv_prog_cc_gcc, [
-AC_EGREP_CPP(yes,[#ifdef __GNUC__
+AC_CACHE_CHECK([whether using GNU C], [cl_cv_prog_cc_gcc], [
+AC_EGREP_CPP([yes],[#ifdef __GNUC__
   yes
 #endif
-], cl_cv_prog_cc_gcc=yes, cl_cv_prog_cc_gcc=no)
+], [cl_cv_prog_cc_gcc=yes], [cl_cv_prog_cc_gcc=no])
 ])
 if test $cl_cv_prog_cc_gcc = yes; then
   CC_GCC=true
@@ -24,6 +24,6 @@ else
   CC_GCC=false
   GCC_X_NONE=''
 fi
-AC_SUBST(CC_GCC)dnl
-AC_SUBST(GCC_X_NONE)dnl
+AC_SUBST([CC_GCC])dnl
+AC_SUBST([GCC_X_NONE])dnl
 ])

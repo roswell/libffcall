@@ -1,5 +1,30 @@
 2016-12-28  Bruno Haible  <bruno@clisp.org>
 
+	More robust quoting in Autoconf macros.
+	* configure.ac: Add brackets around Autoconf macro arguments.
+	* avcall/configure.ac: Likewise.
+	* vacall/configure.ac: Likewise.
+	* trampoline/configure.ac: Likewise.
+	* callback/configure.ac: Likewise.
+	* callback/vacall_r/configure.ac: Likewise.
+	* callback/trampoline_r/configure.ac: Likewise.
+	* m4/as-underscore.m4: Likewise.
+	* m4/cc-gcc.m4: Likewise.
+	* m4/codeexec.m4: Likewise.
+	* m4/general.m4: Likewise.
+	* m4/getpagesize.m4: Likewise.
+	* m4/ireg.m4: Likewise.
+	* m4/ln.m4: Likewise.
+	* m4/mach-vm.m4: Likewise.
+	* m4/mmap.m4: Likewise.
+	* m4/mprotect.m4: Likewise.
+	* m4/pccstruct.m4: Likewise.
+	* m4/proto.m4: Likewise.
+	* m4/shm.m4: Likewise.
+	* m4/smallstruct.m4: Likewise.
+
+2016-12-28  Bruno Haible  <bruno@clisp.org>
+
 	Update list of contributors.
 	* README: List all contributors.
 

@@ -2,13 +2,13 @@ dnl AUTOCONF configuration for VACALL_R
 dnl Bruno Haible 2000-04-02
 dnl Sam Steingold 2008-2010
 dnl
-AC_INIT(libffcall/vacall_r,m4_normalize(m4_esyscmd([cat ../../VERSION])))
-AC_CONFIG_SRCDIR(vacall_r.h.in)
+AC_INIT([libffcall/vacall_r],m4_normalize(m4_esyscmd([cat ../../VERSION])))
+AC_CONFIG_SRCDIR([vacall_r.h.in])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_HEADERS([vacall_r.h],
 [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" vacall_r.h > tmp
 mv -f tmp vacall_r.h],[LIBFFCALL_VERSION=$PACKAGE_VERSION])
-AC_CONFIG_FILES(Makefile)
+AC_CONFIG_FILES([Makefile])
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_GCC_TRADITIONAL
@@ -16,7 +16,7 @@ CL_CC_GCC
 CL_AS_UNDERSCORE
 AC_PROG_RANLIB
 AC_PROG_MAKE_SET
-AC_CONFIG_AUX_DIR(../../build-aux)
+AC_CONFIG_AUX_DIR([../../build-aux])
 AC_PROG_INSTALL
 CL_PROG_LN
 gl_HOST_CPU_C_ABI

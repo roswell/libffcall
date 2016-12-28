@@ -8,10 +8,10 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ(2.13)
+AC_PREREQ([2.13])
 
 AC_DEFUN([CL_PROG_LN],
-[AC_CACHE_CHECK(how to make hard links, cl_cv_prog_LN, [
+[AC_CACHE_CHECK([how to make hard links], [cl_cv_prog_LN], [
 rm -f conftestdata conftestfile
 echo data > conftestfile
 if ln conftestfile conftestdata 2>/dev/null; then
@@ -22,7 +22,7 @@ fi
 rm -f conftestdata conftestfile
 ])
 LN="$cl_cv_prog_LN"
-AC_SUBST(LN)dnl
+AC_SUBST([LN])dnl
 ])
 
 AC_DEFUN([CL_PROG_LN_S],
@@ -43,4 +43,4 @@ if test $cl_cv_prog_LN_S_works = yes; then
 else
   LN_S="$cl_cv_prog_LN"
 fi
-AC_SUBST(LN_S)])
+AC_SUBST([LN_S])])

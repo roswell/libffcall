@@ -8,16 +8,16 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ(2.13)
+AC_PREREQ([2.13])
 
 dnl CL_PROTO(IDENTIFIER, ACTION-IF-NOT-FOUND, FINAL-PROTOTYPE)
 AC_DEFUN([CL_PROTO],
 [AC_MSG_CHECKING([for $1 declaration])
-AC_CACHE_VAL(cl_cv_proto_[$1], [$2
+AC_CACHE_VAL([cl_cv_proto_$1], [$2
 cl_cv_proto_$1="$3"])
 cl_cv_proto_$1=`echo "[$]cl_cv_proto_$1" | tr -s ' ' | sed -e 's/( /(/'`
 AC_MSG_RESULT([$]{ac_t:-
-         }[$]cl_cv_proto_$1)
+         }[$][cl_cv_proto_$1])
 ])
 
 dnl CL_PROTO_RET(INCLUDES, DECL, CACHE-ID, TYPE-IF-OK, TYPE-IF-FAILS)
@@ -25,7 +25,7 @@ AC_DEFUN([CL_PROTO_RET],
 [AC_TRY_COMPILE([$1]
 AC_LANG_EXTERN
 [$2
-], [], $3="$4", $3="$5")
+], [], [$3="$4"], [$3="$5"])
 ])
 
 dnl CL_PROTO_TRY(INCLUDES, DECL, ACTION-IF-OK, ACTION-IF-FAILS)
@@ -38,7 +38,7 @@ AC_LANG_EXTERN
 
 dnl CL_PROTO_CONST(INCLUDES, DECL, CACHE-ID)
 AC_DEFUN([CL_PROTO_CONST],
-[CL_PROTO_TRY([$1], [$2], $3="", $3="const")]
+[CL_PROTO_TRY([$1], [$2], [$3=""], [$3="const"])]
 )
 
 dnl CL_PROTO_MISSING(function_name)

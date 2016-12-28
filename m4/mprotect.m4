@@ -8,14 +8,14 @@ dnl the same distribution terms as the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ(2.57)
+AC_PREREQ([2.57])
 
 AC_DEFUN([CL_MPROTECT],
 [AC_REQUIRE([CL_GETPAGESIZE])dnl
 AC_REQUIRE([CL_MMAP])dnl
-AC_CHECK_FUNCS(mprotect)dnl
+AC_CHECK_FUNCS([mprotect])dnl
 if test $ac_cv_func_mprotect = yes; then
-AC_CACHE_CHECK(for working mprotect, cl_cv_func_mprotect_works, [
+AC_CACHE_CHECK([for working mprotect], [cl_cv_func_mprotect_works], [
 mprotect_prog='
 #include <sys/types.h>
 /* declare malloc() */
@@ -39,9 +39,9 @@ int main () {
 '
 AC_TRY_RUN([$mprotect_prog
   if ((pagesize-1) & pagesize) exit(1);
-  exit(0); }], , no_mprotect=1,
-# When cross-compiling, don't assume anything.
-no_mprotect=1)
+  exit(0); }], , [no_mprotect=1],
+[# When cross-compiling, don't assume anything.
+no_mprotect=1])
 mprotect_prog="$mprotect_prog"'
   char* area = (char*) malloc(6*pagesize);
   char* fault_address = area + pagesize*7/2;
@@ -51,8 +51,8 @@ AC_TRY_RUN(GL_NOCRASH[$mprotect_prog
   nocrash_init();
   if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0) exit(0);
   foo = *fault_address; /* this should cause an exception or signal */
-  exit(0); }], no_mprotect=1, ,
-: # When cross-compiling, don't assume anything.
+  exit(0); }], [no_mprotect=1], ,
+[: # When cross-compiling, don't assume anything.]
 )
 fi
 if test -z "$no_mprotect"; then
@@ -60,8 +60,8 @@ AC_TRY_RUN(GL_NOCRASH[$mprotect_prog
   nocrash_init();
   if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0) exit(0);
   *fault_address = 'z'; /* this should cause an exception or signal */
-  exit(0); }], no_mprotect=1, ,
-: # When cross-compiling, don't assume anything.
+  exit(0); }], [no_mprotect=1], ,
+[: # When cross-compiling, don't assume anything.]
 )
 fi
 if test -z "$no_mprotect"; then
@@ -69,8 +69,8 @@ AC_TRY_RUN(GL_NOCRASH[$mprotect_prog
   nocrash_init();
   if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0) exit(0);
   *fault_address = 'z'; /* this should cause an exception or signal */
-  exit(0); }], no_mprotect=1, ,
-: # When cross-compiling, don't assume anything.
+  exit(0); }], [no_mprotect=1], ,
+[: # When cross-compiling, don't assume anything.]
 )
 fi
 if test -z "$no_mprotect"; then
@@ -79,8 +79,8 @@ AC_TRY_RUN(GL_NOCRASH[$mprotect_prog
   if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0) exit(1);
   if (mprotect(page_align(fault_address),pagesize,PROT_READ|PROT_WRITE) < 0) exit(1);
   *fault_address = 'z'; /* this should not cause an exception or signal */
-  exit(0); }], , no_mprotect=1,
-: # When cross-compiling, don't assume anything.
+  exit(0); }], , [no_mprotect=1],
+[: # When cross-compiling, don't assume anything.]
 )
 fi
 if test -z "$no_mprotect"; then
