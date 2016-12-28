@@ -1,5 +1,11 @@
 2016-12-27  Bruno Haible  <bruno@clisp.org>
 
+	Modernize Cygwin detection.
+	* common/asmi386.h: Test __CYGWIN__, not __CYGWIN32__.
+	From Ken Brown <kbrown@cornell.edu> on 2015-03-05.
+
+2016-12-27  Bruno Haible  <bruno@clisp.org>
+
 	Create tarballs through an Automake-like "make dist" command.
 	* Makefile.in (SOURCE_FILES, LIBTOOL_IMPORTED_FILES,
 	GNULIB_IMPORTED_FILES, IMPORTED_FILES, COPIED_FILES, GENERATED_FILES,
