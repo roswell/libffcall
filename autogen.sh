@@ -104,6 +104,28 @@ fi
 
 # Copy files between directories.
 for file in \
+  vacall-arm.c \
+  vacall-armel.c \
+  vacall-convex.c \
+  vacall-hppa.c \
+  vacall-i386.c \
+  vacall-ia64.c \
+  vacall-m68k.c \
+  vacall-m88k.c \
+  vacall-mips.c \
+  vacall-mipsn32.c \
+  vacall-mips64.c \
+  vacall-powerpc.c \
+  vacall-powerpc64.c \
+  vacall-powerpc64le.c \
+  vacall-s390.c \
+  vacall-sparc.c \
+  vacall-sparc64.c \
+  vacall-x86_64.c \
+  ; do
+  cp -p vacall/$file callback/vacall_r/$file || exit $?
+done
+for file in \
   PORTING \
   cache.c \
   cache-alpha.c \

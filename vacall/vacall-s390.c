@@ -12,7 +12,7 @@
  */
 
 #ifndef REENTRANT
-#include "vacall.h"
+#include "vacall.h.in"
 #else /* REENTRANT */
 #include "vacall_r.h.in"
 #endif
@@ -20,7 +20,7 @@
 #ifdef REENTRANT
 #define __vacall __vacall_r
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *		env	__asm__("r1");
+         *		env	__asm__("r0");
 #endif
 register float 		farg1	__asm__("f0");
 register float		farg2	__asm__("f2");
