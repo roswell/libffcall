@@ -93,6 +93,8 @@ Copyright 2001-2012 Sam Steingold <sds@gnu.org>                   (build infrast
 Copyright 2001-2002 Gerhard Tonn <GerhardTonn@swol.de> <gt@debian.org> (s390 support)
 Copyright 2004      Paul Guyot <pguyot@kallisys.net>              (PowerPC MacOS support)
 Copyright 2005      Thiemo Seufer <ths@debian.org>                (MIPS EL support)
+Copyright 2009      Max Lapan <max.lapan@gmail.com>               (ARM EL support)
+Copyright 2010      Valeriy E. Ushakov <uwe@netbsd.org>           (SPARC64 improvements)
 Copyright 2015      Masanori Mitsugi <mitsugi@linux.vnet.ibm.com> (PowerPC LE support)
 
 This is free software distributed under the GNU General Public Licence
