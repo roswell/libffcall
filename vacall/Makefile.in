@@ -43,7 +43,7 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-OBJECTS = vacall.o misc.o structcpy.o
+OBJECTS = vacall.o misc.o vacall-structcpy.o
 
 all : $(OBJECTS) libvacall.a vacall.h $(srcdir)/vacall.3 $(srcdir)/vacall.html
 
@@ -146,8 +146,8 @@ vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
 misc.o : $(srcdir)/misc.c vacall.h config.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
 
-structcpy.o : $(srcdir)/../common/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/../common/structcpy.c
+vacall-structcpy.o : $(srcdir)/vacall-structcpy.c $(srcdir)/../common/structcpy.c
+	$(CC) $(CFLAGS) -I$(srcdir)/../common -c $(srcdir)/vacall-structcpy.c
 
 libvacall.a : $(OBJECTS)
 	$(RM) libvacall.a
@@ -256,6 +256,7 @@ SOURCE_FILES = \
   vacall-sparc.c vacall-sparc-macro.S \
   vacall-sparc64.c vacall-sparc64-macro.S \
   vacall-x86_64.c vacall-x86_64-linux.s vacall-x86_64-macro.S \
+  vacall-structcpy.c \
   misc.c \
   minitests.c \
   tests.c

@@ -1239,7 +1239,7 @@ typedef __va_alist* va_alist;
   (__va_return(LIST,__VAstruct), *(TYPE*)((LIST)->raddr) = (VAL))
 #define _va_return_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)  \
   (__va_return(LIST,__VAstruct),					\
-   __structcpy((void*)((LIST)->raddr),VAL_ADDR,TYPE_SIZE,TYPE_ALIGN)	\
+   callback_structcpy((void*)((LIST)->raddr),VAL_ADDR,TYPE_SIZE,TYPE_ALIGN)	\
   )
 
 
@@ -1284,7 +1284,7 @@ extern void __vacall_r (); /* the return type is variable, not void! */
 #endif
 extern int __va_error1 (enum __VAtype, enum __VAtype);
 extern int __va_error2 (unsigned int);
-extern void __structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
+extern void callback_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
 typedef union { __vaword room[__VA_ALIST_WORDS]; double align; } __va_struct_buffer_t;
 extern __va_struct_buffer_t __va_struct_buffer;
 

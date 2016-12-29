@@ -38,7 +38,7 @@ Files in this package:
         avcall.h.in     master for main include file avcall.h
         avcall-*.c      source for the interface function
         avcall-*.[sS]   its translation to assembly language
-        structcpy.c     auxiliary function
+        avcall-structcpy.c  auxiliary function
         tests.c         test program
 
     Installation:

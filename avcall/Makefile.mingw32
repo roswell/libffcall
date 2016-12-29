@@ -38,7 +38,7 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-OBJECTS = avcall.o structcpy.o
+OBJECTS = avcall.o avcall-structcpy.o
 
 all : $(OBJECTS) libavcall.a avcall.h $(srcdir)/avcall.3 $(srcdir)/avcall.html
 
@@ -56,8 +56,8 @@ avcall-i386.o : avcall-i386.asm
 avcall-i386.asm : $(srcdir)/avcall-i386-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-i386-macro.S | grep -v '^ *#line' | grep -v '^#ident' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' > avcall-i386.asm
 
-structcpy.o : $(srcdir)/../common/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/../common/structcpy.c
+avcall-structcpy.o : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy.c
+	$(CC) $(CFLAGS) -I$(srcdir)/../common -c $(srcdir)/avcall-structcpy.c
 
 libavcall.a : $(OBJECTS)
 	$(RM) libavcall.a

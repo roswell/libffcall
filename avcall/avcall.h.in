@@ -1140,7 +1140,7 @@ typedef struct
 #define _av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)			\
   __av_struct(LIST,unknown,TYPE_SIZE,TYPE_ALIGN,__av_struct_copy,VAL_ADDR)
 #define __av_struct_copy(TYPE,TYPE_SIZE,TYPE_ALIGN,PLACE,VAL_ADDR)	\
-  __structcpy(PLACE,VAL_ADDR,TYPE_SIZE,TYPE_ALIGN)
+  avcall_structcpy(PLACE,VAL_ADDR,TYPE_SIZE,TYPE_ALIGN)
 /* Structure argument alignment. */
 #if defined(__i386__) && defined(_MSC_VER)
 /* In MSVC, doubles inside structures have alignment 8, i.e.
@@ -1438,6 +1438,6 @@ typedef struct
  */
 
 extern int __builtin_avcall (av_alist* l);
-extern void __structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
+extern void avcall_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
 
 #endif /*_avcall_h */

@@ -64,7 +64,7 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-OBJECTS = avcall.obj structcpy.obj
+OBJECTS = avcall.obj avcall-structcpy.obj
 
 all : $(OBJECTS) avcall.lib avcall.h $(srcdir)/avcall.3 $(srcdir)/avcall.html
 
@@ -80,8 +80,8 @@ avcall-i386.obj : $(srcdir)/avcall-i386-msvc.c
 	$(RM) avcall-i386.obj
 	$(CC) -I$(srcdir)/../common -c $(srcdir)/avcall-i386-msvc.c /Foavcall-i386.obj
 
-structcpy.obj : $(srcdir)/../common/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/../common/structcpy.c
+avcall-structcpy.obj : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy.c
+	$(CC) $(CFLAGS) -I$(srcdir)/../common -c $(srcdir)/avcall-structcpy.c
 
 !if !$(DLL)
 avcall.lib : $(OBJECTS)

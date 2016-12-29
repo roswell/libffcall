@@ -38,7 +38,7 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-OBJECTS = vacall.o misc.o structcpy.o
+OBJECTS = vacall.o misc.o vacall-structcpy.o
 
 all : $(OBJECTS) libvacall.a vacall_r.h
 
@@ -63,8 +63,8 @@ vacall-i386.asm : $(srcdir)/vacall-i386-macro.S
 misc.o : $(srcdir)/misc.c vacall_r.h config.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
 
-structcpy.o : $(srcdir)/../common/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/../common/structcpy.c
+vacall-structcpy.o : $(srcdir)/vacall-structcpy.c $(srcdir)/../../common/structcpy.c
+	$(CC) $(CFLAGS) -I$(srcdir)/../../common -c $(srcdir)/vacall-structcpy.c
 
 libvacall.a : $(OBJECTS)
 	$(RM) libvacall.a

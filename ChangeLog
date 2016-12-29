@@ -1,5 +1,47 @@
 2016-12-29  Bruno Haible  <bruno@clisp.org>
 
+	Fix collision between different copies of __structcpy.
+	Reported in http://savannah.gnu.org/bugs/?23474 .
+	* avcall/avcall-structcpy.c: New file.
+	* avcall/Makefile.in (avcall-structcpy.lo): Renamed from structcpy.lo.
+	(SOURCE_FILES): Add avcall-structcpy.c.
+	* avcall/Makefile.mingw32 (avcall-structcpy.o): Renamed from
+	structcpy.o.
+	* avcall/Makefile.msvc (avcall-structcpy.obj): Renamed from
+	structcpy.obj.
+	* avcall/avcall.h.in: Declare and use avcall_structcpy instead of
+	__structcpy.
+	* avcall/README: Update.
+	* vacall/vacall-structcpy.c: New file.
+	* vacall/Makefile.in (vacall-structcpy.o): Renamed from structcpy.o.
+	(SOURCE_FILES): Add vacall-structcpy.c.
+	* vacall/Makefile.mingw32 (vacall-structcpy.o): Renamed from
+	structcpy.o.
+	* vacall/Makefile.msvc (vacall-structcpy.obj): Renamed from
+	structcpy.obj.
+	* vacall/vacall.h.in: Declare and use vacall_structcpy instead of
+	__structcpy.
+	* callback/vacall_r/vacall-structcpy.c: New file.
+	* callback/vacall_r/Makefile.in (vacall-structcpy.lo): Renamed from
+	structcpy.lo.
+	(SOURCE_FILES): Add vacall-structcpy.c.
+	* callback/vacall_r/Makefile.mingw32 (vacall-structcpy.o): Renamed from
+	structcpy.o.
+	* callback/vacall_r/Makefile.msvc (vacall-structcpy.obj): Renamed from
+	structcpy.obj.
+	* callback/vacall_r/vacall_r.h.in: Declare and use callback_structcpy
+	instead of __structcpy.
+	* callback/Makefile.in (libcallback.la): Use vacall-structcpy.lo, not
+	structcpy.lo.
+	* callback/Makefile.mingw32 (OBJECTS): Use vacall-structcpy.o, not
+	structcpy.o.
+	* callback/Makefile.msvc (OBJECTS): Use vacall-structcpy.obj, not
+	structcpy.obj.
+	(vacall_r/vacall-structcpy.obj): Renamed from vacall_r/structcpy.obj.
+	(clean): Update accordingly.
+
+2016-12-29  Bruno Haible  <bruno@clisp.org>
+
 	Put duplicated files under version control only once, part 2.
 	* vacall/vacall-powerpc.c: Update with the 'REENTRANT' code from
 	callback/vacall_r/.

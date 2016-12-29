@@ -36,7 +36,7 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-OBJECTS = vacall.o misc.o structcpy.o trampoline.o
+OBJECTS = vacall.o misc.o vacall-structcpy.o trampoline.o
 
 all : all-subdirs callback.h vacall_r.h trampoline_r.h libcallback.a $(srcdir)/callback.3 $(srcdir)/callback.html
 

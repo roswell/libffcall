@@ -64,7 +64,7 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-OBJECTS = vacall_r/vacall.obj vacall_r/misc.obj vacall_r/structcpy.obj trampoline_r/trampoline.obj
+OBJECTS = vacall_r/vacall.obj vacall_r/misc.obj vacall_r/vacall-structcpy.obj trampoline_r/trampoline.obj
 
 all : $(OBJECTS) callback.h vacall_r.h trampoline_r.h callback.lib $(srcdir)/callback.3 $(srcdir)/callback.html
 
@@ -93,8 +93,8 @@ vacall_r/vacall-i386.obj : $(srcdir)/vacall_r/vacall-i386-msvc.c vacall_r/vacall
 vacall_r/misc.obj : $(srcdir)/vacall_r/misc.c vacall_r/vacall_r.h vacall_r/config.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/vacall_r/misc.c /Fovacall_r/misc.obj
 
-vacall_r/structcpy.obj : $(srcdir)/vacall_r/structcpy.c
-	$(CC) $(CFLAGS) -c $(srcdir)/vacall_r/structcpy.c /Fovacall_r/structcpy.obj
+vacall_r/vacall-structcpy.obj : $(srcdir)/vacall_r/vacall-structcpy.c $(srcdir)/../common/structcpy.c
+	$(CC) $(CFLAGS) -I$(srcdir)/../common -c $(srcdir)/vacall_r/vacall-structcpy.c /Fovacall_r/vacall-structcpy.obj
 
 trampoline_r.h : trampoline_r/trampoline_r.h
 	$(LN) trampoline_r\trampoline_r.h trampoline_r.h
@@ -161,7 +161,7 @@ check : all test1.exe test2.exe tests.exe uniq-u.exe
 mostlyclean : clean
 
 clean : force
-	$(RM) vacall_r\vacall.obj vacall_r\vacall-i386.obj vacall_r\misc.obj vacall_r\structcpy.obj trampoline_r\trampoline.obj callback.lib callback.exp callback.dll core
+	$(RM) vacall_r\vacall.obj vacall_r\vacall-i386.obj vacall_r\misc.obj vacall_r\vacall-structcpy.obj trampoline_r\trampoline.obj callback.lib callback.exp callback.dll core
 	$(RM) test1.obj test1.exe test2.obj test2.exe
 	$(RM) tests.obj tests.s tests.exe uniq-u.exe tests.out
 
