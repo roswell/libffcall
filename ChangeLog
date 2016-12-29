@@ -1,5 +1,22 @@
 2016-12-29  Bruno Haible  <bruno@clisp.org>
 
+	Revert "Pass the environment argument through the stack, not in a
+	register." commit from 1999-06-01.
+	* vacall/vacall-i386.c: Revert: Allow use of registers %esi, %edi, %ebp.
+	Expect env in %ecx, not as first stack argument.
+	* vacall/vacall-i386-macro.S: Revert.
+	* callback/vacall_r/vacall-i386-macro.S: Revert.
+	* callback/trampoline_r/proto.c (tramp2): Remove function.
+	* callback/trampoline_r/proto-i386.s: Revert accordingly.
+	* callback/trampoline_r/tramp-i386.s: Put the data in %ecx, not as
+	first stack argument.
+	* callback/trampoline_r/trampoline.c [i386]: Revert to simple
+	trampoline.
+	* callback/trampoline_r/test1.c (f) [i386]: Expect env in %ecx, not as
+	first stack argument.
+
+2016-12-29  Bruno Haible  <bruno@clisp.org>
+
 	Revert "Never build shared libraries: --enable-shared has no effect."
 	commit from 2012-04-24.
 	* README: Revert, but still recommend --disable-shared.

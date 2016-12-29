@@ -17,22 +17,15 @@
 
 #ifdef REENTRANT
 typedef struct { void (*vacall_function) (void*,va_alist); void* arg; } env_t;
+register env_t*	env	__asm__("%ecx");
 #endif
 register void*	sp	__asm__("%esp");
 register void*	sret	__asm__("%ebx");
 register int	iret	__asm__("%eax");
-/*
- * Tell gcc to not use the call-saved registers %esi, %edi, %ebp.
- * This ensures that the return sequence does not need to restore registers
- * from the stack.
- */
-register void*	dummy1	__asm__("%esi");
-register void*	dummy2	__asm__("%edi");
-register void*	dummy3	__asm__("%ebp");
 
 void /* the return type is variable, not void! */
 #ifdef REENTRANT
-__vacall_r (env_t * env, __vaword firstword)
+__vacall_r (__vaword firstword)
 #else
 __vacall (__vaword firstword)
 #endif
@@ -131,12 +124,7 @@ __vacall (__vaword firstword)
          * assembly code!
          */
         sp = __builtin_frame_address(0);
-#ifndef REENTRANT
         asm volatile ("ret $4");
-#else
-        /* Also pop env off the stack. */
-        asm volatile ("ret $8");
-#endif
         /*NOTREACHED*/
       }
       if (list.flags & __VA_MSVC_STRUCT_RETURN) {
@@ -157,10 +145,4 @@ __vacall (__vaword firstword)
     asm volatile ("jmp *%ecx");
     /*NOTREACHED*/
   }
-#ifdef REENTRANT
-  /* Pop env off the stack. */
-  /* Callers compiled with -fomit-frame-pointer expect this. */
-  sp = __builtin_frame_address(0);
-  asm volatile ("ret $4");
-#endif
 }

@@ -10,22 +10,8 @@
  */
 
 /* Available registers: %eax, %edx, %ecx. */
-/*
- * On Solaris 2.6, when the function being jumped to is an external symbol of
- * a shared library, the jump actually points to an ELF indirect jump:
- *   jmp *PTR
- * where PTR initially contains the address of some resolving routine which
- * will replace the PTR contents with the actual code address of the function
- * and then jump to the function.
- * Unfortunately, this resolving routine clobbers all three registers:
- * %eax, %edx, %ecx. Must pass the additional data via the stack.
- * A simple "pushl $<data>" is not sufficient: it causes trouble if the called
- * function is compiled with -fomit-frame-pointer.
- */
- 
+
 .globl _tramp
 _tramp:
-	popl %ecx
-	pushl $0x73554711
-	pushl %ecx
+	movl $0x73554711,%ecx
 	jmp 0xbabebec0

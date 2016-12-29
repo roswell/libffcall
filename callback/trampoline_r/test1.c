@@ -32,13 +32,12 @@ typedef int (*function)(...);
 typedef int (*function)();
 #endif
 
-#if defined(__i386__)
-int f (void* env, int x)
-#else
 int f (int x)
-#endif
 {
 #ifdef CHECK_ENV_REGISTER
+#ifdef __i386__
+register void* env __asm__("%ecx");
+#endif
 #ifdef __m68k__
 #ifdef __NetBSD__
 register void* env __asm__("a1");
