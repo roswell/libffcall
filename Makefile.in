@@ -82,7 +82,7 @@ SOURCE_FILES = \
   common/asm-m68k.sh common/asm-m68k.h \
   common/asm-mips.sh common/asm-mips.h \
   common/asm-sparc.sh common/asm-sparc64.sh common/asm-sparc.h \
-  common/asm-x86_64.sh common/x86_64.h \
+  common/asm-x86_64.sh common/asm-x86_64.h \
   common/structcpy.c \
   common/uniq-u.c
 # List of distributed files imported from other packages or directories.
