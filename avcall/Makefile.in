@@ -157,7 +157,7 @@ avcall-structcpy.lo : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy
 	$(LIBTOOL_COMPILE) $(CC) $(CFLAGS) -I$(srcdir)/../common -c $(srcdir)/avcall-structcpy.c
 
 libavcall.la : $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) -static -o libavcall.la -rpath $(libdir) $(OBJECTS)
+	$(LIBTOOL_LINK) $(CC) -o libavcall.la -rpath $(libdir) $(OBJECTS)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.

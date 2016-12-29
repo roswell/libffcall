@@ -1,3 +1,13 @@
+2016-12-29  Bruno Haible  <bruno@clisp.org>
+
+	Revert "Never build shared libraries: --enable-shared has no effect."
+	commit from 2012-04-24.
+	* README: Revert, but still recommend --disable-shared.
+	* avcall/Makefile.in (libavcall.la): Don't pass -static to libtool.
+	* callback/Makefile.in (libcallback.la): Likewise.
+	* callback/vacall_r/Makefile.in (libvacall.la): Likewise.
+	* callback/trampoline_r/Makefile.in (libtrampoline.la): Likewise.
+
 2016-12-30  Bruno Haible  <bruno@clisp.org>
 
 	Rename text files.

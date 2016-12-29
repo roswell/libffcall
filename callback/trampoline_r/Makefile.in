@@ -119,7 +119,7 @@ cache-powerpc.lo : $(srcdir)/cache-powerpc-sysv4.s $(srcdir)/cache-powerpc-macos
 # libtool may want to access it.
 
 libtrampoline.la : $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) -static -o libtrampoline.la -rpath $(libdir) $(OBJECTS)
+	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.

@@ -17,18 +17,22 @@ The four packages are:
 
 Installation instructions:
 
-        mkdir make
-        cd make
+        mkdir builddir
+        cd builddir
         ../configure --cache-file=config.cache
         make
         make check
         make install
 
 
-Note: passind --enable-shared to ./configure has no effect because
-it makes no sense to do so:
+Note: It is possible to do a build that produces shared libraries (by
+passing --enable-shared to configure), but it makes little sense to do so:
 
-1) It is an overkill: libavcall, libvacall, libcallback have less than 1 KB
+1) The main function here is compiled from non-PIC assembly language.
+   I.e. relocations would remain. The GNU linker supports shared libraries
+   with relocations on x86 systems. But only on x86!
+
+2) It is an overkill: libavcall, libvacall, libcallback have less than 1 KB
    of executable code (most of the real code is in the header files):
 
 $ size libavcall.a
@@ -50,14 +54,14 @@ $ size libcallback.a
 When a shared library is loaded, you spend at least 4 KB for its code,
 data and BSS. This is overkill for such a tiny library.
 
-2) The main function here is compiled from non-PIC assembly language.
-   I.e. relocations would remain. The GNU linker supports shared libraries
-   with relocations on x86 systems. But only on x86!
-
 3) Dynamic compilation breaks callback/trampoline_r self-tests at least
    on x86_64-linux (and CLISP FFI too).
    This is, of course, a bug in libffcall, but, even if it is fixed, it
    will still make no sense to --enable-shared.
+
+4) We don't do proper versioning of the resulting shared libraries (yet).
+   Therefore it is possible that upgrading to a newer version of libffcall
+   breaks existing binaries.
 
 
 Files in this package:
