@@ -1,3 +1,12 @@
+2016-12-30  Bruno Haible  <bruno@clisp.org>
+
+	Rename text files.
+	* common/reg-struct-return.txt: Renamed from common/reg-struct-return.
+	* callback/call-used-registers.txt: Renamed from
+	callback/call-used-registers.
+	* trampoline/PORTING: Update.
+	* callback/README: Likewise.
+
 2016-12-29  Bruno Haible  <bruno@clisp.org>
 
 	Update documentation about register usage.

@@ -46,7 +46,7 @@ Files in this package:
     Porting:
 
         Makefile.devel  developer's Makefile
-        call-used-registers  table of call-used registers on different CPUs
+        call-used-registers.txt  table of call-used registers on different CPUs
 
 
 Copyright notice:

@@ -11,7 +11,7 @@ A. a new CPU - how to build the trampoline?
 
    The trampoline is a short sequence of machine instructions which puts
    the constant <data> into <variable>, then jumps to <address>. The only
-   registers that are allowed to be modified are call-used-registers. No
+   registers that are allowed to be modified are call-used registers. No
    stack manipulations are allowed since the trampoline has to pass its
    arguments along to the function at <address>.
 
