@@ -1,5 +1,59 @@
 2016-12-29  Bruno Haible  <bruno@clisp.org>
 
+	Remove support for the 'convex' CPU.
+	* avcall/Makefile.devel (avcall-convex.s, tests-convex.s): Remove
+	targets.
+	* avcall/avcall-convex.[cs]: Remove files.
+	* avcall/Makefile.in (avcall-convex.lo): Remove target.
+	(SOURCE_FILES): Remove avcall-convex.[cs].
+	* avcall/avcall.h.in: Remove defined(__convex__) conditionals.
+	* vacall/Makefile.devel (vacall-convex.s, tests-convex.s): Remove
+	targets.
+	* vacall/vacall-convex.[cs]: Remove files.
+	* vacall/Makefile.in (vacall-convex.o): Remove target.
+	(SOURCE_FILES): Remove vacall-convex.[cs].
+	* vacall/vacall.h.in: Remove defined(__convex__) conditionals.
+	* trampoline/Makefile.devel (proto-convex.s, cache-convex.s,
+	tramp-convex.s): Remove targets.
+	* trampoline/proto-convex.s: Remove file.
+	* trampoline/cache-convex.[cs]: Remove files.
+	* trampoline/tramp-convex.s: Remove file.
+	* trampoline/Makefile.in (cache-convex.o): Remove target.
+	(SOURCE_FILES): Remove cache-convex.[cs].
+	* trampoline/cache.c: Remove defined(__convex__) conditionals.
+	* trampoline/protexec.c: Remove defined(__convex__) conditionals.
+	* trampoline/trampoline.c: Remove defined(__convex__) conditionals.
+	* trampoline/trampoline.h.in: Don't test for convex host.
+	* trampoline/configure.ac: Don't test for convex host.
+	* callback/vacall_r/Makefile.devel (vacall-convex.s): Remove target.
+	* callback/vacall_r/vacall-convex.s: Remove file.
+	* callback/vacall_r/Makefile.in (vacall-convex.lo): Remove target.
+	(SOURCE_FILES): Remove vacall-convex.[cs].
+	* callback/vacall_r/vacall_r.h.in: Remove defined(__convex__)
+	conditionals.
+	* callback/trampoline_r/Makefile.devel (proto-convex.s, cache-convex.s,
+	tramp-convex.s): Remove targets.
+	* callback/trampoline_r/proto-convex.s: Remove file.
+	* callback/trampoline_r/tramp-convex.s: Remove file.
+	* callback/trampoline_r/Makefile.in (cache-convex.lo): Remove target.
+	(SOURCE_FILES): Remove cache-convex.[cs].
+	* callback/trampoline_r/proto.c: Remove defined(__convex__)
+	conditionals.
+	* callback/trampoline_r/trampoline.c: Remove defined(__convex__)
+	conditionals.
+	* callback/trampoline_r/trampoline_r.h.in: Don't test for convex host.
+	* callback/trampoline_r/test1.c: Remove defined(__convex__)
+	conditionals.
+	* callback/trampoline_r/configure.ac: Don't test for convex host.
+	* callback/call-used-registers: Update.
+	* common/reg-struct-return: Update.
+	* PLATFORMS, **/PLATFORMS: Update.
+	* autogen.sh: Don't copy vacall-convex.c, cache-convex.[cs].
+	* Makefile.in (COPIED_FILES): Remove callback/vacall_r/vacall-convex.c,
+	callback/trampoline_r/cache-convex.[cs].
+
+2016-12-29  Bruno Haible  <bruno@clisp.org>
+
 	Fix collision between different copies of __structcpy.
 	Reported in http://savannah.gnu.org/bugs/?23474 .
 	* avcall/avcall-structcpy.c: New file.

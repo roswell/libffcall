@@ -149,9 +149,6 @@ vacall-powerpc64le.lo : $(srcdir)/vacall-powerpc64le.s
 vacall-m88k.lo : $(srcdir)/vacall-m88k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-m88k.s
 
-vacall-convex.lo : $(srcdir)/vacall-convex.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-convex.s
-
 vacall-ia64.lo : $(srcdir)/vacall-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-ia64.s
 
@@ -235,7 +232,6 @@ SOURCE_FILES = \
   vacall-alpha.c vacall-alpha.s \
   vacall-arm.c vacall-arm-macro.S \
   vacall-armel.c vacall-armel.s \
-  vacall-convex.c vacall-convex.s \
   vacall-hppa.c vacall-hppa.s \
   vacall-i386.c vacall-i386-macro.S \
   vacall-ia64.c vacall-ia64.s \

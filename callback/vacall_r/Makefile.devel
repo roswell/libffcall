@@ -12,7 +12,7 @@ GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer -DHAVE_LONG_LONG_INT -DREENTRANT
 SED = sed
 
-precompiled : vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd-macro.S vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.old.s vacall-powerpc-aix.new.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-m88k.s vacall-convex.s vacall-ia64.s vacall-x86_64-macro.S
+precompiled : vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd-macro.S vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.old.s vacall-powerpc-aix.new.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-m88k.s vacall-ia64.s vacall-x86_64-macro.S
 
 vacall-i386-macro.S : vacall-i386.c vacall_r.h.in ../../common/asm-i386.sh
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386.s
@@ -93,9 +93,6 @@ vacall-powerpc64le.s : vacall-powerpc64le.c vacall_r.h.in
 
 vacall-m88k.s : vacall-m88k.c vacall_r.h.in
 	$(GCC) -V 2.95.2 -b m88k-dgux $(GCCFLAGS) -D__m88k__ -S vacall-m88k.c -o vacall-m88k.s
-
-vacall-convex.s : vacall-convex.c vacall_r.h.in
-	$(GCC) -V 2.6.3 -b convex-c2 $(GCCFLAGS) -D__convex__ -S vacall-convex.c -o vacall-convex.s
 
 vacall-ia64.s : vacall-ia64.c vacall_r.h.in
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S vacall-ia64.c -o vacall-ia64.s

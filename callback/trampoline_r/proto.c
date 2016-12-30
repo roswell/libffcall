@@ -47,9 +47,6 @@ register void* env __asm__("r11");
 #ifdef __m88k__
 register void* env __asm__("r11");
 #endif
-#ifdef __convex__
-register void* env __asm__("s0");
-#endif
 #ifdef __s390__
 register void* env __asm__("r0");
 #endif

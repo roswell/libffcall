@@ -105,7 +105,6 @@ IMPORTED_FILES = $(LIBTOOL_IMPORTED_FILES) $(GNULIB_IMPORTED_FILES)
 COPIED_FILES = \
   callback/vacall_r/vacall-arm.c \
   callback/vacall_r/vacall-armel.c \
-  callback/vacall_r/vacall-convex.c \
   callback/vacall_r/vacall-hppa.c \
   callback/vacall_r/vacall-i386.c \
   callback/vacall_r/vacall-ia64.c \
@@ -129,8 +128,6 @@ COPIED_FILES = \
   callback/trampoline_r/cache-arm.s \
   callback/trampoline_r/cache-armel.c \
   callback/trampoline_r/cache-armel.s \
-  callback/trampoline_r/cache-convex.c \
-  callback/trampoline_r/cache-convex.s \
   callback/trampoline_r/cache-hppa.c \
   callback/trampoline_r/cache-hppa.s \
   callback/trampoline_r/cache-powerpc.c \

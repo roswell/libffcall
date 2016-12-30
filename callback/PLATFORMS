@@ -11,7 +11,6 @@ Supported CPUs:  (Put the GNU config.guess values here.)
                 powerpc-unknown-linux (gcc), powerpc-apple-darwin6.8 (gcc)
      powerpc64  powerpc64-unknown-linux (gcc -m64)
      m88k       -- untested
-     convex     -- untested
      ia64       ia64-unknown-linux (gcc)
      x86_64     x86_64-suse-linux (gcc)
      s390       -- untested

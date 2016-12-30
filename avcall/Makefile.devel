@@ -12,7 +12,7 @@ GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer
 SED = sed
 
-precompiled : avcall-i386-macro.S avcall-m68k.mit.S avcall-m68k.mot.s avcall-m68k-amiga.s avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.old.s avcall-powerpc-aix.new.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-powerpc64le.s avcall-m88k.s avcall-convex.s avcall-ia64.s avcall-x86_64-macro.S
+precompiled : avcall-i386-macro.S avcall-m68k.mit.S avcall-m68k.mot.s avcall-m68k-amiga.s avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.old.s avcall-powerpc-aix.new.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-powerpc64le.s avcall-m88k.s avcall-ia64.s avcall-x86_64-macro.S
 
 avcall-i386-macro.S : avcall-i386.c avcall.h.in ../common/asm-i386.sh
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -fno-omit-frame-pointer -S avcall-i386.c -o avcall-i386.s
@@ -96,9 +96,6 @@ avcall-powerpc64le.s : avcall-powerpc64le.c avcall.h.in
 avcall-m88k.s : avcall-m88k.c avcall.h.in
 	$(GCC) -V 2.95.2 -b m88k-dgux $(GCCFLAGS) -D__m88k__ -S avcall-m88k.c -o avcall-m88k.s
 
-avcall-convex.s : avcall-convex.c avcall.h.in
-	$(GCC) -V 2.6.3 -b convex-c2 $(GCCFLAGS) -D__convex__ -S avcall-convex.c -o avcall-convex.s
-
 avcall-ia64.s : avcall-ia64.c avcall.h.in
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S avcall-ia64.c -o avcall-ia64.s
 
@@ -110,7 +107,7 @@ avcall-x86_64-macro.S : avcall-x86_64-linux.s ../common/asm-x86_64.sh
 
 # --------------- Rules for debugging test failures ---------------
 
-tests : tests-i386.s tests-m68k.s tests-mips.s tests-sparc.s tests-alpha.s tests-hppa.s tests-arm.s tests-powerpc.s tests-m88k.s tests-convex.s tests-ia64.s tests-x86_64.s
+tests : tests-i386.s tests-m68k.s tests-mips.s tests-sparc.s tests-alpha.s tests-hppa.s tests-arm.s tests-powerpc.s tests-m88k.s tests-ia64.s tests-x86_64.s
 	true
 
 tests-i386.s : tests.c avcall.h.in
@@ -156,11 +153,6 @@ tests-powerpc.s : tests.c avcall.h.in
 tests-m88k.s : tests.c avcall.h.in
 	$(LN) avcall.h.in avcall.h
 	$(GCC) -V 2.95.2 -b m88k-dgux $(GCCFLAGS) -I/usr/include -D__m88k__ -S tests.c -o tests-m88k.s
-	$(RM) avcall.h
-
-tests-convex.s : tests.c avcall.h.in
-	$(LN) avcall.h.in avcall.h
-	$(GCC) -V 2.6.3 -b convex-c2 $(GCCFLAGS) -I/usr/include -D__convex__ -S tests.c -o tests-convex.s
 	$(RM) avcall.h
 
 tests-ia64.s : tests.c avcall.h.in

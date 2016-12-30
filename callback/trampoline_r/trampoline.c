@@ -67,7 +67,7 @@ extern void (*tramp_r) (); /* trampoline prototype */
 
 #ifndef CODE_EXECUTABLE
 /* How do we make the trampoline's code executable? */
-#if defined(HAVE_MACH_VM) || defined(__convex__) || defined(HAVE_WORKING_MPROTECT) || defined(HAVE_SYS_M88KBCS_H)
+#if defined(HAVE_MACH_VM) || defined(HAVE_WORKING_MPROTECT) || defined(HAVE_SYS_M88KBCS_H)
 /* mprotect() [or equivalent] the malloc'ed area. */
 #define EXECUTABLE_VIA_MPROTECT
 #else
@@ -201,7 +201,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #include <sys/syslocal.h>
 #endif
 /* Inline assembly function for instruction cache flush. */
-#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__powerpcsysv4__) || defined(__convex__)
+#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__powerpcsysv4__)
 #ifdef __GNUC__
 extern inline
 #if defined(__sparc__) || defined(__sparc64__)
@@ -215,9 +215,6 @@ extern inline
 #endif
 #if defined(__powerpc__) && !defined(__powerpc64__)
 #include "cache-powerpc.c"
-#endif
-#ifdef __convex__
-#include "cache-convex.c"
 #endif
 #else
 #if defined(__sparc__) || defined(__sparc64__)
@@ -293,10 +290,6 @@ extern void __TR_clear_cache();
 #ifdef __m88k__
 #define TRAMP_LENGTH 20
 #define TRAMP_ALIGN 8
-#endif
-#ifdef __convex__
-#define TRAMP_LENGTH 14
-#define TRAMP_ALIGN 4
 #endif
 #ifdef __ia64__
 #define TRAMP_LENGTH 32
@@ -932,26 +925,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   hilo(*(unsigned short *) (function + 2), *(unsigned short *) (function + 6))
 #endif
-#ifdef __convex__
-  /* function:
-   *    ld.w #<data>,s0				???? <data>
-   *    jmp <address>				0140 <address>
-   *    ds.h 0					0000
-   */
-  *(short *) (function + 0) = 0x????;
-  *(long *)  (function + 2) = (unsigned long) data;
-  *(short *) (function + 6) = 0x0140;
-  *(long *)  (function + 8) = (unsigned long) address;
-  *(short *) (function +12) = 0x0000;
-#define is_tramp(function)  \
-  *(unsigned short *) (function + 0) == 0x???? && \
-  *(unsigned short *) (function + 6) == 0x0140 && \
-  *(unsigned short *) (function +12) == 0x0000
-#define tramp_address(function)  \
-  *(long *)  (function + 8)
-#define tramp_data(function)  \
-  *(long *)  (function + 2)
-#endif
 #ifdef __ia64__
   /* function:
    *    data8   tramp_r
@@ -1052,16 +1025,10 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #if defined(HAVE_MACH_VM)
     if (vm_protect(task_self(),start_addr,len,0,VM_PROT_READ|VM_PROT_WRITE|VM_PROT_EXECUTE) != KERN_SUCCESS)
 #else
-#if defined(__convex__)
-    /* Convex OS calls it ‘mremap()’. */
-    mremap(start_addr, &len, PROT_READ|PROT_WRITE|PROT_EXEC, MAP_PRIVATE);
-    if (0)
-#else
 #if defined(HAVE_SYS_M88KBCS_H)
     if (memctl(start_addr, len, MCT_TEXT) == -1)
 #else
     if (mprotect((void*)start_addr, len, PROT_READ|PROT_WRITE|PROT_EXEC) < 0)
-#endif
 #endif
 #endif
       { fprintf(stderr,"trampoline: cannot make memory executable\n"); abort(); }
@@ -1161,9 +1128,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __m88k__
   sysmot(S88CACHEFLUSHPAGE, (unsigned long)function & -pagesize);
-#endif
-#ifdef __convex__
-  __TR_clear_cache();
 #endif
 #endif
 

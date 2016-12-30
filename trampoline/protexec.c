@@ -186,34 +186,7 @@ __enable_execute_stack (addr)
 
 #endif /* defined (NeXT) && defined (__MACH__) */
 
-#ifdef __convex__
-
-/* Make stack executable so we can call trampolines on stack.
-   This is called from INITIALIZE_TRAMPOLINE in convex.h.  */
-
-#include <sys/mman.h>
-#include <sys/vmparam.h>
-#include <machine/machparam.h>
-
-void
-__enable_execute_stack ()
-{
-  int fp;
-  static unsigned lowest = USRSTACK;
-  unsigned current = (unsigned) &fp & -NBPG;
-
-  if (lowest > current)
-    {
-      unsigned len = lowest - current;
-      mremap (current, &len, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE);
-      lowest = current;
-    }
-}
-#endif /* __convex__ */
-
 #ifdef __DOLPHIN__
-
-/* Modified from the convex -code above. */
 
 #include <sys/param.h>
 #include <errno.h>
@@ -251,9 +224,6 @@ __enable_execute_stack ()
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/vmmac.h>
-
-/* Modified from the convex -code above.
-   mremap promises to clear the i-cache. */
 
 void
 __enable_execute_stack ()

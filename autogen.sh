@@ -106,7 +106,6 @@ fi
 for file in \
   vacall-arm.c \
   vacall-armel.c \
-  vacall-convex.c \
   vacall-hppa.c \
   vacall-i386.c \
   vacall-ia64.c \
@@ -134,8 +133,6 @@ for file in \
   cache-arm.s \
   cache-armel.c \
   cache-armel.s \
-  cache-convex.c \
-  cache-convex.s \
   cache-hppa.c \
   cache-hppa.s \
   cache-powerpc.c \

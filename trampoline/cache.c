@@ -47,11 +47,6 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
    cacheflush (BEG, END - BEG, BCACHE)
 #endif
 
-#ifdef __convex__
-#define CLEAR_INSN_CACHE(BEG, END)   \
-   asm ("pich")
-#endif
-
 void
 __TR_clear_cache (beg, end)
      char *beg, *end;

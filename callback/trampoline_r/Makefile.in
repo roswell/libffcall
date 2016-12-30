@@ -100,9 +100,6 @@ cache-alpha.lo : $(srcdir)/cache-alpha.s
 cache-hppa.lo : $(srcdir)/cache-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
 
-cache-convex.lo : $(srcdir)/cache-convex.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-convex.s
-
 cache-arm.lo : $(srcdir)/cache-arm.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-arm.s
 
@@ -213,7 +210,6 @@ SOURCE_FILES = \
   cache-alpha.c cache-alpha.s \
   cache-arm.c cache-arm.s \
   cache-armel.c cache-armel.s \
-  cache-convex.c cache-convex.s \
   cache-hppa.c cache-hppa.s \
   cache-powerpc.c cache-powerpc-macos.s cache-powerpc-sysv4.s \
   cache-sparc.c cache-sparc-macro.S \
