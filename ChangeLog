@@ -1,5 +1,10 @@
 2016-12-29  Bruno Haible  <bruno@clisp.org>
 
+	Update documentation about register usage.
+	* callback/call-used-registers: Update regarding powerpc/NetBSD.
+
+2016-12-29  Bruno Haible  <bruno@clisp.org>
+
 	Remove support for the 'convex' CPU.
 	* avcall/Makefile.devel (avcall-convex.s, tests-convex.s): Remove
 	targets.
