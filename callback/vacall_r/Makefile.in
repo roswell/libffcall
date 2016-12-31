@@ -124,7 +124,7 @@ vacall-arm.s : $(srcdir)/vacall-arm-macro.S
 vacall-armel.lo : $(srcdir)/vacall-armel.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-armel.s
 
-vacall-powerpc.lo : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-aix.new.s $(srcdir)/vacall-powerpc-sysv4.s $(srcdir)/vacall-powerpc-linux.s $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-netbsd.s
+vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-aix.new.s $(srcdir)/vacall-powerpc-linux.s $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-netbsd.s $(srcdir)/vacall-powerpc-sysv4.s
 	case "$(OS)" in \
 	  aix3*) syntax=aix.old;; \
 	  aix*) syntax=aix.new;; \
@@ -133,12 +133,7 @@ vacall-powerpc.lo : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-
 	  netbsd*) syntax=netbsd;; \
 	  *) syntax=sysv4;; \
 	esac; \
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-powerpc-$${syntax}.s ; \
-	cp vacall-powerpc-$${syntax}.lo vacall-powerpc.lo ; rm -f vacall-powerpc-$${syntax}.lo ; \
-	if test -f vacall-powerpc-$${syntax}.o; then cp vacall-powerpc-$${syntax}.o vacall-powerpc.o; fi
-# Note that vacall-powerpc-${syntax}.o is kept in place, because in some cases
-# vacall-powerpc-${syntax}.lo contains a symbolic reference to it and therefore
-# libtool may want to access it.
+	cp $(srcdir)/vacall-powerpc-$${syntax}.s vacall-powerpc.s
 
 vacall-powerpc64.lo : $(srcdir)/vacall-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-powerpc64.s
@@ -211,7 +206,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libvacall.* core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-arm.s vacall-x86_64.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-arm.s vacall-powerpc.s vacall-x86_64.s
 	$(RM) -r .libs _libs
 
 distclean : clean

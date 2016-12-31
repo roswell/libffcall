@@ -120,7 +120,10 @@ avcall-arm.s : $(srcdir)/avcall-arm-macro.S
 avcall-armel.lo : $(srcdir)/avcall-armel.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-armel.s
 
-avcall-powerpc.lo : $(srcdir)/avcall-powerpc-aix.old.s $(srcdir)/avcall-powerpc-aix.new.s $(srcdir)/avcall-powerpc-sysv4.s $(srcdir)/avcall-powerpc-macos.s
+avcall-powerpc.lo : avcall-powerpc.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-powerpc.s
+
+avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.old.s $(srcdir)/avcall-powerpc-aix.new.s $(srcdir)/avcall-powerpc-linux.s $(srcdir)/avcall-powerpc-macos.s $(srcdir)/avcall-powerpc-sysv4.s
 	case "$(OS)" in \
 	  aix3*) syntax=aix.old;; \
 	  aix*) syntax=aix.new;; \
@@ -128,12 +131,7 @@ avcall-powerpc.lo : $(srcdir)/avcall-powerpc-aix.old.s $(srcdir)/avcall-powerpc-
 	  macos* | darwin*) syntax=macos;; \
 	  *) syntax=sysv4;; \
 	esac; \
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-powerpc-$${syntax}.s ; \
-	cp avcall-powerpc-$${syntax}.lo avcall-powerpc.lo ; rm -f avcall-powerpc-$${syntax}.lo ; \
-	if test -f avcall-powerpc-$${syntax}.o; then cp avcall-powerpc-$${syntax}.o avcall-powerpc.o; fi
-# Note that avcall-powerpc-${syntax}.o is kept in place, because in some cases
-# avcall-powerpc-${syntax}.lo contains a symbolic reference to it and therefore
-# libtool may want to access it.
+	cp $(srcdir)/avcall-powerpc-$${syntax}.s avcall-powerpc.s
 
 avcall-powerpc64.lo : $(srcdir)/avcall-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-powerpc64.s
@@ -229,7 +227,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-arm.s avcall-x86_64.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-arm.s avcall-powerpc.s avcall-x86_64.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.o minitests.s minitests minitests.out
 	$(RM) tests.o tests.s tests tests.out

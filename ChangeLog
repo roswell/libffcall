@@ -1,3 +1,16 @@
+2016-12-31  Bruno Haible  <bruno@clisp.org>
+
+	Simplify powerpc compilation rules.
+	* avcall/Makefile.in (avcall-powerpc.s): New rule.
+	(avcall-powerpc.lo): Depend on it. Remove libtool specific workaround.
+	(clean): Remove also avcall-powerpc.s.
+	* vacall/Makefile.in (vacall-powerpc.s): New rule.
+	(vacall-powerpc.o): Depend on it.
+	(clean): Remove also vacall-powerpc.s.
+	* callback/vacall_r/Makefile.in (vacall-powerpc.s): New rule.
+	(vacall-powerpc.lo): Depend on it. Remove libtool specific workaround.
+	(clean): Remove also vacall-powerpc.s.
+
 2016-12-29  Bruno Haible  <bruno@clisp.org>
 
 	Revert "Pass the environment argument through the stack, not in a

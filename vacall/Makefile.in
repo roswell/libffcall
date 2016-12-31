@@ -111,7 +111,10 @@ vacall-arm.s : $(srcdir)/vacall-arm-macro.S
 vacall-armel.o : $(srcdir)/vacall-armel.s
 	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-armel.s
 
-vacall-powerpc.o : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-aix.new.s $(srcdir)/vacall-powerpc-sysv4.s $(srcdir)/vacall-powerpc-linux.s $(srcdir)/vacall-powerpc-macos.s
+vacall-powerpc.o : vacall-powerpc.s
+	$(CC) @GCC_X_NONE@ -c vacall-powerpc.s
+
+vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-aix.new.s $(srcdir)/vacall-powerpc-linux.s $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-sysv4.s
 	case "$(OS)" in \
 	  aix3*) syntax=aix.old;; \
 	  aix*) syntax=aix.new;; \
@@ -119,8 +122,7 @@ vacall-powerpc.o : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-a
 	  macos* | darwin*) syntax=macos;; \
 	  *) syntax=sysv4;; \
 	esac; \
-	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-powerpc-$${syntax}.s ; \
-	mv vacall-powerpc-$${syntax}.o vacall-powerpc.o
+	cp $(srcdir)/vacall-powerpc-$${syntax}.s vacall-powerpc.s
 
 vacall-powerpc64.o : $(srcdir)/vacall-powerpc64.s
 	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-powerpc64.s
@@ -213,7 +215,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.a core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-arm.s vacall-x86_64.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-arm.s vacall-powerpc.s vacall-x86_64.s
 	$(RM) minitests.o minitests.s minitests minitests.out
 	$(RM) tests.o tests.s tests tests.out
 
