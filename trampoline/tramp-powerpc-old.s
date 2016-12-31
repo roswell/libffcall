@@ -9,8 +9,9 @@
  * on this software.
  */
 
-/* Available registers: r0, r11, r10, r8, r7, r6, r5, r4, maybe r9. */
+/* Available registers: r0, r11, r12. */
 /* However, r0 is special in that it cannot be used as a base register. */
+/* THIS CODE IS BROKEN, AS IT CLOBBERS r10 !! */
 
 	.globl .tramp
 .csect .text[PR]

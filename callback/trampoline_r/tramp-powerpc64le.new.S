@@ -1,7 +1,7 @@
 /* Trampoline for powerpc64 CPU with ELF v2 calling convention */
 
 /*
- * Copyright 1995-2006 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995-2006, 2016 Bruno Haible, <bruno@clisp.org>
  * Copyright 2015 Masanori Mitsugi, <mitsugi@linux.vnet.ibm.com>
  *
  * This is free software distributed under the GNU General Public Licence
@@ -10,15 +10,16 @@
  * on this software.
  */
 
-/* Available registers: r0, r12, r11, r10, r9, r8, r7, r6, r5, r4, r3. */
+/* Available registers: r0, r11, r12. */
 /* However, r0 is special in that it cannot be used as a base register. */
-/* And r3...r10 should not be clobbered because they contain the first 8
- * integer arguments to the function being called. */
+/* And r12 is, by convention, the address of the current function. */
 
-	.globl tramp_r
-tramp_r:
+	.globl tramp
+tramp:
+        /* We can assume that our own address (=tramp) is in r12. */
 0:      ld  11,1f-0b(12)  /* get data */
         ld  12,2f-0b(12)  /* get function */
+        /* The called function expects to see its own address in r12. */
         mtctr 12
         bctr
 1:      .quad 0x7355471143622155 /* data */

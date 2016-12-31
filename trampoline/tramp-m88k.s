@@ -7,7 +7,7 @@
 ; or can't live with it. There is ABSOLUTELY NO WARRANTY, explicit or implied,
 ; on this software.
 
-; Available registers: r13, r10, maybe r11.
+; Available registers: r13, r10, r11.
 
 text
 	align	8

@@ -9,6 +9,8 @@
 ; on this software.
 ;
 
+; Available registers: %r19, %r20, %r21, %r22, %r29.
+
 	.code
 	.IMPORT $global$,DATA
 	.IMPORT $$dyncall,MILLICODE

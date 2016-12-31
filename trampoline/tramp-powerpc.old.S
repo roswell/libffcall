@@ -9,10 +9,8 @@
  * on this software.
  */
 
-/* Available registers: r0, r12, r11, r10, r9, r8, r7, r6, r5, r4, r3. */
+/* Available registers: r0, r11, r12. */
 /* However, r0 is special in that it cannot be used as a base register. */
-/* And r3...r10 should not be clobbered because they contain the first 8
- * integer arguments to the function being called. */
 
 	.globl tramp
 	.globl .tramp

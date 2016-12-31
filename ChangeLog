@@ -1,5 +1,21 @@
 2016-12-31  Bruno Haible  <bruno@clisp.org>
 
+	Update doc about available registers.
+	* callback/call-used-registers.txt: Clarify call-used registers versus
+	registers available for use in trampolines.
+	* trampoline/tramp-powerpc-old.s: Mark as obsolete.
+	* callback/trampoline_r/tramp-powerpc-old.s: Likewise.
+	* trampoline/tramp-x86_64.s: Fix comment about available registers.
+	* callback/trampoline_r/tramp-x86_64.s: Likewise.
+	* trampoline/tramp-powerpc-sysv4.s: Likewise.
+	* callback/trampoline_r/tramp-powerpc-sysv4.s: Likewise.
+	* trampoline/tramp-*.s: Update comment about available registers.
+	* trampoline/tramp-*.S: Likewise.
+	* callback/trampoline_r/tramp-*.s: Likewise.
+	* callback/trampoline_r/tramp-*.S: Likewise.
+
+2016-12-31  Bruno Haible  <bruno@clisp.org>
+
 	Simplify powerpc compilation rules.
 	* avcall/Makefile.in (avcall-powerpc.s): New rule.
 	(avcall-powerpc.lo): Depend on it. Remove libtool specific workaround.

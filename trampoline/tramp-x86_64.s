@@ -9,7 +9,7 @@
  * on this software.
  */
 
-/* Available registers: %rax, %rdx, %rcx, %rsi, %rdi. */
+/* Available registers: %rax, %r10, %r11. */
 
 .globl tramp
 	.type	tramp,@function

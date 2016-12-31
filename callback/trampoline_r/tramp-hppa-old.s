@@ -7,7 +7,7 @@
 ; or can't live with it. There is ABSOLUTELY NO WARRANTY, explicit or implied,
 ; on this software.
 
-; Available registers: %r19, %r20, %r21, %r22.
+; Available registers: %r19, %r20, %r21, %r22, %r29.
 
 	.SPACE $PRIVATE$
 	.SUBSPA $DATA$,QUAD=1,ALIGN=8,ACCESS=31

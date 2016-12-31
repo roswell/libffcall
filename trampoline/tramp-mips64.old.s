@@ -9,7 +9,7 @@
  * on this software.
  */
 
-/* Available registers: $2, $3. */
+/* Available registers: $2, $3, $12 ... $15, $24. */
 
 	.set	nobopt
 	.set	noreorder

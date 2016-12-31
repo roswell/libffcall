@@ -9,6 +9,8 @@
  * on this software.
  */
 
+/* Available registers: r14 ... r31, r9 ... r11, r2 ... r3. */
+
 	.text
 	.align 16
 	.global tramp#
