@@ -1,5 +1,16 @@
 2017-01-01  Bruno Haible  <bruno@clisp.org>
 
+	Add option --disable-elf-hack to disable the ELF workaround.
+	* m4/binfmt-elf.m4 (FFCALL_BINFMT_ELF_OPTION): New macro.
+	(FFCALL_BINFMT_ELF): Require it. Set BINFMT_ELF to false and define
+	BINFMT_ELF to 0 if --disable-elf-hack was specified.
+	* configure.ac: Invoke FFCALL_BINFMT_ELF_OPTION.
+	* callback/configure.ac: Likewise.
+	* callback/elf-hack.txt: Explain how to use --disable-elf-hack for
+	testing.
+
+2017-01-01  Bruno Haible  <bruno@clisp.org>
+
 	Generic workaround against the ELF symbol resolving routine.
 	Reported for x86_64 by Andrey Kutejko <andy128k@gmail.com>
 	at https://savannah.gnu.org/bugs/?32466 .

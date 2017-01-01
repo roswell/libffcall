@@ -20,6 +20,7 @@ AC_PROG_INSTALL
 CL_PROG_LN
 CL_PROG_LN_S
 gl_HOST_CPU_C_ABI
+FFCALL_BINFMT_ELF_OPTION
 PACKAGE=callback
 FFCALL_COMMON_LIBTOOL
 dnl This piece of sed script replaces every line containing '@subdir@'

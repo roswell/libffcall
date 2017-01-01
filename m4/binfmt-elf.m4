@@ -10,17 +10,35 @@ dnl From Bruno Haible.
 
 AC_PREREQ([2.57])
 
+dnl Provides a configure option --disable-elf-hack.
+AC_DEFUN([FFCALL_BINFMT_ELF_OPTION],
+[AC_ARG_ENABLE([elf-hack],
+   [AS_HELP_STRING([--disable-elf-hack],
+      [disable the hack for supporting shared libraries on ELF platforms])],
+   [case $enableval in
+      no) use_elf_hack=false ;;
+      *) use_elf_hack=true ;;
+    esac
+   ])
+])
+
 dnl Tests whether the binary format is ELF.
 dnl Sets BINFMT_ELF to true or false accordingly.
 dnl Defines BINFMT_ELF as 1 or 0 accordingly.
 AC_DEFUN([FFCALL_BINFMT_ELF],
-[AC_CACHE_CHECK([whether the binary format is ELF], [ffcall_cv_binfmt_elf], [
+[AC_REQUIRE([FFCALL_BINFMT_ELF_OPTION])
+if $use_elf_hack; then
+AC_CACHE_CHECK([whether the binary format is ELF], [ffcall_cv_binfmt_elf], [
 AC_EGREP_CPP([Thranduil],
 [#if defined __ELF__
 Thranduil
 #endif
 ], [ffcall_cv_binfmt_elf=yes], [ffcall_cv_binfmt_elf=no])])
-if test $ffcall_cv_binfmt_elf = yes; then
+ffcall_binfmt_elf=$ffcall_cv_binfmt_elf
+else
+ffcall_binfmt_elf=no
+fi
+if test $ffcall_binfmt_elf = yes; then
   BINFMT_ELF=true
   ffcall_binfmt_elf_value=1
 else

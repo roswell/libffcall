@@ -73,3 +73,17 @@ ia64        r12                      16         Y       r15                     
 x86_64      %rsp                     16         Y       r10                                        Y
 s390        %r15                     8          Y       r0                                         Y
 
+To test whether the ELF workaround is actually needed on a particular platform,
+set CC, CFLAGS, LDFLAGS appropriately, then run
+  mkdir bb1; cd bb1; ../configure --disable-elf-hack; make; make check; cd ..
+  mkdir bb2; cd bb2; ../configure --disable-elf-hack --enable-shared --disable-static; make; make check; cd ..
+  mkdir bb3; cd bb3; ../configure; make; make check; cd ..
+  mkdir bb4; cd bb4; ../configure --enable-shared --disable-static; make; make check; cd ..
+If the outcome is "OK KO OK OK", the ELF workaround is needed. Seen on
+  - x86_64-linux
+If the outcome is "OK OK OK OK", the ELF workaround is not needed. Seen on
+  - i386-linux
+  - i386-solaris9, i386-solaris10
+  - x86_64-solaris10
+But it can change at any moment, through a libc and ld.so upgrade.
+
