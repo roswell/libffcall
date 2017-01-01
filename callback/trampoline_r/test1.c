@@ -1,7 +1,7 @@
 /* Trampoline test */
 
 /*
- * Copyright 1995-1999, 2001-2002, 2004-2006 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995-1999, 2001-2002, 2004-2006, 2017 Bruno Haible, <bruno@clisp.org>
  *
  * This is free software distributed under the GNU General Public Licence
  * described in the file COPYING. Contact the author if you don't have this
@@ -15,6 +15,16 @@
 #include <stdlib.h>
 
 #include "trampoline_r.h"
+
+#if BINFMT_ELF
+
+/* We cannot test trampoline_r without vacall_r. */
+int main ()
+{
+  printf("Skipping test: This is an ELF platform.\n"); exit(0);
+}
+
+#else
 
 /* Set when we can check that the env register is being passed correctly. */
 #if defined __GNUC__ && !defined __clang__
@@ -104,3 +114,5 @@ int main ()
   else
     { printf("Doesn't work!\n"); exit(1); }
 }
+
+#endif

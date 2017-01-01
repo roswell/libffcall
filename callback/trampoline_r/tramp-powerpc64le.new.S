@@ -24,3 +24,16 @@ tramp:
         bctr
 1:      .quad 0x7355471143622155 /* data */
 2:      .quad 0xbabebec0dea0ffab /* function */
+
+	.globl trampelf
+trampelf:
+        /* We can assume that our own address (=trampelf) is in r12. */
+0:      ld  11,1f-0b(12)  /* get data */
+        ld  12,2f-0b(12)  /* get function */
+        addi 1,1,-16  /* Make room on the stack */
+        std 11,0(1)  /* Store data on the stack */
+        /* The called function expects to see its own address in r12. */
+        mtctr 12
+        bctr
+1:      .quad 0x7355471143622155 /* data */
+2:      .quad 0xbabebec0dea0ffab /* function */

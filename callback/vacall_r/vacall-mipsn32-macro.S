@@ -9,6 +9,7 @@
 	DECLARE_FUNCTION(__vacall_r)
 	.ent	__vacall_r
 __vacall_r:
+#include "elfhack-mips.S"
 .LFB1:
 	.frame	$sp,256,$31		
 	.mask	0x90030000,-8

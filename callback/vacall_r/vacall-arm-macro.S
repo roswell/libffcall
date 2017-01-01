@@ -12,6 +12,7 @@ pc	.req	r15
 	.global	C(__vacall_r)
 	DECLARE_FUNCTION(__vacall_r)
 C(__vacall_r:)
+#include "elfhack-arm.S"
 	// args = 4, pretend = 0, frame = 48
 	// frameC(needed) = 0, current_function_anonymous_args = 0
 	stmfd	sp!, {lr}

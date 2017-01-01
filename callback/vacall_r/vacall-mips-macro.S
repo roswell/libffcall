@@ -10,6 +10,7 @@
 	.text
 	.ent	__vacall_r
 __vacall_r:
+#include "elfhack-mips.S"
 	.frame	$fp,88,$31		
 	.mask	0xc0000000,-4
 	.fmask	0x00000000,0

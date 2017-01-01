@@ -1,0 +1,75 @@
+Workaround against the ELF symbol resolving routine
+===================================================
+
+On Solaris 2.6 / i386, when the function being jumped to is an external symbol
+of a shared library, the jump actually points to an ELF indirect jump:
+  jmp *PTR
+where PTR initially contains the address of some resolving routine which
+will replace the PTR contents with the actual code address of the function
+and then jump to the function.
+Unfortunately, this resolving routine clobbers all three registers:
+%eax, %edx, %ecx. But %ecx is the register in which we pass the env_t
+(that points to function and data) to __vacall_r.
+
+The same effect is also seen on Linux / x86_64, where r10 is clobbered by the
+resolving routine (called '_dl_runtime_resolve' in glibc).
+See https://savannah.gnu.org/bugs/?32466 .
+
+The same thing can happen on all platforms that support ELF, since the
+lexical closure register is always a call-used register (see file
+call-used-registers.txt).
+
+On i386 (and m68k), it would be possible to solve this by passing the env_t
+as an extra argument on the stack and restore it to the lexical closure
+register at the beginning of __vacall_r. But this approach becomes too complex
+for the other CPUs.
+
+It is not possible to make a first call to __vacall_r to "straighten things
+out", because during this first call the lexical closure register gets
+clobbered and __vacall_r then invokes undefined behaviour.
+
+It may be possible to fix this, on some platforms,
+  - by use of "ld -r" to combine object files, so that the code in
+    trampoline_r.o can access __vacall_r directly, or
+  - by use of symbol visibility control, so that __vacall_r is not
+    an external symbol of the shared library any more, or
+  - by an appropriate use of dlsym().
+But this is highly platform dependent (linker, compiler, libc) and there may
+be some platforms for which none of these approaches works.
+
+Instead the trick is to
+  1) modify trampoline_r so that it produces a trampoline that pushes the
+     env_t on the stack (preserving correct stack alignment) instead of
+     putting it in the lexical closure register,
+  2) insert a couple of instructions at the beginning of __vacall_r that
+     pops this value off the stack and puts in in the lexical closure
+     register.
+
+Here's the relevant info, from the GCC machine descriptions.
+- Stack register:
+  grep STACK_POINTER_REGNUM in the machine description.
+- Stack alignment:
+  grep STACK_BOUNDARY and PREFERRED_STACK_BOUNDARY in the machine description,
+  divide by 8. Use the maximum possible value.
+- Lexical closure register:
+  grep STATIC_CHAIN_REGNUM (or TARGET_STATIC_CHAIN if it does not exist) and
+  TRAMPOLINE_TEMPLATE in the machine description.
+
+            Stack register           Stack     ELF      Lexical closure register                ELF hack
+                                   alignment supported                                         implemented
+i386        %esp                     16         Y       %ecx (but %eax for fastcall functions)     Y
+m68k        sp = a7                  4          Y       a0 (a1 in ELF, incl. NetBSD)               Y
+mips        $sp = $29                16         Y       we use $2, but GCC uses $15                Y
+sparc       %sp = %o6, save/restore  8          Y       %g2                                        N
+sparc64     %sp = %o6, save/restore  16         Y       %g5                                        N
+alpha       $30                      16         Y       $1                                         Y
+hppa        %r30                     16         Y       %r29                                       N
+arm         sp = r13                 8          Y       r12                                        Y
+aarch64     r31                      16         Y       r18                                        -
+powerpc     1                        16         Y       11 (13 in NetBSD)                          Y
+powerpc64   1                        16         Y       11                                         Y
+m88k        #r31                     16         Y       #r11                                       N
+ia64        r12                      16         Y       r15                                        N
+x86_64      %rsp                     16         Y       r10                                        Y
+s390        %r15                     8          Y       r0                                         Y
+

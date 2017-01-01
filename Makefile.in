@@ -64,6 +64,7 @@ SOURCE_FILES = \
   Makefile.in Makefile.mingw32 Makefile.msvc \
   configure.ac \
   m4/as-underscore.m4 \
+  m4/binfmt-elf.m4 \
   m4/cc-gcc.m4 \
   m4/codeexec.m4 \
   m4/general.m4 \

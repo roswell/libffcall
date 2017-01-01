@@ -1,3 +1,4 @@
+#include "asm-arm.h"
 	.cpu arm10tdmi
 	.fpu softvfp
 	.file	"vacall-armel.c"
@@ -5,7 +6,8 @@
 	.align	2
 	.global	__vacall_r
 	.type	__vacall_r, %function
-__vacall_r:
+C(__vacall_r:)
+#include "elfhack-arm.S"
 	@ args = 4, pretend = 0, frame = 72
 	@ frame_needed = 0, uses_anonymous_args = 0
 	stmfd	sp!, {r4, r5, r6, r7, r8, lr}

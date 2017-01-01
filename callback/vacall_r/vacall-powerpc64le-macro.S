@@ -10,6 +10,7 @@ __vacall_r:
 0:	addis 2,12,.TOC.-0b@ha
 	addi 2,2,.TOC.-0b@l
 	.localentry	__vacall_r,.-__vacall_r
+#include "elfhack-powerpc64le.S"
 	mflr 0
 	std 31,-8(1)
 	li 12,0

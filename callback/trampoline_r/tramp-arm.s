@@ -1,6 +1,6 @@
 @ Trampoline for arm CPU
 
-@ Copyright 1995-1997 Bruno Haible, <bruno@clisp.org>
+@ Copyright 1995-1997, 2016 Bruno Haible, <bruno@clisp.org>
 @
 @ This is free software distributed under the GNU General Public Licence
 @ described in the file COPYING. Contact the author if you don't have this
@@ -25,12 +25,32 @@ _tramp:
 	add	ip,pc,#8
 	ldr	pc,[pc]
 
-	.global	_data
 	.align	0
+	.global	_data
 _data:
 	.word	0x73554711
 
 	.align	0
+	.global	_function
 _function:
 	.word	0xbabebec0
-	.global	_function
+
+	.align	0
+	.global	_trampelf
+_trampelf:
+	@ Immediate constants are a problem. I take the indirect load approach
+	@ because I don't want 4 instructions for each constant.
+	add	ip,pc,#16
+	sub	sp,sp,#8
+	str	ip,[sp]
+	ldr	pc,[pc]
+
+	.align	0
+	.global	_data2
+_data2:
+	.word	0x73554711
+
+	.align	0
+	.global	_function2
+_function2:
+	.word	0xbabebec0

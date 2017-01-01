@@ -5,6 +5,7 @@
 .globl C(__vacall_r)
 	DECLARE_FUNCTION(__vacall_r)
 FUNBEGIN(__vacall_r)
+#include "elfhack-x86_64.S"
 .LFB1:
 	pushq	%r13
 .LCFI0:

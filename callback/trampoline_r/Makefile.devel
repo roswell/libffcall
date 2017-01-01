@@ -99,16 +99,16 @@ tramp-i386.o : tramp-i386.s
 	$(ASPREFIX)/i486-linux/bin/as tramp-i386.s -o $@
 
 tramp-m68k.o : tramp-m68k.s
-	$(ASPREFIX)/m68k-sun/bin/as tramp-m68k.s -o $@
+	$(ASPREFIX)/m68k-linux/bin/as tramp-m68k.s -o $@
 
 tramp-m68k-netbsd.o : tramp-m68k-netbsd.s
-	$(ASPREFIX)/m68k-sun/bin/as tramp-m68k-netbsd.s -o $@
+	$(ASPREFIX)/m68k-linux/bin/as tramp-m68k-netbsd.s -o $@
 
 tramp-mips.o : tramp-mips.s
-	$(ASPREFIX)/mips-sgi/bin/as tramp-mips.s -o $@
+	$(ASPREFIX)/mips-linux/bin/as tramp-mips.s -o $@
 
 tramp-mips64.o : tramp-mips64.s
-	$(ASPREFIX)/mips-sgi/bin/as -mips3 -membedded-pic tramp-mips64.s -o $@
+	$(ASPREFIX)/mips-linux/bin/as -mips64 -mabi=64 tramp-mips64.s -o $@
 
 tramp-sparc.o : tramp-sparc.s
 	$(ASPREFIX)/sparc-sun/bin/as tramp-sparc.s -o $@
@@ -117,7 +117,7 @@ tramp-sparc64.o : tramp-sparc64.s
 	$(ASPREFIX)/sparc64-linux/bin/as tramp-sparc64.s -o $@
 
 tramp-alpha.o : tramp-alpha.s
-	$(ASPREFIX)/alpha-dec-osf/bin/as tramp-alpha.s -o $@
+	$(ASPREFIX)/alpha-linux/bin/as tramp-alpha.s -o $@
 
 tramp-hppa.o : tramp-hppa.s
 	$(ASPREFIX)/hppa1.0-hpux/bin/as tramp-hppa.s -o $@
@@ -144,7 +144,7 @@ tramp-ia64.o : tramp-ia64.s
 	/nue/usr/ia64-hp-linux/bin/as tramp-ia64.s -o $@
 
 tramp-x86_64.o : tramp-x86_64.s
-	$(ASPREFIX)/x86_64-suse-linux/bin/as tramp-x86_64.s -o $@
+	$(ASPREFIX)/x86_64-linux/bin/as tramp-x86_64.s -o $@
 
 tramp-s390.o : tramp-s390.s
 	$(ASPREFIX)/s390-ibm-linux/bin/as tramp-s390.s -o $@

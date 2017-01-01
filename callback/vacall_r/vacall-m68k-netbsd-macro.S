@@ -4,6 +4,7 @@
 .globl C(__vacall_r)
 	DECLARE_FUNCTION(__vacall_r)
 C(__vacall_r:)
+#include "elfhack-m68k.S"
 	link $a6,#-32
 	moveml #0x3020,$sp@-
 	clrl $a6@(-32)

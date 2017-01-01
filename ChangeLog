@@ -1,3 +1,114 @@
+2017-01-01  Bruno Haible  <bruno@clisp.org>
+
+	Generic workaround against the ELF symbol resolving routine.
+	Reported for x86_64 by Andrey Kutejko <andy128k@gmail.com>
+	at https://savannah.gnu.org/bugs/?32466 .
+	* m4/binfmt-elf.m4: New file.
+	* Makefile.in (SOURCE_FILES): Add it.
+	* callback/elf-hack.txt: New file.
+	* callback/test1.c: New file.
+	* callback/Makefile.in (SOURCE_FILES): Add both.
+	(test1.o, test1): New targets.
+	(check): Also run test1.
+	(MOSTLYCLEANFILES): Add test1.o, test1.
+	* callback/trampoline_r/configure.ac: Invoke FFCALL_BINFMT_ELF.
+	* callback/trampoline_r/Makefile.devel: Update the paths to the cross
+	assemblers.
+	* callback/trampoline_r/tramp-*.s: Add a 'trampelf' function.
+	* callback/trampoline_r/tramp-*.S: Likewise.
+	* callback/trampoline_r/tramp-*.o: Regenerated.
+	* callback/trampoline_r/trampoline.c: Implement alternate trampolines on
+	platforms with BINFMT_ELF.
+	* callback/trampoline_r/test1.c: Skip the test if BINFMT_ELF.
+	* callback/vacall_r/configure.ac: Invoke FFCALL_BINFMT_ELF.
+	* callback/vacall_r/elfhack-alpha.S: New file.
+	* callback/vacall_r/elfhack-alpha.sed: New file.
+	* callback/vacall_r/elfhack-arm.S: New file.
+	* callback/vacall_r/elfhack-arm.sed: New file.
+	* callback/vacall_r/elfhack-i386.S: New file.
+	* callback/vacall_r/elfhack-i386.sed: New file.
+	* callback/vacall_r/elfhack-m68k.S: New file.
+	* callback/vacall_r/elfhack-m68k.sed: New file.
+	* callback/vacall_r/elfhack-mips.S: New file.
+	* callback/vacall_r/elfhack-mips.sed: New file.
+	* callback/vacall_r/elfhack-mips64.S: New file.
+	* callback/vacall_r/elfhack-mips64.sed: New file.
+	* callback/vacall_r/elfhack-powerpc.S: New file.
+	* callback/vacall_r/elfhack-powerpc.sed: New file.
+	* callback/vacall_r/elfhack-powerpc64le.S: New file.
+	* callback/vacall_r/elfhack-powerpc64le.sed: New file.
+	* callback/vacall_r/elfhack-s390.S: New file.
+	* callback/vacall_r/elfhack-s390.sed: New file.
+	* callback/vacall_r/elfhack-x86_64.S: New file.
+	* callback/vacall_r/elfhack-x86_64.sed: New file.
+	* callback/vacall_r/Makefile.devel (vacall-i386-macro.S): Insert an
+	include of elfhack-i386.S.
+	(vacall-m68k.mit.S, vacall-m68k-netbsd-macro.S): Insert an include of
+	elfhack-m68k.S.
+	(vacall-mips-macro.S, vacall-mipsn32-macro.S): Insert an include of
+	elfhack-mips.S.
+	(vacall-mips64-macro.S): Insert an include of elfhack-mips64.S.
+	(vacall-alpha-macro.S): Renamed from vacall-alpha.s. Insert an include
+	of elfhack-alpha.S.
+	(vacall-arm-macro.S): Insert an include of elfhack-arm.S.
+	(vacall-armel-macro.S): Renamed from vacall-armel.s. Insert an include
+	of asm-arm.h and elfhack-arm.S.
+	(vacall-powerpc-linux-macro.S, vacall-powerpc-netbsd-macro.S): New
+	targets.
+	(vacall-powerpc-sysv4-macro.S): Renamed from vacall-powerpc-sysv4.s.
+	Insert an include of elfhack-powerpc.S.
+	(vacall-powerpc64le-macro.S): Renamed from vacall-powerpc64le.s. Insert
+	an include of elfhack-powerpc64.S.
+	(vacall-x86_64-macro.S): Insert an include of elfhack-x86_64.S.
+	(vacall-s390-macro.S): New target.
+	* callback/vacall_r/vacall-alpha-macro.S: Renamed from
+	callback/vacall_r/vacall-alpha.s. Include elfhack-alpha.S.
+	* callback/vacall_r/vacall-arm-macro.S: Include elfhack-arm.S.
+	* callback/vacall_r/vacall-armel-macro.S: Renamed from
+	callback/vacall_r/vacall-armel.s. Include asm-arm.h and elfhack-arm.S.
+	* callback/vacall_r/vacall-i386-macro.S: Include elfhack-i386.S.
+	* callback/vacall_r/vacall-m68k.mit.S: Include elfhack-m68k.S.
+	* callback/vacall_r/vacall-m68k-netbsd-macro.S: Likewise.
+	* callback/vacall_r/vacall-mips-macro.S: Include elfhack-mips.S.
+	* callback/vacall_r/vacall-mipsn32-macro.S: Likewise.
+	* callback/vacall_r/vacall-mips64-macro.S: Include elfhack-mips64.S.
+	* callback/vacall_r/vacall-powerpc-linux-macro.S: Generated, to include
+	elfhack-powerpc.S.
+	* callback/vacall_r/vacall-powerpc-netbsd-macro.S: Generated, to include
+	elfhack-powerpc.S.
+	* callback/vacall_r/vacall-powerpc-sysv4-macro.S: Renamed from
+	callback/vacall_r/vacall-powerpc-sysv4.s. Include elfhack-powerpc.S.
+	* callback/vacall_r/vacall-powerpc64le-macro.S: Renamed from
+	callback/vacall_r/vacall-powerpc64le.s. Include elfhack-powerpc64le.S.
+	* callback/vacall_r/vacall-s390-linux.s: Renamed from
+	callback/vacall_r/vacall-s390.s.
+	* callback/vacall_r/vacall-s390-macro.S: Generated, to include
+	elfhack-s390.S.
+	* callback/vacall_r/vacall-x86_64-macro.S: Include elfhack-x86_64.S.
+	* callback/vacall_r/Makefile.in (ASPFLAGS): Conditionally define
+	BINFMT_ELF.
+	(vacall-i386.s, vacall-m68k.s, vacall-mips.s, vacall-mipsn32.s,
+	vacall-mips64.s): Add a -I option for elfhack-*.S.
+	(vacall-alpha.s): New target.
+	(vacall-alpha.lo): Depend on it.
+	(vacall-arm.s): Add a -I option for elfhack-*.S.
+	(vacall-armel.s): New target.
+	(vacall-armel.lo): Depend on it.
+	(vacall-powerpc.s): For the linux, netbsd, sysv4 syntaxes, use the
+	corresponding *.S file.
+	(vacall-powerpc64le.s): New target.
+	(vacall-powerpc64le.lo): Depend on it.
+	(vacall-x86_64.s): Add a -I option for elfhack-*.S.
+	(vacall-s390.s): New target.
+	(vacall-s390.lo): Depend on it.
+	(clean): Remove also vacall-alpha.s, vacall-armel.s,
+	vacall-powerpc64le.s, vacall-s390.s.
+	(SOURCE_FILES): Update for the renamed files. Add
+	vacall-powerpc-linux-macro.S, vacall-powerpc-netbsd-macro.S,
+	vacall-s390-macro.S, elfhack-*.S, elfhack-*.sed.
+	* README: Clarify on which platforms the problem with the ELF symbol
+	resolving routine still exists.
+
 2016-12-31  Bruno Haible  <bruno@clisp.org>
 
 	Update doc about available registers.

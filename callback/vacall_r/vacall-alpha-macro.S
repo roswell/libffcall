@@ -10,6 +10,7 @@ __gnu_compiled_c:
 	.ent __vacall_r
 __vacall_r:
 __vacall_r..ng:
+#include "elfhack-alpha.S"
 	lda $30,-176($30)
 	.frame $30,176,$26,0
 	stq $26,0($30)
