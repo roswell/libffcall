@@ -23,6 +23,7 @@ htmldir = $(datadir)/html
 # Programs used by "make":
 CC = @CC@
 CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
@@ -58,7 +59,7 @@ trampoline_r.h : $(srcdir)/trampoline_r.h.in
 	-$(LN_S) $(srcdir)/trampoline_r.h.in trampoline_r.h
 
 trampoline.lo : $(srcdir)/trampoline.c trampoline_r.h
-	$(LIBTOOL_COMPILE) $(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/trampoline.c
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/trampoline.c
 
 tramp-hppa.lo : $(srcdir)/tramp-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/tramp-hppa.s
@@ -158,13 +159,13 @@ uninstall : force
 	$(RM) $(DESTDIR)$(htmldir)/trampoline_r.html
 
 test1.o : $(srcdir)/test1.c trampoline_r.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/test1.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
 test1 : test1.o $(OBJECTS)
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o $(OBJECTS) -o test1
 
 test2.o : $(srcdir)/test2.c trampoline_r.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/test2.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test2.c
 
 test2 : test2.o $(OBJECTS)
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test2.o $(OBJECTS) -o test2

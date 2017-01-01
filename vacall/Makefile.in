@@ -23,6 +23,7 @@ htmldir = $(datadir)/html
 # Programs used by "make":
 CC = @CC@
 CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
@@ -143,10 +144,10 @@ vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-x86_64.s
 
 misc.o : $(srcdir)/misc.c vacall.h config.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/misc.c
 
 vacall-structcpy.o : $(srcdir)/vacall-structcpy.c $(srcdir)/../common/structcpy.c
-	$(CC) $(CFLAGS) -I$(srcdir)/../common -c $(srcdir)/vacall-structcpy.c
+	$(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-structcpy.c
 
 libvacall.a : $(OBJECTS)
 	$(RM) libvacall.a
@@ -184,10 +185,10 @@ uninstall : force
 	$(RM) $(DESTDIR)$(htmldir)/vacall.html
 
 minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c vacall.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/minitests.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
 
 minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c vacall.h
-	$(CC) $(CFLAGS) $(INCLUDES) -S $(srcdir)/minitests.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
 minitests : minitests.o libvacall.a
 	$(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libvacall.a -o minitests
@@ -198,10 +199,10 @@ check : all minitests
 	test '!' -s minitests.output.$(HOST)
 
 tests.o : $(srcdir)/tests.c vacall.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/tests.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/tests.c
 
 tests.s : $(srcdir)/tests.c vacall.h
-	$(CC) $(CFLAGS) $(INCLUDES) -S $(srcdir)/tests.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
 tests : tests.o libvacall.a
 	$(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libvacall.a -o tests

@@ -23,6 +23,7 @@ htmldir = $(datadir)/html
 # Programs used by "make":
 CC = @CC@
 CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi` `if test @BINFMT_ELF@ = true; then echo '-DBINFMT_ELF'; fi`
@@ -174,10 +175,10 @@ vacall-s390.s : $(srcdir)/vacall-s390-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-s390-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390.s
 
 misc.lo : $(srcdir)/misc.c vacall_r.h config.h
-	$(LIBTOOL_COMPILE) $(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/misc.c
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/misc.c
 
 vacall-structcpy.lo : $(srcdir)/vacall-structcpy.c $(srcdir)/../../common/structcpy.c
-	$(LIBTOOL_COMPILE) $(CC) $(CFLAGS) -I$(srcdir)/../../common -c $(srcdir)/vacall-structcpy.c
+	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-structcpy.c
 
 libvacall.la : $(OBJECTS)
 	$(LIBTOOL_LINK) $(CC) -o libvacall.la -rpath $(libdir) $(OBJECTS)

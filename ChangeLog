@@ -1,5 +1,21 @@
 2017-01-01  Bruno Haible  <bruno@clisp.org>
 
+	Support the CPPFLAGS configure variable.
+	* avcall/Makefile.in (CPPFLAGS): New variable.
+	Use it in all .c file compilations.
+	* vacall/Makefile.in (CPPFLAGS): New variable.
+	Use it in all .c file compilations.
+	* trampoline/Makefile.in (CPPFLAGS): New variable.
+	Use it in all .c file compilations.
+	* callback/Makefile.in (CPPFLAGS): New variable.
+	Use it in all .c file compilations.
+	* callback/vacall_r/Makefile.in (CPPFLAGS): New variable.
+	Use it in all .c file compilations.
+	* callback/trampoline_r/Makefile.in (CPPFLAGS): New variable.
+	Use it in all .c file compilations.
+
+2017-01-01  Bruno Haible  <bruno@clisp.org>
+
 	Add option --disable-elf-hack to disable the ELF workaround.
 	* m4/binfmt-elf.m4 (FFCALL_BINFMT_ELF_OPTION): New macro.
 	(FFCALL_BINFMT_ELF): Require it. Set BINFMT_ELF to false and define

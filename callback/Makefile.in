@@ -22,6 +22,7 @@ htmldir = $(datadir)/html
 # Programs used by "make":
 CC = @CC@
 CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 LIBTOOL = @LIBTOOL@
@@ -107,16 +108,16 @@ uninstall : force
 	$(RM) $(DESTDIR)$(htmldir)/callback.html
 
 test1.o : $(srcdir)/test1.c callback.h vacall_r.h trampoline_r.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/test1.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
 test1 : test1.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o libcallback.la -o test1
 
 minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/minitests.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
 
 minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
-	$(CC) $(CFLAGS) $(INCLUDES) -S $(srcdir)/minitests.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
 minitests : minitests.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libcallback.la -o minitests
@@ -131,10 +132,10 @@ check : all check-subdirs test1 minitests
 	test '!' -s minitests.output.$(HOST)
 
 tests.o : $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(srcdir)/tests.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/tests.c
 
 tests.s : $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
-	$(CC) $(CFLAGS) $(INCLUDES) -S $(srcdir)/tests.c
+	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
 tests : tests.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libcallback.la -o tests
