@@ -1,5 +1,15 @@
 2017-01-01  Bruno Haible  <bruno@clisp.org>
 
+	Assume ANSI C in the documentation.
+	* vacall/vacall.{3,html}: Use ANSI C declaration syntax. Stop
+	mentioning <varargs.h>. Reference stdarg(3).
+	* trampoline/trampoline.{3,html}: Reference stdarg(3).
+	* callback/callback.{3,html}: Use ANSI C declaration syntax. Stop
+	mentioning <varargs.h>.
+	* callback/trampoline_r/trampoline_r.{3,html}: Reference stdarg(3).
+
+2017-01-01  Bruno Haible  <bruno@clisp.org>
+
 	Support the CPPFLAGS configure variable.
 	* avcall/Makefile.in (CPPFLAGS): New variable.
 	Use it in all .c file compilations.

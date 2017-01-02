@@ -39,8 +39,7 @@ vacall -  C functions called with variable arguments
 </PRE>
 <P>
 <PRE>
-<CODE>void <VAR>function</VAR> (<VAR>alist</VAR>)</CODE>
-<CODE>  va_alist <VAR>alist</VAR>;</CODE>
+<CODE>void <VAR>function</VAR> (va_alist <VAR>alist</VAR>)</CODE>
 <CODE>{</CODE>
 <CODE>  va_start_<VAR>type</VAR>(<VAR>alist</VAR>[, <VAR>return_type</VAR>]);</CODE>
 <CODE>  arg = va_arg_<VAR>type</VAR>(<VAR>alist</VAR>[, <VAR>arg_type</VAR>]);</CODE>
@@ -62,7 +61,7 @@ vacall -  C functions called with variable arguments
 
 This  set  of  macros  permit  a C function <VAR>function</VAR> to be
 called with variable  arguments  and  to  return  variable
-return values.  This is much like the <A HREF="varargs(3)"><CODE><B>varargs</B></CODE></A>(3) facility,
+return values.  This is much like the <A HREF="stdarg(3)"><CODE><B>stdarg</B></CODE></A>(3) facility,
 but also allows the return value to be  specified  at  run
 time.
 <P>
@@ -182,12 +181,11 @@ structs are not supported.
 </A>
 
 This example, a possible implementation of <A HREF="execl(3)"><CODE><B>execl</B></CODE></A>(3) on top
-of <A HREF="execv(2)"><CODE><B>execv</B></CODE></A>(2) using <A HREF="varargs(3)"><CODE><B>varargs</B></CODE></A>(3),
-<PRE><CODE>#include &lt;varargs.h&gt;
+of <A HREF="execv(2)"><CODE><B>execv</B></CODE></A>(2) using <A HREF="stdarg(3)"><CODE><B>stdarg</B></CODE></A>(3),
+<PRE><CODE>#include &lt;stdarg.h&gt;
 #define MAXARGS 100
 /* execl is called by execl(file, arg1, arg2, ..., (char *)0); */
-int execl (va_alist)
-  va_dcl
+int execl (...)
 {
   va_list ap;
   char* file;
@@ -205,8 +203,7 @@ looks like this using <A HREF="vacall(3)"><CODE><B>vacall</B></CODE></A>(3):
 <PRE><CODE>#include &lt;vacall.h&gt;
 #define MAXARGS 100
 /* execl is called by vacall(file, arg1, arg2, ..., (char *)0); */
-void execl (ap)
-  va_alist ap;
+void execl (va_alist ap)
 {
   char* file;
   char* args[MAXARGS];
@@ -227,7 +224,7 @@ vacall_function = &amp;execl;
 <H2>See also</H2>
 </A>
 
-<A HREF="varargs(3)"><CODE><B>varargs</B></CODE></A>(3), <A HREF="trampoline(3)"><CODE><B>trampoline</B></CODE></A>(3), <A HREF="callback(3)"><CODE><B>callback</B></CODE></A>(3).
+<A HREF="stdarg(3)"><CODE><B>stdarg</B></CODE></A>(3), <A HREF="trampoline(3)"><CODE><B>trampoline</B></CODE></A>(3), <A HREF="callback(3)"><CODE><B>callback</B></CODE></A>(3).
 
 <A NAME="Bugs">
 <H2>Bugs</H2>
@@ -248,9 +245,6 @@ example, gcc on m68k-next returns
 in registers and
 <CODE>struct { char a[3]; }</CODE>
 in memory, although both types have the same size and the same alignment.
-<P>
-<CODE>&lt;vacall.h&gt;</CODE> cannot be included  when <CODE>&lt;varargs.h&gt;</CODE>  or
-<CODE>&lt;stdarg.h&gt;</CODE> is included.  (Name clash for <CODE>va_alist</CODE>.)
 <P>
 The argument list can only be walked once.
 <P>
@@ -293,7 +287,7 @@ source.
 Bruno Haible &lt;bruno@clisp.org&gt;
 </ADDRESS>
 <P>
-Last modified: 14 January 2001.
+Last modified: 1 January 2017.
 
 </BODY>
 

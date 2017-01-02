@@ -37,9 +37,7 @@ C functions
 </PRE>
 <P>
 <PRE>
-<CODE>void <VAR>function</VAR> (<VAR>data</VAR>, <VAR>alist</VAR>)</CODE>
-<CODE>  void* <VAR>data</VAR>;</CODE>
-<CODE>  va_alist <VAR>alist</VAR>;</CODE>
+<CODE>void <VAR>function</VAR> (void* <VAR>data</VAR>, va_alist <VAR>alist</VAR>)</CODE>
 <CODE>{</CODE>
 <CODE>  va_start_<VAR>type</VAR>(<VAR>alist</VAR>[, <VAR>return_type</VAR>]);</CODE>
 <CODE>  arg = va_arg_<VAR>type</VAR>(<VAR>alist</VAR>[, <VAR>arg_type</VAR>]);</CODE>
@@ -225,9 +223,6 @@ in registers and
 <CODE>struct { char a[3]; }</CODE>
 in memory, although both types have the same size and the same alignment.
 <P>
-<CODE>&lt;callback.h&gt;</CODE> cannot be included  when <CODE>&lt;varargs.h&gt;</CODE>  or
-<CODE>&lt;stdarg.h&gt;</CODE> is included.  (Name clash for <CODE>va_alist</CODE>.)
-<P>
 The argument list can only be walked once.
 
 <A NAME="Non-Bugs">
@@ -267,6 +262,6 @@ Many ideas were cribbed from the gcc source.
 Bruno Haible &lt;bruno@clisp.org&gt;
 </ADDRESS>
 <P>
-Last modified: 14 January 2001.
+Last modified: 1 January 2017.
 
 </BODY>

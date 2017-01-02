@@ -1,13 +1,11 @@
-.TH CALLBACK 3 "14 January 2001"
+.TH CALLBACK 3 "1 January 2017"
 .SH NAME
 callback \- closures with variable arguments as first-class C functions
 .SH SYNOPSIS
 .B #include <callback.h>
 .LP
 .nf
-.BI "void " function " (" data ", " alist ")"
-.BI "  void* " data ";"
-.BI "  va_alist " alist ";"
+.BI "void " function " (void* " data ", va_alist " alist ")"
 .BI "{"
 .BI "  va_start_" type "(" alist "[, " return_type "]);"
 .BI "  " arg " = va_arg_" type "(" alist "[, " arg_type "]);"
@@ -220,15 +218,6 @@ example, gcc on m68k-next returns
 in registers and
 .B "struct { char a[3]; }"
 in memory, although both types have the same size and the same alignment.
-
-.B <callback.h>
-cannot be included when
-.B <varargs.h>
-or
-.B <stdarg.h>
-is included.
-(Name clash for
-.BR va_alist ".)"
 
 The argument list can only be walked once.
 

@@ -1,4 +1,4 @@
-.TH VACALL 3 "14 January 2001"
+.TH VACALL 3 "1 January 2017"
 .SH NAME
 vacall \- C functions called with variable arguments
 .SH SYNOPSIS
@@ -7,8 +7,7 @@ vacall \- C functions called with variable arguments
 .B extern void* vacall_function;
 .LP
 .nf
-.BI "void " function " (" alist ")"
-.BI "  va_alist " alist ";"
+.BI "void " function " (va_alist" alist ")"
 .BI "{"
 .BI "  va_start_" type "(" alist "[, " return_type "]);"
 .BI "  " arg " = va_arg_" type "(" alist "[, " arg_type "]);"
@@ -24,7 +23,7 @@ This set of macros permit a C function
 .I function
 to be called with variable arguments and to return variable return values.
 This is much like the
-.BR varargs (3)
+.BR stdarg (3)
 facility, but also allows the return value to be specified at run time.
 
 Function calling conventions differ considerably on different machines, and
@@ -176,15 +175,14 @@ This example, a possible implementation of
 on top of
 .BR execv (2)
 using
-.BR varargs (3),
+.BR stdarg (3),
 
 .nf
 .ft B
-#include <varargs.h>
+#include <stdarg.h>
 #define MAXARGS 100
 /* execl is called by execl(file, arg1, arg2, ..., (char *)0); */
-int execl (va_alist)
-  va_dcl
+int execl (...)
 {
   va_list ap;
   char* file;
@@ -208,8 +206,7 @@ looks like this using
 #include <vacall.h>
 #define MAXARGS 100
 /* execl is called by vacall(file, arg1, arg2, ..., (char *)0); */
-void execl (ap)
-  va_alist ap;
+void execl (va_alist ap)
 {
   char* file;
   char* args[MAXARGS];
@@ -227,7 +224,7 @@ vacall_function = &execl;
 .fi
 
 .SH SEE ALSO
-.BR varargs (3),
+.BR stdarg (3),
 .BR trampoline (3),
 .BR callback (3).
 
@@ -246,15 +243,6 @@ example, gcc on m68k-next returns
 in registers and
 .B "struct { char a[3]; }"
 in memory, although both types have the same size and the same alignment.
-
-.B <vacall.h>
-cannot be included when
-.B <varargs.h>
-or
-.B <stdarg.h>
-is included.
-(Name clash for
-.BR va_alist ".)"
 
 The argument list can only be walked once.
 
