@@ -46,6 +46,7 @@
 /callback/trampoline_r/cache-powerpc-sysv4.s
 /callback/trampoline_r/protexec.c
 # Files copied from vacall:
+/callback/vacall_r/vacall-alpha.c
 /callback/vacall_r/vacall-arm.c
 /callback/vacall_r/vacall-armel.c
 /callback/vacall_r/vacall-convex.c

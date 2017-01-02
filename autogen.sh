@@ -104,6 +104,7 @@ fi
 
 # Copy files between directories.
 for file in \
+  vacall-alpha.c \
   vacall-arm.c \
   vacall-armel.c \
   vacall-hppa.c \

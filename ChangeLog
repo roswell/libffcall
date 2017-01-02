@@ -114,6 +114,7 @@
 	* vacall/vacall-powerpc.c: Update with the 'REENTRANT' code from
 	callback/vacall_r/.
 	* vacall/vacall-s390.c: Likewise.
+	* callback/vacall_r/vacall-alpha.c: Remove file.
 	* callback/vacall_r/vacall-arm.c: Remove file.
 	* callback/vacall_r/vacall-armel.c: Remove file.
 	* callback/vacall_r/vacall-convex.c: Remove file.
