@@ -1,5 +1,21 @@
 2017-01-02  Bruno Haible  <bruno@clisp.org>
 
+	Add support for the Solaris/x86 platform with cc.
+	* common/asm-i386.sh: Remove the whitespace in the second argument of
+	INSN2MOVX.
+	* vacall/vacall-i386-macro.S: Regenerated.
+	* callback/vacall_r/vacall-i386-macro.S: Likewise.
+	* avcall/Makefile.in (avcall-i386.s): Eliminate ##.
+	* vacall/Makefile.in (vacall-i386.s): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-i386.s): Likewise.
+	* PLATFORMS: Update.
+	* avcall/PLATFORMS: Likewise.
+	* vacall/PLATFORMS: Likewise.
+	* trampoline/PLATFORMS: Likewise.
+	* callback/PLATFORMS: Likewise.
+
+2017-01-02  Bruno Haible  <bruno@clisp.org>
+
 	Add support for the Solaris/x86_64 platform.
 	* common/asm-x86_64.sh: Introduce ALIGN macro. Disable the frame info
 	for exception handlers on Solaris.

@@ -28,22 +28,22 @@ FUNBEGIN(__vacall_r)
 	INSN2(cmp,l	,NUM(2),R(edx))
 	INSN1(jne,_	,L6)
 L45:
-	INSN2MOVX(movs,b	,X1 MEM_DISP(esp,28),R(eax))
+	INSN2MOVX(movs,b,X1 MEM_DISP(esp,28),R(eax))
 	INSN1(jmp,_	,L3)
 L6:
 	INSN2(cmp,l	,NUM(3),R(edx))
 	INSN1(jne,_	,L8)
-	INSN2MOVX(movz,b	,X1 MEM_DISP(esp,28),R(eax))
+	INSN2MOVX(movz,b,X1 MEM_DISP(esp,28),R(eax))
 	INSN1(jmp,_	,L3)
 L8:
 	INSN2(cmp,l	,NUM(4),R(edx))
 	INSN1(jne,_	,L10)
-	INSN2MOVX(movs,w	,X2 MEM_DISP(esp,28),R(eax))
+	INSN2MOVX(movs,w,X2 MEM_DISP(esp,28),R(eax))
 	INSN1(jmp,_	,L3)
 L10:
 	INSN2(cmp,l	,NUM(5),R(edx))
 	INSN1(jne,_	,L12)
-	INSN2MOVX(movz,w	,X2 MEM_DISP(esp,28),R(eax))
+	INSN2MOVX(movz,w,X2 MEM_DISP(esp,28),R(eax))
 	INSN1(jmp,_	,L3)
 L12:
 	INSN2(cmp,l	,NUM(6),R(edx))
@@ -89,13 +89,13 @@ L28:
 	INSN2(cmp,l	,NUM(1),R(edx))
 	INSN1(jne,_	,L34)
 	INSN2(mov,l	,X4 MEM_DISP(esp,12),R(edx))
-	INSN2MOVX(movz,b	,X1 MEM(edx),R(eax))
+	INSN2MOVX(movz,b,X1 MEM(edx),R(eax))
 	INSN1(jmp,_	,L3)
 L34:
 	INSN2(cmp,l	,NUM(2),R(edx))
 	INSN1(jne,_	,L37)
 	INSN2(mov,l	,X4 MEM_DISP(esp,12),R(edx))
-	INSN2MOVX(movz,w	,X2 MEM(edx),R(eax))
+	INSN2MOVX(movz,w,X2 MEM(edx),R(eax))
 	INSN1(jmp,_	,L3)
 L37:
 	INSN2(cmp,l	,NUM(4),R(edx))
