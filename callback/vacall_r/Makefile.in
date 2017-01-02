@@ -166,7 +166,7 @@ vacall-x86_64.lo : vacall-x86_64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-x86_64.s
 
 vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-x86_64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
 
 vacall-s390.lo : vacall-s390.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-s390.s

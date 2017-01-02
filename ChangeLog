@@ -1,3 +1,24 @@
+2017-01-02  Bruno Haible  <bruno@clisp.org>
+
+	Add support for the Solaris/x86_64 platform.
+	* common/asm-x86_64.sh: Introduce ALIGN macro. Disable the frame info
+	for exception handlers on Solaris.
+	* common/asm-x86_64.h (ALIGN): New macro.
+	(FUNEND, EH_FRAME_SECTION): Define differently for Solaris.
+	* vacall/Makefile.devel (vacall-x86_64-macro.S): Don't use a #define
+	that assumes an ANSI C preprocessor.
+	* avcall/avcall-x86_64-macro.S: Regenerated.
+	* vacall/vacall-x86_64-macro.S: Likewise.
+	* callback/vacall_r/vacall-x86_64-macro.S: Likewise.
+	* avcall/Makefile.in (avcall-x86_64.s): Eliminate ##.
+	* vacall/Makefile.in (vacall-x86_64.s): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-x86_64.s): Likewise.
+	* PLATFORMS: Update.
+	* avcall/PLATFORMS: Likewise.
+	* vacall/PLATFORMS: Likewise.
+	* trampoline/PLATFORMS: Likewise.
+	* callback/PLATFORMS: Likewise.
+
 2017-01-01  Bruno Haible  <bruno@clisp.org>
 
 	Assume ANSI C in the documentation.

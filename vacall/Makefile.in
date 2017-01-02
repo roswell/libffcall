@@ -141,7 +141,7 @@ vacall-x86_64.o : vacall-x86_64.s
 	$(CC) @GCC_X_NONE@ -c vacall-x86_64.s
 
 vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-x86_64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
 
 misc.o : $(srcdir)/misc.c vacall.h config.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/misc.c

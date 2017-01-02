@@ -96,7 +96,7 @@ vacall-x86_64-linux.s : vacall-x86_64.c vacall.h.in
 	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S vacall-x86_64.c -o vacall-x86_64-linux.s
 
 vacall-x86_64-macro.S : vacall-x86_64-linux.s ../common/asm-x86_64.sh
-	(echo '#include "asm-x86_64.h"' ; echo '#define vacall_function C(vacall_function)' ; ../common/asm-x86_64.sh < vacall-x86_64-linux.s) > vacall-x86_64-macro.S
+	(echo '#include "asm-x86_64.h"' ; ../common/asm-x86_64.sh < vacall-x86_64-linux.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-x86_64-macro.S
 
 # --------------- Rules for debugging test failures ---------------
 

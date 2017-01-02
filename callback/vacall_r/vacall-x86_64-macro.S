@@ -1,7 +1,7 @@
 #include "asm-x86_64.h"
 	.file	"vacall-x86_64.c"
 	.text
-	.p2align 4,,15
+	ALIGN(4,15)
 .globl C(__vacall_r)
 	DECLARE_FUNCTION(__vacall_r)
 FUNBEGIN(__vacall_r)
@@ -72,7 +72,7 @@ FUNBEGIN(__vacall_r)
 	je	.L52
 	cmpl	$15, %r11d
 	je	.L61
-	.p2align 4,,7
+	ALIGN(4,7)
 .L1:
 	addq	$200, %rsp
 	popq	%r12
@@ -180,7 +180,7 @@ FUNBEGIN(__vacall_r)
 	salq	$56, %r11
 	orq	%r11, %rdx
 	jmp	.L1
-	.p2align 4,,7
+	ALIGN(4,7)
 .L52:
 	movq	40(%rsp), %rax
 	jmp	.L1
@@ -205,13 +205,14 @@ FUNBEGIN(__vacall_r)
 .L54:
 	movzbq	40(%rsp), %rax
 	jmp	.L1
-	.p2align 4,,7
+	ALIGN(4,7)
 .L53:
 	movsbq	40(%rsp),%rax
 	jmp	.L1
 .LFE1:
 .Lfe1:
 	FUNEND(__vacall_r,.Lfe1-__vacall_r)
+#ifndef __sun
 	.section	EH_FRAME_SECTION
 .Lframe1:
 	.long	.LECIE1-.LSCIE1
@@ -253,3 +254,4 @@ FUNBEGIN(__vacall_r)
 	.uleb128 0x2
 	.align 8
 .LEFDE1:
+#endif

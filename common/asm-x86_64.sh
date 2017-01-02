@@ -8,7 +8,8 @@
 
 tmpscript1=sed$$tmp1
 tmpscript2=sed$$tmp2
-tmpremove='rm -f $tmpscript1 $tmpscript2'
+tmpscript3=sed$$tmp3
+tmpremove='rm -f $tmpscript1 $tmpscript2 $tmpscript3'
 trap "$tmpremove" 1 2 15
 
 cat > $tmpscript1 << \EOF
@@ -19,6 +20,11 @@ cat > $tmpscript1 << \EOF
 EOF
 
 cat > $tmpscript2 << \EOF
+# ----------- Introduce macro syntax for assembler pseudo-ops
+s/\.p2align \([^,]*\),,\(.*\)/ALIGN(\1,\2)/
+EOF
+
+cat > $tmpscript3 << \EOF
 # ----------- Global symbols depends on ASM_UNDERSCORE
 s/\.globl \([A-Za-z0-9_]*\)/.globl C(\1)/
 # ----------- Massage the beginning of functions
@@ -32,9 +38,21 @@ d
 s/\.size	\([A-Za-z0-9_]*\),\(.*\)/FUNEND(\1,\2)/
 # ----------- Section of frame info for exception handlers
 s/\.section	\.eh_frame,"aw",@progbits/.section	EH_FRAME_SECTION/
+# ----------- Disable the frame info for exception handlers on Solaris
+# (as the Solaris linker expects a different format, see
+# https://illumos.org/issues/3210)
+/EH_FRAME_SECTION/{
+s/^/#ifndef __sun\
+/
+}
+${
+s/$/\
+#endif/
+}
 EOF
 
 sed -f $tmpscript1 | \
-sed -f $tmpscript2
+sed -f $tmpscript2 | \
+sed -f $tmpscript3
 
 eval "$tmpremove"

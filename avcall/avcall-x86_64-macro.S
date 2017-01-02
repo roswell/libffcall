@@ -1,7 +1,7 @@
 #include "asm-x86_64.h"
 	.file	"avcall-x86_64.c"
 	.text
-	.p2align 4,,15
+	ALIGN(4,15)
 .globl C(__builtin_avcall)
 	DECLARE_FUNCTION(__builtin_avcall)
 FUNBEGIN(__builtin_avcall)
@@ -28,7 +28,7 @@ FUNBEGIN(__builtin_avcall)
 	shrq	$3, %r12
 	cmpq	%r10, %r11
 	jge	.L113
-	.p2align 4,,7
+	ALIGN(4,7)
 .L6:
 	movq	176(%rbx,%r11,8), %rax
 	movq	%rax, (%rbp,%r11,8)
@@ -129,7 +129,7 @@ FUNBEGIN(__builtin_avcall)
 	je	.L115
 	cmpl	$16, %eax
 	je	.L121
-	.p2align 4,,7
+	ALIGN(4,7)
 .L24:
 	addq	$2048, %rsp
 	xorl	%eax, %eax
@@ -183,7 +183,7 @@ FUNBEGIN(__builtin_avcall)
 	movq	16(%rbx), %r10
 	movb	%al, (%r10)
 	jmp	.L24
-	.p2align 4,,7
+	ALIGN(4,7)
 .L88:
 	testl	$512, %eax
 	je	.L24
@@ -202,7 +202,7 @@ FUNBEGIN(__builtin_avcall)
 	movq	%r11, (%rax)
 	movq	%rdx, 8(%rax)
 	jmp	.L24
-	.p2align 4,,7
+	ALIGN(4,7)
 .L115:
 	movq	16(%rbx), %rax
 	movq	%r11, (%rax)
@@ -330,6 +330,7 @@ FUNBEGIN(__builtin_avcall)
 .LFE1:
 .Lfe1:
 	FUNEND(__builtin_avcall,.Lfe1-__builtin_avcall)
+#ifndef __sun
 	.section	EH_FRAME_SECTION
 .Lframe1:
 	.long	.LECIE1-.LSCIE1
@@ -373,3 +374,4 @@ FUNBEGIN(__builtin_avcall)
 	.uleb128 0x2
 	.align 8
 .LEFDE1:
+#endif

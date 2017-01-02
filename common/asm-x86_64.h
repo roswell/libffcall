@@ -15,6 +15,8 @@
 //           be inside the parentheses, not outside, because otherwise some
 //           ANSI C preprocessor inserts a space between the label and the `:',
 //           and some assemblers don't like this.
+//   ALIGN(log,max)
+//           Align to 2^log bytes, but insert at most max bytes.
 //   DECLARE_FUNCTION(name)
 //           Declare `name' to be a global function. When assembly language
 //           code is compiled into a shared library, ELF linkers need to know
@@ -34,6 +36,14 @@
 #define L(label) .L##label
 #endif
 
+#if defined __sun
+// Solaris
+#define ALIGN(log,max) .align 1<<log
+#else
+// Mac OS X, Linux
+#define ALIGN(log,max) .p2align log,,max
+#endif
+
 // When assembly language code is compiled into a shared library, ELF linkers
 // need to know which symbols are functions.
 #ifdef ASM_UNDERSCORE
@@ -41,9 +51,15 @@
 #define DECLARE_FUNCTION(name)
 #define FUNEND(name,size_expression)
 #else
-// Linux/ELF
+// ELF
 #define DECLARE_FUNCTION(name) .type C(name),@function
+#if defined __sun
+// Solaris/ELF
+#define FUNEND(name,size_expression) .size C(name), . - C(name)
+#else
+// Linux/ELF
 #define FUNEND(name,size_expression) .size C(name),size_expression
+#endif
 #endif
 #define FUNBEGIN(name) C(name##:)
 
@@ -52,6 +68,11 @@
 // Mac OS X
 #define EH_FRAME_SECTION __TEXT,__eh_frame,coalesced,no_toc+strip_static_syms+live_support
 #else
+#if defined __sun
+// Solaris/ELF
+#define EH_FRAME_SECTION .eh_frame,"aL",link=.text,@unwind
+#else
 // Linux/ELF
 #define EH_FRAME_SECTION .eh_frame,"aw",@progbits
+#endif
 #endif
