@@ -1,5 +1,12 @@
 2017-01-02  Bruno Haible  <bruno@clisp.org>
 
+	Ensure the alignment of trampolines when we use the free-list approach.
+	* trampoline/trampoline.c (alloc_trampoline): Consider TRAMP_ALIGN
+	when allocating a page of trampolines.
+	* callback/trampoline_r/trampoline.c (alloc_trampoline_r): Likewise.
+
+2017-01-02  Bruno Haible  <bruno@clisp.org>
+
 	Fix a build failure on Solaris/SPARC with newer gcc.
 	* trampoline/trampoline.c: Remove 'extern inline' declarations.
 	* callback/trampoline_r/trampoline.c: Likewise. For SPARC, declare

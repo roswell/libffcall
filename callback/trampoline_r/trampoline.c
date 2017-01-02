@@ -399,7 +399,9 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
       { char** last = &freelist;
         char* page_end = page + pagesize;
         while (page+TRAMP_TOTAL_LENGTH <= page_end)
-          { *last = page; last = (char**)page; page += TRAMP_TOTAL_LENGTH; }
+          { *last = page; last = (char**)page;
+            page = (char*)(((long)page + TRAMP_TOTAL_LENGTH + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
+          }
         *last = NULL;
     } }
   function = freelist; freelist = *(char**)freelist;
