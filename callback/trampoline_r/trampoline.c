@@ -202,26 +202,10 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 /* Inline assembly function for instruction cache flush. */
 #if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__powerpcsysv4__)
-#ifdef __GNUC__
-extern inline
 #if defined(__sparc__) || defined(__sparc64__)
-#include "cache-sparc.c"
-#endif
-#ifdef __alpha__
-#include "cache-alpha.c"
-#endif
-#ifdef __hppa__
-#include "cache-hppa.c"
-#endif
-#if defined(__powerpc__) && !defined(__powerpc64__)
-#include "cache-powerpc.c"
-#endif
-#else
-#if defined(__sparc__) || defined(__sparc64__)
-extern void __TR_clear_cache_4();
+extern void __TR_clear_cache_2();
 #else
 extern void __TR_clear_cache();
-#endif
 #endif
 #endif
 

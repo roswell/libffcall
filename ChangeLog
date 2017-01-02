@@ -1,5 +1,17 @@
 2017-01-02  Bruno Haible  <bruno@clisp.org>
 
+	Fix a build failure on Solaris/SPARC with newer gcc.
+	* trampoline/trampoline.c: Remove 'extern inline' declarations.
+	* callback/trampoline_r/trampoline.c: Likewise. For SPARC, declare
+	__TR_clear_cache_2, not __TR_clear_cache_4.
+	* PLATFORMS: Update.
+	* avcall/PLATFORMS: Likewise.
+	* vacall/PLATFORMS: Likewise.
+	* trampoline/PLATFORMS: Likewise.
+	* callback/PLATFORMS: Likewise.
+
+2017-01-02  Bruno Haible  <bruno@clisp.org>
+
 	Add support for the Solaris/x86 platform with cc.
 	* common/asm-i386.sh: Remove the whitespace in the second argument of
 	INSN2MOVX.
