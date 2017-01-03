@@ -330,7 +330,7 @@ FUNBEGIN(__builtin_avcall)
 .LFE1:
 .Lfe1:
 	FUNEND(__builtin_avcall,.Lfe1-__builtin_avcall)
-#ifndef __sun
+#if !(defined __sun || (defined __APPLE__ && defined __MACH__))
 	.section	EH_FRAME_SECTION
 .Lframe1:
 	.long	.LECIE1-.LSCIE1

@@ -212,7 +212,7 @@ FUNBEGIN(__vacall_r)
 .LFE1:
 .Lfe1:
 	FUNEND(__vacall_r,.Lfe1-__vacall_r)
-#ifndef __sun
+#if !(defined __sun || (defined __APPLE__ && defined __MACH__))
 	.section	EH_FRAME_SECTION
 .Lframe1:
 	.long	.LECIE1-.LSCIE1

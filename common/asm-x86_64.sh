@@ -41,8 +41,9 @@ s/\.section	\.eh_frame,"aw",@progbits/.section	EH_FRAME_SECTION/
 # ----------- Disable the frame info for exception handlers on Solaris
 # (as the Solaris linker expects a different format, see
 # https://illumos.org/issues/3210)
+# Likewise this section does not assemble on Mac OS X 10.5.
 /EH_FRAME_SECTION/{
-s/^/#ifndef __sun\
+s/^/#if !(defined __sun || (defined __APPLE__ && defined __MACH__))\
 /
 }
 ${

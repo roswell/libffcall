@@ -1,3 +1,19 @@
+2017-01-03  Bruno Haible  <bruno@clisp.org>
+
+	Add support for the Mac OS X 10.5 / x86_64 platform.
+	* common/asm-x86_64.sh: Disable the frame info for exception handlers
+	on Mac OS X.
+	* avcall/avcall-x86_64-macro.S: Regenerated.
+	* vacall/vacall-x86_64-macro.S: Likewise.
+	* callback/vacall_r/vacall-x86_64-macro.S: Likewise.
+	* m4/mmap.m4 (FFCALL_MMAP): Renamed from CL_MMAP. Remove AC_BEFORE
+	invocations. Test mmap without MAP_FIXED only. Don't define
+	HAVE_MMAP_DEVZERO_SUN4_29.
+	* m4/mprotect.m4 (FFCALL_MPROTECT): Renamed from CL_MPROTECT. Update
+	dependency.
+	* m4/getpagesize.m4 (CL_GETPAGESIZE): Remove AC_BEFORE invocations.
+	* m4/general.m4 (FFCALL_COMMON_TRAMPOLINE): Update dependencies.
+
 2017-01-02  Bruno Haible  <bruno@clisp.org>
 
 	Ensure the alignment of trampolines when we use the free-list approach.
