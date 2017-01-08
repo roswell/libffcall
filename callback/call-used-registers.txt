@@ -19,7 +19,6 @@ arm          r0-r3,r12,r14               r0-r3                 -                
 aarch64      r0-r18                      r0-r7                 r8                r9-r18
 powerpc      0,3-12                      3-10                  -                 0,11-12
 powerpc64    0,3-12                      3-10                  -                 0,11-12
-m88k         2-13                        2-9                   12                10,11,13
 ia64         r2-r3,r8-r11,r14-r31        r32,r33,...           r8                r14-r31,r9-r11,r2-r3
 x86_64       rax,rdx,rcx,rsi,rdi,r8-r11  rdi,rsi,rdx,rcx,r8,r9 -                 rax,r10,r11
 s390         r0-r5                       r2-r6                 -                 r0-r1
@@ -51,7 +50,6 @@ arm          r12=ip[,r14=lr]             r0,r1,r3,r2             r12
 aarch64      r9-r18                      ?                       r18
 powerpc      0,11-12                     0,11,12                 11 (13 in NetBSD)
 powerpc64    0,11-12                     0,11                    11
-m88k         10,11,13                    r10,r13,r11,r12         r11
 ia64         r14-r31,r9-r11,r2-r3        r8,r14,r15...r19        r15
 x86_64       rax,r10,r11                 rax,r10                 r10
 s390         r0-r1                       r12,r0                  r0

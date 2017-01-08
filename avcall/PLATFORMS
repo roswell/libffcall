@@ -37,7 +37,6 @@ Supported CPUs:  (Put the GNU config.guess values here.)
               powerpc-unknown-linux (gcc)            Apple PPC     LinuxPPC
               powerpc-apple-darwin6.8 (gcc)          Apple PPC     MacOS X
    powerpc64  powerpc64-unknown-linux (gcc -m64)
-   m88k       -- untested
    ia64       ia64-unknown-linux (gcc)               HP NUE/x86    Linux
    x86_64     x86_64-suse-linux (gcc)                AMD64         Linux
               x86_64-pc-solaris2.10 (gcc -m64)       AMD64         Solaris

@@ -11,7 +11,6 @@ hppa      %r28    %r28  ---   ---      ---    ---
 arm       r0      r0    ---   r0,r1    ---    ---
 powerpc   3       3     ---   3,4      ---    ---
 powerpc64 ---     ---   ---   ---      ---    ---
-m88k      r2      ---   ---   ---      ---    ---
 ia64      r8      r8    f8    r8,r9    r8     ---
 x86_64    eax     eax   xmm0  rax,rdx  rax    ---
 s390      r2      r2    r2,r3 r2,r3    r2     ---

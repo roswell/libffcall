@@ -67,7 +67,7 @@ extern void (*tramp_r) (); /* trampoline prototype */
 
 #ifndef CODE_EXECUTABLE
 /* How do we make the trampoline's code executable? */
-#if defined(HAVE_MACH_VM) || defined(HAVE_WORKING_MPROTECT) || defined(HAVE_SYS_M88KBCS_H)
+#if defined(HAVE_MACH_VM) || defined(HAVE_WORKING_MPROTECT)
 /* mprotect() [or equivalent] the malloc'ed area. */
 #define EXECUTABLE_VIA_MPROTECT
 #else
@@ -130,13 +130,8 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 #include <mach/machine/vm_param.h>
 #else
-#ifdef HAVE_SYS_M88KBCS_H
-#include <sys/m88kbcs.h>
-#define getpagesize()  4096  /* ?? */
-#else
 #include <sys/types.h>
 #include <sys/mman.h>
-#endif
 #endif
 #endif
 
@@ -196,9 +191,6 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 #endif
 #endif
-#endif
-#ifdef __m88k__
-#include <sys/syslocal.h>
 #endif
 /* Inline assembly function for instruction cache flush. */
 #if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__powerpcsysv4__)
@@ -297,10 +289,6 @@ extern void __TR_clear_cache();
 #else
 #define TRAMP_LENGTH 32
 #endif
-#define TRAMP_ALIGN 8
-#endif
-#ifdef __m88k__
-#define TRAMP_LENGTH 20
 #define TRAMP_ALIGN 8
 #endif
 #ifdef __ia64__
@@ -1149,36 +1137,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   ((long *) function)[2]
 #endif
 #endif
-#ifdef __m88k__
-  /* function:
-   *    or.u    #r11,#r0,hi16(<data>)		5D 60 hi16(<data>)
-   *    or      #r11,#r11,lo16(<data>)		59 6B lo16(<data>)
-   *    or.u    #r13,#r0,hi16(<address>)	5D A0 hi16(<address>)
-   *    or      #r13,#r13,lo16(<address>)	59 AD lo16(<address>)
-   *    jmp     #r13				F4 00 C0 0D
-   */
-  *(short *) (function + 0) = 0x5D60;
-  *(short *) (function + 2) = (unsigned long) data >> 16;
-  *(short *) (function + 4) = 0x596B;
-  *(short *) (function + 6) = (unsigned long) data & 0xffff;
-  *(short *) (function + 8) = 0x5DA0;
-  *(short *) (function +10) = (unsigned long) address >> 16;
-  *(short *) (function +12) = 0x59AD;
-  *(short *) (function +14) = (unsigned long) address & 0xffff;
-  *(long *)  (function +16) = 0xF400C00D;
-#define is_tramp(function)  \
-  *(unsigned short *) (function + 0) == 0x5D60 && \
-  *(unsigned short *) (function + 4) == 0x596B && \
-  *(unsigned short *) (function + 8) == 0x5DA0 && \
-  *(unsigned short *) (function +12) == 0x59AD && \
-  *(unsigned long *)  (function +16) == 0xF400C00D
-#define hilo(hiword,loword)  \
-  (((unsigned long) (hiword) << 16) | (unsigned long) (loword))
-#define tramp_address(function)  \
-  hilo(*(unsigned short *) (function +10), *(unsigned short *) (function +14))
-#define tramp_data(function)  \
-  hilo(*(unsigned short *) (function + 2), *(unsigned short *) (function + 6))
-#endif
 #ifdef __ia64__
   /* function:
    *    data8   tramp_r
@@ -1325,11 +1283,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #if defined(HAVE_MACH_VM)
     if (vm_protect(task_self(),start_addr,len,0,VM_PROT_READ|VM_PROT_WRITE|VM_PROT_EXECUTE) != KERN_SUCCESS)
 #else
-#if defined(HAVE_SYS_M88KBCS_H)
-    if (memctl(start_addr, len, MCT_TEXT) == -1)
-#else
     if (mprotect((void*)start_addr, len, PROT_READ|PROT_WRITE|PROT_EXEC) < 0)
-#endif
 #endif
       { fprintf(stderr,"trampoline: cannot make memory executable\n"); abort(); }
   }}
@@ -1425,9 +1379,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #if defined(__powerpc__) && !defined(__powerpc64__)
   __TR_clear_cache(function);
-#endif
-#ifdef __m88k__
-  sysmot(S88CACHEFLUSHPAGE, (unsigned long)function & -pagesize);
 #endif
 #endif
 

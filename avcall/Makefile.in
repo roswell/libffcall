@@ -140,9 +140,6 @@ avcall-powerpc64.lo : $(srcdir)/avcall-powerpc64.s
 avcall-powerpc64le.lo : $(srcdir)/avcall-powerpc64le.s
 	$(LIBTOOL_COMPILE) $(CC) -g @GCC_X_NONE@ -c $(srcdir)/avcall-powerpc64le.s
 
-avcall-m88k.lo : $(srcdir)/avcall-m88k.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-m88k.s
-
 avcall-ia64.lo : $(srcdir)/avcall-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-ia64.s
 
@@ -256,7 +253,6 @@ SOURCE_FILES = \
   avcall-ia64.c avcall-ia64.s \
   avcall-m68k.c avcall-m68k.mit.S avcall-m68k.mot.s \
   avcall-m68k-amiga.c avcall-m68k-amiga.s \
-  avcall-m88k.c avcall-m88k.s \
   avcall-mips.c avcall-mips-macro.S \
   avcall-mipsn32.c avcall-mipsn32-macro.S \
   avcall-mips64.c avcall-mips64-macro.S \

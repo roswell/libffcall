@@ -110,7 +110,6 @@ COPIED_FILES = \
   callback/vacall_r/vacall-i386.c \
   callback/vacall_r/vacall-ia64.c \
   callback/vacall_r/vacall-m68k.c \
-  callback/vacall_r/vacall-m88k.c \
   callback/vacall_r/vacall-mips.c \
   callback/vacall_r/vacall-mipsn32.c \
   callback/vacall_r/vacall-mips64.c \

@@ -83,9 +83,6 @@ register void* env __asm__("r13");
 register void* env __asm__("r11");
 #endif
 #endif
-#ifdef __m88k__
-register void* env __asm__("r11");
-#endif
 #ifdef __ia64__
 register void* env __asm__("r15");
 #endif

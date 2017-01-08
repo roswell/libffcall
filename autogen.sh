@@ -111,7 +111,6 @@ for file in \
   vacall-i386.c \
   vacall-ia64.c \
   vacall-m68k.c \
-  vacall-m88k.c \
   vacall-mips.c \
   vacall-mipsn32.c \
   vacall-mips64.c \

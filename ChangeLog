@@ -1,5 +1,49 @@
 2017-01-08  Bruno Haible  <bruno@clisp.org>
 
+	Remove support for the m88k CPU.
+	The only place where this CPU is still used is in the OpenBSD 5.8
+	luna88k port. The luna88k is museum hardware. They use the ELF binary
+	format, through an inofficial port of the 10-years old binutils-2.17.
+	* avcall/Makefile.devel (avcall-m88k.s, tests-m88k.s): Remove targets.
+	* avcall/avcall-m88k.[cs]: Remove files.
+	* avcall/Makefile.in (avcall-m88k.lo): Remove target.
+	(SOURCE_FILES): Remove avcall-m88k.[cs].
+	* avcall/avcall.h.in: Remove defined(__m88k__) conditionals.
+	* vacall/Makefile.devel (vacall-m88k.s, tests-m88k.s): Remove targets.
+	* vacall/vacall-m88k.[cs]: Remove files.
+	* vacall/Makefile.in (vacall-m88k.o): Remove target.
+	(SOURCE_FILES): Remove vacall-m88k.[cs].
+	* vacall/vacall.h.in: Remove defined(__m88k__) conditionals.
+	* trampoline/Makefile.devel (proto-m88k.s, tramp-m88k.s): Remove targets.
+	* trampoline/proto-m88k.s: Remove file.
+	* trampoline/tramp-m88k.s: Remove file.
+	* trampoline/protexec.c: Remove __DOLPHIN__ conditionals.
+	* trampoline/trampoline.c: Remove defined(__m88k__), HAVE_SYS_M88KBCS_H conditionals.
+	* trampoline/trampoline.h.in: Don't test for m88k host.
+	* trampoline/configure.ac: Don't test for m88k host.
+	* callback/vacall_r/Makefile.devel (vacall-m88k.s): Remove target.
+	* callback/vacall_r/vacall-m88k.s: Remove file.
+	* callback/vacall_r/Makefile.in (vacall-m88k.lo): Remove target.
+	(SOURCE_FILES): Remove vacall-m88k.[cs].
+	* callback/vacall_r/vacall_r.h.in: Remove defined(__m88k__) conditionals.
+	* callback/trampoline_r/Makefile.devel (proto-m88k.s, tramp-m88k.s): Remove targets.
+	* callback/trampoline_r/proto-m88k.s: Remove file.
+	* callback/trampoline_r/tramp-m88k.s: Remove file.
+	* callback/trampoline_r/proto.c: Remove defined(__m88k__) conditional.
+	* callback/trampoline_r/trampoline.c: Remove defined(__m88k__), HAVE_SYS_M88KBCS_H conditionals.
+	* callback/trampoline_r/trampoline_r.h.in: Don't test for m88k host.
+	* callback/trampoline_r/test1.c: Remove defined(__m88k__) conditionals.
+	* callback/trampoline_r/configure.ac: Don't test for m88k host.
+	* callback/call-used-registers.txt: Update.
+	* callback/elf-hack.txt: Update.
+	* common/reg-struct-return.txt: Update.
+	* PLATFORMS, **/PLATFORMS: Update.
+	* README: Update.
+	* autogen.sh: Don't copy vacall-m88k.c.
+	* Makefile.in (COPIED_FILES): Remove callback/vacall_r/vacall-m88k.c.
+
+2017-01-08  Bruno Haible  <bruno@clisp.org>
+
 	Fix last commit.
 	* common/asm-x86_64.sh: Escape '&' characters in replacement string.
 

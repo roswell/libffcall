@@ -49,7 +49,4 @@ AC_SUBST([CPU_OBJECTS])
 if test ${HOST_CPU_C_ABI} = mips -o ${HOST_CPU_C_ABI} = mipsn32 -o ${HOST_CPU_C_ABI} = mips64; then
 AC_CHECK_HEADERS([sys/cachectl.h])
 fi
-if test ${HOST_CPU_C_ABI} = m88k; then
-AC_CHECK_HEADERS([sys/m88kbcs.h])
-fi
 AC_OUTPUT

@@ -59,9 +59,6 @@
 #ifndef __s390__
 #undef __s390__
 #endif
-#ifndef __m88k__
-#undef __m88k__
-#endif
 #ifndef __ia64__
 #undef __ia64__
 #endif

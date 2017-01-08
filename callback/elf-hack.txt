@@ -68,7 +68,6 @@ arm         sp = r13                 8          Y       r12                     
 aarch64     r31                      16         Y       r18                                        -
 powerpc     1                        16         Y       11 (13 in NetBSD)                          Y
 powerpc64   1                        16         Y       11                                         Y
-m88k        #r31                     16         Y       #r11                                       N
 ia64        r12                      16         Y       r15                                        N
 x86_64      %rsp                     16         Y       r10                                        Y
 s390        %r15                     8          Y       r0                                         Y

@@ -12,7 +12,7 @@ GCCFLAGS = -O2 -fomit-frame-pointer
 CPP = $(GCC) -E
 ASPREFIX = /usr1/gnu/lib
 
-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.old.s proto-powerpc-aix.new.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-m88k.s proto-ia64.s proto-x86_64.s \
+precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.old.s proto-powerpc-aix.new.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-ia64.s proto-x86_64.s \
       cache-sparc-macro.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s
 
 proto-i386.s : proto.c
@@ -62,9 +62,6 @@ proto-powerpc64-aix.s : proto64.c
 
 proto-powerpc64le.s : proto64.c
 	$(GCC) $(GCCFLAGS) -D__powerpc64__ -D__powerpc64le__ -S proto64.c -o $@
-
-proto-m88k.s : proto.c
-	$(GCC) -V 2.95.2 -b m88k-dgux $(GCCFLAGS) -D__m88k__ -S proto.c -o $@
 
 proto-ia64.s : proto64.c
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S proto64.c -o $@
@@ -130,9 +127,6 @@ tramp-powerpc64le.o : tramp-powerpc64le.s
 
 tramp-powerpc64le.s : tramp-powerpc64le.new.S
 	$(CPP) tramp-powerpc64le.new.S > tramp-powerpc64le.s
-
-tramp-m88k.o : tramp-m88k.s
-	$(ASPREFIX)/m88k-coff/bin/as tramp-m88k.s -o $@
 
 tramp-ia64.o : tramp-ia64.s
 	/nue/usr/ia64-hp-linux/bin/as tramp-ia64.s -o $@

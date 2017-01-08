@@ -156,9 +156,6 @@ vacall-powerpc64le.lo : vacall-powerpc64le.s
 vacall-powerpc64le.s : $(srcdir)/vacall-powerpc64le-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-powerpc64le-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-powerpc64le.s
 
-vacall-m88k.lo : $(srcdir)/vacall-m88k.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-m88k.s
-
 vacall-ia64.lo : $(srcdir)/vacall-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-ia64.s
 
@@ -252,7 +249,6 @@ SOURCE_FILES = \
   vacall-i386.c vacall-i386-macro.S \
   vacall-ia64.c vacall-ia64.s \
   vacall-m68k.c vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd-macro.S \
-  vacall-m88k.c vacall-m88k.s \
   vacall-mips.c vacall-mips-macro.S \
   vacall-mipsn32.c vacall-mipsn32-macro.S \
   vacall-mips64.c vacall-mips64-macro.S \
