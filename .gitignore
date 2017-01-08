@@ -304,6 +304,9 @@ autom4te.cache/
 /callback/vacall_r.h
 /callback/trampoline_r.h
 /callback/libcallback.*
+/callback/test1.o
+/callback/test1
+/callback/test1.exe
 /callback/minitests.o
 /callback/minitests.s
 /callback/minitests
