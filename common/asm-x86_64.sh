@@ -43,7 +43,7 @@ s/\.section	\.eh_frame,"aw",@progbits/.section	EH_FRAME_SECTION/
 # https://illumos.org/issues/3210)
 # Likewise this section does not assemble on Mac OS X 10.5.
 /EH_FRAME_SECTION/{
-s/^/#if !(defined __sun || (defined __APPLE__ && defined __MACH__))\
+s/^/#if !(defined __sun || (defined __APPLE__ \&\& defined __MACH__))\
 /
 }
 ${

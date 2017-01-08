@@ -1,3 +1,8 @@
+2017-01-08  Bruno Haible  <bruno@clisp.org>
+
+	Fix last commit.
+	* common/asm-x86_64.sh: Escape '&' characters in replacement string.
+
 2017-01-03  Bruno Haible  <bruno@clisp.org>
 
 	Add support for the Mac OS X 10.5 / x86_64 platform.
