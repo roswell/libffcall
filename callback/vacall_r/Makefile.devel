@@ -12,7 +12,7 @@ GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer -DHAVE_LONG_LONG_INT -DREENTRANT
 SED = sed
 
-precompiled : vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd-macro.S vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha-macro.S vacall-hppa.s vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.old.s vacall-powerpc-aix.new.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-powerpc64le-macro.S vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
+precompiled : vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd-macro.S vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha-macro.S vacall-hppa.s vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-powerpc64le-macro.S vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
 
 vacall-i386-macro.S : vacall-i386.c vacall_r.h.in ../../common/asm-i386.sh
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386.s
@@ -75,11 +75,8 @@ vacall-armel-macro.S : vacall-armel.c vacall_r.h.in
 	(echo '#include "asm-arm.h"' ; sed -e 's/^\([A-Za-z0-9_]*:\)/C(\1)/' < vacall-armel.s | sed -f elfhack-arm.sed) > vacall-armel-macro.S
 	$(RM) vacall-armel.s
 
-vacall-powerpc-aix.old.s : vacall-powerpc.c vacall_r.h.in
-	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mold-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.old.s
-
-vacall-powerpc-aix.new.s : vacall-powerpc.c vacall_r.h.in
-	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.new.s
+vacall-powerpc-aix.s : vacall-powerpc.c vacall_r.h.in
+	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.s
 
 vacall-powerpc-linux-macro.S : vacall-powerpc-linux.s
 	sed -f elfhack-powerpc.sed < vacall-powerpc-linux.s > vacall-powerpc-linux-macro.S

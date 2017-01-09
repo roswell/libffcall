@@ -131,10 +131,9 @@ vacall-armel.s : $(srcdir)/vacall-armel-macro.S
 vacall-powerpc.lo : vacall-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-powerpc.s
 
-vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.old.s $(srcdir)/vacall-powerpc-aix.new.s $(srcdir)/vacall-powerpc-linux-macro.S $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-netbsd-macro.S $(srcdir)/vacall-powerpc-sysv4-macro.S
+vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux-macro.S $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-netbsd-macro.S $(srcdir)/vacall-powerpc-sysv4-macro.S
 	case "$(OS)" in \
-	  aix3*) syntax=aix.old;; \
-	  aix*) syntax=aix.new;; \
+	  aix*) syntax=aix;; \
 	  linux*) syntax=linux;; \
 	  macos* | darwin*) syntax=macos;; \
 	  netbsd*) syntax=netbsd;; \
@@ -253,7 +252,7 @@ SOURCE_FILES = \
   vacall-mipsn32.c vacall-mipsn32-macro.S \
   vacall-mips64.c vacall-mips64-macro.S \
   vacall-powerpc.c \
-  vacall-powerpc-aix.new.s vacall-powerpc-aix.old.s \
+  vacall-powerpc-aix.s \
   vacall-powerpc-linux.s vacall-powerpc-linux-macro.S \
   vacall-powerpc-macos.s \
   vacall-powerpc-netbsd.s vacall-powerpc-netbsd-macro.S \

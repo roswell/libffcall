@@ -124,10 +124,9 @@ avcall-armel.lo : $(srcdir)/avcall-armel.s
 avcall-powerpc.lo : avcall-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-powerpc.s
 
-avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.old.s $(srcdir)/avcall-powerpc-aix.new.s $(srcdir)/avcall-powerpc-linux.s $(srcdir)/avcall-powerpc-macos.s $(srcdir)/avcall-powerpc-sysv4.s
+avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.s $(srcdir)/avcall-powerpc-linux.s $(srcdir)/avcall-powerpc-macos.s $(srcdir)/avcall-powerpc-sysv4.s
 	case "$(OS)" in \
-	  aix3*) syntax=aix.old;; \
-	  aix*) syntax=aix.new;; \
+	  aix*) syntax=aix;; \
 	  linux* | netbsd*) syntax=linux;; \
 	  macos* | darwin*) syntax=macos;; \
 	  *) syntax=sysv4;; \
@@ -257,7 +256,7 @@ SOURCE_FILES = \
   avcall-mipsn32.c avcall-mipsn32-macro.S \
   avcall-mips64.c avcall-mips64-macro.S \
   avcall-powerpc.c \
-  avcall-powerpc-aix.new.s avcall-powerpc-aix.old.s \
+  avcall-powerpc-aix.s \
   avcall-powerpc-linux.s avcall-powerpc-macos.s avcall-powerpc-sysv4.s \
   avcall-powerpc64.c avcall-powerpc64.s \
   avcall-powerpc64le.c avcall-powerpc64le.s \

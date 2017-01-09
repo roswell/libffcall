@@ -12,7 +12,7 @@ GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer -DHAVE_LONG_LONG_INT
 SED = sed
 
-precompiled : vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.old.s vacall-powerpc-aix.new.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
+precompiled : vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
 
 vacall-i386-macro.S : vacall-i386.c vacall.h.in ../common/asm-i386.sh
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386.s
@@ -68,11 +68,8 @@ vacall-arm-macro.S : vacall-arm.c vacall.h.in ../common/asm-arm.sh
 vacall-armel.s : vacall-armel.c vacall.h.in
 	$(GCC) $(GCCFLAGS) -D__arm__ -D__ARMEL__ -DHAVE_LONG_LONG -fomit-frame-pointer -S vacall-armel.c -o vacall-armel.s
 
-vacall-powerpc-aix.old.s : vacall-powerpc.c vacall.h.in
-	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mold-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.old.s
-
-vacall-powerpc-aix.new.s : vacall-powerpc.c vacall.h.in
-	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.new.s
+vacall-powerpc-aix.s : vacall-powerpc.c vacall.h.in
+	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.s
 
 vacall-powerpc-sysv4.s : vacall-powerpc.c vacall.h.in
 	$(GCC) -V 2.95.2 -b ppc-linux -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-sysv4.s

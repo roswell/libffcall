@@ -12,7 +12,7 @@ GCCFLAGS = -O2 -fomit-frame-pointer
 CPP = $(GCC) -E
 ASPREFIX = /usr1/gnu/lib
 
-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.old.s proto-powerpc-aix.new.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-ia64.s proto-x86_64.s \
+precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-ia64.s proto-x86_64.s \
       cache-sparc-macro.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s
 
 proto-i386.s : proto.c
@@ -45,10 +45,7 @@ proto-hppa.s : proto.c
 proto-arm.s : proto.c
 	$(GCC) -V 2.6.3 -b arm-acorn-riscix $(GCCFLAGS) -D__arm__ -S proto.c -o $@
 
-proto-powerpc-aix.old.s : proto.c
-	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mold-mnemonics $(GCCFLAGS) -D__powerpc__ -S proto.c -o $@
-
-proto-powerpc-aix.new.s : proto.c
+proto-powerpc-aix.s : proto.c
 	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S proto.c -o $@
 
 proto-powerpc-sysv4.s : proto.c

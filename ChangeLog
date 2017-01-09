@@ -1,3 +1,70 @@
+2017-01-09  Bruno Haible  <bruno@clisp.org>
+
+	Remove support for the AIX 3 operating system.
+	* avcall/Makefile.devel (avcall-powerpc-aix.s): Renamed from
+	avcall-powerpc-aix.new.s.
+	(avcall-powerpc-aix.old.s): Remove target.
+	* avcall/avcall-powerpc-aix.s: Renamed from
+	avcall/avcall-powerpc-aix.new.s.
+	* avcall/avcall-powerpc-aix.old.s: Remove file.
+	* avcall/Makefile.in (avcall-powerpc.s): No longer use
+	avcall-powerpc-aix.old.s.
+	(SOURCE_FILES): Add avcall-powerpc-aix.s. Remove
+	avcall-powerpc-aix.new.s, avcall-powerpc-aix.old.s.
+	* vacall/Makefile.devel (vacall-powerpc-aix.s): Renamed from
+	vacall-powerpc-aix.new.s.
+	(vacall-powerpc-aix.old.s): Remove target.
+	* vacall/vacall-powerpc-aix.s: Renamed from
+	vacall/vacall-powerpc-aix.new.s.
+	* vacall/vacall-powerpc-aix.old.s: Remove file.
+	* vacall/Makefile.in (vacall-powerpc.s): No longer use
+	vacall-powerpc-aix.old.s.
+	(SOURCE_FILES): Add vacall-powerpc-aix.s. Remove
+	vacall-powerpc-aix.new.s, vacall-powerpc-aix.old.s.
+	* callback/vacall_r/Makefile.devel (vacall-powerpc-aix.s): Renamed from
+	vacall-powerpc-aix.new.s.
+	(vacall-powerpc-aix.old.s): Remove target.
+	* callback/vacall_r/vacall-powerpc-aix.s: Renamed from
+	callback/vacall_r/vacall-powerpc-aix.new.s.
+	* callback/vacall_r/vacall-powerpc-aix.old.s: Remove file.
+	* callback/vacall_r/Makefile.in (vacall-powerpc.s): No longer use
+	vacall-powerpc-aix.old.s.
+	(SOURCE_FILES): Add vacall-powerpc-aix.s. Remove
+	vacall-powerpc-aix.new.s, vacall-powerpc-aix.old.s.
+	* trampoline/Makefile.devel (proto-powerpc-aix.s): Renamed from
+	proto-powerpc-aix.new.s.
+	(proto-powerpc-aix.old.s): Remove target.
+	* trampoline/proto-powerpc-aix.s: Renamed from 
+	trampoline/proto-powerpc-aix.new.s.
+	* trampoline/proto-powerpc-aix.old.s: Remove file.
+	* trampoline/tramp-powerpc-aix.S: Renamed from
+	trampoline/tramp-powerpc.new.S.
+	* trampoline/tramp-powerpc.old.S: Remove file.
+	* trampoline/tramp-powerpc64-aix.S: Renamed from
+	trampoline/tramp-powerpc64.new.S.
+	* trampoline/Makefile.in (tramp-powerpc.s): No longer use
+	tramp-powerpc.old.S.
+	(tramp-powerpc64.s): Update.
+	(SOURCE_FILES): Add tramp-powerpc-aix.S, tramp-powerpc64-aix.S. Remove
+	tramp-powerpc.old.S, tramp-powerpc.new.S tramp-powerpc64.new.S.
+	* callback/trampoline_r/Makefile.devel (proto-powerpc-aix.s): Renamed
+	from proto-powerpc-aix.new.s.
+	(proto-powerpc-aix.old.s): Remove target.
+	* callback/trampoline_r/proto-powerpc-aix.s: Renamed from
+	callback/trampoline_r/proto-powerpc-aix.new.s.
+	* callback/trampoline_r/proto-powerpc-aix.old.s: Remove file.
+	* callback/trampoline_r/tramp-powerpc-aix.S: Renamed from
+	callback/trampoline_r/tramp-powerpc.new.S.
+	* callback/trampoline_r/tramp-powerpc.old.S: Remove file.
+	* callback/trampoline_r/tramp-powerpc64-aix.S: Renamed from
+	callback/trampoline_r/tramp-powerpc64.new.S.
+	* callback/trampoline_r/Makefile.in (tramp-powerpc.s): No longer use
+	tramp-powerpc.old.S.
+	(tramp-powerpc64.s): Update.
+	(SOURCE_FILES): Add tramp-powerpc-aix.S, tramp-powerpc64-aix.S. Remove
+	tramp-powerpc.old.S, tramp-powerpc.new.S tramp-powerpc64.new.S.
+	* PLATFORMS, **/PLATFORMS: Update.
+
 2017-01-08  Bruno Haible  <bruno@clisp.org>
 
 	Remove support for the m88k CPU.

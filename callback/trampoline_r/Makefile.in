@@ -67,18 +67,14 @@ tramp-hppa.lo : $(srcdir)/tramp-hppa.s
 tramp-powerpc.lo : tramp-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc.s
 
-tramp-powerpc.s : $(srcdir)/tramp-powerpc.old.S $(srcdir)/tramp-powerpc.new.S
-	case "$(OS)" in \
-	  aix3*) syntax=old;; \
-	  *) syntax=new;; \
-	esac; \
-	$(CPP) $(srcdir)/tramp-powerpc.$${syntax}.S > tramp-powerpc.s
+tramp-powerpc.s : $(srcdir)/tramp-powerpc-aix.S
+	$(CPP) $(srcdir)/tramp-powerpc-aix.S > tramp-powerpc.s
 
 tramp-powerpc64.lo : tramp-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc64.s
 
-tramp-powerpc64.s : $(srcdir)/tramp-powerpc64.new.S
-	$(CPP) $(srcdir)/tramp-powerpc64.new.S > tramp-powerpc64.s
+tramp-powerpc64.s : $(srcdir)/tramp-powerpc64-aix.S
+	$(CPP) $(srcdir)/tramp-powerpc64-aix.S > tramp-powerpc64.s
 
 tramp-ia64.lo : $(srcdir)/tramp-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/tramp-ia64.s
@@ -204,8 +200,8 @@ SOURCE_FILES = \
   trampoline_r.h.in \
   trampoline.c \
   tramp-hppa.s \
-  tramp-powerpc.old.S tramp-powerpc.new.S \
-  tramp-powerpc64.new.S \
+  tramp-powerpc-aix.S \
+  tramp-powerpc64-aix.S \
   tramp-ia64.s \
   cache.c \
   cache-alpha.c cache-alpha.s \
