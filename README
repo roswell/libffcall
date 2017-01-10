@@ -109,11 +109,9 @@ on this software.
 
 Distribution:
 
-CVS:
-$ cvs -z3 -d:pserver:anonymous@cvs.savannah.gnu.org:/sources/libffcall co ffcall
-
-Tar:
-$ wget https://github.com/libffcall/libffcall/archive/ffcall-1.12.tar.gz
+git:
+$ git clone git://git.savannah.gnu.org/libffcall.git
+See https://savannah.gnu.org/git/?group=libffcall for more info.
 
 Bug reports to:
 

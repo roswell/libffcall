@@ -56,7 +56,7 @@ maintainer-clean : force
 
 # List of source files (committed in version control).
 SOURCE_FILES = \
-  COPYING NEWS PLATFORMS README README.os2 README.win32 \
+  COPYING DEPENDENCIES NEWS PLATFORMS README README.os2 README.win32 \
   ChangeLog \
   VERSION \
   Makefile.devel \
