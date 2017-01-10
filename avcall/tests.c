@@ -40,13 +40,6 @@ FILE* out;
 #define SKIP_T
 #endif
 
-#if defined(AMIGA)
-/* We don't test passing arguments in registers yet.
- * -1 means passing an argument in the stack instead of a register.
- */
-#define AV_ARG_REGNUM -1
-#endif
-
 #define uchar unsigned char
 #define ushort unsigned short
 #define uint unsigned int

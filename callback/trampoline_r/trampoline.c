@@ -57,13 +57,6 @@ extern void (*tramp_r) (); /* trampoline prototype */
 #define CODE_EXECUTABLE
 #endif
 #endif
-#if defined(__m68k__)
-#if defined(AMIGA) /* Amiga running AmigaOS, not Linux */
-#ifndef CODE_EXECUTABLE /* configure guesses wrong?? */
-#define CODE_EXECUTABLE
-#endif
-#endif
-#endif
 
 #ifndef CODE_EXECUTABLE
 /* How do we make the trampoline's code executable? */
@@ -170,11 +163,6 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 #endif
 #ifdef __m68k__
-#if defined(AMIGA) /* Amiga running AmigaOS, not Linux */
-#include <exec/types.h>
-#include <exec/execbase.h>
-#include <proto/exec.h>
-#endif
 #ifdef hpux
 #include <sys/cache.h>
 #endif
@@ -1305,9 +1293,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #ifdef __m68k__
 #if defined(NeXT) && defined(__GNUC__)
   __asm__ __volatile__ ("trap #2");
-#endif
-#if defined(AMIGA)
-  CacheClearE(function,TRAMP_LENGTH,CACRF_ClearI|CACRF_ClearD);
 #endif
 #if defined(apollo)
   cache_$clear();

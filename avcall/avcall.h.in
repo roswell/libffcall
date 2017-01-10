@@ -373,10 +373,6 @@ typedef struct
   int*			dargsusedptr;
   int			dargsused[2];
 #endif
-#if defined(AMIGA)
-  /* store the arguments passed in registers in an extra array */
-  __avword		regargs[8+7];
-#endif
 } av_alist;
 
 /* The limit for the pointer into the args[] array. */
@@ -691,18 +687,6 @@ typedef struct
 #define __av_word(LIST,VAL)						\
   (--(LIST).aptr < __av_eptr(LIST)					\
    ? -1 : (*(LIST).aptr = (__avword)(VAL), 0))
-#endif
-#if defined(AMIGA)
-/* Some arguments are passed in registers. Query the macro AV_ARG_REGNUM.
- * This should really be an argument to __av_word.
- */
-#undef __av_word /**/
-#define __av_word(LIST,VAL)						\
-  ((AV_ARG_REGNUM) >= 0							\
-   ? ((AV_ARG_REGNUM) < 8+7						\
-      ? -1 : ((LIST).regargs[(AV_ARG_REGNUM)] = (__avword)(VAL), 0))	\
-   : (++(LIST).aptr > __av_eptr(LIST)					\
-      ? -1 : ((LIST).aptr[-1] = (__avword)(VAL), 0)))
 #endif
 
 /* integer argument types */

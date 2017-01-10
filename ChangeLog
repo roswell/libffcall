@@ -1,5 +1,17 @@
 2017-01-09  Bruno Haible  <bruno@clisp.org>
 
+	Remove support for m68k/AmigaOS.
+	* avcall/Makefile.devel (avcall-m68k-amiga.s): Remove target.
+	* avcall/avcall-m68k-amiga.c: Remove file.
+	* avcall/avcall-m68k-amiga.s: Remove file.
+	* avcall/Makefile.in (SOURCE_FILES): Remove them.
+	* avcall/avcall.h.in: Remove AMIGA conditionals.
+	* avcall/tests.c: Likewise.
+	* trampoline/trampoline.c: Likewise.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
+2017-01-09  Bruno Haible  <bruno@clisp.org>
+
 	Remove support for the AIX 3 operating system.
 	* avcall/Makefile.devel (avcall-powerpc-aix.s): Renamed from
 	avcall-powerpc-aix.new.s.
