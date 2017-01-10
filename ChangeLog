@@ -1,5 +1,13 @@
 2017-01-09  Bruno Haible  <bruno@clisp.org>
 
+	Remove support for m68k/HP-UX, m68k/NeXT, apollo, mips/Ultrix.
+	* trampoline/trampoline.c: Remove hpux, NeXT, apollo, ultrix
+	conditionals.
+	* trampoline/cache.c: Likewise.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
+2017-01-09  Bruno Haible  <bruno@clisp.org>
+
 	Remove support for m68k/AmigaOS.
 	* avcall/Makefile.devel (avcall-m68k-amiga.s): Remove target.
 	* avcall/avcall-m68k-amiga.c: Remove file.

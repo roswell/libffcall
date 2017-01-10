@@ -29,20 +29,9 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 /* This code is apparently untested!! */
 
-#ifdef __m68k__
-#ifdef NeXT
-#define CLEAR_INSN_CACHE(BEG, END)   \
-   asm volatile ("trap #2")
-#endif
-#endif
-
 /* This is from Andreas Stolcke <stolcke@ICSI.Berkeley.EDU>. */
 #if defined(__mips__) || defined(__mips64__)
-#ifdef ultrix
-#include <mips/cachectl.h>
-#else
 #include <sys/cachectl.h>
-#endif
 #define CLEAR_INSN_CACHE(BEG, END)   \
    cacheflush (BEG, END - BEG, BCACHE)
 #endif

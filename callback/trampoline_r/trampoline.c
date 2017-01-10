@@ -162,21 +162,12 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #include <windows.h>
 #endif
 #endif
-#ifdef __m68k__
-#ifdef hpux
-#include <sys/cache.h>
-#endif
-#endif
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
-#ifdef ultrix
-#include <mips/cachectl.h>
-#else
 #ifdef linux
 #include <asm/cachectl.h>
 #else
 #ifdef HAVE_SYS_CACHECTL_H
 #include <sys/cachectl.h>
-#endif
 #endif
 #endif
 #endif
@@ -1291,15 +1282,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #endif
 #ifdef __m68k__
-#if defined(NeXT) && defined(__GNUC__)
-  __asm__ __volatile__ ("trap #2");
-#endif
-#if defined(apollo)
-  cache_$clear();
-#endif
-#if defined(hpux)
-  cachectl(CC_IPURGE,function,TRAMP_LENGTH);
-#endif
 #if defined(__NetBSD__) && defined(__GNUC__)
   { register unsigned long _beg __asm__ ("%a1") = (unsigned long) function;
     register unsigned long _len __asm__ ("%d1") = TRAMP_LENGTH;
