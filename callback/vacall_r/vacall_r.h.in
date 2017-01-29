@@ -188,7 +188,7 @@ enum __VA_alist_flags
 #if defined(__sparc__) && !defined(__sparc64__) && defined(sun) && defined(__SUNPRO_C) /* SUNWspro cc */
 				  __VA_SUNPROCC_STRUCT_RETURN,
 #else
-#if defined(__PCC_STRUCT_RETURN__) /* defined through configure, see above */
+#if defined(__PCC_STRUCT_RETURN__) && !defined(__hppa__) /* defined through configure, see above */
 				  __VA_PCC_STRUCT_RETURN,
 #else
 #if defined(__SMALL_STRUCT_RETURN__) || defined(__mipsn32__) || defined(__mips64__) || defined(__ARMEL__)/* defined through configure, see above */

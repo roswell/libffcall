@@ -31,8 +31,10 @@
   Note that other calling conventions would be in effect if we would call
   an explicitly named function!
 
-  To return a structure, the called function copies the return value to
-  the address supplied in register "%r28".
+  To return a structure of more than 8 bytes, the called function copies
+  the return value to the address supplied in register "%r28". Smaller
+  structures are returned in the registers %r28 (first 4 bytes) and %r29
+  (next 4 bytes, if present).
 
   It is forbidden to modify the stack pointer.
 
