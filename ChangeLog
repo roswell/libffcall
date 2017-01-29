@@ -1,5 +1,15 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	Don't make side-effects before overflow checking.
+	* avcall/avcall.h.in: In most macro definitions, modify (LIST).aptr
+	after checking that it will remain within range, not before. But
+	continue to modify (LIST).aptr before storing the argument, as this
+	makes it easier w.r.t. to the alignment. This produces some more
+	duplicate expressions that the compiler will eliminate. But the code
+	is clearer this way.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	Add more floating-point, mixed-number, general-purpose args tests.
 	* avcall/tests.c (f_f24, d_iiidi, d_fdi, ll_iiilli, D_Dfd,
 	l_l0K, ..., l_l6K, ll_l2ll, ..., ll_l7ll, d_l2d, ... d_l7d): New tests.
