@@ -732,7 +732,8 @@ typedef __va_alist* va_alist;
 #if defined(__x86_64__)
 /* the first 6 argument words are passed in registers */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->memiargptr + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= &(LIST)->iarg[6] \
+  (((TYPE_SIZE) <= 2*sizeof(__vaword)					\
+    && (LIST)->memiargptr + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= &(LIST)->iarg[6]) \
    ? ((LIST)->memiargptr += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
       (LIST)->memiargptr - ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) \
      )									\

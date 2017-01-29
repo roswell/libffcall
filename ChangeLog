@@ -1,5 +1,14 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Fix bug with structure arguments larger than 16 bytes.
+	* avcall/avcall.h.in (__av_struct): Pass structures > 16 bytes on the
+	stack.
+	* vacall/vacall.h.in (__va_arg_adjusted): Expect types > 16 bytes passed
+	on the stack.
+	* callback/vacall_r/vacall_r.h.in (__va_arg_adjusted): Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	i386, x86_64, sparc, sparc64: Fix for the Sun Studio 11 compiler.
 	When preprocessing a .S file, "cc -E" activates some other preprocessor
 	than the usual C preprocessor.

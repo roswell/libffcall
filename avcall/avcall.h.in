@@ -1400,7 +1400,8 @@ typedef struct
    and support only passing in integer registers. Other structures are passed
    on the arg stack. */
 #define __av_struct(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)			\
-  ((LIST).iaptr + ((TYPE_SIZE) + sizeof(__avword)-1) / sizeof(__avword) <= &(LIST).iargs[6] \
+  (((TYPE_SIZE) <= 2*sizeof(__avword)						\
+    && (LIST).iaptr + ((TYPE_SIZE) + sizeof(__avword)-1) / sizeof(__avword) <= &(LIST).iargs[6]) \
    ? (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).iaptr,VAL),		\
       (LIST).iaptr += ((TYPE_SIZE) + sizeof(__avword)-1) / sizeof(__avword),	\
       0)									\
