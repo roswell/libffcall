@@ -712,7 +712,7 @@ typedef __va_alist* va_alist;
    (LIST)->aptr + ((-(TYPE_SIZE)) & 3)					\
   )
 #endif
-#if defined(__i386__) || defined(__alpha__) || defined(__ia64__) || defined(__ARMEL__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL))
+#if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || defined(__ia64__) || defined(__ARMEL__)
 /* little endian -> small args < 1 word are adjusted to the left */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
