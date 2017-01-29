@@ -37,8 +37,6 @@
 /callback/trampoline_r/cache-arm.s
 /callback/trampoline_r/cache-armel.c
 /callback/trampoline_r/cache-armel.s
-/callback/trampoline_r/cache-convex.c
-/callback/trampoline_r/cache-convex.s
 /callback/trampoline_r/cache-hppa.c
 /callback/trampoline_r/cache-hppa.s
 /callback/trampoline_r/cache-powerpc.c
@@ -49,7 +47,6 @@
 /callback/vacall_r/vacall-alpha.c
 /callback/vacall_r/vacall-arm.c
 /callback/vacall_r/vacall-armel.c
-/callback/vacall_r/vacall-convex.c
 /callback/vacall_r/vacall-hppa.c
 /callback/vacall_r/vacall-i386.c
 /callback/vacall_r/vacall-ia64.c
@@ -279,7 +276,6 @@ autom4te.cache/
 /trampoline/cache-sparc64.o
 /trampoline/cache-alpha.o
 /trampoline/cache-hppa.o
-/trampoline/cache-convex.o
 /trampoline/cache-arm.o
 /trampoline/cache-armel.o
 /trampoline/cache-powerpc.o
@@ -355,8 +351,6 @@ autom4te.cache/
 /callback/trampoline_r/cache-alpha.o
 /callback/trampoline_r/cache-hppa.lo
 /callback/trampoline_r/cache-hppa.o
-/callback/trampoline_r/cache-convex.lo
-/callback/trampoline_r/cache-convex.o
 /callback/trampoline_r/cache-arm.lo
 /callback/trampoline_r/cache-arm.o
 /callback/trampoline_r/cache-armel.lo
