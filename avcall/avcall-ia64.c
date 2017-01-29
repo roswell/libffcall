@@ -21,8 +21,8 @@
 
   The argument sequence is mapped linearly on the registers r32,...,r39,
   and continued on the stack, in [r12+16], [r12+24], ...
-  Items in this sequence are word-aligned. Structures larger than a single
-  word are even two-word-aligned.
+  Items in this sequence are word-aligned. In gcc < 3.0, structures larger
+  than a single word are even two-word-aligned.
   Integer/pointer arguments are passed in the allocated slots (registers
   or stack slots). The first 8 float/double arguments are passed in
   registers f8,...,f15 instead, but their slots are kept allocated.

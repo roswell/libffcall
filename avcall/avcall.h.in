@@ -1183,7 +1183,7 @@ typedef struct
  * different alignment.
  */
 /* little endian -> small structures < 1 word are adjusted to the left (i.e. occupy the low bits of the word) */
-#if defined(__i386__) || defined(__alpha__) || defined(__x86_64__) || defined(__ARMEL__) || (defined(__ia64__) && defined(__GNUC__) && (__GNUC__ >= 3))
+#if defined(__i386__) || defined(__alpha__) || defined(__ARMEL__) || (defined(__ia64__) && defined(__GNUC__) && (__GNUC__ >= 3)) || defined(__x86_64__)
 #define __av_struct(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)		\
   ((__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)) > __av_eptr(LIST) \
    ? -1 :								\
@@ -1191,7 +1191,7 @@ typedef struct
     (LIST).aptr = (__avword*)(((((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)) +sizeof(__avword)-1) & -(long)sizeof(__avword)), \
     0))
 #endif
-#if defined(__ia64__) && (!defined(__GNUC__) || (__GNUC__ < 3))
+#if defined(__ia64__) && !(defined(__GNUC__) && (__GNUC__ >= 3))
 /* Types larger than a word have 2-word alignment. */
 #define __av_struct(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)		\
   ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)), \

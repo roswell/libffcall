@@ -1125,7 +1125,8 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(long *) (function +16) = (long) address;
   *(long *) (function +24) = (long) data;
 #define is_tramp(function)  \
-  ((long *) function)[0] == (long) &tramp_r
+  ((long *) function)[0] == (long) &tramp_r && \
+  ((long *) function)[1] == (long) (function + 16)
 #define tramp_address(function)  \
   ((long *) function)[2]
 #define tramp_data(function)  \
