@@ -1,5 +1,13 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	sparc64: Fix for Solaris.
+	* vacall/Makefile.devel (vacall-sparc64-linux.s): Produce code that does
+	not make assumptions about the address space.
+	* PLATFORMS, */PLATFORMS: List sparc64-sun-solaris2.10 (gcc -m64,
+	cc -xarch=generic64).
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	sparc, sparc64: Regenerate .s and .S files with known compilers.
 	* common/asm-sparc.h (L, FUNBEGIN, FUNEND): New macros.
 	* common/asm-sparc.sh: Rewritten to consume ELF input. Produce L,

@@ -100,7 +100,11 @@ vacall-sparc-macro.S : vacall-sparc-linux.s ../common/asm-sparc.sh $(THISFILE)
 	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < vacall-sparc-linux.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-sparc-macro.S
 
 vacall-sparc64-linux.s : vacall-sparc64.c vacall.h.in $(THISFILE)
-	$(CROSS_TOOL) sparc64-linux gcc -V 4.0.2 $(GCCFLAGS) -D__sparc64__ -S vacall-sparc64.c -o vacall-sparc64-linux.s
+# For references to global symbols:
+# - -mcmodel=medlow uses 2 instructions, but the code does not work on Solaris (error "ld: fatal: relocation error: R_SPARC_HI22").
+# - -mcmodel=medmid uses 3 instructions, but the code still makes some assumptions about the address space.
+# - -mcmodel=medany uses 4 instructions.
+	$(CROSS_TOOL) sparc64-linux gcc -V 4.0.2 -mcmodel=medany $(GCCFLAGS) -D__sparc64__ -S vacall-sparc64.c -o vacall-sparc64-linux.s
 
 vacall-sparc64-macro.S : vacall-sparc64-linux.s ../common/asm-sparc.sh $(THISFILE)
 	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < vacall-sparc64-linux.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-sparc64-macro.S

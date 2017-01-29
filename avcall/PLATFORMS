@@ -27,6 +27,8 @@ Supported CPUs:  (Put the GNU config.guess values here.)
               sparc-sun-solaris2.3 (gcc)             Sun4 Sparc    SunOS 5.x
               sparc-sun-solaris2.4 (gcc, cc)         Sun4 Sparc    SunOS 5.x
               sparc-sun-solaris2.10 (gcc, cc)        Sun4 Sparc    Solaris 10
+              sparc64-sun-solaris2.10 (gcc -m64,     Sun4 Sparc    Solaris 10
+                  cc -xarch=generic64)
               sparc-unknown-linux (gcc)              emulated      Linux
               sparc64-unknown-linux (gcc)            emulated      Linux
    alpha      alpha-dec-osf3.0 (gcc, cc)             DEC Alpha     OSF/1 3.0
