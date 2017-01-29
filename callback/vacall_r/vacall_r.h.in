@@ -666,14 +666,13 @@ typedef __va_alist* va_alist;
 /* small structures < 1 word are adjusted depending on compiler */
 /* Also make sure we switch to the stack pointer after 5 args */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((((LIST)->onstack == 0 && (LIST)->aptr >= (long)&(LIST)->regarg[5])	\
+  ((((LIST)->onstack == 0 && ((LIST)->aptr + __va_argsize(TYPE_SIZE) > (long)&(LIST)->regarg[5])) \
     ? ((LIST)->onstack=1, (LIST)->aptr = (LIST)->saptr) : 0),		\
    (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
    (LIST)->aptr - __va_argsize(TYPE_SIZE)				\
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (((((LIST)->onstack == 0 && ((LIST)->aptr >= (long)&(LIST)->regarg[5])) \
-   || ((TYPE_SIZE) > sizeof(__vaword) && (LIST)->aptr >= (long)&(LIST)->regarg[4])) \
+  ((((LIST)->onstack == 0 && ((LIST)->aptr + __va_argsize(TYPE_SIZE) > (long)&(LIST)->regarg[5])) \
     ? ((LIST)->onstack=1, (LIST)->aptr = (LIST)->saptr) : 0),		\
    (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
    (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)			\
@@ -781,7 +780,12 @@ typedef __va_alist* va_alist;
   ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(long)__VA_alignof(TYPE)), \
    __va_arg(LIST,TYPE))
 #endif
-#if (defined(__sparc__) && !defined(__sparc64__)) || defined(__s390__)
+#if defined(__s390__)
+/* ‘long long’s have alignment 4 or 8. */
+#define __va_arg_longlong(LIST,TYPE)					\
+   __va_arg(LIST,TYPE)
+#endif
+#if (defined(__sparc__) && !defined(__sparc64__))
 /* Within the arg stack, the alignment is only 4, not 8. */
 /* Beware against unaligned accesses! */
 #define __va_arg_longlong(LIST,TYPE)					\

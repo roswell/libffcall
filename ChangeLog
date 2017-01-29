@@ -1,5 +1,20 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	s390: Fix long long args.
+	* avcall/avcall.h.in (__av_longlong): Align only on a 4-bytes boundary,
+	not on an 8-bytes boundary. Fix condition for switching from register
+	args to stack args.
+	* vacall/vacall.h.in (__va_arg_leftadjusted, __va_arg_rightadjusted):
+	Fix condition for switching from register args to stack args.
+	(__va_arg_longlong): Use __va_arg.
+	* callback/vacall_r/vacall_r.h.in (__va_arg_leftadjusted,
+	__va_arg_rightadjusted): Fix condition for switching from register args
+	to stack args.
+	(__va_arg_longlong): Use __va_arg.
+	* PLATFORMS, */PLATFORMS: List s390x-ibm-linux with "gcc -m31".
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	s390: Fix trampoline.
 	* trampoline/trampoline.c [__s390__]: Fix is_tramp macro.
 
