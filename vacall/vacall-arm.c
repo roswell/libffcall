@@ -34,6 +34,13 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 {
   struct { long retaddr, sav1, sav2, sav3, sav4, arg1, arg2, arg3, arg4; } args;
   __va_alist list;
+
+  /* Enforce 8-bytes-alignment of the stack pointer.
+     We need to do it this way because the old GCC that we use to compile
+     this file does not support the option '-mabi=aapcs'. */
+  register unsigned long sp __asm__("r13");  /* C names for registers */
+  sp &= -8;
+
   /* MAGIC ALERT!
    * This is the last struct on the stack, so that
    * &args + 1 == &return_address == &firstword - 1.

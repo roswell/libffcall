@@ -43,14 +43,20 @@
 int
 __builtin_avcall(av_alist* l)
 {
-  register __avword*	sp	__asm__("r13");  /* C names for registers */
+  register unsigned long sp	__asm__("r13");  /* C names for registers */
 /*register __avword	iret	__asm__("r0"); */
   register __avword	iret2	__asm__("r1");
   register float	fret	__asm__("r0");	/* r0 */
   register double	dret	__asm__("r0");	/* r0,r1 */
 
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
-  __avword* argframe = sp;		/* stack offset for argument list */
+
+  /* Enforce 8-bytes-alignment of the stack pointer.
+     We need to do it this way because the old GCC that we use to compile
+     this file does not support the option '-mabi=aapcs'. */
+  sp &= -8;
+
+  __avword* argframe = (__avword*) sp;	/* stack offset for argument list */
   int arglen = l->aptr - l->args;
   __avword i;
 

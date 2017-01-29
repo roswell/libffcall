@@ -1,5 +1,9 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	arm: Fulfil the constraint that the sp register must be 8-bytes-aligned.
+	* avcall/avcall-arm.c: Enforce 8-bytes-alignment of the stack pointer.
+	* vacall/vacall-arm.c: Likewise.
+
 	arm: Remove support for old arm platforms without the ARM EABI.
 	* avcall/avcall.h.in: Revisit all __arm__ and __ARMEL__ conditionals.
 	* vacall/vacall.h.in: Likewise.
