@@ -1,5 +1,17 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	mipsn32, mips64: Fix struct args and struct returns with newer GCC.
+	* avcall/avcall.h.in: For mipsn32 and mips64 in gcc >= 3.4:
+	1. Don't set __AV_GCC_STRUCT_RETURN.
+	2. Use __AV_SGICC_STRUCT_ARGS.
+	* vacall/vacall.h.in: For mipsn32 and mips64 in gcc >= 3.4:
+	1. Don't set __VA_GCC_STRUCT_RETURN.
+	2. Use __VA_SGICC_STRUCT_ARGS.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* PLATFORMS, */PLATFORMS: List mips-sgi-irix6.5 (gcc -mabi=n32).
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Fix bug with structure arguments larger than 16 bytes.
 	* avcall/avcall.h.in (__av_struct): Pass structures > 16 bytes on the
 	stack.
