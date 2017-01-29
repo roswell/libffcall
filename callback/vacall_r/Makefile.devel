@@ -20,9 +20,10 @@ precompiled : \
   vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64eb-macro.S vacall-mips64el-macro.S \
   vacall-sparc-macro.S vacall-sparc64-macro.S \
   vacall-alpha-macro.S \
-  vacall-hppa-macro.S
+  vacall-hppa-macro.S \
+  vacall-arm-macro.S vacall-armel-macro.S
 # Old rules
-# vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
+# vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall_r.h.in $(THISFILE)
@@ -127,14 +128,15 @@ vacall-hppa-macro.S : vacall-hppa-linux.s ../../common/asm-hppa.sh $(THISFILE)
 
 
 vacall-arm-macro.S : vacall-arm.c vacall_r.h.in ../../common/asm-arm.sh $(THISFILE)
-	$(GCC) -V 2.6.3 -b arm-acorn-riscix $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-arm.s
+	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mbig-endian $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-arm.s
 	(echo '#include "asm-arm.h"' ; ../../common/asm-arm.sh < vacall-arm.s | sed -f elfhack-arm.sed) > vacall-arm-macro.S
 	$(RM) vacall-arm.s
 
 vacall-armel-macro.S : vacall-armel.c vacall_r.h.in $(THISFILE)
-	$(GCC) $(GCCFLAGS) -D__arm__ -D__ARMEL__ -DHAVE_LONG_LONG -fomit-frame-pointer -S vacall-armel.c -o vacall-armel.s
-	(echo '#include "asm-arm.h"' ; sed -e 's/^\([A-Za-z0-9_]*:\)/C(\1)/' < vacall-armel.s | sed -f elfhack-arm.sed) > vacall-armel-macro.S
+	$(CROSS_TOOL) arm-linux gcc -V 3.1 $(GCCFLAGS) -D__arm__ -D__ARMEL__ -DHAVE_LONG_LONG -S vacall-armel.c -o vacall-armel.s
+	(echo '#include "asm-arm.h"' ; sed -e 's,@,//,g' -e 's,#,\$$,g' -e 's/^\([A-Za-z0-9_]*:\)/C(\1)/' < vacall-armel.s | sed -f elfhack-arm.sed) > vacall-armel-macro.S
 	$(RM) vacall-armel.s
+
 
 vacall-powerpc-aix.s : vacall-powerpc.c vacall_r.h.in $(THISFILE)
 	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.s

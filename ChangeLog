@@ -1,5 +1,22 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	arm: Regenerate .s and .S files with known compilers.
+	* common/asm-arm.h (L, FUNBEGIN, FUNEND): New macros.
+	* common/asm-arm.sh: Rewritten to consume ELF input. Produce L,
+	FUNBEGIN, FUNEND macros.
+	* avcall/Makefile.devel (avcall-arm-macro.S, avcall-armel.s): Rewritten.
+	* vacall/Makefile.devel (vacall-arm-macro.S, vacall-armel.s): Rewritten.
+	* callback/vacall_r/Makefile.devel (vacall-arm-macro.S,
+	vacall-armel-macro.S): Rewritten.
+	* avcall/avcall-arm-macro.S: Remove from version control.
+	* avcall/avcall-armel.s: Likewise.
+	* vacall/vacall-arm-macro.S: Likewise.
+	* vacall/vacall-armel.s: Likewise.
+	* callback/vacall_r/vacall-arm-macro.S: Likewise.
+	* callback/vacall_r/vacall-armel-macro.S: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	hppa: Regenerate .s and .S files with known compilers.
 	* common/asm-hppa.sh: New file.
 	* common/asm-hppa.h: New file.
