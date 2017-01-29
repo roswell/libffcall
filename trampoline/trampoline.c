@@ -1076,7 +1076,6 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
         lr      %r13,%r0
         br      %r1
   */
-  /* What about big endian / little endian ?? */
   *(unsigned short *) (function + 0) = 0x180D;
   *(unsigned int *)   (function + 2) = 0xA7D50008;
   *(unsigned int *)   (function + 6) = (unsigned int) variable;
@@ -1089,14 +1088,14 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
   *(unsigned short *) (function +32) = 0x18D0;
   *(unsigned short *) (function +34) = 0x07f1;
 #define is_tramp(function)  \
-  *(short *)          (function + 0) == 0x180D && \
-  *(int *)            (function + 2) == 0xA7D50008 && \
-  *(int *)            (function +18) == 0x5810D000 && \
-  *(int *)            (function +22) == 0xD2031000 && \
-  *(short *)          (function +26) == 0xD004 && \
-  *(int *)            (function +28) == 0x5810D008 && \
-  *(short *)          (function +32) == 0x18D0 && \
-  *(short *)          (function +34) == 0x07f1
+  *(unsigned short *) (function + 0) == 0x180D && \
+  *(unsigned int *)   (function + 2) == 0xA7D50008 && \
+  *(unsigned int *)   (function +18) == 0x5810D000 && \
+  *(unsigned int *)   (function +22) == 0xD2031000 && \
+  *(unsigned short *) (function +26) == 0xD004 && \
+  *(unsigned int *)   (function +28) == 0x5810D008 && \
+  *(unsigned short *) (function +32) == 0x18D0 && \
+  *(unsigned short *) (function +34) == 0x07f1
 #define tramp_address(function)  \
   *(unsigned int *) (function +14)
 #define tramp_variable(function)  \

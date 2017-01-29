@@ -1,5 +1,10 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	s390: Fix trampoline.
+	* trampoline/trampoline.c [__s390__]: Fix is_tramp macro.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	ia64: Fix struct args.
 	* avcall/avcall.h.in (__av_struct): Tweak #if.
 	* avcall/avcall-ia64.c: Fix comment.
