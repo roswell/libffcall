@@ -1,5 +1,21 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	i386, x86_64, sparc, sparc64: Fix for the Sun Studio 11 compiler.
+	When preprocessing a .S file, "cc -E" activates some other preprocessor
+	than the usual C preprocessor.
+	* avcall/Makefile.in (avcall-i386.s, avcall-sparc.s, avcall-sparc64.s,
+	avcall-x86_64.s): Feed the input to the preprocessor through standard
+	input. Postprocess to remove space after '.' and '@'.
+	* vacall/Makefile.in (vacall-i386.s, vacall-sparc.s, vacall-sparc64.s,
+	vacall-x86_64.s): Likewise.
+	* trampoline/Makefile.in (cache-sparc.s, cache-sparc64.s): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-i386.s, vacall-sparc.s,
+	vacall-sparc64.s, vacall-x86_64.s): Likewise.
+	* callback/trampoline_r/Makefile.in (cache-sparc.s, cache-sparc64.s):
+	Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	List platforms on which libffcall is known to work.
 	* PLATFORMS, */PLATFORMS: List i386-pc-solaris2.10 (gcc),
 	mips-sgi-irix6.5 (cc -n32), sparc-unknown-linux (gcc),

@@ -65,19 +65,19 @@ avcall-i386.lo : avcall-i386.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-i386.s
 
 avcall-i386.s : $(srcdir)/avcall-i386-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-i386-macro.S | grep -v '^ *#line' | grep -v '^#ident' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,% ,%,g' -e 's,\. ,.,g' -e 's/##//g' > avcall-i386.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-i386-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's/##//g' > avcall-i386.s
 
 avcall-sparc.lo : avcall-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc.s
 
 avcall-sparc.s : $(srcdir)/avcall-sparc-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc.s
 
 avcall-sparc64.lo : avcall-sparc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc64.s
 
 avcall-sparc64.s : $(srcdir)/avcall-sparc64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc64.s
 
 avcall-m68k.lo : avcall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-m68k.s
@@ -143,7 +143,7 @@ avcall-x86_64.lo : avcall-x86_64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-x86_64.s
 
 avcall-x86_64.s : $(srcdir)/avcall-x86_64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's/##//g' > avcall-x86_64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > avcall-x86_64.s
 
 avcall-structcpy.lo : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy.c
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-structcpy.c

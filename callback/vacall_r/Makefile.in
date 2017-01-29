@@ -65,19 +65,19 @@ vacall-i386.lo : vacall-i386.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-i386.s
 
 vacall-i386.s : $(srcdir)/vacall-i386-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#ident' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,% ,%,g' -e 's,\. ,.,g' -e 's/##//g' > vacall-i386.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common - < $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's/##//g' > vacall-i386.s
 
 vacall-sparc.lo : vacall-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-sparc.s
 
 vacall-sparc.s : $(srcdir)/vacall-sparc-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > vacall-sparc.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common - < $(srcdir)/vacall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > vacall-sparc.s
 
 vacall-sparc64.lo : vacall-sparc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-sparc64.s
 
 vacall-sparc64.s : $(srcdir)/vacall-sparc64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > vacall-sparc64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common - < $(srcdir)/vacall-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > vacall-sparc64.s
 
 vacall-m68k.lo : vacall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-m68k.s
@@ -156,7 +156,7 @@ vacall-x86_64.lo : vacall-x86_64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-x86_64.s
 
 vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common - < $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
 
 vacall-s390.lo : vacall-s390.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-s390.s
