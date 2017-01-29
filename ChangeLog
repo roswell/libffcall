@@ -1,5 +1,23 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	configuration: Support the AR configure variable.
+	Needed for a 64-bit build on AIX.
+	* vacall/configure.ac: Invoke gl_PROG_AR_RANLIB instead of
+	AC_PROG_RANLIB.
+	* trampoline/configure.ac: Likewise.
+	* vacall/Makefile.in (AR): Use value determined by gl_PROG_AR_RANLIB.
+	* trampoline/Makefile.in (AR): Likewise.
+	* avcall/Makefile.in (AR): Use value determined by libtool.
+	* callback/Makefile.in (AR): Likewise.
+	* callback/vacall_r/Makefile.in (AR): Likewise.
+	* callback/trampoline_r/Makefile.in (AR): Likewise.
+	* avcall/configure.ac: Reorder (a no-op).
+	* callback/configure.ac: Likewise.
+	* callback/vacall_r/configure.ac: Likewise.
+	* callback/trampoline_r/configure.ac: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	configuration: Simplification.
 	* m4/general.m4 (CL_CONFIG_SUBDIRS): Remove macro.
 	* configure.ac: Use AC_CONFIG_SUBDIRS instead of CL_CONFIG_SUBDIRS.

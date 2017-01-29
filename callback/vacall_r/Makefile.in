@@ -32,7 +32,7 @@ LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
 LIBTOOL_INSTALL = $(LIBTOOL) --mode=install
 LIBTOOL_UNINSTALL = $(LIBTOOL) --mode=uninstall
-AR = ar
+AR = @AR@
 AR_FLAGS = rc
 RANLIB = @RANLIB@
 MV = mv

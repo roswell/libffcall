@@ -27,7 +27,7 @@ CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
-AR = ar
+AR = @AR@
 AR_FLAGS = rc
 RANLIB = @RANLIB@
 RM = rm -f
