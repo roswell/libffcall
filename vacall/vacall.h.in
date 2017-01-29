@@ -922,7 +922,7 @@ typedef __va_alist* va_alist;
    (LIST)->aptr += sizeof(double),					\
    (++(LIST)->anum <= 16						\
     ? (LIST)->farg[(LIST)->anum - 1]					\
-    : *(float*)((LIST)->aptr - sizeof(double))				\
+    : *(float*)((LIST)->aptr - sizeof(float))				\
   ))
 #define va_arg_double(LIST)  \
   (__va_align_double(LIST)						\

@@ -1,5 +1,13 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	sparc64: Fix the passing of 'float' arguments.
+	* vacall/vacall.h.in (va_arg_float): Expect the float in the upper half
+	of the 8-bytes word.
+	* callback/vacall_r/vacall_r.h.in (va_arg_float): Likewise.
+	* PLATFORMS, */PLATFORMS: List sparc64-unknown-linux (gcc).
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	sparc64: Fix a compiler warning.
 	* vacall/vacall.h.in (__va_arg_struct): Add a cast to pointer.
 	* callback/vacall_r/vacall_r.h.in: Likewise.
