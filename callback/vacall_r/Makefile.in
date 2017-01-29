@@ -98,8 +98,8 @@ vacall-mips.s : $(srcdir)/vacall-mips@ENDIANNESS@-macro.S
 vacall-mipsn32.lo : vacall-mipsn32.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-mipsn32.s
 
-vacall-mipsn32.s : $(srcdir)/vacall-mipsn32-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-mipsn32-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mipsn32.s
+vacall-mipsn32.s : $(srcdir)/vacall-mipsn32@ENDIANNESS@-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-mipsn32@ENDIANNESS@-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mipsn32.s
 
 vacall-mips64.lo : vacall-mips64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-mips64.s
@@ -243,7 +243,7 @@ SOURCE_FILES = \
   vacall-ia64.c vacall-ia64.s \
   vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S vacall-m68k-netbsd-macro.S \
   vacall-mips.c vacall-mipseb-linux.s vacall-mipsel-linux.s vacall-mipseb-macro.S vacall-mipsel-macro.S \
-  vacall-mipsn32.c vacall-mipsn32-linux.s vacall-mipsn32-macro.S \
+  vacall-mipsn32.c vacall-mipsn32eb-linux.s vacall-mipsn32el-linux.s vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S \
   vacall-mips64.c vacall-mips64-linux.s vacall-mips64-macro.S \
   vacall-powerpc.c \
   vacall-powerpc-aix.s \

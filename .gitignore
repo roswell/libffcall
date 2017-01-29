@@ -74,8 +74,10 @@
 /avcall/avcall-mipseb-macro.S
 /avcall/avcall-mipsel-linux.s
 /avcall/avcall-mipsel-macro.S
-/avcall/avcall-mipsn32-linux.s
-/avcall/avcall-mipsn32-macro.S
+/avcall/avcall-mipsn32eb-linux.s
+/avcall/avcall-mipsn32eb-macro.S
+/avcall/avcall-mipsn32el-linux.s
+/avcall/avcall-mipsn32el-macro.S
 /avcall/avcall-mips64-linux.s
 /avcall/avcall-mips64-macro.S
 /vacall/vacall-i386-linux.s
@@ -88,8 +90,10 @@
 /vacall/vacall-mipseb-macro.S
 /vacall/vacall-mipsel-linux.s
 /vacall/vacall-mipsel-macro.S
-/vacall/vacall-mipsn32-linux.s
-/vacall/vacall-mipsn32-macro.S
+/vacall/vacall-mipsn32eb-linux.s
+/vacall/vacall-mipsn32eb-macro.S
+/vacall/vacall-mipsn32el-linux.s
+/vacall/vacall-mipsn32el-macro.S
 /vacall/vacall-mips64-linux.s
 /vacall/vacall-mips64-macro.S
 /callback/vacall_r/vacall-i386-linux.s
@@ -103,8 +107,10 @@
 /callback/vacall_r/vacall-mipseb-macro.S
 /callback/vacall_r/vacall-mipsel-linux.s
 /callback/vacall_r/vacall-mipsel-macro.S
-/callback/vacall_r/vacall-mipsn32-linux.s
-/callback/vacall_r/vacall-mipsn32-macro.S
+/callback/vacall_r/vacall-mipsn32eb-linux.s
+/callback/vacall_r/vacall-mipsn32eb-macro.S
+/callback/vacall_r/vacall-mipsn32el-linux.s
+/callback/vacall_r/vacall-mipsn32el-macro.S
 /callback/vacall_r/vacall-mips64-linux.s
 /callback/vacall_r/vacall-mips64-macro.S
 

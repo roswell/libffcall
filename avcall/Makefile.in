@@ -94,8 +94,8 @@ avcall-mips.s : $(srcdir)/avcall-mips@ENDIANNESS@-macro.S
 avcall-mipsn32.lo : avcall-mipsn32.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-mipsn32.s
 
-avcall-mipsn32.s : $(srcdir)/avcall-mipsn32-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mipsn32-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mipsn32.s
+avcall-mipsn32.s : $(srcdir)/avcall-mipsn32@ENDIANNESS@-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mipsn32@ENDIANNESS@-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mipsn32.s
 
 avcall-mips64.lo : avcall-mips64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-mips64.s
@@ -249,7 +249,7 @@ SOURCE_FILES = \
   avcall-ia64.c avcall-ia64.s \
   avcall-m68k.c avcall-m68k-linux.s avcall-m68k-sun.s avcall-m68k.mit.S avcall-m68k.motorola.S \
   avcall-mips.c avcall-mipseb-linux.s avcall-mipsel-linux.s avcall-mipseb-macro.S avcall-mipsel-macro.S \
-  avcall-mipsn32.c avcall-mipsn32-linux.s avcall-mipsn32-macro.S \
+  avcall-mipsn32.c avcall-mipsn32eb-linux.s avcall-mipsn32el-linux.s avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S \
   avcall-mips64.c avcall-mips64-linux.s avcall-mips64-macro.S \
   avcall-powerpc.c \
   avcall-powerpc-aix.s \

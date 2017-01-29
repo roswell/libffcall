@@ -1,5 +1,40 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	mipsn32: Make it work on Linux (mips64, mips64el) with "gcc -mabi=n32".
+	* avcall/avcall-mipsn32.c: Add code for struct returns on _MIPSEL.
+	* avcall/Makefile.devel (avcall-mipsn32eb-linux.s,
+	avcall-mipsn32eb-macro.S, avcall-mipsn32el-linux.s,
+	avcall-mipsn32el-macro.S): New targets.
+	(avcall-mipsn32-linux.s, avcall-mipsn32-macro.S): Remove targets.
+	* avcall/Makefile.in (avcall-mipsn32.s): Take into account the
+	ENDIANNESS.
+	(SOURCE_FILES): Add avcall-mipsn32eb-linux.s,
+	avcall-mipsn32el-linux.s, avcall-mipsn32eb-macro.S,
+	avcall-mipsn32el-macro.S.
+	Remove avcall-mipsn32-linux.s, avcall-mipsn32-macro.S.
+	* vacall/vacall-mipsn32.c: Add code for struct returns on _MIPSEL.
+	* vacall/Makefile.devel (vacall-mipsn32eb-linux.s,
+	vacall-mipsn32eb-macro.S, vacall-mipsn32el-linux.s,
+	vacall-mipsn32el-macro.S): New targets.
+	(vacall-mipsn32-linux.s, vacall-mipsn32-macro.S): Remove targets.
+	* vacall/Makefile.in (vacall-mipsn32.s): Take into account the
+	ENDIANNESS.
+	(SOURCE_FILES): Add vacall-mipsn32eb-linux.s, vacall-mipsn32el-linux.s,
+	vacall-mipsn32eb-macro.S, vacall-mipsn32el-macro.S.
+	Remove vacall-mipsn32-linux.s, vacall-mipsn32-macro.S.
+	* callback/vacall_r/Makefile.devel (vacall-mipsn32eb-linux.s,
+	vacall-mipsn32eb-macro.S, vacall-mipsn32el-linux.s,
+	vacall-mipsn32el-macro.S): New targets.
+	(vacall-mipsn32-linux.s, vacall-mipsn32-macro.S): Remove targets.
+	* callback/vacall_r/Makefile.in (vacall-mipsn32.s): Take into account
+	the ENDIANNESS.
+	(SOURCE_FILES): Add vacall-mipsn32eb-linux.s, vacall-mipsn32el-linux.s,
+	vacall-mipsn32eb-macro.S, vacall-mipsn32el-macro.S.
+	Remove vacall-mipsn32-linux.s, vacall-mipsn32-macro.S.
+	* PLATFORMS, */PLATFORMS: List mips64-unknown-linux (gcc -mabi=n32).
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	mips: Make it work on Linux (mips, mipsel) with "gcc -mabi=32".
 	* m4/endianness.m4: New file.
 	* avcall/Makefile.devel (avcall-mipseb-linux.s, avcall-mipseb-macro.S,
