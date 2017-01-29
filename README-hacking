@@ -48,3 +48,12 @@ After fetching the sources from the repository, peek at the comments in
 autogen.sh, then run "./autogen.sh"; then you can proceed with "./configure"
 as usual.
 
+
+Cross-compilation tools
+=======================
+
+The Makefile.devel has rules to regenerate some *.s and *.S files, using
+GCC cross-compiler builds. You find a table of these cross-compilers in
+the file cross-tools/cross.conf. To build all these cross-compilers, use
+the file cross-tools/cross-build.sh.
+

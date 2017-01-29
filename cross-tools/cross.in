@@ -1,0 +1,23 @@
+#!/bin/sh
+# Wrapper script for invoking cross-compilation tools built for a particular host.
+# Usage: cross target tool [argument...]
+# Example: cross sparc-linux objdump --disassemble foo.o
+target="$1"
+tool="$2"
+shift
+shift
+if test -d "@HOST_CROSS_DIR@/$target-tools"; then
+  # The gcc binaries have their shared libraries in
+  #   @HOST_CROSS_DIR@/$target-tools/lib
+  # and this location is not listed in an RPATH; therefore we must set
+  # LD_LIBRARY_PATH.
+  # The binutils binaries have their shared libraries in
+  #   @HOST_CROSS_DIR@/$target-tools/@host_triple@/$target/lib
+  # and this location *is* listed in an RPATH; therefore it is not necessary
+  # to list this directory in LD_LIBRARY_PATH, but it does not hurt either.
+  LD_LIBRARY_PATH="@HOST_CROSS_DIR@/$target-tools/lib:@HOST_CROSS_DIR@/$target-tools/@host_triple@/$target/lib" \
+  exec "@HOST_CROSS_DIR@/$target-tools/bin/$target-$tool" "$@"
+else
+  echo "cross: target $target not found" 1>&2
+  exit 1
+fi

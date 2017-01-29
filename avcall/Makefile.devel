@@ -10,8 +10,9 @@ RM = rm -f
 HOST = i486-linux
 CPU = i386
 GCC = gcc
-GCCFLAGS = -O2 -fomit-frame-pointer
+GCCFLAGS = -O2 -fno-omit-frame-pointer -fPIC
 SED = sed
+CROSS_TOOL = cross
 
 precompiled :
 # Old rules

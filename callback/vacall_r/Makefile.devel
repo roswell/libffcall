@@ -10,8 +10,9 @@ RM = rm -f
 HOST = i486-linux
 CPU = i386
 GCC = gcc
-GCCFLAGS = -O2 -fomit-frame-pointer -DHAVE_LONG_LONG_INT -DREENTRANT
+GCCFLAGS = -O2 -fno-omit-frame-pointer -fPIC -DHAVE_LONG_LONG_INT -DREENTRANT
 SED = sed
+CROSS_TOOL = cross
 
 precompiled :
 # Old rules

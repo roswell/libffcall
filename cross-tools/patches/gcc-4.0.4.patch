@@ -1,0 +1,44 @@
+diff -r -u gcc-4.0.4/gcc/config/rs6000/rs6000.c gcc-4.0.4/gcc/config/rs6000/rs6000.c
+--- gcc-4.0.4/gcc/config/rs6000/rs6000.c	2006-03-19 23:26:37.000000000 +0100
++++ gcc-4.0.4/gcc/config/rs6000/rs6000.c	2017-02-11 02:32:41.115537045 +0100
+@@ -17859,7 +17859,7 @@
+       fprintf (file, "\t.indirect_symbol %s\n", symbol_name);
+ 
+       label++;
+-      local_label_0 = alloca (sizeof("\"L0000000000$spb\""));
++      local_label_0 = alloca (sizeof("\"L000000000000$spb\""));
+       sprintf (local_label_0, "\"L%011d$spb\"", label);
+ 
+       fprintf (file, "\tmflr r0\n");
+diff -r -u gcc-4.0.4/gcc/toplev.h gcc-4.0.4/gcc/toplev.h
+--- gcc-4.0.4/gcc/toplev.h	2005-09-09 02:51:59.000000000 +0200
++++ gcc-4.0.4/gcc/toplev.h	2017-02-11 02:05:44.149211350 +0100
+@@ -180,17 +180,17 @@
+ #  define CTZ_HWI __builtin_ctz
+ # endif
+ 
+-extern inline int
+-floor_log2 (unsigned HOST_WIDE_INT x)
+-{
+-  return x ? HOST_BITS_PER_WIDE_INT - 1 - (int) CLZ_HWI (x) : -1;
+-}
+-
+-extern inline int
+-exact_log2 (unsigned HOST_WIDE_INT x)
+-{
+-  return x == (x & -x) && x ? (int) CTZ_HWI (x) : -1;
+-}
++extern int
++floor_log2 (unsigned HOST_WIDE_INT x);
++
++
++
++
++extern int
++exact_log2 (unsigned HOST_WIDE_INT x);
++
++
++
+ #endif /* GCC_VERSION >= 3004 */
+ 
+ /* Functions used to get and set GCC's notion of in what directory

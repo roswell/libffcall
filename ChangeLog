@@ -1,3 +1,24 @@
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
+	Prepare for regenerating .s and .S files with known compilers.
+	This serves three purposes:
+	1. Being able to regenerate everything if avcall.h.in or vacall.h.in
+	   changes.
+	2. Allow safe stack unwinding across avcall and vacall invocations.
+	3. Allow distributing libavcall and libcallback as shared libraries.
+	* README-hacking: Document the cross compilers.
+	* cross-tools/cross.conf: New file.
+	* cross-tools/cross-build.sh: New file.
+	* cross-tools/cross.in: New file.
+	* cross-tools/patches/*.patch: New files.
+	* avcall/Makefile.devel (GCCFLAGS): Add -fno-omit-frame-pointer, -fPIC.
+	(CROSS_TOOL): New variable.
+	* vacall/Makefile.devel (GCCFLAGS): Add -fno-omit-frame-pointer.
+	(CROSS_TOOL): New variable.
+	* callback/vacall_r/Makefile.devel (GCCFLAGS): Add
+	-fno-omit-frame-pointer, -fPIC.
+	(CROSS_TOOL): New variable.
+
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
 	s390: Fix long long args.
