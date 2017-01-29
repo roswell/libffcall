@@ -30,10 +30,6 @@ COPIED_FILES = \
   cache.c \
   cache-alpha.c \
   cache-alpha.s \
-  cache-arm.c \
-  cache-arm.s \
-  cache-armel.c \
-  cache-armel.s \
   cache-hppa.c \
   cache-hppa.s \
   cache-powerpc.c \

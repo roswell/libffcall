@@ -1205,7 +1205,16 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
   __TR_clear_cache(function,function+TRAMP_LENGTH-1);
 #endif
 #ifdef __arm__
-  __TR_clear_cache(function,function+TRAMP_LENGTH);
+  /* On ARM, cache flushing can only be done through a system call.
+     GCC implements it for Linux with EABI, through an "swi 0" with code
+     0xf0002. For other systems, it may be an "swi 0x9f0002",
+     an "swi 0xf00000", or similar.  */
+#if defined(__GNUC__)
+  /* Use the GCC built-in. */
+  __clear_cache((void*)function,(void*)(function+TRAMP_LENGTH));
+#else
+  #error "Don't know how to implement clear_cache on this platform."
+#endif
 #endif
 #if defined(__powerpc__) && !defined(__powerpc64__)
   __TR_clear_cache(function);

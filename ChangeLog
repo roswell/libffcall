@@ -1,5 +1,32 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	arm: Make trampoline work on real ARM harware.
+	The cache flushing code in cache-arm.c and cache-armel.c are for old
+	Linux versions. Nowadays the best way is through the GCC builtin
+	function __clear_cache (which makes the appropriate Linux system call).
+	* trampoline/trampoline.c (alloc_trampoline) [__arm__]: Invoke GCC
+	builtin function __clear_cache. Remove call to __TR_clear_cache.
+	* callback/trampoline_r/trampoline.c (alloc_trampoline_r) [__arm__]:
+	Likewise.
+	* trampoline/cache-arm.[cs]: Remove files.
+	* trampoline/cache-armel.[cs]: Remove files.
+	* callback/trampoline_r/Makefile.maint (COPIED_FILES): Remove
+	cache-arm*.
+	* Makefile.in (COPIED_FILES): Remove callback/trampoline_r/cache-arm*.
+	* trampoline/Makefile.devel (cache-armel.s): Remove target.
+	* trampoline/configure.ac (CPU_OBJECTS): Leave empty for arm and armel.
+	* trampoline/Makefile.in (cache-arm.o, cache-armel.o): Remove targets.
+	(SOURCE_FILES): Remove cache-arm.[cs], cache-armel.[cs].
+	* callback/trampoline_r/Makefile.devel (cache-armel.s): Remove target.
+	* callback/trampoline_r/configure.ac (CPU_OBJECTS): Leave empty for arm
+	and armel.
+	* callback/trampoline_r/Makefile.in (cache-arm.lo, cache-armel.lo):
+	Remove targets.
+	(SOURCE_FILES): Remove cache-arm.[cs], cache-armel.[cs].
+	* trampoline/PLATFORMS: Add two ARM platforms.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	hppa: Fix struct returns.
 	* avcall/avcall.h.in [__hppa__]: Don't set __AV_PCC_STRUCT_RETURN by
 	default.

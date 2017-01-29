@@ -36,7 +36,7 @@ if test ${HOST_CPU_C_ABI} = powerpc; then
     *) ;;
   esac
 fi
-if test ${HOST_CPU_C_ABI} = sparc -o ${HOST_CPU_C_ABI} = sparc64 -o ${HOST_CPU_C_ABI} = alpha -o ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = arm -o ${HOST_CPU_C_ABI} = armel; then
+if test ${HOST_CPU_C_ABI} = sparc -o ${HOST_CPU_C_ABI} = sparc64 -o ${HOST_CPU_C_ABI} = alpha -o ${HOST_CPU_C_ABI} = hppa; then
   CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).lo'
 fi
 if test ${HOST_CPU_C_ABI} = powerpc; then

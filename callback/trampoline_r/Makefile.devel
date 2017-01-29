@@ -83,9 +83,6 @@ cache-powerpc-sysv4.s : cache-powerpc.c
 cache-powerpc-macos.s : cache-powerpc.c
 	$(GCC) -V 3.3.2 -b powerpc-darwin $(GCCFLAGS) -D__powerpc__ -S $< -o $@
 
-cache-armel.s : cache-armel.c
-	$(GCC) $(GCCFLAGS)  -fomit-frame-pointer -S cache-armel.c -o cache-armel.s
-
 tramp-i386.o : tramp-i386.s
 	$(ASPREFIX)/i486-linux/bin/as tramp-i386.s -o $@
 

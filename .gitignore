@@ -33,10 +33,6 @@
 /callback/trampoline_r/cache.c
 /callback/trampoline_r/cache-alpha.c
 /callback/trampoline_r/cache-alpha.s
-/callback/trampoline_r/cache-arm.c
-/callback/trampoline_r/cache-arm.s
-/callback/trampoline_r/cache-armel.c
-/callback/trampoline_r/cache-armel.s
 /callback/trampoline_r/cache-hppa.c
 /callback/trampoline_r/cache-hppa.s
 /callback/trampoline_r/cache-powerpc.c
@@ -275,8 +271,6 @@ autom4te.cache/
 /trampoline/cache-sparc64.o
 /trampoline/cache-alpha.o
 /trampoline/cache-hppa.o
-/trampoline/cache-arm.o
-/trampoline/cache-armel.o
 /trampoline/cache-powerpc.o
 /trampoline/tramp-powerpc.s
 /trampoline/tramp-powerpc64.s
@@ -349,10 +343,6 @@ autom4te.cache/
 /callback/trampoline_r/cache-alpha.o
 /callback/trampoline_r/cache-hppa.lo
 /callback/trampoline_r/cache-hppa.o
-/callback/trampoline_r/cache-arm.lo
-/callback/trampoline_r/cache-arm.o
-/callback/trampoline_r/cache-armel.lo
-/callback/trampoline_r/cache-armel.o
 /callback/trampoline_r/cache-powerpc.lo
 /callback/trampoline_r/cache-powerpc.o
 /callback/trampoline_r/tramp-powerpc.s

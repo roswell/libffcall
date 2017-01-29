@@ -97,12 +97,6 @@ cache-alpha.lo : $(srcdir)/cache-alpha.s
 cache-hppa.lo : $(srcdir)/cache-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
 
-cache-arm.lo : $(srcdir)/cache-arm.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-arm.s
-
-cache-armel.lo : $(srcdir)/cache-armel.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-armel.s
-
 cache-powerpc.lo : $(srcdir)/cache-powerpc-sysv4.s $(srcdir)/cache-powerpc-macos.s
 	case "$(OS)" in \
 	  macos* | darwin*) syntax=macos;; \
@@ -205,8 +199,6 @@ SOURCE_FILES = \
   tramp-ia64.s \
   cache.c \
   cache-alpha.c cache-alpha.s \
-  cache-arm.c cache-arm.s \
-  cache-armel.c cache-armel.s \
   cache-hppa.c cache-hppa.s \
   cache-powerpc.c cache-powerpc-macos.s cache-powerpc-sysv4.s \
   cache-sparc.c cache-sparc-macro.S \
