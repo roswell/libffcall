@@ -2,7 +2,7 @@
 #define _tests_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-1999, 2001-2002, 2005 Bruno Haible, <bruno@clisp.org>
+  Copyright 1995-1999, 2001-2002, 2005, 2017 Bruno Haible, <bruno@clisp.org>
 
   This is free software distributed under the GNU General Public
   Licence described in the file COPYING. Contact the author if
@@ -54,6 +54,7 @@ typedef struct { double x; } Double;
 typedef struct { char c; float f; } A;
 typedef struct { double d; int i[3]; } B;
 typedef struct { long l1; long l2; } J;
+typedef struct { long l1; long l2; long l3; long l4; } K;
 typedef struct { char c[3]; } T;
 typedef struct { char c[33],c1; } X;
 
@@ -66,7 +67,8 @@ long l1=1, l2=2, l3=3, l4=4, l5=5, l6=6, l7=7, l8=8, l9=9;
 long long ll1 = 3875056143130689530LL;
 #endif
 float f1=0.1, f2=0.2, f3=0.3, f4=0.4, f5=0.5, f6=0.6, f7=0.7, f8=0.8, f9=0.9,
-      f10=1.1, f11=1.2, f12=1.3, f13=1.4, f14=1.5, f15=1.6, f16=1.7;
+      f10=1.1, f11=1.2, f12=1.3, f13=1.4, f14=1.5, f15=1.6, f16=1.7, f17=1.8,
+      f18=1.9, f19=2.1, f20=2.2, f21=2.3, f22=2.4, f23=2.5, f24=2.6;
 double d1=0.1, d2=0.2, d3=0.3, d4=0.4, d5=0.5, d6=0.6, d7=0.7, d8=0.8, d9=0.9,
        d10=1.1, d11=1.2, d12=1.3, d13=1.4, d14=1.5, d15=1.6, d16=1.7;
 
@@ -85,14 +87,18 @@ Double D1={0.1}, D2={0.2}, D3={0.3}, D4={0.4}, D5={0.5}, D6={0.6}, D7={0.7}, D8=
 A A1={'a',0.1},A2={'b',0.2},A3={'\377',0.3};
 B B1={0.1,{1,2,3}},B2={0.2,{5,4,3}};
 J J1={47,11},J2={73,55};
+K K1={19,69,12,28};
 T T1={'t','h','e'},T2={'f','o','x'};
 X X1={"abcdefghijklmnopqrstuvwxyzABCDEF",'G'}, X2={"123",'9'}, X3={"return-return-return",'R'};
 
+/* void tests */
 void v_v (void)
 {
   fprintf(out,"void f(void):\n");
   fflush(out);
 }
+
+/* int tests */
 int i_v (void)
 {
   int r=99;
@@ -129,15 +135,16 @@ int i_i8 (int a, int b, int c, int d, int e, int f, int g, int h)
   return r;
 }
 int i_i16 (int a, int b, int c, int d, int e, int f, int g, int h,
-	   int i, int j, int k, int l, int m, int n, int o, int p)
+           int i, int j, int k, int l, int m, int n, int o, int p)
 {
   int r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p;
   fprintf(out,"int f(16*int):(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
-	  a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p);
+          a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p);
   fflush(out);
   return r;
 }
 
+/* float tests */
 float f_f (float a)
 {
   float r=a+1.0;
@@ -160,7 +167,7 @@ float f_f4 (float a, float b, float c, float d)
   return r;
 }
 float f_f8 (float a, float b, float c, float d, float e, float f,
-	    float g, float h)
+            float g, float h)
 {
   float r=a+b+c+d+e+f+g+h;
   fprintf(out,"float f(8*float):(%g,%g,%g,%g,%g,%g,%g,%g)",a,b,c,d,e,f,g,h);
@@ -168,14 +175,24 @@ float f_f8 (float a, float b, float c, float d, float e, float f,
   return r;
 }
 float f_f16 (float a, float b, float c, float d, float e, float f, float g, float h,
-	     float i, float j, float k, float l, float m, float n, float o, float p)
+             float i, float j, float k, float l, float m, float n, float o, float p)
 {
   float r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p;
   fprintf(out,"float f(16*float):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p);
   fflush(out);
   return r;
 }
+float f_f24 (float a, float b, float c, float d, float e, float f, float g, float h,
+             float i, float j, float k, float l, float m, float n, float o, float p,
+             float q, float s, float t, float u, float v, float w, float x, float y)
+{
+  float r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+v+w+x+y;
+  fprintf(out,"float f(24*float):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,v,w,x,y);
+  fflush(out);
+  return r;
+}
 
+/* double tests */
 double d_d (double a)
 {
   double r=a+1.0;
@@ -198,7 +215,7 @@ double d_d4 (double a, double b, double c, double d)
   return r;
 }
 double d_d8 (double a, double b, double c, double d, double e, double f,
-	     double g, double h)
+             double g, double h)
 {
   double r=a+b+c+d+e+f+g+h;
   fprintf(out,"double f(8*double):(%g,%g,%g,%g,%g,%g,%g,%g)",a,b,c,d,e,f,g,h);
@@ -206,8 +223,8 @@ double d_d8 (double a, double b, double c, double d, double e, double f,
   return r;
 }
 double d_d16 (double a, double b, double c, double d, double e, double f,
-	      double g, double h, double i, double j, double k, double l,
-	      double m, double n, double o, double p)
+              double g, double h, double i, double j, double k, double l,
+              double m, double n, double o, double p)
 {
   double r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p;
   fprintf(out,"double f(16*double):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p);
@@ -215,6 +232,7 @@ double d_d16 (double a, double b, double c, double d, double e, double f,
   return r;
 }
 
+/* pointer tests */
 void* vp_vpdpcpsp (void* a, double* b, char* c, Int* d)
 {
   void* ret = (char*)b + 1;
@@ -223,6 +241,7 @@ void* vp_vpdpcpsp (void* a, double* b, char* c, Int* d)
   return ret;
 }
 
+/* mixed number tests */
 uchar uc_ucsil (uchar a, ushort b, uint c, ulong d)
 {
   uchar r = (uchar)-1;
@@ -230,7 +249,6 @@ uchar uc_ucsil (uchar a, ushort b, uint c, ulong d)
   fflush(out);
   return r;
 }
-
 double d_iidd (int a, int b, double c, double d)
 {
   double r = a+b+c+d;
@@ -238,10 +256,24 @@ double d_iidd (int a, int b, double c, double d)
   fflush(out);
   return r;
 }
+double d_iiidi (int a, int b, int c, double d, int e)
+{
+  double r = a+b+c+d+e;
+  fprintf(out,"double f(int,int,int,double,int):(%d,%d,%d,%g,%d)",a,b,c,d,e);
+  fflush(out);
+  return r;
+}
 double d_idid (int a, double b, int c, double d)
 {
   double r = a+b+c+d;
   fprintf(out,"double f(int,double,int,double):(%d,%g,%d,%g)",a,b,c,d);
+  fflush(out);
+  return r;
+}
+double d_fdi (float a, double b, int c)
+{
+  double r = a+b+c;
+  fprintf(out,"double f(float,double,int):(%g,%g,%d)",a,b,c);
   fflush(out);
   return r;
 }
@@ -254,6 +286,13 @@ ushort us_cdcd (char a, double b, char c, double d)
 }
 
 #ifdef HAVE_LONG_LONG_INT
+long long ll_iiilli (int a, int b, int c, long long d, int e)
+{
+  long long r = (long long)(int)a+(long long)(int)b+(long long)(int)c+d+(long long)(int)e;
+  fprintf(out,"long long f(int,int,int,long long,int):(%d,%d,%d,0x%lx%08lx,%d)",a,b,c,(long)(d>>32),(long)(d&0xffffffff),e);
+  fflush(out);
+  return r;
+}
 long long ll_flli (float a, long long b, int c)
 {
   long long r = (long long)(int)a + b + (long long)c;
@@ -263,6 +302,7 @@ long long ll_flli (float a, long long b, int c)
 }
 #endif
 
+/* structure tests */
 Int I_III (Int a, Int b, Int c)
 {
   Int r;
@@ -296,6 +336,14 @@ Double D_fDd (float a, Double b, double c)
   fflush(out);
   return r;
 }
+Double D_Dfd (Double a, float b, double c)
+{
+  Double r;
+  r.x = a.x + b + c;
+  fprintf(out,"Double f(Double,float,double):({%g},%g,%g)",a.x,b,c);
+  fflush(out);
+  return r;
+}
 #endif
 J J_JiJ (J a, int b, J c)
 {
@@ -321,11 +369,154 @@ X X_BcdB (B a, char b, double c, B d)
   r = xr;
   r.c1 = b;
   fprintf(out,"X f(B,char,double,B):({%g,{%d,%d,%d}},'%c',%g,{%g,{%d,%d,%d}})",
-	  a.d,a.i[0],a.i[1],a.i[2],b,c,d.d,d.i[0],d.i[1],d.i[2]);
+          a.d,a.i[0],a.i[1],a.i[2],b,c,d.d,d.i[0],d.i[1],d.i[2]);
   fflush(out);
   return r;
 }
 #endif
+
+/* Test for cases where some argument (especially structure, 'long long', or
+   'double') may be passed partially in general-purpose argument registers
+   and partially on the stack. Different ABIs pass between 4 and 8 arguments
+   (or none) in general-purpose argument registers. */
+
+long l_l0K (K b, long c)
+{
+  long r = b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(K,long):(%ld,%ld,%ld,%ld,%ld)",b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l1K (long a1, K b, long c)
+{
+  long r = a1 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld)",a1,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l2K (long a1, long a2, K b, long c)
+{
+  long r = a1 + a2 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(2*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l3K (long a1, long a2, long a3, K b, long c)
+{
+  long r = a1 + a2 + a3 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(3*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l4K (long a1, long a2, long a3, long a4, K b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(4*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l5K (long a1, long a2, long a3, long a4, long a5, K b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + a5 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(5*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l6K (long a1, long a2, long a3, long a4, long a5, long a6, K b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + a5 + a6 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(6*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+
+#ifdef HAVE_LONG_LONG_INT
+long long ll_l2ll (long a1, long a2, long long b, long c)
+{
+  long r = (long long) (a1 + a2) + b + c;
+  fprintf(out,"long long f(2*long,long long,long):(%ld,%ld,0x%lx%08lx,%ld)",a1,a2,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l3ll (long a1, long a2, long a3, long long b, long c)
+{
+  long r = (long long) (a1 + a2 + a3) + b + c;
+  fprintf(out,"long long f(3*long,long long,long):(%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l4ll (long a1, long a2, long a3, long a4, long long b, long c)
+{
+  long r = (long long) (a1 + a2 + a3 + a4) + b + c;
+  fprintf(out,"long long f(4*long,long long,long):(%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l5ll (long a1, long a2, long a3, long a4, long a5, long long b, long c)
+{
+  long r = (long long) (a1 + a2 + a3 + a4 + a5) + b + c;
+  fprintf(out,"long long f(5*long,long long,long):(%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l6ll (long a1, long a2, long a3, long a4, long a5, long a6, long long b, long c)
+{
+  long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6) + b + c;
+  fprintf(out,"long long f(6*long,long long,long):(%ld,%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,a6,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l7ll (long a1, long a2, long a3, long a4, long a5, long a6, long a7, long long b, long c)
+{
+  long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6 + a7) + b + c;
+  fprintf(out,"long long f(7*long,long long,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,a6,a7,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+#endif
+
+double d_l2d (long a1, long a2, double b, long c)
+{
+  double r = (double) (a1 + a2) + b + c;
+  fprintf(out,"double f(2*long,double,long):(%ld,%ld,%g,%ld)",a1,a2,b,c);
+  fflush(out);
+  return r;
+}
+double d_l3d (long a1, long a2, long a3, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3) + b + c;
+  fprintf(out,"double f(3*long,double,long):(%ld,%ld,%ld,%g,%ld)",a1,a2,a3,b,c);
+  fflush(out);
+  return r;
+}
+double d_l4d (long a1, long a2, long a3, long a4, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3 + a4) + b + c;
+  fprintf(out,"double f(4*long,double,long):(%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,b,c);
+  fflush(out);
+  return r;
+}
+double d_l5d (long a1, long a2, long a3, long a4, long a5, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3 + a4 + a5) + b + c;
+  fprintf(out,"double f(5*long,double,long):(%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,b,c);
+  fflush(out);
+  return r;
+}
+double d_l6d (long a1, long a2, long a3, long a4, long a5, long a6, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3 + a4 + a5 + a6) + b + c;
+  fprintf(out,"double f(6*long,double,long):(%ld,%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,a6,b,c);
+  fflush(out);
+  return r;
+}
+double d_l7d (long a1, long a2, long a3, long a4, long a5, long a6, long a7, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3 + a4 + a5 + a6 + a7) + b + c;
+  fprintf(out,"double f(7*long,double,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,a6,a7,b,c);
+  fflush(out);
+  return r;
+}
 
 /*
  * The way we run these tests - first call the function directly, then
@@ -335,15 +526,15 @@ X X_BcdB (B a, char b, double c, B d)
  * Avoid this by clearing the registers between the first and the second call.
  */
 long clear_traces_i (long a, long b, long c, long d, long e, long f, long g, long h,
-		     long i, long j, long k, long l, long m, long n, long o, long p)
+                     long i, long j, long k, long l, long m, long n, long o, long p)
 { return 0; }
 float clear_traces_f (float a, float b, float c, float d, float e, float f, float g,
-		      float h, float i, float j, float k, float l, float m, float n,
-		      float o, float p)
+                      float h, float i, float j, float k, float l, float m, float n,
+                      float o, float p)
 { return 0.0; }
 double clear_traces_d (double a, double b, double c, double d, double e, double f, double g,
-		       double h, double i, double j, double k, double l, double m, double n,
-		       double o, double p)
+                       double h, double i, double j, double k, double l, double m, double n,
+                       double o, double p)
 { return 0.0; }
 J clear_traces_J (void)
 { J j; j.l1 = j.l2 = 0; return j; }
@@ -538,6 +729,39 @@ void
   av_call(a);
   fprintf(out,"->%g\n",fr);
   fflush(out);
+
+  fr = f_f24(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f24,&fr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_float(a,f3);
+  av_float(a,f4);
+  av_float(a,f5);
+  av_float(a,f6);
+  av_float(a,f7);
+  av_float(a,f8);
+  av_float(a,f9);
+  av_float(a,f10);
+  av_float(a,f11);
+  av_float(a,f12);
+  av_float(a,f13);
+  av_float(a,f14);
+  av_float(a,f15);
+  av_float(a,f16);
+  av_float(a,f17);
+  av_float(a,f18);
+  av_float(a,f19);
+  av_float(a,f20);
+  av_float(a,f21);
+  av_float(a,f22);
+  av_float(a,f23);
+  av_float(a,f24);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
 }
 void
   double_tests (void)
@@ -664,6 +888,20 @@ void
   fprintf(out,"->%g\n",dr);
   fflush(out);
 
+  dr = d_iiidi(i1,i2,i3,d4,i5);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_iiidi,&dr);
+  av_int(a,i1);
+  av_int(a,i2);
+  av_int(a,i3);
+  av_double(a,d4);
+  av_int(a,i5);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
   dr = d_idid(i1,d2,i3,d4);
   fprintf(out,"->%g\n",dr);
   fflush(out);
@@ -673,6 +911,18 @@ void
   av_double(a,d2);
   av_int(a,i3);
   av_double(a,d4);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_fdi(f1,d2,i3);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_fdi,&dr);
+  av_float(a,f1);
+  av_double(a,d2);
+  av_int(a,i3);
   av_call(a);
   fprintf(out,"->%g\n",dr);
   fflush(out);
@@ -693,6 +943,20 @@ void
 #ifdef HAVE_LONG_LONG_INT
   /* Long long types.
    */
+  llr = ll_iiilli(i1,i2,i3,ll1,i13);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+  llr = 0; clear_traces();
+  av_start_longlong(a,ll_iiilli,&llr);
+  av_int(a,i1);
+  av_int(a,i2);
+  av_int(a,i3);
+  av_longlong(a,ll1);
+  av_int(a,i13);
+  av_call(a);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+
   llr = ll_flli(f13,ll1,i13);
   fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
   fflush(out);
@@ -789,6 +1053,18 @@ void
   av_call(a);
   fprintf(out,"->{%g}\n",Dr.x);
   fflush(out);
+
+  Dr = D_Dfd(D1,f2,d3);
+  fprintf(out,"->{%g}\n",Dr.x);
+  fflush(out);
+  Dr.x = 0.0; clear_traces();
+  av_start_struct(a,D_Dfd,Double,av_word_splittable_1(double),&Dr);
+  av_struct(a,Double,D1);
+  av_float(a,f2);
+  av_double(a,d3);
+  av_call(a);
+  fprintf(out,"->{%g}\n",Dr.x);
+  fflush(out);
 #endif
 
   Jr = J_JiJ(J1,i2,J2);
@@ -834,6 +1110,306 @@ void
 
   return;
 }
+
+void
+  gpargs_boundary_tests (void)
+{
+  av_alist a;
+  long lr;
+#ifdef HAVE_LONG_LONG_INT
+  long long llr;
+#endif
+  double dr;
+
+  lr = l_l0K(K1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l0K,&lr);
+  av_struct(a,K,K1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l1K(l1,K1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l1K,&lr);
+  av_long(a,l1);
+  av_struct(a,K,K1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l2K(l1,l2,K1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l2K,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_struct(a,K,K1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l3K(l1,l2,l3,K1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l3K,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_struct(a,K,K1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l4K(l1,l2,l3,l4,K1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l4K,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_struct(a,K,K1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l5K(l1,l2,l3,l4,l5,K1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l5K,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_struct(a,K,K1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l6K(l1,l2,l3,l4,l5,l6,K1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l6K,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_long(a,l6);
+  av_struct(a,K,K1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+#ifdef HAVE_LONG_LONG_INT
+  llr = ll_l2ll(l1,l2,ll1,l9);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+  llr = 0; clear_traces();
+  av_start_longlong(a,ll_l2ll,&llr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_longlong(a,ll1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+
+  llr = ll_l3ll(l1,l2,l3,ll1,l9);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+  llr = 0; clear_traces();
+  av_start_longlong(a,ll_l3ll,&llr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_longlong(a,ll1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+
+  llr = ll_l4ll(l1,l2,l3,l4,ll1,l9);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+  llr = 0; clear_traces();
+  av_start_longlong(a,ll_l4ll,&llr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_longlong(a,ll1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+
+  llr = ll_l5ll(l1,l2,l3,l4,l5,ll1,l9);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+  llr = 0; clear_traces();
+  av_start_longlong(a,ll_l5ll,&llr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_longlong(a,ll1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+
+  llr = ll_l6ll(l1,l2,l3,l4,l5,l6,ll1,l9);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+  llr = 0; clear_traces();
+  av_start_longlong(a,ll_l6ll,&llr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_long(a,l6);
+  av_longlong(a,ll1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+
+  llr = ll_l7ll(l1,l2,l3,l4,l5,l6,l7,ll1,l9);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+  llr = 0; clear_traces();
+  av_start_longlong(a,ll_l7ll,&llr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_long(a,l6);
+  av_long(a,l7);
+  av_longlong(a,ll1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+  fflush(out);
+#endif
+
+  dr = d_l2d(l1,l2,d2,l9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_l2d,&dr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_double(a,d2);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_l3d(l1,l2,l3,d2,l9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_l3d,&dr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_double(a,d2);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_l4d(l1,l2,l3,l4,d2,l9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_l4d,&dr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_double(a,d2);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_l5d(l1,l2,l3,l4,l5,d2,l9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_l5d,&dr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_double(a,d2);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_l6d(l1,l2,l3,l4,l5,l6,d2,l9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_l6d,&dr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_long(a,l6);
+  av_double(a,d2);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_l7d(l1,l2,l3,l4,l5,l6,l7,d2,l9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_l7d,&dr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_long(a,l6);
+  av_long(a,l7);
+  av_double(a,d2);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  return;
+}
+
 int
   main (void)
 {
@@ -845,6 +1421,7 @@ int
   mixed_number_tests();
   pointer_tests();
   structure_tests();
+  gpargs_boundary_tests();
 
   exit(0);
 }

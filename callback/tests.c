@@ -2,7 +2,7 @@
 
 /*
  * Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-1999, 2001-2002, 2005 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995-1999, 2001-2002, 2005, 2017 Bruno Haible, <bruno@clisp.org>
  *
  * This is free software distributed under the GNU General Public Licence
  * described in the file COPYING. Contact the author if you don't have this
@@ -75,6 +75,7 @@ typedef struct { double x; } Double;
 typedef struct { char c; float f; } A;
 typedef struct { double d; int i[3]; } B;
 typedef struct { long l1; long l2; } J;
+typedef struct { long l1; long l2; long l3; long l4; } K;
 typedef struct { char c[3]; } T;
 typedef struct { char c[33],c1; } X;
 
@@ -87,7 +88,8 @@ long l1=1, l2=2, l3=3, l4=4, l5=5, l6=6, l7=7, l8=8, l9=9;
 long long ll1 = 3875056143130689530LL;
 #endif
 float f1=0.1, f2=0.2, f3=0.3, f4=0.4, f5=0.5, f6=0.6, f7=0.7, f8=0.8, f9=0.9,
-      f10=1.1, f11=1.2, f12=1.3, f13=1.4, f14=1.5, f15=1.6, f16=1.7;
+      f10=1.1, f11=1.2, f12=1.3, f13=1.4, f14=1.5, f15=1.6, f16=1.7, f17=1.8,
+      f18=1.9, f19=2.1, f20=2.2, f21=2.3, f22=2.4, f23=2.5, f24=2.6;
 double d1=0.1, d2=0.2, d3=0.3, d4=0.4, d5=0.5, d6=0.6, d7=0.7, d8=0.8, d9=0.9,
        d10=1.1, d11=1.2, d12=1.3, d13=1.4, d14=1.5, d15=1.6, d16=1.7;
 
@@ -106,6 +108,7 @@ Double D1={0.1}, D2={0.2}, D3={0.3}, D4={0.4}, D5={0.5}, D6={0.6}, D7={0.7}, D8=
 A A1={'a',0.1},A2={'b',0.2},A3={'\377',0.3};
 B B1={0.1,{1,2,3}},B2={0.2,{5,4,3}};
 J J1={47,11},J2={73,55};
+K K1={19,69,12,28};
 T T1={'t','h','e'},T2={'f','o','x'};
 X X1={"abcdefghijklmnopqrstuvwxyzABCDEF",'G'}, X2={"123",'9'}, X3={"return-return-return",'R'};
 
@@ -200,6 +203,15 @@ float f_f16 (float a, float b, float c, float d, float e, float f, float g, floa
   fflush(out);
   return r;
 }
+float f_f24 (float a, float b, float c, float d, float e, float f, float g, float h,
+             float i, float j, float k, float l, float m, float n, float o, float p,
+             float q, float s, float t, float u, float v, float w, float x, float y)
+{
+  float r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+v+w+x+y;
+  fprintf(out,"float f(24*float):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,v,w,x,y);
+  fflush(out);
+  return r;
+}
 
 /* double tests */
 double d_d (double a)
@@ -265,10 +277,24 @@ double d_iidd (int a, int b, double c, double d)
   fflush(out);
   return r;
 }
+double d_iiidi (int a, int b, int c, double d, int e)
+{
+  double r = a+b+c+d+e;
+  fprintf(out,"double f(int,int,int,double,int):(%d,%d,%d,%g,%d)",a,b,c,d,e);
+  fflush(out);
+  return r;
+}
 double d_idid (int a, double b, int c, double d)
 {
   double r = a+b+c+d;
   fprintf(out,"double f(int,double,int,double):(%d,%g,%d,%g)",a,b,c,d);
+  fflush(out);
+  return r;
+}
+double d_fdi (float a, double b, int c)
+{
+  double r = a+b+c;
+  fprintf(out,"double f(float,double,int):(%g,%g,%d)",a,b,c);
   fflush(out);
   return r;
 }
@@ -281,6 +307,13 @@ ushort us_cdcd (char a, double b, char c, double d)
 }
 
 #ifdef HAVE_LONG_LONG_INT
+long long ll_iiilli (int a, int b, int c, long long d, int e)
+{
+  long long r = (long long)(int)a+(long long)(int)b+(long long)(int)c+d+(long long)(int)e;
+  fprintf(out,"long long f(int,int,int,long long,int):(%d,%d,%d,0x%lx%08lx,%d)",a,b,c,(long)(d>>32),(long)(d&0xffffffff),e);
+  fflush(out);
+  return r;
+}
 long long ll_flli (float a, long long b, int c)
 {
   long long r = (long long)(int)a + b + (long long)c;
@@ -323,6 +356,14 @@ Double D_fDd (float a, Double b, double c)
   fflush(out);
   return r;
 }
+Double D_Dfd (Double a, float b, double c)
+{
+  Double r;
+  r.x = a.x + b + c;
+  fprintf(out,"Double f(Double,float,double):({%g},%g,%g)",a.x,b,c);
+  fflush(out);
+  return r;
+}
 J J_JiJ (J a, int b, J c)
 {
   J r;
@@ -347,6 +388,149 @@ X X_BcdB (B a, char b, double c, B d)
   r.c1 = b;
   fprintf(out,"X f(B,char,double,B):({%g,{%d,%d,%d}},'%c',%g,{%g,{%d,%d,%d}})",
           a.d,a.i[0],a.i[1],a.i[2],b,c,d.d,d.i[0],d.i[1],d.i[2]);
+  fflush(out);
+  return r;
+}
+
+/* Test for cases where some argument (especially structure, 'long long', or
+   'double') may be passed partially in general-purpose argument registers
+   and partially on the stack. Different ABIs pass between 4 and 8 arguments
+   (or none) in general-purpose argument registers. */
+
+long l_l0K (K b, long c)
+{
+  long r = b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(K,long):(%ld,%ld,%ld,%ld,%ld)",b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l1K (long a1, K b, long c)
+{
+  long r = a1 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld)",a1,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l2K (long a1, long a2, K b, long c)
+{
+  long r = a1 + a2 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(2*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l3K (long a1, long a2, long a3, K b, long c)
+{
+  long r = a1 + a2 + a3 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(3*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l4K (long a1, long a2, long a3, long a4, K b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(4*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l5K (long a1, long a2, long a3, long a4, long a5, K b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + a5 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(5*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+long l_l6K (long a1, long a2, long a3, long a4, long a5, long a6, K b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + a5 + a6 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(6*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+
+#ifdef HAVE_LONG_LONG_INT
+long long ll_l2ll (long a1, long a2, long long b, long c)
+{
+  long long r = (long long) (a1 + a2) + b + c;
+  fprintf(out,"long long f(2*long,long long,long):(%ld,%ld,0x%lx%08lx,%ld)",a1,a2,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l3ll (long a1, long a2, long a3, long long b, long c)
+{
+  long long r = (long long) (a1 + a2 + a3) + b + c;
+  fprintf(out,"long long f(3*long,long long,long):(%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l4ll (long a1, long a2, long a3, long a4, long long b, long c)
+{
+  long long r = (long long) (a1 + a2 + a3 + a4) + b + c;
+  fprintf(out,"long long f(4*long,long long,long):(%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l5ll (long a1, long a2, long a3, long a4, long a5, long long b, long c)
+{
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5) + b + c;
+  fprintf(out,"long long f(5*long,long long,long):(%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l6ll (long a1, long a2, long a3, long a4, long a5, long a6, long long b, long c)
+{
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6) + b + c;
+  fprintf(out,"long long f(6*long,long long,long):(%ld,%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,a6,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+long long ll_l7ll (long a1, long a2, long a3, long a4, long a5, long a6, long a7, long long b, long c)
+{
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6 + a7) + b + c;
+  fprintf(out,"long long f(7*long,long long,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,a6,a7,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  return r;
+}
+#endif
+
+double d_l2d (long a1, long a2, double b, long c)
+{
+  double r = (double) (a1 + a2) + b + c;
+  fprintf(out,"double f(2*long,double,long):(%ld,%ld,%g,%ld)",a1,a2,b,c);
+  fflush(out);
+  return r;
+}
+double d_l3d (long a1, long a2, long a3, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3) + b + c;
+  fprintf(out,"double f(3*long,double,long):(%ld,%ld,%ld,%g,%ld)",a1,a2,a3,b,c);
+  fflush(out);
+  return r;
+}
+double d_l4d (long a1, long a2, long a3, long a4, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3 + a4) + b + c;
+  fprintf(out,"double f(4*long,double,long):(%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,b,c);
+  fflush(out);
+  return r;
+}
+double d_l5d (long a1, long a2, long a3, long a4, long a5, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3 + a4 + a5) + b + c;
+  fprintf(out,"double f(5*long,double,long):(%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,b,c);
+  fflush(out);
+  return r;
+}
+double d_l6d (long a1, long a2, long a3, long a4, long a5, long a6, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3 + a4 + a5 + a6) + b + c;
+  fprintf(out,"double f(6*long,double,long):(%ld,%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,a6,b,c);
+  fflush(out);
+  return r;
+}
+double d_l7d (long a1, long a2, long a3, long a4, long a5, long a6, long a7, double b, long c)
+{
+  double r = (double) (a1 + a2 + a3 + a4 + a5 + a6 + a7) + b + c;
+  fprintf(out,"double f(7*long,double,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,a6,a7,b,c);
   fflush(out);
   return r;
 }
@@ -529,6 +713,39 @@ void f_f16_simulator (void* data, va_alist alist)
   fflush(out);
   va_return_float(alist, r);
 }}
+void f_f24_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&f_f24) { fprintf(out,"wrong data for f_f24\n"); exit(1); }
+  va_start_float(alist);
+ {float a = va_arg_float(alist);
+  float b = va_arg_float(alist);
+  float c = va_arg_float(alist);
+  float d = va_arg_float(alist);
+  float e = va_arg_float(alist);
+  float f = va_arg_float(alist);
+  float g = va_arg_float(alist);
+  float h = va_arg_float(alist);
+  float i = va_arg_float(alist);
+  float j = va_arg_float(alist);
+  float k = va_arg_float(alist);
+  float l = va_arg_float(alist);
+  float m = va_arg_float(alist);
+  float n = va_arg_float(alist);
+  float o = va_arg_float(alist);
+  float p = va_arg_float(alist);
+  float q = va_arg_float(alist);
+  float s = va_arg_float(alist);
+  float t = va_arg_float(alist);
+  float u = va_arg_float(alist);
+  float v = va_arg_float(alist);
+  float w = va_arg_float(alist);
+  float x = va_arg_float(alist);
+  float y = va_arg_float(alist);
+  float r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+v+w+x+y;
+  fprintf(out,"float f(24*float):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,v,w,x,y);
+  fflush(out);
+  va_return_float(alist, r);
+}}
 
 /* double tests */
 void d_d_simulator (void* data, va_alist alist)
@@ -650,6 +867,20 @@ void d_iidd_simulator (void* data, va_alist alist)
   fflush(out);
   va_return_double(alist, r);
 }}
+void d_iiidi_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&d_iiidi) { fprintf(out,"wrong data for d_iiidi\n"); exit(1); }
+  va_start_double(alist);
+ {int a = va_arg_int(alist);
+  int b = va_arg_int(alist);
+  int c = va_arg_int(alist);
+  double d = va_arg_double(alist);
+  int e = va_arg_int(alist);
+  double r=a+b+c+d+e;
+  fprintf(out,"double f(int,int,int,double,int):(%d,%d,%d,%g,%d)",a,b,c,d,e);
+  fflush(out);
+  va_return_double(alist, r);
+}}
 void d_idid_simulator (void* data, va_alist alist)
 {
   if (data != (void*)&d_idid) { fprintf(out,"wrong data for d_idid\n"); exit(1); }
@@ -660,6 +891,18 @@ void d_idid_simulator (void* data, va_alist alist)
   double d = va_arg_double(alist);
   double r=a+b+c+d;
   fprintf(out,"double f(int,double,int,double):(%d,%g,%d,%g)",a,b,c,d);
+  fflush(out);
+  va_return_double(alist, r);
+}}
+void d_fdi_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&d_fdi) { fprintf(out,"wrong data for d_fdi\n"); exit(1); }
+  va_start_double(alist);
+ {float a = va_arg_float(alist);
+  double b = va_arg_double(alist);
+  int c = va_arg_int(alist);
+  double r=a+b+c;
+  fprintf(out,"double f(float,double,int):(%g,%g,%d)",a,b,c);
   fflush(out);
   va_return_double(alist, r);
 }}
@@ -677,6 +920,20 @@ void us_cdcd_simulator (void* data, va_alist alist)
   va_return_ushort(alist, r);
 }}
 #ifdef HAVE_LONG_LONG_INT
+void ll_iiilli_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&ll_iiilli) { fprintf(out,"wrong data for ll_iiilli\n"); exit(1); }
+  va_start_longlong(alist);
+ {int a = va_arg_int(alist);
+  int b = va_arg_int(alist);
+  int c = va_arg_int(alist);
+  long long d = va_arg_longlong(alist);
+  int e = va_arg_int(alist);
+  long long r = (long long)(int)a + (long long)(int)b + (long long)(int)c + d + (long long)e;
+  fprintf(out,"long long f(int,int,int,long long,int):(%d,%d,%d,0x%lx%08lx,%d)",a,b,c,(long)(d>>32),(long)(d&0xffffffff),e);
+  fflush(out);
+  va_return_longlong(alist, r);
+}}
 void ll_flli_simulator (void* data, va_alist alist)
 {
   if (data != (void*)&ll_flli) { fprintf(out,"wrong data for ll_flli\n"); exit(1); }
@@ -758,6 +1015,22 @@ void D_fDd_simulator (void* data, va_alist alist)
   fflush(out);
   va_return_struct(alist, Double, r);
 }}
+void D_Dfd_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&D_Dfd) { fprintf(out,"wrong data for D_Dfd\n"); exit(1); }
+ {Double a;
+  float b;
+  double c;
+  Double r;
+  va_start_struct(alist, Double, va_word_splittable_1(double));
+  a = va_arg_struct(alist, Double);
+  b = va_arg_float(alist);
+  c = va_arg_double(alist);
+  r.x = a.x + b + c;
+  fprintf(out,"Double f(Double,float,double):({%g},%g,%g)",a.x,b,c);
+  fflush(out);
+  va_return_struct(alist, Double, r);
+}}
 #endif
 void J_JiJ_simulator (void* data, va_alist alist)
 {
@@ -815,6 +1088,294 @@ void X_BcdB_simulator (void* data, va_alist alist)
 }}
 #endif
 #endif
+
+/* gpargs boundary tests */
+void l_l0K_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l0K) { fprintf(out,"wrong data for l_l0K\n"); exit(1); }
+  va_start_long(alist);
+ {K b = va_arg_struct(alist, K);
+  long c = va_arg_long(alist);
+  long r = b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(K,long):(%ld,%ld,%ld,%ld,%ld)",b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l1K_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l1K) { fprintf(out,"wrong data for l_l1K\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  K b = va_arg_struct(alist, K);
+  long c = va_arg_long(alist);
+  long r = a1 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld)",a1,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l2K_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l2K) { fprintf(out,"wrong data for l_l2K\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  K b = va_arg_struct(alist, K);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(2*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l3K_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l3K) { fprintf(out,"wrong data for l_l3K\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  K b = va_arg_struct(alist, K);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(3*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l4K_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l4K) { fprintf(out,"wrong data for l_l4K\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  K b = va_arg_struct(alist, K);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + a4 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(4*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l5K_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l5K) { fprintf(out,"wrong data for l_l5K\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  K b = va_arg_struct(alist, K);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + a4 + a5 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(5*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l6K_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l6K) { fprintf(out,"wrong data for l_l6K\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  long a6 = va_arg_long(alist);
+  K b = va_arg_struct(alist, K);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + a4 + a5 + a6 + b.l1 + b.l2 + b.l3 + b.l4 + c;
+  fprintf(out,"long f(6*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+#ifdef HAVE_LONG_LONG_INT
+void ll_l2ll_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&ll_l2ll) { fprintf(out,"wrong data for ll_l2ll\n"); exit(1); }
+  va_start_longlong(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long long b = va_arg_longlong(alist);
+  long c = va_arg_long(alist);
+  long long r = (long long) (a1 + a2) + b + c;
+  fprintf(out,"long long f(2*long,long long,long):(%ld,%ld,0x%lx%08lx,%ld)",a1,a2,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  va_return_longlong(alist, r);
+}}
+void ll_l3ll_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&ll_l3ll) { fprintf(out,"wrong data for ll_l3ll\n"); exit(1); }
+  va_start_longlong(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long long b = va_arg_longlong(alist);
+  long c = va_arg_long(alist);
+  long long r = (long long) (a1 + a2 + a3) + b + c;
+  fprintf(out,"long long f(3*long,long long,long):(%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  va_return_longlong(alist, r);
+}}
+void ll_l4ll_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&ll_l4ll) { fprintf(out,"wrong data for ll_l4ll\n"); exit(1); }
+  va_start_longlong(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long long b = va_arg_longlong(alist);
+  long c = va_arg_long(alist);
+  long long r = (long long) (a1 + a2 + a3 + a4) + b + c;
+  fprintf(out,"long long f(4*long,long long,long):(%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  va_return_longlong(alist, r);
+}}
+void ll_l5ll_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&ll_l5ll) { fprintf(out,"wrong data for ll_l5ll\n"); exit(1); }
+  va_start_longlong(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  long long b = va_arg_longlong(alist);
+  long c = va_arg_long(alist);
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5) + b + c;
+  fprintf(out,"long long f(5*long,long long,long):(%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  va_return_longlong(alist, r);
+}}
+void ll_l6ll_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&ll_l6ll) { fprintf(out,"wrong data for ll_l6ll\n"); exit(1); }
+  va_start_longlong(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  long a6 = va_arg_long(alist);
+  long long b = va_arg_longlong(alist);
+  long c = va_arg_long(alist);
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6) + b + c;
+  fprintf(out,"long long f(6*long,long long,long):(%ld,%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,a6,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  va_return_longlong(alist, r);
+}}
+void ll_l7ll_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&ll_l7ll) { fprintf(out,"wrong data for ll_l7ll\n"); exit(1); }
+  va_start_longlong(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  long a6 = va_arg_long(alist);
+  long a7 = va_arg_long(alist);
+  long long b = va_arg_longlong(alist);
+  long c = va_arg_long(alist);
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6 + a7) + b + c;
+  fprintf(out,"long long f(7*long,long long,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,a6,a7,(long)(b>>32),(long)(b&0xffffffff),c);
+  fflush(out);
+  va_return_longlong(alist, r);
+}}
+#endif
+void d_l2d_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&d_l2d) { fprintf(out,"wrong data for d_l2d\n"); exit(1); }
+  va_start_double(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  double b = va_arg_double(alist);
+  long c = va_arg_long(alist);
+  double r = (double) (a1 + a2) + b + c;
+  fprintf(out,"double f(2*long,double,long):(%ld,%ld,%g,%ld)",a1,a2,b,c);
+  fflush(out);
+  va_return_double(alist, r);
+}}
+void d_l3d_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&d_l3d) { fprintf(out,"wrong data for d_l3d\n"); exit(1); }
+  va_start_double(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  double b = va_arg_double(alist);
+  long c = va_arg_long(alist);
+  double r = (double) (a1 + a2 + a3) + b + c;
+  fprintf(out,"double f(3*long,double,long):(%ld,%ld,%ld,%g,%ld)",a1,a2,a3,b,c);
+  fflush(out);
+  va_return_double(alist, r);
+}}
+void d_l4d_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&d_l4d) { fprintf(out,"wrong data for d_l4d\n"); exit(1); }
+  va_start_double(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  double b = va_arg_double(alist);
+  long c = va_arg_long(alist);
+  double r = (double) (a1 + a2 + a3 + a4) + b + c;
+  fprintf(out,"double f(4*long,double,long):(%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,b,c);
+  fflush(out);
+  va_return_double(alist, r);
+}}
+void d_l5d_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&d_l5d) { fprintf(out,"wrong data for d_l5d\n"); exit(1); }
+  va_start_double(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  double b = va_arg_double(alist);
+  long c = va_arg_long(alist);
+  double r = (double) (a1 + a2 + a3 + a4 + a5) + b + c;
+  fprintf(out,"double f(5*long,double,long):(%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,b,c);
+  fflush(out);
+  va_return_double(alist, r);
+}}
+void d_l6d_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&d_l6d) { fprintf(out,"wrong data for d_l6d\n"); exit(1); }
+  va_start_double(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  long a6 = va_arg_long(alist);
+  double b = va_arg_double(alist);
+  long c = va_arg_long(alist);
+  double r = (double) (a1 + a2 + a3 + a4 + a5 + a6) + b + c;
+  fprintf(out,"double f(6*long,double,long):(%ld,%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,a6,b,c);
+  fflush(out);
+  va_return_double(alist, r);
+}}
+void d_l7d_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&d_l7d) { fprintf(out,"wrong data for d_l7d\n"); exit(1); }
+  va_start_double(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  long a6 = va_arg_long(alist);
+  long a7 = va_arg_long(alist);
+  double b = va_arg_double(alist);
+  long c = va_arg_long(alist);
+  double r = (double) (a1 + a2 + a3 + a4 + a5 + a6 + a7) + b + c;
+  fprintf(out,"double f(7*long,double,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%g,%ld)",a1,a2,a3,a4,a5,a6,a7,b,c);
+  fflush(out);
+  va_return_double(alist, r);
+}}
 
 /*
  * The way we run these tests - first call the function directly, then
@@ -960,6 +1521,15 @@ int main (void)
     fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float)) callback) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16);
     fprintf(out,"->%g\n",fr);
     fflush(out);
+
+    fr = f_f24(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    callback = alloc_callback(&f_f24_simulator,(void*)&f_f24);
+    fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float)) callback) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,f21,f22,f23,f24);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
   }
 
   /* double tests */
@@ -1050,12 +1620,30 @@ int main (void)
     fprintf(out,"->%g\n",dr);
     fflush(out);
 
+    dr = d_iiidi(i1,i2,i3,d4,i5);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    callback = alloc_callback(&d_iiidi_simulator,(void*)&d_iiidi);
+    dr = ((double (*) (int,int,int,double,int)) callback) (i1,i2,i3,d4,i5);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
     dr = d_idid(i1,d2,i3,d4);
     fprintf(out,"->%g\n",dr);
     fflush(out);
     dr = 0.0; clear_traces();
     callback = alloc_callback(&d_idid_simulator,(void*)&d_idid);
     dr = ((double (*) (int,double,int,double)) callback) (i1,d2,i3,d4);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_fdi(f1,d2,i3);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    callback = alloc_callback(&d_fdi_simulator,(void*)&d_fdi);
+    dr = ((double (*) (float,double,int)) callback) (f1,d2,i3);
     fprintf(out,"->%g\n",dr);
     fflush(out);
 
@@ -1069,6 +1657,15 @@ int main (void)
     fflush(out);
 
 #ifdef HAVE_LONG_LONG_INT
+    llr = ll_iiilli(i1,i2,i3,ll1,i13);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+    llr = 0; clear_traces();
+    callback = alloc_callback(&ll_iiilli_simulator,(void*)&ll_iiilli);
+    llr = ((long long (*) (int,int,int,long long,int)) callback) (i1,i2,i3,ll1,i13);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+
     llr = ll_flli(f13,ll1,i13);
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
     fflush(out);
@@ -1126,6 +1723,15 @@ int main (void)
     Dr = ((Double (*) (float,Double,double)) callback) (f1,D2,d3);
     fprintf(out,"->{%g}\n",Dr.x);
     fflush(out);
+
+    Dr = D_Dfd(D1,f2,d3);
+    fprintf(out,"->{%g}\n",Dr.x);
+    fflush(out);
+    Dr.x = 0.0; clear_traces();
+    callback = alloc_callback(&D_Dfd_simulator,(void*)&D_Dfd);
+    Dr = ((Double (*) (Double,float,double)) callback) (D1,f2,d3);
+    fprintf(out,"->{%g}\n",Dr.x);
+    fflush(out);
 #endif
 
     Jr = J_JiJ(J1,i2,J2);
@@ -1162,6 +1768,187 @@ int main (void)
 #endif
   }
 #endif
+
+  /* gpargs boundary tests */
+  { long lr;
+#ifdef HAVE_LONG_LONG_INT
+    long long llr;
+#endif
+    double dr;
+
+    lr = l_l0K(K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l0K_simulator,(void*)l_l0K);
+    lr = ((long (*) (K,long)) callback) (K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l1K(l1,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l1K_simulator,(void*)l_l1K);
+    lr = ((long (*) (long,K,long)) callback) (l1,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l2K(l1,l2,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l2K_simulator,(void*)l_l2K);
+    lr = ((long (*) (long,long,K,long)) callback) (l1,l2,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l3K(l1,l2,l3,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l3K_simulator,(void*)l_l3K);
+    lr = ((long (*) (long,long,long,K,long)) callback) (l1,l2,l3,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l4K(l1,l2,l3,l4,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l4K_simulator,(void*)l_l4K);
+    lr = ((long (*) (long,long,long,long,K,long)) callback) (l1,l2,l3,l4,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l5K(l1,l2,l3,l4,l5,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l5K_simulator,(void*)l_l5K);
+    lr = ((long (*) (long,long,long,long,long,K,long)) callback) (l1,l2,l3,l4,l5,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l6K(l1,l2,l3,l4,l5,l6,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l6K_simulator,(void*)l_l6K);
+    lr = ((long (*) (long,long,long,long,long,long,K,long)) callback) (l1,l2,l3,l4,l5,l6,K1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+#ifdef HAVE_LONG_LONG_INT
+    llr = ll_l2ll(l1,l2,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+    llr = 0; clear_traces();
+    callback = alloc_callback(&ll_l2ll_simulator,(void*)ll_l2ll);
+    llr = ((long long (*) (long,long,long long,long)) callback) (l1,l2,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+
+    llr = ll_l3ll(l1,l2,l3,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+    llr = 0; clear_traces();
+    callback = alloc_callback(&ll_l3ll_simulator,(void*)ll_l3ll);
+    llr = ((long long (*) (long,long,long,long long,long)) callback) (l1,l2,l3,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+
+    llr = ll_l4ll(l1,l2,l3,l4,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+    llr = 0; clear_traces();
+    callback = alloc_callback(&ll_l4ll_simulator,(void*)ll_l4ll);
+    llr = ((long long (*) (long,long,long,long,long long,long)) callback) (l1,l2,l3,l4,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+
+    llr = ll_l5ll(l1,l2,l3,l4,l5,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+    llr = 0; clear_traces();
+    callback = alloc_callback(&ll_l5ll_simulator,(void*)ll_l5ll);
+    llr = ((long long (*) (long,long,long,long,long,long long,long)) callback) (l1,l2,l3,l4,l5,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+
+    llr = ll_l6ll(l1,l2,l3,l4,l5,l6,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+    llr = 0; clear_traces();
+    callback = alloc_callback(&ll_l6ll_simulator,(void*)ll_l6ll);
+    llr = ((long long (*) (long,long,long,long,long,long,long long,long)) callback) (l1,l2,l3,l4,l5,l6,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+
+    llr = ll_l7ll(l1,l2,l3,l4,l5,l6,l7,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+    llr = 0; clear_traces();
+    callback = alloc_callback(&ll_l7ll_simulator,(void*)ll_l7ll);
+    llr = ((long long (*) (long,long,long,long,long,long,long,long long,long)) callback) (l1,l2,l3,l4,l5,l6,l7,ll1,l9);
+    fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
+    fflush(out);
+#endif
+
+    dr = d_l2d(l1,l2,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    callback = alloc_callback(&d_l2d_simulator,(void*)d_l2d);
+    dr = ((double (*) (long,long,double,long)) callback) (l1,l2,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_l3d(l1,l2,l3,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    callback = alloc_callback(&d_l3d_simulator,(void*)d_l3d);
+    dr = ((double (*) (long,long,long,double,long)) callback) (l1,l2,l3,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_l4d(l1,l2,l3,l4,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    callback = alloc_callback(&d_l4d_simulator,(void*)d_l4d);
+    dr = ((double (*) (long,long,long,long,double,long)) callback) (l1,l2,l3,l4,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_l5d(l1,l2,l3,l4,l5,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    callback = alloc_callback(&d_l5d_simulator,(void*)d_l5d);
+    dr = ((double (*) (long,long,long,long,long,double,long)) callback) (l1,l2,l3,l4,l5,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_l6d(l1,l2,l3,l4,l5,l6,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    callback = alloc_callback(&d_l6d_simulator,(void*)d_l6d);
+    dr = ((double (*) (long,long,long,long,long,long,double,long)) callback) (l1,l2,l3,l4,l5,l6,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_l7d(l1,l2,l3,l4,l5,l6,l7,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    callback = alloc_callback(&d_l7d_simulator,(void*)d_l7d);
+    dr = ((double (*) (long,long,long,long,long,long,long,double,long)) callback) (l1,l2,l3,l4,l5,l6,l7,ll1,l9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+  }
 
   exit(0);
 }

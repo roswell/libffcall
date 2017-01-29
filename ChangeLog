@@ -1,5 +1,13 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	Add more floating-point, mixed-number, general-purpose args tests.
+	* avcall/tests.c (f_f24, d_iiidi, d_fdi, ll_iiilli, D_Dfd,
+	l_l0K, ..., l_l6K, ll_l2ll, ..., ll_l7ll, d_l2d, ... d_l7d): New tests.
+	* vacall/tests.c: Likewise.
+	* callback/tests.c: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	Enable the 'long long' tests in callback.
 	* callback/configure.ac: Invoke AC_TYPE_LONG_LONG_INT.
 	* callback/tests.c: Test HAVE_LONG_LONG_INT, not HAVE_LONG_LONG.
