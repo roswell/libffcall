@@ -1,5 +1,11 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	mips: Fix for Linux with "gcc -mabi=32".
+	* vacall/vacall.h.in (__va_arg_adjusted): Use same conditional on
+	_MIPSEB as in callback/vacall_r/vacall_r.h.in.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	mipsn32, mips64: Fix struct args and struct returns with newer GCC.
 	* avcall/avcall.h.in: For mipsn32 and mips64 in gcc >= 3.4:
 	1. Don't set __AV_GCC_STRUCT_RETURN.

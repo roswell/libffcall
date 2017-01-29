@@ -724,9 +724,15 @@ typedef __va_alist* va_alist;
   __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
+#ifdef _MIPSEB
 /* big endian -> small args < 1 word are adjusted to the right */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   ((LIST)->anum++, __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))
+#else /* _MIPSEL */
+/* little endian -> small args < 1 word are adjusted to the left */
+#define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
+  ((LIST)->anum++, __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))
+#endif
 #endif
 #if defined(__x86_64__)
 /* the first 6 argument words are passed in registers */
