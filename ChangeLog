@@ -1,5 +1,11 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	arm: Comments.
+	* avcall/avcall-arm.c: Add comments.
+	* avcall/avcall.h.in: Fix comment.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	arm: Make trampoline work on real ARM harware.
 	The cache flushing code in cache-arm.c and cache-armel.c are for old
 	Linux versions. Nowadays the best way is through the GCC builtin

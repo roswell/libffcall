@@ -19,11 +19,19 @@
 
   ARM Argument Passing Conventions:
 
-  All arguments, except the first 4 words, are passed on the stack with
-  word alignment. Doubles take two words. Structure args are passed as
-  true structures embedded in the argument stack. To return a structure,
-  the called function copies the return value to the address supplied
-  in register "%r0".
+  All arguments, except the first 4 words which are passed in the registers
+  r0, r1, r2, r3, are passed on the stack with word alignment. Doubles take
+  two words.
+  In ABIs where 'double' and 'long long' have alignment 4, they are passed
+  entirely in registers or entirely on the stack (i.e. not the first half
+  in r3 and the second half on the stack).
+  In ABIs where 'double' and 'long long' have alignment 8, they are passed
+  with 2-word alignment in this word sequence (e.g. a 'double' after an
+  'int' in r0 gets passed in (r2,r3), not in (r1,r2)). This implies that
+  they are passed entirely in registers or entirely on the stack.
+  Structure args are passed as true structures embedded in the argument stack.
+  To return a structure, the called function copies the return value to the
+  address supplied in register r0.
 
   Compile this routine with gcc -O (or -O2 or -g -O) to get the right
   register variables, or use the assembler version.
