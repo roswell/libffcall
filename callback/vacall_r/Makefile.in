@@ -235,7 +235,7 @@ SOURCE_FILES = \
   Makefile.in Makefile.mingw32 Makefile.msvc \
   configure.ac \
   vacall_r.h.in \
-  vacall-alpha.c vacall-alpha-macro.S \
+  vacall-alpha.c vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm.c vacall-arm-macro.S \
   vacall-armel.c vacall-armel-macro.S \
   vacall-hppa.c vacall-hppa.s \

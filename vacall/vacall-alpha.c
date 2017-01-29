@@ -42,106 +42,108 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
           __vaword word5, __vaword word6,
           __vaword firstword)
 {
-  __va_alist list;
-  struct { double farg1, farg2, farg3, farg4, farg5, farg6;
-           long arg1, arg2, arg3, arg4, arg5, arg6;
-         }
-    args;
+  /* Put all local variables in a struct, so that we control the allocation
+   * order on the stack. */
+  struct {
+    __va_alist list;
+    double farg1, farg2, farg3, farg4, farg5, farg6;
+    long arg1, arg2, arg3, arg4, arg5, arg6;
+  } locals;
   /* MAGIC ALERT! This is the last struct on the stack, so that
-   * &args + 1 == &firstword. Look at the assembly code to convince yourself.
+   * &locals + 1 == &firstword. Look at the assembly code to convince yourself.
    */
   /* Move the arguments passed in registers to their stack locations. */
-  /* args.arg1 = */ (&firstword)[-6] = word1;
-  /* args.arg2 = */ (&firstword)[-5] = word2;
-  /* args.arg3 = */ (&firstword)[-4] = word3;
-  /* args.arg4 = */ (&firstword)[-3] = word4;
-  /* args.arg5 = */ (&firstword)[-2] = word5;
-  /* args.arg6 = */ (&firstword)[-1] = word6;
-  args.farg1 = farg1;
-  args.farg2 = farg2;
-  args.farg3 = farg3;
-  args.farg4 = farg4;
-  args.farg5 = farg5;
-  args.farg6 = farg6;
+  /* locals.arg1 = */ (&firstword)[-6] = word1; /* $16 */
+  /* locals.arg2 = */ (&firstword)[-5] = word2; /* $17 */
+  /* locals.arg3 = */ (&firstword)[-4] = word3; /* $18 */
+  /* locals.arg4 = */ (&firstword)[-3] = word4; /* $19 */
+  /* locals.arg5 = */ (&firstword)[-2] = word5; /* $20 */
+  /* locals.arg6 = */ (&firstword)[-1] = word6; /* $21 */
+  locals.farg1 = farg1;
+  locals.farg2 = farg2;
+  locals.farg3 = farg3;
+  locals.farg4 = farg4;
+  locals.farg5 = farg5;
+  locals.farg6 = farg6;
   /* Prepare the va_alist. */
-  list.flags = 0;
-  list.aptr = (long)(&firstword - 6);
-  list.raddr = (void*)0;
-  list.rtype = __VAvoid;
-  list.memargptr = (long)&firstword;
+  locals.list.flags = 0;
+  locals.list.aptr = (long)(&firstword - 6);
+  locals.list.raddr = (void*)0;
+  locals.list.rtype = __VAvoid;
+  locals.list.memargptr = (long)&firstword;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
-  (*vacall_function) (&list);
+  (*vacall_function) (&locals.list);
 #else /* REENTRANT */
-  (*env->vacall_function) (env->arg,&list);
+  (*env->vacall_function) (env->arg,&locals.list);
 #endif
   /* Put return value into proper register. */
-  if (list.rtype == __VAvoid) {
+  if (locals.list.rtype == __VAvoid) {
   } else
-  if (list.rtype == __VAchar) {
-    iret = list.tmp._char;
+  if (locals.list.rtype == __VAchar) {
+    iret = locals.list.tmp._char;
   } else
-  if (list.rtype == __VAschar) {
-    iret = list.tmp._schar;
+  if (locals.list.rtype == __VAschar) {
+    iret = locals.list.tmp._schar;
   } else
-  if (list.rtype == __VAuchar) {
-    iret = list.tmp._uchar;
+  if (locals.list.rtype == __VAuchar) {
+    iret = locals.list.tmp._uchar;
   } else
-  if (list.rtype == __VAshort) {
-    iret = list.tmp._short;
+  if (locals.list.rtype == __VAshort) {
+    iret = locals.list.tmp._short;
   } else
-  if (list.rtype == __VAushort) {
-    iret = list.tmp._ushort;
+  if (locals.list.rtype == __VAushort) {
+    iret = locals.list.tmp._ushort;
   } else
-  if (list.rtype == __VAint) {
-    iret = list.tmp._int;
+  if (locals.list.rtype == __VAint) {
+    iret = locals.list.tmp._int;
   } else
-  if (list.rtype == __VAuint) {
-    iret = list.tmp._uint;
+  if (locals.list.rtype == __VAuint) {
+    iret = locals.list.tmp._uint;
   } else
-  if (list.rtype == __VAlong) {
-    iret = list.tmp._long;
+  if (locals.list.rtype == __VAlong) {
+    iret = locals.list.tmp._long;
   } else
-  if (list.rtype == __VAulong) {
-    iret = list.tmp._ulong;
+  if (locals.list.rtype == __VAulong) {
+    iret = locals.list.tmp._ulong;
   } else
-  if (list.rtype == __VAlonglong) {
-    iret = list.tmp._long;
+  if (locals.list.rtype == __VAlonglong) {
+    iret = locals.list.tmp._long;
   } else
-  if (list.rtype == __VAulonglong) {
-    iret = list.tmp._ulong;
+  if (locals.list.rtype == __VAulonglong) {
+    iret = locals.list.tmp._ulong;
   } else
-  if (list.rtype == __VAfloat) {
-    fret = list.tmp._float;
+  if (locals.list.rtype == __VAfloat) {
+    fret = locals.list.tmp._float;
   } else
-  if (list.rtype == __VAdouble) {
-    dret = list.tmp._double;
+  if (locals.list.rtype == __VAdouble) {
+    dret = locals.list.tmp._double;
   } else
-  if (list.rtype == __VAvoidp) {
-    iret = (long)list.tmp._ptr;
+  if (locals.list.rtype == __VAvoidp) {
+    iret = (long)locals.list.tmp._ptr;
   } else
-  if (list.rtype == __VAstruct) {
-    if (list.flags & __VA_PCC_STRUCT_RETURN) {
+  if (locals.list.rtype == __VAstruct) {
+    if (locals.list.flags & __VA_PCC_STRUCT_RETURN) {
       /* pcc struct return convention */
-      iret = (long) list.raddr;
+      iret = (long) locals.list.raddr;
     } else {
       /* normal struct return convention */
-      if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
-        if (list.rsize == sizeof(char)) {
-          iret = *(unsigned char *) list.raddr;
+      if (locals.list.flags & __VA_REGISTER_STRUCT_RETURN) {
+        if (locals.list.rsize == sizeof(char)) {
+          iret = *(unsigned char *) locals.list.raddr;
         } else
-        if (list.rsize == sizeof(short)) {
-          iret = *(unsigned short *) list.raddr;
+        if (locals.list.rsize == sizeof(short)) {
+          iret = *(unsigned short *) locals.list.raddr;
         } else
-        if (list.rsize == sizeof(int)) {
-          iret = *(unsigned int *) list.raddr;
+        if (locals.list.rsize == sizeof(int)) {
+          iret = *(unsigned int *) locals.list.raddr;
         } else
-        if (list.rsize == sizeof(long)) {
-          iret = *(unsigned long *) list.raddr;
+        if (locals.list.rsize == sizeof(long)) {
+          iret = *(unsigned long *) locals.list.raddr;
         } else
-        if (list.rsize == 2*sizeof(__vaword)) {
-          iret  = ((__vaword *) list.raddr)[0];
-          iret2 = ((__vaword *) list.raddr)[1];
+        if (locals.list.rsize == 2*sizeof(__vaword)) {
+          iret  = ((__vaword *) locals.list.raddr)[0];
+          iret2 = ((__vaword *) locals.list.raddr)[1];
         }
       }
     }

@@ -18,9 +18,10 @@ precompiled : \
   vacall-i386-macro.S \
   vacall-m68k.mit.S vacall-m68k.motorola.S \
   vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64eb-macro.S vacall-mips64el-macro.S \
-  vacall-sparc-macro.S vacall-sparc64-macro.S
+  vacall-sparc-macro.S vacall-sparc64-macro.S \
+  vacall-alpha.s
 # Old rules
-# vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
+# vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall.h.in $(THISFILE)
@@ -111,9 +112,8 @@ vacall-sparc64-macro.S : vacall-sparc64-linux.s ../common/asm-sparc.sh $(THISFIL
 
 
 vacall-alpha.s : vacall-alpha.c vacall.h.in $(THISFILE)
-	$(GCC) -V 2.7.2 -b alpha-dec-osf $(GCCFLAGS) -D__alpha__ -S vacall-alpha.c -o vacall-alpha-temp.s
-	cat < vacall-alpha-temp.s > vacall-alpha.s
-	$(RM) vacall-alpha-temp.s
+	$(CROSS_TOOL) alpha-linux gcc -V 4.0.2 $(GCCFLAGS) -D__alpha__ -S vacall-alpha.c -o vacall-alpha.s
+
 
 vacall-hppa.s : vacall-hppa.c vacall.h.in $(THISFILE)
 	$(GCC) -V 2.6.3 -b hppa1.0-hpux $(GCCFLAGS) -D__hppa__ -S vacall-hppa.c -o vacall-hppa.s

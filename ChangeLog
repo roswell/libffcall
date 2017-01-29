@@ -1,5 +1,24 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	alpha: Regenerate .s and .S files with known compilers.
+	* avcall/avcall-alpha.c: Use __builtin_alloca.
+	* avcall/Makefile.devel (precompiled): Depend on avcall-alpha.s.
+	(avcall-alpha.s): Rewritten.
+	* vacall/vacall-alpha.c: Put all local variables in a struct.
+	* vacall/Makefile.devel (precompiled): Depend on vacall-alpha.s.
+	(vacall-alpha.s): Rewritten.
+	* callback/vacall_r/Makefile.devel (precompiled): Depend on
+	vacall-alpha-macro.S.
+	(vacall-alpha-linux.s): New target.
+	(vacall-alpha-macro.S): Rewritten.
+	* callback/vacall_r/Makefile.in (SOURCE_FILES): Add
+	vacall-alpha-linux.s.
+	* avcall/avcall-alpha.s: Remove from version control.
+	* vacall/vacall-alpha.s: Likewise.
+	* callback/vacall_r/vacall-alpha-macro.S: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	sparc64: Fix for Solaris.
 	* vacall/Makefile.devel (vacall-sparc64-linux.s): Produce code that does
 	not make assumptions about the address space.

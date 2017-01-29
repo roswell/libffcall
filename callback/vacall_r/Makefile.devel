@@ -18,9 +18,10 @@ precompiled : \
   vacall-i386-macro.S \
   vacall-m68k.mit.S vacall-m68k.motorola.S vacall-m68k-netbsd-macro.S \
   vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64eb-macro.S vacall-mips64el-macro.S \
-  vacall-sparc-macro.S vacall-sparc64-macro.S
+  vacall-sparc-macro.S vacall-sparc64-macro.S \
+  vacall-alpha-macro.S
 # Old rules
-# vacall-alpha-macro.S vacall-hppa.s vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
+# vacall-hppa.s vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall_r.h.in $(THISFILE)
@@ -110,10 +111,12 @@ vacall-sparc64-macro.S : vacall-sparc64-linux.s ../../common/asm-sparc.sh $(THIS
 	(echo '#include "asm-sparc.h"' ; ../../common/asm-sparc.sh < vacall-sparc64-linux.s) > vacall-sparc64-macro.S
 
 
-vacall-alpha-macro.S : vacall-alpha.c vacall_r.h.in $(THISFILE)
-	$(GCC) -V 2.7.2 -b alpha-dec-osf $(GCCFLAGS) -D__alpha__ -S vacall-alpha.c -o vacall-alpha-temp.s
-	$(SED) -e '/ldgp/d' < vacall-alpha-temp.s | sed -f elfhack-alpha.sed > vacall-alpha-macro.S
-	$(RM) vacall-alpha-temp.s
+vacall-alpha-linux.s : vacall-alpha.c vacall_r.h.in $(THISFILE)
+	$(CROSS_TOOL) alpha-linux gcc -V 4.0.2 $(GCCFLAGS) -D__alpha__ -S vacall-alpha.c -o vacall-alpha-linux.s
+
+vacall-alpha-macro.S : vacall-alpha-linux.s $(THISFILE)
+	sed -f elfhack-alpha.sed < vacall-alpha-linux.s > vacall-alpha-macro.S
+
 
 vacall-hppa.s : vacall-hppa.c vacall_r.h.in $(THISFILE)
 	$(GCC) -V 2.6.3 -b hppa1.0-hpux $(GCCFLAGS) -D__hppa__ -S vacall-hppa.c -o vacall-hppa.s

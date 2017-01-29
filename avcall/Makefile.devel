@@ -18,9 +18,10 @@ precompiled : \
   avcall-i386-macro.S \
   avcall-m68k.mit.S avcall-m68k.motorola.S \
   avcall-mipseb-macro.S avcall-mipsel-macro.S avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S avcall-mips64eb-macro.S avcall-mips64el-macro.S \
-  avcall-sparc-macro.S avcall-sparc64-macro.S
+  avcall-sparc-macro.S avcall-sparc64-macro.S \
+  avcall-alpha.s
 # Old rules
-# avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
+# avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
 
 
 avcall-i386-linux.s : avcall-i386.c avcall.h.in $(THISFILE)
@@ -94,12 +95,9 @@ avcall-sparc64-macro.S : avcall-sparc64-linux.s ../common/asm-sparc.sh $(THISFIL
 	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < avcall-sparc64-linux.s) > avcall-sparc64-macro.S
 
 
-# Patrick Bridges says that on Linux/Alpha, avcall-alpha.s compiled with "-O"
-# works but compiled with "-O2" doesn't work.
 avcall-alpha.s : avcall-alpha.c avcall.h.in $(THISFILE)
-	$(GCC) -V 2.7.2 -b alpha-dec-osf $(GCCFLAGS) -O1 -D__alpha__ -S avcall-alpha.c -o avcall-alpha-temp.s
-	$(SED) -e '/ldgp/d' < avcall-alpha-temp.s > avcall-alpha.s
-	$(RM) avcall-alpha-temp.s
+	$(CROSS_TOOL) alpha-linux gcc -V 4.0.2 $(GCCFLAGS) -D__alpha__ -S avcall-alpha.c -o avcall-alpha.s
+
 
 avcall-hppa.s : avcall-hppa.c avcall.h.in $(THISFILE)
 	$(GCC) -V 2.6.3 -b hppa1.0-hpux $(GCCFLAGS) -D__hppa__ -S avcall-hppa.c -o avcall-hppa-temp.s

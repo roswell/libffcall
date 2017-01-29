@@ -58,8 +58,8 @@ __builtin_avcall(av_alist* l)
 /*register __avword	iret	__asm__("$0"); */
   register __avword	iret2	__asm__("$1");
 
-  __avword* argframe = (sp -= __AV_ALIST_WORDS); /* make room for argument list */
-  int arglen = ((unsigned long) l->aptr - (unsigned long) l->args) >> 3;
+  __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
+  int arglen = ((unsigned long) l->aptr - (unsigned long) l->args) / sizeof (__avword);
   __avword i, i2;
 
   for (i = 6; i < arglen; i++)		/* push excess function args */
@@ -82,7 +82,6 @@ __builtin_avcall(av_alist* l)
   __asm__ __volatile__ ("ldt $f21,%0" : : "m" (l->args[5])); /* farg6 = *(double*) &l->args[5]; */
   i = (*l->func)();
   i2 = iret2;
-  sp += __AV_ALIST_WORDS;	/* remove argument list from the stack */
   /* this is apparently not needed, but better safe than sorry... */
   __asm__ __volatile__ ("" : : :
 			/* clobber */ "$16", "$17", "$18", "$19", "$20", "$21",
