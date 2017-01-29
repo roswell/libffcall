@@ -1,5 +1,43 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	Add support for some Linux+PaX or SELinux kernels and for HardenedBSD.
+	Reported
+	- by Gerard Milmeister in https://sourceforge.net/p/clisp/bugs/356/,
+	- by Pradeep Kumar in https://sourceforge.net/p/clisp/bugs/415/,
+	- by Don Cohen in
+	  http://lists.gnu.org/archive/html/libffcall/2016-12/msg00002.html,
+	- by Nelson Beebe.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): New macro.
+	* m4/general.m4 (FFCALL_COMMON_TRAMPOLINE): Require it.
+	* trampoline/trampoline.c (EXECUTABLE_VIA_MALLOC_THEN_MPROTECT,
+	EXECUTABLE_VIA_MMAP_THEN_MPROTECT, EXECUTABLE_VIA_MMAP_FILE_SHARED):
+	New macros.
+	(EXECUTABLE_VIA_MPROTECT, EXECUTABLE_VIA_MMAP_ANONYMOUS,
+	EXECUTABLE_VIA_MMAP_DEVZERO): Remove macros.
+	(MAP_FILE, MAP_VARIABLE): Define fallbacks.
+	(pagesize): Define outside of functions.
+	(alloc_trampoline): If EXECUTABLE_VIA_MMAP_FILE_SHARED is defined,
+	create separate mappings of a file, for writing and for executing.
+	If EXECUTABLE_VIA_MMAP_THEN_MPROTECT is defined, use mmap of an
+	anonymous page, then mprotect.
+	(free_trampoline): Convert back from executable address to writable
+	address.
+	* callback/trampoline_r/trampoline.c
+	(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT, EXECUTABLE_VIA_MMAP_THEN_MPROTECT,
+	EXECUTABLE_VIA_MMAP_FILE_SHARED): New macros.
+	(EXECUTABLE_VIA_MPROTECT, EXECUTABLE_VIA_MMAP_ANONYMOUS,
+	EXECUTABLE_VIA_MMAP_DEVZERO): Remove macros.
+	(MAP_FILE, MAP_VARIABLE): Define fallbacks.
+	(pagesize): Define outside of functions.
+	(alloc_trampoline_r): If EXECUTABLE_VIA_MMAP_FILE_SHARED is defined,
+	create separate mappings of a file, for writing and for executing.
+	If EXECUTABLE_VIA_MMAP_THEN_MPROTECT is defined, use mmap of an
+	anonymous page, then mprotect.
+	(free_trampoline_r, is_trampoline_r): Convert back from executable
+	address to writable address.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	Fix "Generic workaround against the ELF symbol resolving routine".
 	* callback/vacall_r/elfhack-alpha.S: Put env in register $1, not $2.
 	* callback/vacall_r/elfhack-alpha.sed: Make it find the correct line.

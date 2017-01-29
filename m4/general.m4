@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2016 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2017 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -23,6 +23,7 @@ AC_REQUIRE([FFCALL_MPROTECT])dnl
 AC_REQUIRE([CL_SHM_H])dnl
 AC_REQUIRE([CL_SHM])dnl
 AC_REQUIRE([FFCALL_CODEEXEC])dnl
+AC_REQUIRE([FFCALL_CODEEXEC_PAX])dnl
 ])
 
 AC_DEFUN([CL_CHECK],[dnl

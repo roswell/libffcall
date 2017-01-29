@@ -61,19 +61,21 @@ extern void (*tramp) (); /* trampoline prototype */
 #ifndef CODE_EXECUTABLE
 /* How do we make the trampoline's code executable? */
 #if defined(HAVE_MACH_VM) || defined(HAVE_WORKING_MPROTECT)
+#if defined(HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC)
 /* mprotect() [or equivalent] the malloc'ed area. */
-#define EXECUTABLE_VIA_MPROTECT
+#define EXECUTABLE_VIA_MALLOC_THEN_MPROTECT
+#elif defined(HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC)
+/* mprotect() [or equivalent] the mmap'ed area. */
+#define EXECUTABLE_VIA_MMAP_THEN_MPROTECT
+#elif defined(HAVE_MMAP_SHARED_CAN_EXEC)
+#define EXECUTABLE_VIA_MMAP_FILE_SHARED
+#else
+#error "Don't know how to make memory pages executable."
+#endif
 #else
 #ifdef HAVE_MMAP
 /* Use an mmap'ed page. */
 #define EXECUTABLE_VIA_MMAP
-#ifdef HAVE_MMAP_ANONYMOUS
-/* Use mmap with the MAP_ANONYMOUS or MAP_ANON flag. */
-#define EXECUTABLE_VIA_MMAP_ANONYMOUS
-#else
-/* Use mmap on /dev/zero. */
-#define EXECUTABLE_VIA_MMAP_DEVZERO
-#endif
 #else
 #ifdef HAVE_SHM
 /* Use an shmat'ed page. */
@@ -111,7 +113,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 
 /* Declare mprotect() or equivalent. */
-#ifdef EXECUTABLE_VIA_MPROTECT
+#if defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_THEN_MPROTECT)
 #ifdef HAVE_MACH_VM
 #include <sys/resource.h>
 #include <mach/mach_interface.h>
@@ -129,7 +131,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 
 /* Declare mmap(). */
-#ifdef EXECUTABLE_VIA_MMAP
+#if defined(EXECUTABLE_VIA_MMAP) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
 #include <sys/types.h>
 #include <sys/mman.h>
 #if !defined(PROT_EXEC) && defined(PROT_EXECUTE) /* Irix 4.0.5 needs this */
@@ -138,7 +140,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 
 /* Declare open(). */
-#ifdef EXECUTABLE_VIA_MMAP_DEVZERO
+#if defined(EXECUTABLE_VIA_MMAP_DEVZERO) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -152,6 +154,17 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #ifdef HAVE_SYS_SYSMACROS_H
 #include <sys/sysmacros.h>
 #endif
+#endif
+
+/* Some old mmap() implementations require the flag MAP_FILE whenever you pass
+   an fd >= 0. */
+#ifndef MAP_FILE
+#define MAP_FILE 0
+#endif
+/* Some old mmap() implementations require the flag MAP_VARIABLE whenever you
+   pass an addr == NULL. */
+#ifndef MAP_VARIABLE
+#define MAP_VARIABLE 0
 #endif
 
 /* Support for instruction cache flush. */
@@ -263,7 +276,11 @@ extern void __TR_clear_cache();
 #define TRAMP_BIAS 0
 #endif
 
-#if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MPROTECT)
+#if !defined(CODE_EXECUTABLE)
+static long pagesize = 0;
+#endif
+
+#if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT)
 /* AIX doesn't support mprotect() in malloc'ed memory. Must get pages of
  * memory with execute permission via mmap(). Then keep a free list of
  * free trampolines.
@@ -276,9 +293,12 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
   char* function;
 
 #if !defined(CODE_EXECUTABLE)
-  static long pagesize = 0;
 #if defined(EXECUTABLE_VIA_MMAP_DEVZERO)
   static int zero_fd;
+#endif
+#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+  static int file_fd;
+  static long file_length;
 #endif
   /* First, get the page size once and for all. */
   if (!pagesize)
@@ -293,20 +313,63 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
       if (zero_fd < 0)
         { fprintf(stderr,"trampoline: Cannot open /dev/zero!\n"); abort(); }
 #endif
+#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+      {
+        char filename[100];
+        sprintf(filename, "%s/trampdata-%d-%ld", "/tmp", getpid (), random ());
+        file_fd = open (filename, O_CREAT | O_RDWR | O_TRUNC | O_CLOEXEC, 0700);
+        if (file_fd < 0)
+          { fprintf(stderr,"trampoline: Cannot open %s!\n",filename); abort(); }
+        /* Remove the file from the file system as soon as possible, to make
+           sure there is no leftover after this process terminates or crashes. */
+        unlink(filename);
+      }
+      file_length = 0;
+#endif
     }
 #endif
 
   /* 1. Allocate room */
 
-#if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MPROTECT)
+#if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT)
   if (freelist == NULL)
     { /* Get a new page. */
       char* page;
-#ifdef EXECUTABLE_VIA_MMAP_ANONYMOUS
-      page = mmap(0, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
+      char* page_end;
+#ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
+      char* page_x;
+      /* Extend the file by one page. */
+      long new_file_length = file_length + pagesize;
+      if (ftruncate(file_fd,new_file_length) < 0)
+        { fprintf(stderr,"trampoline: Cannot extend backing file!\n"); abort(); }
+      /* Create separate mappings for writing and for executing. */
+      page = (char*)mmap(NULL,pagesize,PROT_READ|PROT_WRITE,MAP_SHARED,file_fd,file_length);
+      page_x = (char*)mmap(NULL,pagesize,PROT_READ|PROT_EXEC,MAP_SHARED,file_fd,file_length);
+      if (page == (char*)(-1) || page_x == (char*)(-1))
+        { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
+      file_length = new_file_length;
+      page_end = page + pagesize;
+      /* Link the two pages together. */
+      ((long*)page)[0] = page_x - page;
+      page = (char*)(((long)page + sizeof(long) + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
+#else
+#ifdef EXECUTABLE_VIA_MMAP_THEN_MPROTECT
+#ifdef HAVE_MMAP_ANONYMOUS
+      /* Use mmap with the MAP_ANONYMOUS or MAP_ANON flag. */
+      page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
+#else
+      /* Use mmap on /dev/zero. */
+      page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
 #endif
-#ifdef EXECUTABLE_VIA_MMAP_DEVZERO
-      page = mmap(0, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE, zero_fd, 0);
+#endif
+#ifdef EXECUTABLE_VIA_MMAP
+#ifdef HAVE_MMAP_ANONYMOUS
+      /* Use mmap with the MAP_ANONYMOUS or MAP_ANON flag. */
+      page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
+#else
+      /* Use mmap on /dev/zero. */
+      page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
+#endif
 #endif
 #ifdef EXECUTABLE_VIA_SHM
       int shmid = shmget(IPC_PRIVATE, pagesize, 0700|IPC_CREAT);
@@ -317,9 +380,10 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
 #endif
       if (page == (char*)(-1))
         { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
+      page_end = page + pagesize;
+#endif
       /* Fill it with free trampolines. */
       { char** last = &freelist;
-        char* page_end = page + pagesize;
         while (page+TRAMP_LENGTH <= page_end)
           { *last = page; last = (char**)page;
             page = (char*)(((long)page + TRAMP_LENGTH + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
@@ -1092,7 +1156,8 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
 
   /* 3. Set memory protection to "executable" */
 
-#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MPROTECT)
+#if !defined(CODE_EXECUTABLE)
+#if defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_THEN_MPROTECT)
   /* Call mprotect on the pages that contain the range. */
   { unsigned long start_addr = (unsigned long) function;
     unsigned long end_addr = (unsigned long) (function + TRAMP_LENGTH);
@@ -1106,6 +1171,13 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
 #endif
       { fprintf(stderr,"trampoline: cannot make memory executable\n"); abort(); }
   }}
+#endif
+#ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
+  /* Find the executable address corresponding to the writable address. */
+  { unsigned long page = (unsigned long) function & -(long)pagesize;
+    function += ((long*)page)[0];
+  }
+#endif
 #endif
 
   /* 4. Flush instruction cache */
@@ -1198,7 +1270,13 @@ void free_trampoline (__TR_function function)
 #if TRAMP_BIAS
   function = (__TR_function)((char*)function - TRAMP_BIAS);
 #endif
-#if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MPROTECT)
+#if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT)
+#ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
+  /* Find the writable address corresponding to the executable address. */
+  { unsigned long page_x = (unsigned long) function & -(long)pagesize;
+    function -= ((long*)page_x)[0];
+  }
+#endif
   *(char**)function = freelist; freelist = (char*)function;
   /* It is probably not worth calling munmap() for entirely freed pages. */
 #else
