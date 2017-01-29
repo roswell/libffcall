@@ -37,4 +37,28 @@ totally-clean : force
 	$(RM) vacall-i386-msvc.c vacall-i386-mingw32.c
 
 
+# Files copied from other directories
+
+COPIED_FILES = \
+  vacall-alpha.c \
+  vacall-arm.c \
+  vacall-armel.c \
+  vacall-hppa.c \
+  vacall-i386.c \
+  vacall-ia64.c \
+  vacall-m68k.c \
+  vacall-mips.c \
+  vacall-mipsn32.c \
+  vacall-mips64.c \
+  vacall-powerpc.c \
+  vacall-powerpc64.c \
+  vacall-s390.c \
+  vacall-sparc.c \
+  vacall-sparc64.c \
+  vacall-x86_64.c
+copied-files : $(COPIED_FILES)
+$(COPIED_FILES) : % : ../../vacall/%
+	cp $< $@
+
+
 force :

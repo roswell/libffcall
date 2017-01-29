@@ -1,6 +1,7 @@
 # This is the developer's -*-Makefile-*-, not the user's makefile.
 # Do not use it unless you know exactly what you do!
 
+THISFILE = Makefile.devel
 LN = ln -s
 RM = rm -f
 
@@ -12,81 +13,83 @@ GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer -DHAVE_LONG_LONG_INT
 SED = sed
 
-precompiled : vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
+precompiled :
+# Old rules
+# vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
 
-vacall-i386-macro.S : vacall-i386.c vacall.h.in ../common/asm-i386.sh
+vacall-i386-macro.S : vacall-i386.c vacall.h.in ../common/asm-i386.sh $(THISFILE)
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386.s
 	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386.s | ../common/asm-i386.sh) > vacall-i386-macro.S
 	$(RM) vacall-i386.s
 
-vacall-m68k.mit.S : vacall-m68k.c vacall.h.in ../common/asm-m68k.sh
+vacall-m68k.mit.S : vacall-m68k.c vacall.h.in ../common/asm-m68k.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b m68k-sun $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k.mit.s
 	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh < vacall-m68k.mit.s) > vacall-m68k.mit.S
 	$(RM) vacall-m68k.mit.s
 
-vacall-m68k.mot.s : vacall-m68k.c vacall.h.in
+vacall-m68k.mot.s : vacall-m68k.c vacall.h.in $(THISFILE)
 	$(GCC) -V 2.95.2 -b m68k-linux $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k.mot.s
 
-vacall-mips-macro.S : vacall-mips.c vacall.h.in ../common/asm-mips.sh
+vacall-mips-macro.S : vacall-mips.c vacall.h.in ../common/asm-mips.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b mips-sgi $(GCCFLAGS) -D__mips__ -fno-omit-frame-pointer -S vacall-mips.c -o vacall-mips.s
 	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mips.s) > vacall-mips-macro.S
 	$(RM) vacall-mips.s
 
-vacall-mipsn32-macro.S : vacall-mipsn32.c vacall.h.in ../common/asm-mips.sh
+vacall-mipsn32-macro.S : vacall-mipsn32.c vacall.h.in ../common/asm-mips.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b mips-sgi-irix6 $(GCCFLAGS) -D__mipsn32__ -S vacall-mipsn32.c -o vacall-mipsn32.s
 	(echo '#include "asm-mips.h"' ; $(SED) -e 's/\$$sp,\$$sp,192/$$sp,$$sp,256/' -e 's/\$$sp,192,/$$sp,256,/' < vacall-mipsn32.s | ../common/asm-mips.sh) > vacall-mipsn32-macro.S
 	$(RM) vacall-mipsn32.s
 
-vacall-mips64-macro.S : vacall-mips64.c vacall.h.in ../common/asm-mips.sh
+vacall-mips64-macro.S : vacall-mips64.c vacall.h.in ../common/asm-mips.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b mips-sgi -mips3 -mlong64 $(GCCFLAGS) -U__mips__ -D__mips64__ -S vacall-mips64.c -o vacall-mips64.s
 	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mips64.s) > vacall-mips64-macro.S
 	$(RM) vacall-mips64.s
 
-vacall-sparc-macro.S : vacall-sparc.c vacall.h.in ../common/asm-sparc.sh
+vacall-sparc-macro.S : vacall-sparc.c vacall.h.in ../common/asm-sparc.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b sparc-sun $(GCCFLAGS) -D__sparc__ -S vacall-sparc.c -o vacall-sparc.s
 	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < vacall-sparc.s) > vacall-sparc-macro.S
 	$(RM) vacall-sparc.s
 
-vacall-sparc64-macro.S : vacall-sparc64.c vacall.h.in ../common/asm-sparc64.sh
+vacall-sparc64-macro.S : vacall-sparc64.c vacall.h.in ../common/asm-sparc64.sh $(THISFILE)
 	sparc64-linux-gcc -V 2.95.2 -b sparc64-linux $(GCCFLAGS) -D__sparc64__ -S vacall-sparc64.c -o vacall-sparc64.s
 	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc64.sh < vacall-sparc64.s) > vacall-sparc64-macro.S
 	$(RM) vacall-sparc64.s
 
-vacall-alpha.s : vacall-alpha.c vacall.h.in
+vacall-alpha.s : vacall-alpha.c vacall.h.in $(THISFILE)
 	$(GCC) -V 2.7.2 -b alpha-dec-osf $(GCCFLAGS) -D__alpha__ -S vacall-alpha.c -o vacall-alpha-temp.s
 	cat < vacall-alpha-temp.s > vacall-alpha.s
 	$(RM) vacall-alpha-temp.s
 
-vacall-hppa.s : vacall-hppa.c vacall.h.in
+vacall-hppa.s : vacall-hppa.c vacall.h.in $(THISFILE)
 	$(GCC) -V 2.6.3 -b hppa1.0-hpux $(GCCFLAGS) -D__hppa__ -S vacall-hppa.c -o vacall-hppa.s
 
-vacall-arm-macro.S : vacall-arm.c vacall.h.in ../common/asm-arm.sh
+vacall-arm-macro.S : vacall-arm.c vacall.h.in ../common/asm-arm.sh $(THISFILE)
 	$(GCC) -V 2.6.3 -b arm-acorn-riscix $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-arm.s
 	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < vacall-arm.s) > vacall-arm-macro.S
 	$(RM) vacall-arm.s
 
-vacall-armel.s : vacall-armel.c vacall.h.in
+vacall-armel.s : vacall-armel.c vacall.h.in $(THISFILE)
 	$(GCC) $(GCCFLAGS) -D__arm__ -D__ARMEL__ -DHAVE_LONG_LONG -fomit-frame-pointer -S vacall-armel.c -o vacall-armel.s
 
-vacall-powerpc-aix.s : vacall-powerpc.c vacall.h.in
+vacall-powerpc-aix.s : vacall-powerpc.c vacall.h.in $(THISFILE)
 	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.s
 
-vacall-powerpc-sysv4.s : vacall-powerpc.c vacall.h.in
+vacall-powerpc-sysv4.s : vacall-powerpc.c vacall.h.in $(THISFILE)
 	$(GCC) -V 2.95.2 -b ppc-linux -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-sysv4.s
 
-vacall-powerpc-macos.s : vacall-powerpc.c vacall.h.in
+vacall-powerpc-macos.s : vacall-powerpc.c vacall.h.in $(THISFILE)
 	$(GCC) -V 3.3.2 -b powerpc-darwin $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-macos.s
 
-vacall-powerpc64.s : vacall-powerpc64.c vacall.h.in
+vacall-powerpc64.s : vacall-powerpc64.c vacall.h.in $(THISFILE)
 	/cross/powerpc64-linux-tools/bin/powerpc64-linux-gcc $(GCCFLAGS) -D__powerpc64__ -S vacall-powerpc64.c -o vacall-powerpc64.s
 
-vacall-ia64.s : vacall-ia64.c vacall.h.in
+vacall-ia64.s : vacall-ia64.c vacall.h.in $(THISFILE)
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S vacall-ia64.c -o vacall-ia64.s
 
-vacall-x86_64-linux.s : vacall-x86_64.c vacall.h.in
+vacall-x86_64-linux.s : vacall-x86_64.c vacall.h.in $(THISFILE)
 	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S vacall-x86_64.c -o vacall-x86_64-linux.s
 
-vacall-x86_64-macro.S : vacall-x86_64-linux.s ../common/asm-x86_64.sh
+vacall-x86_64-macro.S : vacall-x86_64-linux.s ../common/asm-x86_64.sh $(THISFILE)
 	(echo '#include "asm-x86_64.h"' ; ../common/asm-x86_64.sh < vacall-x86_64-linux.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-x86_64-macro.S
 
 # --------------- Rules for debugging test failures ---------------

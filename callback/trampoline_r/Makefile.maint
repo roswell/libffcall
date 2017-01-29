@@ -23,4 +23,26 @@ totally-clean : force
 	$(RM) config.h.msvc config.h.mingw32
 
 
+# Files copied from other directories
+
+COPIED_FILES = \
+  PORTING \
+  cache.c \
+  cache-alpha.c \
+  cache-alpha.s \
+  cache-arm.c \
+  cache-arm.s \
+  cache-armel.c \
+  cache-armel.s \
+  cache-hppa.c \
+  cache-hppa.s \
+  cache-powerpc.c \
+  cache-powerpc-macos.s \
+  cache-powerpc-sysv4.s \
+  protexec.c
+copied-files : $(COPIED_FILES)
+$(COPIED_FILES) : % : ../../trampoline/%
+	cp $< $@
+
+
 force :

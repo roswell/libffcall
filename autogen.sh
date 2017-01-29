@@ -103,44 +103,8 @@ if test $skip_gnulib = false; then
 fi
 
 # Copy files between directories.
-for file in \
-  vacall-alpha.c \
-  vacall-arm.c \
-  vacall-armel.c \
-  vacall-hppa.c \
-  vacall-i386.c \
-  vacall-ia64.c \
-  vacall-m68k.c \
-  vacall-mips.c \
-  vacall-mipsn32.c \
-  vacall-mips64.c \
-  vacall-powerpc.c \
-  vacall-powerpc64.c \
-  vacall-s390.c \
-  vacall-sparc.c \
-  vacall-sparc64.c \
-  vacall-x86_64.c \
-  ; do
-  cp -p vacall/$file callback/vacall_r/$file || exit $?
-done
-for file in \
-  PORTING \
-  cache.c \
-  cache-alpha.c \
-  cache-alpha.s \
-  cache-arm.c \
-  cache-arm.s \
-  cache-armel.c \
-  cache-armel.s \
-  cache-hppa.c \
-  cache-hppa.s \
-  cache-powerpc.c \
-  cache-powerpc-macos.s \
-  cache-powerpc-sysv4.s \
-  protexec.c \
-  ; do
-  cp -p trampoline/$file callback/trampoline_r/$file || exit $?
-done
+(cd callback/vacall_r && make -f Makefile.maint copied-files)
+(cd callback/trampoline_r && make -f Makefile.maint copied-files)
 
 make -f Makefile.maint totally-clean all || exit $?
 
