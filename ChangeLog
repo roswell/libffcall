@@ -1,5 +1,11 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	powerpc64: Make trampoline work on AIX in a 64-bit build.
+	* trampoline/tramp-powerpc64-aix.S: Add assembler pseudo-ops for AIX.
+	* callback/trampoline_r/tramp-powerpc64-aix.S: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	arm: Comments.
 	* avcall/avcall-arm.c: Add comments.
 	* avcall/avcall.h.in: Fix comment.

@@ -1,7 +1,7 @@
 /* Trampoline for powerpc64 CPU with AIX calling convention */
 
 /*
- * Copyright 1995-2006 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995-2017 Bruno Haible, <bruno@clisp.org>
  *
  * This is free software distributed under the GNU General Public Licence
  * described in the file COPYING. Contact the author if you don't have this
@@ -12,10 +12,20 @@
 /* Available registers: r0, r11, r12. */
 /* However, r0 is special in that it cannot be used as a base register. */
 
+	.machine "ppc64"
+
+#ifdef _AIX
+	.rename H.4.NO_SYMBOL{PR},""
+	.lglobl H.4.NO_SYMBOL{PR}
+
+	.globl .tramp
+	.csect  H.4.NO_SYMBOL{PR},7
+#else
 	.globl tramp
 	.globl .tramp
 tramp:
 	.quad .tramp
+#endif
 .tramp:
 /* Move <data> into <variable> */
 	ld 11,0(2)	/* get <variable> */
