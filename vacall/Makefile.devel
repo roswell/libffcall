@@ -15,9 +15,11 @@ SED = sed
 CROSS_TOOL = cross
 
 precompiled : \
-  vacall-i386-macro.S
+  vacall-i386-macro.S \
+  vacall-m68k.mit.S vacall-m68k.motorola.S
 # Old rules
-# vacall-m68k.mit.S vacall-m68k.mot.s vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
+# vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
+
 
 vacall-i386-linux.s : vacall-i386.c vacall.h.in $(THISFILE)
 	$(CROSS_TOOL) i386-linux gcc -V 3.1 $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386-linux.s
@@ -25,13 +27,19 @@ vacall-i386-linux.s : vacall-i386.c vacall.h.in $(THISFILE)
 vacall-i386-macro.S : vacall-i386-linux.s ../common/asm-i386.sh $(THISFILE)
 	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386-linux.s | ../common/asm-i386.sh | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-i386-macro.S
 
-vacall-m68k.mit.S : vacall-m68k.c vacall.h.in ../common/asm-m68k.sh $(THISFILE)
-	$(GCC) -V 2.95.2 -b m68k-sun $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k.mit.s
-	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh < vacall-m68k.mit.s) > vacall-m68k.mit.S
-	$(RM) vacall-m68k.mit.s
 
-vacall-m68k.mot.s : vacall-m68k.c vacall.h.in $(THISFILE)
-	$(GCC) -V 2.95.2 -b m68k-linux $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k.mot.s
+vacall-m68k-linux.s : vacall-m68k.c vacall.h.in $(THISFILE)
+	$(CROSS_TOOL) m68k-linux gcc -V 3.1 $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k-linux.s
+
+vacall-m68k-sun.s : vacall-m68k.c vacall.h.in $(THISFILE)
+	$(CROSS_TOOL) m68k-sun gcc -V 3.1 $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k-sun.s
+
+vacall-m68k.mit.S : vacall-m68k-sun.s ../common/asm-m68k.sh $(THISFILE)
+	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh mit < vacall-m68k-sun.s) > vacall-m68k.mit.S
+
+vacall-m68k.motorola.S : vacall-m68k-linux.s ../common/asm-m68k.sh $(THISFILE)
+	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh motorola < vacall-m68k-linux.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-m68k.motorola.S
+
 
 vacall-mips-macro.S : vacall-mips.c vacall.h.in ../common/asm-mips.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b mips-sgi $(GCCFLAGS) -D__mips__ -fno-omit-frame-pointer -S vacall-mips.c -o vacall-mips.s

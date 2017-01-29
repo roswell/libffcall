@@ -15,9 +15,11 @@ SED = sed
 CROSS_TOOL = cross
 
 precompiled : \
-  avcall-i386-macro.S
+  avcall-i386-macro.S \
+  avcall-m68k.mit.S avcall-m68k.motorola.S
 # Old rules
-# avcall-m68k.mit.S avcall-m68k.mot.s avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
+# avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
+
 
 avcall-i386-linux.s : avcall-i386.c avcall.h.in $(THISFILE)
 	$(CROSS_TOOL) i386-linux gcc -V 3.1 $(GCCFLAGS) -D__i386__ -fno-omit-frame-pointer -S avcall-i386.c -o avcall-i386-linux.s
@@ -25,13 +27,19 @@ avcall-i386-linux.s : avcall-i386.c avcall.h.in $(THISFILE)
 avcall-i386-macro.S : avcall-i386-linux.s ../common/asm-i386.sh $(THISFILE)
 	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < avcall-i386-linux.s | ../common/asm-i386.sh) > avcall-i386-macro.S
 
-avcall-m68k.mit.S : avcall-m68k.c avcall.h.in ../common/asm-m68k.sh $(THISFILE)
-	$(GCC) -V 2.95.2 -b m68k-sun $(GCCFLAGS) -D__m68k__ -S avcall-m68k.c -o avcall-m68k.mit.s
-	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh < avcall-m68k.mit.s) > avcall-m68k.mit.S
-	$(RM) avcall-m68k.mit.s
 
-avcall-m68k.mot.s : avcall-m68k.c avcall.h.in $(THISFILE)
-	$(GCC) -V 2.95.2 -b m68k-linux $(GCCFLAGS) -D__m68k__ -S avcall-m68k.c -o avcall-m68k.mot.s
+avcall-m68k-linux.s : avcall-m68k.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) m68k-linux gcc -V 3.1 $(GCCFLAGS) -D__m68k__ -S avcall-m68k.c -o avcall-m68k-linux.s
+
+avcall-m68k-sun.s : avcall-m68k.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) m68k-sun gcc -V 3.1 $(GCCFLAGS) -D__m68k__ -S avcall-m68k.c -o avcall-m68k-sun.s
+
+avcall-m68k.mit.S : avcall-m68k-sun.s ../common/asm-m68k.sh $(THISFILE)
+	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh mit < avcall-m68k-sun.s) > avcall-m68k.mit.S
+
+avcall-m68k.motorola.S : avcall-m68k-linux.s ../common/asm-m68k.sh $(THISFILE)
+	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh motorola < avcall-m68k-linux.s) > avcall-m68k.motorola.S
+
 
 avcall-mips-macro.S : avcall-mips.c avcall.h.in ../common/asm-mips.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b mips-sgi $(GCCFLAGS) -D__mips__ -fno-omit-frame-pointer -S avcall-mips.c -o avcall-mips.s

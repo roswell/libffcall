@@ -82,7 +82,7 @@ vacall-sparc64.s : $(srcdir)/vacall-sparc64-macro.S
 vacall-m68k.lo : vacall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-m68k.s
 
-vacall-m68k.s : $(srcdir)/vacall-m68k.mit.S $(srcdir)/vacall-m68k.mot.s $(srcdir)/vacall-m68k-netbsd-macro.S
+vacall-m68k.s : $(srcdir)/vacall-m68k.mit.S $(srcdir)/vacall-m68k.motorola.S $(srcdir)/vacall-m68k-netbsd-macro.S
 	case "$(OS)" in \
 	  netbsd*) src=$(srcdir)/vacall-m68k-netbsd-macro.S;; \
 	  *) src=$(srcdir)/vacall-m68k.mit.S;; \
@@ -241,7 +241,7 @@ SOURCE_FILES = \
   vacall-hppa.c vacall-hppa.s \
   vacall-i386.c vacall-i386-linux.s vacall-i386-macro.S \
   vacall-ia64.c vacall-ia64.s \
-  vacall-m68k.c vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd-macro.S \
+  vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S vacall-m68k-netbsd-macro.S \
   vacall-mips.c vacall-mips-macro.S \
   vacall-mipsn32.c vacall-mipsn32-macro.S \
   vacall-mips64.c vacall-mips64-macro.S \

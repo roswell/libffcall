@@ -1,5 +1,47 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	m68k: Regenerate .s and .S files with known compilers.
+	* common/asm-m68k.h (L, FUNBEGIN, FUNEND): New macros.
+	* common/asm-m68k.sh: Expect a syntax argument. Produce L, FUNBEGIN,
+	FUNEND macros.
+	* avcall/avcall-m68k.c: Use __builtin_alloca instead of hacking on the
+	'sp' register.
+	* avcall/Makefile.devel (precompiled): Depend on avcall-m68k.mit.S and
+	avcall-m68k.motorola.S.
+	(avcall-m68k-linux.s, avcall-m68k-sun.s): New targets.
+	(avcall-m68k.mit.S, avcall-m68k.motorola.S): Rewritten.
+	* avcall/Makefile.in (avcall-m68k.s): Depend on avcall-m68k.motorola.S
+	instead of avcall-m68k.mot.s.
+	(SOURCE_FILES): Add avcall-m68k-linux.s, avcall-m68k-sun.s.
+	Replace avcall-m68k.mot.s with avcall-m68k.motorola.S.
+	* vacall/Makefile.devel (precompiled): Depend on vacall-m68k.mit.S and
+	vacall-m68k.motorola.S.
+	(vacall-m68k-linux.s, vacall-m68k-sun.s): New targets.
+	(vacall-m68k.mit.S, vacall-m68k.motorola.S): Rewritten.
+	* vacall/Makefile.in (vacall-m68k.s): Depend on vacall-m68k.motorola.S
+	instead of vacall-m68k.mot.s.
+	(SOURCE_FILES): Add vacall-m68k-linux.s,
+	vacall-m68k-sun.s, vacall-mips-linux.s, vacall-mipsn32-linux.s,
+	Replace vacall-m68k.mot.s with vacall-m68k.motorola.S.
+	* callback/vacall_r/Makefile.devel (precompiled): Depend on
+	vacall-m68k.mit.S, vacall-m68k.motorola.S, vacall-m68k-netbsd-macro.S.
+	(vacall-m68k-linux.s, vacall-m68k-sun.s): New targets.
+	(vacall-m68k.mit.S, vacall-m68k.motorola.S, vacall-m68k-netbsd-macro.S):
+	Rewritten.
+	* callback/vacall_r/Makefile.in (vacall-m68k.s): Depend on
+	vacall-m68k.motorola.S instead of vacall-m68k.mot.s.
+	(SOURCE_FILES): Add vacall-m68k-linux.s, vacall-m68k-sun.s.
+	Replace vacall-m68k.mot.s with vacall-m68k.motorola.S.
+	* avcall/avcall-m68k.mit.S: Remove from version control.
+	* avcall/avcall-m68k.mot.s: Likewise.
+	* callback/vacall_r/vacall-m68k-netbsd-macro.S: Likewise.
+	* callback/vacall_r/vacall-m68k.mit.S: Likewise.
+	* callback/vacall_r/vacall-m68k.mot.s: Likewise.
+	* vacall/vacall-m68k.mit.S: Likewise.
+	* vacall/vacall-m68k.mot.s: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	i386: Regenerate .s and .S files with known compilers.
 	* common/asm-i386.hh (P2ALIGN): New macro.
 	(FUNEND): Take two arguments.

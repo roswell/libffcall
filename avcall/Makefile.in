@@ -82,7 +82,7 @@ avcall-sparc64.s : $(srcdir)/avcall-sparc64-macro.S
 avcall-m68k.lo : avcall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-m68k.s
 
-avcall-m68k.s : $(srcdir)/avcall-m68k.mit.S $(srcdir)/avcall-m68k.mot.s
+avcall-m68k.s : $(srcdir)/avcall-m68k.mit.S $(srcdir)/avcall-m68k.motorola.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-m68k.mit.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' | if test @AS_UNDERSCORE@ = true; then sed -e 's/\$$//g'; else sed -e 's/\$$/%/g'; fi > avcall-m68k.s
 
 avcall-mips.lo : avcall-mips.s
@@ -247,7 +247,7 @@ SOURCE_FILES = \
   avcall-hppa.c avcall-hppa.s \
   avcall-i386.c avcall-i386-linux.s avcall-i386-macro.S \
   avcall-ia64.c avcall-ia64.s \
-  avcall-m68k.c avcall-m68k.mit.S avcall-m68k.mot.s \
+  avcall-m68k.c avcall-m68k-linux.s avcall-m68k-sun.s avcall-m68k.mit.S avcall-m68k.motorola.S \
   avcall-mips.c avcall-mips-macro.S \
   avcall-mipsn32.c avcall-mipsn32-macro.S \
   avcall-mips64.c avcall-mips64-macro.S \
