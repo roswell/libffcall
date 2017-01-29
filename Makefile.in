@@ -106,7 +106,6 @@ IMPORTED_FILES = $(LIBTOOL_IMPORTED_FILES) $(GNULIB_IMPORTED_FILES)
 # List of files copied by autogen.sh.
 COPIED_FILES = \
   callback/vacall_r/vacall-arm.c \
-  callback/vacall_r/vacall-armel.c \
   callback/vacall_r/vacall-hppa.c \
   callback/vacall_r/vacall-i386.c \
   callback/vacall_r/vacall-ia64.c \

@@ -1,5 +1,32 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	arm: Remove support for old arm platforms without the ARM EABI.
+	* avcall/avcall.h.in: Revisit all __arm__ and __ARMEL__ conditionals.
+	* vacall/vacall.h.in: Likewise.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* avcall/avcall-arm.c: Renamed from avcall/avcall-armel.c.
+	* avcall/Makefile.devel (avcall-arm-macro.S): Make sure it's usable for
+	both endiannesses.
+	(avcall-armel.s): Remove target.
+	* avcall/Makefile.in (avcall-armel.lo): Remove target.
+	(SOURCE_FILES): Remove avcall-armel.[cs].
+	* vacall/vacall-arm.c: Renamed from vacall/vacall-armel.c.
+	* vacall/Makefile.devel (vacall-arm-macro.S): Make sure it's usable for
+	both endiannesses.
+	(vacall-armel.s): Remove target.
+	* vacall/Makefile.in (vacall-armel.o): Remove target.
+	(SOURCE_FILES): Remove vacall-armel.[cs].
+	* Makefile.in (COPIED_FILES): Remove callback/vacall_r/vacall-armel.c.
+	* callback/vacall_r/Makefile.devel (vacall-arm-macro.S): Make sure it's
+	usable for both endiannesses.
+	(vacall-armel-macro.S): Remove target.
+	* callback/vacall_r/Makefile.maint (COPIED_FILES): Remove
+	vacall-armel.c.
+	* callback/vacall_r/Makefile.in (vacall-armel.lo, vacall-armel.s):
+	Remove targets.
+	(clean): Don't remove vacall-armel.s.
+	(SOURCE_FILES): Remove vacall-armel.c, vacall-armel-macro.S.
+
 	arm: Regenerate .s and .S files with known compilers.
 	* common/asm-arm.h (L, FUNBEGIN, FUNEND): New macros.
 	* common/asm-arm.sh: Rewritten to consume ELF input. Produce L,

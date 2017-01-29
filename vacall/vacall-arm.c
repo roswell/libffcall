@@ -20,16 +20,19 @@
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("r12");
 #endif
+
+/* armel have only softvfp which uses generic registers */
 register __vaword	iret	__asm__("r0");
 register __vaword	iret2	__asm__("r1");
-register float		fret	__asm__("f0");
-register double		dret	__asm__("f0");
+register float		fret	__asm__("r0");
+register __vaword	dret1	__asm__("r0");
+register __vaword	dret2	__asm__("r1");
 
 void /* the return type is variable, not void! */
 __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
           __vaword firstword)
 {
-  struct { long retaddr, arg1, arg2, arg3, arg4; } args;
+  struct { long retaddr, sav1, sav2, sav3, sav4, arg1, arg2, arg3, arg4; } args;
   __va_alist list;
   /* MAGIC ALERT!
    * This is the last struct on the stack, so that
@@ -37,11 +40,19 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
    * Look at the assembly code to convince yourself.
    */
   /* Move the arguments passed in registers to their stack locations. */
-  args.retaddr = (&firstword)[-1]; /* save the return address */
-  (&firstword)[-4] = word1;
-  (&firstword)[-3] = word2;
-  (&firstword)[-2] = word3;
-  (&firstword)[-1] = word4;
+  args.retaddr = (&firstword)[-1]; /* save the return address and saved registers */
+  args.sav1 = (&firstword)[-2];
+  args.sav2 = (&firstword)[-3];
+  args.sav3 = (&firstword)[-4];
+  args.sav4 = (&firstword)[-5];
+  args.arg1 = word1;
+  args.arg2 = word2;
+  args.arg3 = word3;
+  args.arg4 = word4;
+  (&firstword)[-4] = args.arg1;
+  (&firstword)[-3] = args.arg2;
+  (&firstword)[-2] = args.arg3;
+  (&firstword)[-1] = args.arg4;
   /* Prepare the va_alist. */
   list.flags = 0;
   list.aptr = (long)(&firstword - 4);
@@ -91,7 +102,8 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     fret = list.tmp._float;
   } else
   if (list.rtype == __VAdouble) {
-    dret = list.tmp._double;
+      dret1 = ((__vaword *) &list.tmp._double)[0];
+      dret2 = ((__vaword *) &list.tmp._double)[1];
   } else
   if (list.rtype == __VAvoidp) {
     iret = (long)list.tmp._ptr;
@@ -110,15 +122,13 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
         if (list.rsize == sizeof(short)) { /* can't occur */
           iret = *(unsigned short *) list.raddr;
         } else
-        if (list.rsize == sizeof(int)) {
-          iret = *(unsigned int *) list.raddr;
-        } else
-        if (list.rsize == 2*sizeof(__vaword)) {
-          iret  = ((__vaword *) list.raddr)[0];
-          iret2 = ((__vaword *) list.raddr)[1];
-        }
+          iret = *(unsigned int *) list.raddr; /* struct of size 3 :) */
       }
     }
   }
-  (&firstword)[-1] = args.retaddr; /* restore the return address */
+  (&firstword)[-1] = args.retaddr; /* restore the return address and saved registers */
+  (&firstword)[-2] = args.sav1;
+  (&firstword)[-3] = args.sav2;
+  (&firstword)[-4] = args.sav3;
+  (&firstword)[-5] = args.sav4;
 }

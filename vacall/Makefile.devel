@@ -21,7 +21,7 @@ precompiled : \
   vacall-sparc-macro.S vacall-sparc64-macro.S \
   vacall-alpha.s \
   vacall-hppa-macro.S \
-  vacall-arm-macro.S vacall-armel.s
+  vacall-arm-macro.S
 # Old rules
 # vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
 
@@ -125,12 +125,11 @@ vacall-hppa-macro.S : vacall-hppa-linux.s ../common/asm-hppa.sh $(THISFILE)
 
 
 vacall-arm-macro.S : vacall-arm.c vacall.h.in ../common/asm-arm.sh $(THISFILE)
-	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mbig-endian $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-arm.s
-	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < vacall-arm.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-arm-macro.S
-	$(RM) vacall-arm.s
-
-vacall-armel.s : vacall-armel.c vacall.h.in $(THISFILE)
-	$(CROSS_TOOL) arm-linux gcc -V 3.1 $(GCCFLAGS) -D__arm__ -D__ARMEL__ -DHAVE_LONG_LONG -S vacall-armel.c -o vacall-armel.s
+	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mlittle-endian $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-armel.s
+	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mbig-endian $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-armeb.s
+	cmp vacall-armel.s vacall-armeb.s > /dev/null
+	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < vacall-armel.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-arm-macro.S
+	$(RM) vacall-armel.s vacall-armeb.s
 
 
 vacall-powerpc-aix.s : vacall-powerpc.c vacall.h.in $(THISFILE)
