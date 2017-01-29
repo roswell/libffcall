@@ -23,6 +23,7 @@ gl_HOST_CPU_C_ABI
 FFCALL_BINFMT_ELF_OPTION
 PACKAGE=callback
 FFCALL_COMMON_LIBTOOL
+AC_TYPE_LONG_LONG_INT
 dnl This piece of sed script replaces every line containing '@subdir@'
 dnl by several consecutive lines, each referencing one subdir.
 extrasub="$extrasub"'
