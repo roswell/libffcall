@@ -1,3 +1,13 @@
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
+	Fix "Generic workaround against the ELF symbol resolving routine".
+	* callback/vacall_r/elfhack-alpha.S: Put env in register $1, not $2.
+	* callback/vacall_r/elfhack-alpha.sed: Make it find the correct line.
+	* callback/trampoline_r/trampoline.c [__ia64__]: Fix code for
+	BINFMT_ELF.
+	[__mips64__]: Fix a typo in the trampoline for BINFMT_ELF.
+	[__s390__]: Fix typo in is_tramp macro for BINFMT_ELF.
+
 2017-01-10  Bruno Haible  <bruno@clisp.org>
 
 	Update documentation.

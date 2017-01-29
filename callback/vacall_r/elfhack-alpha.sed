@@ -1,3 +1,3 @@
-/^__vacall_r\.\.ng:/{s/$/\
+/__vacall_r\.\.ng:/{s/$/\
 #include "elfhack-alpha.S"/
 }

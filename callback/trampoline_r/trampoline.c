@@ -271,10 +271,7 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 8
 #endif
 #ifdef __ia64__
-#if BINFMT_ELF
-#else
 #define TRAMP_LENGTH 32
-#endif
 #define TRAMP_ALIGN 16
 #endif
 #ifdef __x86_64__
@@ -615,7 +612,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #ifdef __mips64__
 #if BINFMT_ELF
   /* function:
-   *    dsubu $29,$29,16		67 BD DD F0
+   *    dsubu $29,$29,16		67 BD FF F0
    *    ld $2,24($25)			DF 22 00 18
    *    ld $25,32($25)			DF 39 00 20
    *    sd $2,0($29)			FF A2 00 00
@@ -624,7 +621,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    *    .dword <data>			<data>
    *    .dword <address>		<address>
    */
-  *(unsigned int *)  (function + 0) = 0x67BDDDF0;
+  *(unsigned int *)  (function + 0) = 0x67BDFFF0;
   *(unsigned int *)  (function + 4) = 0xDF220018;
   *(unsigned int *)  (function + 8) = 0xDF390020;
   *(unsigned int *)  (function +12) = 0xFFA20000;
@@ -633,7 +630,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned long *) (function +24) = (unsigned long) data;
   *(unsigned long *) (function +32) = (unsigned long) address;
 #define is_tramp(function)  \
-  *(unsigned int *)  (function + 0) == 0x67BDDDF0 && \
+  *(unsigned int *)  (function + 0) == 0x67BDFFF0 && \
   *(unsigned int *)  (function + 4) == 0xDF220018 && \
   *(unsigned int *)  (function + 8) == 0xDF390020 && \
   *(unsigned int *)  (function +12) == 0xFFA20000 && \
@@ -1213,7 +1210,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned int *)   (function +12) == 0x58001000 && \
   *(unsigned int *)   (function +16) == 0xA7FAFFF8 && \
   *(unsigned int *)   (function +20) == 0x58101004 && \
-  *(unsigned int *)   (function +14) == 0x5000F000 && \
+  *(unsigned int *)   (function +24) == 0x5000F000 && \
   *(unsigned short *) (function +28) == 0x07F1
 #else
   /* function:

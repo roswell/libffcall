@@ -10,6 +10,6 @@
  */
 
 #ifdef BINFMT_ELF
-	ldq $2,0($30)
+	ldq $1,0($30)
 	lda $30,16($30)
 #endif
