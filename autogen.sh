@@ -116,7 +116,6 @@ for file in \
   vacall-mips64.c \
   vacall-powerpc.c \
   vacall-powerpc64.c \
-  vacall-powerpc64le.c \
   vacall-s390.c \
   vacall-sparc.c \
   vacall-sparc64.c \

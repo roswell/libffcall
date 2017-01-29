@@ -57,9 +57,6 @@ proto-powerpc-macos.s : proto.c
 proto-powerpc64-aix.s : proto64.c
 	/cross/powerpc64-linux-tools/bin/powerpc64-linux-gcc $(GCCFLAGS) -D__powerpc64__ -S proto64.c -o $@
 
-proto-powerpc64le.s : proto64.c
-	$(GCC) $(GCCFLAGS) -D__powerpc64__ -D__powerpc64le__ -S proto64.c -o $@
-
 proto-ia64.s : proto64.c
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S proto64.c -o $@
 
@@ -118,12 +115,6 @@ tramp-powerpc-old.o : tramp-powerpc-old.s
 
 tramp-powerpc-sysv4.o : tramp-powerpc-sysv4.s
 	$(ASPREFIX)/ppc-linux/bin/as tramp-powerpc-sysv4.s -o $@
-
-tramp-powerpc64le.o : tramp-powerpc64le.s
-	$(ASPREFIX)/ppc64le-linux/bin/as tramp-powerpc64le.s -o $@
-
-tramp-powerpc64le.s : tramp-powerpc64le.new.S
-	$(CPP) tramp-powerpc64le.new.S > tramp-powerpc64le.s
 
 tramp-ia64.o : tramp-ia64.s
 	/nue/usr/ia64-hp-linux/bin/as tramp-ia64.s -o $@

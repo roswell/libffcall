@@ -149,12 +149,6 @@ vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux
 vacall-powerpc64.lo : $(srcdir)/vacall-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-powerpc64.s
 
-vacall-powerpc64le.lo : vacall-powerpc64le.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-powerpc64le.s
-
-vacall-powerpc64le.s : $(srcdir)/vacall-powerpc64le-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-powerpc64le-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-powerpc64le.s
-
 vacall-ia64.lo : $(srcdir)/vacall-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-ia64.s
 
@@ -223,7 +217,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libvacall.* core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-arm.s vacall-armel.s vacall-powerpc.s vacall-powerpc64le.s vacall-x86_64.s vacall-s390.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-arm.s vacall-armel.s vacall-powerpc.s vacall-x86_64.s vacall-s390.s
 	$(RM) -r .libs _libs
 
 distclean : clean
@@ -258,7 +252,6 @@ SOURCE_FILES = \
   vacall-powerpc-netbsd.s vacall-powerpc-netbsd-macro.S \
   vacall-powerpc-sysv4-macro.S \
   vacall-powerpc64.c vacall-powerpc64.s \
-  vacall-powerpc64le.c vacall-powerpc64le-macro.S \
   vacall-s390.c vacall-s390-linux.s vacall-s390-macro.S \
   vacall-sparc.c vacall-sparc-macro.S \
   vacall-sparc64.c vacall-sparc64-macro.S \
@@ -270,7 +263,6 @@ SOURCE_FILES = \
   elfhack-mips.S elfhack-mips.sed \
   elfhack-mips64.S elfhack-mips64.sed \
   elfhack-powerpc.S elfhack-powerpc.sed \
-  elfhack-powerpc64le.S elfhack-powerpc64le.sed \
   elfhack-s390.S elfhack-s390.sed \
   elfhack-x86_64.S elfhack-x86_64.sed \
   vacall-structcpy.c \

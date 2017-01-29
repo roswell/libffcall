@@ -56,7 +56,6 @@
 /callback/vacall_r/vacall-mips64.c
 /callback/vacall_r/vacall-powerpc.c
 /callback/vacall_r/vacall-powerpc64.c
-/callback/vacall_r/vacall-powerpc64le.c
 /callback/vacall_r/vacall-s390.c
 /callback/vacall_r/vacall-sparc.c
 /callback/vacall_r/vacall-sparc64.c
@@ -329,7 +328,6 @@ autom4te.cache/
 /callback/vacall_r/vacall-arm.s
 /callback/vacall_r/vacall-armel.s
 /callback/vacall_r/vacall-powerpc.s
-/callback/vacall_r/vacall-powerpc64le.s
 /callback/vacall_r/vacall-x86_64.s
 /callback/vacall_r/vacall-s390.s
 # Erased by callback/trampoline_r/Makefile.

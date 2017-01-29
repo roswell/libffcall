@@ -1,5 +1,10 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	Revert the addition of a powerpc64le port by Masanori Mitsugi
+	(commit from 2015-08-23).
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	Add support for some Linux+PaX or SELinux kernels and for HardenedBSD.
 	Reported
 	- by Gerard Milmeister in https://sourceforge.net/p/clisp/bugs/356/,

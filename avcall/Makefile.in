@@ -136,9 +136,6 @@ avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.s $(srcdir)/avcall-powerpc-linux
 avcall-powerpc64.lo : $(srcdir)/avcall-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-powerpc64.s
 
-avcall-powerpc64le.lo : $(srcdir)/avcall-powerpc64le.s
-	$(LIBTOOL_COMPILE) $(CC) -g @GCC_X_NONE@ -c $(srcdir)/avcall-powerpc64le.s
-
 avcall-ia64.lo : $(srcdir)/avcall-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-ia64.s
 
@@ -258,7 +255,6 @@ SOURCE_FILES = \
   avcall-powerpc-aix.s \
   avcall-powerpc-linux.s avcall-powerpc-macos.s avcall-powerpc-sysv4.s \
   avcall-powerpc64.c avcall-powerpc64.s \
-  avcall-powerpc64le.c avcall-powerpc64le.s \
   avcall-s390.c avcall-s390.s \
   avcall-sparc.c avcall-sparc-macro.S \
   avcall-sparc64.c avcall-sparc64-macro.S \

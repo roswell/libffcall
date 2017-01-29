@@ -12,7 +12,7 @@ GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer
 SED = sed
 
-precompiled : avcall-i386-macro.S avcall-m68k.mit.S avcall-m68k.mot.s avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-powerpc64le.s avcall-ia64.s avcall-x86_64-macro.S
+precompiled : avcall-i386-macro.S avcall-m68k.mit.S avcall-m68k.mot.s avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
 
 avcall-i386-macro.S : avcall-i386.c avcall.h.in ../common/asm-i386.sh
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -fno-omit-frame-pointer -S avcall-i386.c -o avcall-i386.s
@@ -83,9 +83,6 @@ avcall-powerpc-macos.s : avcall-powerpc.c avcall.h.in
 
 avcall-powerpc64.s : avcall-powerpc64.c avcall.h.in
 	/cross/powerpc64-linux-tools/bin/powerpc64-linux-gcc $(GCCFLAGS) -D__powerpc64__ -S avcall-powerpc64.c -o avcall-powerpc64.s
-
-avcall-powerpc64le.s : avcall-powerpc64le.c avcall.h.in
-	$(GCC) $(GCCFLAGS) -D__powerpc64__ -D__powerpc64le__ -S avcall-powerpc64le.c -o avcall-powerpc64le.s
 
 avcall-ia64.s : avcall-ia64.c avcall.h.in
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S avcall-ia64.c -o avcall-ia64.s
