@@ -113,8 +113,11 @@ vacall-alpha.lo : vacall-alpha.s
 vacall-alpha.s : $(srcdir)/vacall-alpha-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-alpha-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-alpha.s
 
-vacall-hppa.lo : $(srcdir)/vacall-hppa.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-hppa.s
+vacall-hppa.lo : vacall-hppa.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-hppa.s
+
+vacall-hppa.s : $(srcdir)/vacall-hppa-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > vacall-hppa.s
 
 vacall-arm.lo : vacall-arm.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-arm.s
@@ -217,7 +220,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libvacall.* core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-arm.s vacall-armel.s vacall-powerpc.s vacall-x86_64.s vacall-s390.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armel.s vacall-powerpc.s vacall-x86_64.s vacall-s390.s
 	$(RM) -r .libs _libs
 
 distclean : clean
@@ -238,7 +241,7 @@ SOURCE_FILES = \
   vacall-alpha.c vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm.c vacall-arm-macro.S \
   vacall-armel.c vacall-armel-macro.S \
-  vacall-hppa.c vacall-hppa.s \
+  vacall-hppa.c vacall-hppa-linux.s vacall-hppa-macro.S \
   vacall-i386.c vacall-i386-linux.s vacall-i386-macro.S \
   vacall-ia64.c vacall-ia64.s \
   vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S vacall-m68k-netbsd-macro.S \

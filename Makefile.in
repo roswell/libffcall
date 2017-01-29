@@ -79,6 +79,7 @@ SOURCE_FILES = \
   m4/shm.m4 \
   m4/smallstruct.m4 \
   common/asm-arm.sh common/asm-arm.h \
+  common/asm-hppa.sh common/asm-hppa.h \
   common/asm-i386.sh common/asm-i386.hh \
   common/asm-m68k.sh common/asm-m68k.h \
   common/asm-mips.sh common/asm-mips.h \

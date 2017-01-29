@@ -19,9 +19,10 @@ precompiled : \
   vacall-m68k.mit.S vacall-m68k.motorola.S vacall-m68k-netbsd-macro.S \
   vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64eb-macro.S vacall-mips64el-macro.S \
   vacall-sparc-macro.S vacall-sparc64-macro.S \
-  vacall-alpha-macro.S
+  vacall-alpha-macro.S \
+  vacall-hppa-macro.S
 # Old rules
-# vacall-hppa.s vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
+# vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall_r.h.in $(THISFILE)
@@ -118,8 +119,12 @@ vacall-alpha-macro.S : vacall-alpha-linux.s $(THISFILE)
 	sed -f elfhack-alpha.sed < vacall-alpha-linux.s > vacall-alpha-macro.S
 
 
-vacall-hppa.s : vacall-hppa.c vacall_r.h.in $(THISFILE)
-	$(GCC) -V 2.6.3 -b hppa1.0-hpux $(GCCFLAGS) -D__hppa__ -S vacall-hppa.c -o vacall-hppa.s
+vacall-hppa-linux.s : vacall-hppa.c vacall_r.h.in $(THISFILE)
+	$(CROSS_TOOL) hppa-linux gcc -V 3.1 $(GCCFLAGS) -D__hppa__ -S vacall-hppa.c -o vacall-hppa-linux.s
+
+vacall-hppa-macro.S : vacall-hppa-linux.s ../../common/asm-hppa.sh $(THISFILE)
+	(echo '#include "asm-hppa.h"' ; ../../common/asm-hppa.sh < vacall-hppa-linux.s) > vacall-hppa-macro.S
+
 
 vacall-arm-macro.S : vacall-arm.c vacall_r.h.in ../../common/asm-arm.sh $(THISFILE)
 	$(GCC) -V 2.6.3 -b arm-acorn-riscix $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-arm.s

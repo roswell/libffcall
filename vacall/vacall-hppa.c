@@ -73,10 +73,10 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
    */
   __va_alist list;
   /* Move the arguments passed in registers to their stack locations. */
-  &word1; /* (&firstword)[4] = word1; */
-  &word2; /* (&firstword)[3] = word2; */
-  &word3; /* (&firstword)[2] = word3; */
-  &word4; /* (&firstword)[1] = word4; */
+  (&firstword)[4] = word1;
+  (&firstword)[3] = word2;
+  (&firstword)[2] = word3;
+  (&firstword)[1] = word4;
   list.darg[1] = darg1;
   list.darg[0] = darg2;
   list.farg[3] = farg1;

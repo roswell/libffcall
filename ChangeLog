@@ -1,5 +1,42 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	hppa: Regenerate .s and .S files with known compilers.
+	* common/asm-hppa.sh: New file.
+	* common/asm-hppa.h: New file.
+	* Makefile.in (SOURCE_FILES): Add them.
+	* avcall/Makefile.devel (avcall-hppa-linux.s, avcall-hppa-macro.S): New
+	targets.
+	(avcall-hppa.s): Remove target.
+	* avcall/Makefile.in (avcall-hppa.s): New target.
+	(avcall-hppa.lo): Update.
+	(clean): Remove also avcall-hppa.s.
+	(SOURCE_FILES): Add avcall-hppa-linux.s, avcall-hppa-macro.S. Remove
+	avcall-hppa.s.
+	* vacall/vacall-hppa.c: Use explicit assignments to move the arguments
+	to their stack locations.
+	* vacall/Makefile.devel (vacall-hppa-linux.s, vacall-hppa-macro.S): New
+	targets.
+	(vacall-hppa.s): Remove target.
+	* vacall/Makefile.in (vacall-hppa.s): New target.
+	(vacall-hppa.o): Update.
+	(clean): Remove also vacall-hppa.s.
+	(SOURCE_FILES): Add vacall-hppa-linux.s, vacall-hppa-macro.S. Remove
+	vacall-hppa.s.
+	* callback/vacall_r/Makefile.devel (vacall-hppa-linux.s,
+	vacall-hppa-macro.S): New targets.
+	(vacall-hppa.s): Remove target.
+	* callback/vacall_r/Makefile.in (vacall-hppa.s): New target.
+	(vacall-hppa.lo): Update.
+	(clean): Remove also vacall-hppa.s.
+	(SOURCE_FILES): Add vacall-hppa-linux.s, vacall-hppa-macro.S. Remove
+	vacall-hppa.s.
+	* avcall/avcall-hppa.s: Remove from version control.
+	* vacall/vacall-hppa.s: Likewise.
+	* callback/vacall_r/vacall-hppa.s: Likewise.
+	* PLATFORMS, */PLATFORMS: List hppa2.0w-hp-hpux11.31 (cc).
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	alpha: Regenerate .s and .S files with known compilers.
 	* avcall/avcall-alpha.c: Use __builtin_alloca.
 	* avcall/Makefile.devel (precompiled): Depend on avcall-alpha.s.

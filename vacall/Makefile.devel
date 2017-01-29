@@ -19,9 +19,10 @@ precompiled : \
   vacall-m68k.mit.S vacall-m68k.motorola.S \
   vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64eb-macro.S vacall-mips64el-macro.S \
   vacall-sparc-macro.S vacall-sparc64-macro.S \
-  vacall-alpha.s
+  vacall-alpha.s \
+  vacall-hppa-macro.S
 # Old rules
-# vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
+# vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall.h.in $(THISFILE)
@@ -115,8 +116,12 @@ vacall-alpha.s : vacall-alpha.c vacall.h.in $(THISFILE)
 	$(CROSS_TOOL) alpha-linux gcc -V 4.0.2 $(GCCFLAGS) -D__alpha__ -S vacall-alpha.c -o vacall-alpha.s
 
 
-vacall-hppa.s : vacall-hppa.c vacall.h.in $(THISFILE)
-	$(GCC) -V 2.6.3 -b hppa1.0-hpux $(GCCFLAGS) -D__hppa__ -S vacall-hppa.c -o vacall-hppa.s
+vacall-hppa-linux.s : vacall-hppa.c vacall.h.in $(THISFILE)
+	$(CROSS_TOOL) hppa-linux gcc -V 3.1 $(GCCFLAGS) -D__hppa__ -S vacall-hppa.c -o vacall-hppa-linux.s
+
+vacall-hppa-macro.S : vacall-hppa-linux.s ../common/asm-hppa.sh $(THISFILE)
+	(echo '#include "asm-hppa.h"' ; ../common/asm-hppa.sh < vacall-hppa-linux.s ; echo 'IMPORT_DATA(vacall_function)') > vacall-hppa-macro.S
+
 
 vacall-arm-macro.S : vacall-arm.c vacall.h.in ../common/asm-arm.sh $(THISFILE)
 	$(GCC) -V 2.6.3 -b arm-acorn-riscix $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-arm.s
