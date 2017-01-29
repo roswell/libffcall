@@ -17,7 +17,7 @@ CROSS_TOOL = cross
 precompiled : \
   vacall-i386-macro.S \
   vacall-m68k.mit.S vacall-m68k.motorola.S \
-  vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S
+  vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S
 # Old rules
 # vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
 
@@ -42,12 +42,18 @@ vacall-m68k.motorola.S : vacall-m68k-linux.s ../common/asm-m68k.sh $(THISFILE)
 	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh motorola < vacall-m68k-linux.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-m68k.motorola.S
 
 
-vacall-mips-linux.s : vacall-mips.c vacall.h.in $(THISFILE)
+vacall-mipseb-linux.s : vacall-mips.c vacall.h.in $(THISFILE)
 # For references to global symbols: -mno-explicit-relocs ensures a syntax that the IRIX assembler understands.
-	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -mno-explicit-relocs $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mips-linux.s
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -meb -mno-explicit-relocs $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mipseb-linux.s
 
-vacall-mips-macro.S : vacall-mips-linux.s ../common/asm-mips.sh $(THISFILE)
-	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mips-linux.s) > vacall-mips-macro.S
+vacall-mipseb-macro.S : vacall-mipseb-linux.s ../common/asm-mips.sh $(THISFILE)
+	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mipseb-linux.s) > vacall-mipseb-macro.S
+
+vacall-mipsel-linux.s : vacall-mips.c vacall.h.in $(THISFILE)
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -mel -mno-explicit-relocs $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mipsel-linux.s
+
+vacall-mipsel-macro.S : vacall-mipsel-linux.s ../common/asm-mips.sh $(THISFILE)
+	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mipsel-linux.s) > vacall-mipsel-macro.S
 
 vacall-mipsn32-linux.s : vacall-mipsn32.c vacall.h.in $(THISFILE)
 	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=n32 $(GCCFLAGS) -D__mipsn32__ -S vacall-mipsn32.c -o vacall-mipsn32-linux.s

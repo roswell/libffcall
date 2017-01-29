@@ -17,7 +17,7 @@ CROSS_TOOL = cross
 precompiled : \
   avcall-i386-macro.S \
   avcall-m68k.mit.S avcall-m68k.motorola.S \
-  avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S
+  avcall-mipseb-macro.S avcall-mipsel-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S
 # Old rules
 # avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
 
@@ -42,11 +42,17 @@ avcall-m68k.motorola.S : avcall-m68k-linux.s ../common/asm-m68k.sh $(THISFILE)
 	(echo '#include "asm-m68k.h"' ; ../common/asm-m68k.sh motorola < avcall-m68k-linux.s) > avcall-m68k.motorola.S
 
 
-avcall-mips-linux.s : avcall-mips.c avcall.h.in $(THISFILE)
-	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 $(GCCFLAGS) -D__mips__ -S avcall-mips.c -o avcall-mips-linux.s
+avcall-mipseb-linux.s : avcall-mips.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -meb $(GCCFLAGS) -D__mips__ -S avcall-mips.c -o avcall-mipseb-linux.s
 
-avcall-mips-macro.S : avcall-mips-linux.s ../common/asm-mips.sh $(THISFILE)
-	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < avcall-mips-linux.s) > avcall-mips-macro.S
+avcall-mipseb-macro.S : avcall-mipseb-linux.s ../common/asm-mips.sh $(THISFILE)
+	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < avcall-mipseb-linux.s) > avcall-mipseb-macro.S
+
+avcall-mipsel-linux.s : avcall-mips.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -mel $(GCCFLAGS) -D__mips__ -S avcall-mips.c -o avcall-mipsel-linux.s
+
+avcall-mipsel-macro.S : avcall-mipsel-linux.s ../common/asm-mips.sh $(THISFILE)
+	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < avcall-mipsel-linux.s) > avcall-mipsel-macro.S
 
 avcall-mipsn32-linux.s : avcall-mipsn32.c avcall.h.in $(THISFILE)
 	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=n32 $(GCCFLAGS) -D__mipsn32__ -S avcall-mipsn32.c -o avcall-mipsn32-linux.s
