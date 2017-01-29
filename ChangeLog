@@ -1,3 +1,31 @@
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
+	i386: Regenerate .s and .S files with known compilers.
+	* common/asm-i386.hh (P2ALIGN): New macro.
+	(FUNEND): Take two arguments.
+	* common/asm-i386.sh: Rewritten to consume ELF input. Produce P2ALIGN
+	macro. Handle indirect call statements.
+	* avcall/avcall-i386.c: Use __builtin_alloca instead of hacking on the
+	'sp' register.
+	* avcall/Makefile.devel (precompiled): Depend on avcall-i386-macro.S.
+	(avcall-i386-linux.s): New target.
+	(avcall-i386-macro.S): Rewritten.
+	* avcall/Makefile.in (SOURCE_FILES): Add avcall-i386-linux.s.
+	* vacall/vacall-i386.c: Insert the appropriate stack cleanup before
+	'ret $4'.
+	* vacall/Makefile.devel (precompiled): Depend on vacall-i386-macro.S.
+	(vacall-i386-linux.s): New target.
+	(vacall-i386-macro.S): Rewritten.
+	* vacall/Makefile.in (SOURCE_FILES): Add vacall-i386-linux.s.
+	* callback/vacall_r/Makefile.devel (precompiled): Depend on
+	vacall-i386-macro.S.
+	(vacall-i386-linux.s): New target.
+	(vacall-i386-macro.S): Rewritten.
+	* callback/vacall_r/Makefile.in (SOURCE_FILES): Add vacall-i386-linux.s.
+	* avcall/avcall-i386-macro.S: Remove from version control.
+	* vacall/vacall-i386-macro.S: Likewise.
+	* callback/vacall_r/vacall-i386-macro.S: Likewise.
+
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
 	Prepare for regenerating .s and .S files with known compilers.

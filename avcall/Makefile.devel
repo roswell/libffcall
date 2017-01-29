@@ -14,14 +14,16 @@ GCCFLAGS = -O2 -fno-omit-frame-pointer -fPIC
 SED = sed
 CROSS_TOOL = cross
 
-precompiled :
+precompiled : \
+  avcall-i386-macro.S
 # Old rules
-# avcall-i386-macro.S avcall-m68k.mit.S avcall-m68k.mot.s avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
+# avcall-m68k.mit.S avcall-m68k.mot.s avcall-mips-macro.S avcall-mipsn32-macro.S avcall-mips64-macro.S avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
 
-avcall-i386-macro.S : avcall-i386.c avcall.h.in ../common/asm-i386.sh $(THISFILE)
-	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -fno-omit-frame-pointer -S avcall-i386.c -o avcall-i386.s
-	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < avcall-i386.s | ../common/asm-i386.sh) > avcall-i386-macro.S
-	$(RM) avcall-i386.s
+avcall-i386-linux.s : avcall-i386.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) i386-linux gcc -V 3.1 $(GCCFLAGS) -D__i386__ -fno-omit-frame-pointer -S avcall-i386.c -o avcall-i386-linux.s
+
+avcall-i386-macro.S : avcall-i386-linux.s ../common/asm-i386.sh $(THISFILE)
+	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < avcall-i386-linux.s | ../common/asm-i386.sh) > avcall-i386-macro.S
 
 avcall-m68k.mit.S : avcall-m68k.c avcall.h.in ../common/asm-m68k.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b m68k-sun $(GCCFLAGS) -D__m68k__ -S avcall-m68k.c -o avcall-m68k.mit.s

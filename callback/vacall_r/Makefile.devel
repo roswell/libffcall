@@ -14,14 +14,16 @@ GCCFLAGS = -O2 -fno-omit-frame-pointer -fPIC -DHAVE_LONG_LONG_INT -DREENTRANT
 SED = sed
 CROSS_TOOL = cross
 
-precompiled :
+precompiled : \
+  vacall-i386-macro.S
 # Old rules
-# vacall-i386-macro.S vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd-macro.S vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha-macro.S vacall-hppa.s vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
+# vacall-m68k.mit.S vacall-m68k.mot.s vacall-m68k-netbsd-macro.S vacall-mips-macro.S vacall-mipsn32-macro.S vacall-mips64-macro.S vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha-macro.S vacall-hppa.s vacall-arm-macro.S vacall-armel-macro.S vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
 
-vacall-i386-macro.S : vacall-i386.c vacall_r.h.in ../../common/asm-i386.sh $(THISFILE)
-	$(GCC) -V 2.7.2 -b i486-linuxaout $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386.s
-	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386.s | ../../common/asm-i386.sh | sed -f elfhack-i386.sed) > vacall-i386-macro.S
-	$(RM) vacall-i386.s
+vacall-i386-linux.s : vacall-i386.c vacall_r.h.in $(THISFILE)
+	$(CROSS_TOOL) i386-linux gcc -V 3.1 $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386-linux.s
+
+vacall-i386-macro.S : vacall-i386-linux.s ../../common/asm-i386.sh $(THISFILE)
+	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386-linux.s | ../../common/asm-i386.sh | sed -f elfhack-i386.sed) > vacall-i386-macro.S
 
 vacall-m68k.mit.S : vacall-m68k.c vacall_r.h.in ../../common/asm-m68k.sh $(THISFILE)
 	$(GCC) -V 2.95.2 -b m68k-sun $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k.mit.s

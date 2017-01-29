@@ -54,7 +54,7 @@ __builtin_avcall(av_alist* l)
 /*register __avword	iret	__asm__("eax"); */
   register __avword	iret2	__asm__("edx");
 
-  __avword* argframe = (sp -= __AV_ALIST_WORDS); /* make room for argument list */
+  __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;
   __avword i;
 

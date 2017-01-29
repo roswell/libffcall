@@ -24,16 +24,24 @@ s,[ 	][ 	]*$,,
 EOF
 
 cat > $tmpscript02 << \EOF
-# ----------- Remove #APP/#NO_APP lines, add a blank line at the end
+# ----------- Remove #APP/#NO_APP lines and gcc self-identification, add a blank line at the end
 /^#APP$/d
 /^#NO_APP$/d
 /gcc2_compiled/d
 /gnu_compiled_c/d
+/\.ident/d
 EOF
 
 cat > $tmpscript03 << \EOF
 # ----------- Global symbols depends on ASM_UNDERSCORE
-s/_\([A-Za-z0-9_:]*\)/C(\1)/
+s/^\([A-Za-z0-9_:]\+\)/C(\1)/
+s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
+# ----------- Massage the beginning of functions
+/\.type/{
+s/\.type	\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/
+}
+# ----------- Massage the end of functions
+s/\.size	\([A-Za-z0-9_]*\),\(.*\)/FUNEND(\1,\2)/
 EOF
 
 cat > $tmpscript04 << \EOF
@@ -48,13 +56,13 @@ EOF
 
 cat > $tmpscript05 << \EOF
 # ----------- Introduce macro syntax for instructions
-s/\(push\|pop\|mul\|div\|not\|neg\|inc\|dec\|fld\|fstp\)\(.\)\( \+\)\(.*\)$/INSN1(\1,\2	,\4)/
-s/\(call\|jmp\|jc\|jnc\|je\|jne\|jz\|jnz\|ja\|jae\|jb\|jbe\|jl\|jge\|js\|jns\)\( \+\)\(.*\)$/INSN1(\1,_	,\3)/
-s/\(movs\|movz\)\(.\)l\( \+\)\(.*\)$/INSN2MOVX(\1,\2,\4)/
-s/\(mov\|add\|sub\|adc\|sbb\|xor\|test\|cmp\|rcl\|rcr\|and\|or\|sar\|shr\|shl\|lea\)\(.\)\( \+\)\(.*\)$/INSN2(\1,\2	,\4)/
-s/\(shld\|shrd\)\(.\)\( \+\)shcl\( \+\)\(.*\)$/INSN2SHCL(\1,\2	,\5)/
-s/rep ;/REP/
-s/repz ;/REPZ/
+s/\(push\|pop\|mul\|div\|not\|neg\|inc\|dec\|fld\|fstp\)\(.\)\([ 	]\+\)\(.*\)$/INSN1(\1,\2	,\4)/
+s/\(call\|jmp\|jc\|jnc\|je\|jne\|jz\|jnz\|ja\|jae\|jb\|jbe\|jl\|jge\|js\|jns\)\([ 	]\+\)\(.*\)$/INSN1(\1,_	,\3)/
+s/\(movs\|movz\)\(.\)l\([ 	]\+\)\(.*\)$/INSN2MOVX(\1,\2,\4)/
+s/\(mov\|add\|sub\|adc\|sbb\|xor\|test\|cmp\|rcl\|rcr\|and\|or\|sar\|shr\|shl\|lea\)\(.\)\([ 	]\+\)\(.*\)$/INSN2(\1,\2	,\4)/
+s/\(shld\|shrd\)\(.\)\([ 	]\+\)shcl\( \+\)\(.*\)$/INSN2SHCL(\1,\2	,\5)/
+s/rep[ 	];/REP/
+s/repz[ 	];/REPZ/
 EOF
 
 cat > $tmpscript06 << \EOF
@@ -96,7 +104,7 @@ EOF
 
 cat > $tmpscript09 << \EOF
 # ----------- Treat indirect calls
-s/\(INSN1[(]\(call\|jmp\),_[^,]*,\)\*\(R[(][^)]*[)]\)[)]$/\1INDIR(\3))/
+s/\(INSN1[(]\(call\|jmp\),_[^,]*,\)\*\(\(R\|MEM\)[(][^)]*[)]\)[)]$/\1INDIR(\3))/
 EOF
 
 cat > $tmpscript10 << \EOF
@@ -104,7 +112,8 @@ cat > $tmpscript10 << \EOF
 /\.file\([ 	]\+\)/d
 s/\.text/TEXT()/
 s/^\([^#]*\)\.align \(.*\)/\1ALIGN(\2)/
-s/\.globl\( \+\)\(.*\)$/GLOBL(\2)/
+s/\.p2align \([^,]*\),,\(.*\)/P2ALIGN(\1,\2)/
+s/\.globl\( \+\)\(.*\)$/GLOBL(C(\2))/
 s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
 # The next 5 lines add FUNEND() after each ret followed by an empty line
 /[ 	]ret *$/{
@@ -116,8 +125,7 @@ EOF
 
 cat > $tmpscript11 << \EOF
 # ----------- Declare global symbols as functions (we have no variables)
-s/GLOBL(C(\([A-Za-z0-9_]*\)))$/GLOBL(C(\1))\
-	DECLARE_FUNCTION(\1)/
+s/GLOBL(C(\([A-Za-z0-9_]*\)))$/GLOBL(C(\1))/
 EOF
 
 sed -f $tmpscript01 | \

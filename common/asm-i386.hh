@@ -105,6 +105,8 @@
 //           Switch to the code section.
 //   ALIGN(log)
 //           Align to 2^log bytes.
+//   P2ALIGN(log,max)
+//           Align to 2^log bytes, but insert at most max bytes.
 //   GLOBL(name)
 //           Declare `name' to be a global symbol.
 //   DECLARE_FUNCTION(name)
@@ -113,8 +115,8 @@
 //           which symbols are functions.
 //   FUNBEGIN(name)
 //           Start the assembly language code for the C function `name'.
-//   FUNEND()
-//           End the assembly language code for a function.
+//   FUNEND(name,size_expression)
+//           End the assembly language code for the C function 'name'.
 
 // Define the C(name) and L(label) macros.
 #ifdef _MSC_VER
@@ -180,6 +182,11 @@
 #if defined(ELF_SYNTAX) || defined(__CYGWIN__) || defined(__MINGW32__)
 #define ALIGN(log) .align 1<<log
 #endif
+#if defined(__sun)
+#define P2ALIGN(log,max) .align 1<<log
+#else
+#define P2ALIGN(log,max) .p2align log,,max
+#endif
 #endif
 #ifdef INTEL_SYNTAX
 #define R(r) r
@@ -210,8 +217,10 @@
 #ifdef _MSC_VER
 // No pseudo-ops available in MS inline assembler.
 #define ALIGN(log)
+#define P2ALIGN(log)
 #else
 #define ALIGN(log) .align log
+#define P2ALIGN(log) .align log
 #endif
 #endif
 
@@ -244,10 +253,14 @@
 // and those registers among %ebx,%esi,%edi which occur in the asm code
 // if optimization is enabled).
 #define FUNBEGIN(name) __declspec(naked) void name () { __asm {
-#define FUNEND()                                      }       }
+#define FUNEND(name,size_expression)                  }       }
 #else
 #define FUNBEGIN(name) C(name##:)
-#define FUNEND()
+#if defined(BSD_SYNTAX)
+#define FUNEND(name,size_expression)
+#else
+#define FUNEND(name,size_expression) .size C(name),.-C(name)
+#endif
 #endif
 
 #define _
