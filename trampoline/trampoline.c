@@ -202,11 +202,11 @@ extern void __TR_clear_cache();
 #define TRAMP_LENGTH 18
 #define TRAMP_ALIGN 16
 #endif
-#if defined(__mips__) && !defined(__mipsn32__)
+#if defined(__mipsold__) && !defined(__mipsn32__)
 #define TRAMP_LENGTH 32
 #define TRAMP_ALIGN 4
 #endif
-#ifdef __mipsn32__
+#if (defined(__mips__) || defined(__mipsn32__)) && !defined(__mips64__)
 #define TRAMP_LENGTH 36
 #define TRAMP_ALIGN 4
 #endif
@@ -441,7 +441,7 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
 #define tramp_data(function)  \
   *(long *)  (function + 2)
 #endif
-#if defined(__mips__) && !defined(__mipsn32__)
+#if defined(__mipsold__) && !defined(__mipsn32__)
   /* function:
    *    li $2,<data>&0xffff0000		3C 02 hi16(<data>)
    *    ori $2,$2,<data>&0xffff		34 42 lo16(<data>)
@@ -485,7 +485,7 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
 #define tramp_data(function)  \
   hilo(*(unsigned short *) (function + 2), *(unsigned short *) (function + 6))
 #endif
-#ifdef __mipsn32__
+#if (defined(__mips__) || defined(__mipsn32__)) && !defined(__mips64__)
   /* function:
    *    lw $2,24($25)			8F 22 00 18
    *    lw $3,28($25)			8F 23 00 1C
@@ -497,7 +497,6 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
    *    .word <data>			<data>
    *    .word <address>			<address>
    */
-  /* What about big endian / little endian ?? */
   *(unsigned int *) (function + 0) = 0x8F220018;
   *(unsigned int *) (function + 4) = 0x8F23001C;
   *(unsigned int *) (function + 8) = 0xAC430000;
@@ -632,7 +631,6 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
    *    .dword <data>			<data>
    *    .dword <address>		<address>
    */
-  /* What about big endian / little endian ?? */
   *(long *)          (function + 0) = 0xDF220018DF230020L;
   *(long *)          (function + 8) = 0xFC430000DF390028L;
   *(long *)          (function +16) = 0x0320000800000000L;

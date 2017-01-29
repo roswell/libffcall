@@ -1,6 +1,17 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
 	mips: Fix for Linux with "gcc -mabi=32".
+	* trampoline/tramp-mips.old.o: Renamed from trampoline/tramp-mips.o.
+	* trampoline/tramp-mips.old.s: Renamed from trampoline/tramp-mips.s.
+	* trampoline/tramp-mips.s: New file, based on
+	trampoline/tramp-mipsn32.s.
+	* trampoline/tramp-mips.o: New generated file.
+	* trampoline/trampoline.c: For __mips__, use the same trampoline as for
+	__mipsn32__.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
+	mips: Fix for Linux with "gcc -mabi=32".
 	* vacall/vacall.h.in (__va_arg_adjusted): Use same conditional on
 	_MIPSEB as in callback/vacall_r/vacall_r.h.in.
 

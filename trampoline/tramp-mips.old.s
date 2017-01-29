@@ -1,7 +1,7 @@
 /* Trampoline for mips CPU */
 
 /*
- * Copyright 1996-1998 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995 Bruno Haible, <bruno@clisp.org>
  *
  * This is free software distributed under the GNU General Public Licence
  * described in the file COPYING. Contact the author if you don't have this
@@ -17,22 +17,13 @@
 	.globl	tramp
 	.ent	tramp
 tramp:
-	/* We can assume that our own address (=tramp) is in $25. */
-	lw	$2,24($25)
-	lw	$3,28($25)
-	sw	$3,0($2)
-	lw	$25,32($25)
+	li	$2,0x73550000
+	ori	$2,$2,0x4711
+	sw	$2,0x12345678
+	li	$25,0xbabe0000
+	ori	$25,$25,0xbec0
 	/* The called function expects to see its own address in $25. */
 	j	$25
 	/* Some Mips hardware running Irix-4.0.5 needs this nop. */
 	nop
-	/* We'll actually store the data words immediately after the code. */
-	/* The assembler just doesn't like ".word" inside section .text. */
-	.data
-$LC0:
-	.word	0x12345678
-$LC1:
-	.word	0x73554711
-$LC2:
-	.word	0xbabebec0
 	.end	tramp
