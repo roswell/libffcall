@@ -55,10 +55,7 @@ register void* env __asm__("a1");
 register void* env __asm__("a0");
 #endif
 #endif
-#ifdef __mips__
-register void* env __asm__("$2");
-#endif
-#ifdef __mips64__
+#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
 register void* env __asm__("$2");
 #endif
 #if defined(__sparc__) && !defined(__sparc64__)

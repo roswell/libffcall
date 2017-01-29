@@ -206,7 +206,7 @@ extern void __TR_clear_cache();
 #define TRAMP_LENGTH 14
 #define TRAMP_ALIGN 16
 #endif
-#if defined(__mips__) || defined(__mipsn32__) && !defined(__mips64__)
+#if (defined(__mips__) || defined(__mipsn32__)) && !defined(__mips64__)
 #if BINFMT_ELF
 #define TRAMP_LENGTH 32
 #else
@@ -539,7 +539,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   *(long *)  (function + 2)
 #endif
-#if defined(__mips__) || defined(__mipsn32__) && !defined(__mips64__)
+#if (defined(__mips__) || defined(__mipsn32__)) && !defined(__mips64__)
 #if BINFMT_ELF
   /* function:
    *    subu $29,$29,16			27 BD FF F0

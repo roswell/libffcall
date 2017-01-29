@@ -1,5 +1,13 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	mips64: Fix trampoline_r.
+	* callback/trampoline_r/trampoline.c: Fix conditionals that involve
+	__mips64__.
+	* callback/trampoline_r/test1.c: Fix duplicate declaration of 'env' on
+	mips64.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	mipsn32, mips64: Fix for little-endian platforms.
 	* vacall/vacall.h.in (__va_arg_adjusted): Use same conditional on
 	_MIPSEB and _MIPSEL as in callback/vacall_r/vacall_r.h.in.
