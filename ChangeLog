@@ -1,5 +1,12 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	configuration: Simplification.
+	* m4/general.m4 (CL_CONFIG_SUBDIRS): Remove macro.
+	* configure.ac: Use AC_CONFIG_SUBDIRS instead of CL_CONFIG_SUBDIRS.
+	* callback/configure.ac: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	Revert the addition of a powerpc64le port by Masanori Mitsugi
 	(commit from 2015-08-23).
 

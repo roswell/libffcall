@@ -42,9 +42,3 @@ AC_DEFUN([AC_LANG_EXTERN],
 "C"
 #endif
 ])
-
-AC_DEFUN([CL_CONFIG_SUBDIRS],
-[dnl No AC_CONFIG_AUX_DIR_DEFAULT, so we don't need install.sh.
-AC_PROVIDE([AC_CONFIG_AUX_DIR_DEFAULT])
-AC_CONFIG_SUBDIRS([$1])dnl
-])

@@ -37,5 +37,5 @@ p
 d
 }
 '
-CL_CONFIG_SUBDIRS([vacall_r trampoline_r])
+AC_CONFIG_SUBDIRS([vacall_r trampoline_r])
 AC_OUTPUT
