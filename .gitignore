@@ -70,12 +70,24 @@
 /avcall/avcall-m68k-sun.s
 /avcall/avcall-m68k.mit.S
 /avcall/avcall-m68k.motorola.S
+/avcall/avcall-mips-linux.s
+/avcall/avcall-mips-macro.S
+/avcall/avcall-mipsn32-linux.s
+/avcall/avcall-mipsn32-macro.S
+/avcall/avcall-mips64-linux.s
+/avcall/avcall-mips64-macro.S
 /vacall/vacall-i386-linux.s
 /vacall/vacall-i386-macro.S
 /vacall/vacall-m68k-linux.s
 /vacall/vacall-m68k-sun.s
 /vacall/vacall-m68k.mit.S
 /vacall/vacall-m68k.motorola.S
+/vacall/vacall-mips-linux.s
+/vacall/vacall-mips-macro.S
+/vacall/vacall-mipsn32-linux.s
+/vacall/vacall-mipsn32-macro.S
+/vacall/vacall-mips64-linux.s
+/vacall/vacall-mips64-macro.S
 /callback/vacall_r/vacall-i386-linux.s
 /callback/vacall_r/vacall-i386-macro.S
 /callback/vacall_r/vacall-m68k-linux.s
@@ -83,6 +95,12 @@
 /callback/vacall_r/vacall-m68k-sun.s
 /callback/vacall_r/vacall-m68k.mit.S
 /callback/vacall_r/vacall-m68k.motorola.S
+/callback/vacall_r/vacall-mips-linux.s
+/callback/vacall_r/vacall-mips-macro.S
+/callback/vacall_r/vacall-mipsn32-linux.s
+/callback/vacall_r/vacall-mipsn32-macro.S
+/callback/vacall_r/vacall-mips64-linux.s
+/callback/vacall_r/vacall-mips64-macro.S
 
 # ---------- "make -f Makefile.maint totally-clean" gets you here ----------
 

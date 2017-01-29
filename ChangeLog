@@ -1,5 +1,59 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	mips, mipsn32, mips64: Regenerate .s and .S files with known compilers.
+	This restores support for IRIX with cc -32 (regression from 2008-09-26).
+	* common/asm-mips.sh: Rewritten to consume ELF input.
+	* avcall/avcall-mips.c: Rely on the compiler to set $25 at each
+	function call. Add comment about broken GCC 3.3.x and 3.4.x. Avoid
+	'switch' statements, to make the generated code position-independent.
+	Declare iret2 as single __avword.
+	* avcall/avcall-mipsn32.c: Use __builtin_alloca. Rely on the compiler
+	to set $25 at each function call.
+	* avcall/avcall-mips64.c: Likewise.
+	* avcall/Makefile.devel (precompiled): Depend on avcall-mips-macro.S,
+	avcall-mipsn32-macro.S, avcall-mips64-macro.S.
+	(avcall-mips-linux.s, avcall-mipsn32-linux.s, avcall-mips64-linux.s):
+	New targets.
+	(avcall-mips-macro.S, avcall-mipsn32-macro.S, avcall-mips64-macro.S):
+	Rewritten.
+	* avcall/Makefile.in (SOURCE_FILES): Add avcall-mips-linux.s,
+	avcall-mipsn32-linux.s, avcall-mips64-linux.s.
+	* vacall/vacall-mips.c: Rely on the compiler to set $25 at each
+	function call.
+	* vacall/vacall-mipsn32.c: Likewise.
+	* vacall/vacall-mips64.c: Likewise. Add offset to references of
+	arguments in the stack.
+	* vacall/Makefile.devel (precompiled): Depend on vacall-mips-macro.S,
+	vacall-mipsn32-macro.S, vacall-mips64-macro.S.
+	(vacall-mips-linux.s, vacall-mipsn32-linux.s, vacall-mips64-linux.s):
+	New targets.
+	(vacall-mips-macro.S): Rewritten.
+	(vacall-mipsn32-macro.S): Rewritten. Update the postprocessing hack.
+	(vacall-mips64-macro.S): Rewritten. Add a postprocessing hack.
+	* vacall/Makefile.in (SOURCE_FILES): Add vacall-mips-linux.s,
+	vacall-mipsn32-linux.s, vacall-mips64-linux.s.
+	* callback/vacall_r/Makefile.devel (precompiled): Depend on
+	vacall-mips-macro.S, vacall-mipsn32-macro.S, vacall-mips64-macro.S.
+	(vacall-mips-linux.s, vacall-mipsn32-linux.s, vacall-mips64-linux.s):
+	New targets.
+	(vacall-mips-macro.S): Rewritten.
+	(vacall-mipsn32-macro.S): Rewritten. Update the postprocessing hack.
+	(vacall-mips64-macro.S): Rewritten. Add a postprocessing hack.
+	* callback/vacall_r/Makefile.in (SOURCE_FILES): Add vacall-mips-linux.s,
+	vacall-mipsn32-linux.s, vacall-mips64-linux.s.
+	* avcall/avcall-mips-macro.S: Remove from version control.
+	* avcall/avcall-mipsn32-macro.S: Likewise.
+	* avcall/avcall-mips64-macro.S: Likewise.
+	* vacall/vacall-mips-macro.S: Likewise.
+	* vacall/vacall-mipsn32-macro.S: Likewise.
+	* vacall/vacall-mips64-macro.S: Likewise.
+	* callback/vacall_r/vacall-mips-macro.S: Likewise.
+	* callback/vacall_r/vacall-mipsn32-macro.S: Likewise.
+	* callback/vacall_r/vacall-mips64-macro.S: Likewise.
+	* PLATFORMS, */PLATFORMS: List mips-sgi-irix6.5 (cc -32).
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	m68k: Regenerate .s and .S files with known compilers.
 	* common/asm-m68k.h (L, FUNBEGIN, FUNEND): New macros.
 	* common/asm-m68k.sh: Expect a syntax argument. Produce L, FUNBEGIN,

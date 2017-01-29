@@ -23,7 +23,6 @@ typedef void (*func_pointer)(void*,va_alist);
 register struct { func_pointer vacall_function; void* arg; }
          *	env	__asm__("$2");
 #endif
-register func_pointer t9 __asm__("$25");
 register void*	sp	__asm__("$sp");
 register long	iarg0	__asm__("$4");
 register long	iarg1	__asm__("$5");
@@ -61,6 +60,10 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
           __vaword word5, __vaword word6, __vaword word7, __vaword word8,
           __vaword firstword)
 {
+  /* gcc-4.0.2 does not allocate stack space for word1,...,word8. */
+  /* The following account for the stack frame increase from 192 to 256 bytes
+   * done by postprocessing. */
+#define firstword (*(&firstword+8))
   /* Move the arguments passed in registers to their stack locations. */
   (&firstword)[-8] = iarg0; /* word1 */
   (&firstword)[-7] = iarg1; /* word2 */
@@ -96,9 +99,9 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   list.anum = 0;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
-  (*(t9 = vacall_function)) (&list);
+  (*vacall_function) (&list);
 #else /* REENTRANT */
-  (*(t9 = env->vacall_function)) (env->arg,&list);
+  (*env->vacall_function) (env->arg,&list);
 #endif
   /* Put return value into proper register. */
   if (list.rtype == __VAvoid) {

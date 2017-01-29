@@ -235,9 +235,9 @@ SOURCE_FILES = \
   vacall-i386.c vacall-i386-linux.s vacall-i386-macro.S \
   vacall-ia64.c vacall-ia64.s \
   vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S \
-  vacall-mips.c vacall-mips-macro.S \
-  vacall-mipsn32.c vacall-mipsn32-macro.S \
-  vacall-mips64.c vacall-mips64-macro.S \
+  vacall-mips.c vacall-mips-linux.s vacall-mips-macro.S \
+  vacall-mipsn32.c vacall-mipsn32-linux.s vacall-mipsn32-macro.S \
+  vacall-mips64.c vacall-mips64-linux.s vacall-mips64-macro.S \
   vacall-powerpc.c \
   vacall-powerpc-aix.s \
   vacall-powerpc-linux.s vacall-powerpc-macos.s vacall-powerpc-sysv4.s \

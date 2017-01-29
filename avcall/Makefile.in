@@ -248,9 +248,9 @@ SOURCE_FILES = \
   avcall-i386.c avcall-i386-linux.s avcall-i386-macro.S \
   avcall-ia64.c avcall-ia64.s \
   avcall-m68k.c avcall-m68k-linux.s avcall-m68k-sun.s avcall-m68k.mit.S avcall-m68k.motorola.S \
-  avcall-mips.c avcall-mips-macro.S \
-  avcall-mipsn32.c avcall-mipsn32-macro.S \
-  avcall-mips64.c avcall-mips64-macro.S \
+  avcall-mips.c avcall-mips-linux.s avcall-mips-macro.S \
+  avcall-mipsn32.c avcall-mipsn32-linux.s avcall-mipsn32-macro.S \
+  avcall-mips64.c avcall-mips64-linux.s avcall-mips64-macro.S \
   avcall-powerpc.c \
   avcall-powerpc-aix.s \
   avcall-powerpc-linux.s avcall-powerpc-macos.s avcall-powerpc-sysv4.s \

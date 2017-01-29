@@ -15,14 +15,20 @@ cat > $tmpscript1 << \EOF
 # ----------- Remove gcc self-identification
 /gcc2_compiled/d
 /gnu_compiled_c/d
+/\.ident/d
 EOF
 
 cat > $tmpscript2 << \EOF
 # ----------- Remove comments, they would cause trouble in preprocessing
 s,#.*$,,
-# ----------- Declare global symbols as functions (we have no variables)
-s/\.globl	\([A-Za-z0-9_]*\)$/.globl	\1\
-	DECLARE_FUNCTION(\1)/
+# ----------- Remove assembler pseudo-ops that the IRIX assembler does not understand
+/\.section/d
+/\.previous/d
+/\.abicalls/d
+# ----------- Massage the beginning of functions
+/\.type/{
+s/\.type[ 	]\+\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/
+}
 EOF
 
 sed -f $tmpscript1 | \

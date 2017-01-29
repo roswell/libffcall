@@ -30,6 +30,9 @@
   - If the first two args are floats or doubles, they are also passed in $f12
     and $f14. But varargs functions will expect them in the integer registers
     and we can't tell whether the function is varargs so we pass them both ways.
+  - GCC 3.3.x and 3.4.x pass the next args after two floats in $7 and on the
+    stack, instead of in $6, $7, and on the stack. This is a bug that is fixed
+    in GCC 4.0.4. We don't support these versions of GCC on mips with -mabi=32.
   - Structure arguments are copies embedded in the arglist structure.
   - Structure returns are pointers to caller-allocated space passed in as the
     first argument of the list. The function also returns the pointer.
@@ -44,22 +47,18 @@
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
-typedef __avword (*func_pointer)();
-register func_pointer	t9	__asm__("$25");
-
 int
 __builtin_avcall(av_alist* l)
 {
   register __avword*	sp __asm__("$sp");  /* C names for registers */
-  register __avword	iret2_tmp __asm__("$3");
+  register __avword	iret2 __asm__("$3");
   register float	fret_tmp __asm__("$f0");
   register double	dret_tmp __asm__("$f0");
   __avword *space = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword));	/* big space for child's stack frame */
-  __avword *argframe = (__avword*)sp;	/* stack offset for argument list is 0 */
+  __avword *argframe = sp;	/* stack offset for argument list is 0 */
   int arglen = l->aptr - l->args;
   int i;
   __avword iret;
-  long long iret2;
   float fret;
   double dret;
 
@@ -76,80 +75,78 @@ __builtin_avcall(av_alist* l)
   for (i = 4; i < arglen; i++)		/* push excess function args */
     argframe[i] = l->args[i];
 
-  iret = (*(t9 = l->func))(l->args[0], l->args[1],  /* call function with 1st 4 args */
-			   l->args[2], l->args[3]);
-  iret2 = iret2_tmp;
+  /* Note: The code of this call ought to put the address of the called function
+     in register $25 before the call.  */
+  iret = (*l->func)(l->args[0], l->args[1],  /* call function with 1st 4 args */
+		    l->args[2], l->args[3]);
   fret = fret_tmp;
   dret = dret_tmp;
 
   /* save return value */
-  switch (l->rtype) {
-  default:
-  case __AVvoid:
-    break;
-  case __AVword:
+  if (l->rtype == __AVvoid) {
+  } else
+  if (l->rtype == __AVword) {
     RETURN(__avword, iret);
-    break;
-  case __AVchar:
+  } else
+  if (l->rtype == __AVchar) {
     RETURN(char, iret);
-    break;
-  case __AVschar:
+  } else
+  if (l->rtype == __AVschar) {
     RETURN(signed char, iret);
-    break;
-  case __AVuchar:
+  } else
+  if (l->rtype == __AVuchar) {
     RETURN(unsigned char, iret);
-    break;
-  case __AVshort:
+  } else
+  if (l->rtype == __AVshort) {
     RETURN(short, iret);
-    break;
-  case __AVushort:
+  } else
+  if (l->rtype == __AVushort) {
     RETURN(unsigned short, iret);
-    break;
-  case __AVint:
+  } else
+  if (l->rtype == __AVint) {
     RETURN(int, iret);
-    break;
-  case __AVuint:
+  } else
+  if (l->rtype == __AVuint) {
     RETURN(unsigned int, iret);
-    break;
-  case __AVlong:
+  } else
+  if (l->rtype == __AVlong) {
     RETURN(long, iret);
-    break;
-  case __AVulong:
+  } else
+  if (l->rtype == __AVulong) {
     RETURN(unsigned long, iret);
-    break;
-  case __AVlonglong:
-  case __AVulonglong:
-    ((__avword*)l->raddr)[0] = (__avword)(iret);
+  } else
+  if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
+    ((__avword*)l->raddr)[0] = iret;
     ((__avword*)l->raddr)[1] = iret2;
-    break;
-  case __AVfloat:
+  } else
+  if (l->rtype == __AVfloat) {
     RETURN(float, fret);
-    break;
-  case __AVdouble:
+  } else
+  if (l->rtype == __AVdouble) {
     RETURN(double, dret);
-    break;
-  case __AVvoidp:
-    RETURN(void*, (__avword)iret);
-    break;
-  case __AVstruct:
+  } else
+  if (l->rtype == __AVvoidp) {
+    RETURN(void*, iret);
+  } else
+  if (l->rtype == __AVstruct) {
     if (l->flags & __AV_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention: need a  *(TYPE*)l->raddr = *(TYPE*)i;  */
+      /* pcc struct return convention: need a  *(TYPE*)l->raddr = *(TYPE*)iret;  */
       if (l->rsize == sizeof(char)) {
-        RETURN(char, *(char*)(__avword)iret);
+        RETURN(char, *(char*)iret);
       } else
       if (l->rsize == sizeof(short)) {
-        RETURN(short, *(short*)(__avword)iret);
+        RETURN(short, *(short*)iret);
       } else
       if (l->rsize == sizeof(int)) {
-        RETURN(int, *(int*)(__avword)iret);
+        RETURN(int, *(int*)iret);
       } else
       if (l->rsize == sizeof(double)) {
-        ((int*)l->raddr)[0] = ((int*)(__avword)iret)[0];
-        ((int*)l->raddr)[1] = ((int*)(__avword)iret)[1];
+        ((int*)l->raddr)[0] = ((int*)iret)[0];
+        ((int*)l->raddr)[1] = ((int*)iret)[1];
       } else {
         int n = (l->rsize + sizeof(__avword)-1)/sizeof(__avword);
         while (--n >= 0)
-          ((__avword*)l->raddr)[n] = ((__avword*)(__avword)iret)[n];
+          ((__avword*)l->raddr)[n] = ((__avword*)iret)[n];
       }
     } else {
       /* normal struct return convention */
@@ -165,7 +162,6 @@ __builtin_avcall(av_alist* l)
         }
       }
     }
-    break;
   }
   return 0;
 }

@@ -23,7 +23,6 @@ typedef void (*func_pointer)(void*,va_alist);
 register struct { func_pointer vacall_function; void* arg; }
          *	env	__asm__("$2");
 #endif
-register func_pointer t9 __asm__("$25");
 register float	farg1	__asm__("$f12");
 register float	farg2	__asm__("$f14");
 register double	darg1	__asm__("$f12");
@@ -59,9 +58,9 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   list.anum = 0;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
-  (*(t9 = vacall_function)) (&list);
+  (*vacall_function) (&list);
 #else /* REENTRANT */
-  (*(t9 = env->vacall_function)) (env->arg,&list);
+  (*env->vacall_function) (env->arg,&list);
 #endif
   /* Put return value into proper register. */
   if (list.rtype == __VAvoid) {

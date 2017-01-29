@@ -49,9 +49,6 @@
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
-typedef __avword (*func_pointer)();
-register func_pointer	t9	__asm__("$25");
-
 int
 __builtin_avcall(av_alist* l)
 {
@@ -60,8 +57,7 @@ __builtin_avcall(av_alist* l)
   register double	dret	__asm__("$f0");
 /*register __avword	iret1	__asm__("$2"); */
   register __avword	iret2	__asm__("$3");
-  __avword space[__AV_ALIST_WORDS];	/* big space for child's stack frame */
-  __avword *argframe = (__avword*)sp;	/* stack offset for argument list is 0 */
+  __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;
   __avword i;
 
@@ -116,7 +112,9 @@ __builtin_avcall(av_alist* l)
   __asm__ __volatile__ ("ld $9,%0" : : "m" (l->args[5]) : "$9"); /* arg1 = l->args[5]; */
   __asm__ __volatile__ ("ld $10,%0" : : "m" (l->args[6]) : "$10"); /* arg1 = l->args[6]; */
   __asm__ __volatile__ ("ld $11,%0" : : "m" (l->args[7]) : "$11"); /* arg1 = l->args[7]; */
-  i = (*(t9 = l->func))();
+  /* Note: The code of this call ought to put the address of the called function
+     in register $25 before the call.  */
+  i = (*l->func)();
 
   /* save return value */
   if (l->rtype == __AVvoid) {
