@@ -1139,7 +1139,7 @@ typedef __va_alist* va_alist;
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   ((TYPE_SIZE) <= 16							\
    ? (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)			\
-      __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))			\
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))		\
    : va_arg_ptr(LIST,void*)						\
   )
 #endif

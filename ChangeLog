@@ -1,5 +1,11 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	sparc64: Fix a compiler warning.
+	* vacall/vacall.h.in (__va_arg_struct): Add a cast to pointer.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	mips64: Fix trampoline_r.
 	* callback/trampoline_r/trampoline.c: Fix conditionals that involve
 	__mips64__.
