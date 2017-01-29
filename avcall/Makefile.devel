@@ -17,9 +17,10 @@ CROSS_TOOL = cross
 precompiled : \
   avcall-i386-macro.S \
   avcall-m68k.mit.S avcall-m68k.motorola.S \
-  avcall-mipseb-macro.S avcall-mipsel-macro.S avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S avcall-mips64eb-macro.S avcall-mips64el-macro.S
+  avcall-mipseb-macro.S avcall-mipsel-macro.S avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S avcall-mips64eb-macro.S avcall-mips64el-macro.S \
+  avcall-sparc-macro.S avcall-sparc64-macro.S
 # Old rules
-# avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
+# avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
 
 
 avcall-i386-linux.s : avcall-i386.c avcall.h.in $(THISFILE)
@@ -79,15 +80,19 @@ avcall-mips64el-macro.S : avcall-mips64el-linux.s ../common/asm-mips.sh $(THISFI
 	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < avcall-mips64el-linux.s) > avcall-mips64el-macro.S
 
 
-avcall-sparc-macro.S : avcall-sparc.c avcall.h.in ../common/asm-sparc.sh $(THISFILE)
-	$(GCC) -V 2.95.2 -b sparc-sun $(GCCFLAGS) -D__sparc__ -S avcall-sparc.c -o avcall-sparc.s
-	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < avcall-sparc.s) > avcall-sparc-macro.S
-	$(RM) avcall-sparc.s
+avcall-sparc-linux.s : avcall-sparc.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) sparc-linux gcc -V 3.1 $(GCCFLAGS) -D__sparc__ -S avcall-sparc.c -o avcall-sparc-linux.s
 
-avcall-sparc64-macro.S : avcall-sparc64.c avcall.h.in ../common/asm-sparc64.sh $(THISFILE)
-	sparc64-linux-gcc -V 2.95.2 -b sparc64-linux $(GCCFLAGS) -D__sparc64__ -S avcall-sparc64.c -o avcall-sparc64.s
-	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc64.sh < avcall-sparc64.s) > avcall-sparc64-macro.S
-	$(RM) avcall-sparc64.s
+avcall-sparc-macro.S : avcall-sparc-linux.s ../common/asm-sparc.sh $(THISFILE)
+	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < avcall-sparc-linux.s) > avcall-sparc-macro.S
+
+avcall-sparc64-linux.s : avcall-sparc64.c avcall.h.in $(THISFILE)
+# This compiler produces useless instructions with -fPIC. The result is PIC even without -fPIC.
+	$(CROSS_TOOL) sparc64-linux gcc -V 4.0.2 $(GCCFLAGS) -fno-PIC -D__sparc64__ -S avcall-sparc64.c -o avcall-sparc64-linux.s
+
+avcall-sparc64-macro.S : avcall-sparc64-linux.s ../common/asm-sparc.sh $(THISFILE)
+	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < avcall-sparc64-linux.s) > avcall-sparc64-macro.S
+
 
 # Patrick Bridges says that on Linux/Alpha, avcall-alpha.s compiled with "-O"
 # works but compiled with "-O2" doesn't work.

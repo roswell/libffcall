@@ -256,8 +256,8 @@ SOURCE_FILES = \
   avcall-powerpc-linux.s avcall-powerpc-macos.s avcall-powerpc-sysv4.s \
   avcall-powerpc64.c avcall-powerpc64.s \
   avcall-s390.c avcall-s390.s \
-  avcall-sparc.c avcall-sparc-macro.S \
-  avcall-sparc64.c avcall-sparc64-macro.S \
+  avcall-sparc.c avcall-sparc-linux.s avcall-sparc-macro.S \
+  avcall-sparc64.c avcall-sparc64-linux.s avcall-sparc64-macro.S \
   avcall-x86_64.c avcall-x86_64-linux.s avcall-x86_64-macro.S \
   avcall-structcpy.c \
   minitests.c \
