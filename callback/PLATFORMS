@@ -5,7 +5,7 @@ Supported CPUs:  (Put the GNU config.guess values here.)
      mips       mips-sgi-irix5.3 (gcc), mips-sgi-irix6.4 (cc -32, -n32, -64),
                 mips-sgi-irix6.5 (cc -32, -n32, gcc -mabi=n32),
                 mips-unknown-linux (gcc -mabi=32),
-                mips64-unknown-linux (gcc -mabi=n32)
+                mips64-unknown-linux (gcc -mabi=n32, gcc -mabi=64)
      sparc      sparc-sun-sunos4.1.3_U1 (gcc), sparc-sun-solaris2.4 (gcc),
                 sparc-sun-solaris2.10 (gcc, cc), sparc-unknown-linux (gcc),
                 sparc64-unknown-linux (gcc)

@@ -17,7 +17,7 @@ CROSS_TOOL = cross
 precompiled : \
   avcall-i386-macro.S \
   avcall-m68k.mit.S avcall-m68k.motorola.S \
-  avcall-mipseb-macro.S avcall-mipsel-macro.S avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S avcall-mips64-macro.S
+  avcall-mipseb-macro.S avcall-mipsel-macro.S avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S avcall-mips64eb-macro.S avcall-mips64el-macro.S
 # Old rules
 # avcall-sparc-macro.S avcall-sparc64-macro.S avcall-alpha.s avcall-hppa.s avcall-arm-macro.S avcall-armel-macro.S avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
 
@@ -66,11 +66,17 @@ avcall-mipsn32el-linux.s : avcall-mipsn32.c avcall.h.in $(THISFILE)
 avcall-mipsn32el-macro.S : avcall-mipsn32el-linux.s ../common/asm-mips.sh $(THISFILE)
 	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < avcall-mipsn32el-linux.s) > avcall-mipsn32el-macro.S
 
-avcall-mips64-linux.s : avcall-mips64.c avcall.h.in $(THISFILE)
-	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=64 $(GCCFLAGS) -D__mips64__ -S avcall-mips64.c -o avcall-mips64-linux.s
+avcall-mips64eb-linux.s : avcall-mips64.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=64 -meb $(GCCFLAGS) -D__mips64__ -S avcall-mips64.c -o avcall-mips64eb-linux.s
 
-avcall-mips64-macro.S : avcall-mips64-linux.s ../common/asm-mips.sh $(THISFILE)
-	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < avcall-mips64-linux.s) > avcall-mips64-macro.S
+avcall-mips64eb-macro.S : avcall-mips64eb-linux.s ../common/asm-mips.sh $(THISFILE)
+	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < avcall-mips64eb-linux.s) > avcall-mips64eb-macro.S
+
+avcall-mips64el-linux.s : avcall-mips64.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=64 -mel $(GCCFLAGS) -D__mips64__ -S avcall-mips64.c -o avcall-mips64el-linux.s
+
+avcall-mips64el-macro.S : avcall-mips64el-linux.s ../common/asm-mips.sh $(THISFILE)
+	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < avcall-mips64el-linux.s) > avcall-mips64el-macro.S
 
 
 avcall-sparc-macro.S : avcall-sparc.c avcall.h.in ../common/asm-sparc.sh $(THISFILE)

@@ -78,8 +78,10 @@
 /avcall/avcall-mipsn32eb-macro.S
 /avcall/avcall-mipsn32el-linux.s
 /avcall/avcall-mipsn32el-macro.S
-/avcall/avcall-mips64-linux.s
-/avcall/avcall-mips64-macro.S
+/avcall/avcall-mips64eb-linux.s
+/avcall/avcall-mips64eb-macro.S
+/avcall/avcall-mips64el-linux.s
+/avcall/avcall-mips64el-macro.S
 /vacall/vacall-i386-linux.s
 /vacall/vacall-i386-macro.S
 /vacall/vacall-m68k-linux.s
@@ -94,8 +96,10 @@
 /vacall/vacall-mipsn32eb-macro.S
 /vacall/vacall-mipsn32el-linux.s
 /vacall/vacall-mipsn32el-macro.S
-/vacall/vacall-mips64-linux.s
-/vacall/vacall-mips64-macro.S
+/vacall/vacall-mips64eb-linux.s
+/vacall/vacall-mips64eb-macro.S
+/vacall/vacall-mips64el-linux.s
+/vacall/vacall-mips64el-macro.S
 /callback/vacall_r/vacall-i386-linux.s
 /callback/vacall_r/vacall-i386-macro.S
 /callback/vacall_r/vacall-m68k-linux.s
@@ -111,8 +115,10 @@
 /callback/vacall_r/vacall-mipsn32eb-macro.S
 /callback/vacall_r/vacall-mipsn32el-linux.s
 /callback/vacall_r/vacall-mipsn32el-macro.S
-/callback/vacall_r/vacall-mips64-linux.s
-/callback/vacall_r/vacall-mips64-macro.S
+/callback/vacall_r/vacall-mips64eb-linux.s
+/callback/vacall_r/vacall-mips64eb-macro.S
+/callback/vacall_r/vacall-mips64el-linux.s
+/callback/vacall_r/vacall-mips64el-macro.S
 
 # ---------- "make -f Makefile.maint totally-clean" gets you here ----------
 

@@ -17,7 +17,7 @@ CROSS_TOOL = cross
 precompiled : \
   vacall-i386-macro.S \
   vacall-m68k.mit.S vacall-m68k.motorola.S \
-  vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64-macro.S
+  vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64eb-macro.S vacall-mips64el-macro.S
 # Old rules
 # vacall-sparc-macro.S vacall-sparc64-macro.S vacall-alpha.s vacall-hppa.s vacall-arm-macro.S vacall-armel.s vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
 
@@ -73,14 +73,23 @@ vacall-mipsn32el-macro.S : vacall-mipsn32el-linux.s ../common/asm-mips.sh $(THIS
 	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mipsn32el-linux-hacked.s) > vacall-mipsn32el-macro.S
 	$(RM) vacall-mipsn32el-linux-hacked.s
 
-vacall-mips64-linux.s : vacall-mips64.c vacall.h.in $(THISFILE)
-	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=64 $(GCCFLAGS) -D__mips64__ -S vacall-mips64.c -o vacall-mips64-linux.s
+vacall-mips64eb-linux.s : vacall-mips64.c vacall.h.in $(THISFILE)
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=64 -meb $(GCCFLAGS) -D__mips64__ -S vacall-mips64.c -o vacall-mips64eb-linux.s
 
-vacall-mips64-macro.S : vacall-mips64-linux.s ../common/asm-mips.sh $(THISFILE)
-	$(SED) -e 's/\$$sp,\$$sp,\([-]*\)224/$$sp,$$sp,\1288/' < vacall-mips64-linux.s > vacall-mips64-linux-hacked.s
-	if cmp vacall-mips64-linux.s vacall-mips64-linux-hacked.s > /dev/null; then echo "Postprocessing hack no longer applies." 1>&2; exit 1; fi
-	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mips64-linux-hacked.s) > vacall-mips64-macro.S
-	$(RM) vacall-mips64-linux-hacked.s
+vacall-mips64eb-macro.S : vacall-mips64eb-linux.s ../common/asm-mips.sh $(THISFILE)
+	$(SED) -e 's/\$$sp,\$$sp,\([-]*\)224/$$sp,$$sp,\1288/' < vacall-mips64eb-linux.s > vacall-mips64eb-linux-hacked.s
+	if cmp vacall-mips64eb-linux.s vacall-mips64eb-linux-hacked.s > /dev/null; then echo "Postprocessing hack no longer applies." 1>&2; exit 1; fi
+	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mips64eb-linux-hacked.s) > vacall-mips64eb-macro.S
+	$(RM) vacall-mips64eb-linux-hacked.s
+
+vacall-mips64el-linux.s : vacall-mips64.c vacall.h.in $(THISFILE)
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=64 -mel $(GCCFLAGS) -D__mips64__ -S vacall-mips64.c -o vacall-mips64el-linux.s
+
+vacall-mips64el-macro.S : vacall-mips64el-linux.s ../common/asm-mips.sh $(THISFILE)
+	$(SED) -e 's/\$$sp,\$$sp,\([-]*\)224/$$sp,$$sp,\1288/' < vacall-mips64el-linux.s > vacall-mips64el-linux-hacked.s
+	if cmp vacall-mips64el-linux.s vacall-mips64el-linux-hacked.s > /dev/null; then echo "Postprocessing hack no longer applies." 1>&2; exit 1; fi
+	(echo '#include "asm-mips.h"' ; ../common/asm-mips.sh < vacall-mips64el-linux-hacked.s) > vacall-mips64el-macro.S
+	$(RM) vacall-mips64el-linux-hacked.s
 
 
 vacall-sparc-macro.S : vacall-sparc.c vacall.h.in ../common/asm-sparc.sh $(THISFILE)

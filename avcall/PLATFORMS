@@ -22,7 +22,7 @@ Supported CPUs:  (Put the GNU config.guess values here.)
               mips-sgi-irix6.5 (cc -32, -n32,        SGI mips3     Irix 6.5
                   gcc -mabi=n32)
               mips-unknown-linux (gcc -mabi=32)      emulated      Linux
-              mips64-unknown-linux (gcc -mabi=n32)   emulated      Linux
+              mips64-unknown-linux (gcc -mabi=n32,64)emulated      Linux
    sparc      sparc-sun-sunos4.1.1 (gcc, cc)         Sun4 Sparc    SunOS 4.x
               sparc-sun-solaris2.3 (gcc)             Sun4 Sparc    SunOS 5.x
               sparc-sun-solaris2.4 (gcc, cc)         Sun4 Sparc    SunOS 5.x

@@ -1,5 +1,39 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	mips64: Make it work on Linux (mips64, mips64el) with "gcc -mabi=64".
+	* avcall/avcall-mips64.c: Add code for struct returns on _MIPSEL.
+	* avcall/Makefile.devel (avcall-mips64eb-linux.s,
+	avcall-mips64eb-macro.S, avcall-mips64el-linux.s,
+	avcall-mips64el-macro.S): New targets.
+	(avcall-mips64-linux.s, avcall-mips64-macro.S): Remove targets.
+	* avcall/Makefile.in (avcall-mips64.s): Take into account the
+	ENDIANNESS.
+	(SOURCE_FILES): Add avcall-mips64eb-linux.s, avcall-mips64el-linux.s,
+	avcall-mips64eb-macro.S, avcall-mips64el-macro.S.
+	Remove avcall-mips64-linux.s, avcall-mips64-macro.S.
+	* vacall/vacall-mips64.c: Add code for struct returns on _MIPSEL.
+	* vacall/Makefile.devel (vacall-mips64eb-linux.s,
+	vacall-mips64eb-macro.S, vacall-mips64el-linux.s,
+	vacall-mips64el-macro.S): New targets.
+	(vacall-mips64-linux.s, vacall-mips64-macro.S): Remove targets.
+	* vacall/Makefile.in (vacall-mips64.s): Take into account the
+	ENDIANNESS.
+	(SOURCE_FILES): Add vacall-mips64eb-linux.s, vacall-mips64el-linux.s,
+	vacall-mips64eb-macro.S, vacall-mips64el-macro.S.
+	Remove vacall-mips64-linux.s, vacall-mips64-macro.S.
+	* callback/vacall_r/Makefile.devel (vacall-mips64eb-linux.s,
+	vacall-mips64eb-macro.S, vacall-mips64el-linux.s,
+	vacall-mips64el-macro.S): New targets.
+	(vacall-mips64-linux.s, vacall-mips64-macro.S): Remove targets.
+	* callback/vacall_r/Makefile.in (vacall-mips64.s): Take into account the
+	ENDIANNESS.
+	(SOURCE_FILES): Add vacall-mips64eb-linux.s, vacall-mips64el-linux.s,
+	vacall-mips64eb-macro.S, vacall-mips64el-macro.S.
+	Remove vacall-mips64-linux.s, vacall-mips64-macro.S.
+	* PLATFORMS, */PLATFORMS: List mips64-unknown-linux (gcc -mabi=64).
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	mipsn32: Make it work on Linux (mips64, mips64el) with "gcc -mabi=n32".
 	* avcall/avcall-mipsn32.c: Add code for struct returns on _MIPSEL.
 	* avcall/Makefile.devel (avcall-mipsn32eb-linux.s,
