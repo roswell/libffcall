@@ -1,5 +1,11 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	Don't violate ISO C rules.
+	* avcall/avcall.h.in (__av_struct): Don't store an unaligned pointer
+	in (LIST).aptr.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	Don't make side-effects before overflow checking.
 	* avcall/avcall.h.in: In most macro definitions, modify (LIST).aptr
 	after checking that it will remain within range, not before. But
