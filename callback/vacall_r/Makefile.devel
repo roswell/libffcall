@@ -21,9 +21,10 @@ precompiled : \
   vacall-sparc-macro.S vacall-sparc64-macro.S \
   vacall-alpha-macro.S \
   vacall-hppa-macro.S \
-  vacall-arm-macro.S vacall-armhf-macro.S
+  vacall-arm-macro.S vacall-armhf-macro.S \
+  vacall-powerpc-aix.s vacall-powerpc-linux-macro.S vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s
 # Old rules
-# vacall-powerpc-aix.s vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
+# vacall-ia64.s vacall-x86_64-macro.S vacall-s390-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall_r.h.in $(THISFILE)
@@ -144,7 +145,10 @@ vacall-armhf-macro.S : vacall-armhf.c vacall_r.h.in ../../common/asm-arm.sh $(TH
 
 
 vacall-powerpc-aix.s : vacall-powerpc.c vacall_r.h.in $(THISFILE)
-	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.s
+	$(CROSS_TOOL) rs6000-aix gcc -V 3.3.6 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-aix.s
+
+vacall-powerpc-linux.s : vacall-powerpc.c vacall_r.h.in $(THISFILE)
+	$(CROSS_TOOL) powerpc-linux gcc -V 3.3.6 -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-linux.s
 
 vacall-powerpc-linux-macro.S : vacall-powerpc-linux.s $(THISFILE)
 	sed -f elfhack-powerpc.sed < vacall-powerpc-linux.s > vacall-powerpc-linux-macro.S
@@ -153,15 +157,16 @@ vacall-powerpc-netbsd-macro.S : vacall-powerpc-netbsd.s $(THISFILE)
 	sed -f elfhack-powerpc.sed < vacall-powerpc-netbsd.s > vacall-powerpc-netbsd-macro.S
 
 vacall-powerpc-sysv4-macro.S : vacall-powerpc.c vacall_r.h.in $(THISFILE)
-	$(GCC) -V 2.95.2 -b ppc-linux -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-sysv4.s
+	$(CROSS_TOOL) powerpc-linux gcc -V 3.3.6 -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-sysv4.s
 	sed -f elfhack-powerpc.sed < vacall-powerpc-sysv4.s > vacall-powerpc-sysv4-macro.S
 	$(RM) vacall-powerpc-sysv4.s
 
 vacall-powerpc-macos.s : vacall-powerpc.c vacall_r.h.in $(THISFILE)
-	$(GCC) -V 3.3.2 -b powerpc-darwin $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-macos.s
+	$(CROSS_TOOL) powerpc-darwin gcc -V 4.0.4 $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-macos.s
 
 vacall-powerpc64.s : vacall-powerpc64.c vacall_r.h.in $(THISFILE)
-	/cross/powerpc64-linux-tools/bin/powerpc64-linux-gcc $(GCCFLAGS) -D__powerpc64__ -S vacall-powerpc64.c -o vacall-powerpc64.s
+	$(CROSS_TOOL) powerpc64-linux gcc -V 3.3.6 $(GCCFLAGS) -D__powerpc64__ -S vacall-powerpc64.c -o vacall-powerpc64.s
+
 
 vacall-ia64.s : vacall-ia64.c vacall_r.h.in $(THISFILE)
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S vacall-ia64.c -o vacall-ia64.s

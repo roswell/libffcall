@@ -68,8 +68,7 @@ __builtin_avcall(av_alist* l)
   register float	fret	__asm__("fr1");
   register double	dret	__asm__("fr1");
 
-  __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
-  __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
+  __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;
   __avword i;
 
@@ -78,34 +77,45 @@ __builtin_avcall(av_alist* l)
 
   /* pass first 13 floating-point args in registers */
   arglen = l->faptr - l->fargs;
-  if (arglen == 0) goto fargs0;
-  else if (arglen == 1) goto fargs1;
-  else if (arglen == 2) goto fargs2;
-  else if (arglen == 3) goto fargs3;
-  else if (arglen == 4) goto fargs4;
-  else if (arglen == 5) goto fargs5;
-  else if (arglen == 6) goto fargs6;
-  else if (arglen == 7) goto fargs7;
-  else if (arglen == 8) goto fargs8;
-  else if (arglen == 9) goto fargs9;
-  else if (arglen == 10) goto fargs10;
-  else if (arglen == 11) goto fargs11;
-  else if (arglen == 12) goto fargs12;
-  else if (arglen == 13) goto fargs13;
-  fargs13: farg13 = l->fargs[12];
-  fargs12: farg12 = l->fargs[11];
-  fargs11: farg11 = l->fargs[10];
-  fargs10: farg10 = l->fargs[9];
-  fargs9: farg9 = l->fargs[8];
-  fargs8: farg8 = l->fargs[7];
-  fargs7: farg7 = l->fargs[6];
-  fargs6: farg6 = l->fargs[5];
-  fargs5: farg5 = l->fargs[4];
-  fargs4: farg4 = l->fargs[3];
-  fargs3: farg3 = l->fargs[2];
-  fargs2: farg2 = l->fargs[1];
-  fargs1: farg1 = l->fargs[0];
-  fargs0: ;
+  if (arglen > 0) {
+    if (arglen > 1) {
+      if (arglen > 2) {
+        if (arglen > 3) {
+          if (arglen > 4) {
+            if (arglen > 5) {
+              if (arglen > 6) {
+                if (arglen > 7) {
+                  if (arglen > 8) {
+                    if (arglen > 9) {
+                      if (arglen > 10) {
+                        if (arglen > 11) {
+                          if (arglen > 12) {
+                            farg13 = l->fargs[12];
+                          }
+                          farg12 = l->fargs[11];
+                        }
+                        farg11 = l->fargs[10];
+                      }
+                      farg10 = l->fargs[9];
+                    }
+                    farg9 = l->fargs[8];
+                  }
+                  farg8 = l->fargs[7];
+                }
+                farg7 = l->fargs[6];
+              }
+              farg6 = l->fargs[5];
+            }
+            farg5 = l->fargs[4];
+          }
+          farg4 = l->fargs[3];
+        }
+        farg3 = l->fargs[2];
+      }
+      farg2 = l->fargs[1];
+    }
+    farg1 = l->fargs[0];
+  }
 				/* call function, pass 8 args in registers */
   i = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3],
 		 l->args[4], l->args[5], l->args[6], l->args[7]);

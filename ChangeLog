@@ -1,3 +1,34 @@
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
+	powerpc, powerpc64: Regenerate .s and .S files with known compilers.
+	* avcall/avcall-powerpc64.c: Use __builtin_alloca. Use an 'if' cascade
+	instead of gotos.
+	* avcall/Makefile.devel (avcall-powerpc-linux.s): New target.
+	(avcall-powerpc-aix.s, avcall-powerpc-sysv4.s, avcall-powerpc-macos.s,
+	avcall-powerpc64.s): Rewritten.
+	* vacall/Makefile.devel (vacall-powerpc-linux.s): New target.
+	(vacall-powerpc-aix.s, vacall-powerpc-sysv4.s, vacall-powerpc-macos.s,
+	vacall-powerpc64.s): Rewritten.
+	* callback/vacall_r/Makefile.devel (vacall-powerpc-linux.s): New target.
+	(vacall-powerpc-aix.s, vacall-powerpc-sysv4-macro.S,
+	vacall-powerpc-macos.s, vacall-powerpc64.s): Rewritten.
+	* avcall/avcall-powerpc-aix.s: Remove from version control.
+	* avcall/avcall-powerpc-linux.s: Likewise.
+	* avcall/avcall-powerpc-sysv4.s: Likewise.
+	* avcall/avcall-powerpc-macos.s: Likewise.
+	* avcall/avcall-powerpc64.s: Likewise.
+	* vacall/vacall-powerpc-aix.s: Likewise.
+	* vacall/vacall-powerpc-linux.s: Likewise.
+	* vacall/vacall-powerpc-sysv4.s: Likewise.
+	* vacall/vacall-powerpc-macos.s: Likewise.
+	* vacall/vacall-powerpc64.s: Likewise.
+	* callback/vacall_r/vacall-powerpc-aix.s: Likewise.
+	* callback/vacall_r/vacall-powerpc-linux.s: Likewise.
+	* callback/vacall_r/vacall-powerpc-linux-macro.S: Likewise.
+	* callback/vacall_r/vacall-powerpc-sysv4-macro.S: Likewise.
+	* callback/vacall_r/vacall-powerpc-macos.s: Likewise.
+	* callback/vacall_r/vacall-powerpc64.s: Likewise.
+
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
 	armhf: Add support for arm with -mfloat-abi=hard.

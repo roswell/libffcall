@@ -87,6 +87,11 @@
 /avcall/avcall-mips64eb-macro.S
 /avcall/avcall-mips64el-linux.s
 /avcall/avcall-mips64el-macro.S
+/avcall/avcall-powerpc-aix.s
+/avcall/avcall-powerpc-linux.s
+/avcall/avcall-powerpc-macos.s
+/avcall/avcall-powerpc-sysv4.s
+/avcall/avcall-powerpc64.s
 /avcall/avcall-sparc-linux.s
 /avcall/avcall-sparc-macro.S
 /avcall/avcall-sparc64-linux.s
@@ -114,6 +119,11 @@
 /vacall/vacall-mips64eb-macro.S
 /vacall/vacall-mips64el-linux.s
 /vacall/vacall-mips64el-macro.S
+/vacall/vacall-powerpc-aix.s
+/vacall/vacall-powerpc-linux.s
+/vacall/vacall-powerpc-macos.s
+/vacall/vacall-powerpc-sysv4.s
+/vacall/vacall-powerpc64.s
 /vacall/vacall-sparc-linux.s
 /vacall/vacall-sparc-macro.S
 /vacall/vacall-sparc64-linux.s
@@ -143,6 +153,12 @@
 /callback/vacall_r/vacall-mips64eb-macro.S
 /callback/vacall_r/vacall-mips64el-linux.s
 /callback/vacall_r/vacall-mips64el-macro.S
+/callback/vacall_r/vacall-powerpc-aix.s
+/callback/vacall_r/vacall-powerpc-linux.s
+/callback/vacall_r/vacall-powerpc-linux-macro.S
+/callback/vacall_r/vacall-powerpc-macos.s
+/callback/vacall_r/vacall-powerpc-sysv4-macro.S
+/callback/vacall_r/vacall-powerpc64.s
 /callback/vacall_r/vacall-sparc-linux.s
 /callback/vacall_r/vacall-sparc-macro.S
 /callback/vacall_r/vacall-sparc64-linux.s
