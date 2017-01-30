@@ -112,9 +112,6 @@ avcall-hppa.lo : avcall-hppa.s
 avcall-hppa.s : $(srcdir)/avcall-hppa-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > avcall-hppa.s
 
-avcall-s390.lo : $(srcdir)/avcall-s390.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-s390.s
-
 avcall-arm.lo : avcall-arm.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm.s
 
@@ -150,6 +147,9 @@ avcall-x86_64.lo : avcall-x86_64.s
 
 avcall-x86_64.s : $(srcdir)/avcall-x86_64-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > avcall-x86_64.s
+
+avcall-s390.lo : $(srcdir)/avcall-s390.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-s390.s
 
 avcall-structcpy.lo : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy.c
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-structcpy.c

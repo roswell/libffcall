@@ -24,7 +24,8 @@ precompiled : \
   vacall-arm-macro.S vacall-armhf-macro.S \
   vacall-powerpc-aix.s vacall-powerpc-linux.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s \
   vacall-ia64.s \
-  vacall-x86_64-macro.S
+  vacall-x86_64-macro.S \
+  vacall-s390.s
 
 
 vacall-i386-linux.s : vacall-i386.c vacall.h.in $(THISFILE)
@@ -167,6 +168,10 @@ vacall-x86_64-linux.s : vacall-x86_64.c vacall.h.in $(THISFILE)
 
 vacall-x86_64-macro.S : vacall-x86_64-linux.s ../common/asm-x86_64.sh $(THISFILE)
 	(echo '#include "asm-x86_64.h"' ; ../common/asm-x86_64.sh < vacall-x86_64-linux.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-x86_64-macro.S
+
+
+vacall-s390.s : vacall-s390.c vacall.h.in $(THISFILE)
+	$(CROSS_TOOL) s390-linux gcc -V 3.1 $(GCCFLAGS) -D__s390__ -S vacall-s390.c -o vacall-s390.s
 
 
 # --------------- Rules for debugging test failures ---------------

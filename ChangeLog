@@ -1,5 +1,19 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	s390: Regenerate .s and .S files with known compilers.
+	* avcall/avcall-s390.c: Fix include statement.
+	* avcall/Makefile.devel (avcall-s390.s): New target.
+	* vacall/Makefile.devel (vacall-s390.s): New target.
+	* callback/vacall_r/Makefile.devel (vacall-s390-linux.s): New target.
+	* avcall/Makefile.in: Move avcall-s390.lo target.
+	* vacall/Makefile.in: Move vacall-s390.o target.
+	* avcall/avcall-s390.s: Remove from version control.
+	* vacall/vacall-s390.s: Likewise.
+	* callback/vacall_r/vacall-s390-linux.s: Likewise.
+	* callback/vacall_r/vacall-s390-macro.S: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Regenerate .s and .S files with known compilers.
 	* common/asm-x86_64.h (P2ALIGN): New macro.
 	(ALIGN): Remove macro.

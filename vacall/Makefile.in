@@ -103,9 +103,6 @@ vacall-hppa.o : vacall-hppa.s
 vacall-hppa.s : $(srcdir)/vacall-hppa-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > vacall-hppa.s
 
-vacall-s390.o : $(srcdir)/vacall-s390.s
-	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-s390.s
-
 vacall-arm.o : vacall-arm.s
 	$(CC) @GCC_X_NONE@ -c vacall-arm.s
 
@@ -141,6 +138,9 @@ vacall-x86_64.o : vacall-x86_64.s
 
 vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
+
+vacall-s390.o : $(srcdir)/vacall-s390.s
+	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-s390.s
 
 misc.o : $(srcdir)/misc.c vacall.h config.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/misc.c

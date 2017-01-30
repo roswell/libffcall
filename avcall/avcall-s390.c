@@ -29,7 +29,7 @@
   Compile this routine with gcc -O2 to get the right register variables.
   For other compilers use the pre-compiled assembler version.
   ----------------------------------------------------------------------*/
-#include "avcall.h"
+#include "avcall.h.in"
 
 #define STACK_OFFSET 24
 
