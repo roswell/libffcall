@@ -1,5 +1,16 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	ia64: Regenerate .s and .S files with known compilers.
+	* avcall/Makefile.devel (avcall-ia64.s): Rewritten.
+	* vacall/Makefile.devel (vacall-ia64.s): Rewritten.
+	* callback/vacall_r/Makefile.devel (vacall-ia64.s): Rewritten.
+	* vacall/vacall-ia64.c: Put all local variables in a struct.
+	* avcall/avcall-ia64.s: Remove from version control.
+	* vacall/vacall-ia64.s: Likewise.
+	* callback/vacall_r/vacall-ia64.s: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	powerpc, powerpc64: Regenerate .s and .S files with known compilers.
 	* avcall/avcall-powerpc64.c: Use __builtin_alloca. Use an 'if' cascade
 	instead of gotos.

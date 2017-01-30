@@ -71,6 +71,7 @@
 /avcall/avcall-hppa-macro.S
 /avcall/avcall-i386-linux.s
 /avcall/avcall-i386-macro.S
+/avcall/avcall-ia64.s
 /avcall/avcall-m68k-linux.s
 /avcall/avcall-m68k-sun.s
 /avcall/avcall-m68k.mit.S
@@ -103,6 +104,7 @@
 /vacall/vacall-hppa-macro.S
 /vacall/vacall-i386-linux.s
 /vacall/vacall-i386-macro.S
+/vacall/vacall-ia64.s
 /vacall/vacall-m68k-linux.s
 /vacall/vacall-m68k-sun.s
 /vacall/vacall-m68k.mit.S
@@ -136,6 +138,7 @@
 /callback/vacall_r/vacall-hppa-macro.S
 /callback/vacall_r/vacall-i386-linux.s
 /callback/vacall_r/vacall-i386-macro.S
+/callback/vacall_r/vacall-ia64.s
 /callback/vacall_r/vacall-m68k-linux.s
 /callback/vacall_r/vacall-m68k-netbsd-macro.S
 /callback/vacall_r/vacall-m68k-sun.s

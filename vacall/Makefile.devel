@@ -22,9 +22,10 @@ precompiled : \
   vacall-alpha.s \
   vacall-hppa-macro.S \
   vacall-arm-macro.S vacall-armhf-macro.S \
-  vacall-powerpc-aix.s vacall-powerpc-linux.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s
+  vacall-powerpc-aix.s vacall-powerpc-linux.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s \
+  vacall-ia64.s
 # Old rules
-# vacall-ia64.s vacall-x86_64-macro.S
+# vacall-x86_64-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall.h.in $(THISFILE)
@@ -159,7 +160,8 @@ vacall-powerpc64.s : vacall-powerpc64.c vacall.h.in $(THISFILE)
 
 
 vacall-ia64.s : vacall-ia64.c vacall.h.in $(THISFILE)
-	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S vacall-ia64.c -o vacall-ia64.s
+	$(CROSS_TOOL) ia64-linux gcc -V 4.0.1 $(GCCFLAGS) -D__ia64__ -S vacall-ia64.c -o vacall-ia64.s
+
 
 vacall-x86_64-linux.s : vacall-x86_64.c vacall.h.in $(THISFILE)
 	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S vacall-x86_64.c -o vacall-x86_64-linux.s
