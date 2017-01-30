@@ -1,5 +1,24 @@
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Regenerate .s and .S files with known compilers.
+	* common/asm-x86_64.h (P2ALIGN): New macro.
+	(ALIGN): Remove macro.
+	* common/asm-x86_64.sh: Rewritten to consume ELF input. Produce L,
+	P2ALIGN macros.
+	* avcall/avcall-x86_64.c: Use __builtin_alloca instead of hacking on the
+	'sp' register.
+	* avcall/Makefile.devel (avcall-x86_64-linux.s): Rewritten.
+	* vacall/Makefile.devel (vacall-x86_64-linux.s): Rewritten.
+	* callback/vacall_r/Makefile.devel (vacall-x86_64-linux.s): Rewritten.
+	* avcall/avcall-x86_64-linux.s: Remove from version control.
+	* avcall/avcall-x86_64-macro.S: Likewise.
+	* vacall/vacall-x86_64-linux.s: Likewise.
+	* vacall/vacall-x86_64-macro.S: Likewise.
+	* callback/vacall_r/vacall-x86_64-linux.s: Likewise.
+	* callback/vacall_r/vacall-x86_64-macro.S: Likewise.
+
+2017-01-29  Bruno Haible  <bruno@clisp.org>
+
 	ia64: Regenerate .s and .S files with known compilers.
 	* avcall/Makefile.devel (avcall-ia64.s): Rewritten.
 	* vacall/Makefile.devel (vacall-ia64.s): Rewritten.

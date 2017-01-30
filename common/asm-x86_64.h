@@ -15,7 +15,7 @@
 //           be inside the parentheses, not outside, because otherwise some
 //           ANSI C preprocessor inserts a space between the label and the `:',
 //           and some assemblers don't like this.
-//   ALIGN(log,max)
+//   P2ALIGN(log,max)
 //           Align to 2^log bytes, but insert at most max bytes.
 //   DECLARE_FUNCTION(name)
 //           Declare `name' to be a global function. When assembly language
@@ -38,10 +38,10 @@
 
 #if defined __sun
 // Solaris
-#define ALIGN(log,max) .align 1<<log
+#define P2ALIGN(log,max) .align 1<<log
 #else
 // Mac OS X, Linux
-#define ALIGN(log,max) .p2align log,,max
+#define P2ALIGN(log,max) .p2align log,,max
 #endif
 
 // When assembly language code is compiled into a shared library, ELF linkers

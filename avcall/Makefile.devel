@@ -23,9 +23,8 @@ precompiled : \
   avcall-hppa-macro.S \
   avcall-arm-macro.S avcall-armhf-macro.S \
   avcall-powerpc-aix.s avcall-powerpc-linux.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s \
-  avcall-ia64.s
-# Old rules
-# avcall-x86_64-macro.S
+  avcall-ia64.s \
+  avcall-x86_64-macro.S
 
 
 avcall-i386-linux.s : avcall-i386.c avcall.h.in $(THISFILE)
@@ -147,10 +146,11 @@ avcall-ia64.s : avcall-ia64.c avcall.h.in $(THISFILE)
 
 
 avcall-x86_64-linux.s : avcall-x86_64.c avcall.h.in $(THISFILE)
-	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S avcall-x86_64.c -o avcall-x86_64-linux.s
+	$(CROSS_TOOL) x86_64-linux gcc-4.0.2 $(GCCFLAGS) -D__x86_64__ -S avcall-x86_64.c -o avcall-x86_64-linux.s
 
 avcall-x86_64-macro.S : avcall-x86_64-linux.s ../common/asm-x86_64.sh $(THISFILE)
 	(echo '#include "asm-x86_64.h"' ; ../common/asm-x86_64.sh < avcall-x86_64-linux.s) > avcall-x86_64-macro.S
+
 
 # --------------- Rules for debugging test failures ---------------
 

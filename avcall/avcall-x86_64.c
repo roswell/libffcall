@@ -60,7 +60,7 @@ __builtin_avcall(av_alist* l)
   register __avword	iret2	__asm__("rdx");
   register double	dret	__asm__("xmm0");
 
-  __avword* argframe = (sp -= __AV_ALIST_WORDS); /* make room for argument list */
+  __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;
   int farglen = l->faptr - l->fargs;
   __avword i, i2;
@@ -201,7 +201,6 @@ __builtin_avcall(av_alist* l)
       }
     }
   }
-  sp += __AV_ALIST_WORDS;
   return 0;
 }
 

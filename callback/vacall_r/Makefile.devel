@@ -23,9 +23,10 @@ precompiled : \
   vacall-hppa-macro.S \
   vacall-arm-macro.S vacall-armhf-macro.S \
   vacall-powerpc-aix.s vacall-powerpc-linux-macro.S vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64.s \
-  vacall-ia64.s
+  vacall-ia64.s \
+  vacall-x86_64-macro.S
 # Old rules
-# vacall-x86_64-macro.S vacall-s390-macro.S
+# vacall-s390-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall_r.h.in $(THISFILE)
@@ -174,10 +175,11 @@ vacall-ia64.s : vacall-ia64.c vacall_r.h.in $(THISFILE)
 
 
 vacall-x86_64-linux.s : vacall-x86_64.c vacall_r.h.in $(THISFILE)
-	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S vacall-x86_64.c -o vacall-x86_64-linux.s
+	$(CROSS_TOOL) x86_64-linux gcc-4.0.2 $(GCCFLAGS) -D__x86_64__ -S vacall-x86_64.c -o vacall-x86_64-linux.s
 
 vacall-x86_64-macro.S : vacall-x86_64-linux.s ../../common/asm-x86_64.sh $(THISFILE)
 	(echo '#include "asm-x86_64.h"' ; ../../common/asm-x86_64.sh < vacall-x86_64-linux.s | sed -f elfhack-x86_64.sed) > vacall-x86_64-macro.S
+
 
 vacall-s390-macro.S : vacall-s390-linux.s $(THISFILE)
 	sed -e 's,^#,//,' < vacall-s390-linux.s | sed -f elfhack-s390.sed > vacall-s390-macro.S

@@ -20,24 +20,18 @@ cat > $tmpscript1 << \EOF
 EOF
 
 cat > $tmpscript2 << \EOF
-# ----------- Introduce macro syntax for assembler pseudo-ops
-s/\.p2align \([^,]*\),,\(.*\)/ALIGN(\1,\2)/
-EOF
-
-cat > $tmpscript3 << \EOF
 # ----------- Global symbols depends on ASM_UNDERSCORE
+s/^\([A-Za-z0-9_:]\+\)/C(\1)/
+s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
 s/\.globl \([A-Za-z0-9_]*\)/.globl C(\1)/
 # ----------- Massage the beginning of functions
 /\.type/{
-s/\.type	\([A-Za-z0-9_]*\),@function/DECLARE_FUNCTION(\1)\
-FUNBEGIN(\1)/
-n
-d
+s/\.type	\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/
 }
 # ----------- Massage the end of functions
 s/\.size	\([A-Za-z0-9_]*\),\(.*\)/FUNEND(\1,\2)/
 # ----------- Section of frame info for exception handlers
-s/\.section	\.eh_frame,"aw",@progbits/.section	EH_FRAME_SECTION/
+s/\.section	\.eh_frame,"a[w]*",@progbits/.section	EH_FRAME_SECTION/
 # ----------- Disable the frame info for exception handlers on Solaris
 # (as the Solaris linker expects a different format, see
 # https://illumos.org/issues/3210)
@@ -50,6 +44,12 @@ ${
 s/$/\
 #endif/
 }
+EOF
+
+cat > $tmpscript3 << \EOF
+# ----------- Introduce macro syntax for assembler pseudo-ops
+s/\.p2align \([^,]*\),,\(.*\)/P2ALIGN(\1,\2)/
+s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
 EOF
 
 sed -f $tmpscript1 | \
