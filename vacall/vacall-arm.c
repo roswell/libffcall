@@ -28,11 +28,24 @@ register float		fret	__asm__("r0");
 register __vaword	dret1	__asm__("r0");
 register __vaword	dret2	__asm__("r1");
 
+/* The ARM ABI requires that the first 4 general-purpose argument words are
+   being passed in registers, even if these words belong to a struct. No room
+   is allocated for these register words on the stack by the caller, but the
+   callee allocates room for them - at the right place in the stack frame,
+   that is, above the usual {fp, sp, retaddr, pc} combo - if and only if
+   they are part of a larger struct that extends to the stack and the address
+   of this struct is taken. */
+struct gpargsequence {
+  __vaword word1; /* r0 */
+  __vaword word2; /* r1 */
+  __vaword word3; /* r2 */
+  __vaword word4; /* r3 */
+  __vaword firststackword;
+};
+
 void /* the return type is variable, not void! */
-__vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
-          __vaword firstword)
+__vacall (struct gpargsequence gpargs)
 {
-  struct { long retaddr, sav1, sav2, sav3, sav4, arg1, arg2, arg3, arg4; } args;
   __va_alist list;
 
   /* Enforce 8-bytes-alignment of the stack pointer.
@@ -41,28 +54,9 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   register unsigned long sp __asm__("r13");  /* C names for registers */
   sp &= -8;
 
-  /* MAGIC ALERT!
-   * This is the last struct on the stack, so that
-   * &args + 1 == &return_address == &firstword - 1.
-   * Look at the assembly code to convince yourself.
-   */
-  /* Move the arguments passed in registers to their stack locations. */
-  args.retaddr = (&firstword)[-1]; /* save the return address and saved registers */
-  args.sav1 = (&firstword)[-2];
-  args.sav2 = (&firstword)[-3];
-  args.sav3 = (&firstword)[-4];
-  args.sav4 = (&firstword)[-5];
-  args.arg1 = word1;
-  args.arg2 = word2;
-  args.arg3 = word3;
-  args.arg4 = word4;
-  (&firstword)[-4] = args.arg1;
-  (&firstword)[-3] = args.arg2;
-  (&firstword)[-2] = args.arg3;
-  (&firstword)[-1] = args.arg4;
   /* Prepare the va_alist. */
   list.flags = 0;
-  list.aptr = (long)(&firstword - 4);
+  list.aptr = (long)&gpargs;
   list.raddr = (void*)0;
   list.rtype = __VAvoid;
   /* Call vacall_function. The macros do all the rest. */
@@ -133,9 +127,4 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
       }
     }
   }
-  (&firstword)[-1] = args.retaddr; /* restore the return address and saved registers */
-  (&firstword)[-2] = args.sav1;
-  (&firstword)[-3] = args.sav2;
-  (&firstword)[-4] = args.sav3;
-  (&firstword)[-5] = args.sav4;
 }

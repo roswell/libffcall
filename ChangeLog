@@ -1,3 +1,13 @@
+2017-01-31  Bruno Haible  <bruno@clisp.org>
+
+	arm: Make vacall work, for -mfloat-abi=soft.
+	* vacall/vacall.h.in [__arm__] (__va_alist): Enable the filler word.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-arm.c: Use a split struct to convince GCC to allocate
+	room on the stack for the first 4 general-purpose argument words.
+	* vacall/PLATFORMS: List the arm5 machine with 'soft' floats.
+	* avcall/PLATFORMS: Likewise.
+
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
 	arm: Fulfil the constraint that the sp register must be 8-bytes-aligned.

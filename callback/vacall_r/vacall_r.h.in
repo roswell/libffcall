@@ -314,11 +314,15 @@ typedef struct
   void*          raddr;
   enum __VAtype  rtype;
   unsigned long  rsize;
-#if defined(__i386__) || (defined(__powerpc__) && !defined(__powerpc64__) && defined(__MACH__) && defined(__APPLE__))
+#if defined(__i386__) || defined(__arm__) || (defined(__powerpc__) && !defined(__powerpc64__) && defined(__MACH__) && defined(__APPLE__))
   /* Filler word, needed if the numbers of words up to now in this structure */
-  /* is odd (because on MSVC, alignof(double) = 8, normally = 4; similarly,  */
-  /* on MacOS X, the Apple compiler has alignof(double) = 8 whereas the      */
-  /* standard GCC has alignof(double) = 4.                                   */
+  /* is odd.                                                                 */
+  /* - On MSVC, alignof(double) = 8, but normally on i386 it is = 4.         */
+  /* - On ARM, GCC 3.1 produces code for an ABI where alignof(double) = 4    */
+  /*   and alignof(long long) = 4. But in the newer AAPCS ABI, these         */
+  /*   alignments are 8.                                                     */
+  /* - On Mac OS X, the Apple compiler has alignof(double) = 8 whereas the   */
+  /*   standard GCC has alignof(double) = 4.                                 */
   __vaword       filler1;
 #endif
   /* temporary storage for return value */
