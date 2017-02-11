@@ -1,5 +1,33 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	powerpc64: Add support for AIX in a 64-bit build, part 1.
+	* avcall/Makefile.devel (avcall-powerpc64-aix.s,
+	avcall-powerpc64-linux.s): New targets.
+	(avcall-powerpc64.s): Remove target.
+	* avcall/Makefile.in (avcall-powerpc64.s): New target.
+	(avcall-powerpc64.lo): Update.
+	(clean): Remove also avcall-powerpc64.s.
+	(SOURCE_FILES): Add avcall-powerpc64-aix.s, avcall-powerpc64-linux.s.
+	Remove avcall-powerpc64.s.
+	* vacall/Makefile.devel (vacall-powerpc64-aix.s,
+	vacall-powerpc64-linux.s): New targets.
+	(vacall-powerpc64.s): Remove target.
+	* vacall/Makefile.in (vacall-powerpc64.s): New target.
+	(vacall-powerpc64.o): Update.
+	(clean): Remove also vacall-powerpc64.s.
+	(SOURCE_FILES): Add vacall-powerpc64-aix.s, vacall-powerpc64-linux.s.
+	Remove vacall-powerpc64.s.
+	* callback/vacall_r/Makefile.devel (vacall-powerpc64-aix.s,
+	vacall-powerpc64-linux.s): New targets.
+	(vacall-powerpc64.s): Remove target.
+	* callback/vacall_r/Makefile.in (vacall-powerpc64.s): New target.
+	(vacall-powerpc64.lo): Update.
+	(clean): Remove also vacall-powerpc64.s.
+	(SOURCE_FILES): Add vacall-powerpc64-aix.s, vacall-powerpc64-linux.s.
+	Remove vacall-powerpc64.s.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	powerpc64: Update Makefile.devel rules.
 	* trampoline/Makefile.devel (CROSS_TOOL): New variable.
 	(proto-powerpc64-aix.s): Update rule.

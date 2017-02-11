@@ -92,7 +92,8 @@
 /avcall/avcall-powerpc-linux.s
 /avcall/avcall-powerpc-macos.s
 /avcall/avcall-powerpc-sysv4.s
-/avcall/avcall-powerpc64.s
+/avcall/avcall-powerpc64-aix.s
+/avcall/avcall-powerpc64-linux.s
 /avcall/avcall-s390.s
 /avcall/avcall-sparc-linux.s
 /avcall/avcall-sparc-macro.S
@@ -128,7 +129,8 @@
 /vacall/vacall-powerpc-linux.s
 /vacall/vacall-powerpc-macos.s
 /vacall/vacall-powerpc-sysv4.s
-/vacall/vacall-powerpc64.s
+/vacall/vacall-powerpc64-aix.s
+/vacall/vacall-powerpc64-linux.s
 /vacall/vacall-s390.s
 /vacall/vacall-sparc-linux.s
 /vacall/vacall-sparc-macro.S
@@ -166,7 +168,8 @@
 /callback/vacall_r/vacall-powerpc-linux-macro.S
 /callback/vacall_r/vacall-powerpc-macos.s
 /callback/vacall_r/vacall-powerpc-sysv4-macro.S
-/callback/vacall_r/vacall-powerpc64.s
+/callback/vacall_r/vacall-powerpc64-aix.s
+/callback/vacall_r/vacall-powerpc64-linux.s
 /callback/vacall_r/vacall-s390-linux.s
 /callback/vacall_r/vacall-s390-macro.S
 /callback/vacall_r/vacall-sparc-linux.s
@@ -347,6 +350,7 @@ autom4te.cache/
 /avcall/avcall-arm.s
 /avcall/avcall-armhf.s
 /avcall/avcall-powerpc.s
+/avcall/avcall-powerpc64.s
 /avcall/avcall-x86_64.s
 /avcall/minitests.o
 /avcall/minitests.s
@@ -373,6 +377,7 @@ autom4te.cache/
 /vacall/vacall-arm.s
 /vacall/vacall-armhf.s
 /vacall/vacall-powerpc.s
+/vacall/vacall-powerpc64.s
 /vacall/vacall-x86_64.s
 /vacall/minitests.o
 /vacall/minitests.s
@@ -446,6 +451,7 @@ autom4te.cache/
 /callback/vacall_r/vacall-arm.s
 /callback/vacall_r/vacall-armhf.s
 /callback/vacall_r/vacall-powerpc.s
+/callback/vacall_r/vacall-powerpc64.s
 /callback/vacall_r/vacall-x86_64.s
 /callback/vacall_r/vacall-s390.s
 # Erased by callback/trampoline_r/Makefile.

@@ -144,8 +144,15 @@ vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux
 	    cp $(srcdir)/vacall-powerpc-$${syntax}.s vacall-powerpc.s || exit 1 ;; \
 	esac
 
-vacall-powerpc64.lo : $(srcdir)/vacall-powerpc64.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-powerpc64.s
+vacall-powerpc64.lo : vacall-powerpc64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-powerpc64.s
+
+vacall-powerpc64.s : $(srcdir)/vacall-powerpc64-aix.s $(srcdir)/vacall-powerpc64-linux.s
+	case "$(OS)" in \
+	  aix*) syntax=aix;; \
+	  *) syntax=linux;; \
+	esac; \
+	cp $(srcdir)/vacall-powerpc64-$${syntax}.s vacall-powerpc64.s
 
 vacall-ia64.lo : $(srcdir)/vacall-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-ia64.s
@@ -215,7 +222,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libvacall.* core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-powerpc.s vacall-x86_64.s vacall-s390.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-powerpc.s vacall-powerpc64.s vacall-x86_64.s vacall-s390.s
 	$(RM) -r .libs _libs
 
 distclean : clean
@@ -248,7 +255,7 @@ SOURCE_FILES = \
   vacall-powerpc-linux.s vacall-powerpc-linux-macro.S \
   vacall-powerpc-macos.s \
   vacall-powerpc-sysv4-macro.S \
-  vacall-powerpc64.c vacall-powerpc64.s \
+  vacall-powerpc64.c vacall-powerpc64-aix.s vacall-powerpc64-linux.s \
   vacall-s390.c vacall-s390-linux.s vacall-s390-macro.S \
   vacall-sparc.c vacall-sparc-linux.s vacall-sparc-macro.S \
   vacall-sparc64.c vacall-sparc64-linux.s vacall-sparc64-macro.S \
