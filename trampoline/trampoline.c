@@ -27,8 +27,7 @@
 #define __powerpcaix__  /* AIX ABI, just a closure. */
 #endif
 #endif
-#if defined(__powerpc64__)
-/* The only ABI on powerpc64 known so far is the AIX ABI. */
+#if defined(__powerpc64__) && !defined(__powerpc64_elfv2__)
 #define __powerpc64aix__  /* AIX ABI, just a closure. */
 #endif
 #if defined(__hppanew__)
@@ -250,6 +249,10 @@ extern void __TR_clear_cache();
 #ifdef __powerpcaix__
 #define TRAMP_LENGTH 24
 #define TRAMP_ALIGN 4
+#endif
+#ifdef __powerpc64_elfv2__
+#define TRAMP_LENGTH 48
+#define TRAMP_ALIGN 8
 #endif
 #ifdef __powerpc64aix__
 #define TRAMP_LENGTH 48
@@ -968,6 +971,41 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
   ((long *) function)[3]
 #define tramp_data(function)  \
   ((long *) function)[4]
+#endif
+#ifdef __powerpc64_elfv2__
+  /* function:
+   *    ld 11,24(12)		18 00 6C E9
+   *    ld 0,32(12)		20 00 0C E8
+   *    std 0,0(11)		00 00 0B F8
+   *    ld 12,40(12)		28 00 8C E9
+   *    mtctr 12		A6 03 89 7D
+   *    bctr			20 04 80 4E
+   *    .quad <variable>
+   *    .quad <data>
+   *    .quad <address>
+   */
+  *(int *)   (function + 0) = 0xE96C0018;
+  *(int *)   (function + 4) = 0xE80C0020;
+  *(int *)   (function + 8) = 0xF80B0000;
+  *(int *)   (function +12) = 0xE98C0028;
+  *(int *)   (function +16) = 0x7D8903A6;
+  *(int *)   (function +20) = 0x4E800420;
+  *(long *)  (function +24) = (unsigned long) variable;
+  *(long *)  (function +32) = (unsigned long) data;
+  *(long *)  (function +40) = (unsigned long) address;
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0xE96C0018 && \
+  *(unsigned int *) (function + 4) == 0xE80C0020 && \
+  *(unsigned int *) (function + 8) == 0xF80B0000 && \
+  *(unsigned int *) (function +12) == 0xE98C0028 && \
+  *(unsigned int *) (function +16) == 0x7D8903A6 && \
+  *(unsigned int *) (function +20) == 0x4E800420
+#define tramp_address(function)  \
+  (*(unsigned long *) (function +40))
+#define tramp_variable(function)  \
+  (*(unsigned long *) (function +24))
+#define tramp_data(function)  \
+  (*(unsigned long *) (function +32))
 #endif
 #ifdef __powerpc64aix__
   /* function:

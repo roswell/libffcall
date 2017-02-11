@@ -22,7 +22,7 @@ precompiled : \
   avcall-alpha.s \
   avcall-hppa-macro.S \
   avcall-arm-macro.S avcall-armhf-macro.S \
-  avcall-powerpc-aix.s avcall-powerpc-linux.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64-aix.s avcall-powerpc64-linux.s \
+  avcall-powerpc-aix.s avcall-powerpc-linux.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64-aix.s avcall-powerpc64-linux.s avcall-powerpc64-elfv2-linux.s \
   avcall-ia64.s \
   avcall-x86_64-macro.S \
   avcall-s390.s
@@ -147,6 +147,13 @@ avcall-powerpc64-linux.s : avcall-powerpc64.c avcall.h.in $(THISFILE)
 	cmp avcall-powerpc64-linux-le.s avcall-powerpc64-linux-be.s > /dev/null
 	cp avcall-powerpc64-linux-be.s avcall-powerpc64-linux.s
 	$(RM) avcall-powerpc64-linux-le.s avcall-powerpc64-linux-be.s
+
+avcall-powerpc64-elfv2-linux.s : avcall-powerpc64.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) powerpc64le-linux gcc-5.4.0 -mabi=elfv2 -mcpu=power4 -mlittle-endian $(GCCFLAGS) -D__powerpc64__ -D__powerpc64_elfv2__ -S avcall-powerpc64.c -o avcall-powerpc64-elfv2-linux-le.s
+	$(CROSS_TOOL) powerpc64le-linux gcc-5.4.0 -mabi=elfv2 -mcpu=power4 -mbig-endian $(GCCFLAGS) -D__powerpc64__ -D__powerpc64_elfv2__ -S avcall-powerpc64.c -o avcall-powerpc64-elfv2-linux-be.s
+	cmp avcall-powerpc64-elfv2-linux-le.s avcall-powerpc64-elfv2-linux-be.s > /dev/null
+	cp avcall-powerpc64-elfv2-linux-be.s avcall-powerpc64-elfv2-linux.s
+	$(RM) avcall-powerpc64-elfv2-linux-le.s avcall-powerpc64-elfv2-linux-be.s
 
 
 avcall-ia64.s : avcall-ia64.c avcall.h.in $(THISFILE)

@@ -36,6 +36,7 @@ register double		farg11	__asm__("fr11");
 register double		farg12	__asm__("fr12");
 register double		farg13	__asm__("fr13");
 register __vaword	iret	__asm__("r3");
+register __vaword	iret2	__asm__("r4");
 register float		fret	__asm__("fr1");
 register double		dret	__asm__("fr1");
 
@@ -131,7 +132,120 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = (long)list.tmp._ptr;
   } else
   if (list.rtype == __VAstruct) {
-    /* __VA_PCC_STRUCT_RETURN and __VA_REGISTER_STRUCT_RETURN are ignored */
+    /* __VA_PCC_STRUCT_RETURN is ignored */
+#ifdef __powerpc64_elfv2__
+    if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
+      /* In the ELFv2 ABI, gcc returns structs of size <= 16 in registers. */
+      if (list.rsize > 0 && list.rsize <= 16) {
+        if (list.rsize == 1) {
+          iret =   (__vaword)((unsigned char *) list.raddr)[0];
+        } else
+        if (list.rsize == 2) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 8);
+        } else
+        if (list.rsize == 3) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 16);
+        } else
+        if (list.rsize == 4) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 24);
+        } else
+        if (list.rsize == 5) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[4] << 32);
+        } else
+        if (list.rsize == 6) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[5] << 40);
+        } else
+        if (list.rsize == 7) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[5] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[6] << 48);
+        } else
+        if (list.rsize >= 8 && list.rsize <= 16) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[5] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[6] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[7] << 56);
+          if (list.rsize == 8) {
+          } else
+          if (list.rsize == 9) {
+            iret2 =   (__vaword)((unsigned char *) list.raddr)[8];
+          } else
+          if (list.rsize == 10) {
+            iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                   | ((__vaword)((unsigned char *) list.raddr)[9] << 8);
+          } else
+          if (list.rsize == 11) {
+            iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                   | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                   | ((__vaword)((unsigned char *) list.raddr)[10] << 16);
+          } else
+          if (list.rsize == 12) {
+            iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                   | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                   | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                   | ((__vaword)((unsigned char *) list.raddr)[11] << 24);
+          } else
+          if (list.rsize == 13) {
+            iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                   | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                   | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                   | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
+                   | ((__vaword)((unsigned char *) list.raddr)[12] << 32);
+          } else
+          if (list.rsize == 14) {
+            iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                   | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                   | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                   | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
+                   | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
+                   | ((__vaword)((unsigned char *) list.raddr)[13] << 40);
+          } else
+          if (list.rsize == 15) {
+            iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                   | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                   | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                   | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
+                   | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
+                   | ((__vaword)((unsigned char *) list.raddr)[13] << 40)
+                   | ((__vaword)((unsigned char *) list.raddr)[14] << 48);
+          } else
+          if (list.rsize == 16) {
+            iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                   | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                   | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                   | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
+                   | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
+                   | ((__vaword)((unsigned char *) list.raddr)[13] << 40)
+                   | ((__vaword)((unsigned char *) list.raddr)[14] << 48)
+                   | ((__vaword)((unsigned char *) list.raddr)[15] << 56);
+          }
+        }
+      }
+    }
+#endif
   }
 }
 

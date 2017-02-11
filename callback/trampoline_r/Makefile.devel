@@ -13,7 +13,7 @@ CPP = $(GCC) -E
 CROSS_TOOL = cross
 ASPREFIX = /usr1/gnu/lib
 
-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-ia64.c proto-x86_64.c \
+precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.c proto-x86_64.c \
       cache-sparc-macro.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s
 
 proto-i386.s : proto.c
@@ -57,6 +57,9 @@ proto-powerpc-macos.s : proto.c
 
 proto-powerpc64-aix.s : proto64.c
 	$(CROSS_TOOL) powerpc64-linux gcc $(GCCFLAGS) -D__powerpc64__ -S proto64.c -o $@
+
+proto-powerpc64-elfv2.s : proto64.c
+	$(CROSS_TOOL) powerpc64le-linux gcc -mabi=elfv2 $(GCCFLAGS) -D__powerpc64__ -S proto64.c -o $@
 
 proto-ia64.s : proto64.c
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S proto64.c -o $@
@@ -113,6 +116,9 @@ tramp-powerpc-old.o : tramp-powerpc-old.s
 
 tramp-powerpc-sysv4.o : tramp-powerpc-sysv4.s
 	$(ASPREFIX)/ppc-linux/bin/as tramp-powerpc-sysv4.s -o $@
+
+tramp-powerpc64-elfv2.o : tramp-powerpc64-elfv2.s
+	$(CROSS_TOOL) powerpc64le-linux as tramp-powerpc64-elfv2.s -o $@
 
 tramp-ia64.o : tramp-ia64.s
 	/nue/usr/ia64-hp-linux/bin/as tramp-ia64.s -o $@

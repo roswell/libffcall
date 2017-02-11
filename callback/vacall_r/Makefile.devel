@@ -22,7 +22,7 @@ precompiled : \
   vacall-alpha-macro.S \
   vacall-hppa-macro.S \
   vacall-arm-macro.S vacall-armhf-macro.S \
-  vacall-powerpc-aix.s vacall-powerpc-linux-macro.S vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64-aix.s vacall-powerpc64-linux.s \
+  vacall-powerpc-aix.s vacall-powerpc-linux-macro.S vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64-aix.s vacall-powerpc64-linux.s vacall-powerpc64-elfv2-linux.s \
   vacall-ia64.s \
   vacall-x86_64-macro.S \
   vacall-s390-macro.S
@@ -167,6 +167,13 @@ vacall-powerpc64-linux.s : vacall-powerpc64.c vacall_r.h.in $(THISFILE)
 	cmp vacall-powerpc64-linux-le.s vacall-powerpc64-linux-be.s > /dev/null
 	cp vacall-powerpc64-linux-be.s vacall-powerpc64-linux.s
 	$(RM) vacall-powerpc64-linux-le.s vacall-powerpc64-linux-be.s
+
+vacall-powerpc64-elfv2-linux.s : vacall-powerpc64.c vacall_r.h.in $(THISFILE)
+	$(CROSS_TOOL) powerpc64le-linux gcc-5.4.0 -mabi=elfv2 -mcpu=power4 -mlittle-endian $(GCCFLAGS) -D__powerpc64__ -D__powerpc64_elfv2__ -S vacall-powerpc64.c -o vacall-powerpc64-elfv2-linux-le.s
+	$(CROSS_TOOL) powerpc64le-linux gcc-5.4.0 -mabi=elfv2 -mcpu=power4 -mbig-endian $(GCCFLAGS) -D__powerpc64__ -D__powerpc64_elfv2__ -S vacall-powerpc64.c -o vacall-powerpc64-elfv2-linux-be.s
+# vacall-powerpc64-linux-be.s contains endianness specific optimizations.
+	cp vacall-powerpc64-elfv2-linux-le.s vacall-powerpc64-elfv2-linux.s
+	$(RM) vacall-powerpc64-elfv2-linux-le.s vacall-powerpc64-elfv2-linux-be.s
 
 
 vacall-ia64.s : vacall-ia64.c vacall_r.h.in $(THISFILE)

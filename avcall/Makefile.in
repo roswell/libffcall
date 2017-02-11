@@ -146,6 +146,12 @@ avcall-powerpc64.s : $(srcdir)/avcall-powerpc64-aix.s $(srcdir)/avcall-powerpc64
 	esac; \
 	cp $(srcdir)/avcall-powerpc64-$${syntax}.s avcall-powerpc64.s
 
+avcall-powerpc64-elfv2.lo : avcall-powerpc64-elfv2.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-powerpc64-elfv2.s
+
+avcall-powerpc64-elfv2.s : $(srcdir)/avcall-powerpc64-elfv2-linux.s
+	cp $(srcdir)/avcall-powerpc64-elfv2-linux.s avcall-powerpc64-elfv2.s
+
 avcall-ia64.lo : $(srcdir)/avcall-ia64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-ia64.s
 
@@ -234,7 +240,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-hppa.s avcall-arm.s avcall-armhf.s avcall-powerpc.s avcall-powerpc64.s avcall-x86_64.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-hppa.s avcall-arm.s avcall-armhf.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-x86_64.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.o minitests.s minitests minitests.out
 	$(RM) tests.o tests.s tests tests.out
@@ -267,7 +273,7 @@ SOURCE_FILES = \
   avcall-powerpc.c \
   avcall-powerpc-aix.s \
   avcall-powerpc-linux.s avcall-powerpc-macos.s avcall-powerpc-sysv4.s \
-  avcall-powerpc64.c avcall-powerpc64-aix.s avcall-powerpc64-linux.s \
+  avcall-powerpc64.c avcall-powerpc64-aix.s avcall-powerpc64-linux.s avcall-powerpc64-elfv2-linux.s \
   avcall-s390.c avcall-s390.s \
   avcall-sparc.c avcall-sparc-linux.s avcall-sparc-macro.S \
   avcall-sparc64.c avcall-sparc64-linux.s avcall-sparc64-macro.S \

@@ -27,8 +27,7 @@
 #define __powerpcaix__  /* AIX ABI, just a closure. */
 #endif
 #endif
-#if defined(__powerpc64__)
-/* The only ABI on powerpc64 known so far is the AIX ABI. */
+#if defined(__powerpc64__) && !defined(__powerpc64_elfv2__)
 #define __powerpc64aix__  /* AIX ABI, just a closure. */
 #endif
 #if defined(__hppanew__)
@@ -246,6 +245,10 @@ extern void __TR_clear_cache();
 #ifdef __powerpcaix__
 #define TRAMP_LENGTH 20
 #define TRAMP_ALIGN 4
+#endif
+#ifdef __powerpc64_elfv2__
+#define TRAMP_LENGTH 32
+#define TRAMP_ALIGN 8
 #endif
 #ifdef __powerpc64aix__
 #define TRAMP_LENGTH 40
@@ -836,6 +839,31 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   ((long *) function)[4]
 #define tramp_data(function)  \
   ((long *) function)[3]
+#endif
+#ifdef __powerpc64_elfv2__
+  /* function:
+   *    ld 11,16(12)		10 00 6C E9
+   *    ld 12,24(12)		18 00 8C E9
+   *    mtctr 12		A6 03 89 7D
+   *    bctr			20 04 80 4E
+   *    .quad <data>
+   *    .quad <address>
+   */
+  *(int *)   (function + 0) = 0xE96C0010;
+  *(int *)   (function + 4) = 0xE98C0018;
+  *(int *)   (function + 8) = 0x7D8903A6;
+  *(int *)   (function +12) = 0x4E800420;
+  *(long *)  (function +16) = (unsigned long) data;
+  *(long *)  (function +24) = (unsigned long) address;
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0xE96C0010 && \
+  *(unsigned int *) (function + 4) == 0xE98C0018 && \
+  *(unsigned int *) (function + 8) == 0x7D8903A6 && \
+  *(unsigned int *) (function +12) == 0x4E800420
+#define tramp_address(function)  \
+  (*(unsigned long *) (function +24))
+#define tramp_data(function)  \
+  (*(unsigned long *) (function +16))
 #endif
 #ifdef __powerpc64aix__
   /* function:

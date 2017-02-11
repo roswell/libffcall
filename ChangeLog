@@ -1,5 +1,57 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	powerpc64: Add support for the ELFv2 ABI on Linux.
+	* avcall/avcall-powerpc64.c: Handle small struct return in registers
+	when __AV_REGISTER_STRUCT_RETURN is set.
+	* avcall/avcall.h.in: Optionally define __powerpc64_elfv2__.
+	(__AV_REGISTER_STRUCT_RETURN): Define also for __powerpc64__.
+	(__av_reg_struct_return, __av_start_struct3): Define differently for
+	__powerpc64_elfv2__.
+	(av_float) [__powerpc64__]: Define in a simplified way if
+	__AV_AIXCC_FLOAT_ARGS cannot be set.
+	(__av_struct): Define differently for little-endian __powerpc64__.
+	* avcall/Makefile.devel (avcall-powerpc64-elfv2-linux.s): New target.
+	* avcall/Makefile.in (avcall-powerpc64-elfv2.lo,
+	avcall-powerpc64-elfv2.s): New targets.
+	(clean): Remove also avcall-powerpc64-elfv2.s.
+	(SOURCE_FILES): Add avcall-powerpc64-elfv2-linux.s.
+	* vacall/vacall-powerpc64.c: Handle small struct return in registers
+	when __VA_REGISTER_STRUCT_RETURN is set.
+	* vacall/vacall.h.in: Optionally define __powerpc64_elfv2__.
+	(__VA_REGISTER_STRUCT_RETURN): Define also for __powerpc64__.
+	(__va_reg_struct_return, __va_start_struct1): Define differently for
+	__powerpc64_elfv2__.
+	(__va_arg_adjusted): Define differently for little-endian __powerpc64__.
+	(va_arg_float) [__powerpc64__]: Define in a simplified way if
+	__VA_AIXCC_FLOAT_ARGS cannot be set.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/Makefile.devel (vacall-powerpc64-elfv2-linux.s): New target.
+	* vacall/Makefile.in (vacall-powerpc64-elfv2.o,
+	vacall-powerpc64-elfv2.s): New targets.
+	(clean): Remove also vacall-powerpc64-elfv2.s.
+	(SOURCE_FILES): Add vacall-powerpc64-elfv2-linux.s.
+	* trampoline/Makefile.devel (proto-powerpc64-elfv2.s,
+	tramp-powerpc64-elfv2.o): New targets.
+	* trampoline/proto-powerpc64elfv2.s: New generated file.
+	* trampoline/tramp-powerpc64elfv2.s: New file.
+	* trampoline/tramp-powerpc64elfv2.o: New generated file.
+	* trampoline/trampoline.c: Add code for __powerpc64_elfv2__.
+	* callback/vacall_r/Makefile.devel (vacall-powerpc64-elfv2-linux.s):
+	New target.
+	* callback/vacall_r/Makefile.in (vacall-powerpc64-elfv2.lo,
+	vacall-powerpc64-elfv2.s): New targets.
+	(clean): Remove also vacall-powerpc64-elfv2.s.
+	(SOURCE_FILES): Add vacall-powerpc64-elfv2-linux.s.
+	* callback/trampoline_r/Makefile.devel (proto-powerpc64-elfv2.s,
+	tramp-powerpc64-elfv2.o): New targets.
+	* callback/trampoline_r/proto-powerpc64elfv2.s: New generated file.
+	* callback/trampoline_r/tramp-powerpc64elfv2.s: New file.
+	* callback/trampoline_r/tramp-powerpc64elfv2.o: New generated file.
+	* callback/trampoline_r/trampoline.c: Add code for __powerpc64_elfv2__.
+	* PLATFORMS, */PLATFORMS: List powerpc64le-unknown-linux (gcc).
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	powerpc64: Add support for AIX in a 64-bit build, with xlc.
 	* avcall/avcall.h.in (__AV_AIXCC_FLOAT_ARGS, __AV_FLOAT_ARGS): New enum
 	values.

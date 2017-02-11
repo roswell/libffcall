@@ -49,6 +49,7 @@ Supported CPUs:  (Put the GNU config.guess values here.)
    powerpc64  powerpc-ibm-aix7.1.3.0 (gcc -maix64,   IBM POWER     AIX 7.1.3
                   xlc -q64)
               powerpc64-unknown-linux (gcc -m64)     IBM POWER     Linux
+              powerpc64le-unknown-linux (gcc)        IBM POWER     Linux
    ia64       ia64-unknown-linux (gcc)               Intel         Linux
    x86_64     x86_64-suse-linux (gcc)                AMD64         Linux
               x86_64-pc-solaris2.10 (gcc -m64)       AMD64         Solaris
