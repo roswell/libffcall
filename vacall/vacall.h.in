@@ -274,7 +274,6 @@ enum __VA_alist_flags
   /* ANSI C compilers and GNU gcc pass floats as floats.
    * K&R C compilers pass floats as doubles. We don't support them any more.
    */
-  __VA_ANSI_FLOAT_ARGS		= 0,    /* pass floats as floats */
 
   /* how to pass and return small integer arguments */
   __VA_ANSI_INTEGERS		= 0, /* no promotions */

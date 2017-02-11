@@ -1,5 +1,10 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	Remove outdated no-op definition.
+	* vacall/vacall.h.in (__VA_ANSI_FLOAT_ARGS): Remove enum value.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	powerpc: Don't special-case NetBSD.
 	* vacall/vacall-powerpc.c: Remove special case of NetBSD.
 	* callback/vacall_r/Makefile.devel (vacall-powerpc-netbsd-macro.S):
