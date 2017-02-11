@@ -1,7 +1,7 @@
 /* Trampoline for mips CPU */
 
 /*
- * Copyright 1995-1997, 2016 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995-1997, 2016-2017 Bruno Haible, <bruno@clisp.org>
  *
  * This is free software distributed under the GNU General Public Licence
  * described in the file COPYING. Contact the author if you don't have this
@@ -27,18 +27,3 @@ tramp:
 $LC0:	.word	0x73554711
 $LC1:	.word	0xbabebec0
 	.end	tramp
-
-	.globl	trampelf
-	.ent	trampelf
-trampelf:
-	/* We can assume that our own address (=trampelf) is in $25. */
-	subu	$sp,$sp,16
-	lw	$2,24($25)
-	lw	$25,28($25)
-	sw	$2,($sp)
-	/* The called function expects to see its own address in $25. */
-	j	$25
-	 nop
-$LC2:	.word	0x73554711
-$LC3:	.word	0xbabebec0
-	.end	trampelf

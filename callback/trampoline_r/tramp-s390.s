@@ -1,7 +1,7 @@
 /* Trampoline for s390 CPU */
 
 /*
- * Copyright 1995, 2016 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995, 2016-2017 Bruno Haible, <bruno@clisp.org>
  * Copyright 2001 Gerhard Tonn, <gt@debian.org>
  *
  * This is free software distributed under the GNU General Public Licence
@@ -23,19 +23,4 @@ _tramp:
 .LTN0_0:
 	l       %r0,.LC0-.LT0_0(%r1)
 	l       %r1,.LC1-.LT0_0(%r1)
-	br      %r1
-
-.globl _trampelf
-_trampelf:
-	bras    %r1,.LTN1_0
-.LT1_0:
-.LC2:
-	.long   1934968593
-.LC3:
-	.long   0xbabebec0
-.LTN1_0:
-	l       %r0,.LC2-.LT1_0(%r1)
-	ahi     %r15,-8
-	l       %r1,.LC3-.LT1_0(%r1)
-	st      %r0,0(%r15)
 	br      %r1

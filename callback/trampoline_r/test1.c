@@ -16,16 +16,6 @@
 
 #include "trampoline_r.h"
 
-#if BINFMT_ELF && !defined(__arm__)
-
-/* We cannot test trampoline_r without vacall_r. */
-int main ()
-{
-  printf("Skipping test: This is an ELF platform.\n"); exit(0);
-}
-
-#else
-
 /* Set when we can check that the env register is being passed correctly. */
 #if defined __GNUC__ && !defined __clang__ && !defined(__arm__)
 #define CHECK_ENV_REGISTER
@@ -105,5 +95,3 @@ int main ()
   else
     { printf("Doesn't work!\n"); exit(1); }
 }
-
-#endif

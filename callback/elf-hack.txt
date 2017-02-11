@@ -37,7 +37,7 @@ It may be possible to fix this, on some platforms,
 But this is highly platform dependent (linker, compiler, libc) and there may
 be some platforms for which none of these approaches works.
 
-Instead the trick is to
+A workaround that was implemented in January 2017 was to
   1) modify trampoline_r so that it produces a trampoline that pushes the
      env_t on the stack (preserving correct stack alignment) instead of
      putting it in the lexical closure register,
@@ -45,44 +45,9 @@ Instead the trick is to
      pops this value off the stack and puts in in the lexical closure
      register.
 
-Here's the relevant info, from the GCC machine descriptions.
-- Stack register:
-  grep STACK_POINTER_REGNUM in the machine description.
-- Stack alignment:
-  grep STACK_BOUNDARY and PREFERRED_STACK_BOUNDARY in the machine description,
-  divide by 8. Use the maximum possible value.
-- Lexical closure register:
-  grep STATIC_CHAIN_REGNUM (or TARGET_STATIC_CHAIN if it does not exist) and
-  TRAMPOLINE_TEMPLATE in the machine description.
-
-            Stack register           Stack     ELF      Lexical closure register                ELF hack
-                                   alignment supported                                         implemented
-i386        %esp                     16         Y       %ecx (but %eax for fastcall functions)     Y
-m68k        sp = a7                  4          Y       a0 (a1 in ELF, incl. NetBSD)               Y
-mips        $sp = $29                16         Y       we use $2, but GCC uses $15                Y
-sparc       %sp = %o6, save/restore  8          Y       %g2                                        N
-sparc64     %sp = %o6, save/restore  16         Y       %g5                                        N
-alpha       $30                      16         Y       $1                                         Y
-hppa        %r30                     16         Y       %r29                                       N
-arm         sp = r13                 8          Y       r12                                        Y
-aarch64     r31                      16         Y       r18                                        -
-powerpc     1                        16         Y       11 (13 in NetBSD)                          Y
-powerpc64   1                        16         Y       11                                         Y
-ia64        r12                      16         Y       r15                                        N
-x86_64      %rsp                     16         Y       r10                                        Y
-s390        %r15                     8          Y       r0                                         Y
-
-To test whether the ELF workaround is actually needed on a particular platform,
-set CC, CFLAGS, LDFLAGS appropriately, then run
-  mkdir bb1; cd bb1; ../configure --disable-elf-hack; make; make check; cd ..
-  mkdir bb2; cd bb2; ../configure --disable-elf-hack --enable-shared --disable-static; make; make check; cd ..
-  mkdir bb3; cd bb3; ../configure; make; make check; cd ..
-  mkdir bb4; cd bb4; ../configure --enable-shared --disable-static; make; make check; cd ..
-If the outcome is "OK KO OK OK", the ELF workaround is needed. Seen on
-  - x86_64-linux
-If the outcome is "OK OK OK OK", the ELF workaround is not needed. Seen on
-  - i386-linux
-  - i386-solaris9, i386-solaris10
-  - x86_64-solaris10
-But it can change at any moment, through a libc and ld.so upgrade.
+An even simpler workaround is to make __vacall_r a static function, so that
+the ELF linker does not even see it. Instead introduce a function get__vacall_r
+that returns &__vacall_r. This function is global, but since it has a normal
+calling convention, the ELF symbol resolving routine does not cause trouble
+the first time get__vacall_r() is invoked.
 

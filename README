@@ -54,12 +54,7 @@ $ size libcallback.a
 When a shared library is loaded, you spend at least 4 KB for its code,
 data and BSS. This is overkill for such a tiny library.
 
-3) On ELF systems with the CPUs sparc, hppa, ia64 (e.g. sparc-solaris,
-   sparc-linux, hppa-linux, ia64-linux), the symbol resolving routine of
-   libc and ld.so may break the callback library. See callback/elf-hack.txt
-   for porting details.
-
-4) We don't do proper versioning of the resulting shared libraries (yet).
+3) We don't do proper versioning of the resulting shared libraries (yet).
    Therefore it is possible that upgrading to a newer version of libffcall
    breaks existing binaries.
 

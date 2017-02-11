@@ -32,7 +32,7 @@ vacall-i386-linux.s : vacall-i386.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) i386-linux gcc -V 3.1 $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386-linux.s
 
 vacall-i386-macro.S : vacall-i386-linux.s ../../common/asm-i386.sh $(THISFILE)
-	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386-linux.s | ../../common/asm-i386.sh | sed -f elfhack-i386.sed) > vacall-i386-macro.S
+	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386-linux.s | ../../common/asm-i386.sh) > vacall-i386-macro.S
 
 
 vacall-m68k-linux.s : vacall-m68k.c vacall_r.h.in $(THISFILE)
@@ -42,14 +42,14 @@ vacall-m68k-sun.s : vacall-m68k.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) m68k-sun gcc -V 3.1 $(GCCFLAGS) -D__m68k__ -S vacall-m68k.c -o vacall-m68k-sun.s
 
 vacall-m68k.mit.S : vacall-m68k-sun.s ../../common/asm-m68k.sh $(THISFILE)
-	(echo '#include "asm-m68k.h"' ; ../../common/asm-m68k.sh mit < vacall-m68k-sun.s | sed -f elfhack-m68k.sed) > vacall-m68k.mit.S
+	(echo '#include "asm-m68k.h"' ; ../../common/asm-m68k.sh mit < vacall-m68k-sun.s) > vacall-m68k.mit.S
 
 vacall-m68k.motorola.S : vacall-m68k-linux.s ../../common/asm-m68k.sh $(THISFILE)
-	(echo '#include "asm-m68k.h"' ; ../../common/asm-m68k.sh motorola < vacall-m68k-linux.s | sed -f elfhack-m68k.sed) > vacall-m68k.motorola.S
+	(echo '#include "asm-m68k.h"' ; ../../common/asm-m68k.sh motorola < vacall-m68k-linux.s) > vacall-m68k.motorola.S
 
 vacall-m68k-netbsd-macro.S : vacall-m68k.c vacall_r.h.in ../../common/asm-m68k.sh $(THISFILE)
 	$(CROSS_TOOL) m68k-sun gcc -V 3.1 $(GCCFLAGS) -D__m68k__ -D__NetBSD__ -S vacall-m68k.c -o vacall-m68k-netbsd.s
-	(echo '#include "asm-m68k.h"' ; ../../common/asm-m68k.sh mit < vacall-m68k-netbsd.s | sed -f elfhack-m68k.sed) > vacall-m68k-netbsd-macro.S
+	(echo '#include "asm-m68k.h"' ; ../../common/asm-m68k.sh mit < vacall-m68k-netbsd.s) > vacall-m68k-netbsd-macro.S
 	$(RM) vacall-m68k-netbsd.s
 
 
@@ -58,13 +58,13 @@ vacall-mipseb-linux.s : vacall-mips.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -meb -mno-explicit-relocs $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mipseb-linux.s
 
 vacall-mipseb-macro.S : vacall-mipseb-linux.s ../../common/asm-mips.sh $(THISFILE)
-	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipseb-linux.s | sed -f elfhack-mips.sed) > vacall-mipseb-macro.S
+	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipseb-linux.s) > vacall-mipseb-macro.S
 
 vacall-mipsel-linux.s : vacall-mips.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -mel -mno-explicit-relocs $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mipsel-linux.s
 
 vacall-mipsel-macro.S : vacall-mipsel-linux.s ../../common/asm-mips.sh $(THISFILE)
-	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipsel-linux.s | sed -f elfhack-mips.sed) > vacall-mipsel-macro.S
+	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipsel-linux.s) > vacall-mipsel-macro.S
 
 vacall-mipsn32eb-linux.s : vacall-mipsn32.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=n32 -meb $(GCCFLAGS) -D__mipsn32__ -S vacall-mipsn32.c -o vacall-mipsn32eb-linux.s
@@ -72,7 +72,7 @@ vacall-mipsn32eb-linux.s : vacall-mipsn32.c vacall_r.h.in $(THISFILE)
 vacall-mipsn32eb-macro.S : vacall-mipsn32eb-linux.s ../../common/asm-mips.sh $(THISFILE)
 	$(SED) -e 's/\$$sp,\$$sp,\([-]*\)192/$$sp,$$sp,\1256/' < vacall-mipsn32eb-linux.s > vacall-mipsn32eb-linux-hacked.s
 	if cmp vacall-mipsn32eb-linux.s vacall-mipsn32eb-linux-hacked.s > /dev/null; then echo "Postprocessing hack no longer applies." 1>&2; exit 1; fi
-	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipsn32eb-linux-hacked.s | sed -f elfhack-mips.sed) > vacall-mipsn32eb-macro.S
+	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipsn32eb-linux-hacked.s) > vacall-mipsn32eb-macro.S
 	$(RM) vacall-mipsn32eb-linux-hacked.s
 
 vacall-mipsn32el-linux.s : vacall-mipsn32.c vacall_r.h.in $(THISFILE)
@@ -81,7 +81,7 @@ vacall-mipsn32el-linux.s : vacall-mipsn32.c vacall_r.h.in $(THISFILE)
 vacall-mipsn32el-macro.S : vacall-mipsn32el-linux.s ../../common/asm-mips.sh $(THISFILE)
 	$(SED) -e 's/\$$sp,\$$sp,\([-]*\)192/$$sp,$$sp,\1256/' < vacall-mipsn32el-linux.s > vacall-mipsn32el-linux-hacked.s
 	if cmp vacall-mipsn32el-linux.s vacall-mipsn32el-linux-hacked.s > /dev/null; then echo "Postprocessing hack no longer applies." 1>&2; exit 1; fi
-	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipsn32el-linux-hacked.s | sed -f elfhack-mips.sed) > vacall-mipsn32el-macro.S
+	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipsn32el-linux-hacked.s) > vacall-mipsn32el-macro.S
 	$(RM) vacall-mipsn32el-linux-hacked.s
 
 vacall-mips64eb-linux.s : vacall-mips64.c vacall_r.h.in $(THISFILE)
@@ -90,7 +90,7 @@ vacall-mips64eb-linux.s : vacall-mips64.c vacall_r.h.in $(THISFILE)
 vacall-mips64eb-macro.S : vacall-mips64eb-linux.s ../../common/asm-mips.sh $(THISFILE)
 	$(SED) -e 's/\$$sp,\$$sp,\([-]*\)224/$$sp,$$sp,\1288/' < vacall-mips64eb-linux.s > vacall-mips64eb-linux-hacked.s
 	if cmp vacall-mips64eb-linux.s vacall-mips64eb-linux-hacked.s > /dev/null; then echo "Postprocessing hack no longer applies." 1>&2; exit 1; fi
-	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mips64eb-linux-hacked.s | sed -f elfhack-mips64.sed) > vacall-mips64eb-macro.S
+	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mips64eb-linux-hacked.s) > vacall-mips64eb-macro.S
 	$(RM) vacall-mips64eb-linux-hacked.s
 
 vacall-mips64el-linux.s : vacall-mips64.c vacall_r.h.in $(THISFILE)
@@ -99,7 +99,7 @@ vacall-mips64el-linux.s : vacall-mips64.c vacall_r.h.in $(THISFILE)
 vacall-mips64el-macro.S : vacall-mips64el-linux.s ../../common/asm-mips.sh $(THISFILE)
 	$(SED) -e 's/\$$sp,\$$sp,\([-]*\)224/$$sp,$$sp,\1288/' < vacall-mips64el-linux.s > vacall-mips64el-linux-hacked.s
 	if cmp vacall-mips64el-linux.s vacall-mips64el-linux-hacked.s > /dev/null; then echo "Postprocessing hack no longer applies." 1>&2; exit 1; fi
-	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mips64el-linux-hacked.s | sed -f elfhack-mips64.sed) > vacall-mips64el-macro.S
+	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mips64el-linux-hacked.s) > vacall-mips64el-macro.S
 	$(RM) vacall-mips64el-linux-hacked.s
 
 
@@ -120,7 +120,7 @@ vacall-alpha-linux.s : vacall-alpha.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) alpha-linux gcc -V 4.0.2 $(GCCFLAGS) -D__alpha__ -S vacall-alpha.c -o vacall-alpha-linux.s
 
 vacall-alpha-macro.S : vacall-alpha-linux.s $(THISFILE)
-	sed -f elfhack-alpha.sed < vacall-alpha-linux.s > vacall-alpha-macro.S
+	cp vacall-alpha-linux.s vacall-alpha-macro.S
 
 
 vacall-hppa-linux.s : vacall-hppa.c vacall_r.h.in $(THISFILE)
@@ -153,14 +153,14 @@ vacall-powerpc-linux.s : vacall-powerpc.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) powerpc-linux gcc -V 3.3.6 -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-linux.s
 
 vacall-powerpc-linux-macro.S : vacall-powerpc-linux.s $(THISFILE)
-	sed -f elfhack-powerpc.sed < vacall-powerpc-linux.s > vacall-powerpc-linux-macro.S
+	cp vacall-powerpc-linux.s vacall-powerpc-linux-macro.S
 
 vacall-powerpc-netbsd-macro.S : vacall-powerpc-netbsd.s $(THISFILE)
-	sed -f elfhack-powerpc.sed < vacall-powerpc-netbsd.s > vacall-powerpc-netbsd-macro.S
+	cp vacall-powerpc-netbsd.s vacall-powerpc-netbsd-macro.S
 
 vacall-powerpc-sysv4-macro.S : vacall-powerpc.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) powerpc-linux gcc -V 3.3.6 -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-sysv4.s
-	sed -f elfhack-powerpc.sed < vacall-powerpc-sysv4.s > vacall-powerpc-sysv4-macro.S
+	cp vacall-powerpc-sysv4.s vacall-powerpc-sysv4-macro.S
 	$(RM) vacall-powerpc-sysv4.s
 
 vacall-powerpc-macos.s : vacall-powerpc.c vacall_r.h.in $(THISFILE)
@@ -178,11 +178,11 @@ vacall-x86_64-linux.s : vacall-x86_64.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) x86_64-linux gcc-4.0.2 $(GCCFLAGS) -D__x86_64__ -S vacall-x86_64.c -o vacall-x86_64-linux.s
 
 vacall-x86_64-macro.S : vacall-x86_64-linux.s ../../common/asm-x86_64.sh $(THISFILE)
-	(echo '#include "asm-x86_64.h"' ; ../../common/asm-x86_64.sh < vacall-x86_64-linux.s | sed -f elfhack-x86_64.sed) > vacall-x86_64-macro.S
+	(echo '#include "asm-x86_64.h"' ; ../../common/asm-x86_64.sh < vacall-x86_64-linux.s) > vacall-x86_64-macro.S
 
 
 vacall-s390-linux.s : vacall-s390.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) s390-linux gcc -V 3.1 $(GCCFLAGS) -D__s390__ -S vacall-s390.c -o vacall-s390-linux.s
 
 vacall-s390-macro.S : vacall-s390-linux.s $(THISFILE)
-	sed -e 's,^#,//,' < vacall-s390-linux.s | sed -f elfhack-s390.sed > vacall-s390-macro.S
+	sed -e 's,^#,//,' < vacall-s390-linux.s > vacall-s390-macro.S

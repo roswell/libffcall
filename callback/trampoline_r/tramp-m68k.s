@@ -1,6 +1,6 @@
 | Trampoline for m68k CPU
 
-| Copyright 1995-1997, 2016 Bruno Haible, <bruno@clisp.org>
+| Copyright 1995-1997, 2016-2017 Bruno Haible, <bruno@clisp.org>
 |
 | This is free software distributed under the GNU General Public Licence
 | described in the file COPYING. Contact the author if you don't have this
@@ -12,11 +12,5 @@
 .globl tramp
 tramp:
 	movel #0x73554711,%a0
-	jmp 0xbabebec0
-	nop
-
-.globl trampelf
-trampelf:
-	movel #0x73554711,%sp@-
 	jmp 0xbabebec0
 	nop

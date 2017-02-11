@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-1999, 2001-2006, 2016 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995-1999, 2001-2006, 2016-2017 Bruno Haible, <bruno@clisp.org>
  *
  * This is free software distributed under the GNU General Public Licence
  * described in the file COPYING. Contact the author if you don't have this
@@ -195,11 +195,7 @@ extern void __TR_clear_cache();
 
 /* Length and alignment of trampoline */
 #ifdef __i386__
-#if BINFMT_ELF
-#define TRAMP_LENGTH 16
-#else
 #define TRAMP_LENGTH 12
-#endif
 #define TRAMP_ALIGN 16  /* 4 for a i386, 16 for a i486 */
 #endif
 #ifdef __m68k__
@@ -207,11 +203,7 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 16
 #endif
 #if (defined(__mips__) || defined(__mipsn32__)) && !defined(__mips64__)
-#if BINFMT_ELF
-#define TRAMP_LENGTH 32
-#else
 #define TRAMP_LENGTH 24
-#endif
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __mips64old__
@@ -219,11 +211,7 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __mips64__
-#if BINFMT_ELF
-#define TRAMP_LENGTH 40
-#else
 #define TRAMP_LENGTH 32
-#endif
 #define TRAMP_ALIGN 8
 #endif
 #if defined(__sparc__) && !defined(__sparc64__)
@@ -235,11 +223,7 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 16
 #endif
 #ifdef __alpha__
-#if BINFMT_ELF
-#define TRAMP_LENGTH 40
-#else
 #define TRAMP_LENGTH 32
-#endif
 #define TRAMP_ALIGN 8
 #endif
 #ifdef __hppaold__
@@ -256,11 +240,7 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __powerpcsysv4__
-#if BINFMT_ELF
-#define TRAMP_LENGTH 32
-#else
 #define TRAMP_LENGTH 24
-#endif
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __powerpcaix__
@@ -276,19 +256,11 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 16
 #endif
 #ifdef __x86_64__
-#if BINFMT_ELF
-#define TRAMP_LENGTH 30
-#else
 #define TRAMP_LENGTH 22
-#endif
 #define TRAMP_ALIGN 16
 #endif
 #ifdef __s390__
-#if BINFMT_ELF
-#define TRAMP_LENGTH 30
-#else
 #define TRAMP_LENGTH 22
-#endif
 #define TRAMP_ALIGN 2
 #endif
 
@@ -437,29 +409,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    * But I doubt it's really worth it.
    */
 #ifdef __i386__
-#if BINFMT_ELF
-  /* function:
-   *    subl $16,%esp			83 EC 10
-   *    movl $<data>,(%esp)		C7 04 24 <data>
-   *    jmp <address>			E9 <address>-<here>
-   * here:
-   *    nop				90
-   */
-  *(long *)  (function + 0) = 0xC710EC83;
-  *(short *) (function + 4) = 0x2404;
-  *(long *)  (function + 6) = (long) data;
-  *(char *)  (function +10) = 0xE9;
-  *(long *)  (function +11) = (long) address - (long) (function + 15);
-  *(char *)  (function +15) = 0x90;   /* nop, for alignment */
-#define is_tramp(function)  \
-  *(unsigned long *)  (function + 0) == 0xC710EC83 && \
-  *(unsigned short *) (function + 4) == 0x2404 && \
-  *(unsigned char *)  (function +10) == 0xE9
-#define tramp_address(function)  \
-  *(long *)  (function +11) + (long) (function + 15)
-#define tramp_data(function)  \
-  *(long *)  (function + 6)
-#else
   /* function:
    *    movl $<data>,%ecx		B9 <data>
    *    jmp <address>			E9 <address>-<here>
@@ -480,24 +429,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   *(long *)  (function + 1)
 #endif
-#endif
 #ifdef __m68k__
-#if BINFMT_ELF
-  /* function:
-   *    movel #<data>,sp@-		2F 3C <data>
-   *    jmp <address>			4E F9 <address>
-   *    nop				4E 71
-   */
-  *(short *) (function + 0) = 0x2F3C;
-  *(long *)  (function + 2) = (long) data;
-  *(short *) (function + 6) = 0x4EF9;
-  *(long *)  (function + 8) = (long) address;
-  *(short *) (function +12) = 0x4E71;
-#define is_tramp(function)  \
-  *(unsigned short *) (function + 0) == 0x2F3C && \
-  *(unsigned short *) (function + 6) == 0x4EF9 && \
-  *(unsigned short *) (function +12) == 0x4E71
-#else
 #ifdef __NetBSD__
   /* function:
    *    movel #<data>,a1		22 7C <data>
@@ -529,44 +461,12 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned short *) (function + 6) == 0x4EF9 && \
   *(unsigned short *) (function +12) == 0x4E71
 #endif
-#endif
 #define tramp_address(function)  \
   *(long *)  (function + 8)
 #define tramp_data(function)  \
   *(long *)  (function + 2)
 #endif
 #if (defined(__mips__) || defined(__mipsn32__)) && !defined(__mips64__)
-#if BINFMT_ELF
-  /* function:
-   *    subu $29,$29,16			27 BD FF F0
-   *    lw $2,24($25)			8F 22 00 18
-   *    lw $25,28($25)			8F 39 00 1C
-   *    sw $2,0($29)			AF A2 00 00
-   *    jr $25				03 20 00 08
-   *    nop				00 00 00 00
-   *    .word <data>			<data>
-   *    .word <address>			<address>
-   */
-  *(unsigned int *) (function + 0) = 0x27BDFFF0;
-  *(unsigned int *) (function + 4) = 0x8F220018;
-  *(unsigned int *) (function + 8) = 0x8F39001C;
-  *(unsigned int *) (function +12) = 0xAFA20000;
-  *(unsigned int *) (function +16) = 0x03200008;
-  *(unsigned int *) (function +20) = 0x00000000;
-  *(unsigned int *) (function +24) = (unsigned int) data;
-  *(unsigned int *) (function +28) = (unsigned int) address;
-#define is_tramp(function)  \
-  *(unsigned int *) (function + 0) == 0x27BDFFF0 && \
-  *(unsigned int *) (function + 4) == 0x8F220018 && \
-  *(unsigned int *) (function + 8) == 0x8F39001C && \
-  *(unsigned int *) (function +12) == 0xAFA20000 && \
-  *(unsigned int *) (function +16) == 0x03200008 && \
-  *(unsigned int *) (function +20) == 0x00000000
-#define tramp_address(function)  \
-  *(unsigned int *) (function +28)
-#define tramp_data(function)  \
-  *(unsigned int *) (function +24)
-#else
   /* function:
    *    lw $2,16($25)			8F 22 00 10
    *    lw $25,20($25)			8F 39 00 14
@@ -590,7 +490,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned int *) (function +20)
 #define tramp_data(function)  \
   *(unsigned int *) (function +16)
-#endif
 #endif
 #ifdef __mips64old__
   /* function:
@@ -662,37 +561,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
        *(unsigned short *) (function +22))
 #endif
 #ifdef __mips64__
-#if BINFMT_ELF
-  /* function:
-   *    dsubu $29,$29,16		67 BD FF F0
-   *    ld $2,24($25)			DF 22 00 18
-   *    ld $25,32($25)			DF 39 00 20
-   *    sd $2,0($29)			FF A2 00 00
-   *    j $25				03 20 00 08
-   *    nop				00 00 00 00
-   *    .dword <data>			<data>
-   *    .dword <address>		<address>
-   */
-  *(unsigned int *)  (function + 0) = 0x67BDFFF0;
-  *(unsigned int *)  (function + 4) = 0xDF220018;
-  *(unsigned int *)  (function + 8) = 0xDF390020;
-  *(unsigned int *)  (function +12) = 0xFFA20000;
-  *(unsigned int *)  (function +16) = 0x03200008;
-  *(unsigned int *)  (function +20) = 0x00000000;
-  *(unsigned long *) (function +24) = (unsigned long) data;
-  *(unsigned long *) (function +32) = (unsigned long) address;
-#define is_tramp(function)  \
-  *(unsigned int *)  (function + 0) == 0x67BDFFF0 && \
-  *(unsigned int *)  (function + 4) == 0xDF220018 && \
-  *(unsigned int *)  (function + 8) == 0xDF390020 && \
-  *(unsigned int *)  (function +12) == 0xFFA20000 && \
-  *(unsigned int *)  (function +16) == 0x03200008 && \
-  *(unsigned int *)  (function +20) == 0x00000000
-#define tramp_address(function)  \
-  *(unsigned long *) (function +32)
-#define tramp_data(function)  \
-  *(unsigned long *) (function +24)
-#else
   /* function:
    *    ld $2,16($25)			DF 22 00 10
    *    ld $25,24($25)			DF 39 00 18
@@ -716,7 +584,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned long *) (function +24)
 #define tramp_data(function)  \
   *(unsigned long *) (function +16)
-#endif
 #endif
 #if defined(__sparc__) && !defined(__sparc64__)
   /* function:
@@ -770,37 +637,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(long *) (function +16)
 #endif
 #ifdef __alpha__
-#if BINFMT_ELF
-  /* function:
-   *    br $1,function..ng	00 00 20 C0
-   * function..ng:
-   *    ldq $2,20($1)		14 00 41 A4
-   *    lda $30,-16($30)	F0 FF DE 23
-   *    ldq $27,28($1)		1C 00 61 A7
-   *    stq $2,0($30)		00 00 5E B4
-   *    jmp $31,($27),0		00 00 FB 6B
-   *    .quad <data>		<data>
-   *    .quad <address>		<address>
-   */
-  { static int code [6] =
-      { 0xC0200000, 0xA4410014, 0x23DEFFF0, 0xA761001C, 0xB45E0000, 0x6BFB0000 };
-    int i;
-    for (i=0; i<6; i++) { ((int *) function)[i] = code[i]; }
-    ((long *) function)[3] = (long) data;
-    ((long *) function)[4] = (long) address;
-  }
-#define is_tramp(function)  \
-  ((int *) function)[0] == 0xC0200000 && \
-  ((int *) function)[1] == 0xA4410014 && \
-  ((int *) function)[2] == 0x23DEFFF0 && \
-  ((int *) function)[3] == 0xA761001C && \
-  ((int *) function)[4] == 0xB45E0000 && \
-  ((int *) function)[5] == 0x6BFB0000
-#define tramp_address(function)  \
-  ((long *) function)[4]
-#define tramp_data(function)  \
-  ((long *) function)[3]
-#else
   /* function:
    *    br $1,function..ng	00 00 20 C0
    * function..ng:
@@ -826,7 +662,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   ((long *) function)[3]
 #define tramp_data(function)  \
   ((long *) function)[2]
-#endif
 #endif
 #ifdef __hppaold__
   /* function:
@@ -966,39 +801,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   ((long *) function)[10]
 #endif
 #ifdef __powerpcsysv4__
-#if BINFMT_ELF
-  /* function:
-   *    {liu|lis} 11,hi16(<data>)		3D 60 hi16(<data>)
-   *    {oril|ori} 11,11,lo16(<data>)		61 6B lo16(<data>)
-   *    {liu|lis} 0,hi16(<address>)		3C 00 hi16(<address>)
-   *    {oril|ori} 0,0,lo16(<address>)		60 00 lo16(<address>)
-   *    addi 1,1,-16				38 21 FF F0
-   *    stw 11,0(1)				91 61 00 00
-   *    mtctr 0					7C 09 03 A6
-   *    bctr					4E 80 04 20
-   */
-  *(short *) (function + 0) = 0x3D60;
-  *(short *) (function + 2) = (unsigned long) data >> 16;
-  *(short *) (function + 4) = 0x616B;
-  *(short *) (function + 6) = (unsigned long) data & 0xffff;
-  *(short *) (function + 8) = 0x3C00;
-  *(short *) (function +10) = (unsigned long) address >> 16;
-  *(short *) (function +12) = 0x6000;
-  *(short *) (function +14) = (unsigned long) address & 0xffff;
-  *(long *)  (function +16) = 0x3821FFF0;
-  *(long *)  (function +20) = 0x91610000;
-  *(long *)  (function +24) = 0x7C0903A6;
-  *(long *)  (function +28) = 0x4E800420;
-#define is_tramp(function)  \
-  *(unsigned short *) (function + 0) == 0x3D60 && \
-  *(unsigned short *) (function + 4) == 0x616B && \
-  *(unsigned short *) (function + 8) == 0x3C00 && \
-  *(unsigned short *) (function +12) == 0x6000 && \
-  *(unsigned long *)  (function +16) == 0x3821FFF0 && \
-  *(unsigned long *)  (function +20) == 0x91610000 && \
-  *(unsigned long *)  (function +24) == 0x7C0903A6 && \
-  *(unsigned long *)  (function +28) == 0x4E800420
-#else
 #ifdef __NetBSD__
   /* function:
    *    {liu|lis} 13,hi16(<data>)		3D A0 hi16(<data>)
@@ -1051,7 +853,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned short *) (function +12) == 0x6000 && \
   *(unsigned long *)  (function +16) == 0x7C0903A6 && \
   *(unsigned long *)  (function +20) == 0x4E800420
-#endif
 #endif
 #define hilo(hiword,loword)  \
   (((unsigned long) (hiword) << 16) | (unsigned long) (loword))
@@ -1123,21 +924,11 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   ((long *) function)[3]
 #endif
 #ifdef __x86_64__
-#if BINFMT_ELF
-  /* function:
-   *    movabsq $<data>,%r10		49 BA <data>
-   *    movabsq $<address>,%rax		48 B8 <address>
-   *    subq $16,%rsp			48 83 EC 10
-   *    movq %r10,(%rsp)		4C 89 14 24
-   *    jmp *%rax			FF E0
-   */
-#else
   /* function:
    *    movabsq $<data>,%r10		49 BA <data>
    *    movabsq $<address>,%rax		48 B8 <address>
    *    jmp *%rax			FF E0
    */
-#endif
   *(short *) (function + 0) = 0xBA49;
   *(short *) (function + 2) = (unsigned long) data & 0xffff;
   *(int *)   (function + 4) = ((unsigned long) data >> 16) & 0xffffffff;
@@ -1145,23 +936,11 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(short *) (function +10) = 0xB848;
   *(int *)   (function +12) = (unsigned long) address & 0xffffffff;
   *(int *)   (function +16) = ((unsigned long) address >> 32) & 0xffffffff;
-#if BINFMT_ELF
-  *(int *)   (function +20) = 0x10EC8348;
-  *(int *)   (function +24) = 0x2414894C;
-  *(short *) (function +28) = 0xE0FF;
-#define is_tramp(function)  \
-  *(unsigned short *) (function + 0) == 0xBA49 && \
-  *(unsigned short *) (function +10) == 0xB848 && \
-  *(unsigned int *)   (function +20) == 0x10EC8348 && \
-  *(unsigned int *)   (function +24) == 0x2414894C && \
-  *(unsigned short *) (function +28) == 0xE0FF
-#else
   *(short *) (function +20) = 0xE0FF;
 #define is_tramp(function)  \
   *(unsigned short *) (function + 0) == 0xBA49 && \
   *(unsigned short *) (function +10) == 0xB848 && \
   *(unsigned short *) (function +20) == 0xE0FF
-#endif
 #define hilo(hiword,loword)  \
   (((unsigned long) (hiword) << 32) | (unsigned long) (loword))
 #define himidlo(hishort,midword,loshort)  \
@@ -1175,34 +954,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
           *(unsigned short *) (function + 2))
 #endif
 #ifdef __s390__
-#if BINFMT_ELF
-  /* function:
-        bras    %r1,function+12		A7 15 00 06
-        .long   <data>
-        .long   <address>
-     function+12:
-        l       %r0,0(%r1)		58 00 10 00
-        ahi     %r15,-8			A7 FA FF F8
-        l       %r1,4(%r1)		58 10 10 04
-        st      %r0,0(%r15)		50 00 F0 00
-        br      %r1			07 F1
-  */
-  *(int *)   (function + 0) = 0xA7150006;
-  *(int *)   (function + 4) = (unsigned int) data;
-  *(int *)   (function + 8) = (unsigned int) address;
-  *(int *)   (function +12) = 0x58001000;
-  *(int *)   (function +16) = 0xA7FAFFF8;
-  *(int *)   (function +20) = 0x58101004;
-  *(int *)   (function +24) = 0x5000F000;
-  *(short *) (function +28) = 0x07F1;
-#define is_tramp(function)  \
-  *(unsigned int *)   (function + 0) == 0xA7150006 && \
-  *(unsigned int *)   (function +12) == 0x58001000 && \
-  *(unsigned int *)   (function +16) == 0xA7FAFFF8 && \
-  *(unsigned int *)   (function +20) == 0x58101004 && \
-  *(unsigned int *)   (function +24) == 0x5000F000 && \
-  *(unsigned short *) (function +28) == 0x07F1
-#else
   /* function:
         bras    %r1,function+12		A7 15 00 06
         .long   <data>
@@ -1223,7 +974,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned int *)   (function +12) == 0x58001000 && \
   *(unsigned int *)   (function +16) == 0x58101004 && \
   *(unsigned short *) (function +20) == 0x07F1
-#endif
 #define tramp_address(function)  \
   *(unsigned int *) (function + 8)
 #define tramp_data(function)  \

@@ -1,5 +1,63 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	Revert BINFMT_ELF hack.
+	* callback/elf-hack.txt: Explain the new workaround.
+	* callback/vacall_r/Makefile.devel (vacall-i386-macro.S,
+	vacall-m68k.mit.S, vacall-m68k.motorola.S, vacall-m68k-netbsd-macro.S,
+	vacall-mipseb-macro.S, vacall-mipsel-macro.S, vacall-mipsn32eb-macro.S,
+	vacall-mipsn32el-macro.S, vacall-mips64eb-macro.S,
+	vacall-mips64el-macro.S, vacall-alpha-macro.S,
+	vacall-powerpc-linux-macro.S, vacall-powerpc-netbsd-macro.S,
+	vacall-powerpc-sysv4-macro.S, vacall-x86_64-macro.S,
+	vacall-s390-macro.S): Don't postprocess through elfhack-*.sed.
+	* callback/vacall_r/elfhack-alpha.S: Remove file.
+	* callback/vacall_r/elfhack-alpha.sed: Remove file.
+	* callback/vacall_r/elfhack-i386.S: Remove file.
+	* callback/vacall_r/elfhack-i386.sed: Remove file.
+	* callback/vacall_r/elfhack-m68k.S: Remove file.
+	* callback/vacall_r/elfhack-m68k.sed: Remove file.
+	* callback/vacall_r/elfhack-mips.S: Remove file.
+	* callback/vacall_r/elfhack-mips.sed: Remove file.
+	* callback/vacall_r/elfhack-mips64.S: Remove file.
+	* callback/vacall_r/elfhack-mips64.sed: Remove file.
+	* callback/vacall_r/elfhack-powerpc.S: Remove file.
+	* callback/vacall_r/elfhack-powerpc.sed: Remove file.
+	* callback/vacall_r/elfhack-s390.S: Remove file.
+	* callback/vacall_r/elfhack-s390.sed: Remove file.
+	* callback/vacall_r/elfhack-x86_64.S: Remove file.
+	* callback/vacall_r/elfhack-x86_64.sed: Remove file.
+	* callback/vacall_r/Makefile.in (ASPFLAGS): Don't set BINFMT_ELF.
+	(SOURCE_FILES): Remove elhack-*.S and elfhack-*.sed.
+	* callback/vacall_r/configure.ac: Don't invoke FFCALL_BINFMT_ELF.
+	* callback/trampoline_r/trampoline.c: Remove code for BINFMT_ELF.
+	* callback/trampoline_r/tramp-alpha.s: Remove trampelf.
+	* callback/trampoline_r/tramp-alpha.o: Regenerated.
+	* callback/trampoline_r/tramp-i386.s: Remove trampelf.
+	* callback/trampoline_r/tramp-i386.o: Regenerated.
+	* callback/trampoline_r/tramp-m68k-netbsd.s: Remove trampelf.
+	* callback/trampoline_r/tramp-m68k-netbsd.o: Regenerated.
+	* callback/trampoline_r/tramp-m68k.s: Remove trampelf.
+	* callback/trampoline_r/tramp-m68k.o: Regenerated.
+	* callback/trampoline_r/tramp-mips.s: Remove trampelf.
+	* callback/trampoline_r/tramp-mips.o: Regenerated.
+	* callback/trampoline_r/tramp-mips64.s: Remove trampelf.
+	* callback/trampoline_r/tramp-mips64.o: Regenerated.
+	* callback/trampoline_r/tramp-powerpc-sysv4.s: Remove trampelf.
+	* callback/trampoline_r/tramp-powerpc-sysv4.o: Regenerated.
+	* callback/trampoline_r/tramp-s390.s: Remove trampelf.
+	* callback/trampoline_r/tramp-s390.o: Regenerated.
+	* callback/trampoline_r/tramp-x86_64.s: Remove trampelf.
+	* callback/trampoline_r/tramp-x86_64.o: Regenerated.
+	* callback/trampoline_r/test1.c: Reenable on ELF platforms.
+	* callback/trampoline_r/configure.ac: Don't invoke FFCALL_BINFMT_ELF.
+	* callback/configure.ac: Don't invoke FFCALL_BINFMT_ELF_OPTION.
+	* configure.ac: Don't invoke FFCALL_BINFMT_ELF_OPTION.
+	* m4/binfmt-elf.m4: Remove file.
+	* Makefile.in (SOURCE_FILES): Remove it.
+	* README: Update regarding the ELF problem.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	Access __vacall_r through an indirection, except on SPARC.
 	* callback/vacall_r/vacall_r.h.in (__vacall_r_t): New type.
 	(get__vacall_r): New declaration.
