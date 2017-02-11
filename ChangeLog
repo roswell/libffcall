@@ -1,5 +1,21 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	Support the LDFLAGS configure variable.
+	* avcall/Makefile.in (LDFLAGS): New variable.
+	Use it in all linking commands.
+	* vacall/Makefile.in (LDFLAGS): New variable.
+	Use it in all linking commands.
+	* trampoline/Makefile.in (LDFLAGS): New variable.
+	Use it in all linking commands.
+	* callback/Makefile.in (LDFLAGS): New variable.
+	Use it in all linking commands.
+	* callback/vacall_r/Makefile.in (LDFLAGS): New variable.
+	Use it in all linking commands.
+	* callback/trampoline_r/Makefile.in (LDFLAGS): New variable.
+	Use it in all linking commands.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	Fix build failure on Mac OS X 10.5 / x86_64. Regression from today.
 	* common/asm-x86_64.sh: Recognize symbol in symbol(%rip) syntax.
 	* vacall/Makefile.devel (vacall-x86_64-macro.S): Remove extra

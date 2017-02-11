@@ -27,6 +27,7 @@ CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
+LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
 LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
@@ -174,7 +175,7 @@ avcall-structcpy.lo : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-structcpy.c
 
 libavcall.la : $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) -o libavcall.la -rpath $(libdir) $(OBJECTS)
+	$(LIBTOOL_LINK) $(CC) -o libavcall.la -rpath $(libdir) $(OBJECTS) $(LDFLAGS)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
@@ -221,7 +222,7 @@ minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c avcall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
 minitests : minitests.o libavcall.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libavcall.la -o minitests
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libavcall.la $(LDFLAGS) -o minitests
 
 check : all minitests
 	./minitests > minitests.out
@@ -235,7 +236,7 @@ tests.s : $(srcdir)/tests.c avcall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
 tests : tests.o libavcall.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libavcall.la -o tests
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libavcall.la $(LDFLAGS) -o tests
 
 extracheck : all tests
 	./tests > tests.out

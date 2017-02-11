@@ -27,6 +27,7 @@ CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
+LDFLAGS = @LDFLAGS@
 AR = @AR@
 AR_FLAGS = rc
 RANLIB = @RANLIB@
@@ -209,7 +210,7 @@ minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
 minitests : minitests.o libvacall.a
-	$(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libvacall.a -o minitests
+	$(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libvacall.a $(LDFLAGS) -o minitests
 
 check : all minitests
 	./minitests > minitests.out
@@ -223,7 +224,7 @@ tests.s : $(srcdir)/tests.c vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
 tests : tests.o libvacall.a
-	$(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libvacall.a -o tests
+	$(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libvacall.a $(LDFLAGS) -o tests
 
 extracheck : all tests
 	./tests > tests.out

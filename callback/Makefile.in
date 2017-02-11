@@ -25,6 +25,7 @@ CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
+LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
 LIBTOOL_INSTALL = $(LIBTOOL) --mode=install
@@ -63,7 +64,7 @@ trampoline_r.h :
 	$(LN_S) trampoline_r/trampoline_r.h trampoline_r.h
 
 libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la
-	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) vacall_r/vacall.lo vacall_r/misc.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo
+	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) vacall_r/vacall.lo vacall_r/misc.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo $(LDFLAGS)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
@@ -111,7 +112,7 @@ test1.o : $(srcdir)/test1.c callback.h vacall_r.h trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
 test1 : test1.o libcallback.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o libcallback.la -o test1
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o libcallback.la $(LDFLAGS) -o test1
 
 minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
@@ -120,7 +121,7 @@ minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c callback.h vacall_r.h tram
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
 minitests : minitests.o libcallback.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libcallback.la -o minitests
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libcallback.la $(LDFLAGS) -o minitests
 
 check-subdirs : force
 	cd @subdir@ && $(MAKE) check
@@ -138,7 +139,7 @@ tests.s : $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
 tests : tests.o libcallback.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libcallback.la -o tests
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libcallback.la $(LDFLAGS) -o tests
 
 extracheck-subdirs : force
 	cd @subdir@ && $(MAKE) extracheck

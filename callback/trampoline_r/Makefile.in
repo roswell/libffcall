@@ -27,6 +27,7 @@ CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
+LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
 LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
@@ -110,7 +111,7 @@ cache-powerpc.lo : $(srcdir)/cache-powerpc-sysv4.s $(srcdir)/cache-powerpc-macos
 # libtool may want to access it.
 
 libtrampoline.la : $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS)
+	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS) $(LDFLAGS)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
@@ -152,13 +153,13 @@ test1.o : $(srcdir)/test1.c trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
 test1 : test1.o $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o $(OBJECTS) -o test1
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o $(OBJECTS) $(LDFLAGS) -o test1
 
 test2.o : $(srcdir)/test2.c trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test2.c
 
 test2 : test2.o $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test2.o $(OBJECTS) -o test2
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test2.o $(OBJECTS) $(LDFLAGS) -o test2
 
 check1 : all test1
 	./test1
