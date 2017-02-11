@@ -131,7 +131,7 @@ avcall-powerpc.lo : avcall-powerpc.s
 avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.s $(srcdir)/avcall-powerpc-linux.s $(srcdir)/avcall-powerpc-macos.s $(srcdir)/avcall-powerpc-sysv4.s
 	case "$(OS)" in \
 	  aix*) syntax=aix;; \
-	  linux* | netbsd*) syntax=linux;; \
+	  linux* | netbsd* | openbsd*) syntax=linux;; \
 	  macos* | darwin*) syntax=macos;; \
 	  *) syntax=sysv4;; \
 	esac; \

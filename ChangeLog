@@ -1,5 +1,12 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	powerpc: Add support for OpenBSD.
+	* avcall/Makefile.in (avcall-powerpc.s): Treat OpenBSD like NetBSD.
+	* vacall/Makefile.in (vacall-powerpc.s): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-powerpc.s): Likewise.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	mips64: Add support for OpenBSD.
 	On OpenBSD, cacheflush() is declared in <machine/sysarch.h>, see
 	openbsd-src/blob/master/lib/libarch/mips64/cacheflush.3 .

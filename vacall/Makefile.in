@@ -122,7 +122,7 @@ vacall-powerpc.o : vacall-powerpc.s
 vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux.s $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-sysv4.s
 	case "$(OS)" in \
 	  aix*) syntax=aix;; \
-	  linux* | netbsd*) syntax=linux;; \
+	  linux* | netbsd* | openbsd*) syntax=linux;; \
 	  macos* | darwin*) syntax=macos;; \
 	  *) syntax=sysv4;; \
 	esac; \
