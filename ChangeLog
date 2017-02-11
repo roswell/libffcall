@@ -1,5 +1,13 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	hppa: Fix bug with structure return for sizes 5, 6, 7.
+	* avcall/avcall-hppa.c: For structure return for sizes > 4, get 4 bytes
+	from iret2.
+	* vacall/vacall-hppa.c: For structure return for sizes > 4, put 4 bytes
+	into iret2.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Fix bug with structure return for sizes < 16, != 1, 2, 4, 8.
 	* avcall/avcall-x86_64.c: Treat structure returns for all sizes <= 16
 	like those with sizes 1, 2, 4, 8, 16.

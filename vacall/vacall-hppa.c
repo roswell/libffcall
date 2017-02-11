@@ -187,26 +187,26 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
                     |  ((unsigned char *) list.raddr)[3];
             } else
             if (list.rsize == 5) {
-              iret1 =  (((unsigned char *) list.raddr)[0] << 24)
-                     | (((unsigned char *) list.raddr)[1] << 16)
-                     | (((unsigned char *) list.raddr)[2] << 8)
-                     |  ((unsigned char *) list.raddr)[3];
-              iret2 =   ((unsigned char *) list.raddr)[4];
+              iret1 =   ((unsigned char *) list.raddr)[0];
+              iret2 =  (((unsigned char *) list.raddr)[1] << 24)
+                     | (((unsigned char *) list.raddr)[2] << 16)
+                     | (((unsigned char *) list.raddr)[3] << 8)
+                     |  ((unsigned char *) list.raddr)[4];
             } else
             if (list.rsize == 6) {
-              iret1 =  (((unsigned char *) list.raddr)[0] << 24)
-                     | (((unsigned char *) list.raddr)[1] << 16)
-                     | (((unsigned char *) list.raddr)[2] << 8)
-                     |  ((unsigned char *) list.raddr)[3];
-              iret2 =  (((unsigned char *) list.raddr)[4] << 8)
+              iret1 =  (((unsigned char *) list.raddr)[0] << 8)
+                     |  ((unsigned char *) list.raddr)[1];
+              iret2 =  (((unsigned char *) list.raddr)[2] << 24)
+                     | (((unsigned char *) list.raddr)[3] << 16)
+                     | (((unsigned char *) list.raddr)[4] << 8)
                      |  ((unsigned char *) list.raddr)[5];
             } else
             if (list.rsize == 7) {
-              iret1 =  (((unsigned char *) list.raddr)[0] << 24)
-                     | (((unsigned char *) list.raddr)[1] << 16)
-                     | (((unsigned char *) list.raddr)[2] << 8)
-                     |  ((unsigned char *) list.raddr)[3];
-              iret2 =  (((unsigned char *) list.raddr)[4] << 16)
+              iret1 =  (((unsigned char *) list.raddr)[0] << 16)
+                     | (((unsigned char *) list.raddr)[1] << 8)
+                     |  ((unsigned char *) list.raddr)[2];
+              iret2 =  (((unsigned char *) list.raddr)[3] << 24)
+                     | (((unsigned char *) list.raddr)[4] << 16)
                      | (((unsigned char *) list.raddr)[5] << 8)
                      |  ((unsigned char *) list.raddr)[6];
             } else

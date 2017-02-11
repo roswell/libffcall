@@ -177,25 +177,25 @@ __builtin_avcall(av_alist* l)
             ((unsigned char *)l->raddr)[3] = (unsigned char)(i);
           } else
           if (l->rsize == 5) {
-            ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>24);
-            ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>16);
-            ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>8);
-            ((unsigned char *)l->raddr)[3] = (unsigned char)(i);
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(i);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret2>>24);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret2>>16);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>8);
             ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2);
           } else
           if (l->rsize == 6) {
-            ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>24);
-            ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>16);
-            ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>8);
-            ((unsigned char *)l->raddr)[3] = (unsigned char)(i);
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>8);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(i);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret2>>24);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>16);
             ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2>>8);
             ((unsigned char *)l->raddr)[5] = (unsigned char)(iret2);
           } else
           if (l->rsize == 7) {
-            ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>24);
-            ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>16);
-            ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>8);
-            ((unsigned char *)l->raddr)[3] = (unsigned char)(i);
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>16);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>8);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(i);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>24);
             ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2>>16);
             ((unsigned char *)l->raddr)[5] = (unsigned char)(iret2>>8);
             ((unsigned char *)l->raddr)[6] = (unsigned char)(iret2);

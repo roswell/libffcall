@@ -343,6 +343,7 @@ autom4te.cache/
 /avcall/avcall-mips.s
 /avcall/avcall-mipsn32.s
 /avcall/avcall-mips64.s
+/avcall/avcall-hppa.s
 /avcall/avcall-arm.s
 /avcall/avcall-armhf.s
 /avcall/avcall-powerpc.s
@@ -368,6 +369,7 @@ autom4te.cache/
 /vacall/vacall-mips.s
 /vacall/vacall-mipsn32.s
 /vacall/vacall-mips64.s
+/vacall/vacall-hppa.s
 /vacall/vacall-arm.s
 /vacall/vacall-armhf.s
 /vacall/vacall-powerpc.s
@@ -440,6 +442,7 @@ autom4te.cache/
 /callback/vacall_r/vacall-mipsn32.s
 /callback/vacall_r/vacall-mips64.s
 /callback/vacall_r/vacall-alpha.s
+/callback/vacall_r/vacall-hppa.s
 /callback/vacall_r/vacall-arm.s
 /callback/vacall_r/vacall-armhf.s
 /callback/vacall_r/vacall-powerpc.s
