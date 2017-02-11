@@ -56,7 +56,7 @@ proto-powerpc-macos.s : proto.c
 	$(GCC) -V 3.3.2 -b powerpc-darwin $(GCCFLAGS) -D__powerpc__ -S proto.c -o $@
 
 proto-powerpc64-aix.s : proto64.c
-	/cross/powerpc64-linux-tools/bin/powerpc64-linux-gcc $(GCCFLAGS) -D__powerpc64__ -S proto64.c -o $@
+	$(CROSS_TOOL) powerpc64-linux gcc $(GCCFLAGS) -D__powerpc64__ -S proto64.c -o $@
 
 proto-ia64.s : proto64.c
 	$(GCC) -V 2.9-ia64-000216 -b ia64-hp-linux $(GCCFLAGS) -D__ia64__ -S proto64.c -o $@

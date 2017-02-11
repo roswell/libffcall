@@ -1,5 +1,13 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	powerpc64: Update Makefile.devel rules.
+	* trampoline/Makefile.devel (CROSS_TOOL): New variable.
+	(proto-powerpc64-aix.s): Update rule.
+	* callback/trampoline_r/Makefile.devel (proto-powerpc64-aix.s): Update
+	rule.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	hppa: Fix bug with structure return for sizes 5, 6, 7.
 	* avcall/avcall-hppa.c: For structure return for sizes > 4, get 4 bytes
 	from iret2.
