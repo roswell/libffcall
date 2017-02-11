@@ -16,7 +16,7 @@
 
 #include "trampoline_r.h"
 
-#if BINFMT_ELF
+#if BINFMT_ELF && !defined(__arm__)
 
 /* We cannot test trampoline_r without vacall_r. */
 int main ()
@@ -27,7 +27,7 @@ int main ()
 #else
 
 /* Set when we can check that the env register is being passed correctly. */
-#if defined __GNUC__ && !defined __clang__
+#if defined __GNUC__ && !defined __clang__ && !defined(__arm__)
 #define CHECK_ENV_REGISTER
 #endif
 
@@ -69,9 +69,6 @@ register void* env __asm__("$1");
 #endif
 #ifdef __hppa__
 register void* env __asm__("%r29");
-#endif
-#ifdef __arm__
-register void* env __asm__("r12");
 #endif
 #ifdef __powerpc__
 #ifdef __NetBSD__

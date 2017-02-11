@@ -252,11 +252,7 @@ extern void __TR_clear_cache();
 #define TRAMP_BIAS 2
 #endif
 #ifdef __arm__
-#if BINFMT_ELF
-#define TRAMP_LENGTH 24
-#else
-#define TRAMP_LENGTH 16
-#endif
+#define TRAMP_LENGTH 48
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __powerpcsysv4__
@@ -923,57 +919,51 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   ((long *) function)[2]
 #endif
 #ifdef __arm__
-#if BINFMT_ELF
   /* function:
-   *	add	r12,pc,#16		E28FC010
+   *	mov	ip,sp			E1A0C00D
+   *	stmdb	sp!,{r0,r1,r2,r3}	E92D000F
+   *	stmfd	sp!,{fp,ip,lr,pc}	E92DD800
+   *	sub	fp,ip,#20		E24CB014
    *	sub	sp,sp,#8		E24DD008
-   *	str	r12,[sp]		E58DC000
-   *	ldr	pc,[pc]			E59FF000
+   *	ldr	ip,[pc,#12]		E59FC00C	@ Get <data>
+   *	str	ip,[sp,#0]		E58DC000	@ Put <data> on stack
+   *	mov	lr,pc			E1A0E00F	@ Prepare call (put return address in lr)
+   *	ldr	pc,[pc,#4]		E59FF004	@ Call <function> with the same args in registers
+   *	ldmea	fp,{fp,sp,pc}		E91BA800	@ Restore fp and sp, and return to return address.
    * _data:
    *	.word	<data>
    * _function:
    *	.word	<address>
    */
   {
-    ((long *) function)[0] = 0xE28FC010;
-    ((long *) function)[1] = 0xE24DD008;
-    ((long *) function)[2] = 0xE58DC000;
-    ((long *) function)[3] = 0xE59FF000;
-    ((long *) function)[4] = (long) data;
-    ((long *) function)[5] = (long) address;
+    ((long *) function)[0] = 0xE1A0C00D;
+    ((long *) function)[1] = 0xE92D000F;
+    ((long *) function)[2] = 0xE92DD800;
+    ((long *) function)[3] = 0xE24CB014;
+    ((long *) function)[4] = 0xE24DD008;
+    ((long *) function)[5] = 0xE59FC00C;
+    ((long *) function)[6] = 0xE58DC000;
+    ((long *) function)[7] = 0xE1A0E00F;
+    ((long *) function)[8] = 0xE59FF004;
+    ((long *) function)[9] = 0xE91BA800;
+    ((long *) function)[10] = (long) data;
+    ((long *) function)[11] = (long) address;
   }
 #define is_tramp(function)  \
-  ((long *) function)[0] == 0xE28FC010 && \
-  ((long *) function)[1] == 0xE24DD008 && \
-  ((long *) function)[2] == 0xE58DC000 && \
-  ((long *) function)[3] == 0xE59FF000
+  ((long *) function)[0] == 0xE1A0C00D && \
+  ((long *) function)[1] == 0xE92D000F && \
+  ((long *) function)[2] == 0xE92DD800 && \
+  ((long *) function)[3] == 0xE24CB014 && \
+  ((long *) function)[4] == 0xE24DD008 && \
+  ((long *) function)[5] == 0xE59FC00C && \
+  ((long *) function)[6] == 0xE58DC000 && \
+  ((long *) function)[7] == 0xE1A0E00F && \
+  ((long *) function)[8] == 0xE59FF004 && \
+  ((long *) function)[9] == 0xE91BA800
 #define tramp_address(function)  \
-  ((long *) function)[5]
+  ((long *) function)[11]
 #define tramp_data(function)  \
-  ((long *) function)[4]
-#else
-  /* function:
-   *	add	r12,pc,#8		E28FC008
-   *	ldr	pc,[pc]			E59FF000
-   * _data:
-   *	.word	<data>
-   * _function:
-   *	.word	<address>
-   */
-  {
-    ((long *) function)[0] = 0xE28FC008;
-    ((long *) function)[1] = 0xE59FF000;
-    ((long *) function)[2] = (long) data;
-    ((long *) function)[3] = (long) address;
-  }
-#define is_tramp(function)  \
-  ((long *) function)[0] == 0xE28FC008 && \
-  ((long *) function)[1] == 0xE59FF000
-#define tramp_address(function)  \
-  ((long *) function)[3]
-#define tramp_data(function)  \
-  ((long *) function)[2]
-#endif
+  ((long *) function)[10]
 #endif
 #ifdef __powerpcsysv4__
 #if BINFMT_ELF

@@ -10,6 +10,7 @@ CPU = i386
 GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer
 CPP = $(GCC) -E
+CROSS_TOOL = cross
 ASPREFIX = /usr1/gnu/lib
 
 precompiled : proto-i386.s proto-m68k.s proto-m68k-netbsd.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-ia64.c proto-x86_64.c \
@@ -46,7 +47,7 @@ proto-hppa.s : proto.c
 	$(GCC) -V 2.6.3 -b hppa1.0-hpux $(GCCFLAGS) -D__hppa__ -S proto.c -o $@
 
 proto-arm.s : proto.c
-	$(GCC) -V 2.6.3 -b arm-acorn-riscix $(GCCFLAGS) -D__arm__ -S proto.c -o $@
+	$(CROSS_TOOL) arm-linux gcc -V 3.1 $(GCCFLAGS) -fno-omit-frame-pointer -D__arm__ -S proto.c -o $@
 
 proto-powerpc-aix.s : proto.c
 	$(GCC) -V 2.95.2 -b rs6000 -mno-power -mno-power2 -mno-powerpc -mnew-mnemonics $(GCCFLAGS) -D__powerpc__ -S proto.c -o $@
@@ -111,7 +112,7 @@ tramp-hppa.o : tramp-hppa.s
 	$(ASPREFIX)/hppa1.0-hpux/bin/as tramp-hppa.s -o $@
 
 tramp-arm.o : tramp-arm.s
-	$(ASPREFIX)/arm-acorn-riscix/bin/as tramp-arm.s -o $@
+	$(CROSS_TOOL) arm-linux as tramp-arm.s -o $@
 
 tramp-powerpc-old.o : tramp-powerpc-old.s
 	$(ASPREFIX)/rs6000/bin/as tramp-powerpc-old.s -o $@

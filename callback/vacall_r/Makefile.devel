@@ -131,7 +131,7 @@ vacall-arm-macro.S : vacall-arm.c vacall_r.h.in ../../common/asm-arm.sh $(THISFI
 	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mlittle-endian $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-armel.s
 	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mbig-endian $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-armeb.s
 	cmp vacall-armel.s vacall-armeb.s > /dev/null
-	(echo '#include "asm-arm.h"' ; ../../common/asm-arm.sh < vacall-armel.s | sed -f elfhack-arm.sed) > vacall-arm-macro.S
+	(echo '#include "asm-arm.h"' ; ../../common/asm-arm.sh < vacall-armel.s) > vacall-arm-macro.S
 	$(RM) vacall-armel.s vacall-armeb.s
 
 

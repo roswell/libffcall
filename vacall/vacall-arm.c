@@ -1,7 +1,7 @@
 /* vacall function for arm CPU */
 
 /*
- * Copyright 1995-2004 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995-2017 Bruno Haible, <bruno@clisp.org>
  *
  * This is free software distributed under the GNU General Public Licence
  * described in the file COPYING. Contact the author if you don't have this
@@ -17,8 +17,7 @@
 
 #ifdef REENTRANT
 #define __vacall __vacall_r
-register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *		env	__asm__("r12");
+typedef struct { void (*vacall_function) (void*,va_alist); void* arg; } env_t;
 #endif
 
 /* armel have only softvfp which uses generic registers */
@@ -28,6 +27,7 @@ register float		fret	__asm__("r0");
 register __vaword	dret1	__asm__("r0");
 register __vaword	dret2	__asm__("r1");
 
+#ifndef REENTRANT
 /* The ARM ABI requires that the first 4 general-purpose argument words are
    being passed in registers, even if these words belong to a struct. No room
    is allocated for these register words on the stack by the caller, but the
@@ -45,6 +45,14 @@ struct gpargsequence {
 
 void /* the return type is variable, not void! */
 __vacall (struct gpargsequence gpargs)
+#else /* REENTRANT */
+/* The first 4 general-purpose argument words have already been pushed to the
+   stack by the trampoline. We can ignore them here. */
+void /* the return type is variable, not void! */
+__vacall (__vaword ignored1, __vaword ignored2, __vaword ignored3, __vaword ignored4,
+          env_t* env, __vaword filler, __vaword saved_fp, __vaword saved_sp, __vaword saved_lr, __vaword saved_pc,
+          __vaword firstword)
+#endif
 {
   __va_alist list;
 
@@ -56,7 +64,11 @@ __vacall (struct gpargsequence gpargs)
 
   /* Prepare the va_alist. */
   list.flags = 0;
+#ifndef REENTRANT
   list.aptr = (long)&gpargs;
+#else /* REENTRANT */
+  list.aptr = (long)&firstword;
+#endif
   list.raddr = (void*)0;
   list.rtype = __VAvoid;
   /* Call vacall_function. The macros do all the rest. */
@@ -103,8 +115,8 @@ __vacall (struct gpargsequence gpargs)
     fret = list.tmp._float;
   } else
   if (list.rtype == __VAdouble) {
-      dret1 = ((__vaword *) &list.tmp._double)[0];
-      dret2 = ((__vaword *) &list.tmp._double)[1];
+    dret1 = ((__vaword *) &list.tmp._double)[0];
+    dret2 = ((__vaword *) &list.tmp._double)[1];
   } else
   if (list.rtype == __VAvoidp) {
     iret = (long)list.tmp._ptr;

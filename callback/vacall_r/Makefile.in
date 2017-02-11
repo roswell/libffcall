@@ -253,7 +253,6 @@ SOURCE_FILES = \
   vacall-sparc64.c vacall-sparc64-linux.s vacall-sparc64-macro.S \
   vacall-x86_64.c vacall-x86_64-linux.s vacall-x86_64-macro.S \
   elfhack-alpha.S elfhack-alpha.sed \
-  elfhack-arm.S elfhack-arm.sed \
   elfhack-i386.S elfhack-i386.sed \
   elfhack-m68k.S elfhack-m68k.sed \
   elfhack-mips.S elfhack-mips.sed \

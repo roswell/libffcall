@@ -1,3 +1,29 @@
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
+	arm: Make callback work, for -mfloat-abi=soft.
+	* callback/trampoline_r/Makefile.devel (CROSS_TOOL): New variable.
+	(proto-arm.s): Use known cross-compiler and -fno-omit-frame-pointer.
+	(tramp-arm.o): Use known cross-assembler.
+	* callback/trampoline_r/proto-arm.s: Regenerated.
+	* callback/trampoline_r/tramp-arm.s: Try three different trampolines.
+	The third one, trampcallwithframe, works.
+	* callback/trampoline_r/tramp-arm.o: Regenerated.
+	* callback/call-used-registers.txt: Add comments about arm.
+	* callback/trampoline_r/trampoline.c: For arm, use a trampoline with
+	standard prologue with struct args and standard epilogue.
+	* callback/trampoline_r/test1.c: On arm platforms, don't check the
+	passing of env.
+	* vacall/vacall-arm.c [REENTRANT]: Expect to find env on the stack, not
+	in r12.
+	* callback/vacall_r/Makefile.devel (vacall-arm-macro.S): Don't
+	postprocess through elfhack-arm.sed.
+	* callback/vacall_r/elfhack-arm.S: Remove file.
+	* callback/vacall_r/elfhack-arm.sed: Remove file.
+	* callback/vacall_r/Makefile.in (SOURCE_FILES): Remove elfhack-arm.S,
+	elfhack-arm.sed.
+	* PLATFORMS: List the arm5 machine with 'soft' floats.
+	* callback/PLATFORMS: Likewise.
+
 2017-01-31  Bruno Haible  <bruno@clisp.org>
 
 	arm: Make vacall work, for -mfloat-abi=soft.
