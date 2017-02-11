@@ -1,5 +1,11 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Fix bug with structure return for sizes < 16, != 1, 2, 4, 8.
+	* avcall/avcall-x86_64.c: Treat structure returns for all sizes <= 16
+	like those with sizes 1, 2, 4, 8, 16.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	Add some dedicated small structure return tests.
 	* avcall/tests.c (Size1, Size2, Size3, Size4, Size7, Size8, Size12,
 	Size15, Size16): New types.
