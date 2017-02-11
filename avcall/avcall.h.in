@@ -244,11 +244,11 @@ enum __AV_alist_flags
 #if defined(__powerpc__) || defined(__powerpc64__)
   __AV_AIXCC_STRUCT_ARGS	= 1<<7,
 #endif
-  /* the default way to pass floats */
+  /* the default way to pass structs */
   /* This choice here is based on the assumption that the function you are
    * going to call has been compiled with the same compiler you are using to
    * include this file.
-   * If you want to call functions with another float passing convention,
+   * If you want to call functions with another struct passing convention,
    * just  #define __AV_STRUCT_ARGS ...
    * before or after #including <avcall.h>.
    */
@@ -276,6 +276,24 @@ enum __AV_alist_flags
   /* ANSI C compilers and GNU gcc pass floats as floats.
    * K&R C compilers pass floats as doubles. We don't support them any more.
    */
+#if defined(__powerpc64__)
+  __AV_AIXCC_FLOAT_ARGS         = 1<<8,      /* pass floats in the low 4 bytes of an 8-bytes word */
+#endif
+  /* the default way to pass floats */
+  /* This choice here is based on the assumption that the function you are
+   * going to call has been compiled with the same compiler you are using to
+   * include this file.
+   * If you want to call functions with another float passing convention,
+   * just  #define __AV_FLOAT_ARGS ...
+   * before or after #including <avcall.h>.
+   */
+#ifndef __AV_FLOAT_ARGS
+#if defined(__powerpc64__) && defined(_AIX) && !defined(__GNUC__) /* AIX 64-bit xlc */
+  __AV_FLOAT_ARGS		= __AV_AIXCC_FLOAT_ARGS,
+#else
+  __AV_FLOAT_ARGS		= 0,
+#endif
+#endif
 
   /* how to pass and return small integer arguments */
   __AV_ANSI_INTEGERS		= 0, /* no promotions */
@@ -412,7 +430,7 @@ typedef struct
  */
 
 #define __AV_START_FLAGS  \
-  __AV_STRUCT_RETURN | __AV_FLOAT_RETURN | __AV_STRUCT_ARGS | __AV_CLEANUP
+  __AV_STRUCT_RETURN | __AV_FLOAT_RETURN | __AV_STRUCT_ARGS | __AV_FLOAT_ARGS | __AV_CLEANUP
 
 #define __av_start(LIST,FUNC,RADDR,RETTYPE)				\
   ((LIST).func = (__avword(*)())(FUNC),					\
@@ -1108,7 +1126,7 @@ typedef struct
   ((LIST).aptr >= __av_eptr(LIST)					\
    ? -1 :								\
    ((LIST).aptr++,							\
-    ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
+    ((float*)(LIST).aptr)[(LIST).flags & __AV_AIXCC_FLOAT_ARGS ? -2 : -1] = (float)(VAL), \
     (LIST).faptr < &(LIST).fargs[13] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 

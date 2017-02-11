@@ -1,5 +1,21 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	powerpc64: Add support for AIX in a 64-bit build, with xlc.
+	* avcall/avcall.h.in (__AV_AIXCC_FLOAT_ARGS, __AV_FLOAT_ARGS): New enum
+	values.
+	(__AV_START_FLAGS): Include __AV_FLOAT_ARGS.
+	(av_float) [__powerpc64__]: Pick word according to whether
+	__AV_AIXCC_FLOAT_ARGS is set.
+	* vacall/vacall.h.in (__VA_AIXCC_FLOAT_ARGS, __VA_FLOAT_ARGS): New enum
+	values.
+	(__VA_START_FLAGS): Include __VA_FLOAT_ARGS.
+	(va_arg_float) [__powerpc64__]: Pick word according to whether
+	__VA_AIXCC_FLOAT_ARGS is set.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* PLATFORMS, */PLATFORMS: List powerpc-ibm-aix7.1.3.0 (xlc -q64).
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	powerpc64: Add support for AIX in a 64-bit build, with gcc.
 	* avcall/avcall.h.in (__AV_AIXCC_STRUCT_ARGS): Define also on
 	__powerpc64__.

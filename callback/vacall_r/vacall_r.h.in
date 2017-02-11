@@ -246,11 +246,11 @@ enum __VA_alist_flags
 #if defined(__powerpc__) || defined(__powerpc64__)
   __VA_AIXCC_STRUCT_ARGS	= 1<<7,
 #endif
-  /* the default way to pass floats */
+  /* the default way to pass structs */
   /* This choice here is based on the assumption that the function you are
    * going to call has been compiled with the same compiler you are using to
    * include this file.
-   * If you want to call functions with another float passing convention,
+   * If you want to call functions with another structs passing convention,
    * just  #define __VA_STRUCT_ARGS ...
    * before or after #including <vacall_r.h>.
    */
@@ -278,6 +278,24 @@ enum __VA_alist_flags
   /* ANSI C compilers and GNU gcc pass floats as floats.
    * K&R C compilers pass floats as doubles. We don't support them any more.
    */
+#if defined(__powerpc64__)
+  __VA_AIXCC_FLOAT_ARGS         = 1<<8,      /* pass floats in the low 4 bytes of an 8-bytes word */
+#endif
+  /* the default way to pass floats */
+  /* This choice here is based on the assumption that the function you are
+   * going to call has been compiled with the same compiler you are using to
+   * include this file.
+   * If you want to call functions with another float passing convention,
+   * just  #define __VA_FLOAT_ARGS ...
+   * before or after #including <vacall_r.h>.
+   */
+#ifndef __VA_FLOAT_ARGS
+#if defined(__powerpc64__) && defined(_AIX) && !defined(__GNUC__) /* AIX 64-bit xlc */
+  __VA_FLOAT_ARGS		= __VA_AIXCC_FLOAT_ARGS,
+#else
+  __VA_FLOAT_ARGS		= 0,
+#endif
+#endif
 
   /* how to pass and return small integer arguments */
   __VA_ANSI_INTEGERS		= 0, /* no promotions */
@@ -423,7 +441,7 @@ typedef __va_alist* va_alist;
  * Definition of the va_start_xxx macros.
  */
 #define __VA_START_FLAGS  \
-  __VA_STRUCT_RETURN | __VA_FLOAT_RETURN | __VA_STRUCT_ARGS | __VA_CLEANUP
+  __VA_STRUCT_RETURN | __VA_FLOAT_RETURN | __VA_STRUCT_ARGS | __VA_FLOAT_ARGS | __VA_CLEANUP
 #define __va_start(LIST,RETTYPE)  \
   ((LIST)->flags = __VA_START_FLAGS,					\
    (LIST)->rtype = (RETTYPE)						\
@@ -1014,7 +1032,7 @@ typedef __va_alist* va_alist;
   ((LIST)->aptr += sizeof(__vaword),					\
    ((LIST)->memfargptr < &(LIST)->farg[13]				\
     ? (float) *((LIST)->memfargptr++)					\
-    : *(float*)((LIST)->aptr - sizeof(float))				\
+    : ((float*)(LIST)->aptr)[(LIST)->flags & __VA_AIXCC_FLOAT_ARGS ? -2 : -1] \
   ))
 #define va_arg_double(LIST)  \
   (__va_align_double(LIST)						\
