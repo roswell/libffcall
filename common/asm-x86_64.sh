@@ -24,6 +24,7 @@ cat > $tmpscript2 << \EOF
 s/^\([A-Za-z0-9_:]\+\)/C(\1)/
 s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
 s/\.globl \([A-Za-z0-9_]*\)/.globl C(\1)/
+s/\([A-Za-z0-9_]\+\)(%rip)/C(\1)(%rip)/
 # ----------- Massage the beginning of functions
 /\.type/{
 s/\.type	\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/

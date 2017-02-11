@@ -1,5 +1,12 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	Fix build failure on Mac OS X 10.5 / x86_64. Regression from today.
+	* common/asm-x86_64.sh: Recognize symbol in symbol(%rip) syntax.
+	* vacall/Makefile.devel (vacall-x86_64-macro.S): Remove extra
+	postprocessing, now done by common/asm-x86_64.sh.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	Fix build failure on Mac OS X 10.5 / i386. Regression from today.
 	* common/asm-i386.sh: Simplify the function referencing code, originally
 	for PIC on ELF platforms, so that it works also on non-ELF platforms.
