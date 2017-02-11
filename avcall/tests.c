@@ -55,6 +55,28 @@ typedef struct { char c; float f; } A;
 typedef struct { double d; int i[3]; } B;
 typedef struct { long l1; long l2; } J;
 typedef struct { long l1; long l2; long l3; long l4; } K;
+typedef struct { char x1; } Size1;
+typedef struct { char x1; char x2; } Size2;
+typedef struct { char x1; char x2; char x3; } Size3;
+typedef struct { char x1; char x2; char x3; char x4; } Size4;
+typedef struct {
+  char x1; char x2; char x3; char x4; char x5; char x6; char x7;
+} Size7;
+typedef struct {
+  char x1; char x2; char x3; char x4; char x5; char x6; char x7; char x8;
+} Size8;
+typedef struct {
+  char x1; char x2; char x3; char x4; char x5; char x6; char x7; char x8;
+  char x9; char x10; char x11; char x12;
+} Size12;
+typedef struct {
+  char x1; char x2; char x3; char x4; char x5; char x6; char x7; char x8;
+  char x9; char x10; char x11; char x12; char x13; char x14; char x15;
+} Size15;
+typedef struct {
+  char x1; char x2; char x3; char x4; char x5; char x6; char x7; char x8;
+  char x9; char x10; char x11; char x12; char x13; char x14; char x15; char x16;
+} Size16;
 typedef struct { char c[3]; } T;
 typedef struct { char c[33],c1; } X;
 
@@ -88,6 +110,15 @@ A A1={'a',0.1},A2={'b',0.2},A3={'\377',0.3};
 B B1={0.1,{1,2,3}},B2={0.2,{5,4,3}};
 J J1={47,11},J2={73,55};
 K K1={19,69,12,28};
+Size1 Size1_1={'a'};
+Size2 Size2_1={'a','b'};
+Size3 Size3_1={'a','b','c'};
+Size4 Size4_1={'a','b','c','d'};
+Size7 Size7_1={'a','b','c','d','e','f','g'};
+Size8 Size8_1={'a','b','c','d','e','f','g','h'};
+Size12 Size12_1={'a','b','c','d','e','f','g','h','i','j','k','l'};
+Size15 Size15_1={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o'};
+Size16 Size16_1={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p'};
 T T1={'t','h','e'},T2={'f','o','x'};
 X X1={"abcdefghijklmnopqrstuvwxyzABCDEF",'G'}, X2={"123",'9'}, X3={"return-return-return",'R'};
 
@@ -301,6 +332,62 @@ long long ll_flli (float a, long long b, int c)
   return r;
 }
 #endif
+
+/* small structure return tests */
+Size1 S1_v (void)
+{
+  fprintf(out,"Size1 f(void):");
+  fflush(out);
+  return Size1_1;
+}
+Size2 S2_v (void)
+{
+  fprintf(out,"Size2 f(void):");
+  fflush(out);
+  return Size2_1;
+}
+Size3 S3_v (void)
+{
+  fprintf(out,"Size3 f(void):");
+  fflush(out);
+  return Size3_1;
+}
+Size4 S4_v (void)
+{
+  fprintf(out,"Size4 f(void):");
+  fflush(out);
+  return Size4_1;
+}
+Size7 S7_v (void)
+{
+  fprintf(out,"Size7 f(void):");
+  fflush(out);
+  return Size7_1;
+}
+Size8 S8_v (void)
+{
+  fprintf(out,"Size8 f(void):");
+  fflush(out);
+  return Size8_1;
+}
+Size12 S12_v (void)
+{
+  fprintf(out,"Size12 f(void):");
+  fflush(out);
+  return Size12_1;
+}
+Size15 S15_v (void)
+{
+  fprintf(out,"Size15 f(void):");
+  fflush(out);
+  return Size15_1;
+}
+Size16 S16_v (void)
+{
+  fprintf(out,"Size16 f(void):");
+  fflush(out);
+  return Size16_1;
+}
 
 /* structure tests */
 Int I_III (Int a, Int b, Int c)
@@ -994,6 +1081,102 @@ void
   return;
 }
 void
+  small_structure_return_tests (void)
+{
+  av_alist a;
+
+  {
+    Size1 r = S1_v();
+    fprintf(out,"->{%c}\n",r.x1);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S1_v,Size1,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c}\n",r.x1);
+    fflush(out);
+  }
+  {
+    Size2 r = S2_v();
+    fprintf(out,"->{%c%c}\n",r.x1,r.x2);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S2_v,Size2,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c%c}\n",r.x1,r.x2);
+    fflush(out);
+  }
+  {
+    Size3 r = S3_v();
+    fprintf(out,"->{%c%c%c}\n",r.x1,r.x2,r.x3);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S3_v,Size3,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c%c%c}\n",r.x1,r.x2,r.x3);
+    fflush(out);
+  }
+  {
+    Size4 r = S4_v();
+    fprintf(out,"->{%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S4_v,Size4,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4);
+    fflush(out);
+  }
+  {
+    Size7 r = S7_v();
+    fprintf(out,"->{%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S7_v,Size7,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7);
+    fflush(out);
+  }
+  {
+    Size8 r = S8_v();
+    fprintf(out,"->{%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S8_v,Size8,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8);
+    fflush(out);
+  }
+  {
+    Size12 r = S12_v();
+    fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S12_v,Size12,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12);
+    fflush(out);
+  }
+  {
+    Size15 r = S15_v();
+    fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12,r.x13,r.x14,r.x15);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S15_v,Size15,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12,r.x13,r.x14,r.x15);
+    fflush(out);
+  }
+  {
+    Size16 r = S16_v();
+    fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12,r.x13,r.x14,r.x15,r.x16);
+    fflush(out);
+    memset(&r,0,sizeof(r)); clear_traces();
+    av_start_struct(a,S16_v,Size16,1,&r);
+    av_call(a);
+    fprintf(out,"->{%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c}\n",r.x1,r.x2,r.x3,r.x4,r.x5,r.x6,r.x7,r.x8,r.x9,r.x10,r.x11,r.x12,r.x13,r.x14,r.x15,r.x16);
+    fflush(out);
+  }
+}
+void
   structure_tests (void)
 {
   av_alist a;
@@ -1420,6 +1603,7 @@ int
   double_tests();
   mixed_number_tests();
   pointer_tests();
+  small_structure_return_tests();
   structure_tests();
   gpargs_boundary_tests();
 
