@@ -54,13 +54,14 @@ vacall-m68k-netbsd-macro.S : vacall-m68k.c vacall_r.h.in ../../common/asm-m68k.s
 
 
 vacall-mipseb-linux.s : vacall-mips.c vacall_r.h.in $(THISFILE)
-	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -meb $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mipseb-linux.s
+# For references to symbols: -mno-explicit-relocs ensures a syntax that the IRIX assembler understands.
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -meb -mno-explicit-relocs $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mipseb-linux.s
 
 vacall-mipseb-macro.S : vacall-mipseb-linux.s ../../common/asm-mips.sh $(THISFILE)
 	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipseb-linux.s | sed -f elfhack-mips.sed) > vacall-mipseb-macro.S
 
 vacall-mipsel-linux.s : vacall-mips.c vacall_r.h.in $(THISFILE)
-	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -mel $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mipsel-linux.s
+	$(CROSS_TOOL) mips64-linux gcc -V 4.0.2 -mabi=32 -mel -mno-explicit-relocs $(GCCFLAGS) -D__mips__ -S vacall-mips.c -o vacall-mipsel-linux.s
 
 vacall-mipsel-macro.S : vacall-mipsel-linux.s ../../common/asm-mips.sh $(THISFILE)
 	(echo '#include "asm-mips.h"' ; ../../common/asm-mips.sh < vacall-mipsel-linux.s | sed -f elfhack-mips.sed) > vacall-mipsel-macro.S

@@ -67,6 +67,9 @@ struct gpargsequence {
   __vaword firststackword;
 };
 
+#ifdef REENTRANT
+static
+#endif
 void /* the return type is variable, not void! */
 __vacall (struct gpargsequence gpargs)
 #else /* REENTRANT */
@@ -183,3 +186,11 @@ __vacall (__vaword ignored1, __vaword ignored2, __vaword ignored3, __vaword igno
     }
   }
 }
+
+#ifdef REENTRANT
+__vacall_r_t
+get__vacall_r (void)
+{
+  return (__vacall_r_t)(void*)&__vacall;
+}
+#endif

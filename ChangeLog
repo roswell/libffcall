@@ -1,3 +1,33 @@
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
+	Access __vacall_r through an indirection, except on SPARC.
+	* callback/vacall_r/vacall_r.h.in (__vacall_r_t): New type.
+	(get__vacall_r): New declaration.
+	(__vacall_r): Remove declaration.
+	* vacall/vacall-alpha.c [REENTRANT]: Make __vacall_r static.
+	(get__vacall_r): New function.
+	* vacall/vacall-arm.c: Likewise.
+	* vacall/vacall-armhf.c: Likewise.
+	* vacall/vacall-hppa.c: Likewise.
+	* vacall/vacall-i386.c: Likewise.
+	* vacall/vacall-ia64.c: Likewise.
+	* vacall/vacall-m68k.c: Likewise.
+	* vacall/vacall-mips.c: Likewise.
+	* vacall/vacall-mipsn32.c: Likewise.
+	* vacall/vacall-mips64.c: Likewise.
+	* vacall/vacall-powerpc.c: Likewise.
+	* vacall/vacall-powerpc64.c: Likewise.
+	* vacall/vacall-s390.c: Likewise.
+	* vacall/vacall-x86_64.c: Likewise.
+	* callback/vacall_r/vacall-powerpc-netbsd-macro.S: Update accordingly.
+	* callback/vacall_r/Makefile.devel (vacall-mipseb-linux.s,
+	vacall-mipsel-linux.s): Use option -mno-explicit-relocs. Needed for
+	IRIX.
+	* callback/vacall_r/Makefile.in (vacall-i386.s): Remove space after '@'.
+	Needed on Solaris/x86.
+	* callback/callback.h.in (alloc_callback, is_callback): Use
+	get__vacall_r().
+
 2017-01-29  Bruno Haible  <bruno@clisp.org>
 
 	s390: Regenerate .s and .S files with known compilers.

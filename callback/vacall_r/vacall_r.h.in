@@ -1290,11 +1290,37 @@ typedef __va_alist* va_alist;
 /*
  * Miscellaneous declarations.
  */
+
+#if defined(__sparc__) || defined(__sparc64__)
+/* On SPARC, PIC compiled code crashes when used outside of a shared library.
+   Therefore, don't use the get__vacall_r indirection on this platform. */
+
+extern
 #ifdef __cplusplus
-extern "C" void __vacall_r (); /* the return type is variable, not void! */
-#else
-extern void __vacall_r (); /* the return type is variable, not void! */
+"C"
 #endif
+void __vacall_r (); /* Actually it takes arguments and returns values! */
+
+#define get__vacall_r() (&__vacall_r)
+
+#else
+
+/* A fake type for __vacall_r.
+   Actually it takes arguments and returns values. */
+typedef void (*__vacall_r_t) (void);
+
+/* This function returns the address of __vacall_r.
+   __vacall_r is not a global symbol, because on ELF platforms, functions with
+   global visibility cannot accept additional arguments in registers. See
+   elf-hack.txt for more details. */
+extern
+#ifdef __cplusplus
+"C"
+#endif
+__vacall_r_t get__vacall_r (void);
+
+#endif
+
 extern int __va_error1 (enum __VAtype, enum __VAtype);
 extern int __va_error2 (unsigned int);
 extern void callback_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);

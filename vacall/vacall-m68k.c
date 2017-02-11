@@ -34,6 +34,9 @@ register double	dret	__asm__("d0");	/* d0,d1 */
 register float	fp_fret	__asm__("fp0");
 register double	fp_dret	__asm__("fp0");
 
+#ifdef REENTRANT
+static
+#endif
 void /* the return type is variable, not void! */
 __vacall (__vaword firstword)
 {
@@ -135,3 +138,11 @@ __vacall (__vaword firstword)
     done: ;
   }
 }
+
+#ifdef REENTRANT
+__vacall_r_t
+get__vacall_r (void)
+{
+  return (__vacall_r_t)(void*)&__vacall;
+}
+#endif

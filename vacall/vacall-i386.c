@@ -16,6 +16,7 @@
 #endif
 
 #ifdef REENTRANT
+#define __vacall __vacall_r
 typedef struct { void (*vacall_function) (void*,va_alist); void* arg; } env_t;
 register env_t*	env	__asm__("%ecx");
 #endif
@@ -23,12 +24,11 @@ register void*	sp	__asm__("%esp");
 register void*	sret	__asm__("%ebx");
 register int	iret	__asm__("%eax");
 
-void /* the return type is variable, not void! */
 #ifdef REENTRANT
-__vacall_r (__vaword firstword)
-#else
-__vacall (__vaword firstword)
+static
 #endif
+void /* the return type is variable, not void! */
+__vacall (__vaword firstword)
 {
   __va_alist list;
   /* Prepare the va_alist. */
@@ -156,3 +156,11 @@ __vacall (__vaword firstword)
     /*NOTREACHED*/
   }
 }
+
+#ifdef REENTRANT
+__vacall_r_t
+get__vacall_r (void)
+{
+  return (__vacall_r_t)(void*)&__vacall;
+}
+#endif

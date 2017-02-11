@@ -1,10 +1,8 @@
 	.file	"vacall-powerpc.c"
 	.section	".text"
 	.align 2
-	.globl __vacall_r
 	.type	__vacall_r, @function
 __vacall_r:
-#include "elfhack-powerpc.S"
 	stwu 1,-208(1)
 	mflr 0
 	li 11,0
@@ -136,4 +134,37 @@ __vacall_r:
 	extsb 3,0
 	b .L1
 	.size	__vacall_r, .-__vacall_r
+	.section	".got2","aw"
+.LCTOC1 = .+32768
+	.section	".text"
+	.section	".got2","aw"
+.LC0:
+	.long __vacall_r
+	.section	".text"
+	.align 2
+	.globl get__vacall_r
+.LCL1:
+	.long .LCTOC1-.LCF1
+	.type	get__vacall_r, @function
+get__vacall_r:
+	stwu 1,-32(1)
+	mflr 0
+	bcl 20,31,.LCF1
+.LCF1:
+	stw 30,24(1)
+	mflr 30
+	stw 31,28(1)
+	mr 31,1
+	stw 0,36(1)
+	lwz 11,0(1)
+	lwz 0,.LCL1-.LCF1(30)
+	lwz 31,-4(11)
+	add 30,0,30
+	lwz 0,4(11)
+	lwz 3,.LC0-.LCTOC1(30)
+	lwz 30,-8(11)
+	mtlr 0
+	mr 1,11
+	blr
+	.size	get__vacall_r, .-get__vacall_r
 	.ident	"GCC: (GNU) 3.3.3 (NetBSD nb3 20040520)"

@@ -48,6 +48,7 @@ __vacall (struct gpargsequence gpargs)
 #else /* REENTRANT */
 /* The first 4 general-purpose argument words have already been pushed to the
    stack by the trampoline. We can ignore them here. */
+static
 void /* the return type is variable, not void! */
 __vacall (__vaword ignored1, __vaword ignored2, __vaword ignored3, __vaword ignored4,
           env_t* env, __vaword filler, __vaword saved_fp, __vaword saved_sp, __vaword saved_lr, __vaword saved_pc,
@@ -140,3 +141,11 @@ __vacall (__vaword ignored1, __vaword ignored2, __vaword ignored3, __vaword igno
     }
   }
 }
+
+#ifdef REENTRANT
+__vacall_r_t
+get__vacall_r (void)
+{
+  return (__vacall_r_t)(void*)&__vacall;
+}
+#endif

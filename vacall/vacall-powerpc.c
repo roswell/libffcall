@@ -44,6 +44,9 @@ register __vaword	iret2	__asm__("r4");
 register float		fret	__asm__("fr1");
 register double		dret	__asm__("fr1");
 
+#ifdef REENTRANT
+static
+#endif
 void /* the return type is variable, not void! */
 __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
           __vaword word5, __vaword word6, __vaword word7, __vaword word8,
@@ -175,3 +178,11 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     }
   }
 }
+
+#ifdef REENTRANT
+__vacall_r_t
+get__vacall_r (void)
+{
+  return (__vacall_r_t)(void*)&__vacall;
+}
+#endif

@@ -61,6 +61,9 @@ register double	dret	__asm__("%fr4");
 register __vaword iret1	__asm__("%r28");
 register __vaword iret2	__asm__("%r29");
 
+#ifdef REENTRANT
+static
+#endif
 void /* the return type is variable, not void! */
 __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
           __vaword firstword)
@@ -223,3 +226,11 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     }
   }
 }
+
+#ifdef REENTRANT
+__vacall_r_t
+get__vacall_r (void)
+{
+  return (__vacall_r_t)(void*)&__vacall;
+}
+#endif
