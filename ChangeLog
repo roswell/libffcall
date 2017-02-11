@@ -1,5 +1,25 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	m68k: Don't special-case NetBSD.
+	* callback/call-used-registers.txt: Add comment about NetBSD.
+	* vacall/vacall-m68k.c: Remove special case of NetBSD.
+	* callback/vacall_r/Makefile.devel (vacall-m68k-netbsd-macro.S): Remove
+	target.
+	* callback/vacall_r/Makefile.in (vacall-m68k.s): Always use
+	vacall-m68k.mit.S.
+	(SOURCE_FILES): Remove vacall-m68k-netbsd-macro.S.
+	* callback/trampoline_r/proto.c: Remove special case of m68k/NetBSD.
+	* callback/trampoline_r/proto-m68k-netbsd.s: Remove file.
+	* callback/trampoline_r/tramp-m68k-netbsd.s: Remove file.
+	* callback/trampoline_r/tramp-m68k-netbsd.o: Remove file.
+	* callback/trampoline_r/Makefile.devel (proto-m68k-netbsd.s,
+	tramp-m68k-netbsd.o): Remove targets.
+	* callback/trampoline_r/trampoline.c: Remove special case of
+	m68k/NetBSD.
+	* callback/trampoline_r/test1.c: Likewise.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	Revert BINFMT_ELF hack.
 	* callback/elf-hack.txt: Explain the new workaround.
 	* callback/vacall_r/Makefile.devel (vacall-i386-macro.S,

@@ -146,7 +146,6 @@
 /callback/vacall_r/vacall-i386-macro.S
 /callback/vacall_r/vacall-ia64.s
 /callback/vacall_r/vacall-m68k-linux.s
-/callback/vacall_r/vacall-m68k-netbsd-macro.S
 /callback/vacall_r/vacall-m68k-sun.s
 /callback/vacall_r/vacall-m68k.mit.S
 /callback/vacall_r/vacall-m68k.motorola.S

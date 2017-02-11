@@ -13,7 +13,7 @@ CPP = $(GCC) -E
 CROSS_TOOL = cross
 ASPREFIX = /usr1/gnu/lib
 
-precompiled : proto-i386.s proto-m68k.s proto-m68k-netbsd.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-ia64.c proto-x86_64.c \
+precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-ia64.c proto-x86_64.c \
       cache-sparc-macro.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s
 
 proto-i386.s : proto.c
@@ -21,9 +21,6 @@ proto-i386.s : proto.c
 
 proto-m68k.s : proto.c
 	$(GCC) -V egcs-2.91.57 -b m68k-sun $(GCCFLAGS) -D__m68k__ -S proto.c -o $@
-
-proto-m68k-netbsd.s : proto.c
-	$(GCC) -V egcs-2.91.57 -b m68k-sun $(GCCFLAGS) -D__m68k__ -D__NetBSD__ -S proto.c -o $@
 
 proto-mips.s : proto.c
 	$(GCC) -V 2.95.2 -b mips-sgi $(GCCFLAGS) -D__mips__ -S proto.c -o $@ -mabicalls
@@ -89,9 +86,6 @@ tramp-i386.o : tramp-i386.s
 
 tramp-m68k.o : tramp-m68k.s
 	$(ASPREFIX)/m68k-linux/bin/as tramp-m68k.s -o $@
-
-tramp-m68k-netbsd.o : tramp-m68k-netbsd.s
-	$(ASPREFIX)/m68k-linux/bin/as tramp-m68k-netbsd.s -o $@
 
 tramp-mips.o : tramp-mips.s
 	$(ASPREFIX)/mips-linux/bin/as tramp-mips.s -o $@

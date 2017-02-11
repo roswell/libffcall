@@ -82,12 +82,8 @@ vacall-sparc64.s : $(srcdir)/vacall-sparc64-macro.S
 vacall-m68k.lo : vacall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-m68k.s
 
-vacall-m68k.s : $(srcdir)/vacall-m68k.mit.S $(srcdir)/vacall-m68k.motorola.S $(srcdir)/vacall-m68k-netbsd-macro.S
-	case "$(OS)" in \
-	  netbsd*) src=$(srcdir)/vacall-m68k-netbsd-macro.S;; \
-	  *) src=$(srcdir)/vacall-m68k.mit.S;; \
-	esac; \
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $$src | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' | if test @AS_UNDERSCORE@ = true; then sed -e 's/\$$//g'; else sed -e 's/\$$/%/g'; fi > vacall-m68k.s
+vacall-m68k.s : $(srcdir)/vacall-m68k.mit.S $(srcdir)/vacall-m68k.motorola.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-m68k.mit.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' | if test @AS_UNDERSCORE@ = true; then sed -e 's/\$$//g'; else sed -e 's/\$$/%/g'; fi > vacall-m68k.s
 
 vacall-mips.lo : vacall-mips.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-mips.s
@@ -244,7 +240,7 @@ SOURCE_FILES = \
   vacall-hppa.c vacall-hppa-linux.s vacall-hppa-macro.S \
   vacall-i386.c vacall-i386-linux.s vacall-i386-macro.S \
   vacall-ia64.c vacall-ia64.s \
-  vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S vacall-m68k-netbsd-macro.S \
+  vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S \
   vacall-mips.c vacall-mipseb-linux.s vacall-mipsel-linux.s vacall-mipseb-macro.S vacall-mipsel-macro.S \
   vacall-mipsn32.c vacall-mipsn32eb-linux.s vacall-mipsn32el-linux.s vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S \
   vacall-mips64.c vacall-mips64eb-linux.s vacall-mips64el-linux.s vacall-mips64eb-macro.S vacall-mips64el-macro.S \

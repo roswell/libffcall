@@ -16,7 +16,7 @@ CROSS_TOOL = cross
 
 precompiled : \
   vacall-i386-macro.S \
-  vacall-m68k.mit.S vacall-m68k.motorola.S vacall-m68k-netbsd-macro.S \
+  vacall-m68k.mit.S vacall-m68k.motorola.S \
   vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64eb-macro.S vacall-mips64el-macro.S \
   vacall-sparc-macro.S vacall-sparc64-macro.S \
   vacall-alpha-macro.S \
@@ -46,11 +46,6 @@ vacall-m68k.mit.S : vacall-m68k-sun.s ../../common/asm-m68k.sh $(THISFILE)
 
 vacall-m68k.motorola.S : vacall-m68k-linux.s ../../common/asm-m68k.sh $(THISFILE)
 	(echo '#include "asm-m68k.h"' ; ../../common/asm-m68k.sh motorola < vacall-m68k-linux.s) > vacall-m68k.motorola.S
-
-vacall-m68k-netbsd-macro.S : vacall-m68k.c vacall_r.h.in ../../common/asm-m68k.sh $(THISFILE)
-	$(CROSS_TOOL) m68k-sun gcc -V 3.1 $(GCCFLAGS) -D__m68k__ -D__NetBSD__ -S vacall-m68k.c -o vacall-m68k-netbsd.s
-	(echo '#include "asm-m68k.h"' ; ../../common/asm-m68k.sh mit < vacall-m68k-netbsd.s) > vacall-m68k-netbsd-macro.S
-	$(RM) vacall-m68k-netbsd.s
 
 
 vacall-mipseb-linux.s : vacall-mips.c vacall_r.h.in $(THISFILE)

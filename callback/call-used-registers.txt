@@ -54,6 +54,10 @@ ia64         r14-r31,r9-r11,r2-r3        r8,r14,r15...r19        r15
 x86_64       rax,r10,r11                 rax,r10                 r10
 s390         r0-r1                       r12,r0                  r0
 
+We don't follow the special choices of NetBSD here. The generic choice for
+each CPU is good enough. We could actually use any of the registers in the
+second column.
+
 There is a complication on arm: We cannot build a __vacall_r function that
 receives a value in the r12 register, because this register is used in the
 standard function prologue, and it is hard to convince GCC to not clobber r12

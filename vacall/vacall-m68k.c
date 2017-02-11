@@ -18,12 +18,7 @@
 #ifdef REENTRANT
 #define __vacall __vacall_r
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *	env
-#ifdef __NetBSD__
-			__asm__("a1");
-#else
-			__asm__("a0");
-#endif
+         *	env	__asm__("a0");
 #endif
 register void*	sret	__asm__("a1");
 register int	iret	__asm__("d0");
