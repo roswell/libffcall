@@ -178,8 +178,12 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #ifdef linux
 #include <asm/cachectl.h>
 #else
+#ifdef __OpenBSD__
+#include <machine/sysarch.h>
+#else
 #ifdef HAVE_SYS_CACHECTL_H
 #include <sys/cachectl.h>
+#endif
 #endif
 #endif
 #endif

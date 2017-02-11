@@ -1,5 +1,13 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	mips64: Add support for OpenBSD.
+	On OpenBSD, cacheflush() is declared in <machine/sysarch.h>, see
+	openbsd-src/blob/master/lib/libarch/mips64/cacheflush.3 .
+	* trampoline/trampoline.c [__OpenBSD__]: Include <machine/sysarch.h>.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	Support the LDFLAGS configure variable.
 	* avcall/Makefile.in (LDFLAGS): New variable.
 	Use it in all linking commands.
