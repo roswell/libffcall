@@ -21,7 +21,7 @@ precompiled : \
   vacall-sparc-macro.S vacall-sparc64-macro.S \
   vacall-alpha.s \
   vacall-hppa-macro.S \
-  vacall-arm-macro.S
+  vacall-arm-macro.S vacall-armhf-macro.S
 # Old rules
 # vacall-powerpc-aix.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64.s vacall-ia64.s vacall-x86_64-macro.S
 
@@ -130,6 +130,14 @@ vacall-arm-macro.S : vacall-arm.c vacall.h.in ../common/asm-arm.sh $(THISFILE)
 	cmp vacall-armel.s vacall-armeb.s > /dev/null
 	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < vacall-armel.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-arm-macro.S
 	$(RM) vacall-armel.s vacall-armeb.s
+
+vacall-armhf-macro.S : vacall-armhf.c vacall.h.in ../common/asm-arm.sh $(THISFILE)
+# The option -mabi=aapcs ensures an 8-bytes-aligned stack pointer.
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mlittle-endian $(GCCFLAGS) -D__armhf__ -S vacall-armhf.c -o vacall-armhfel.s
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mbig-endian $(GCCFLAGS) -D__armhf__ -S vacall-armhf.c -o vacall-armhfeb.s
+	cmp vacall-armhfel.s vacall-armhfeb.s > /dev/null
+	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < vacall-armhfel.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-armhf-macro.S
+	$(RM) vacall-armhfel.s vacall-armhfeb.s
 
 
 vacall-powerpc-aix.s : vacall-powerpc.c vacall.h.in $(THISFILE)

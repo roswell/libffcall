@@ -251,7 +251,7 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 16
 #define TRAMP_BIAS 2
 #endif
-#ifdef __arm__
+#if defined(__arm__) || defined(__armhf__)
 #define TRAMP_LENGTH 48
 #define TRAMP_ALIGN 4
 #endif
@@ -918,7 +918,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   ((long *) function)[2]
 #endif
-#ifdef __arm__
+#if defined(__arm__) || defined(__armhf__)
   /* function:
    *	mov	ip,sp			E1A0C00D
    *	stmdb	sp!,{r0,r1,r2,r3}	E92D000F
@@ -1336,7 +1336,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   /* This assumes that the trampoline fits in at most two cache lines. */
   __TR_clear_cache(function,function+TRAMP_LENGTH-1);
 #endif
-#ifdef __arm__
+#if defined(__arm__) || defined(__armhf__)
   /* On ARM, cache flushing can only be done through a system call.
      GCC implements it for Linux with EABI, through an "swi 0" with code
      0xf0002. For other systems, it may be an "swi 0x9f0002",

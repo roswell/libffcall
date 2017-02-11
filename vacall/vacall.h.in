@@ -2,7 +2,7 @@
 #define _VACALL_H
 
 /*
- * Copyright 1995-2006 Bruno Haible, <bruno@clisp.org>
+ * Copyright 1995-2017 Bruno Haible, <bruno@clisp.org>
  *
  * This is free software distributed under the GNU General Public Licence
  * described in the file COPYING. Contact the author if you don't have this
@@ -46,6 +46,9 @@
 #endif
 #ifndef __arm__
 #undef __arm__
+#endif
+#ifndef __armhf__
+#undef __armhf__
 #endif
 #ifndef __powerpc__
 #undef __powerpc__
@@ -191,7 +194,7 @@ enum __VA_alist_flags
 #if defined(__PCC_STRUCT_RETURN__) && !defined(__hppa__) /* defined through configure, see above */
 				  __VA_PCC_STRUCT_RETURN,
 #else
-#if defined(__SMALL_STRUCT_RETURN__) || defined(__mipsn32__) || defined(__mips64__) || defined(__arm__) /* defined through configure, see above */
+#if defined(__SMALL_STRUCT_RETURN__) || defined(__mipsn32__) || defined(__mips64__) || defined(__arm__) || defined(__armhf__) /* defined through configure, see above */
 				  __VA_SMALL_STRUCT_RETURN |
 #endif
 #if defined(__GNUC__) && !((defined(__mipsn32__) || defined(__mips64__)) && ((__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)))
@@ -287,7 +290,7 @@ enum __VA_alist_flags
 #endif
 
   /* These are for internal use only */
-#if defined(__i386__) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm__) || (defined(__powerpc__) && !defined(__powerpc64__)) || defined(__ia64__) || defined(__x86_64__) || defined(__s390__)
+#if defined(__i386__) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__)) || defined(__ia64__) || defined(__x86_64__) || defined(__s390__)
   __VA_REGISTER_STRUCT_RETURN	= 1<<10,
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
@@ -315,7 +318,7 @@ typedef struct
   void*          raddr;
   enum __VAtype  rtype;
   unsigned long  rsize;
-#if defined(__i386__) || defined(__arm__) || (defined(__powerpc__) && !defined(__powerpc64__) && defined(__MACH__) && defined(__APPLE__))
+#if defined(__i386__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__) && defined(__MACH__) && defined(__APPLE__))
   /* Filler word, needed if the numbers of words up to now in this structure */
   /* is odd.                                                                 */
   /* - On MSVC, alignof(double) = 8, but normally on i386 it is = 4.         */
@@ -372,6 +375,12 @@ typedef struct
   int            anum;
   float          farg[16];
   double         darg[16];
+#endif
+#if defined(__armhf__)
+  unsigned long  saptr;
+  unsigned int   fanum;
+  float          farg[16];
+  double         darg[8];
 #endif
 #if defined(__powerpc__) || defined(__powerpc64__)
   double*        memfargptr;
@@ -486,7 +495,7 @@ typedef __va_alist* va_alist;
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
   ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN, 0)
 #endif
-#if defined(__arm__)
+#if defined(__arm__) || defined(__armhf__)
 /* structs of size 3 also will be returned in register */
 #define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
   ((TYPE_SIZE) <= 4)
@@ -592,7 +601,7 @@ typedef __va_alist* va_alist;
       0									\
   )  )
 #endif
-#if defined(__alpha__) || defined(__arm__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__s390__)
+#if defined(__alpha__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__s390__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
   ((LIST)->raddr = *(void* *)((LIST)->aptr),				\
@@ -630,7 +639,7 @@ typedef __va_alist* va_alist;
 /* Padding of non-struct arguments. */
 #define __va_argsize(TYPE_SIZE)  \
   (((TYPE_SIZE) + sizeof(__vaword)-1) & -(long)sizeof(__vaword))
-#if defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || defined(__arm__) || (defined(__powerpc__) && !defined(__powerpc64__) && (defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__)
+#if defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__) && (defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__)
 /* args grow up */
 /* small structures < 1 word are adjusted depending on compiler */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
@@ -715,12 +724,12 @@ typedef __va_alist* va_alist;
    (LIST)->aptr + ((-(TYPE_SIZE)) & 3)					\
   )
 #endif
-#if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || (defined(__arm__) && defined(__ARMEL__)) || defined(__ia64__)
+#if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || ((defined(__arm__) || defined(__armhf__)) && defined(__ARMEL__)) || defined(__ia64__)
 /* little endian -> small args < 1 word are adjusted to the left */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
 #endif
-#if defined(__m68k__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEB)) || defined(__sparc__) || defined(__sparc64__) || defined(__hppa__) || (defined(__arm__) && !defined(__ARMEL__)) || defined(__powerpc__) || defined(__powerpc64__) || defined(__s390__)
+#if defined(__m68k__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEB)) || defined(__sparc__) || defined(__sparc64__) || defined(__hppa__) || ((defined(__arm__) || defined(__armhf__)) && !defined(__ARMEL__)) || defined(__powerpc__) || defined(__powerpc64__) || defined(__s390__)
 /* big endian -> small args < 1 word are adjusted to the right */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
@@ -770,7 +779,7 @@ typedef __va_alist* va_alist;
 /* ‘long long’ fits in __vaword. */
 #define va_arg_longlong(LIST)	__va_arg(LIST,long long)
 #define va_arg_ulonglong(LIST)	__va_arg(LIST,unsigned long long)
-#elif defined(__i386__) || defined(__m68k__) || defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__powerpc__) || defined(__s390__)
+#elif defined(__i386__) || defined(__m68k__) || defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__s390__)
 /* ‘long long’s are passed embedded on the arg stack. */
 #define va_arg_longlong(LIST)	__va_arg_longlong(LIST,long long)
 #define va_arg_ulonglong(LIST)	__va_arg_longlong(LIST,unsigned long long)
@@ -778,7 +787,7 @@ typedef __va_alist* va_alist;
 /* ‘long long’s are (at most) word-aligned. */
 #define __va_arg_longlong(LIST,TYPE)	__va_arg(LIST,TYPE)
 #endif
-#if defined(__mips__) || defined(__arm__) || (defined(__powerpc__) && !(defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))))
+#if defined(__mips__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !(defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))))
 /* ‘long long’s have alignment 8. */
 #define __va_arg_longlong(LIST,TYPE)					\
   ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(long)__VA_alignof(TYPE)), \
@@ -812,7 +821,7 @@ typedef __va_alist* va_alist;
 #if defined(__i386__) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__) || defined(__s390__)
 #define __va_align_double(LIST)
 #endif
-#if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__) || defined(__arm__)
+#if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__) || defined(__arm__) || defined(__armhf__)
 /* __VA_alignof(double) > sizeof(__vaword) */
 #define __va_align_double(LIST)  \
   (LIST)->aptr = ((LIST)->aptr + sizeof(double)-1) & -(long)sizeof(double),
@@ -938,6 +947,23 @@ typedef __va_alist* va_alist;
     ? (LIST)->darg[(LIST)->anum - 1]					\
     : *(double*)((LIST)->aptr - sizeof(double))				\
   ))
+#endif
+#if defined(__armhf__)
+#define va_arg_float(LIST)  \
+  ((LIST)->fanum <= 15							\
+   ? (LIST)->farg[(LIST)->fanum++]					\
+   : (((LIST)->aptr < (LIST)->saptr ? (LIST)->aptr = (LIST)->saptr : 0), \
+      (LIST)->aptr += sizeof(float),					\
+      *(float*)((LIST)->aptr - sizeof(float))				\
+  )  )
+#define va_arg_double(LIST)  \
+  (((LIST)->fanum % 2 ? (LIST)->fanum++ : 0),				\
+   ((LIST)->fanum <= 14							\
+    ? ((LIST)->fanum += 2, (LIST)->darg[(LIST)->fanum / 2 - 1])		\
+    : (((LIST)->aptr < (LIST)->saptr ? (LIST)->aptr = (LIST)->saptr : 0), \
+       (LIST)->aptr += sizeof(double),					\
+       *(double*)((LIST)->aptr - sizeof(double))			\
+  ))  )
 #endif
 #if defined(__powerpc__) && !defined(__powerpc64__) && (defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)))
 /* The first 13 floating-point args have been stored elsewhere. */
@@ -1086,7 +1112,7 @@ typedef __va_alist* va_alist;
 #endif
 #define __va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (LIST)->aptr = ((LIST)->aptr + __va_struct_alignment(TYPE_ALIGN)-1) & -(long)__va_struct_alignment(TYPE_ALIGN),
-#if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || defined(__arm__) || defined(__powerpc64__) || (defined(__ia64__) && defined(__GNUC__) && (__GNUC__ >= 3)) || defined(__x86_64__)
+#if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc64__) || (defined(__ia64__) && defined(__GNUC__) && (__GNUC__ >= 3)) || defined(__x86_64__)
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
    __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)				\

@@ -21,7 +21,7 @@ precompiled : \
   avcall-sparc-macro.S avcall-sparc64-macro.S \
   avcall-alpha.s \
   avcall-hppa-macro.S \
-  avcall-arm-macro.S
+  avcall-arm-macro.S avcall-armhf-macro.S
 # Old rules
 # avcall-powerpc-aix.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64.s avcall-ia64.s avcall-x86_64-macro.S
 
@@ -114,6 +114,14 @@ avcall-arm-macro.S : avcall-arm.c avcall.h.in ../common/asm-arm.sh $(THISFILE)
 	cmp avcall-armel.s avcall-armeb.s > /dev/null
 	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < avcall-armel.s) > avcall-arm-macro.S
 	$(RM) avcall-armel.s avcall-armeb.s
+
+avcall-armhf-macro.S : avcall-armhf.c avcall.h.in ../common/asm-arm.sh $(THISFILE)
+# The option -mabi=aapcs ensures an 8-bytes-aligned stack pointer.
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mlittle-endian $(GCCFLAGS) -D__armhf__ -S avcall-armhf.c -o avcall-armhfel.s
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mbig-endian $(GCCFLAGS) -D__armhf__ -S avcall-armhf.c -o avcall-armhfeb.s
+	cmp avcall-armhfel.s avcall-armhfeb.s > /dev/null
+	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < avcall-armhfel.s) > avcall-armhf-macro.S
+	$(RM) avcall-armhfel.s avcall-armhfeb.s
 
 
 avcall-powerpc-aix.s : avcall-powerpc.c avcall.h.in $(THISFILE)

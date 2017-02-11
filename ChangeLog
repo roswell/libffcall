@@ -1,5 +1,38 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	armhf: Add support for arm with -mfloat-abi=hard.
+	* avcall/avcall.h.in: Add code for __armhf__, especially __av_start1,
+	__av_start_struct4, av_long, av_ulong, av_ptr, __av_longlong, av_float,
+	av_double, __av_struct.
+	* avcall/avcall-armhf.c: New file.
+	* avcall/Makefile.devel (avcall-armhf-macro.S): New target.
+	* avcall/Makefile.in (avcall-armhf.lo, avcall-armhf.s): New targets.
+	(clean): Remove avcall-armhf.s.
+	(SOURCE_FILES): Add avcall-armhf.c, avcall-armhf-macro.S.
+	* vacall/vacall.h.in: Add code for __armhf__, especially va_arg_float,
+	va_arg_double.
+	* vacall/vacall-armhf.c: New file.
+	* vacall/Makefile.devel (vacall-armhf-macro.S): New target.
+	* vacall/Makefile.in (vacall-armhf.o, vacall-armhf.s): New targets.
+	(clean): Remove vacall-armhf.s.
+	(SOURCE_FILES): Add vacall-armhf.c, vacall-armhf-macro.S.
+	* callback/vacall_r/Makefile.maint (COPIED_FILES): Add vacall-armhf.c.
+	* Makefile.in (COPIED_FILES): Add callback/vacall_r/vacall-armhf.c.
+	* callback/vacall_r/vacall_r.h.in: Add code for __armhf__, especially
+	va_arg_float, va_arg_double.
+	* callback/vacall_r/Makefile.devel (vacall-armhf-macro.S): New target.
+	* callback/vacall_r/Makefile.in (vacall-armhf.lo, vacall-armhf.s): New
+	targets.
+	(clean): Remove vacall-armhf.s.
+	(SOURCE_FILES): Add vacall-armhf.c, vacall-armhf-macro.S.
+	* trampoline/trampoline.h.in: Optionally define __armhf__.
+	* trampoline/trampoline.c: Treat __armhf__ like __arm__.
+	* callback/trampoline_r/trampoline_r.h.in: Optionally define __armhf__.
+	* callback/trampoline_r/trampoline.c: Treat __armhf__ like __arm__.
+	* PLATFORMS, */PLATFORMS: List the armv7 machine with 'hard' floats.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	arm: Make callback work, for -mfloat-abi=soft.
 	* callback/trampoline_r/Makefile.devel (CROSS_TOOL): New variable.
 	(proto-arm.s): Use known cross-compiler and -fno-omit-frame-pointer.

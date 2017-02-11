@@ -47,6 +47,9 @@
 #ifndef __arm__
 #undef __arm__
 #endif
+#ifndef __armhf__
+#undef __armhf__
+#endif
 #ifndef __powerpc__
 #undef __powerpc__
 #endif
