@@ -102,6 +102,7 @@
 /avcall/avcall-sparc64-macro.S
 /avcall/avcall-x86_64-linux.s
 /avcall/avcall-x86_64-macro.S
+/avcall/avcall-x86_64-x32-linux.s
 /vacall/vacall-alpha.s
 /vacall/vacall-arm-macro.S
 /vacall/vacall-armhf-macro.S
@@ -140,6 +141,7 @@
 /vacall/vacall-sparc64-macro.S
 /vacall/vacall-x86_64-linux.s
 /vacall/vacall-x86_64-macro.S
+/vacall/vacall-x86_64-x32-linux.s
 /callback/vacall_r/vacall-alpha-linux.s
 /callback/vacall_r/vacall-alpha-macro.S
 /callback/vacall_r/vacall-arm-macro.S
@@ -181,6 +183,7 @@
 /callback/vacall_r/vacall-sparc64-macro.S
 /callback/vacall_r/vacall-x86_64-linux.s
 /callback/vacall_r/vacall-x86_64-macro.S
+/callback/vacall_r/vacall-x86_64-x32-linux.s
 
 # ---------- "make -f Makefile.maint totally-clean" gets you here ----------
 
@@ -356,6 +359,7 @@ autom4te.cache/
 /avcall/avcall-powerpc64.s
 /avcall/avcall-powerpc64-elfv2.s
 /avcall/avcall-x86_64.s
+/avcall/avcall-x86_64-x32.s
 /avcall/minitests.o
 /avcall/minitests.s
 /avcall/minitests
@@ -384,6 +388,7 @@ autom4te.cache/
 /vacall/vacall-powerpc64.s
 /vacall/vacall-powerpc64-elfv2.s
 /vacall/vacall-x86_64.s
+/vacall/vacall-x86_64-x32.s
 /vacall/minitests.o
 /vacall/minitests.s
 /vacall/minitests
@@ -459,6 +464,7 @@ autom4te.cache/
 /callback/vacall_r/vacall-powerpc64.s
 /callback/vacall_r/vacall-powerpc64-elfv2.s
 /callback/vacall_r/vacall-x86_64.s
+/callback/vacall_r/vacall-x86_64-x32.s
 /callback/vacall_r/vacall-s390.s
 # Erased by callback/trampoline_r/Makefile.
 /callback/trampoline_r/trampoline.lo

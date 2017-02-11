@@ -24,7 +24,7 @@ precompiled : \
   avcall-arm-macro.S avcall-armhf-macro.S \
   avcall-powerpc-aix.s avcall-powerpc-linux.s avcall-powerpc-sysv4.s avcall-powerpc-macos.s avcall-powerpc64-aix.s avcall-powerpc64-linux.s avcall-powerpc64-elfv2-linux.s \
   avcall-ia64.s \
-  avcall-x86_64-macro.S \
+  avcall-x86_64-macro.S avcall-x86_64-x32-linux.s \
   avcall-s390.s
 
 
@@ -165,6 +165,9 @@ avcall-x86_64-linux.s : avcall-x86_64.c avcall.h.in $(THISFILE)
 
 avcall-x86_64-macro.S : avcall-x86_64-linux.s ../common/asm-x86_64.sh $(THISFILE)
 	(echo '#include "asm-x86_64.h"' ; ../common/asm-x86_64.sh < avcall-x86_64-linux.s) > avcall-x86_64-macro.S
+
+avcall-x86_64-x32-linux.s : avcall-x86_64.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) x86_64-linux gcc-5.4.0 -mx32 $(GCCFLAGS) -D__x86_64__ -D__x86_64_x32__ -S avcall-x86_64.c -o avcall-x86_64-x32-linux.s
 
 
 avcall-s390.s : avcall-s390.c avcall.h.in $(THISFILE)

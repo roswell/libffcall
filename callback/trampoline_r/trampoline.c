@@ -259,8 +259,13 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 16
 #endif
 #ifdef __x86_64__
+#ifdef __x86_64_x32__
+#define TRAMP_LENGTH 13
+#define TRAMP_ALIGN 4
+#else
 #define TRAMP_LENGTH 22
 #define TRAMP_ALIGN 16
+#endif
 #endif
 #ifdef __s390__
 #define TRAMP_LENGTH 22
@@ -907,6 +912,28 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   ((long *) function)[3]
 #endif
 #ifdef __x86_64__
+#ifdef __x86_64_x32__
+  /* function:
+   *    movl $<data>,%r10d		41 BA <data>
+   *    movl $<address>,%rax		B8 <address>
+   *    jmp *%rax			FF E0
+   */
+  *(int *)   (function + 0) = ((unsigned long) data << 16) | 0xBA41;
+  *(int *)   (function + 4) = ((unsigned long) address << 24) | 0xB80000 | ((unsigned long) data >> 16);
+  *(int *)   (function + 8) = 0xFF000000 | ((unsigned long) address >> 8);
+  *(int *)   (function +12) = 0xE0;
+#define is_tramp(function)  \
+  (*(unsigned long *) (function + 0) & 0x0000FFFF) == 0xBA41 && \
+  (*(unsigned long *) (function + 4) & 0x00FF0000) == 0xB80000 && \
+  (*(unsigned long *) (function + 8) & 0xFF000000) == 0xFF000000 && \
+   *(unsigned char *) (function +12) == 0xE0
+#define tramp_address(function)  \
+  ((*(unsigned long *) (function + 4) >> 24) | \
+   (*(unsigned long *) (function + 8) << 8))
+#define tramp_data(function)  \
+  ((*(unsigned long *) (function + 0) >> 16) | \
+   (*(unsigned long *) (function + 4) << 16))
+#else
   /* function:
    *    movabsq $<data>,%r10		49 BA <data>
    *    movabsq $<address>,%rax		48 B8 <address>
@@ -935,6 +962,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   himidlo(*(unsigned short *) (function + 8), \
           *(unsigned int *)   (function + 4), \
           *(unsigned short *) (function + 2))
+#endif
 #endif
 #ifdef __s390__
   /* function:

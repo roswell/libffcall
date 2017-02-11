@@ -13,7 +13,7 @@ CPP = $(GCC) -E
 CROSS_TOOL = cross
 ASPREFIX = /usr1/gnu/lib
 
-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.c proto-x86_64.c \
+precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.c proto-x86_64.c proto-x86_64-x32.s \
       cache-sparc-macro.S cache-alpha.s cache-hppa.s cache-powerpc-sysv4.s cache-powerpc-macos.s
 
 proto-i386.s : proto.c
@@ -66,6 +66,9 @@ proto-ia64.s : proto64.c
 
 proto-x86_64.s : proto64.c
 	$(GCC) -V 3.2.2 -b x86_64-suse-linux $(GCCFLAGS) -D__x86_64__ -S proto64.c -o $@
+
+proto-x86_64-x32.s : proto.c
+	$(CROSS_TOOL) x86_64-linux gcc-5.4.0 -mx32 $(GCCFLAGS) -fno-asynchronous-unwind-tables -D__x86_64__ -D__x86_64_x32__ -S proto.c -o $@
 
 cache-sparc-macro.S : cache-sparc.c ../../common/asm-sparc.sh
 	$(GCC) -V 2.95.2 -b sparc-sun $(GCCFLAGS) -D__sparc__ -S $< -o cache-sparc.s
@@ -125,6 +128,9 @@ tramp-ia64.o : tramp-ia64.s
 
 tramp-x86_64.o : tramp-x86_64.s
 	$(ASPREFIX)/x86_64-linux/bin/as tramp-x86_64.s -o $@
+
+tramp-x86_64-x32.o : tramp-x86_64-x32.s
+	$(CROSS_TOOL) x86_64-linux as tramp-x86_64-x32.s -o $@
 
 tramp-s390.o : tramp-s390.s
 	$(ASPREFIX)/s390-ibm-linux/bin/as tramp-s390.s -o $@

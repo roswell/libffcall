@@ -36,6 +36,9 @@ register void* env __asm__("r12");
 #ifdef __powerpc__
 register void* env __asm__("r11");
 #endif
+#ifdef __x86_64_x32__
+register void* env __asm__("r10");
+#endif
 #ifdef __s390__
 register void* env __asm__("r0");
 #endif

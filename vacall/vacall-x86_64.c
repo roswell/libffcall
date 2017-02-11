@@ -48,7 +48,9 @@ register double dret __asm__("xmm0");
  * from the stack.
  */
 register void*	dummy1	__asm__("%rbx");
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 9)
 register void*	dummy2	__asm__("%rbp");
+#endif
 
 #ifdef REENTRANT
 static
@@ -118,10 +120,18 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = list.tmp._ulong;
   } else
   if (list.rtype == __VAlonglong) {
+#ifdef __x86_64_x32__
+    iret = list.tmp._longlong;
+#else
     iret = list.tmp._long;
+#endif
   } else
   if (list.rtype == __VAulonglong) {
+#ifdef __x86_64_x32__
+    iret = list.tmp._ulonglong;
+#else
     iret = list.tmp._ulong;
+#endif
   } else
   if (list.rtype == __VAfloat) {
     fret = list.tmp._float;

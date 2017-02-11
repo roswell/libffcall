@@ -1,5 +1,50 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Add support for the x32 ABI on Linux.
+	* avcall/avcall.h.in: Optionally define __x86_64_x32__.
+	(__avword, __av_longlong): Define differently for __x86_64_x32__.
+	* avcall/Makefile.devel (avcall-x86_64-x32-linux.s): New target.
+	* avcall/Makefile.in (avcall-x86_64-x32.lo, avcall-x86_64-x32.s): New
+	targets.
+	(clean): Remove also avcall-x86_64-x32.s.
+	(SOURCE_FILES): Add avcall-x86_64-x32-linux.s.
+	* vacall/vacall-x86_64.c: Don't declare a register variable in %rbp for
+	GCC >= 4.9.
+	For __x86_64_x32__, treat return of 'long long' and 'unsigned long long'
+	differently.
+	* vacall/vacall.h.in: Optionally define __x86_64_x32__.
+	(__vaword, va_arg_longlong, va_return_longlong): Define differently for
+	__x86_64_x32__.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/Makefile.devel (vacall-x86_64-x32-linux.s): New target.
+	* vacall/Makefile.in (vacall-x86_64-x32.o, vacall-x86_64-x32.s): New
+	targets.
+	(clean): Remove also vacall-x86_64-x32.s.
+	(SOURCE_FILES): Add vacall-x86_64-x32-linux.s.
+	* trampoline/Makefile.devel (proto-x86_64-x32.s, tramp-x86_64-x32.o):
+	New targets.
+	* trampoline/proto-x86_64-x32.s: New generated file.
+	* trampoline/tramp-x86_64-x32.s: New file.
+	* trampoline/tramp-x86_64-x32.o: New generated file.
+	* trampoline/trampoline.c: Add code for __x86_64_x32__.
+	* callback/vacall_r/Makefile.devel (vacall-x86_64-x32-linux.s): New
+	target.
+	* callback/vacall_r/Makefile.in (vacall-x86_64-x32.lo,
+	vacall-x86_64-x32.s): New targets.
+	(clean): Remove also vacall-x86_64-x32.s.
+	(SOURCE_FILES): Add vacall-x86_64-x32-linux.s.
+	* callback/trampoline_r/Makefile.devel (proto-x86_64-x32.s,
+	tramp-x86_64-x32.o): New targets.
+	* callback/trampoline_r/proto.c: Specify env register for
+	__x86_64_x32__.
+	* callback/trampoline_r/proto-x86_64-x32.s: New generated file.
+	* callback/trampoline_r/tramp-x86_64-x32.s: New file.
+	* callback/trampoline_r/tramp-x86_64-x32.o: New generated file.
+	* callback/trampoline_r/trampoline.c: Add code for __x86_64_x32__.
+	* PLATFORMS, */PLATFORMS: List x86_64-unknown-linux (gcc -mx32).
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	Simplify platform defines. Reverts commit from 2010-07-20.
 	* trampoline/trampoline.h.in: Remove CPU symbol definitions.
 	* callback/trampoline_r/trampoline_r.h.in: Likewise.

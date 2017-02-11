@@ -65,6 +65,9 @@
 #ifndef __x86_64__
 #undef __x86_64__
 #endif
+#ifndef __x86_64_x32__
+#undef __x86_64_x32__
+#endif
 #ifndef __s390__
 #undef __s390__
 #endif
@@ -112,7 +115,7 @@
 
 /* C builtin types.
  */
-#if defined(__mipsn32__)
+#if defined(__mipsn32__) || defined(__x86_64_x32__)
 typedef long long __vaword;
 #else
 typedef long __vaword;
@@ -795,11 +798,11 @@ typedef __va_alist* va_alist;
 #define va_arg_long(LIST)	__va_arg(LIST,long)
 #define va_arg_ulong(LIST)	__va_arg(LIST,unsigned long)
 
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__)
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__))
 /* ‘long long’ and ‘long’ are identical. */
 #define va_arg_longlong		va_arg_long
 #define va_arg_ulonglong	va_arg_ulong
-#elif defined(__mipsn32__)
+#elif defined(__mipsn32__) || defined(__x86_64_x32__)
 /* ‘long long’ fits in __vaword. */
 #define va_arg_longlong(LIST)	__va_arg(LIST,long long)
 #define va_arg_ulonglong(LIST)	__va_arg(LIST,unsigned long long)
@@ -1272,7 +1275,7 @@ typedef __va_alist* va_alist;
   (__va_return(LIST,__VAlong), (LIST)->tmp._long = (VAL))
 #define va_return_ulong(LIST,VAL)  \
   (__va_return(LIST,__VAulong), (LIST)->tmp._ulong = (VAL))
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__)
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__))
 #define va_return_longlong(LIST,VAL)  \
   (__va_return(LIST,__VAlonglong), (LIST)->tmp._long = (VAL))
 #define va_return_ulonglong(LIST,VAL)  \

@@ -72,6 +72,9 @@
 #ifndef __x86_64__
 #undef __x86_64__
 #endif
+#ifndef __x86_64_x32__
+#undef __x86_64_x32__
+#endif
 #ifndef __s390__
 #undef __s390__
 #endif
@@ -112,7 +115,7 @@
 
 /* C builtin types.
  */
-#if defined(__mipsn32__)
+#if defined(__mipsn32__) || defined(__x86_64_x32__)
 typedef long long __avword;
 #else
 typedef long __avword;
@@ -781,7 +784,7 @@ typedef struct
 #define av_ushort		av_ulong
 #define av_uint			av_ulong
 
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__)
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__))
 /* ‘long long’ and ‘long’ are identical. */
 #define av_longlong		av_long
 #define av_ulonglong		av_ulong
@@ -789,7 +792,7 @@ typedef struct
 /* ‘long long’ fits in __avword. */
 #define av_longlong		__av_word
 #define av_ulonglong(LIST,VAL)	__av_word(LIST,(unsigned long long)(VAL))
-#elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__s390__)
+#elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__x86_64_x32__) || defined(__s390__)
 /* ‘long long’s are passed embedded on the arg stack. */
 #define av_longlong(LIST,VAL)	__av_longlong(LIST,long long,VAL)
 #define av_ulonglong(LIST,VAL)	__av_longlong(LIST,unsigned long long,VAL)
@@ -802,7 +805,7 @@ typedef struct
     ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
     0))
 #endif
-#if defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !(defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__s390__)
+#if defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !(defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__x86_64_x32__) || defined(__s390__)
 /* ‘long long’s have alignment 4 or 8. */
 #if defined(__mips__)
 #define __av_longlong(LIST,TYPE,VAL)					\
@@ -840,6 +843,12 @@ typedef struct
    ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE)), \
     ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
     0))
+#endif
+#if defined(__x86_64_x32__)
+#define __av_longlong(LIST,TYPE,VAL)					\
+  ((LIST).iaptr < &(LIST).iargs[__AV_IARG_NUM]				\
+   ? (*(LIST).iaptr++ = (__avword)(TYPE)(VAL), 0)			\
+   : __av_word(LIST,(TYPE)(VAL)))
 #endif
 #if defined(__s390__)
 /* Within the arg stack, the alignment is only 4, not 8. */

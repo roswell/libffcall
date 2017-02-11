@@ -24,7 +24,7 @@ precompiled : \
   vacall-arm-macro.S vacall-armhf-macro.S \
   vacall-powerpc-aix.s vacall-powerpc-linux.s vacall-powerpc-sysv4.s vacall-powerpc-macos.s vacall-powerpc64-aix.s vacall-powerpc64-linux.s vacall-powerpc64-elfv2-linux.s \
   vacall-ia64.s \
-  vacall-x86_64-macro.S \
+  vacall-x86_64-macro.S vacall-x86_64-x32-linux.s \
   vacall-s390.s
 
 
@@ -183,6 +183,9 @@ vacall-x86_64-linux.s : vacall-x86_64.c vacall.h.in $(THISFILE)
 
 vacall-x86_64-macro.S : vacall-x86_64-linux.s ../common/asm-x86_64.sh $(THISFILE)
 	(echo '#include "asm-x86_64.h"' ; ../common/asm-x86_64.sh < vacall-x86_64-linux.s | sed -e 's/vacall_function/C(vacall_function)/g') > vacall-x86_64-macro.S
+
+vacall-x86_64-x32-linux.s : vacall-x86_64.c vacall.h.in $(THISFILE)
+	$(CROSS_TOOL) x86_64-linux gcc-5.4.0 -mx32 $(GCCFLAGS) -D__x86_64__ -D__x86_64_x32__ -S vacall-x86_64.c -o vacall-x86_64-x32-linux.s
 
 
 vacall-s390.s : vacall-s390.c vacall.h.in $(THISFILE)
