@@ -1,5 +1,22 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	powerpc64: Add support for AIX in a 64-bit build, with gcc.
+	* avcall/avcall.h.in (__AV_AIXCC_STRUCT_ARGS): Define also on
+	__powerpc64__.
+	(__AV_STRUCT_ARGS): Set to __AV_AIXCC_STRUCT_ARGS on __powerpc64__ with
+	AIX.
+	(__av_struct): Define for __powerpc64__ like for __powerpc__.
+	* vacall/vacall.h.in (__VA_AIXCC_STRUCT_ARGS): Define also on
+	__powerpc64__.
+	(__VA_STRUCT_ARGS): Set to __VA_AIXCC_STRUCT_ARGS on __powerpc64__ with
+	AIX.
+	(__va_arg_struct): Define for __powerpc64__ with AIX like for
+	__powerpc__ with AIX.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* PLATFORMS, */PLATFORMS: List powerpc-ibm-aix7.1.3.0 (gcc -maix64).
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	powerpc64: Add support for AIX in a 64-bit build, part 1.
 	* avcall/Makefile.devel (avcall-powerpc64-aix.s,
 	avcall-powerpc64-linux.s): New targets.
