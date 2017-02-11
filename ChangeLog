@@ -1,5 +1,11 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	Simplify platform defines. Reverts commit from 2010-07-20.
+	* trampoline/trampoline.h.in: Remove CPU symbol definitions.
+	* callback/trampoline_r/trampoline_r.h.in: Likewise.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	powerpc64: Add support for the ELFv2 ABI on Linux.
 	* avcall/avcall-powerpc64.c: Handle small struct return in registers
 	when __AV_REGISTER_STRUCT_RETURN is set.
