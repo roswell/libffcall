@@ -150,9 +150,6 @@ vacall-powerpc-linux.s : vacall-powerpc.c vacall_r.h.in $(THISFILE)
 vacall-powerpc-linux-macro.S : vacall-powerpc-linux.s $(THISFILE)
 	cp vacall-powerpc-linux.s vacall-powerpc-linux-macro.S
 
-vacall-powerpc-netbsd-macro.S : vacall-powerpc-netbsd.s $(THISFILE)
-	cp vacall-powerpc-netbsd.s vacall-powerpc-netbsd-macro.S
-
 vacall-powerpc-sysv4-macro.S : vacall-powerpc.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) powerpc-linux gcc -V 3.3.6 -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-sysv4.s
 	cp vacall-powerpc-sysv4.s vacall-powerpc-sysv4-macro.S

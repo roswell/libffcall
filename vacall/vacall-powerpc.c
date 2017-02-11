@@ -20,11 +20,7 @@
 #ifdef REENTRANT
 #define __vacall __vacall_r
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-#ifdef __NetBSD__
-         *		env	__asm__("r13");
-#else
          *		env	__asm__("r11");
-#endif
 #endif
 register double		farg1	__asm__("fr1");
 register double		farg2	__asm__("fr2");

@@ -130,12 +130,11 @@ vacall-armhf.s : $(srcdir)/vacall-armhf-macro.S
 vacall-powerpc.lo : vacall-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-powerpc.s
 
-vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux-macro.S $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-netbsd-macro.S $(srcdir)/vacall-powerpc-sysv4-macro.S
+vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux-macro.S $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-sysv4-macro.S
 	case "$(OS)" in \
 	  aix*) syntax=aix;; \
-	  linux*) syntax=linux;; \
+	  linux* | netbsd*) syntax=linux;; \
 	  macos* | darwin*) syntax=macos;; \
-	  netbsd*) syntax=netbsd;; \
 	  *) syntax=sysv4;; \
 	esac; \
 	case $${syntax} in \
@@ -248,7 +247,6 @@ SOURCE_FILES = \
   vacall-powerpc-aix.s \
   vacall-powerpc-linux.s vacall-powerpc-linux-macro.S \
   vacall-powerpc-macos.s \
-  vacall-powerpc-netbsd.s vacall-powerpc-netbsd-macro.S \
   vacall-powerpc-sysv4-macro.S \
   vacall-powerpc64.c vacall-powerpc64.s \
   vacall-s390.c vacall-s390-linux.s vacall-s390-macro.S \

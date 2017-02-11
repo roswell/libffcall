@@ -57,11 +57,7 @@ register void* env __asm__("$1");
 register void* env __asm__("%r29");
 #endif
 #ifdef __powerpc__
-#ifdef __NetBSD__
-register void* env __asm__("r13");
-#else
 register void* env __asm__("r11");
-#endif
 #endif
 #ifdef __ia64__
 register void* env __asm__("r15");

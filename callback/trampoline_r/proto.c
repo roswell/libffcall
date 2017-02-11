@@ -34,11 +34,7 @@ register void* env __asm__("%r29");
 register void* env __asm__("r12");
 #endif
 #ifdef __powerpc__
-#ifdef __NetBSD__
-register void* env __asm__("r13");
-#else
 register void* env __asm__("r11");
-#endif
 #endif
 #ifdef __s390__
 register void* env __asm__("r0");
