@@ -1,5 +1,11 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	Fix build failure on Mac OS X 10.5 / i386. Regression from today.
+	* common/asm-i386.sh: Simplify the function referencing code, originally
+	for PIC on ELF platforms, so that it works also on non-ELF platforms.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Add support for the x32 ABI on Linux.
 	* avcall/avcall.h.in: Optionally define __x86_64_x32__.
 	(__avword, __av_longlong): Define differently for __x86_64_x32__.

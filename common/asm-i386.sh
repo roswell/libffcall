@@ -42,6 +42,37 @@ s/\.type	\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/
 }
 # ----------- Massage the end of functions
 s/\.size	\([A-Za-z0-9_]*\),\(.*\)/FUNEND(\1,\2)/
+# ----------- Introduce conditionals for function references in PIC code
+# Note: This is hairy. It assumes that the register clobbered with
+# the 'addl $_GLOBAL_OFFSET_TABLE_ ...' instruction is the same as
+# the register that the @GOTOFF instructions reference.
+/^	addl	\$_GLOBAL_OFFSET_TABLE_,/{
+x
+s/.*/.LgotGOT/
+x
+s/^	addl	\$_GLOBAL_OFFSET_TABLE_, *\(%.*\)/#ifdef __ELF__\
+	addl	$_GLOBAL_OFFSET_TABLE_,\1\
+#else\
+.LgotGOT:\
+#endif/
+}
+/^	addl	\$_GLOBAL_OFFSET_TABLE_+\[\.-\(.*\)\],/{
+h
+s/^	addl	\$_GLOBAL_OFFSET_TABLE_+\[\.-\(.*\)\],.*/\1/
+x
+s/^	addl	\$_GLOBAL_OFFSET_TABLE_+\[\.-\(.*\)\], *\(%.*\)/#ifdef __ELF__\
+	addl	\$_GLOBAL_OFFSET_TABLE_+[.-\1],\2\
+#endif/
+}
+/@GOTOFF(/{
+G
+s/^	leal	\([A-Za-z0-9_]\+\)@GOTOFF\(.*\)\
+\(.*\)/#ifdef __ELF__\
+	leal	\1@GOTOFF\2\
+#else\
+	leal	C(\1)-\3\2\
+#endif/
+}
 EOF
 
 cat > $tmpscript04 << \EOF
