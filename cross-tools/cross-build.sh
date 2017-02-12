@@ -37,6 +37,8 @@ package=libffcall
 # You can set MAKE to 'gmake' if your 'make' program is not GNU make.
 MAKE=make
 
+# --------------------- BEGIN copy from gnulib-tool ---------------------
+
 # When using GNU sed, turn off as many GNU extensions as possible,
 # to minimize the risk of accidentally using non-portable features.
 # However, do this only for gnulib-tool itself, not for the code that
@@ -64,6 +66,98 @@ if (alias) > /dev/null 2>&1 \
   fi
   alias sed='sed --posix'
 fi
+
+# func_exit STATUS
+# exits with a given status.
+# This function needs to be used, rather than 'exit', when a 'trap' handler is
+# in effect that refers to $?.
+func_exit ()
+{
+  (exit $1); exit $1
+}
+
+# func_fatal_error message
+# outputs to stderr a fatal error message, and terminates the program.
+# Input:
+# - progname                 name of this program
+func_fatal_error ()
+{
+  echo "$progname: *** $1" 1>&2
+  echo "$progname: *** Stop." 1>&2
+  func_exit 1
+}
+
+# func_cross_tools_dir
+# locates the directory where the cross-tools lives
+# Input:
+# - progname                 name of this program
+# Sets variables
+# - self_abspathname         absolute pathname of this script
+# - cross_tools_dir          absolute pathname of cross-tools directory
+func_cross_tools_dir ()
+{
+  case "$progname" in
+    /* | ?:*) self_abspathname="$progname" ;;
+    */*) self_abspathname=`pwd`/"$progname" ;;
+    *)
+      # Look in $PATH.
+      # Iterate through the elements of $PATH.
+      # We use IFS=: instead of
+      #   for d in `echo ":$PATH:" | sed -e 's/:::*/:.:/g' | sed -e 's/:/ /g'`
+      # because the latter does not work when some PATH element contains spaces.
+      # We use a canonicalized $pathx instead of $PATH, because empty PATH
+      # elements are by definition equivalent to '.', however field splitting
+      # according to IFS=: loses empty fields in many shells:
+      #   - /bin/sh on OSF/1 and Solaris loses all empty fields (at the
+      #     beginning, at the end, and in the middle),
+      #   - /bin/sh on IRIX and /bin/ksh on IRIX and OSF/1 lose empty fields
+      #     at the beginning and at the end,
+      #   - GNU bash, /bin/sh on AIX and HP-UX, and /bin/ksh on AIX, HP-UX,
+      #     Solaris lose empty fields at the end.
+      # The 'case' statement is an optimization, to avoid evaluating the
+      # explicit canonicalization command when $PATH contains no empty fields.
+      self_abspathname=
+      if test "$PATH_SEPARATOR" = ";"; then
+        # On Windows, programs are searched in "." before $PATH.
+        pathx=".;$PATH"
+      else
+        # On Unix, we have to convert empty PATH elements to ".".
+        pathx="$PATH"
+        case :$PATH: in
+          *::*)
+            pathx=`echo ":$PATH:" | sed -e 's/:::*/:.:/g' -e 's/^://' -e 's/:\$//'`
+            ;;
+        esac
+      fi
+      save_IFS="$IFS"
+      IFS="$PATH_SEPARATOR"
+      for d in $pathx; do
+        IFS="$save_IFS"
+        test -z "$d" && d=.
+        if test -x "$d/$progname" && test ! -d "$d/$progname"; then
+          self_abspathname="$d/$progname"
+          break
+        fi
+      done
+      IFS="$save_IFS"
+      if test -z "$self_abspathname"; then
+        func_fatal_error "could not locate the cross-build.sh program - how did you invoke it?"
+      fi
+      ;;
+  esac
+  while test -h "$self_abspathname"; do
+    # Resolve symbolic link.
+    linkval=`func_readlink "$self_abspathname"`
+    test -n "$linkval" || break
+    case "$linkval" in
+      /* | ?:* ) self_abspathname="$linkval" ;;
+      * ) self_abspathname=`echo "$self_abspathname" | sed -e 's,/[^/]*$,,'`/"$linkval" ;;
+    esac
+  done
+  cross_tools_dir=`echo "$self_abspathname" | sed -e 's,/[^/]*$,,'`
+}
+
+# --------------------- END copy from gnulib-tool ---------------------
 
 # func_usage
 # outputs to stdout the --help usage message.
@@ -93,14 +187,7 @@ There is NO WARRANTY, to the extent permitted by law.
   printf "Written by %s.\n" "Bruno Haible"
 }
 
-# func_exit STATUS
-# exits with a given status.
-# This function needs to be used, rather than 'exit', when a 'trap' handler is
-# in effect that refers to $?.
-func_exit ()
-{
-  (exit $1); exit $1
-}
+func_cross_tools_dir
 
 # func_get_all_cpus
 # retrieves the list of all known/supported CPUs.
@@ -120,7 +207,7 @@ func_get_all_cpus ()
           *) all_cpus="$all_cpus $cpu" ;;
         esac
       done
-    } < cross.conf
+    } < "$cross_tools_dir/cross.conf"
   fi
 }
 
@@ -184,18 +271,23 @@ if test -z "$HOST_CROSS_DIR"; then
   echo "Missing environment variable HOST_CROSS_DIR." 1>&2
   func_exit 1
 fi
+# Make it absolute.
+case "$HOST_CROSS_DIR" in
+  /* | ?:*) ;;
+  *) HOST_CROSS_DIR=`pwd`/"$HOST_CROSS_DIR" ;;
+esac
 mkdir -p "$HOST_CROSS_DIR"
 
 if test -z "$GNU_RELEASES_DIR"; then
-  GNU_RELEASES_DIR=`pwd`/gnu-releases
+  GNU_RELEASES_DIR="$cross_tools_dir/gnu-releases"
 fi
 
 # func_build_cross
 # Creates the 'cross' script.
 func_build_cross ()
 {
-  sed -e "s|@HOST_CROSS_DIR@|$HOST_CROSS_DIR|g" -e "s|@host_triple@|$host_triple|g" < cross.in > cross
-  chmod a+x cross
+  sed -e "s|@HOST_CROSS_DIR@|$HOST_CROSS_DIR|g" -e "s|@host_triple@|$host_triple|g" < "$cross_tools_dir/cross.in" > "$cross_tools_dir/cross"
+  chmod a+x "$cross_tools_dir/cross"
 }
 
 # func_ensure_tarball package version suffix urldirname
@@ -235,7 +327,7 @@ func_ensure_unpacked_source ()
   pkg_version="$2"
   pkg_suffix="$3"
   pkg_urldirname="$4"
-  if test -d "sources/$pkg_package-$pkg_version"; then
+  if test -d "$cross_tools_dir/sources/$pkg_package-$pkg_version"; then
     # Already there.
     :
   else
@@ -247,15 +339,15 @@ func_ensure_unpacked_source ()
       xz) unpacker=xz ;;
       *) echo "Don't know how to unpack $pkg_package-$pkg_version.tar.$pkg_suffix" 1>&2; func_exit 1 ;;
     esac
-    rm -rf "$sources/pkg_package-$pkg_version"
-    mkdir -p sources
-    $unpacker -d -c < "$GNU_RELEASES_DIR/$pkg_package-$pkg_version.tar.$pkg_suffix" | (cd sources && tar xf -) || func_exit 1
-    test -d "sources/$pkg_package-$pkg_version" || {
-      echo "No directory sources/$pkg_package-$pkg_version was created!" 1>&2; func_exit 1
+    rm -rf "$cross_tools_dir/sources/$pkg_package-$pkg_version"
+    mkdir -p "$cross_tools_dir/sources"
+    $unpacker -d -c < "$GNU_RELEASES_DIR/$pkg_package-$pkg_version.tar.$pkg_suffix" | (cd "$cross_tools_dir/sources" && tar xf -) || func_exit 1
+    test -d "$cross_tools_dir/sources/$pkg_package-$pkg_version" || {
+      echo "No directory $cross_tools_dir/sources/$pkg_package-$pkg_version was created!" 1>&2; func_exit 1
     }
-    if test -f "patches/$pkg_package-$pkg_version.patch"; then
-      echo "Patching sources/$pkg_package-$pkg_version ..."
-      (cd sources && patch -p0 < "../patches/$pkg_package-$pkg_version.patch") || func_exit 1
+    if test -f "$cross_tools_dir/patches/$pkg_package-$pkg_version.patch"; then
+      echo "Patching $cross_tools_dir/sources/$pkg_package-$pkg_version ..."
+      (cd "$cross_tools_dir/sources" && patch -p0 < "../patches/$pkg_package-$pkg_version.patch") || func_exit 1
     fi
   fi
 }
@@ -269,11 +361,11 @@ func_build_gmp ()
 {
   pkg_version="$1"
   func_ensure_unpacked_source gmp "$pkg_version" bz2 "https://ftp.gnu.org/pub/gnu/gmp" || func_exit 1
-  mkdir -p "build/build-$target"
-  rm -rf "build/build-$target/gmp-$pkg_version"
-  mkdir "build/build-$target/gmp-$pkg_version"
-  echo "Building in build/build-$target/gmp-$pkg_version ..."
-  (cd "build/build-$target/gmp-$pkg_version" \
+  mkdir -p "$cross_tools_dir/build/build-$target"
+  rm -rf "$cross_tools_dir/build/build-$target/gmp-$pkg_version"
+  mkdir "$cross_tools_dir/build/build-$target/gmp-$pkg_version"
+  echo "Building in $cross_tools_dir/build/build-$target/gmp-$pkg_version ..."
+  (cd "$cross_tools_dir/build/build-$target/gmp-$pkg_version" \
    && ../../../sources/gmp-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" \
    && $MAKE \
    && $MAKE install \
@@ -289,11 +381,11 @@ func_build_mpfr ()
 {
   pkg_version="$1"
   func_ensure_unpacked_source mpfr "$pkg_version" bz2 "https://ftp.gnu.org/pub/gnu/mpfr" || func_exit 1
-  mkdir -p "build/build-$target"
-  rm -rf "build/build-$target/mpfr-$pkg_version"
-  mkdir "build/build-$target/mpfr-$pkg_version"
-  echo "Building in build/build-$target/mpfr-$pkg_version ..."
-  (cd "build/build-$target/mpfr-$pkg_version" \
+  mkdir -p "$cross_tools_dir/build/build-$target"
+  rm -rf "$cross_tools_dir/build/build-$target/mpfr-$pkg_version"
+  mkdir "$cross_tools_dir/build/build-$target/mpfr-$pkg_version"
+  echo "Building in $cross_tools_dir/build/build-$target/mpfr-$pkg_version ..."
+  (cd "$cross_tools_dir/build/build-$target/mpfr-$pkg_version" \
    && ../../../sources/mpfr-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --with-gmp="$HOST_CROSS_DIR/${target}-tools" --enable-shared \
    && $MAKE \
    && $MAKE install \
@@ -309,11 +401,11 @@ func_build_mpc ()
 {
   pkg_version="$1"
   func_ensure_unpacked_source mpc "$pkg_version" gz "http://www.multiprecision.org/mpc/download" || func_exit 1
-  mkdir -p "build/build-$target"
-  rm -rf "build/build-$target/mpc-$pkg_version"
-  mkdir "build/build-$target/mpc-$pkg_version"
-  echo "Building in build/build-$target/mpc-$pkg_version ..."
-  (cd "build/build-$target/mpc-$pkg_version" \
+  mkdir -p "$cross_tools_dir/build/build-$target"
+  rm -rf "$cross_tools_dir/build/build-$target/mpc-$pkg_version"
+  mkdir "$cross_tools_dir/build/build-$target/mpc-$pkg_version"
+  echo "Building in $cross_tools_dir/build/build-$target/mpc-$pkg_version ..."
+  (cd "$cross_tools_dir/build/build-$target/mpc-$pkg_version" \
    && ../../../sources/mpc-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --with-gmp="$HOST_CROSS_DIR/${target}-tools" --with-mpfr="$HOST_CROSS_DIR/${target}-tools" --enable-shared \
    && $MAKE \
    && $MAKE install \
@@ -329,11 +421,11 @@ func_build_libelf ()
 {
   pkg_version="$1"
   func_ensure_unpacked_source libelf "$pkg_version" gz "http://www.mr511.de/software" || func_exit 1
-  mkdir -p "build/build-$target"
-  rm -rf "build/build-$target/libelf-$pkg_version"
-  mkdir "build/build-$target/libelf-$pkg_version"
-  echo "Building in build/build-$target/libelf-$pkg_version ..."
-  (cd "build/build-$target/libelf-$pkg_version" \
+  mkdir -p "$cross_tools_dir/build/build-$target"
+  rm -rf "$cross_tools_dir/build/build-$target/libelf-$pkg_version"
+  mkdir "$cross_tools_dir/build/build-$target/libelf-$pkg_version"
+  echo "Building in $cross_tools_dir/build/build-$target/libelf-$pkg_version ..."
+  (cd "$cross_tools_dir/build/build-$target/libelf-$pkg_version" \
    && ../../../sources/libelf-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --enable-shared \
    && $MAKE \
    && $MAKE install \
@@ -349,11 +441,11 @@ func_build_isl ()
 {
   pkg_version="$1"
   func_ensure_unpacked_source isl "$pkg_version" bz2 "ftp://gcc.gnu.org/pub/gcc/infrastructure" || func_exit 1
-  mkdir -p "build/build-$target"
-  rm -rf "build/build-$target/isl-$pkg_version"
-  mkdir "build/build-$target/isl-$pkg_version"
-  echo "Building in build/build-$target/isl-$pkg_version ..."
-  (cd "build/build-$target/isl-$pkg_version" \
+  mkdir -p "$cross_tools_dir/build/build-$target"
+  rm -rf "$cross_tools_dir/build/build-$target/isl-$pkg_version"
+  mkdir "$cross_tools_dir/build/build-$target/isl-$pkg_version"
+  echo "Building in $cross_tools_dir/build/build-$target/isl-$pkg_version ..."
+  (cd "$cross_tools_dir/build/build-$target/isl-$pkg_version" \
    && ../../../sources/isl-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --with-gmp-prefix="$HOST_CROSS_DIR/${target}-tools" --enable-shared \
    && $MAKE \
    && $MAKE install \
@@ -375,11 +467,11 @@ func_build_binutils ()
     # An official GNU release
     func_ensure_unpacked_source binutils "$version" bz2 "https://ftp.gnu.org/pub/gnu/binutils"
   fi
-  mkdir -p "build/build-$target"
-  rm -rf "build/build-$target/binutils-$version"
-  mkdir "build/build-$target/binutils-$version"
-  echo "Building in build/build-$target/binutils-$version ..."
-  (cd "build/build-$target/binutils-$version" \
+  mkdir -p "$cross_tools_dir/build/build-$target"
+  rm -rf "$cross_tools_dir/build/build-$target/binutils-$version"
+  mkdir "$cross_tools_dir/build/build-$target/binutils-$version"
+  echo "Building in $cross_tools_dir/build/build-$target/binutils-$version ..."
+  (cd "$cross_tools_dir/build/build-$target/binutils-$version" \
    && ../../../sources/binutils-$version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --target=$binutilstarget --enable-shared --disable-werror \
    && $MAKE \
    && $MAKE install \
@@ -442,12 +534,12 @@ func_build_gcc ()
   if test "$target" = armv7l-linux-gnueabihf; then
     configure_options="$configure_options --with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16"
   fi
-  mkdir -p "build/build-$target"
-  rm -rf "build/build-$target/gcc-$version"
-  mkdir "build/build-$target/gcc-$version"
-  echo "Building in build/build-$target/gcc-$version ..."
+  mkdir -p "$cross_tools_dir/build/build-$target"
+  rm -rf "$cross_tools_dir/build/build-$target/gcc-$version"
+  mkdir "$cross_tools_dir/build/build-$target/gcc-$version"
+  echo "Building in $cross_tools_dir/build/build-$target/gcc-$version ..."
   (PATH="$HOST_CROSS_DIR/${target}-tools/bin:$PATH"
-   cd "build/build-$target/gcc-$version" \
+   cd "$cross_tools_dir/build/build-$target/gcc-$version" \
    && ../../../sources/gcc-$version/configure --prefix="$HOST_CROSS_DIR/${target}-tools" --target="$gcctarget" $configure_options --with-as="$HOST_CROSS_DIR/${target}-tools/bin/${target}-as" --with-ld="$HOST_CROSS_DIR/${target}-tools/bin/${target}-ld" --enable-languages=c \
    && { : "make usually fails during the libgcc phase, either because cc1 does not find its shared libraries, or because no include files are present yet, or because it invokes the wrong assembler"; \
         $MAKE; \
@@ -495,7 +587,7 @@ func_build_cpu ()
         done
       fi
     done
-  } < cross.conf
+  } < "$cross_tools_dir/cross.conf"
 }
 
 case "$mode" in

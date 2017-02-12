@@ -38,22 +38,36 @@ You will need reasonably recent versions of the build tools:
 And, of course, the packages listed in the DEPENDENCIES file.
 
 
+Cross-compilation tools
+=======================
+
+The Makefile.devel has rules to regenerate some *.s and *.S files, using
+GCC cross-compiler builds. You find a table of these cross-compilers in
+the file cross-tools/cross.conf.
+
+To build all these cross-compilers, use the file cross-tools/cross-build.sh.
+See the comments at the top of cross-tools/cross-build.sh for how to use it.
+When done, copy the generated 'cross' script into your $PATH so that
+Makefile.devel will find it.
+
+
 Building off the git repository
 ===============================
 
 Access to the git repository is described at
   http://savannah.gnu.org/git/?group=libffcall
 
-After fetching the sources from the repository, peek at the comments in
-autogen.sh, then run "./autogen.sh"; then you can proceed with "./configure"
-as usual.
+After fetching the sources from the repository:
 
+1. Create the cross-compilation tools, as described above.
 
-Cross-compilation tools
-=======================
+2. Regenerate the *.s and *.S files, by running
+     make -f Makefile.devel
 
-The Makefile.devel has rules to regenerate some *.s and *.S files, using
-GCC cross-compiler builds. You find a table of these cross-compilers in
-the file cross-tools/cross.conf. To build all these cross-compilers, use
-the file cross-tools/cross-build.sh.
+3. Run
+     ./autogen.sh
+
+4. Then you can proceed with
+     ./configure
+   as usual.
 

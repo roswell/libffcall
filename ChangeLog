@@ -1,3 +1,11 @@
+2017-02-12  Bruno Haible  <bruno@clisp.org>
+
+	Make the cross-build.sh script more usable.
+	* README-hacking: Add more text.
+	* cross-tools/cross-build.sh: Don't assume the script is run from the
+	current directory. Accept a relative HOST_CROSS_DIR.
+	Reported by Don Cohen <don-ffcall@isis.cs3-inc.com>.
+
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
 	Update documentation.
