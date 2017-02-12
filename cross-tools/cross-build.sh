@@ -345,9 +345,18 @@ func_ensure_unpacked_source ()
     test -d "$cross_tools_dir/sources/$pkg_package-$pkg_version" || {
       echo "No directory $cross_tools_dir/sources/$pkg_package-$pkg_version was created!" 1>&2; func_exit 1
     }
+    # Apply patches.
     if test -f "$cross_tools_dir/patches/$pkg_package-$pkg_version.patch"; then
       echo "Patching $cross_tools_dir/sources/$pkg_package-$pkg_version ..."
       (cd "$cross_tools_dir/sources" && patch -p0 < "../patches/$pkg_package-$pkg_version.patch") || func_exit 1
+    fi
+    # For binutils, remove the gprof directory. When this subdirectory exists
+    # and the host platform happens to be the same as the target platform,
+    # the binutils configure adds 'gprof' to the @configdirs@ value and thus
+    # causes this subdirectory to be included in the build. But this directory
+    # has extra prerequisites: an Objective-C compiler.
+    if test "$pkg_package" = binutils; then
+      rm -rf "$cross_tools_dir/sources/$pkg_package-$pkg_version/gprof"
     fi
   fi
 }

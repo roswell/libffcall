@@ -1,5 +1,12 @@
 2017-02-12  Bruno Haible  <bruno@clisp.org>
 
+	Make the cross-build.sh script work on an x86_64-linux host.
+	* cross-tools/cross-build.sh: Remove the binutils-*/gprof directory.
+	* cross-tools/patches/binutils-*.patch: Backport a buffer overrun bug
+	fix from binutils-2.17.
+
+2017-02-12  Bruno Haible  <bruno@clisp.org>
+
 	Make the cross-build.sh script more usable.
 	* README-hacking: Add more text.
 	* cross-tools/cross-build.sh: Don't assume the script is run from the
