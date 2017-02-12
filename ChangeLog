@@ -1,5 +1,10 @@
 2017-02-11  Bruno Haible  <bruno@clisp.org>
 
+	Update documentation.
+	* NEWS: List the progress since version 1.12.
+
+2017-02-11  Bruno Haible  <bruno@clisp.org>
+
 	powerpc: Add support for OpenBSD.
 	* avcall/Makefile.in (avcall-powerpc.s): Treat OpenBSD like NetBSD.
 	* vacall/Makefile.in (vacall-powerpc.s): Likewise.

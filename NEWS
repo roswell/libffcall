@@ -1,6 +1,38 @@
 New in 1.13:
 
-* Added support for 64-bit mode (x86_64) on Mac OS X.
+* Added support for the following platforms:
+  (Previously, a build on these platforms failed.)
+  - x86_64: Mac OS X 64-bit.
+  - x86_64: Solaris 64-bit.
+  - x86_64: Linux with x32 ABI: CC="gcc -mx32".
+  - arm: Linux 32-bit, without hardware floats.
+  - powerpc: AIX 64-bit.
+  - mips: IRIX 6.5 with CC="cc -32".
+  - sparc: Solaris 64-bit.
+
+* Fixed support for the following platforms:
+  (Previously, a build on these platforms appeared to succeed but was buggy.)
+  - x86_64: Linux.
+  - arm: Linux 32-bit, with hardware floats.
+  - mips: Linux with CC="gcc -mabi=32".
+  - mips: Linux with CC="gcc -mabi=n32".
+  - mips: Linux with CC="gcc -mabi=64".
+  - mips: IRIX 6.5 with CC="gcc -mabi=n32".
+  - s390: Linux.
+  - sparc: Linux 64-bit.
+  - ia64: Linux.
+  - hppa: HP-UX 32-bit.
+
+* Verified support for the following platforms:
+  (A build on these platforms worked and still works.)
+  - i386: Linux, Solaris, Mac OS X.
+  - powerpc: Linux 32-bit.
+  - powerpc: Linux 64-bit.
+  - powerpc: AIX 32-bit.
+  - mips: IRIX 6.5 with CC="cc -n32".
+  - sparc: Solaris 32-bit.
+  - sparc: Linux 32-bit: CC="gcc -m32".
+  - alpha: Linux.
 
 New in 1.12:
 
