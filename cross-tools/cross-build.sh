@@ -502,7 +502,7 @@ func_build_binutils ()
 # Builds the GNU gcc for a given target.
 # Input:
 # - target          Directory component indicating the target.
-# - version         binutils version
+# - version         gcc version
 # - gcctarget       Target argument to pass to configure
 func_build_gcc ()
 {
