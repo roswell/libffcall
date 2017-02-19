@@ -1,5 +1,3 @@
-#ifndef _avcall_sparc64_c				/*-*- C -*-*/
-#define _avcall_sparc64_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-1999 Bruno Haible, <bruno@clisp.org>
@@ -15,7 +13,7 @@
   Foreign function interface for a Sparc v9 in 64-bit mode with gcc.
 
   This calls a C function with an argument list built up using macros
-  defined in av_call.h.
+  defined in avcall.h.
 
   Sparc 64-bit Argument Passing Conventions
 
@@ -458,5 +456,3 @@ __builtin_avcall(av_alist* l)
   }
   return 0;
 }
-
-#endif /*_avcall_sparc64_c */

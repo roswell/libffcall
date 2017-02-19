@@ -1,5 +1,3 @@
-#ifndef _tests_c				/*-*- C -*-*/
-#define _tests_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-1999, 2001-2002, 2005, 2017 Bruno Haible, <bruno@clisp.org>
@@ -1609,5 +1607,3 @@ int
 
   exit(0);
 }
-
-#endif /*_tests_c */

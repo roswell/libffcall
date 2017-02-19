@@ -1,5 +1,3 @@
-#ifndef _avcall_m68k_c				/*-*- C -*-*/
-#define _avcall_m68k_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-1999 Bruno Haible, <bruno@clisp.org>
@@ -15,7 +13,7 @@
   Foreign function interface for a m68k Sun3 with gcc/sun-cc.
 
   This calls a C function with an argument list built up using macros
-  defined in av_call.h.
+  defined in avcall.h.
 
   M68k Argument Passing Conventions:
 
@@ -163,5 +161,3 @@ __builtin_avcall(av_alist* l)
   }
   return 0;
 }
-
-#endif /*_avcall_m68k_c */

@@ -1,5 +1,3 @@
-#ifndef _avcall_mips_c				/*-*- C -*-*/
-#define _avcall_mips_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-1999 Bruno Haible, <bruno@clisp.org>
@@ -16,7 +14,7 @@
   Foreign function interface for an SGI MIPS with gcc/sgi-cc.
 
   This calls a C function with an argument list built up using macros
-  defined in av_call.h.
+  defined in avcall.h.
 
   SGI MIPS Argument Passing Conventions
 
@@ -165,5 +163,3 @@ __builtin_avcall(av_alist* l)
   }
   return 0;
 }
-
-#endif /*_avcall_mips_c */

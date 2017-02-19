@@ -1,5 +1,3 @@
-#ifndef _avcall_powerpc64_c				/*-*- C -*-*/
-#define _avcall_powerpc64_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-2006 Bruno Haible, <bruno@clisp.org>
@@ -287,5 +285,3 @@ __builtin_avcall(av_alist* l)
   }
   return 0;
 }
-
-#endif /*_avcall_powerpc64_c */

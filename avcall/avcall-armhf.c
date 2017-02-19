@@ -1,5 +1,3 @@
-#ifndef _avcall_armhf_c				/*-*- C -*-*/
-#define _avcall_armhf_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-2017 Bruno Haible, <bruno@clisp.org>
@@ -15,7 +13,7 @@
   Foreign function interface for an ARM with -mfloat-abi=hard with gcc.
 
   This calls a C function with an argument list built up using macros
-  defined in av_call.h.
+  defined in avcall.h.
 
   ARM Argument Passing Conventions:
 
@@ -217,5 +215,3 @@ __builtin_avcall(av_alist* l)
   }
   return 0;
 }
-
-#endif /*_avcall_armhf_c */

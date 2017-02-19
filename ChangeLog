@@ -1,5 +1,11 @@
 2017-02-19  Bruno Haible  <bruno@clisp.org>
 
+	Remove useless double-inclusion guard on .c files.
+	* avcall/tests.c: Remove double-inclusion guard.
+	* avcall/avcall-*.c: Likewise. Fix comment.
+
+2017-02-19  Bruno Haible  <bruno@clisp.org>
+
 	powerpc: Fix build failure on MacOS X (regression from 2017-01-29).
 	1.
 	* cross-tools/cross.conf: For powerpc-darwin, go back to gcc 3.3.6.

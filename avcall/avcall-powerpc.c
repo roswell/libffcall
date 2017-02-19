@@ -1,5 +1,3 @@
-#ifndef _avcall_powerpc_c				/*-*- C -*-*/
-#define _avcall_powerpc_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-2006 Bruno Haible, <bruno@clisp.org>
@@ -17,7 +15,7 @@
   Foreign function interface for an IBM RS/6000 with gcc
 
   This calls a C function with an argument list built up using macros
-  defined in av_call.h.
+  defined in avcall.h.
 
   RS6000 Argument Passing Conventions:
 
@@ -213,5 +211,3 @@ __builtin_avcall(av_alist* l)
   }
   return 0;
 }
-
-#endif /*_avcall_powerpc_c */

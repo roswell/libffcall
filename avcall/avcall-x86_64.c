@@ -1,5 +1,3 @@
-#ifndef _avcall_x86_64_c				/*-*- C -*-*/
-#define _avcall_x86_64_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-1999, 2004 Bruno Haible, <bruno@clisp.org>
@@ -15,7 +13,7 @@
   Foreign function interface for a Linux x86_64 (a.k.a. amd64) with gcc.
 
   This calls a C function with an argument list built up using macros
-  defined in av_call.h.
+  defined in avcall.h.
 
   x86_64 Argument Passing Conventions are documented in
   http://www.x86-64.org/abi.pdf.
@@ -296,5 +294,3 @@ __builtin_avcall(av_alist* l)
   }
   return 0;
 }
-
-#endif /*_avcall_x86_64_c */

@@ -1,5 +1,3 @@
-#ifndef _avcall_ia64_c				/*-*- C -*-*/
-#define _avcall_ia64_c
 /**
   Copyright 1993 Bill Triggs, <Bill.Triggs@inrialpes.fr>
   Copyright 1995-2001 Bruno Haible, <bruno@clisp.org>
@@ -15,7 +13,7 @@
   Foreign function interface for a Intel IA-64 in little-endian mode with gcc.
 
   This calls a C function with an argument list built up using macros
-  defined in av_call.h.
+  defined in avcall.h.
 
   IA-64 64-bit Argument Passing Conventions:
 
@@ -255,5 +253,3 @@ __builtin_avcall(av_alist* l)
   }
   return 0;
 }
-
-#endif /*_avcall_ia64_c */
