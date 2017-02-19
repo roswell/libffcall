@@ -136,7 +136,7 @@ avcall-powerpc-sysv4.s : avcall-powerpc.c avcall.h.in $(THISFILE)
 	$(CROSS_TOOL) powerpc-linux gcc -V 3.3.6 -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S avcall-powerpc.c -o avcall-powerpc-sysv4.s
 
 avcall-powerpc-macos.s : avcall-powerpc.c avcall.h.in $(THISFILE)
-	$(CROSS_TOOL) powerpc-darwin gcc -V 4.0.4 $(GCCFLAGS) -D__powerpc__ -S avcall-powerpc.c -o avcall-powerpc-macos.s
+	$(CROSS_TOOL) powerpc-darwin gcc -V 3.3.6 $(GCCFLAGS) -D__powerpc__ -S avcall-powerpc.c -o avcall-powerpc-macos.s
 
 avcall-powerpc64-aix.s : avcall-powerpc64.c avcall.h.in $(THISFILE)
 	$(CROSS_TOOL) rs6000-aix6.1 gcc-5.4.0 -maix64 $(GCCFLAGS) -D__powerpc64__ -S avcall-powerpc64.c -o avcall-powerpc64-aix.s

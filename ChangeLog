@@ -1,3 +1,22 @@
+2017-02-19  Bruno Haible  <bruno@clisp.org>
+
+	powerpc: Fix build failure on MacOS X (regression from 2017-01-29).
+	1.
+	* cross-tools/cross.conf: For powerpc-darwin, go back to gcc 3.3.6.
+	* cross-tools/patches/gcc-3.3.6.patch: New file.
+	* avcall/Makefile.devel (avcall-powerpc-macos.s): Use gcc 3.3.6.
+	* vacall/Makefile.devel (vacall-powerpc-macos.s): Use gcc 3.3.6.
+	* callback/vacall_r/Makefile.devel (vacall-powerpc-macos.s): Use gcc
+	3.3.6.
+	2.
+	* avcall/Makefile.in (avcall-powerpc.s): For MacOS, remove the .machine
+	pseudo-op.
+	* vacall/Makefile.in (vacall-powerpc.s): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-powerpc.s): Likewise.
+	3.
+	* PLATFORMS, */PLATFORMS: List powerpc-apple-darwin9.8.0 (gcc).
+	* NEWS: Mention the status of MacOS X / powerpc.
+
 2017-02-12  Bruno Haible  <bruno@clisp.org>
 
 	Make the cross-build.sh script work on an x86_64-linux host.

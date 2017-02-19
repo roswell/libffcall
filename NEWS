@@ -29,6 +29,7 @@ New in 1.13:
   - powerpc: Linux 32-bit.
   - powerpc: Linux 64-bit.
   - powerpc: AIX 32-bit.
+  - powerpc: MacOS X.
   - mips: IRIX 6.5 with CC="cc -n32".
   - sparc: Solaris 32-bit.
   - sparc: Linux 32-bit: CC="gcc -m32".

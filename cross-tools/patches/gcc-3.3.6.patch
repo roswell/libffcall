@@ -1,0 +1,40 @@
+diff -r -u gcc-3.3.6/gcc/config/darwin.c gcc-3.3.6/gcc/config/darwin.c
+--- gcc-3.3.6/gcc/config/darwin.c	2004-03-23 06:35:01.000000000 +0100
++++ gcc-3.3.6/gcc/config/darwin.c	2017-02-14 00:51:28.767083600 +0100
+@@ -1014,7 +1014,9 @@
+ 	  name2 = darwin_strip_name_encoding (sym_name);
+ 	  if (strcmp (name1, name2) == 0)
+ 	    {
+-	      IDENTIFIER_POINTER (TREE_VALUE (temp)) = name;
++	      /* FIXME: This breaks the identifier hash table.  */
++	      IDENTIFIER_NODE_CHECK (TREE_VALUE (temp))->identifier.id.str
++		= (unsigned char *) name;
+ 	      break;
+ 	    }
+ 	}
+@@ -1078,7 +1080,9 @@
+ 	  name2 = darwin_strip_name_encoding (sym_name);
+ 	  if (strcmp (name1, name2) == 0)
+ 	    {
+-	      IDENTIFIER_POINTER (TREE_VALUE (temp)) = name;
++	      /* FIXME: This breaks the identifier hash table.  */
++	      IDENTIFIER_NODE_CHECK (TREE_VALUE (temp))->identifier.id.str
++		= (unsigned char *) name;
+ 	      break;
+ 	    }
+ 	}
+diff -r -u gcc-3.3.6/gcc/config/rs6000/rs6000.h gcc-3.3.6/gcc/config/rs6000/rs6000.h
+--- gcc-3.3.6/gcc/config/rs6000/rs6000.h	2004-02-02 05:40:49.000000000 +0100
++++ gcc-3.3.6/gcc/config/rs6000/rs6000.h	2017-02-14 00:53:54.467494830 +0100
+@@ -2527,11 +2527,7 @@
+     }									  \
+ }
+ 
+-#ifdef HAVE_GAS_WEAK
+-#define RS6000_WEAK 1
+-#else
+ #define RS6000_WEAK 0
+-#endif
+ 
+ #if RS6000_WEAK
+ /* Used in lieu of ASM_WEAKEN_LABEL.  */

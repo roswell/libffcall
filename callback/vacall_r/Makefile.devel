@@ -156,7 +156,7 @@ vacall-powerpc-sysv4-macro.S : vacall-powerpc.c vacall_r.h.in $(THISFILE)
 	$(RM) vacall-powerpc-sysv4.s
 
 vacall-powerpc-macos.s : vacall-powerpc.c vacall_r.h.in $(THISFILE)
-	$(CROSS_TOOL) powerpc-darwin gcc -V 4.0.4 $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-macos.s
+	$(CROSS_TOOL) powerpc-darwin gcc -V 3.3.6 $(GCCFLAGS) -D__powerpc__ -S vacall-powerpc.c -o vacall-powerpc-macos.s
 
 vacall-powerpc64-aix.s : vacall-powerpc64.c vacall_r.h.in $(THISFILE)
 	$(CROSS_TOOL) rs6000-aix6.1 gcc-5.4.0 -maix64 $(GCCFLAGS) -D__powerpc64__ -S vacall-powerpc64.c -o vacall-powerpc64-aix.s

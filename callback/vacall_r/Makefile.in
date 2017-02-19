@@ -141,6 +141,8 @@ vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux
 	case $${syntax} in \
 	  linux | netbsd | sysv4) \
 	    $(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-powerpc-$${syntax}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-powerpc.s || exit 1 ;; \
+	  macos) \
+	    grep -v '\.machine' $(srcdir)/vacall-powerpc-$${syntax}.s > vacall-powerpc.s || exit 1 ;; \
 	  *) \
 	    cp $(srcdir)/vacall-powerpc-$${syntax}.s vacall-powerpc.s || exit 1 ;; \
 	esac

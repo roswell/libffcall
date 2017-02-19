@@ -126,7 +126,12 @@ vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux
 	  macos* | darwin*) syntax=macos;; \
 	  *) syntax=sysv4;; \
 	esac; \
-	cp $(srcdir)/vacall-powerpc-$${syntax}.s vacall-powerpc.s
+	case $${syntax} in \
+	  macos) \
+	    grep -v '\.machine' $(srcdir)/vacall-powerpc-$${syntax}.s > vacall-powerpc.s || exit 1 ;; \
+	  *) \
+	    cp $(srcdir)/vacall-powerpc-$${syntax}.s vacall-powerpc.s || exit 1 ;; \
+	esac
 
 vacall-powerpc64.o : vacall-powerpc64.s
 	$(CC) @GCC_X_NONE@ -c vacall-powerpc64.s

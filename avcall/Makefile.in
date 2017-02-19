@@ -135,7 +135,12 @@ avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.s $(srcdir)/avcall-powerpc-linux
 	  macos* | darwin*) syntax=macos;; \
 	  *) syntax=sysv4;; \
 	esac; \
-	cp $(srcdir)/avcall-powerpc-$${syntax}.s avcall-powerpc.s
+	case $${syntax} in \
+	  macos) \
+	    grep -v '\.machine' $(srcdir)/avcall-powerpc-$${syntax}.s > avcall-powerpc.s || exit 1 ;; \
+	  *) \
+	    cp $(srcdir)/avcall-powerpc-$${syntax}.s avcall-powerpc.s || exit 1 ;; \
+	esac
 
 avcall-powerpc64.lo : avcall-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-powerpc64.s
