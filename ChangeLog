@@ -1,5 +1,11 @@
 2017-02-19  Bruno Haible  <bruno@clisp.org>
 
+	configuration: Avoid running an unneeded test.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): Require FFCALL_CODEEXEC. Do
+	nothing if its result is that malloc()ed memory is already executable.
+
+2017-02-19  Bruno Haible  <bruno@clisp.org>
+
 	Remove useless double-inclusion guard on .c files.
 	* avcall/tests.c: Remove double-inclusion guard.
 	* avcall/avcall-*.c: Likewise. Fix comment.

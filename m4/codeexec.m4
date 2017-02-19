@@ -54,6 +54,10 @@ dnl and HardenedBSD.
 AC_DEFUN([FFCALL_CODEEXEC_PAX],
 [AC_REQUIRE([FFCALL_MMAP])
 AC_REQUIRE([FFCALL_MPROTECT])
+AC_REQUIRE([FFCALL_CODEEXEC])
+case "$ffcall_cv_codeexec" in
+  *yes) ;;
+  *)
 if test $cl_cv_func_mprotect_works = yes; then
   AC_CACHE_CHECK([whether mprotect can make malloc()ed memory executable],
     [ffcall_cv_malloc_mprotect_can_exec],
@@ -206,4 +210,6 @@ fi
 fi
 fi
 fi
+  ;;
+esac
 ])
