@@ -1,3 +1,8 @@
+2017-02-26  Bruno Haible  <bruno@clisp.org>
+
+	Document the support for GNU Hurd.
+	* PLATFORMS, */PLATFORMS: List i686-unknown-gnu0.9 (gcc).
+
 2017-02-19  Bruno Haible  <bruno@clisp.org>
 
 	configuration: Avoid running an unneeded test.

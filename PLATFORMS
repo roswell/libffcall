@@ -1,5 +1,5 @@
 Supported CPUs:  (Put the GNU config.guess values here.)
-     i386       i486-unknown-linux (gcc),
+     i386       i486-unknown-linux (gcc), i686-unknown-gnu0.9 (gcc),
                 i386-unknown-sysv4.0 (gcc, /usr/bin/cc, /usr/ucb/cc),
                 i386-pc-solaris2.6 (gcc), i386-pc-solaris2.10 (gcc, cc),
                 i486-unknown-sco3.2v4.2 (gcc, cc -Of),

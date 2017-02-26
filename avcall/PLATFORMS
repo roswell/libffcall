@@ -3,6 +3,7 @@ Supported CPUs:  (Put the GNU config.guess values here.)
    CPU        GNU config.guess value                 machine       OS
 
    i386       i486-unknown-linux (gcc)               i386/486/586  Linux
+              i686-unknown-gnu0.9 (gcc)              i686          GNU Hurd
               i386-unknown-sysv4.0 (gcc,             i386          Consensys
                   /usr/bin/cc, /usr/ucb/cc)
               i386-pc-solaris2.6 (gcc)               i386/486/586  Solaris
