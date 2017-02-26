@@ -14,10 +14,14 @@ You will need reasonably recent versions of the build tools:
   * GNU automake
     + Homepage:
       http://www.gnu.org/software/automake/
+    You need a particular version of GNU automake.
+    See the comments at the top of Makefile.maint for details.
 
   * GNU autoconf
     + Homepage:
       http://www.gnu.org/software/autoconf/
+    You need a particular version of GNU autoconf and set a couple of symbolic
+    links. See the comments at the top of Makefile.maint for details.
 
   * GNU m4
     + Homepage:

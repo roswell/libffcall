@@ -1,5 +1,14 @@
 2017-02-26  Bruno Haible  <bruno@clisp.org>
 
+	Document more clearly the maintainer prerequisites.
+	* Makefile.in (ACLOCAL, AUTOCONF, AUTOHEADER): Add comments.
+	* README-hacking: Likewise.
+	Reported by Don Cohen <don-ffcall@isis.cs3-inc.com> in
+	<https://lists.gnu.org/archive/html/libffcall/2017-02/msg00001.html>
+	and Sam Steingold <sds@gnu.org>.
+
+2017-02-26  Bruno Haible  <bruno@clisp.org>
+
 	Document the support for GNU Hurd.
 	* PLATFORMS, */PLATFORMS: List i686-unknown-gnu0.9 (gcc).
 

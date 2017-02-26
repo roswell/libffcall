@@ -2,9 +2,19 @@
 
 SHELL = /bin/sh
 MAKE = make
+
+# You need to use this precise version of GNU Automake.
+# If you want to use a different version of GNU Automake, you are on your own!
 ACLOCAL = aclocal-1.15
+
+# You need to use this precise version of GNU Autoconf and create
+# symbolic links
+#   $ ln -s `which autoconf` autoconf-`autoconf --version | sed -e '2,$d' -e 's/^[^0-9]*//'`
+#   $ ln -s `which autoheader` autoheader-`autoheader --version | sed -e '2,$d' -e 's/^[^0-9]*//'`
+# If you want to use a different version of GNU Autoconf, you are on your own!
 AUTOCONF = autoconf-2.69
 AUTOHEADER = autoheader-2.69
+
 CP = cp
 RM = rm -f
 
