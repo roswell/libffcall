@@ -111,64 +111,77 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
         else
           AC_CACHE_CHECK([whether mprotect can make mmap()ed memory executable],
             [ffcall_cv_mmap_mprotect_can_exec],
-            [AC_TRY_RUN(
-               [#include <errno.h>
-                #include <stdlib.h>
-                #ifdef HAVE_UNISTD_H
-                 #include <unistd.h>
-                #endif
-                #include <fcntl.h>
-                /* declare getpagesize() and mprotect() */
-                #include <sys/mman.h>
-                #ifndef HAVE_GETPAGESIZE
-                 #include <sys/param.h>
-                 #define getpagesize() PAGESIZE
-                #else
-                 ]AC_LANG_EXTERN[
-                 RETGETPAGESIZETYPE getpagesize (void);
-                #endif
-                #ifndef MAP_FILE
-                 #define MAP_FILE 0
-                #endif
-                #ifndef MAP_VARIABLE
-                 #define MAP_VARIABLE 0
-                #endif
-                int
-                main ()
-                {
-                  unsigned int pagesize = getpagesize ();
-                  char *p;
-                  int ret;
-                #if defined HAVE_MMAP_ANON
-                  p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON | MAP_VARIABLE, -1, 0);
-                #elif defined HAVE_MMAP_ANONYMOUS
-                  p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
-                #elif defined HAVE_MMAP_DEVZERO
-                  int zero_fd = open("/dev/zero", O_RDONLY, 0666);
-                  if (zero_fd < 0)
-                    return 1;
-                  p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
-                #else
-                  ??
-                #endif
-                  if (p == (char*) -1)
-                    /* mmap is not working as expected. */
-                    return 1;
-                  p[5] = 0x77;
-                  ret = mprotect (p, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
-                  if (ret < 0 && (errno == EACCES || errno == ENOMEM))
-                    /* mprotect is forbidden to make mmap()ed pages executable that were writable earlier. */
-                    return 2;
-                  return 0;
-                }
-               ],
-               [ffcall_cv_mmap_mprotect_can_exec=yes],
-               [ffcall_cv_mmap_mprotect_can_exec=no])
+            [dnl On RHEL 6 / CentOS 6 with SELinux enabled, the result of
+             dnl this test depends on SELinux flags that can be changed at
+             dnl runtime: By default, the result is 'yes'. However, when the flags
+             dnl allow_execmem and allow_execstack are turned off, the result is
+             dnl 'no'.
+             if test "$cross_compiling" != yes -a -d /etc/selinux; then
+               ffcall_cv_mmap_mprotect_can_exec='determined by SELinux at runtime'
+             else
+               AC_TRY_RUN(
+                 [#include <errno.h>
+                  #include <stdlib.h>
+                  #ifdef HAVE_UNISTD_H
+                   #include <unistd.h>
+                  #endif
+                  #include <fcntl.h>
+                  /* declare getpagesize() and mprotect() */
+                  #include <sys/mman.h>
+                  #ifndef HAVE_GETPAGESIZE
+                   #include <sys/param.h>
+                   #define getpagesize() PAGESIZE
+                  #else
+                   ]AC_LANG_EXTERN[
+                   RETGETPAGESIZETYPE getpagesize (void);
+                  #endif
+                  #ifndef MAP_FILE
+                   #define MAP_FILE 0
+                  #endif
+                  #ifndef MAP_VARIABLE
+                   #define MAP_VARIABLE 0
+                  #endif
+                  int
+                  main ()
+                  {
+                    unsigned int pagesize = getpagesize ();
+                    char *p;
+                    int ret;
+                  #if defined HAVE_MMAP_ANON
+                    p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON | MAP_VARIABLE, -1, 0);
+                  #elif defined HAVE_MMAP_ANONYMOUS
+                    p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
+                  #elif defined HAVE_MMAP_DEVZERO
+                    int zero_fd = open("/dev/zero", O_RDONLY, 0666);
+                    if (zero_fd < 0)
+                      return 1;
+                    p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
+                  #else
+                    ??
+                  #endif
+                    if (p == (char*) -1)
+                      /* mmap is not working as expected. */
+                      return 1;
+                    p[5] = 0x77;
+                    ret = mprotect (p, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
+                    if (ret < 0 && (errno == EACCES || errno == ENOMEM))
+                      /* mprotect is forbidden to make mmap()ed pages executable that were writable earlier. */
+                      return 2;
+                    return 0;
+                  }
+                 ],
+                 [ffcall_cv_mmap_mprotect_can_exec=yes],
+                 [ffcall_cv_mmap_mprotect_can_exec=no])
+             fi
             ])
-          if test $ffcall_cv_mmap_mprotect_can_exec = yes; then
-            AC_DEFINE([HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC], [],
-              [have an mprotect() function that can make mmap()ed memory pages executable])
-          else
+          case "$ffcall_cv_mmap_mprotect_can_exec" in
+            yes)       MPROTECT_AFTER_MMAP_CAN_EXEC=1 ;;
+            no)        MPROTECT_AFTER_MMAP_CAN_EXEC=0 ;;
+            *runtime*) MPROTECT_AFTER_MMAP_CAN_EXEC='-1' ;;
+          esac
+          AC_DEFINE_UNQUOTED([HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC], [$MPROTECT_AFTER_MMAP_CAN_EXEC],
+            [have an mprotect() function that can make mmap()ed memory pages executable])
+          if test "$ffcall_cv_mmap_mprotect_can_exec" != yes; then
             AC_CACHE_CHECK([whether a shared mmap can make memory pages executable],
               [ffcall_cv_mmap_shared_can_exec],
               [filename="/tmp/trampdata$$.data"

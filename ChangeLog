@@ -1,5 +1,14 @@
 2017-06-03  Bruno Haible  <bruno@clisp.org>
 
+	Improve support for SELinux.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): On SELinux systems, define
+	HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC to -1.
+	* trampoline/trampoline.c: When HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC is -1,
+	assume the worst and don't set EXECUTABLE_VIA_MMAP_THEN_MPROTECT.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
+2017-06-03  Bruno Haible  <bruno@clisp.org>
+
 	Indent the *.m4 files.
 	* m4/as-underscore.m4: Use reasonable indentation.
 	* m4/cc-gcc.m4: Likewise.

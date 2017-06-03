@@ -58,32 +58,32 @@ extern void (*tramp) (); /* trampoline prototype */
 #endif
 
 #ifndef CODE_EXECUTABLE
-/* How do we make the trampoline's code executable? */
-#if defined(HAVE_MACH_VM) || defined(HAVE_WORKING_MPROTECT)
-#if defined(HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC)
-/* mprotect() [or equivalent] the malloc'ed area. */
-#define EXECUTABLE_VIA_MALLOC_THEN_MPROTECT
-#elif defined(HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC)
-/* mprotect() [or equivalent] the mmap'ed area. */
-#define EXECUTABLE_VIA_MMAP_THEN_MPROTECT
-#elif defined(HAVE_MMAP_SHARED_CAN_EXEC)
-#define EXECUTABLE_VIA_MMAP_FILE_SHARED
-#else
-#error "Don't know how to make memory pages executable."
-#endif
-#else
-#ifdef HAVE_MMAP
-/* Use an mmap'ed page. */
-#define EXECUTABLE_VIA_MMAP
-#else
-#ifdef HAVE_SHM
-/* Use an shmat'ed page. */
-#define EXECUTABLE_VIA_SHM
-#else
-??
-#endif
-#endif
-#endif
+  /* How do we make the trampoline's code executable? */
+  #if defined(HAVE_MACH_VM) || defined(HAVE_WORKING_MPROTECT)
+    #if defined(HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC)
+      /* mprotect() [or equivalent] the malloc'ed area. */
+      #define EXECUTABLE_VIA_MALLOC_THEN_MPROTECT
+    #elif HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC > 0
+      /* mprotect() [or equivalent] the mmap'ed area. */
+      #define EXECUTABLE_VIA_MMAP_THEN_MPROTECT
+    #elif defined(HAVE_MMAP_SHARED_CAN_EXEC)
+      #define EXECUTABLE_VIA_MMAP_FILE_SHARED
+    #else
+      #error "Don't know how to make memory pages executable."
+    #endif
+  #else
+    #ifdef HAVE_MMAP
+      /* Use an mmap'ed page. */
+      #define EXECUTABLE_VIA_MMAP
+    #else
+      #ifdef HAVE_SHM
+        /* Use an shmat'ed page. */
+        #define EXECUTABLE_VIA_SHM
+      #else
+        ??
+      #endif
+    #endif
+  #endif
 #endif
 
 #include <stdio.h> /* declares fprintf() */
