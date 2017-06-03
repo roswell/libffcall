@@ -69,46 +69,59 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
       if test $cl_cv_func_mprotect_works = yes; then
         AC_CACHE_CHECK([whether mprotect can make malloc()ed memory executable],
           [ffcall_cv_malloc_mprotect_can_exec],
-          [AC_TRY_RUN(
-             [#include <errno.h>
-              #include <stdlib.h>
-              #ifdef HAVE_UNISTD_H
-               #include <unistd.h>
-              #endif
-              #include <fcntl.h>
-              /* declare getpagesize() and mprotect() */
-              #include <sys/mman.h>
-              #ifndef HAVE_GETPAGESIZE
-               #include <sys/param.h>
-               #define getpagesize() PAGESIZE
-              #else
-               ]AC_LANG_EXTERN[
-               RETGETPAGESIZETYPE getpagesize (void);
-              #endif
-              int
-              main ()
-              {
-                unsigned int pagesize = getpagesize ();
-                char *p = (char *) malloc (50);
-                int ret;
-                if (p == (char*) -1)
-                  /* malloc is not working as expected. */
-                  return 1;
-                p[5] = 0x77;
-                ret = mprotect (p - ((unsigned int) p & (pagesize - 1)), pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
-                if (ret < 0 && (errno == EACCES || errno == ENOMEM))
-                  /* mprotect is forbidden to make malloc()ed pages executable that were writable earlier. */
-                  return 2;
-                return 0;
-              }
-             ],
-             [ffcall_cv_malloc_mprotect_can_exec=yes],
-             [ffcall_cv_malloc_mprotect_can_exec=no])
+          [dnl On RHEL 6 / CentOS 6 with SELinux enabled, the result of
+           dnl this test depends on SELinux flags that can be changed at
+           dnl runtime: By default, the result is 'no'. However, when the flag
+           dnl allow_execheap is turned on, the result is 'yes'. But the flag
+           dnl can be turned off again at any moment.
+           if test "$cross_compiling" != yes -a -d /etc/selinux; then
+             ffcall_cv_malloc_mprotect_can_exec='determined by SELinux at runtime'
+           else
+             AC_TRY_RUN(
+               [#include <errno.h>
+                #include <stdlib.h>
+                #ifdef HAVE_UNISTD_H
+                 #include <unistd.h>
+                #endif
+                #include <fcntl.h>
+                /* declare getpagesize() and mprotect() */
+                #include <sys/mman.h>
+                #ifndef HAVE_GETPAGESIZE
+                 #include <sys/param.h>
+                 #define getpagesize() PAGESIZE
+                #else
+                 ]AC_LANG_EXTERN[
+                 RETGETPAGESIZETYPE getpagesize (void);
+                #endif
+                int
+                main ()
+                {
+                  unsigned int pagesize = getpagesize ();
+                  char *p = (char *) malloc (50);
+                  int ret;
+                  if (p == (char*) -1)
+                    /* malloc is not working as expected. */
+                    return 1;
+                  p[5] = 0x77;
+                  ret = mprotect (p - ((unsigned int) p & (pagesize - 1)), pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
+                  if (ret < 0 && (errno == EACCES || errno == ENOMEM))
+                    /* mprotect is forbidden to make malloc()ed pages executable that were writable earlier. */
+                    return 2;
+                  return 0;
+                }
+               ],
+               [ffcall_cv_malloc_mprotect_can_exec=yes],
+               [ffcall_cv_malloc_mprotect_can_exec=no])
+           fi
           ])
-        if test $ffcall_cv_malloc_mprotect_can_exec = yes; then
-          AC_DEFINE([HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC], [],
-            [have an mprotect() function that can make malloc()ed memory pages executable])
-        else
+        case "$ffcall_cv_malloc_mprotect_can_exec" in
+          yes)       MPROTECT_AFTER_MALLOC_CAN_EXEC=1 ;;
+          no)        MPROTECT_AFTER_MALLOC_CAN_EXEC=0 ;;
+          *runtime*) MPROTECT_AFTER_MALLOC_CAN_EXEC='-1' ;;
+        esac
+        AC_DEFINE_UNQUOTED([HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC], [$MPROTECT_AFTER_MALLOC_CAN_EXEC],
+          [have an mprotect() function that can make malloc()ed memory pages executable])
+        if test "$ffcall_cv_malloc_mprotect_can_exec" != yes; then
           AC_CACHE_CHECK([whether mprotect can make mmap()ed memory executable],
             [ffcall_cv_mmap_mprotect_can_exec],
             [dnl On RHEL 6 / CentOS 6 with SELinux enabled, the result of

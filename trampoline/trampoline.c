@@ -60,7 +60,7 @@ extern void (*tramp) (); /* trampoline prototype */
 #ifndef CODE_EXECUTABLE
   /* How do we make the trampoline's code executable? */
   #if defined(HAVE_MACH_VM) || defined(HAVE_WORKING_MPROTECT)
-    #if defined(HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC)
+    #if HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC > 0
       /* mprotect() [or equivalent] the malloc'ed area. */
       #define EXECUTABLE_VIA_MALLOC_THEN_MPROTECT
     #elif HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC > 0
