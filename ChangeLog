@@ -1,3 +1,24 @@
+2017-06-03  Bruno Haible  <bruno@clisp.org>
+
+	Indent the *.m4 files.
+	* m4/as-underscore.m4: Use reasonable indentation.
+	* m4/cc-gcc.m4: Likewise.
+	* m4/codeexec.m4: Likewise.
+	* m4/endianness.m4: Likewise.
+	* m4/general.m4: Likewise.
+	* m4/getpagesize.m4: Likewise.
+	* m4/ireg.m4: Likewise.
+	* m4/ln.m4: Likewise.
+	* m4/mach-vm.m4: Likewise.
+	* m4/mmap.m4: Likewise.
+	* m4/mprotect.m4: Likewise.
+	* m4/pccstruct.m4: Likewise.
+	* m4/shm.m4: Likewise.
+	* m4/smallstruct.m4: Likewise.
+	* m4/proto.m4: Likewise.
+	(CL_PROTO_TRY, CL_PROTO_CONST, CL_PROTO_MISSING, CONST_VARIANTS,
+	SIZE_VARIANTS): Remove macros.
+
 2017-02-26  Bruno Haible  <bruno@clisp.org>
 
 	Document more clearly the maintainer prerequisites.

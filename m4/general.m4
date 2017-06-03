@@ -11,31 +11,37 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 AC_PREREQ([2.61])
 
 AC_DEFUN([FFCALL_COMMON_LIBTOOL],
-[LT_INIT([disable-shared])dnl
+[
+  LT_INIT([disable-shared])
 ])
 
 AC_DEFUN([FFCALL_COMMON_TRAMPOLINE],
-[AC_REQUIRE([AC_HEADER_STDC])dnl
-AC_REQUIRE([CL_GETPAGESIZE])dnl
-AC_REQUIRE([CL_MACH_VM])dnl
-AC_REQUIRE([FFCALL_MMAP])dnl
-AC_REQUIRE([FFCALL_MPROTECT])dnl
-AC_REQUIRE([CL_SHM_H])dnl
-AC_REQUIRE([CL_SHM])dnl
-AC_REQUIRE([FFCALL_CODEEXEC])dnl
-AC_REQUIRE([FFCALL_CODEEXEC_PAX])dnl
+[
+  AC_REQUIRE([AC_HEADER_STDC])
+  AC_REQUIRE([CL_GETPAGESIZE])
+  AC_REQUIRE([CL_MACH_VM])
+  AC_REQUIRE([FFCALL_MMAP])
+  AC_REQUIRE([FFCALL_MPROTECT])
+  AC_REQUIRE([CL_SHM_H])
+  AC_REQUIRE([CL_SHM])
+  AC_REQUIRE([FFCALL_CODEEXEC])
+  AC_REQUIRE([FFCALL_CODEEXEC_PAX])
 ])
 
-AC_DEFUN([CL_CHECK],[dnl
+AC_DEFUN([CL_CHECK],
+[
   AC_CACHE_CHECK([for $2],[$3],
     [$1([AC_LANG_PROGRAM([$4],[$5])],[$3=yes],[$3=no])])
   AS_IF([test $$3 = yes], [$6], [$7])
 ])
 
-AC_DEFUN([CL_LINK_CHECK], [CL_CHECK([AC_LINK_IFELSE],$@)])
+AC_DEFUN([CL_LINK_CHECK],
+[
+  CL_CHECK([AC_LINK_IFELSE],$@)
+])
 
 dnl Expands to the "extern ..." prefix used for system declarations.
-dnl AC_LANG_EXTERN()
+dnl AC_LANG_EXTERN
 AC_DEFUN([AC_LANG_EXTERN],
 [extern
 #ifdef __cplusplus

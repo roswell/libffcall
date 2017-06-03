@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2009 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2017 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License.  As a special exception to the GNU General
 dnl Public License, this file may be distributed as part of a program
@@ -11,23 +11,30 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 AC_PREREQ([2.13])
 
 AC_DEFUN([SSR_DOC],[whether small structs are returned in registers])
-AC_DEFUN([FFCALL_SMALL_STRUCT_RETURN],[dnl
-AC_CACHE_CHECK([SSR_DOC],[ffcall_cv_c_struct_return_small],[AC_TRY_RUN(GL_NOCRASH[
-typedef struct { long x; } foo; long y;
-foo foofun () { foo f; f.x = y; return f; }
-long (*fun) () = (long (*) ()) foofun;
-int main() {
-  nocrash_init();
-  y = 37; if ((*fun)() != 37) return 1;
-  y = 55; if ((*fun)() != 55) return 1;
-  return 0;
-}], [ffcall_cv_c_struct_return_small=yes], [ffcall_cv_c_struct_return_small=no],
-[dnl When cross-compiling, don't assume anything.
-dnl There are even weirder return value passing conventions than pcc.
-ffcall_cv_c_struct_return_small="guessing no"])
-])
-case "$ffcall_cv_c_struct_return_small" in
-  *yes) AC_DEFINE([__SMALL_STRUCT_RETURN__], [], SSR_DOC) ;;
-  *no) ;;
-esac
+AC_DEFUN([FFCALL_SMALL_STRUCT_RETURN],
+[
+  AC_CACHE_CHECK([SSR_DOC], [ffcall_cv_c_struct_return_small],
+    [AC_TRY_RUN(GL_NOCRASH
+       [typedef struct { long x; } foo;
+        long y;
+        foo foofun () { foo f; f.x = y; return f; }
+        long (*fun) () = (long (*) ()) foofun;
+        int main()
+        { nocrash_init();
+          y = 37; if ((*fun)() != 37) return 1;
+          y = 55; if ((*fun)() != 55) return 1;
+          return 0;
+        }
+       ],
+       [ffcall_cv_c_struct_return_small=yes],
+       [ffcall_cv_c_struct_return_small=no],
+       [dnl When cross-compiling, don't assume anything.
+        dnl There are even weirder return value passing conventions than pcc.
+        ffcall_cv_c_struct_return_small="guessing no"
+       ])
+    ])
+  case "$ffcall_cv_c_struct_return_small" in
+    *yes) AC_DEFINE([__SMALL_STRUCT_RETURN__], [], SSR_DOC) ;;
+    *no) ;;
+  esac
 ])
