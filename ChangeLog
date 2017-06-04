@@ -1,5 +1,11 @@
 2017-06-04  Bruno Haible  <bruno@clisp.org>
 
+	build: Get rid of autom4te.cache directories.
+	* Makefile.maint (configure, $(SUBDIRS_CONFIGURE), $(ALL_CONFIG_H_IN)):
+	Remove autom4te.cache subdirectory.
+
+2017-06-04  Bruno Haible  <bruno@clisp.org>
+
 	Change the license from GPLv2 to GPLv2+.
 	* **/configure.ac, **/*.3, **/*.html, **/minitests.c,
 	callback/MIGRATION, common/asm-*: Add copyright notice.

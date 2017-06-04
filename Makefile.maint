@@ -131,10 +131,10 @@ configures : $(ALL_CONFIGURE)
 AUTOCONF_FILES = aclocal.m4 $(wildcard m4/*.m4) $(wildcard glm4/*.m4)
 
 configure : configure.ac $(AUTOCONF_FILES)
-	$(AUTOCONF)
+	$(AUTOCONF) && rm -rf autom4te.cache
 
 $(SUBDIRS_CONFIGURE) : %/configure : %/configure.ac $(AUTOCONF_FILES)
-	srcdir=`pwd`; cd $* && $(AUTOCONF) --include="$$srcdir"
+	srcdir=`pwd`; cd $* && $(AUTOCONF) --include="$$srcdir" && rm -rf autom4te.cache
 
 .PHONY : check-configures
 check-configures : $(ALL_CONFIGURE)
@@ -147,7 +147,7 @@ ALL_CONFIG_H_IN = $(patsubst %,%/config.h.in,$(CONFIGURED_SUBDIRS))
 config-h-in : $(ALL_CONFIG_H_IN)
 
 $(ALL_CONFIG_H_IN) : %/config.h.in : %/configure.ac $(AUTOCONF_FILES)
-	srcdir=`pwd`; cd $* && $(AUTOHEADER) --include="$$srcdir"
+	srcdir=`pwd`; cd $* && $(AUTOHEADER) --include="$$srcdir" && rm -rf autom4te.cache
 
 
 # Other generated files.
