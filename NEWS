@@ -1,5 +1,7 @@
 New in 1.13:
 
+* The license has been changed from GPLv2 to GPLv2+.
+
 * Added support for the following platforms:
   (Previously, a build on these platforms failed.)
   - x86_64: Mac OS X 64-bit.

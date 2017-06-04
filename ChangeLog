@@ -1,3 +1,12 @@
+2017-06-04  Bruno Haible  <bruno@clisp.org>
+
+	Change the license from GPLv2 to GPLv2+.
+	* **/configure.ac, **/*.3, **/*.html, **/minitests.c,
+	callback/MIGRATION, common/asm-*: Add copyright notice.
+	* m4/*.m4: Use GPLv2+ with exception notice.
+	* Everywhere else: Change GPLv2 copyright notice to GPLv2+ copyright
+	notice. Update copyright years.
+
 2017-06-03  Bruno Haible  <bruno@clisp.org>
 
 	Make the cross-build.sh script work with argument 'all'.

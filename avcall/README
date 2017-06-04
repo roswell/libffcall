@@ -15,10 +15,10 @@ arg-list overflow).
 
 
 Installation instructions:
-	./configure
-	make
-	make check
-	make install
+        ./configure
+        make
+        make check
+        make install
 
 
 Files in this package:
@@ -55,15 +55,21 @@ Files in this package:
         underscore.h    used to build the *.S files
 
 
-The current code is under the GNU licence, but the interface (macro
-names, arguments & functionality but not the actual macro or function
-code in avcall.[ch]) is absolutely free and any port conforming to it is
-welcome.
+Copyright notice:
 
-------------------------------------------------------
-Bill Triggs                       | Bill.Triggs@inrialpes.fr
-Oxford University Robotics Group  | Bill.Triggs@imag.fr
-19 Parks Rd, Oxford OX1 3PJ, G.B. | fax +44-865-273908
-------------------------------------------------------
-Bruno Haible
-<bruno@clisp.org>
+Copyright 1993-1995 Bill Triggs <Bill.Triggs@imag.fr>
+Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+

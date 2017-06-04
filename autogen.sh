@@ -15,11 +15,11 @@
 #   - a copy of the newest libtool-x.y.z.tar.gz in the current directory, or
 #   - the wget program in the PATH and an internet connection.
 
-# Copyright (C) 2016 Bruno Haible.
+# Copyright (C) 2016-2017 Bruno Haible.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3 of the License, or
+# the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
