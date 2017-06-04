@@ -1,5 +1,10 @@
 2017-06-03  Bruno Haible  <bruno@clisp.org>
 
+	Make the cross-build.sh script work with argument 'all'.
+	* cross-tools/cross-build.sh: Fix typo.
+
+2017-06-03  Bruno Haible  <bruno@clisp.org>
+
 	Improve support for SELinux.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): On SELinux systems, define
 	HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC to -1.

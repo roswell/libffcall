@@ -612,7 +612,7 @@ case "$mode" in
   all )
     func_build_cross || func_exit 1
     func_get_all_cpus
-    for target_cpu in all_cpus
+    for target_cpu in $all_cpus
     do
       func_build_cpu || func_exit 1
     done
