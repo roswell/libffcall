@@ -1,5 +1,14 @@
 2017-06-10  Bruno Haible  <bruno@clisp.org>
 
+	Simplify Makefile.devel.
+	* avcall/Makefile.devel (HOST, CPU): Remove unused variables.
+	* vacall/Makefile.devel (HOST, CPU): Likewise.
+	* trampoline/Makefile.devel (HOST, CPU): Likewise.
+	* callback/vacall_r/Makefile.devel (HOST, CPU): Likewise.
+	* callback/trampoline_r/Makefile.devel (HOST, CPU): Likewise.
+
+2017-06-10  Bruno Haible  <bruno@clisp.org>
+
 	Make the EXECUTABLE_VIA_MMAP_FILE_SHARED support work on i386.
 	* trampoline/trampoline.c (alloc_trampoline): New local variable
 	'function_x'. Use it instead of 'function' for the computation of the

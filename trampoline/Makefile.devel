@@ -5,8 +5,6 @@ RM = rm -f
 
 # ============ Rules that require cross-compilation tools ============
 
-HOST = i486-linux
-CPU = i386
 GCC = gcc
 GCCFLAGS = -O2 -fomit-frame-pointer
 CPP = $(GCC) -E
