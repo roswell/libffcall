@@ -95,8 +95,11 @@ vacall-mips64.o : vacall-mips64.s
 vacall-mips64.s : $(srcdir)/vacall-mips64@ENDIANNESS@-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-mips64@ENDIANNESS@-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mips64.s
 
-vacall-alpha.o : $(srcdir)/vacall-alpha.s
-	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-alpha.s
+vacall-alpha.o : vacall-alpha.s
+	$(CC) @GCC_X_NONE@ -c vacall-alpha.s
+
+vacall-alpha.s : $(srcdir)/vacall-alpha-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-alpha-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-alpha.s
 
 vacall-hppa.o : vacall-hppa.s
 	$(CC) @GCC_X_NONE@ -c vacall-hppa.s
@@ -119,7 +122,7 @@ vacall-armhf.s : $(srcdir)/vacall-armhf-macro.S
 vacall-powerpc.o : vacall-powerpc.s
 	$(CC) @GCC_X_NONE@ -c vacall-powerpc.s
 
-vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux.s $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-sysv4.s
+vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux-macro.S $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-sysv4-macro.S
 	case "$(OS)" in \
 	  aix*) syntax=aix;; \
 	  linux* | netbsd* | openbsd*) syntax=linux;; \
@@ -129,6 +132,8 @@ vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux
 	case $${syntax} in \
 	  macos) \
 	    grep -v '\.machine' $(srcdir)/vacall-powerpc-$${syntax}.s > vacall-powerpc.s || exit 1 ;; \
+	  linux | sysv4) \
+	    $(CPP) $(ASPFLAGS) $(srcdir)/vacall-powerpc-$${syntax}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-powerpc.s || exit 1 ;; \
 	  *) \
 	    cp $(srcdir)/vacall-powerpc-$${syntax}.s vacall-powerpc.s || exit 1 ;; \
 	esac
@@ -136,21 +141,29 @@ vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux
 vacall-powerpc64.o : vacall-powerpc64.s
 	$(CC) @GCC_X_NONE@ -c vacall-powerpc64.s
 
-vacall-powerpc64.s : $(srcdir)/vacall-powerpc64-aix.s $(srcdir)/vacall-powerpc64-linux.s
+vacall-powerpc64.s : $(srcdir)/vacall-powerpc64-aix.s $(srcdir)/vacall-powerpc64-linux.S
 	case "$(OS)" in \
 	  aix*) syntax=aix;; \
 	  *) syntax=linux;; \
 	esac; \
-	cp $(srcdir)/vacall-powerpc64-$${syntax}.s vacall-powerpc64.s
+	case $${syntax} in \
+	  linux) \
+	    $(CPP) $(ASPFLAGS) $(srcdir)/vacall-powerpc64-$${syntax}.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-powerpc64.s || exit 1 ;; \
+	  *) \
+	    cp $(srcdir)/vacall-powerpc64-$${syntax}.s vacall-powerpc64.s || exit 1 ;; \
+	esac
 
 vacall-powerpc64-elfv2.o : vacall-powerpc64-elfv2.s
 	$(CC) @GCC_X_NONE@ -c vacall-powerpc64-elfv2.s
 
-vacall-powerpc64-elfv2.s : $(srcdir)/vacall-powerpc64-elfv2-linux.s
-	cp $(srcdir)/vacall-powerpc64-elfv2-linux.s vacall-powerpc64-elfv2.s
+vacall-powerpc64-elfv2.s : $(srcdir)/vacall-powerpc64-elfv2-linux.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-powerpc64-elfv2-linux.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-powerpc64-elfv2.s
 
-vacall-ia64.o : $(srcdir)/vacall-ia64.s
-	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-ia64.s
+vacall-ia64.o : vacall-ia64.s
+	$(CC) @GCC_X_NONE@ -c vacall-ia64.s
+
+vacall-ia64.s : $(srcdir)/vacall-ia64-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-ia64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-ia64.s
 
 vacall-x86_64.o : vacall-x86_64.s
 	$(CC) @GCC_X_NONE@ -c vacall-x86_64.s
@@ -164,8 +177,11 @@ vacall-x86_64-x32.o : vacall-x86_64-x32.s
 vacall-x86_64-x32.s : $(srcdir)/vacall-x86_64-x32-linux.s
 	cp $(srcdir)/vacall-x86_64-x32-linux.s vacall-x86_64-x32.s
 
-vacall-s390.o : $(srcdir)/vacall-s390.s
-	$(CC) @GCC_X_NONE@ -c $(srcdir)/vacall-s390.s
+vacall-s390.o : vacall-s390.s
+	$(CC) @GCC_X_NONE@ -c vacall-s390.s
+
+vacall-s390.s : $(srcdir)/vacall-s390-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-s390-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390.s
 
 misc.o : $(srcdir)/misc.c vacall.h config.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/misc.c
@@ -240,7 +256,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.a core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-x86_64.s vacall-x86_64-x32.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64-x32.s vacall-s390.s
 	$(RM) minitests.o minitests.s minitests minitests.out
 	$(RM) tests.o tests.s tests tests.out
 
@@ -250,7 +266,7 @@ distclean : clean
 maintainer-clean : distclean
 
 
-# List of source files (committed in version control).
+# List of source files (committed in version control or generated by Makefile.devel).
 SOURCE_FILES = \
   COPYING \
   PLATFORMS README vacall.3 vacall.html \
@@ -259,21 +275,21 @@ SOURCE_FILES = \
   Makefile.in Makefile.mingw32 Makefile.msvc \
   configure.ac \
   vacall.h.in \
-  vacall-alpha.c vacall-alpha.s \
+  vacall-alpha.c vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm.c vacall-arm-macro.S \
   vacall-armhf.c vacall-armhf-macro.S \
   vacall-hppa.c vacall-hppa-linux.s vacall-hppa-macro.S \
   vacall-i386.c vacall-i386-linux.s vacall-i386-macro.S \
-  vacall-ia64.c vacall-ia64.s \
+  vacall-ia64.c vacall-ia64-linux.s vacall-ia64-macro.S \
   vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S \
   vacall-mips.c vacall-mipseb-linux.s vacall-mipsel-linux.s vacall-mipseb-macro.S vacall-mipsel-macro.S \
   vacall-mipsn32.c vacall-mipsn32eb-linux.s vacall-mipsn32el-linux.s vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S \
   vacall-mips64.c vacall-mips64eb-linux.s vacall-mips64el-linux.s vacall-mips64eb-macro.S vacall-mips64el-macro.S \
   vacall-powerpc.c \
   vacall-powerpc-aix.s \
-  vacall-powerpc-linux.s vacall-powerpc-macos.s vacall-powerpc-sysv4.s \
-  vacall-powerpc64.c vacall-powerpc64-aix.s vacall-powerpc64-linux.s vacall-powerpc64-elfv2-linux.s \
-  vacall-s390.c vacall-s390.s \
+  vacall-powerpc-linux.s vacall-powerpc-linux-macro.S vacall-powerpc-macos.s vacall-powerpc-sysv4-macro.S \
+  vacall-powerpc64.c vacall-powerpc64-aix.s vacall-powerpc64-linux.S vacall-powerpc64-elfv2-linux.S \
+  vacall-s390.c vacall-s390-linux.s vacall-s390-macro.S \
   vacall-sparc.c vacall-sparc-linux.s vacall-sparc-macro.S \
   vacall-sparc64.c vacall-sparc64-linux.s vacall-sparc64-macro.S \
   vacall-x86_64.c vacall-x86_64-linux.s vacall-x86_64-macro.S vacall-x86_64-x32-linux.s \

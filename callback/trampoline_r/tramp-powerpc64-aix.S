@@ -51,3 +51,5 @@ tramp_r:
 	ld 0,0(12)	/* actual code address */
 	mtctr 0
 	bctr
+
+#include "noexecstack.h"

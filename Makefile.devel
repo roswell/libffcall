@@ -6,7 +6,11 @@
 precompiled : force
 	cd avcall && $(MAKE) -f Makefile.devel precompiled
 	cd vacall && $(MAKE) -f Makefile.devel precompiled
+	cd trampoline && $(MAKE) -f Makefile.devel precompiled
 	cd callback/vacall_r \
+	  && $(MAKE) -f Makefile.maint copied-files \
+	  && $(MAKE) -f Makefile.devel precompiled
+	cd callback/trampoline_r \
 	  && $(MAKE) -f Makefile.maint copied-files \
 	  && $(MAKE) -f Makefile.devel precompiled
 

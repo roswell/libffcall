@@ -62,8 +62,11 @@ trampoline_r.h : $(srcdir)/trampoline_r.h.in
 trampoline.lo : $(srcdir)/trampoline.c trampoline_r.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/trampoline.c
 
-tramp-hppa.lo : $(srcdir)/tramp-hppa.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/tramp-hppa.s
+tramp-hppa.lo : tramp-hppa.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-hppa.s
+
+tramp-hppa.s : $(srcdir)/tramp-hppa-macro.S $(srcdir)/../../common/noexecstack.h
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/tramp-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > tramp-hppa.s
 
 tramp-powerpc.lo : tramp-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc.s
@@ -74,11 +77,14 @@ tramp-powerpc.s : $(srcdir)/tramp-powerpc-aix.S
 tramp-powerpc64.lo : tramp-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc64.s
 
-tramp-powerpc64.s : $(srcdir)/tramp-powerpc64-aix.S
-	$(CPP) $(srcdir)/tramp-powerpc64-aix.S > tramp-powerpc64.s
+tramp-powerpc64.s : $(srcdir)/tramp-powerpc64-aix.S $(srcdir)/../../common/noexecstack.h
+	$(CPP) -I$(srcdir)/../../common $(srcdir)/tramp-powerpc64-aix.S > tramp-powerpc64.s
 
-tramp-ia64.lo : $(srcdir)/tramp-ia64.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/tramp-ia64.s
+tramp-ia64.lo : tramp-ia64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-ia64.s
+
+tramp-ia64.s : $(srcdir)/tramp-ia64-macro.S $(srcdir)/../../common/noexecstack.h
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/tramp-ia64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > tramp-ia64.s
 
 cache-sparc.lo : cache-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-sparc.s
@@ -89,26 +95,37 @@ cache-sparc.s : $(srcdir)/cache-sparc-macro.S
 cache-sparc64.lo : cache-sparc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-sparc64.s
 
-cache-sparc64.s : $(srcdir)/cache-sparc-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common - < $(srcdir)/cache-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc64.s
+cache-sparc64.s : $(srcdir)/cache-sparc64-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common - < $(srcdir)/cache-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc64.s
 
-cache-alpha.lo : $(srcdir)/cache-alpha.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-alpha.s
+cache-alpha.lo : cache-alpha.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-alpha.s
 
-cache-hppa.lo : $(srcdir)/cache-hppa.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-hppa.s
+cache-alpha.s : $(srcdir)/cache-alpha-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/cache-alpha-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-alpha.s
 
-cache-powerpc.lo : $(srcdir)/cache-powerpc-sysv4.s $(srcdir)/cache-powerpc-macos.s
+cache-hppa.lo : cache-hppa.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-hppa.s
+
+cache-hppa.s : $(srcdir)/cache-hppa-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/cache-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > cache-hppa.s
+
+cache-powerpc.lo : cache-powerpc.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-powerpc.s
+
+cache-powerpc.s : $(srcdir)/cache-powerpc-linux-macro.S $(srcdir)/cache-powerpc-macos.s
 	case "$(OS)" in \
 	  macos* | darwin*) syntax=macos;; \
-	  *) syntax=sysv4;; \
+	  *) syntax=linux;; \
 	esac; \
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/cache-powerpc-$${syntax}.s ; \
-	cp cache-powerpc-$${syntax}.lo cache-powerpc.lo ; rm -f cache-powerpc-$${syntax}.lo ; \
-	if test -f cache-powerpc-$${syntax}.o; then cp cache-powerpc-$${syntax}.o cache-powerpc.o; fi
-# Note that cache-powerpc-${syntax}.o is kept in place, because in some cases
-# cache-powerpc-${syntax}.lo contains a symbolic reference to it and therefore
-# libtool may want to access it.
+	case $${syntax} in \
+	  macos) \
+	    grep -v '\.machine' $(srcdir)/cache-powerpc-$${syntax}.s > cache-powerpc.s || exit 1 ;; \
+	  linux) \
+	    $(CPP) $(ASPFLAGS) $(srcdir)/cache-powerpc-$${syntax}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-powerpc.s || exit 1 ;; \
+	  *) \
+	    cp $(srcdir)/cache-powerpc-$${syntax}.s cache-powerpc.s || exit 1 ;; \
+	esac
 
 libtrampoline.la : $(OBJECTS)
 	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS) $(LDFLAGS)
@@ -174,7 +191,7 @@ extracheck : check
 mostlyclean : clean
 
 clean : force
-	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.o/g'` tramp-powerpc.s tramp-powerpc64.s cache-sparc.s cache-sparc64.s libtrampoline.* core
+	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.o/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-powerpc.s libtrampoline.* core
 	$(RM) -r .libs _libs
 	$(RM) test1.o test1 test2.o test2
 
@@ -184,7 +201,7 @@ distclean : clean
 maintainer-clean : distclean
 
 
-# List of source files (committed in version control).
+# List of source files (committed in version control or generated by Makefile.devel).
 SOURCE_FILES = \
   COPYING \
   PORTING README trampoline_r.3 trampoline_r.html \
@@ -194,15 +211,15 @@ SOURCE_FILES = \
   configure.ac \
   trampoline_r.h.in \
   trampoline.c \
-  tramp-hppa.s \
+  tramp-hppa-macro.S \
   tramp-powerpc-aix.S \
   tramp-powerpc64-aix.S \
-  tramp-ia64.s \
+  tramp-ia64-macro.S \
   cache.c \
-  cache-alpha.c cache-alpha.s \
-  cache-hppa.c cache-hppa.s \
-  cache-powerpc.c cache-powerpc-macos.s cache-powerpc-sysv4.s \
-  cache-sparc.c cache-sparc-macro.S \
+  cache-alpha.c cache-alpha-linux.s cache-alpha-macro.S \
+  cache-hppa.c cache-hppa-linux.s cache-hppa-macro.S \
+  cache-powerpc.c cache-powerpc-linux.s cache-powerpc-linux-macro.S cache-powerpc-macos.s \
+  cache-sparc.c cache-sparc-linux.s cache-sparc-macro.S cache-sparc64-linux.s cache-sparc64-macro.S \
   test1.c \
   test2.c
 # List of distributed files generated by Makefile.maint.

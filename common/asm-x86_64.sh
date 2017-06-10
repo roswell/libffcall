@@ -65,6 +65,7 @@ EOF
 cat > $tmpscript3 << \EOF
 # ----------- Introduce macro syntax for assembler pseudo-ops
 s/\.p2align \([^,]*\),,\(.*\)/P2ALIGN(\1,\2)/
+/\.section\([ 	]\+\).*GNU-stack/d
 s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
 EOF
 

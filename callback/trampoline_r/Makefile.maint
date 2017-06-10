@@ -29,12 +29,8 @@ COPIED_FILES = \
   PORTING \
   cache.c \
   cache-alpha.c \
-  cache-alpha.s \
   cache-hppa.c \
-  cache-hppa.s \
   cache-powerpc.c \
-  cache-powerpc-macos.s \
-  cache-powerpc-sysv4.s \
   protexec.c
 copied-files : $(COPIED_FILES)
 $(COPIED_FILES) : % : ../../trampoline/%

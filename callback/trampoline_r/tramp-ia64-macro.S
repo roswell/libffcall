@@ -39,3 +39,5 @@ tramp_r:
 	br b6
 	;;
 	.endp tramp_r#
+
+#include "noexecstack.h"

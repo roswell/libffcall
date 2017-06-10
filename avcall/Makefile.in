@@ -104,8 +104,11 @@ avcall-mips64.lo : avcall-mips64.s
 avcall-mips64.s : $(srcdir)/avcall-mips64@ENDIANNESS@-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-mips64@ENDIANNESS@-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-mips64.s
 
-avcall-alpha.lo : $(srcdir)/avcall-alpha.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-alpha.s
+avcall-alpha.lo : avcall-alpha.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-alpha.s
+
+avcall-alpha.s : $(srcdir)/avcall-alpha-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-alpha-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-alpha.s
 
 avcall-hppa.lo : avcall-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-hppa.s
@@ -128,7 +131,7 @@ avcall-armhf.s : $(srcdir)/avcall-armhf-macro.S
 avcall-powerpc.lo : avcall-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-powerpc.s
 
-avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.s $(srcdir)/avcall-powerpc-linux.s $(srcdir)/avcall-powerpc-macos.s $(srcdir)/avcall-powerpc-sysv4.s
+avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.s $(srcdir)/avcall-powerpc-linux-macro.S $(srcdir)/avcall-powerpc-macos.s $(srcdir)/avcall-powerpc-sysv4-macro.S
 	case "$(OS)" in \
 	  aix*) syntax=aix;; \
 	  linux* | netbsd* | openbsd*) syntax=linux;; \
@@ -138,6 +141,8 @@ avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.s $(srcdir)/avcall-powerpc-linux
 	case $${syntax} in \
 	  macos) \
 	    grep -v '\.machine' $(srcdir)/avcall-powerpc-$${syntax}.s > avcall-powerpc.s || exit 1 ;; \
+	  linux | sysv4) \
+	    $(CPP) $(ASPFLAGS) $(srcdir)/avcall-powerpc-$${syntax}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-powerpc.s || exit 1 ;; \
 	  *) \
 	    cp $(srcdir)/avcall-powerpc-$${syntax}.s avcall-powerpc.s || exit 1 ;; \
 	esac
@@ -145,21 +150,29 @@ avcall-powerpc.s : $(srcdir)/avcall-powerpc-aix.s $(srcdir)/avcall-powerpc-linux
 avcall-powerpc64.lo : avcall-powerpc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-powerpc64.s
 
-avcall-powerpc64.s : $(srcdir)/avcall-powerpc64-aix.s $(srcdir)/avcall-powerpc64-linux.s
+avcall-powerpc64.s : $(srcdir)/avcall-powerpc64-aix.s $(srcdir)/avcall-powerpc64-linux.S
 	case "$(OS)" in \
 	  aix*) syntax=aix;; \
 	  *) syntax=linux;; \
 	esac; \
-	cp $(srcdir)/avcall-powerpc64-$${syntax}.s avcall-powerpc64.s
+	case $${syntax} in \
+	  linux) \
+	    $(CPP) $(ASPFLAGS) $(srcdir)/avcall-powerpc64-$${syntax}.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-powerpc64.s || exit 1 ;; \
+	  *) \
+	    cp $(srcdir)/avcall-powerpc64-$${syntax}.s avcall-powerpc64.s || exit 1 ;; \
+	esac
 
 avcall-powerpc64-elfv2.lo : avcall-powerpc64-elfv2.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-powerpc64-elfv2.s
 
-avcall-powerpc64-elfv2.s : $(srcdir)/avcall-powerpc64-elfv2-linux.s
-	cp $(srcdir)/avcall-powerpc64-elfv2-linux.s avcall-powerpc64-elfv2.s
+avcall-powerpc64-elfv2.s : $(srcdir)/avcall-powerpc64-elfv2-linux.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-powerpc64-elfv2-linux.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-powerpc64-elfv2.s
 
-avcall-ia64.lo : $(srcdir)/avcall-ia64.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-ia64.s
+avcall-ia64.lo : avcall-ia64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-ia64.s
+
+avcall-ia64.s : $(srcdir)/avcall-ia64-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-ia64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-ia64.s
 
 avcall-x86_64.lo : avcall-x86_64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-x86_64.s
@@ -173,8 +186,11 @@ avcall-x86_64-x32.lo : avcall-x86_64-x32.s
 avcall-x86_64-x32.s : $(srcdir)/avcall-x86_64-x32-linux.s
 	cp $(srcdir)/avcall-x86_64-x32-linux.s avcall-x86_64-x32.s
 
-avcall-s390.lo : $(srcdir)/avcall-s390.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c $(srcdir)/avcall-s390.s
+avcall-s390.lo : avcall-s390.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-s390.s
+
+avcall-s390.s : $(srcdir)/avcall-s390-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-s390-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-s390.s
 
 avcall-structcpy.lo : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy.c
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-structcpy.c
@@ -252,7 +268,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-hppa.s avcall-arm.s avcall-armhf.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-x86_64.s avcall-x86_64-x32.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-arm.s avcall-armhf.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64-x32.s avcall-s390.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.o minitests.s minitests minitests.out
 	$(RM) tests.o tests.s tests tests.out
@@ -263,7 +279,7 @@ distclean : clean
 maintainer-clean : distclean
 
 
-# List of source files (committed in version control).
+# List of source files (committed in version control or generated by Makefile.devel).
 SOURCE_FILES = \
   COPYING \
   DOC PLATFORMS README avcall.3 avcall.html \
@@ -272,21 +288,21 @@ SOURCE_FILES = \
   Makefile.in Makefile.mingw32 Makefile.msvc \
   configure.ac \
   avcall.h.in \
-  avcall-alpha.c avcall-alpha.s \
+  avcall-alpha.c avcall-alpha-linux.s avcall-alpha-macro.S \
   avcall-arm.c avcall-arm-macro.S \
   avcall-armhf.c avcall-armhf-macro.S \
   avcall-hppa.c avcall-hppa-linux.s avcall-hppa-macro.S \
   avcall-i386.c avcall-i386-linux.s avcall-i386-macro.S \
-  avcall-ia64.c avcall-ia64.s \
+  avcall-ia64.c avcall-ia64-linux.s avcall-ia64-macro.S \
   avcall-m68k.c avcall-m68k-linux.s avcall-m68k-sun.s avcall-m68k.mit.S avcall-m68k.motorola.S \
   avcall-mips.c avcall-mipseb-linux.s avcall-mipsel-linux.s avcall-mipseb-macro.S avcall-mipsel-macro.S \
   avcall-mipsn32.c avcall-mipsn32eb-linux.s avcall-mipsn32el-linux.s avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S \
   avcall-mips64.c avcall-mips64eb-linux.s avcall-mips64el-linux.s avcall-mips64eb-macro.S avcall-mips64el-macro.S \
   avcall-powerpc.c \
   avcall-powerpc-aix.s \
-  avcall-powerpc-linux.s avcall-powerpc-macos.s avcall-powerpc-sysv4.s \
-  avcall-powerpc64.c avcall-powerpc64-aix.s avcall-powerpc64-linux.s avcall-powerpc64-elfv2-linux.s \
-  avcall-s390.c avcall-s390.s \
+  avcall-powerpc-linux.s avcall-powerpc-linux-macro.S avcall-powerpc-macos.s avcall-powerpc-sysv4-macro.S \
+  avcall-powerpc64.c avcall-powerpc64-aix.s avcall-powerpc64-linux.S avcall-powerpc64-elfv2-linux.S \
+  avcall-s390.c avcall-s390-linux.s avcall-s390-macro.S \
   avcall-sparc.c avcall-sparc-linux.s avcall-sparc-macro.S \
   avcall-sparc64.c avcall-sparc64-linux.s avcall-sparc64-macro.S \
   avcall-x86_64.c avcall-x86_64-linux.s avcall-x86_64-macro.S avcall-x86_64-x32-linux.s \

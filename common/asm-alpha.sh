@@ -1,12 +1,12 @@
 #!/bin/sh
-# Translate the assembler syntax of arm assembler programs
-# Usage: asm-arm.sh < riscix-asm-file > portable-asm-file
+# Translate the assembler syntax of alpha assembler programs
+# Usage: asm-alpha.sh < alphalinux-asm-file > portable-asm-file
 # The portable-asm-file has to be
 #   1. preprocessed,
 #   2. grep -v '^ *#line' | grep -v '^#'
-#   3. sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$,#,g'
+#   3. sed -e 's,% ,%,g' -e 's,//.*$,,'
 
-# Copyright (C) 1999-2017 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 2017 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,24 +34,8 @@ cat > $tmpscript1 << \EOF
 EOF
 
 cat > $tmpscript2 << \EOF
-# ----------- Hide comments, to avoid trouble in preprocessing
-s,@,//,g
-# ----------- Turn # into $, to avoid trouble in preprocessing
-s,#,\$,g
-# ----------- Global symbols depends on ASM_UNDERSCORE
-s/^\([A-Za-z0-9_:]\+\)/C(\1)/
-s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
-s/\.global[ 	]\([A-Za-z0-9_]*\)/.global C(\1)/
 # ----------- Introduce macro syntax for assembler pseudo-ops
-/\.file\([ 	]\+\)/d
 /\.section\([ 	]\+\).*GNU-stack/d
-s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
-# ----------- Massage the beginning of functions
-/\.type/{
-s/\.type[ 	]\([A-Za-z0-9_]*\), *function/DECLARE_FUNCTION(\1)/
-}
-# ----------- Massage the end of functions
-s/\.size[ 	]\([A-Za-z0-9_]*\),\(.*\)/FUNEND(\1)/
 EOF
 
 sed -f $tmpscript1 | \

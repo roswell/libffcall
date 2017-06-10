@@ -1,5 +1,191 @@
 2017-06-10  Bruno Haible  <bruno@clisp.org>
 
+	Don't declare the need for an executable stack on Linux and FreeBSD.
+	* porting-tools: New directory.
+	* common/asm-alpha.sh: New file.
+	* common/asm-powerpc.sh: New file.
+	* common/asm-arm.sh: Remove the GNU-stack note line.
+	* common/asm-sparc.sh: Likewise.
+	* common/asm-x86_64.sh: Likewise.
+	* common/noexecstack.h: New file.
+	* common/noexecstack-arm.h: New file.
+	* avcall/Makefile.devel (precompiled): Add avcall-alpha-macro.S,
+	avcall-powerpc-linux-macro.S, avcall-powerpc-sysv4-macro.S,
+	avcall-powerpc64-linux.S, avcall-powerpc64-elfv2-linux.S,
+	avcall-ia64-macro.S, avcall-s390-macro.S. Remove avcall-alpha.s,
+	avcall-powerpc-linux.s, avcall-powerpc-sysv4.s,
+	avcall-powerpc64-linux.s, avcall-powerpc64-elfv2-linux.s, avcall-ia64.s,
+	avcall-s390.s.
+	(avcall-i386-macro.S, avcall-m68k.mit.S, avcall-m68k.motorola.S,
+	avcall-sparc-macro.S, avcall-sparc64-macro.S, avcall-hppa-macro.S,
+	avcall-x86_64-macro.S): Include noexecstack.h.
+	(avcall-alpha-linux.s): Renamed from avcall-alpha.s.
+	(avcall-alpha-macro.S): New rule.
+	(avcall-arm-macro.S, avcall-armhf-macro.S): Include noexecstack-arm.h.
+	(avcall-powerpc-linux-macro.S): New rule.
+	(avcall-powerpc-sysv4-macro.S): Replaces rule for
+	avcall-powerpc-sysv4.s.
+	(avcall-powerpc64-linux.S): Replaces rule for avcall-powerpc64-linux.s.
+	(avcall-powerpc64-elfv2-linux.S): Replaces rule for
+	avcall-powerpc64-elfv2-linux.s.
+	(avcall-ia64-linux.s): Renamed from avcall-ia64.s.
+	(avcall-ia64-macro.S): New rule.
+	(avcall-s390-linux.s): Renamed from avcall-s390.s.
+	(avcall-s390-macro.S): New rule.
+	* avcall/Makefile.in (avcall-alpha.s): New rule.
+	(avcall-alpha.lo): Update.
+	(avcall-powerpc.s): Use avcall-powerpc-linux-macro.S,
+	avcall-powerpc-sysv4-macro.S instead of avcall-powerpc-linux.s,
+	avcall-powerpc-sysv4.s.
+	(avcall-powerpc64.s): Use avcall-powerpc64-linux.S instead of
+	avcall-powerpc64-linux.s.
+	(avcall-powerpc64-elfv2.s): Use avcall-powerpc64-elfv2-linux.S instead
+	of avcall-powerpc64-elfv2-linux.s.
+	(avcall-ia64.s): New rule.
+	(avcall-ia64.lo): Update.
+	(avcall-s390.s): New rule.
+	(avcall-s390.lo): Update.
+	(clean): Remove also avcall-alpha.s, avcall-ia64.s, avcall-s390.s.
+	(SOURCE_FILES): Update.
+	* vacall/Makefile.devel (precompiled): Add vacall-alpha-macro.S,
+	vacall-powerpc-linux-macro.S, vacall-powerpc-sysv4-macro.S,
+	vacall-powerpc64-linux.S, vacall-powerpc64-elfv2-linux.S,
+	vacall-ia64-macro.S, vacall-s390-macro.S. Remove vacall-alpha.s,
+	vacall-powerpc-linux.s, vacall-powerpc-sysv4.s,
+	vacall-powerpc64-linux.s, vacall-powerpc64-elfv2-linux.s, vacall-ia64.s,
+	vacall-s390.s.
+	(vacall-i386-macro.S, vacall-m68k.mit.S, vacall-m68k.motorola.S,
+	vacall-sparc-macro.S, vacall-sparc64-macro.S, vacall-hppa-macro.S,
+	vacall-x86_64-macro.S): Include noexecstack.h.
+	(vacall-alpha-linux.s): Renamed from vacall-alpha.s.
+	(vacall-alpha-macro.S): New rule.
+	(vacall-arm-macro.S, vacall-armhf-macro.S): Include noexecstack-arm.h.
+	(vacall-powerpc-linux-macro.S): New rule.
+	(vacall-powerpc-sysv4-macro.S): Replaces rule for
+	vacall-powerpc-sysv4.s.
+	(vacall-powerpc64-linux.S): Replaces rule for vacall-powerpc64-linux.s.
+	(vacall-powerpc64-elfv2-linux.S): Replaces rule for
+	vacall-powerpc64-elfv2-linux.s.
+	(vacall-ia64-linux.s): Renamed from vacall-ia64.s.
+	(vacall-ia64-macro.S): New rule.
+	(vacall-s390-linux.s): Renamed from vacall-s390.s.
+	(vacall-s390-macro.S): New rule.
+	* vacall/Makefile.in (vacall-alpha.s): New rule.
+	(vacall-alpha.o): Update.
+	(vacall-powerpc.s): Use vacall-powerpc-linux-macro.S,
+	vacall-powerpc-sysv4-macro.S instead of vacall-powerpc-linux.s,
+	vacall-powerpc-sysv4.s.
+	(vacall-powerpc64.s): Use vacall-powerpc64-linux.S instead of
+	vacall-powerpc64-linux.s.
+	(vacall-powerpc64-elfv2.s): Use vacall-powerpc64-elfv2-linux.S instead
+	of vacall-powerpc64-elfv2-linux.s.
+	(vacall-ia64.s): New rule.
+	(vacall-ia64.o): Update.
+	(vacall-s390.s): New rule.
+	(vacall-s390.o): Update.
+	(clean): Remove also vacall-alpha.s, vacall-ia64.s, vacall-s390.s.
+	(SOURCE_FILES): Update.
+	* callback/vacall_r/Makefile.devel (precompiled): Add
+	vacall-powerpc64-linux.S, vacall-powerpc64-elfv2-linux.S,
+	vacall-ia64-macro.S. Remove vacall-powerpc64-linux.s,
+	vacall-powerpc64-elfv2-linux.s, vacall-ia64.s.
+	(vacall-i386-macro.S, vacall-m68k.mit.S, vacall-m68k.motorola.S,
+	vacall-sparc-macro.S, vacall-sparc64-macro.S, vacall-alpha-macro.S,
+	vacall-hppa-macro.S, vacall-powerpc-linux-macro.S,
+	vacall-powerpc-sysv4-macro.S, vacall-x86_64-macro.S,
+	vacall-s390-macro.S): Include noexecstack.h.
+	(vacall-arm-macro.S, vacall-armhf-macro.S): Include noexecstack-arm.h.
+	(vacall-powerpc64-linux.S): Replaces rule for vacall-powerpc64-linux.s.
+	(vacall-powerpc64-elfv2-linux.S): Replaces rule for
+	vacall-powerpc64-elfv2-linux.s.
+	(vacall-ia64-linux.s): Renamed from vacall-ia64.s.
+	(vacall-ia64-macro.S): New rule.
+	* callback/vacall_r/Makefile.in (vacall-powerpc64.s): Use
+	vacall-powerpc64-linux.S instead of vacall-powerpc64-linux.s.
+	(vacall-powerpc64-elfv2.s): Use vacall-powerpc64-elfv2-linux.S instead
+	of vacall-powerpc64-elfv2-linux.s.
+	(vacall-ia64.s): New rule.
+	(vacall-ia64.lo): Update.
+	(vacall-s390.s): New rule.
+	(vacall-s390.lo): Update.
+	(clean): Remove also vacall-ia64.s.
+	(SOURCE_FILES): Update.
+	* trampoline/cache-alpha.s: Remove file.
+	* trampoline/cache-hppa.s: Remove file.
+	* trampoline/cache-powerpc-macos.s, trampoline/cache-powerpc-sysv4.s:
+	Remove files.
+	* trampoline/cache-sparc-macro.S: Remove file.
+	* trampoline/tramp-hppa-macro.S: Renamed from trampoline/tramp-hppa.s.
+	Include "noexecstack.h".
+	* trampoline/tramp-ia64-macro.S: Renamed from trampoline/tramp-ia64.s.
+	Include "noexecstack.h".
+	* trampoline/tramp-powerpc64-aix.S: Include "noexecstack.h".
+	* trampoline/Makefile.devel: Rename GCCFLAGS to OLDGCCFLAGS in old
+	rules.
+	(cache-*): Remove old rules.
+	(precompiled): New target.
+	(cache-sparc-linux.s, cache-sparc-macro.S, cache-sparc64-linux.s,
+	cache-sparc64-macro.S, cache-alpha-linux.s, cache-alpha-macro.S,
+	cache-hppa-linux.s, cache-hppa-macro.S, cache-powerpc-linux.s,
+	cache-powerpc-linux-macro.S, cache-powerpc-macos.s): New rules.
+	* trampoline/Makefile.in (tramp-hppa.s): New rule.
+	(tramp-hppa.o): Update.
+	(tramp-powerpc64.s: Depend on noexecstack.h.
+	(tramp-ia64.s): New rule.
+	(tramp-ia64.o): Update.
+	(cache-sparc64.s): Update.
+	(cache-alpha.s): New rule.
+	(cache-alpha.o): Update.
+	(cache-hppa.s): New rule.
+	(cache-hppa.o): Update.
+	(cache-powerpc.s): New rule.
+	(cache-powerpc.o): Update.
+	(clean): Remove also tramp-hppa.s, tramp-ia64.s, cache-alpha.s,
+	cache-hppa.s, cache-powerpc.s.
+	(SOURCE_FILES): Update.
+	* callback/trampoline_r/cache-sparc-macro.S: Remove file.
+	* callback/trampoline_r/tramp-hppa-macro.S: Renamed from
+	callback/trampoline_r/tramp-hppa.s. Include "noexecstack.h".
+	* callback/trampoline_r/tramp-ia64-macro.S: Renamed from
+	callback/trampoline_r/tramp-ia64.s. Include "noexecstack.h".
+	* callback/trampoline_r/tramp-powerpc64-aix.S: Include "noexecstack.h".
+	* callback/trampoline_r/Makefile.maint (COPIED_FILES): Remove
+	cache-alpha.s, cache-hppa.s, cache-powerpc-macos.s,
+	cache-powerpc-sysv4.s.
+	* callback/trampoline_r/Makefile.devel: Rename GCCFLAGS to OLDGCCFLAGS
+	in old rules.
+	(cache-*): Remove old rules.
+	(precompiled): New target.
+	(cache-sparc-linux.s, cache-sparc-macro.S, cache-sparc64-linux.s,
+	cache-sparc64-macro.S, cache-alpha-linux.s, cache-alpha-macro.S,
+	cache-hppa-linux.s, cache-hppa-macro.S, cache-powerpc-linux.s,
+	cache-powerpc-linux-macro.S, cache-powerpc-macos.s): New rules.
+	* callback/trampoline_r/Makefile.in (tramp-hppa.s): New rule.
+	(tramp-hppa.lo): Update.
+	(tramp-powerpc64.s: Depend on noexecstack.h.
+	(tramp-ia64.s): New rule.
+	(tramp-ia64.lo): Update.
+	(cache-sparc64.s): Update.
+	(cache-alpha.s): New rule.
+	(cache-alpha.lo): Update.
+	(cache-hppa.s): New rule.
+	(cache-hppa.lo): Update.
+	(cache-powerpc.s): New rule.
+	(cache-powerpc.lo): Update.
+	(clean): Remove also tramp-hppa.s, tramp-ia64.s, cache-alpha.s,
+	cache-hppa.s, cache-powerpc.s.
+	(SOURCE_FILES): Update.
+	* Makefile.devel (precompiled): Recurse also into trampoline and
+	callback/trampoline_r directories.
+	* Makefile.in (SOURCE_FILES): Update.
+	(COPIED_FILES): Remove callback/trampoline_r/cache-alpha.s,
+	callback/trampoline_r/cache-hppa.s,
+	callback/trampoline_r/cache-powerpc-macos.s,
+	callback/trampoline_r/cache-powerpc-sysv4.s.
+	* NEWS: Mention the change.
+
+2017-06-10  Bruno Haible  <bruno@clisp.org>
+
 	Simplify Makefile.devel.
 	* avcall/Makefile.devel (HOST, CPU): Remove unused variables.
 	* vacall/Makefile.devel (HOST, CPU): Likewise.

@@ -37,6 +37,9 @@ New in 1.13:
   - sparc: Linux 32-bit: CC="gcc -m32".
   - alpha: Linux.
 
+* Support for a security feature: On Linux and FreeBSD platforms, linking with
+  the libffcall libraries no longer causes the stack to become executable.
+
 New in 1.12:
 
 * Added ppc64le to the list of supported architectures.

@@ -40,6 +40,7 @@ s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
 s/\.global[ 	]\([A-Za-z0-9_]*\)$/.global C(\1)/
 # ----------- Introduce macro syntax for assembler pseudo-ops
 /\.file\([ 	]\+\)/d
+/\.section\([ 	]\+\).*GNU-stack/d
 s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
 # ----------- Massage the beginning of functions
 /\.type/{

@@ -23,29 +23,27 @@
 	.code
 
 	.align 4
-	.EXPORT tramp,ENTRY,PRIV_LEV=3,ARGW0=GR,ARGW1=GR
-	.label tramp
+	.EXPORT tramp_r,ENTRY,PRIV_LEV=3,ARGW0=GR,ARGW1=GR
+	.label tramp_r
 	.PROC
 	.CALLINFO FRAME=0,NO_CALLS
 	.ENTRY
 ; The closure pointer is already in register %r19.
-; Move <variable> into register %r20.
-	ldw 0(0,%r19),%r20
-; Move <data> into register %r22
-	ldw 4(0,%r19),%r22
+; Move <data> into register %r29
+	ldw 0(0,%r19),%r29
 ; Move <address> into register %r21.
-	ldw 8(0,%r19),%r21
-; Store <data> into <variable>.
-	stw %r22,0(0,%r20)
-; Jump to %r21.
-	bb,>=,n %r21,30,tramp_2
+	ldw 4(0,%r19),%r21
+; Jump to it.
+	bb,>=,n %r21,30,tramp_r_2
 	depi 0,31,2,%r21
 	ldw 4(0,%r21),%r19
 	ldw 0(0,%r21),%r21
-	.label tramp_2
+	.label tramp_r_2
 	ldsid (0,%r21),%r1
 	mtsp %r1,%sr0
 	be,n 0(%sr0,%r21)
 	nop
 	.EXIT
 	.PROCEND
+
+#include "noexecstack.h"
