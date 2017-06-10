@@ -1,5 +1,36 @@
 2017-06-10  Bruno Haible  <bruno@clisp.org>
 
+	Add cache invalidation for 64-bit powerpc.
+	* trampoline/cache-powerpc64.c: New file.
+	* trampoline/Makefile.devel (cache-powerpc64-elfv2-linux.s,
+	cache-powerpc64-elfv2-macro.S): New rules.
+	* trampoline/configure.ac (CPU_OBJECTS): Augment also for
+	powerpc64-elfv2 ABI.
+	* trampoline/Makefile.in (cache-powerpc64-elfv2.o,
+	cache-powerpc64-elfv2.s): New rules.
+	(clean): Remove also cache-powerpc64-elfv2.s.
+	(SOURCE_FILES): Add cache-powerpc64.c, cache-powerpc64-elfv2-linux.s,
+	cache-powerpc64-elfv2-macro.S.
+	* trampoline/trampoline.c (__TR_clear_cache): Declare also for
+	powerpc64-elfv2 ABI.
+	(alloc_trampoline): Invoke __TR_clear_cache also on powerpc64-elfv2 ABI.
+	* callback/trampoline_r/cache-powerpc64.c: New file.
+	* callback/trampoline_r/Makefile.devel (cache-powerpc64-elfv2-linux.s,
+	cache-powerpc64-elfv2-macro.S): New rules.
+	* trampoline/configure.ac (CPU_OBJECTS): Augment also for
+	powerpc64-elfv2 ABI.
+	* callback/trampoline_r/Makefile.in (cache-powerpc64-elfv2.lo,
+	cache-powerpc64-elfv2.s): New rules.
+	(clean): Remove also cache-powerpc64-elfv2.s.
+	(SOURCE_FILES): Add cache-powerpc64.c, cache-powerpc64-elfv2-linux.s,
+	cache-powerpc64-elfv2-macro.S.
+	* callback/trampoline_r/trampoline.c (__TR_clear_cache): Declare also
+	for powerpc64-elfv2 ABI.
+	(alloc_trampoline_r): Invoke __TR_clear_cache also on powerpc64-elfv2
+	ABI.
+
+2017-06-10  Bruno Haible  <bruno@clisp.org>
+
 	Fix cache invalidation for 32-bit powerpc.
 	* trampoline/cache-powerpc.c: Add comment.
 	* callback/trampoline_r/cache-powerpc.c: New file, based on

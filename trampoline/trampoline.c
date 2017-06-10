@@ -196,7 +196,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 #endif
 /* Inline assembly function for instruction cache flush. */
-#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__powerpcsysv4__)
+#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__powerpcsysv4__) || defined(__powerpc64_elfv2__)
 #if defined(__sparc__) || defined(__sparc64__)
 extern void __TR_clear_cache_4();
 #else
@@ -1299,7 +1299,7 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
   #error "Don't know how to implement clear_cache on this platform."
 #endif
 #endif
-#if defined(__powerpc__) && !defined(__powerpc64__)
+#if defined(__powerpc__) || defined(__powerpc64__)
   __TR_clear_cache(function_x);
 #endif
 #endif

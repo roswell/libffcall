@@ -127,6 +127,12 @@ cache-powerpc.s : $(srcdir)/cache-powerpc-linux-macro.S $(srcdir)/cache-powerpc-
 	    cp $(srcdir)/cache-powerpc-$${syntax}.s cache-powerpc.s || exit 1 ;; \
 	esac
 
+cache-powerpc64-elfv2.lo : cache-powerpc64-elfv2.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-powerpc64-elfv2.s
+
+cache-powerpc64-elfv2.s : $(srcdir)/cache-powerpc64-elfv2-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/cache-powerpc64-elfv2-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-powerpc64-elfv2.s
+
 libtrampoline.la : $(OBJECTS)
 	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS) $(LDFLAGS)
 
@@ -191,7 +197,7 @@ extracheck : check
 mostlyclean : clean
 
 clean : force
-	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.o/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-powerpc.s libtrampoline.* core
+	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.o/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.* core
 	$(RM) -r .libs _libs
 	$(RM) test1.o test1 test2.o test2
 
@@ -219,6 +225,7 @@ SOURCE_FILES = \
   cache-alpha.c cache-alpha-linux.s cache-alpha-macro.S \
   cache-hppa.c cache-hppa-linux.s cache-hppa-macro.S \
   cache-powerpc.c cache-powerpc-linux.s cache-powerpc-linux-macro.S cache-powerpc-macos.s \
+  cache-powerpc64.c cache-powerpc64-elfv2-linux.s cache-powerpc64-elfv2-macro.S \
   cache-sparc.c cache-sparc-linux.s cache-sparc-macro.S cache-sparc64-linux.s cache-sparc64-macro.S \
   test1.c \
   test2.c

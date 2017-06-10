@@ -15,7 +15,8 @@ precompiled : \
   cache-sparc-macro.S cache-sparc64-macro.S \
   cache-alpha-macro.S \
   cache-hppa-macro.S \
-  cache-powerpc-linux-macro.S cache-powerpc-macos.s
+  cache-powerpc-linux-macro.S cache-powerpc-macos.s \
+  cache-powerpc64-elfv2-macro.S
 
 
 cache-sparc-linux.s : cache-sparc.c $(THISFILE)
@@ -53,6 +54,17 @@ cache-powerpc-linux-macro.S : cache-powerpc-linux.s ../../common/asm-powerpc.sh 
 
 cache-powerpc-macos.s : cache-powerpc.c $(THISFILE)
 	$(CROSS_TOOL) powerpc-darwin gcc -V 3.3.6 $(GCCFLAGS) -D__powerpc__ -S cache-powerpc.c -o cache-powerpc-macos.s
+
+
+cache-powerpc64-elfv2-linux.s : cache-powerpc64.c $(THISFILE)
+	$(CROSS_TOOL) powerpc64le-linux gcc-5.4.0 -mabi=elfv2 -mcpu=power4 -mlittle-endian $(GCCFLAGS) -D__powerpc64__ -S cache-powerpc64.c -o cache-powerpc64-elfv2-linux-le.s
+	$(CROSS_TOOL) powerpc64le-linux gcc-5.4.0 -mabi=elfv2 -mcpu=power4 -mbig-endian $(GCCFLAGS) -D__powerpc64__ -S cache-powerpc64.c -o cache-powerpc64-elfv2-linux-be.s
+	cmp cache-powerpc64-elfv2-linux-le.s cache-powerpc64-elfv2-linux-be.s > /dev/null
+	mv cache-powerpc64-elfv2-linux-le.s cache-powerpc64-elfv2-linux.s
+	$(RM) cache-powerpc64-elfv2-linux-be.s
+
+cache-powerpc64-elfv2-macro.S : cache-powerpc64-elfv2-linux.s ../../common/asm-powerpc.sh ../../common/noexecstack.h $(THISFILE)
+	(../../common/asm-powerpc.sh < cache-powerpc64-elfv2-linux.s ; cat ../../common/noexecstack.h) > cache-powerpc64-elfv2-macro.S
 
 
 # --------------- Older rules ---------------

@@ -152,6 +152,8 @@
 /trampoline/cache-powerpc-linux.s
 /trampoline/cache-powerpc-linux-macro.S
 /trampoline/cache-powerpc-macos.s
+/trampoline/cache-powerpc64-elfv2-linux.s
+/trampoline/cache-powerpc64-elfv2-macro.S
 /trampoline/cache-sparc-linux.s
 /trampoline/cache-sparc-macro.S
 /trampoline/cache-sparc64-linux.s
@@ -206,6 +208,8 @@
 /callback/trampoline_r/cache-powerpc-linux.s
 /callback/trampoline_r/cache-powerpc-linux-macro.S
 /callback/trampoline_r/cache-powerpc-macos.s
+/callback/trampoline_r/cache-powerpc64-elfv2-linux.s
+/callback/trampoline_r/cache-powerpc64-elfv2-macro.S
 /callback/trampoline_r/cache-sparc-linux.s
 /callback/trampoline_r/cache-sparc-macro.S
 /callback/trampoline_r/cache-sparc64-linux.s
@@ -442,6 +446,7 @@ autom4te.cache/
 /trampoline/cache-alpha.o
 /trampoline/cache-hppa.o
 /trampoline/cache-powerpc.o
+/trampoline/cache-powerpc64-elfv2.o
 /trampoline/tramp-hppa.s
 /trampoline/tramp-powerpc.s
 /trampoline/tramp-powerpc64.s
@@ -451,6 +456,7 @@ autom4te.cache/
 /trampoline/cache-alpha.s
 /trampoline/cache-hppa.s
 /trampoline/cache-powerpc.s
+/trampoline/cache-powerpc64-elfv2.s
 /trampoline/libtrampoline.a
 /trampoline/core
 /trampoline/test1.o
@@ -525,6 +531,8 @@ autom4te.cache/
 /callback/trampoline_r/cache-hppa.o
 /callback/trampoline_r/cache-powerpc.lo
 /callback/trampoline_r/cache-powerpc.o
+/callback/trampoline_r/cache-powerpc64-elfv2.lo
+/callback/trampoline_r/cache-powerpc64-elfv2.o
 /callback/trampoline_r/tramp-hppa.s
 /callback/trampoline_r/tramp-powerpc.s
 /callback/trampoline_r/tramp-powerpc64.s
@@ -534,6 +542,7 @@ autom4te.cache/
 /callback/trampoline_r/cache-alpha.s
 /callback/trampoline_r/cache-hppa.s
 /callback/trampoline_r/cache-powerpc.s
+/callback/trampoline_r/cache-powerpc64-elfv2.s
 /callback/trampoline_r/libtrampoline.*
 /callback/trampoline_r/core
 /callback/trampoline_r/test1.o
