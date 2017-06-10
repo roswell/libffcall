@@ -305,6 +305,7 @@ static char* freelist = NULL;
 __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data1)
 {
   char* function;
+  char* function_x;
   char* data;
 
 #if !defined(CODE_EXECUTABLE)
@@ -422,6 +423,15 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   }
 #endif
 
+#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+  /* Find the executable address corresponding to the writable address. */
+  { unsigned long page = (unsigned long) function & -(long)pagesize;
+    function_x = function + ((long*)page)[0];
+  }
+#else
+  function_x = function;
+#endif
+
   /* 2. Fill out the trampoline */
   data = function + TRAMP_LENGTH;
   /* Knowing that data = function + TRAMP_LENGTH, we could certainly optimize
@@ -439,7 +449,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(char *)  (function + 0) = 0xB9;
   *(long *)  (function + 1) = (long) data;
   *(char *)  (function + 5) = 0xE9;
-  *(long *)  (function + 6) = (long) address - (long) (function + 10);
+  *(long *)  (function + 6) = (long) address - (long) (function_x + 10);
   *(short *) (function +10) = 0x9090;   /* nop nop, for alignment */
 #define is_tramp(function)  \
   *(unsigned char *)  (function + 0) == 0xB9 && \
@@ -1028,12 +1038,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
       { fprintf(stderr,"trampoline: cannot make memory executable\n"); abort(); }
   }}
 #endif
-#ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
-  /* Find the executable address corresponding to the writable address. */
-  { unsigned long page = (unsigned long) function & -(long)pagesize;
-    function += ((long*)page)[0];
-  }
-#endif
 #endif
 
   /* 4. Flush instruction cache */
@@ -1045,13 +1049,13 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   /* Only needed if we really set up machine instructions. */
 #ifdef __i386__
 #if defined(_WIN32)
-  while (!FlushInstructionCache(GetCurrentProcess(),function,TRAMP_LENGTH))
+  while (!FlushInstructionCache(GetCurrentProcess(),function_x,TRAMP_LENGTH))
     continue;
 #endif
 #endif
 #ifdef __m68k__
 #if defined(__NetBSD__) && defined(__GNUC__)
-  { register unsigned long _beg __asm__ ("%a1") = (unsigned long) function;
+  { register unsigned long _beg __asm__ ("%a1") = (unsigned long) function_x;
     register unsigned long _len __asm__ ("%d1") = TRAMP_LENGTH;
     __asm__ __volatile__ (
       "move%.l %#0x80000004,%/d0\n\t" /* CC_EXTPURGE | C_IPURGE */
@@ -1063,7 +1067,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   }
 #endif
 #if defined(__linux__) && defined(__GNUC__)
-  { register unsigned long _beg __asm__ ("%d1") = (unsigned long) function;
+  { register unsigned long _beg __asm__ ("%d1") = (unsigned long) function_x;
     register unsigned long _len __asm__ ("%d4") = TRAMP_LENGTH + 32;
     __asm__ __volatile__ (
       "move%.l %#123,%/d0\n\t"
@@ -1089,25 +1093,25 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     "trap %#0\n\t"
     "add%.l %#24,%/sp"
     :
-    : "r" (function), "g" ((int)TRAMP_LENGTH)
+    : "r" (function_x), "g" ((int)TRAMP_LENGTH)
     : "%d0"
     );
 #endif
 #endif
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
-  cacheflush(function,TRAMP_LENGTH,ICACHE);
+  cacheflush(function_x,TRAMP_LENGTH,ICACHE);
   /* gforth-0.3.0 uses BCACHE instead of ICACHE. Why?? */
 #endif
 #if defined(__sparc__) || defined(__sparc64__)
   /* This assumes that the trampoline fits in at most two cache lines. */
-  __TR_clear_cache_2(function,function+TRAMP_LENGTH-1);
+  __TR_clear_cache_2(function_x,function_x+TRAMP_LENGTH-1);
 #endif
 #ifdef __alpha__
   __TR_clear_cache();
 #endif
 #ifdef __hppa__
   /* This assumes that the trampoline fits in at most two cache lines. */
-  __TR_clear_cache(function,function+TRAMP_LENGTH-1);
+  __TR_clear_cache(function_x,function_x+TRAMP_LENGTH-1);
 #endif
 #if defined(__arm__) || defined(__armhf__)
   /* On ARM, cache flushing can only be done through a system call.
@@ -1116,18 +1120,18 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
      an "swi 0xf00000", or similar.  */
 #if defined(__GNUC__)
   /* Use the GCC built-in. */
-  __clear_cache((void*)function,(void*)(function+TRAMP_LENGTH));
+  __clear_cache((void*)function_x,(void*)(function_x+TRAMP_LENGTH));
 #else
   #error "Don't know how to implement clear_cache on this platform."
 #endif
 #endif
 #if defined(__powerpc__) && !defined(__powerpc64__)
-  __TR_clear_cache(function);
+  __TR_clear_cache(function_x);
 #endif
 #endif
 
   /* 5. Return. */
-  return (__TR_function) (function + TRAMP_BIAS);
+  return (__TR_function) (function_x + TRAMP_BIAS);
 }
 
 void free_trampoline_r (__TR_function function)

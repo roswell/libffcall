@@ -1,3 +1,11 @@
+2017-06-10  Bruno Haible  <bruno@clisp.org>
+
+	Make the EXECUTABLE_VIA_MMAP_FILE_SHARED support work on i386.
+	* trampoline/trampoline.c (alloc_trampoline): New local variable
+	'function_x'. Use it instead of 'function' for the computation of the
+	relative address in the i386 trampoline.
+	* callback/trampoline_r/trampoline.c (alloc_trampoline_r): Likewise.
+
 2017-06-04  Bruno Haible  <bruno@clisp.org>
 
 	build: Get rid of autom4te.cache directories.
