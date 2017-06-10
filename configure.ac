@@ -1,4 +1,4 @@
-dnl AUTOCONF configuration for FFCALL
+dnl AUTOCONF configuration for LIBFFCALL
 dnl Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
 dnl Copyright 2008-2010 Sam Steingold <sds@gnu.org>
 dnl

@@ -1,5 +1,9 @@
 2017-06-10  Bruno Haible  <bruno@clisp.org>
 
+	In comments, write 'libffcall' instead of 'ffcall'.
+
+2017-06-10  Bruno Haible  <bruno@clisp.org>
+
 	Add cache invalidation for 64-bit powerpc.
 	* trampoline/cache-powerpc64.c: New file.
 	* trampoline/Makefile.devel (cache-powerpc64-elfv2-linux.s,

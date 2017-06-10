@@ -49,7 +49,7 @@ FILE* out;
  * The calling convention for C functions returning structures of size > 8 bytes
  * apparently has changed between gcc-2.6.3 and gcc-2.7 (all i386 platforms),
  * and vacall supports only the old one. Since gcc-2.8 will switch back to
- * gcc-2.6.3's calling convention, I won't change ffcall/vacall for this.
+ * gcc-2.6.3's calling convention, I won't change libffcall/vacall for this.
  * Just hide the problem by not running the test. The impact isn't big for
  * CLISP: Callbacks returning structures > 8 bytes won't work.
  */

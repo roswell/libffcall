@@ -1,4 +1,4 @@
-ffcall - foreign function call libraries
+libffcall - foreign function call libraries
 
 This is a collection of four libraries which can be used to build
 foreign function call interfaces in embedded interpreters.
