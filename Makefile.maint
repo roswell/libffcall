@@ -118,7 +118,7 @@ ALL_CONFIGURE = configure $(SUBDIRS_CONFIGURE)
 ALL_CONFIGURE_AC = $(patsubst %,%.ac,$(ALL_CONFIGURE))
 
 aclocal.m4 : $(ALL_CONFIGURE_AC) $(wildcard m4/*.m4) $(wildcard glm4/*.m4)
-	{ echo 'AC_INIT'; cat $(ALL_CONFIGURE_AC) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADERS(\|AC_CONFIG_FILES(\)'; } > configure.ac-tmp
+	{ echo 'AC_INIT'; cat $(ALL_CONFIGURE_AC) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADERS(\|AC_CONFIG_FILES(\)' | sed -e 's/esyscmd/ifelse/'; } > configure.ac-tmp
 	mv configure.ac configure.ac-save && \
 	{ mv configure.ac-tmp configure.ac && \
 	  $(ACLOCAL) --output=aclocal.m4 -I m4 -I glm4; \

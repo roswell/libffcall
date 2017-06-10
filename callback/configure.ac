@@ -36,6 +36,7 @@ gl_HOST_CPU_C_ABI
 PACKAGE=callback
 FFCALL_COMMON_LIBTOOL
 AC_TYPE_LONG_LONG_INT
+
 dnl This piece of sed script replaces every line containing '@subdir@'
 dnl by several consecutive lines, each referencing one subdir.
 extrasub="$extrasub"'
@@ -51,4 +52,18 @@ d
 }
 '
 AC_CONFIG_SUBDIRS([vacall_r trampoline_r])
+
+dnl Ensure that "configure --help" lists all the command line options that
+dnl are usable with the subdir configures. Really AC_CONFIG_SUBDIRS should
+dnl do it by itself.
+dnl System types:
+AC_CANONICAL_HOST
+dnl Optional Features: AC_ARG_ENABLE calls
+dnl Optional Packages: AC_ARG_WITH calls
+dnl Some influential environment variables: AC_ARG_VAR calls
+esyscmd([{
+cd vacall_r && autoconf -I../.. --trace=AC_ARG_ENABLE:'$n([$1],[$2])' --trace=AC_ARG_WITH:'$n([$1],[$2])' --trace=AC_ARG_VAR:'$n($@)' && cd ..;
+cd trampoline_r && autoconf -I../.. --trace=AC_ARG_ENABLE:'$n([$1],[$2])' --trace=AC_ARG_WITH:'$n([$1],[$2])' --trace=AC_ARG_VAR:'$n($@)' && cd ..;
+} | sed -f ../build-aux/ac-help.sed ])
+
 AC_OUTPUT
