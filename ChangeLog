@@ -1,5 +1,16 @@
 2017-06-10  Bruno Haible  <bruno@clisp.org>
 
+	Fix cache invalidation for 32-bit powerpc.
+	* trampoline/cache-powerpc.c: Add comment.
+	* callback/trampoline_r/cache-powerpc.c: New file, based on
+	trampoline/cache-powerpc.c.
+	* callback/trampoline_r/Makefile.maint (COPIED_FILES): Remove
+	cache-powerpc.c.
+	* Makefile.in (COPIED_FILES): Remove
+	callback/trampoline_r/cache-powerpc.c.
+
+2017-06-10  Bruno Haible  <bruno@clisp.org>
+
 	Don't declare the need for an executable stack on Linux and FreeBSD.
 	* porting-tools: New directory.
 	* common/asm-alpha.sh: New file.

@@ -28,8 +28,5 @@ void __TR_clear_cache (char* first_addr)
   asm volatile ("icbi 0,%0; dcbf 0,%0" : : "r" (first_addr+12));
   asm volatile ("icbi 0,%0; dcbf 0,%0" : : "r" (first_addr+16));
   asm volatile ("icbi 0,%0; dcbf 0,%0" : : "r" (first_addr+20));
-  asm volatile ("icbi 0,%0; dcbf 0,%0" : : "r" (first_addr+24));
-  asm volatile ("icbi 0,%0; dcbf 0,%0" : : "r" (first_addr+28));
-  asm volatile ("icbi 0,%0; dcbf 0,%0" : : "r" (first_addr+32));
   asm volatile ("sync; isync");
 }

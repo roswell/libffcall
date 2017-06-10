@@ -33,7 +33,6 @@
 /callback/trampoline_r/cache.c
 /callback/trampoline_r/cache-alpha.c
 /callback/trampoline_r/cache-hppa.c
-/callback/trampoline_r/cache-powerpc.c
 /callback/trampoline_r/protexec.c
 # Files copied from vacall:
 /callback/vacall_r/vacall-alpha.c

@@ -30,7 +30,6 @@ COPIED_FILES = \
   cache.c \
   cache-alpha.c \
   cache-hppa.c \
-  cache-powerpc.c \
   protexec.c
 copied-files : $(COPIED_FILES)
 $(COPIED_FILES) : % : ../../trampoline/%
