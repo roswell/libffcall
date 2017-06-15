@@ -494,6 +494,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned int *) (function +12) = 0x00000000;
   *(unsigned int *) (function +16) = (unsigned int) data;
   *(unsigned int *) (function +20) = (unsigned int) address;
+#define TRAMP_CODE_LENGTH  16
 #define is_tramp(function)  \
   *(unsigned int *) (function + 0) == 0x8F220010 && \
   *(unsigned int *) (function + 4) == 0x8F390014 && \
@@ -588,6 +589,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned int *)  (function +12) = 0x00000000;
   *(unsigned long *) (function +16) = (unsigned long) data;
   *(unsigned long *) (function +24) = (unsigned long) address;
+#define TRAMP_CODE_LENGTH  16
 #define is_tramp(function)  \
   *(unsigned int *)  (function + 0) == 0xDF220010 && \
   *(unsigned int *)  (function + 4) == 0xDF390018 && \
@@ -639,6 +641,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(int *)  (function +12) = 0xCA586010;
   *(long *) (function +16) = (long) data;
   *(long *) (function +24) = (long) address;
+#define TRAMP_CODE_LENGTH  16
 #define is_tramp(function)  \
   *(int *)  (function + 0) == 0x83414000 && \
   *(int *)  (function + 4) == 0xC4586018 && \
@@ -666,6 +669,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     ((long *) function)[2] = (long) data;
     ((long *) function)[3] = (long) address;
   }
+#define TRAMP_CODE_LENGTH  16
 #define is_tramp(function)  \
   ((int *) function)[0] == 0xC0200000 && \
   ((int *) function)[1] == 0xA7610014 && \
@@ -759,6 +763,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     *(long *) (function + 8) = (long) data;
     *(long *) (function +12) = (long) address;
   }
+#define TRAMP_CODE_LENGTH  0
 #define is_tramp(function)  \
   ((long *) function)[0] == ((long *) ((char*)tramp_r_address-2))[0]
 #define tramp_address(function)  \
@@ -797,6 +802,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     ((long *) function)[10] = (long) data;
     ((long *) function)[11] = (long) address;
   }
+#define TRAMP_CODE_LENGTH  40
 #define is_tramp(function)  \
   ((long *) function)[0] == 0xE1A0C00D && \
   ((long *) function)[1] == 0xE92D000F && \
@@ -860,6 +866,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(long *)  (function + 8) = 0;
   *(long *)  (function +12) = (long) data;
   *(long *)  (function +16) = (long) address;
+#define TRAMP_CODE_LENGTH  0
 #define is_tramp(function)  \
   ((long *) function)[0] == ((long *) &tramp_r)[0]
 #define tramp_address(function)  \
@@ -882,6 +889,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(int *)   (function +12) = 0x4E800420;
   *(long *)  (function +16) = (unsigned long) data;
   *(long *)  (function +24) = (unsigned long) address;
+#define TRAMP_CODE_LENGTH  16
 #define is_tramp(function)  \
   *(unsigned int *) (function + 0) == 0xE96C0010 && \
   *(unsigned int *) (function + 4) == 0xE98C0018 && \
@@ -906,6 +914,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(long *)  (function +16) = 0;
   *(long *)  (function +24) = (long) data;
   *(long *)  (function +32) = (long) address;
+#define TRAMP_CODE_LENGTH  0
 #define is_tramp(function)  \
   ((long *) function)[0] == ((long *) &tramp_r)[0]
 #define tramp_address(function)  \
@@ -925,6 +934,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(long *) (function + 8) = (long) (function + 16);
   *(long *) (function +16) = (long) address;
   *(long *) (function +24) = (long) data;
+#define TRAMP_CODE_LENGTH  0
 #define is_tramp(function)  \
   ((long *) function)[0] == (long) &tramp_r && \
   ((long *) function)[1] == (long) (function + 16)
@@ -1045,18 +1055,22 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    * cache. The freshly built trampoline is visible to the data cache, but not
    * maybe not to the instruction cache. This is hairy.
    */
+  /* TRAMP_CODE_LENGTH = length of the machine instructions. */
+#ifndef TRAMP_CODE_LENGTH
+#define TRAMP_CODE_LENGTH TRAMP_LENGTH
+#endif
 #if !(defined(__hppanew__) || defined(__powerpcaix__) || defined(__powerpc64aix__) || defined(__ia64__))
   /* Only needed if we really set up machine instructions. */
 #ifdef __i386__
 #if defined(_WIN32)
-  while (!FlushInstructionCache(GetCurrentProcess(),function_x,TRAMP_LENGTH))
+  while (!FlushInstructionCache(GetCurrentProcess(),function_x,TRAMP_CODE_LENGTH))
     continue;
 #endif
 #endif
 #ifdef __m68k__
 #if defined(__NetBSD__) && defined(__GNUC__)
   { register unsigned long _beg __asm__ ("%a1") = (unsigned long) function_x;
-    register unsigned long _len __asm__ ("%d1") = TRAMP_LENGTH;
+    register unsigned long _len __asm__ ("%d1") = TRAMP_CODE_LENGTH;
     __asm__ __volatile__ (
       "move%.l %#0x80000004,%/d0\n\t" /* CC_EXTPURGE | C_IPURGE */
       "trap #12"                      /* kernel call ‘cachectl’ */
@@ -1068,7 +1082,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #if defined(__linux__) && defined(__GNUC__)
   { register unsigned long _beg __asm__ ("%d1") = (unsigned long) function_x;
-    register unsigned long _len __asm__ ("%d4") = TRAMP_LENGTH + 32;
+    register unsigned long _len __asm__ ("%d4") = TRAMP_CODE_LENGTH + 32;
     __asm__ __volatile__ (
       "move%.l %#123,%/d0\n\t"
       "move%.l %#1,%/d2\n\t"
@@ -1093,25 +1107,25 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     "trap %#0\n\t"
     "add%.l %#24,%/sp"
     :
-    : "r" (function_x), "g" ((int)TRAMP_LENGTH)
+    : "r" (function_x), "g" ((int)TRAMP_CODE_LENGTH)
     : "%d0"
     );
 #endif
 #endif
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
-  cacheflush(function_x,TRAMP_LENGTH,ICACHE);
+  cacheflush(function_x,TRAMP_CODE_LENGTH,ICACHE);
   /* gforth-0.3.0 uses BCACHE instead of ICACHE. Why?? */
 #endif
 #if defined(__sparc__) || defined(__sparc64__)
   /* This assumes that the trampoline fits in at most two cache lines. */
-  __TR_clear_cache_2(function_x,function_x+TRAMP_LENGTH-1);
+  __TR_clear_cache_2(function_x,function_x+TRAMP_CODE_LENGTH-1);
 #endif
 #ifdef __alpha__
   __TR_clear_cache();
 #endif
 #ifdef __hppa__
   /* This assumes that the trampoline fits in at most two cache lines. */
-  __TR_clear_cache(function_x,function_x+TRAMP_LENGTH-1);
+  __TR_clear_cache(function_x,function_x+TRAMP_CODE_LENGTH-1);
 #endif
 #if defined(__arm__) || defined(__armhf__)
   /* On ARM, cache flushing can only be done through a system call.
@@ -1120,7 +1134,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
      an "swi 0xf00000", or similar.  */
 #if defined(__GNUC__)
   /* Use the GCC built-in. */
-  __clear_cache((void*)function_x,(void*)(function_x+TRAMP_LENGTH));
+  __clear_cache((void*)function_x,(void*)(function_x+TRAMP_CODE_LENGTH));
 #else
   #error "Don't know how to implement clear_cache on this platform."
 #endif
