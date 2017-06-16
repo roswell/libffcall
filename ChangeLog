@@ -1,3 +1,10 @@
+2017-06-16  Bruno Haible  <bruno@clisp.org>
+
+	Remove unused fields from __va_alist.
+	* vacall/vacall.h.in (__va_alist): Don't include _longlong and
+	_ulonglong on platforms where they are unused.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+
 2017-06-15  Bruno Haible  <bruno@clisp.org>
 
 	Reduce the amount of cache invalidation to the necessary minimum.
