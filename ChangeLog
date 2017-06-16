@@ -1,3 +1,48 @@
+2017-06-17  Bruno Haible  <bruno@clisp.org>
+
+	arm64: Add support for arm64 CPU (a.k.a. aarch64).
+	* cross-tools/cross.conf: Add configuration for arm64 cross tools.
+	* common/reg-struct-return.txt: Add info about arm64.
+	* callback/call-used-registers.txt: Likewise.
+	* avcall/avcall.h.in: Add code for __arm64__, especially __av_start1,
+	av_long, av_ulong, av_ptr, av_float, av_double, __av_struct.
+	* avcall/avcall-arm64.c: New file.
+	* avcall/Makefile.devel (avcall-arm64-macro.S): New target.
+	* avcall/Makefile.in (avcall-arm64.lo, avcall-arm64.s): New targets.
+	(clean): Remove avcall-arm64.s.
+	(SOURCE_FILES): Add avcall-arm64.c, avcall-arm64-macro.S.
+	* vacall/vacall.h.in: Add code for __arm64__, especially
+	__va_arg_adjusted, va_arg_float, va_arg_double, __va_arg_struct.
+	* vacall/vacall-arm64.c: New file.
+	* vacall/Makefile.devel (vacall-arm64-macro.S): New target.
+	* vacall/Makefile.in (vacall-arm64.o, vacall-arm64.s): New targets.
+	(clean): Remove vacall-armhf.s.
+	(SOURCE_FILES): Add vacall-arm64.c, vacall-arm64-macro.S.
+	* callback/vacall_r/Makefile.maint (COPIED_FILES): Add vacall-arm64.c.
+	* Makefile.in (COPIED_FILES): Add callback/vacall_r/vacall-arm64.c.
+	* callback/vacall_r/vacall_r.h.in: Add code for __arm64__, especially
+	__va_arg_adjusted, va_arg_float, va_arg_double, __va_arg_struct.
+	* callback/vacall_r/Makefile.devel (vacall-arm64-macro.S): New target.
+	* callback/vacall_r/Makefile.in (vacall-arm64.lo, vacall-arm64.s): New
+	targets.
+	(clean): Remove vacall-arm64.s.
+	(SOURCE_FILES): Add vacall-arm64.c, vacall-arm64-macro.S.
+	* trampoline/Makefile.devel (proto-arm64.s, tramp-arm64.o): New targets.
+	* trampoline/proto-arm64.s: New generated file.
+	* trampoline/tramp-arm64.s: New file.
+	* trampoline/tramp-arm64.o: New generated file.
+	* trampoline/trampoline.c: Implement for __arm64__.
+	* callback/trampoline_r/Makefile.devel (proto-arm64.s, tramp-arm64.o):
+	New targets.
+	* callback/trampoline_r/proto64.c: Add support for __arm64__.
+	* callback/trampoline_r/proto-arm64.s: New generated file.
+	* callback/trampoline_r/tramp-arm64.s: New file.
+	* callback/trampoline_r/tramp-arm64.o: New generated file.
+	* callback/trampoline_r/trampoline.c: Implement for __arm64__.
+	* callback/trampoline_r/test1.c: Add support for __arm64__.
+	* PLATFORMS, */PLATFORMS: List the arm64 machine.
+	* NEWS: Mention the new port.
+
 2017-06-16  Bruno Haible  <bruno@clisp.org>
 
 	Remove unused fields from __va_alist.

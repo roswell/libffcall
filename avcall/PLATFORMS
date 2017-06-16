@@ -43,6 +43,7 @@ Supported CPUs:  (Put the GNU config.guess values here.)
               hppa2.0w-hp-hpux11.31 (cc)             HP 9000/8xx   HP-UX 11.31
    arm        armv5tejl-unknown-linux (gcc)          emulated      Linux
               armv7l-unknown-linux (gcc)             emulated      Linux
+   arm64      aarch64-unknown-linux (gcc)            APM X-Gene    Linux
    powerpc    powerpc-ibm-aix4.1.4.0 (cc)            IBM RS/6000   AIX 4.1.4
               powerpc-ibm-aix7.1.3.0 (xlc, gcc)      IBM POWER     AIX 7.1.3
               powerpc-unknown-linux (gcc)            Apple PPC     LinuxPPC

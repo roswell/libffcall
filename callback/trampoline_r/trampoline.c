@@ -250,6 +250,10 @@ extern void __TR_clear_cache();
 #define TRAMP_LENGTH 48
 #define TRAMP_ALIGN 4
 #endif
+#ifdef __arm64__
+#define TRAMP_LENGTH 32
+#define TRAMP_ALIGN 8
+#endif
 #ifdef __powerpcsysv4__
 #define TRAMP_LENGTH 24
 #define TRAMP_ALIGN 4
@@ -781,11 +785,11 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    *	ldr	ip,[pc,#12]		E59FC00C	@ Get <data>
    *	str	ip,[sp,#0]		E58DC000	@ Put <data> on stack
    *	mov	lr,pc			E1A0E00F	@ Prepare call (put return address in lr)
-   *	ldr	pc,[pc,#4]		E59FF004	@ Call <function> with the same args in registers
+   *	ldr	pc,[pc,#4]		E59FF004	@ Call <address> with the same args in registers
    *	ldmea	fp,{fp,sp,pc}		E91BA800	@ Restore fp and sp, and return to return address.
    * _data:
    *	.word	<data>
-   * _function:
+   * _address:
    *	.word	<address>
    */
   {
@@ -818,6 +822,32 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   ((long *) function)[11]
 #define tramp_data(function)  \
   ((long *) function)[10]
+#endif
+#ifdef __arm64__
+  /* function:
+   *    ldr x17,.+24		580000D1
+   *    ldr x18,.+12		58000072
+   *    br x17			D61F0220
+   *    nop			D503201F
+   *    .xword <data>		<data>
+   *    .xword <address>	<address>
+   */
+  *(int *)   (function + 0) = 0x580000D1;
+  *(int *)   (function + 4) = 0x58000072;
+  *(int *)   (function + 8) = 0xD61F0220;
+  *(int *)   (function +12) = 0xD503201F;
+  *(long *)  (function +16) = (unsigned long) data;
+  *(long *)  (function +24) = (unsigned long) address;
+#define TRAMP_CODE_LENGTH  16
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0x580000D1 && \
+  *(unsigned int *) (function + 4) == 0x58000072 && \
+  *(unsigned int *) (function + 8) == 0xD61F0220 && \
+  *(unsigned int *) (function +12) == 0xD503201F
+#define tramp_address(function)  \
+  (*(unsigned long *) (function +24))
+#define tramp_data(function)  \
+  (*(unsigned long *) (function +16))
 #endif
 #ifdef __powerpcsysv4__
   /* function:
@@ -1127,11 +1157,14 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   /* This assumes that the trampoline fits in at most two cache lines. */
   __TR_clear_cache(function_x,function_x+TRAMP_CODE_LENGTH-1);
 #endif
-#if defined(__arm__) || defined(__armhf__)
+#if defined(__arm__) || defined(__armhf__) || defined(__arm64__)
   /* On ARM, cache flushing can only be done through a system call.
      GCC implements it for Linux with EABI, through an "swi 0" with code
      0xf0002. For other systems, it may be an "swi 0x9f0002",
      an "swi 0xf00000", or similar.  */
+  /* On ARM64, cache flushing is done through special instructions,
+     and the length of the cache lines must be determined at runtime.
+     See gcc/libgcc/config/aarch64/sync-cache.c. */
 #if defined(__GNUC__)
   /* Use the GCC built-in. */
   __clear_cache((void*)function_x,(void*)(function_x+TRAMP_CODE_LENGTH));

@@ -43,6 +43,7 @@ COPIED_FILES = \
   vacall-alpha.c \
   vacall-arm.c \
   vacall-armhf.c \
+  vacall-arm64.c \
   vacall-hppa.c \
   vacall-i386.c \
   vacall-ia64.c \

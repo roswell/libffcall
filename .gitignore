@@ -38,6 +38,7 @@
 /callback/vacall_r/vacall-alpha.c
 /callback/vacall_r/vacall-arm.c
 /callback/vacall_r/vacall-armhf.c
+/callback/vacall_r/vacall-arm64.c
 /callback/vacall_r/vacall-hppa.c
 /callback/vacall_r/vacall-i386.c
 /callback/vacall_r/vacall-ia64.c
@@ -63,6 +64,7 @@
 /avcall/avcall-alpha-macro.S
 /avcall/avcall-arm-macro.S
 /avcall/avcall-armhf-macro.S
+/avcall/avcall-arm64-macro.S
 /avcall/avcall-hppa-linux.s
 /avcall/avcall-hppa-macro.S
 /avcall/avcall-i386-linux.s
@@ -106,6 +108,7 @@
 /vacall/vacall-alpha-macro.S
 /vacall/vacall-arm-macro.S
 /vacall/vacall-armhf-macro.S
+/vacall/vacall-arm64-macro.S
 /vacall/vacall-hppa-linux.s
 /vacall/vacall-hppa-macro.S
 /vacall/vacall-i386-linux.s
@@ -162,6 +165,7 @@
 /callback/vacall_r/vacall-alpha-macro.S
 /callback/vacall_r/vacall-arm-macro.S
 /callback/vacall_r/vacall-armhf-macro.S
+/callback/vacall_r/vacall-arm64-macro.S
 /callback/vacall_r/vacall-hppa-linux.s
 /callback/vacall_r/vacall-hppa-macro.S
 /callback/vacall_r/vacall-i386-linux.s
@@ -386,6 +390,7 @@ autom4te.cache/
 /avcall/avcall-hppa.s
 /avcall/avcall-arm.s
 /avcall/avcall-armhf.s
+/avcall/avcall-arm64.s
 /avcall/avcall-powerpc.s
 /avcall/avcall-powerpc64.s
 /avcall/avcall-powerpc64-elfv2.s
@@ -418,6 +423,7 @@ autom4te.cache/
 /vacall/vacall-hppa.s
 /vacall/vacall-arm.s
 /vacall/vacall-armhf.s
+/vacall/vacall-arm64.s
 /vacall/vacall-powerpc.s
 /vacall/vacall-powerpc64.s
 /vacall/vacall-powerpc64-elfv2.s
@@ -503,6 +509,7 @@ autom4te.cache/
 /callback/vacall_r/vacall-hppa.s
 /callback/vacall_r/vacall-arm.s
 /callback/vacall_r/vacall-armhf.s
+/callback/vacall_r/vacall-arm64.s
 /callback/vacall_r/vacall-powerpc.s
 /callback/vacall_r/vacall-powerpc64.s
 /callback/vacall_r/vacall-powerpc64-elfv2.s

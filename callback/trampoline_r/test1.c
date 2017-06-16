@@ -64,6 +64,9 @@ register void* env __asm__("$1");
 #ifdef __hppa__
 register void* env __asm__("%r29");
 #endif
+#ifdef __arm64__
+register void* env __asm__("x18");
+#endif
 #ifdef __powerpc__
 register void* env __asm__("r11");
 #endif

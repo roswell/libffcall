@@ -110,6 +110,7 @@ IMPORTED_FILES = $(LIBTOOL_IMPORTED_FILES) $(GNULIB_IMPORTED_FILES)
 COPIED_FILES = \
   callback/vacall_r/vacall-arm.c \
   callback/vacall_r/vacall-armhf.c \
+  callback/vacall_r/vacall-arm64.c \
   callback/vacall_r/vacall-hppa.c \
   callback/vacall_r/vacall-i386.c \
   callback/vacall_r/vacall-ia64.c \
