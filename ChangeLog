@@ -1,3 +1,22 @@
+2017-06-18  Bruno Haible  <bruno@clisp.org>
+
+	s390: Improve trampolines.
+	* trampoline/Makefile.devel (proto-s390.s): New target.
+	(tramp-s390.o): Use cross tools.
+	* trampoline/proto-s390.s: Regenerated with gcc 3.1.
+	* trampoline/tramp-s390.s: Rewritten from scratch, to not use %r13.
+	* trampoline/tramp-s390.o: New generated file.
+	* trampoline/trampoline.c (alloc_trampoline) [__s390__]: Change the
+	trampoline to not use %r13.
+	* callback/trampoline_r/Makefile.devel (proto-s390.s): New target.
+	(tramp-s390.o): Use cross tools.
+	* callback/trampoline_r/proto-s390.s: Regenerated with gcc 3.1.
+	* callback/trampoline_r/tramp-s390.s: Rewritten from scratch. Use 'lm'
+	instruction.
+	* callback/trampoline_r/tramp-s390.o: Regenerated.
+	* callback/trampoline_r/trampoline.c (alloc_trampoline_r) [__s390__]:
+	Change the trampoline accordingly.
+
 2017-06-17  Bruno Haible  <bruno@clisp.org>
 
 	arm64: Add support for arm64 CPU (a.k.a. aarch64).

@@ -1,8 +1,7 @@
 /* Trampoline for s390 CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
- * Copyright 2001 Gerhard Tonn <gt@debian.org>
+ * Copyright 2017 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Available registers: r0, r1. */
+/* Available registers: r0, r1.
+   r13 cannot be used as literal pool pointer here, because it is call-saved. */
 
-.globl _tramp
-_tramp:
-	bras    %r1,.LTN0_0
-.LT0_0:
-.LC0:
-	.long   1934968593
-.LC1:
-	.long   0xbabebec0
-.LTN0_0:
-	l       %r0,.LC0-.LT0_0(%r1)
-	l       %r1,.LC1-.LT0_0(%r1)
-	br      %r1
+	.text
+
+	.align	4
+	.globl tramp
+	.type	tramp, @function
+tramp:
+	/* Get .L1 in %r1. */
+	bras	%r1,.L1
+.L1:
+	/* Get <data> in %r0 and <function> in %r1. */
+	lm	%r0,%r1,data-.L1(%r1)
+	/* Jump to <function>. */
+	br	%r1
+	.align	4
+data:
+	.long	0x73554711
+function:
+	.long	0xbabebec0
+	.size	tramp, .-tramp

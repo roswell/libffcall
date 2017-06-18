@@ -1,20 +1,9 @@
 	.file	"proto.c"
-	.version	"01.01"
-gcc2_compiled.:
 .text
-	.align 4
+	.align	4
 .globl tramp
-	.type	 tramp,@function
+	.type	tramp,@function
 tramp:
-#	leaf function           0
-#	automatics              0
-#	outgoing args           0
-#	need frame pointer      0
-#	call alloca             0
-#	has varargs             0
-#	incoming args (stack)   0
-#	function length         10
-#	register live           0010000000000010000000000000000000
 	stm	%r13,%r15,52(%r15)
 	bras	%r13,.LTN0_0
 .LT0_0:
@@ -23,27 +12,22 @@ tramp:
 .LC1:
 	.long	-1161904448
 .LTN0_0:
-	lr	%r1,%r15
+	lr	%r14,%r15
 	ahi	%r15,-96
-	st	%r1,0(%r15)
 	l	%r2,.LC1-.LT0_0(%r13)
 	l	%r0,.LC0-.LT0_0(%r13)
+	st	%r14,0(%r15)
 	basr	%r14,%r2
-	l	%r4,152(%r15)
+	l	%r1,152(%r15)
 	lm	%r13,%r15,148(%r15)
-	br	%r4
+	br	%r1
 .Lfe1:
-	.size	 tramp,.Lfe1-tramp
-	.align 4
+	.size	tramp,.Lfe1-tramp
+	.align	4
 .globl jump
-	.type	 jump,@function
+	.type	jump,@function
 jump:
-#	leaf function
-#	has varargs             0
-#	incoming args (stack)   0
-#	function length         6
-#	register live           0100000000000000000000000000000000
-	stm	%r13,%r13,52(%r15)
+	st	%r13,52(%r15)
 	bras	%r13,.LTN1_0
 .LT1_0:
 .LC2:
@@ -51,8 +35,6 @@ jump:
 .LTN1_0:
 	l	%r1,.LC2-.LT1_0(%r13)
 	br	%r1
-	lm	%r13,%r13,52(%r15)
-	br	%r14
 .Lfe2:
-	.size	 jump,.Lfe2-jump
-	.ident	"GCC: (GNU) 2.95.4 20011006 (Debian prerelease)"
+	.size	jump,.Lfe2-jump
+	.ident	"GCC: (GNU) 3.1"
