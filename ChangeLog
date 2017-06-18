@@ -1,5 +1,13 @@
 2017-06-18  Bruno Haible  <bruno@clisp.org>
 
+	s390: Reorder code.
+	* avcall/avcall.h.in: Move s390 specific code to the end (after ia64 and
+	x86_64 specific code).
+	* vacall/vacall.h.in: Likewise.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+
+2017-06-18  Bruno Haible  <bruno@clisp.org>
+
 	s390: Improve trampolines.
 	* trampoline/Makefile.devel (proto-s390.s): New target.
 	(tramp-s390.o): Use cross tools.

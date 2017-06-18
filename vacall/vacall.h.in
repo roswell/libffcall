@@ -436,15 +436,6 @@ typedef struct
   int            onstack;
 #endif
 #endif
-#if defined(__s390__)
-  float*         memfargptr;
-  double*        memdargptr;
-  float          farg[2];
-  double         darg[2];
-  __vaword       regarg[5];
-  unsigned long  saptr;
-  int            onstack;
-#endif
 #if defined(__ia64__)
   __vaword*      saptr;
   double*        memfargptr;
@@ -455,6 +446,15 @@ typedef struct
   double         farg[8];
   __vaword*      memiargptr;
   __vaword       iarg[6];
+#endif
+#if defined(__s390__)
+  float*         memfargptr;
+  double*        memdargptr;
+  float          farg[2];
+  double         darg[2];
+  __vaword       regarg[5];
+  unsigned long  saptr;
+  int            onstack;
 #endif
 } __va_alist;
 
@@ -1107,30 +1107,6 @@ typedef __va_alist* va_alist;
     : *(double*)((LIST)->aptr - sizeof(double))				\
   ))
 #endif
-#if defined(__s390__)
-/* The first 2 floating-point args have been stored elsewhere. */
-#define va_arg_float(LIST)  \
-  ((LIST)->memfargptr < &(LIST)->farg[2]				\
-   ? (LIST)->memdargptr++, (float) *((LIST)->memfargptr++)		\
-   : ((LIST)->aptr = ((LIST)->onstack == 0                              \
-                       ? ((LIST)->onstack=1, (LIST)->saptr)             \
-                       : (LIST)->aptr                                   \
-                      ),                                                \
-      (LIST)->aptr += sizeof(float),					\
-      *(float*)((LIST)->aptr - sizeof(float))				\
-  ))
-#define va_arg_double(LIST)  \
-  ((LIST)->memdargptr < &(LIST)->darg[2]				\
-    ? (LIST)->memfargptr++, *((LIST)->memdargptr++)			\
-    : ((LIST)->aptr = ((LIST)->onstack == 0                             \
-                       ? ((LIST)->onstack=1, (LIST)->saptr)             \
-                       : (LIST)->aptr                                   \
-                      ),                                                \
-       __va_align_double(LIST)						\
-       (LIST)->aptr += sizeof(double),					\
-       *(double*)((LIST)->aptr - sizeof(double))			\
-  ))
-#endif
 #if defined(__ia64__)
 /* The first 8 floating-point args have been stored elsewhere. */
 #define va_arg_float(LIST)  \
@@ -1163,6 +1139,30 @@ typedef __va_alist* va_alist;
    : ((LIST)->aptr += sizeof(__vaword),					\
       *(double*)((LIST)->aptr - sizeof(__vaword))			\
   )  )
+#endif
+#if defined(__s390__)
+/* The first 2 floating-point args have been stored elsewhere. */
+#define va_arg_float(LIST)  \
+  ((LIST)->memfargptr < &(LIST)->farg[2]				\
+   ? (LIST)->memdargptr++, (float) *((LIST)->memfargptr++)		\
+   : ((LIST)->aptr = ((LIST)->onstack == 0				\
+                       ? ((LIST)->onstack=1, (LIST)->saptr)		\
+                       : (LIST)->aptr					\
+                      ),						\
+      (LIST)->aptr += sizeof(float),					\
+      *(float*)((LIST)->aptr - sizeof(float))				\
+  ))
+#define va_arg_double(LIST)  \
+  ((LIST)->memdargptr < &(LIST)->darg[2]				\
+    ? (LIST)->memfargptr++, *((LIST)->memdargptr++)			\
+    : ((LIST)->aptr = ((LIST)->onstack == 0				\
+                       ? ((LIST)->onstack=1, (LIST)->saptr)		\
+                       : (LIST)->aptr					\
+                      ),						\
+       __va_align_double(LIST)						\
+       (LIST)->aptr += sizeof(double),					\
+       *(double*)((LIST)->aptr - sizeof(double))			\
+  ))
 #endif
 #ifndef va_arg_float
 #define va_arg_float(LIST)	__va_arg(LIST,float)
