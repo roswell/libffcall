@@ -50,11 +50,11 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   __va_alist list;
   /* Move the arguments passed in registers to temp storage, since
      moving them to the stack would mess up the stack */
-  list.regarg[0] = word1;
-  list.regarg[1] = word2;
-  list.regarg[2] = word3;
-  list.regarg[3] = word4;
-  list.regarg[4] = word5;
+  list.iarg[0] = word1;
+  list.iarg[1] = word2;
+  list.iarg[2] = word3;
+  list.iarg[3] = word4;
+  list.iarg[4] = word5;
 
   list.darg[1] = darg2;
   list.darg[0] = darg1;
@@ -64,7 +64,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 
   /* Prepare the va_alist. */
   list.flags = 0;
-  list.aptr = (long)(&list.regarg[0]);
+  list.aptr = (long)(&list.iarg[0]);
   list.saptr = (long)(&firstword);
   list.onstack = 0;
   list.raddr = (void*)0;

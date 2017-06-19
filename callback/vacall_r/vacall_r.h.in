@@ -436,7 +436,7 @@ typedef struct
   double*        memfargptr;
   double         farg[13];
 #if !(defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)))
-  __vaword       regarg[8];
+  __vaword       iarg[8];
   unsigned long  saptr;
   int            onstack;
 #endif
@@ -458,7 +458,7 @@ typedef struct
   double*        memdargptr;
   float          farg[2];
   double         darg[2];
-  __vaword       regarg[5];
+  __vaword       iarg[5];
   unsigned long  saptr;
   int            onstack;
 #endif
@@ -726,13 +726,13 @@ typedef __va_alist* va_alist;
 /* small structures < 1 word are adjusted depending on compiler */
 /* Also make sure we switch to the stack pointer after 8 args */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((((LIST)->onstack == 0 && (LIST)->aptr >= (long)&(LIST)->regarg[8])	\
+  ((((LIST)->onstack == 0 && (LIST)->aptr >= (long)&(LIST)->iarg[8])	\
     ? ((LIST)->onstack=1, (LIST)->aptr = (LIST)->saptr) : 0),		\
    (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
    (LIST)->aptr - __va_argsize(TYPE_SIZE)				\
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((((LIST)->onstack == 0 && (LIST)->aptr >= (long)&(LIST)->regarg[8])	\
+  ((((LIST)->onstack == 0 && (LIST)->aptr >= (long)&(LIST)->iarg[8])	\
     ? ((LIST)->onstack=1, (LIST)->aptr = (LIST)->saptr) : 0),		\
    (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
    (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)			\
@@ -746,13 +746,13 @@ typedef __va_alist* va_alist;
 /* small structures < 1 word are adjusted depending on compiler */
 /* Also make sure we switch to the stack pointer after 5 args */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((((LIST)->onstack == 0 && ((LIST)->aptr + __va_argsize(TYPE_SIZE) > (long)&(LIST)->regarg[5])) \
+  ((((LIST)->onstack == 0 && ((LIST)->aptr + __va_argsize(TYPE_SIZE) > (long)&(LIST)->iarg[5])) \
     ? ((LIST)->onstack=1, (LIST)->aptr = (LIST)->saptr) : 0),		\
    (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
    (LIST)->aptr - __va_argsize(TYPE_SIZE)				\
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((((LIST)->onstack == 0 && ((LIST)->aptr + __va_argsize(TYPE_SIZE) > (long)&(LIST)->regarg[5])) \
+  ((((LIST)->onstack == 0 && ((LIST)->aptr + __va_argsize(TYPE_SIZE) > (long)&(LIST)->iarg[5])) \
     ? ((LIST)->onstack=1, (LIST)->aptr = (LIST)->saptr) : 0),		\
    (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
    (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)			\

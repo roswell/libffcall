@@ -73,14 +73,14 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 #else
   /* Move the arguments passed in registers to temp storage, since
      moving them to the stack would mess up the stack */
-  list.regarg[0] = word1;
-  list.regarg[1] = word2;
-  list.regarg[2] = word3;
-  list.regarg[3] = word4;
-  list.regarg[4] = word5;
-  list.regarg[5] = word6;
-  list.regarg[6] = word7;
-  list.regarg[7] = word8;
+  list.iarg[0] = word1;
+  list.iarg[1] = word2;
+  list.iarg[2] = word3;
+  list.iarg[3] = word4;
+  list.iarg[4] = word5;
+  list.iarg[5] = word6;
+  list.iarg[6] = word7;
+  list.iarg[7] = word8;
 #endif
   list.farg[0] = farg1;
   list.farg[1] = farg2;
@@ -102,7 +102,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 #if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))
   list.aptr = (long)(&firstword - 8);
 #else
-  list.aptr = (long)(&list.regarg[0]);
+  list.aptr = (long)(&list.iarg[0]);
   list.saptr = (long)(&firstword);
   list.onstack = 0;
 #endif

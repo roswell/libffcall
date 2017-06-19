@@ -1,3 +1,11 @@
+2017-06-19  Bruno Haible  <bruno@clisp.org>
+
+	Fix a misnomer.
+	* vacall/vacall.h.in: Rename 'regarg' to 'iarg'.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-powerpc.c: Update accordingly.
+	* vacall/vacall-s390.c: Likewise.
+
 2017-06-18  Bruno Haible  <bruno@clisp.org>
 
 	s390x: Add support for s390x CPU (64-bit S/390).
