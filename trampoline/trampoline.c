@@ -287,9 +287,13 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 16
 #endif
 #endif
-#ifdef __s390__
+#if defined(__s390__) && !defined(__s390x__)
 #define TRAMP_LENGTH 40
 #define TRAMP_ALIGN 4
+#endif
+#if defined(__s390x__)
+#define TRAMP_LENGTH 64
+#define TRAMP_ALIGN 8
 #endif
 
 #ifndef TRAMP_BIAS
@@ -1197,7 +1201,7 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
           *(unsigned short *) (function + 2))
 #endif
 #endif
-#ifdef __s390__
+#if defined(__s390__) && !defined(__s390x__)
   /* function:
    *    bras %r1,.L1			A7150002
    * .L1:
@@ -1238,6 +1242,54 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
   *(unsigned int *) (function +32)
 #define tramp_data(function)  \
   *(unsigned int *) (function +28)
+#endif
+#ifdef __s390x__
+  /* function:
+   *    larl %r1,.L1			C01000000003
+   * .L1:
+   *    lg %r0,data-.L1(%r1)		E30010220004
+   *    lg %r1,variable-.L1(%r1)	E310102A0004
+   *    stg %r0,0(%r1)			E30010000024
+   *    larl %r1,.L2			C01000000003
+   * .L2:
+   *    lg %r1,function-.L2(%r1)	E310101A0004
+   *    br %r1				07F1
+   *    nop				0707
+   * data:     .quad <data>
+   * variable: .quad <variable>
+   * address:  .quad <address>
+   */
+  *(int *)   (function + 0) = 0xC0100000;
+  *(int *)   (function + 4) = 0x0003E300;
+  *(int *)   (function + 8) = 0x10220004;
+  *(int *)   (function +12) = 0xE310102A;
+  *(int *)   (function +16) = 0x0004E300;
+  *(int *)   (function +20) = 0x10000024;
+  *(int *)   (function +24) = 0xC0100000;
+  *(int *)   (function +28) = 0x0003E310;
+  *(int *)   (function +32) = 0x101A0004;
+  *(int *)   (function +36) = 0x07F10707;
+  *(long *)  (function +40) = (unsigned long) data;
+  *(long *)  (function +48) = (unsigned long) variable;
+  *(long *)  (function +56) = (unsigned long) address;
+#define TRAMP_CODE_LENGTH  40
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0xC0100000 && \
+  *(unsigned int *) (function + 4) == 0x0003E300 && \
+  *(unsigned int *) (function + 8) == 0x10220004 && \
+  *(unsigned int *) (function +12) == 0xE310102A && \
+  *(unsigned int *) (function +16) == 0x0004E300 && \
+  *(unsigned int *) (function +20) == 0x10000024 && \
+  *(unsigned int *) (function +24) == 0xC0100000 && \
+  *(unsigned int *) (function +28) == 0x0003E310 && \
+  *(unsigned int *) (function +32) == 0x101A0004 && \
+  *(unsigned int *) (function +36) == 0x07F10707
+#define tramp_address(function)  \
+  (*(unsigned long *) (function +56))
+#define tramp_variable(function)  \
+  (*(unsigned long *) (function +48))
+#define tramp_data(function)  \
+  (*(unsigned long *) (function +40))
 #endif
 
   /* 3. Set memory protection to "executable" */

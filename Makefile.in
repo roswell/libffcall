@@ -121,6 +121,7 @@ COPIED_FILES = \
   callback/vacall_r/vacall-powerpc.c \
   callback/vacall_r/vacall-powerpc64.c \
   callback/vacall_r/vacall-s390.c \
+  callback/vacall_r/vacall-s390x.c \
   callback/vacall_r/vacall-sparc.c \
   callback/vacall_r/vacall-sparc64.c \
   callback/vacall_r/vacall-x86_64.c \

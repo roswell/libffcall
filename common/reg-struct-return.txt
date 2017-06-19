@@ -15,3 +15,4 @@ powerpc64 ---     ---   ---   ---      ---    ---
 ia64      r8      r8    f8    r8,r9    r8     ---
 x86_64    eax     eax   xmm0  rax,rdx  rax    ---
 s390      r2      r2    r2,r3 r2,r3    r2     ---
+s390x     ---     ---   ---   ---      ---    ---

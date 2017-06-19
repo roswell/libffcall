@@ -283,9 +283,13 @@ extern void __TR_clear_cache();
 #define TRAMP_ALIGN 16
 #endif
 #endif
-#ifdef __s390__
+#if defined(__s390__) && !defined(__s390x__)
 #define TRAMP_LENGTH 20
 #define TRAMP_ALIGN 4
+#endif
+#ifdef __s390x__
+#define TRAMP_LENGTH 32
+#define TRAMP_ALIGN 8
 #endif
 
 #ifndef TRAMP_BIAS
@@ -1026,7 +1030,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
           *(unsigned short *) (function + 2))
 #endif
 #endif
-#ifdef __s390__
+#if defined(__s390__) && !defined(__s390x__)
   /* function:
    *    bras %r1,.L1			A7150002
    * .L1:
@@ -1050,6 +1054,33 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned int *) (function +16)
 #define tramp_data(function)  \
   *(unsigned int *) (function +12)
+#endif
+#ifdef __s390x__
+  /* function:
+   *    larl %r1,.L1			C01000000003
+   * .L1:
+   *    lmg %r0,%r1,data-.L1(%r1)	EB01100A0004
+   *    br %r1				07F1
+   *    nop				0707
+   * data:    .quad <data>
+   * address: .quad <address>
+   */
+  *(int *)   (function + 0) = 0xC0100000;
+  *(int *)   (function + 4) = 0x0003EB01;
+  *(int *)   (function + 8) = 0x100A0004;
+  *(int *)   (function +12) = 0x07F10707;
+  *(long *)  (function +16) = (unsigned long) data;
+  *(long *)  (function +24) = (unsigned long) address;
+#define TRAMP_CODE_LENGTH  16
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0xC0100000 && \
+  *(unsigned int *) (function + 4) == 0x0003EB01 && \
+  *(unsigned int *) (function + 8) == 0x100A0004 && \
+  *(unsigned int *) (function +12) == 0x07F10707
+#define tramp_address(function)  \
+  (*(unsigned long *) (function +24))
+#define tramp_data(function)  \
+  (*(unsigned long *) (function +16))
 #endif
   /*
    * data:

@@ -49,6 +49,7 @@
 /callback/vacall_r/vacall-powerpc.c
 /callback/vacall_r/vacall-powerpc64.c
 /callback/vacall_r/vacall-s390.c
+/callback/vacall_r/vacall-s390x.c
 /callback/vacall_r/vacall-sparc.c
 /callback/vacall_r/vacall-sparc64.c
 /callback/vacall_r/vacall-x86_64.c
@@ -97,6 +98,8 @@
 /avcall/avcall-powerpc64-elfv2-linux.S
 /avcall/avcall-s390-linux.s
 /avcall/avcall-s390-macro.S
+/avcall/avcall-s390x-linux.s
+/avcall/avcall-s390x-macro.S
 /avcall/avcall-sparc-linux.s
 /avcall/avcall-sparc-macro.S
 /avcall/avcall-sparc64-linux.s
@@ -141,6 +144,8 @@
 /vacall/vacall-powerpc64-elfv2-linux.S
 /vacall/vacall-s390-linux.s
 /vacall/vacall-s390-macro.S
+/vacall/vacall-s390x-linux.s
+/vacall/vacall-s390x-macro.S
 /vacall/vacall-sparc-linux.s
 /vacall/vacall-sparc-macro.S
 /vacall/vacall-sparc64-linux.s
@@ -198,6 +203,8 @@
 /callback/vacall_r/vacall-powerpc64-elfv2-linux.S
 /callback/vacall_r/vacall-s390-linux.s
 /callback/vacall_r/vacall-s390-macro.S
+/callback/vacall_r/vacall-s390x-linux.s
+/callback/vacall_r/vacall-s390x-macro.S
 /callback/vacall_r/vacall-sparc-linux.s
 /callback/vacall_r/vacall-sparc-macro.S
 /callback/vacall_r/vacall-sparc64-linux.s
@@ -398,6 +405,7 @@ autom4te.cache/
 /avcall/avcall-x86_64.s
 /avcall/avcall-x86_64-x32.s
 /avcall/avcall-s390.s
+/avcall/avcall-s390x.s
 /avcall/minitests.o
 /avcall/minitests.s
 /avcall/minitests
@@ -431,6 +439,7 @@ autom4te.cache/
 /vacall/vacall-x86_64.s
 /vacall/vacall-x86_64-x32.s
 /vacall/vacall-s390.s
+/vacall/vacall-s390x.s
 /vacall/minitests.o
 /vacall/minitests.s
 /vacall/minitests
@@ -517,6 +526,7 @@ autom4te.cache/
 /callback/vacall_r/vacall-x86_64.s
 /callback/vacall_r/vacall-x86_64-x32.s
 /callback/vacall_r/vacall-s390.s
+/callback/vacall_r/vacall-s390x.s
 # Erased by callback/trampoline_r/Makefile.
 /callback/trampoline_r/trampoline.lo
 /callback/trampoline_r/trampoline.o

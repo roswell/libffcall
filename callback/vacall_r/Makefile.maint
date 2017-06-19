@@ -54,6 +54,7 @@ COPIED_FILES = \
   vacall-powerpc.c \
   vacall-powerpc64.c \
   vacall-s390.c \
+  vacall-s390x.c \
   vacall-sparc.c \
   vacall-sparc64.c \
   vacall-x86_64.c

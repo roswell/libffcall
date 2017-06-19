@@ -41,6 +41,9 @@ register void* env __asm__("r15");
 #ifdef __x86_64__
 register void* env __asm__("r10");
 #endif
+#ifdef __s390x__
+register void* env __asm__("r0");
+#endif
 
 int tramp ()
 { env = data;

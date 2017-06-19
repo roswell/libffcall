@@ -9,6 +9,7 @@ New in 1.13:
   - x86_64: Linux with x32 ABI: CC="gcc -mx32".
   - arm: Linux 32-bit, without hardware floats.
   - arm64: Linux 64-bit.
+  - s390x: Linux 64-bit.
   - powerpc: AIX 64-bit.
   - mips: IRIX 6.5 with CC="cc -32".
   - sparc: Solaris 64-bit.

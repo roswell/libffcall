@@ -59,4 +59,5 @@ Supported CPUs:  (Put the GNU config.guess values here.)
               x86_64-pc-solaris2.10 (gcc -m64)       AMD64         Solaris
               x86_64-pc-solaris2.10 (cc -xarch=generic64)  AMD64   Solaris
    s390       s390x-ibm-linux (gcc -m31)             emulated      Linux
+   s390x      s390x-ibm-linux (gcc)                  emulated      Linux
 

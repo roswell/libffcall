@@ -26,4 +26,5 @@ Supported CPUs:  (Put the GNU config.guess values here.)
      x86_64     x86_64-suse-linux, x86_64-unknown-linux (gcc -mx32),
                 x86_64-pc-solaris2.10
      s390       s390x-ibm-linux
+     s390x      s390x-ibm-linux
 

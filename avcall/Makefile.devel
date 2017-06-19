@@ -24,7 +24,7 @@ precompiled : \
   avcall-powerpc-aix.s avcall-powerpc-linux-macro.S avcall-powerpc-sysv4-macro.S avcall-powerpc-macos.s avcall-powerpc64-aix.s avcall-powerpc64-linux.S avcall-powerpc64-elfv2-linux.S \
   avcall-ia64-macro.S \
   avcall-x86_64-macro.S avcall-x86_64-x32-linux.s \
-  avcall-s390-macro.S
+  avcall-s390-macro.S avcall-s390x-macro.S
 
 
 avcall-i386-linux.s : avcall-i386.c avcall.h.in $(THISFILE)
@@ -191,8 +191,15 @@ avcall-x86_64-x32-linux.s : avcall-x86_64.c avcall.h.in $(THISFILE)
 avcall-s390-linux.s : avcall-s390.c avcall.h.in $(THISFILE)
 	$(CROSS_TOOL) s390-linux gcc -V 3.1 $(GCCFLAGS) -D__s390__ -S avcall-s390.c -o avcall-s390-linux.s
 
-avcall-s390-macro.S : avcall-s390-linux.s ../common/noexecstack.h $(THISFILE)
-	cat avcall-s390-linux.s ../common/noexecstack.h > avcall-s390-macro.S
+avcall-s390-macro.S : avcall-s390-linux.s ../common/asm-s390.sh ../common/noexecstack.h $(THISFILE)
+	(../common/asm-s390.sh < avcall-s390-linux.s ; cat ../common/noexecstack.h) > avcall-s390-macro.S
+
+
+avcall-s390x-linux.s : avcall-s390x.c avcall.h.in $(THISFILE)
+	$(CROSS_TOOL) s390x-linux gcc-5.4.0 $(GCCFLAGS) -D__s390x__ -S avcall-s390x.c -o avcall-s390x-linux.s
+
+avcall-s390x-macro.S : avcall-s390x-linux.s ../common/asm-s390.sh ../common/noexecstack.h $(THISFILE)
+	(../common/asm-s390.sh < avcall-s390x-linux.s ; cat ../common/noexecstack.h) > avcall-s390x-macro.S
 
 
 # --------------- Rules for debugging test failures ---------------

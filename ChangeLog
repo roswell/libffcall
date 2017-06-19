@@ -1,5 +1,61 @@
 2017-06-18  Bruno Haible  <bruno@clisp.org>
 
+	s390x: Add support for s390x CPU (64-bit S/390).
+	* cross-tools/cross.conf: Add configuration for s390x cross tools.
+	* common/reg-struct-return.txt: Add info about s390x.
+	* callback/call-used-registers.txt: Likewise.
+	* common/asm-s390.sh: New file.
+	* avcall/avcall.h.in: Optionally define __s390x__. Add code for
+	__s390x__, especially __av_start_struct4, av_float, av_double,
+	__av_struct.
+	* avcall/avcall-s390x.c: New file.
+	* avcall/Makefile.devel (avcall-s390-macro.S): Use asm-s390.sh.
+	(avcall-s390x-linux.s, avcall-s390x-macro.S): New targets.
+	* avcall/Makefile.in (avcall-s390x.lo, avcall-s390x.s): New targets.
+	(clean): Remove avcall-s390x.s.
+	(SOURCE_FILES): Add avcall-s390x.c, avcall-s390x-linux.s,
+	avcall-s390x-macro.S.
+	* vacall/vacall.h.in: Optionally define __s390x__. Add code for
+	__s390x__, especially __va_start_struct2, __va_arg_adjusted,
+	va_arg_float, va_arg_double, __va_arg_struct.
+	* vacall/vacall-s390x.c: New file.
+	* vacall/Makefile.devel (vacall-s390-macro.S): Use asm-s390.sh.
+	(vacall-s390x-linux.s, vacall-s390x-macro.S): New targets.
+	* vacall/Makefile.in (vacall-s390x.o, vacall-s390x.s): New targets.
+	(clean): Remove vacall-s390x.s.
+	(SOURCE_FILES): Add vacall-s390x.c, vacall-s390x-linux.s,
+	vacall-s390x-macro.S.
+	* callback/vacall_r/Makefile.maint (COPIED_FILES): Add vacall-s390x.c.
+	* Makefile.in (COPIED_FILES): Add callback/vacall_r/vacall-s390x.c.
+	* callback/vacall_r/vacall_r.h.in: Optionally define __s390x__. Add code
+	for __s390x__, especially __va_start_struct2, __va_arg_adjusted,
+	va_arg_float, va_arg_double, __va_arg_struct.
+	* callback/vacall_r/Makefile.devel (vacall-s390-macro.S): Use
+	asm-s390.sh.
+	(vacall-s390x-linux.s, vacall-s390x-macro.S): New targets.
+	* callback/vacall_r/Makefile.in (vacall-s390x.lo, vacall-s390x.s): New
+	targets.
+	(clean): Remove vacall-s390x.s.
+	(SOURCE_FILES): Add vacall-s390x.c, vacall-s390x-linux.s,
+	vacall-s390x-macro.S.
+	* trampoline/Makefile.devel (proto-s390x.s, tramp-s390x.o): New targets.
+	* trampoline/proto-s390x.s: New generated file.
+	* trampoline/tramp-s390x.s: New file.
+	* trampoline/tramp-s390x.o: New generated file.
+	* trampoline/trampoline.c: Implement for __s390x__.
+	* callback/trampoline_r/Makefile.devel (proto-s390x.s, tramp-s390x.o):
+	New targets.
+	* callback/trampoline_r/proto64.c: Add support for __s390x__.
+	* callback/trampoline_r/proto-s390x.s: New generated file.
+	* callback/trampoline_r/tramp-s390x.s: New file.
+	* callback/trampoline_r/tramp-s390x.o: New generated file.
+	* callback/trampoline_r/trampoline.c: Implement for __s390x__.
+	* callback/trampoline_r/test1.c: Add support for __s390x__.
+	* PLATFORMS, */PLATFORMS: List the s390x machine.
+	* NEWS: Mention the new port.
+
+2017-06-18  Bruno Haible  <bruno@clisp.org>
+
 	Small code style improvements.
 	* avcall/avcall.h.in [__arm64__]: Define and use __AV_FARG_NUM.
 	[__s390__, __arm64__] (__av_struct): Avoid a boolean negation.
@@ -53,7 +109,7 @@
 	* vacall/vacall-arm64.c: New file.
 	* vacall/Makefile.devel (vacall-arm64-macro.S): New target.
 	* vacall/Makefile.in (vacall-arm64.o, vacall-arm64.s): New targets.
-	(clean): Remove vacall-armhf.s.
+	(clean): Remove vacall-arm64.s.
 	(SOURCE_FILES): Add vacall-arm64.c, vacall-arm64-macro.S.
 	* callback/vacall_r/Makefile.maint (COPIED_FILES): Add vacall-arm64.c.
 	* Makefile.in (COPIED_FILES): Add callback/vacall_r/vacall-arm64.c.

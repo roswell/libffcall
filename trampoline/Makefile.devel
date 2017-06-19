@@ -72,7 +72,7 @@ cache-powerpc64-elfv2-macro.S : cache-powerpc64-elfv2-linux.s ../common/asm-powe
 OLDGCCFLAGS = -O2 -fomit-frame-pointer
 ASPREFIX = /usr1/gnu/lib
 
-proto-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-arm64.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.s proto-x86_64.s proto-x86_64-x32.s proto-s390.s
+proto-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-arm64.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.s proto-x86_64.s proto-x86_64-x32.s proto-s390.s proto-s390x.s
 
 proto-i386.s : proto.c
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(OLDGCCFLAGS) -D__i386__ -S proto.c -o $@
@@ -134,6 +134,9 @@ proto-x86_64-x32.s : proto.c
 proto-s390.s : proto.c
 	$(CROSS_TOOL) s390-linux gcc -V 3.1 $(OLDGCCFLAGS) -D__s390__ -S proto.c -o $@
 
+proto-s390x.s : proto64.c
+	$(CROSS_TOOL) s390x-linux gcc-5.4.0 $(OLDGCCFLAGS) -D__s390x__ -S proto64.c -o $@
+
 tramp-i386.o : tramp-i386.s
 	$(ASPREFIX)/i486-linux/bin/as tramp-i386.s -o $@
 
@@ -184,3 +187,6 @@ tramp-x86_64-x32.o : tramp-x86_64-x32.s
 
 tramp-s390.o : tramp-s390.s
 	$(CROSS_TOOL) s390-linux as tramp-s390.s -o $@
+
+tramp-s390x.o : tramp-s390x.s
+	$(CROSS_TOOL) s390x-linux as tramp-s390x.s -o $@

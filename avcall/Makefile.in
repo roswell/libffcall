@@ -198,6 +198,12 @@ avcall-s390.lo : avcall-s390.s
 avcall-s390.s : $(srcdir)/avcall-s390-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-s390-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-s390.s
 
+avcall-s390x.lo : avcall-s390x.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-s390x.s
+
+avcall-s390x.s : $(srcdir)/avcall-s390x-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-s390x.s
+
 avcall-structcpy.lo : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy.c
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-structcpy.c
 
@@ -274,7 +280,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.o *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64-x32.s avcall-s390.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.o minitests.s minitests minitests.out
 	$(RM) tests.o tests.s tests tests.out
@@ -310,6 +316,7 @@ SOURCE_FILES = \
   avcall-powerpc-linux.s avcall-powerpc-linux-macro.S avcall-powerpc-macos.s avcall-powerpc-sysv4-macro.S \
   avcall-powerpc64.c avcall-powerpc64-aix.s avcall-powerpc64-linux.S avcall-powerpc64-elfv2-linux.S \
   avcall-s390.c avcall-s390-linux.s avcall-s390-macro.S \
+  avcall-s390x.c avcall-s390x-linux.s avcall-s390x-macro.S \
   avcall-sparc.c avcall-sparc-linux.s avcall-sparc-macro.S \
   avcall-sparc64.c avcall-sparc64-linux.s avcall-sparc64-macro.S \
   avcall-x86_64.c avcall-x86_64-linux.s avcall-x86_64-macro.S avcall-x86_64-x32-linux.s \
