@@ -406,12 +406,13 @@ typedef struct
   /* store the integer arguments in an extra array */
   unsigned int		ianum;
   __avword		iargs[__AV_IARG_NUM];
+#define __AV_FARG_NUM 8
   /* store the floating-point arguments in an extra array */
   unsigned int		fanum;		/* number of fargs[] words that are occupied so far */
   unsigned int		farg_mask;	/* bitmask of those entries in fargs[] which have a float value */
   unsigned int		darg_mask;	/* bitmask of those entries in dargs[] which have a double value */
-  float			fargs[8];
-  double		dargs[8];
+  float			fargs[__AV_FARG_NUM];
+  double		dargs[__AV_FARG_NUM];
 #endif
 #if defined(__ia64__) || defined(__x86_64__)
   /* store the floating-point arguments in an extra array */
@@ -1123,9 +1124,9 @@ typedef struct
 
 #if defined(__arm64__)
 
-/* Up to 8 float or double args can be passed in float registers. */
+/* Up to __AV_FARG_NUM float or double args can be passed in float registers. */
 #define av_float(LIST,VAL)						\
-  ((LIST).fanum <= 7							\
+  ((LIST).fanum < __AV_FARG_NUM						\
    ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
       (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
       (LIST).fanum++,							\
@@ -1137,7 +1138,7 @@ typedef struct
        0)))
 
 #define av_double(LIST,VAL)						\
-  (((LIST).fanum <= 7							\
+  (((LIST).fanum < __AV_FARG_NUM					\
     ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
        (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
        (LIST).fanum++,							\
@@ -1480,15 +1481,15 @@ typedef struct
     ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)((__avword)(LIST).aptr-(TYPE_SIZE)),VAL),\
     0))
 #define __av_struct(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)		\
-  ((TYPE_SIZE) != 1 && (TYPE_SIZE) != 2 && (TYPE_SIZE) != 4 && (TYPE_SIZE) != 8 \
-   ? (++(LIST).aptr							\
-    > ((LIST).eptr = (__avword*)((long)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-    ? -1 :								\
-    (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),		\
-     (LIST).aptr[-1] = (__avword)(LIST).eptr,				\
-     0))								\
-   : (((TYPE_SIZE) == 8 && (LIST).aptr - (LIST).args - (LIST).fargwords == 4 ? ++(LIST).aptr,0 : 0), \
-      __av_struct_rightadjusted(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)))
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8 \
+   ? (((TYPE_SIZE) == 8 && (LIST).aptr - (LIST).args - (LIST).fargwords == 4 ? ++(LIST).aptr,0 : 0), \
+      __av_struct_rightadjusted(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)) \
+   : (++(LIST).aptr							\
+      > ((LIST).eptr = (__avword*)((long)(LIST).eptr - (((TYPE_SIZE)+7)&-8))) \
+      ? -1 :								\
+      (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
+       (LIST).aptr[-1] = (__avword)(LIST).eptr,				\
+       0)))
 #endif
 /* big endian -> small structures < 1 word are adjusted to the right (i.e. occupy the high bits of the word) */
 #if ((defined(__arm__) || defined(__armhf__)) && !defined(__ARMEL__))
@@ -1583,8 +1584,19 @@ typedef struct
  * Big structures are passed as pointers to caller-made local copies.
  */
 #define __av_struct(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)		\
-  ((TYPE_SIZE) > 16							\
-   ? ((LIST).ianum < __AV_IARG_NUM					\
+  ((TYPE_SIZE) <= 16							\
+   ? ((((LIST).ianum*sizeof(__avword)+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)) <= __AV_IARG_NUM*sizeof(__avword) \
+      ? (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)&(LIST).iargs[(LIST).ianum],VAL), \
+         (LIST).ianum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(long)sizeof(__avword))/sizeof(__avword), \
+         0)								\
+      : ((__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)) > __av_eptr(LIST) \
+         ? -1 :								\
+         ((LIST).ianum = __AV_IARG_NUM,					\
+          (LIST).aptr = (__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)), \
+          ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)((__avword)(LIST).aptr-(TYPE_SIZE)),VAL), \
+          (LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(__avword)-1) & -(long)sizeof(__avword)), \
+          0)))								\
+   : ((LIST).ianum < __AV_IARG_NUM					\
       ? ((LIST).aptr							\
          > ((LIST).eptr = (__avword*)((long)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
          ? -1 :								\
@@ -1596,17 +1608,6 @@ typedef struct
          ? -1 :								\
          (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
           (LIST).aptr[-1] = (__avword)(LIST).eptr,			\
-          0)))								\
-   : ((((LIST).ianum*sizeof(__avword)+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)) <= __AV_IARG_NUM*sizeof(__avword) \
-      ? (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)&(LIST).iargs[(LIST).ianum],VAL), \
-         (LIST).ianum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(long)sizeof(__avword))/sizeof(__avword), \
-         0)								\
-      : ((__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)) > __av_eptr(LIST) \
-         ? -1 :								\
-         ((LIST).ianum = __AV_IARG_NUM,					\
-          (LIST).aptr = (__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(long)(TYPE_ALIGN)), \
-          ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)((__avword)(LIST).aptr-(TYPE_SIZE)),VAL), \
-          (LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(__avword)-1) & -(long)sizeof(__avword)), \
           0))))
 #endif
 #if defined(__x86_64__)

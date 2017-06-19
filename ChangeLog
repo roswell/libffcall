@@ -1,5 +1,15 @@
 2017-06-18  Bruno Haible  <bruno@clisp.org>
 
+	Small code style improvements.
+	* avcall/avcall.h.in [__arm64__]: Define and use __AV_FARG_NUM.
+	[__s390__, __arm64__] (__av_struct): Avoid a boolean negation.
+	* vacall/vacall.h.in [__arm64__]: Define and use __VA_IARG_NUM,
+	__VA_FARG_NUM.
+	[__x86_64__]: Define and use __VA_IARG_NUM.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+
+2017-06-18  Bruno Haible  <bruno@clisp.org>
+
 	s390: Reorder code.
 	* avcall/avcall.h.in: Move s390 specific code to the end (after ia64 and
 	x86_64 specific code).
