@@ -18,6 +18,7 @@ New in 1.13:
   (Previously, a build on these platforms appeared to succeed but was buggy.)
   - x86_64: Linux.
   - arm: Linux 32-bit, with hardware floats.
+  - powerpc: Linux 64-bit.
   - mips: Linux with CC="gcc -mabi=32".
   - mips: Linux with CC="gcc -mabi=n32".
   - mips: Linux with CC="gcc -mabi=64".
@@ -31,7 +32,6 @@ New in 1.13:
   (A build on these platforms worked and still works.)
   - i386: Linux, Solaris, Mac OS X.
   - powerpc: Linux 32-bit.
-  - powerpc: Linux 64-bit.
   - powerpc: AIX 32-bit.
   - powerpc: MacOS X.
   - mips: IRIX 6.5 with CC="cc -n32".
