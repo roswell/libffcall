@@ -28,6 +28,11 @@ CPP = @CPP@
 INCLUDES = -I. -I$(srcdir)
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
+LIBTOOL = @LIBTOOL@
+LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
+LIBTOOL_LINK = $(LIBTOOL) --mode=link
+LIBTOOL_INSTALL = $(LIBTOOL) --mode=install
+LIBTOOL_UNINSTALL = $(LIBTOOL) --mode=uninstall
 AR = @AR@
 AR_FLAGS = rc
 RANLIB = @RANLIB@
@@ -44,66 +49,69 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-OBJECTS = trampoline.o @CPU_OBJECTS@
+# Needed by $(LIBTOOL).
+top_builddir = .
 
-all : $(OBJECTS) libtrampoline.a trampoline.h $(srcdir)/trampoline.3 $(srcdir)/trampoline.html
+OBJECTS = trampoline.lo @CPU_OBJECTS@
+
+all : $(OBJECTS) libtrampoline.la trampoline.h $(srcdir)/trampoline.3 $(srcdir)/trampoline.html
 
 trampoline.h : $(srcdir)/trampoline.h.in
 	-$(LN_S) $(srcdir)/trampoline.h.in trampoline.h
 
-trampoline.o : $(srcdir)/trampoline.c trampoline.h
-	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/trampoline.c
+trampoline.lo : $(srcdir)/trampoline.c trampoline.h
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/trampoline.c
 
-tramp-hppa.o : tramp-hppa.s
-	$(CC) @GCC_X_NONE@ -c tramp-hppa.s
+tramp-hppa.lo : tramp-hppa.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-hppa.s
 
 tramp-hppa.s : $(srcdir)/tramp-hppa-macro.S $(srcdir)/../common/noexecstack.h
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/tramp-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > tramp-hppa.s
 
-tramp-powerpc.o : tramp-powerpc.s
-	$(CC) @GCC_X_NONE@ -c tramp-powerpc.s
+tramp-powerpc.lo : tramp-powerpc.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc.s
 
 tramp-powerpc.s : $(srcdir)/tramp-powerpc-aix.S
 	$(CPP) $(srcdir)/tramp-powerpc-aix.S > tramp-powerpc.s
 
-tramp-powerpc64.o : tramp-powerpc64.s
-	$(CC) @GCC_X_NONE@ -c tramp-powerpc64.s
+tramp-powerpc64.lo : tramp-powerpc64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc64.s
 
 tramp-powerpc64.s : $(srcdir)/tramp-powerpc64-aix.S $(srcdir)/../common/noexecstack.h
 	$(CPP) -I$(srcdir)/../common $(srcdir)/tramp-powerpc64-aix.S > tramp-powerpc64.s
 
-tramp-ia64.o : tramp-ia64.s
-	$(CC) @GCC_X_NONE@ -c tramp-ia64.s
+tramp-ia64.lo : tramp-ia64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-ia64.s
 
 tramp-ia64.s : $(srcdir)/tramp-ia64-macro.S $(srcdir)/../common/noexecstack.h
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/tramp-ia64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > tramp-ia64.s
 
-cache-sparc.o : cache-sparc.s
-	$(CC) @GCC_X_NONE@ -c cache-sparc.s
+cache-sparc.lo : cache-sparc.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-sparc.s
 
 cache-sparc.s : $(srcdir)/cache-sparc-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/cache-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc.s
 
-cache-sparc64.o : cache-sparc64.s
-	$(CC) @GCC_X_NONE@ -c cache-sparc64.s
+cache-sparc64.lo : cache-sparc64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-sparc64.s
 
 cache-sparc64.s : $(srcdir)/cache-sparc64-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/cache-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc64.s
 
-cache-alpha.o : cache-alpha.s
-	$(CC) @GCC_X_NONE@ -c cache-alpha.s
+cache-alpha.lo : cache-alpha.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-alpha.s
 
 cache-alpha.s : $(srcdir)/cache-alpha-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/cache-alpha-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-alpha.s
 
-cache-hppa.o : cache-hppa.s
-	$(CC) @GCC_X_NONE@ -c cache-hppa.s
+cache-hppa.lo : cache-hppa.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-hppa.s
 
 cache-hppa.s : $(srcdir)/cache-hppa-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/cache-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > cache-hppa.s
 
-cache-powerpc.o : cache-powerpc.s
-	$(CC) @GCC_X_NONE@ -c cache-powerpc.s
+cache-powerpc.lo : cache-powerpc.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-powerpc.s
 
 cache-powerpc.s : $(srcdir)/cache-powerpc-linux-macro.S $(srcdir)/cache-powerpc-macos.s
 	case "$(OS)" in \
@@ -119,22 +127,20 @@ cache-powerpc.s : $(srcdir)/cache-powerpc-linux-macro.S $(srcdir)/cache-powerpc-
 	    cp $(srcdir)/cache-powerpc-$${syntax}.s cache-powerpc.s || exit 1 ;; \
 	esac
 
-cache-powerpc64-elfv2.o : cache-powerpc64-elfv2.s
-	$(CC) @GCC_X_NONE@ -c cache-powerpc64-elfv2.s
+cache-powerpc64-elfv2.lo : cache-powerpc64-elfv2.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-powerpc64-elfv2.s
 
 cache-powerpc64-elfv2.s : $(srcdir)/cache-powerpc64-elfv2-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/cache-powerpc64-elfv2-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-powerpc64-elfv2.s
 
-libtrampoline.a : $(OBJECTS)
-	$(RM) libtrampoline.a
-	$(AR) $(AR_FLAGS) libtrampoline.a $(OBJECTS)
-	$(RANLIB) libtrampoline.a
+libtrampoline.la : $(OBJECTS)
+	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS) $(LDFLAGS)
 
 install : all force
 	mkdir -p $(DESTDIR)$(prefix)
 	mkdir -p $(DESTDIR)$(exec_prefix)
 	mkdir -p $(DESTDIR)$(libdir)
-	$(INSTALL_DATA) libtrampoline.a $(DESTDIR)$(libdir)/libtrampoline.a
+	$(LIBTOOL_INSTALL) $(INSTALL_DATA) libtrampoline.la $(DESTDIR)$(libdir)/libtrampoline.la
 	mkdir -p $(DESTDIR)$(includedir)
 	$(INSTALL_DATA) trampoline.h $(DESTDIR)$(includedir)/trampoline.h
 	mkdir -p $(DESTDIR)$(mandir)
@@ -155,7 +161,7 @@ installdirs : force
 	mkdir -p $(DESTDIR)$(htmldir)
 
 uninstall : force
-	$(RM) $(DESTDIR)$(libdir)/libtrampoline.a
+	$(LIBTOOL_UNINSTALL) $(RM) $(DESTDIR)$(libdir)/libtrampoline.la
 	$(RM) $(DESTDIR)$(includedir)/trampoline.h
 	$(RM) $(DESTDIR)$(mandir)/man3/trampoline.3
 	$(RM) $(DESTDIR)$(htmldir)/trampoline.html
@@ -164,13 +170,13 @@ test1.o : $(srcdir)/test1.c trampoline.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
 test1 : test1.o $(OBJECTS)
-	$(CC) $(CFLAGS) @GCC_X_NONE@ test1.o $(OBJECTS) $(LDFLAGS) -o test1
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o $(OBJECTS) $(LDFLAGS) -o test1
 
 test2.o : $(srcdir)/test2.c trampoline.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test2.c
 
 test2 : test2.o $(OBJECTS)
-	$(CC) $(CFLAGS) @GCC_X_NONE@ test2.o $(OBJECTS) $(LDFLAGS) -o test2
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test2.o $(OBJECTS) $(LDFLAGS) -o test2
 
 check1 : all test1
 	./test1
@@ -185,11 +191,12 @@ extracheck : check
 mostlyclean : clean
 
 clean : force
-	$(RM) $(OBJECTS) tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.a core
+	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.o/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.* core
+	$(RM) -r .libs _libs
 	$(RM) test1.o test1 test2.o test2
 
 distclean : clean
-	$(RM) config.status config.log config.cache Makefile config.h trampoline.h tests.passed.*
+	$(RM) config.status config.log config.cache Makefile config.h trampoline.h libtool tests.passed.*
 
 maintainer-clean : distclean
 

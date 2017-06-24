@@ -1,5 +1,17 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Build library using libtool.
+	* trampoline/configure.ac: Invoke FFCALL_COMMON_LIBTOOL.
+	(CPU_OBJECTS): Now contains .lo file names instead of .o file names.
+	* trampoline/Makefile.in (LIBTOOL*, top_builddir): New variables.
+	(*.lo): Targets renamed from *.o.
+	(libtrampoline.la): Replaces target libtrampoline.a.
+	Use LIBTOOL* variables as appropriate.
+	(clean): Remove also *.lo, libtrampoline.*, .libs, _libs.
+	(distclean): Remove also 'libtool'.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Generate position-independent code.
 	* trampoline/Makefile.devel (GCCFLAGS): Add -fPIC.
 

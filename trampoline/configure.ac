@@ -34,25 +34,27 @@ AC_PROG_INSTALL
 CL_PROG_LN
 CL_PROG_LN_S
 gl_HOST_CPU_C_ABI
+PACKAGE=trampoline
+FFCALL_COMMON_LIBTOOL
 AC_CHECK_HEADERS([unistd_h])
 FFCALL_COMMON_TRAMPOLINE
 CPU_OBJECTS=''
 if test ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = powerpc64 -o ${HOST_CPU_C_ABI} = ia64; then
-  CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).o'
+  CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).lo'
 fi
 if test ${HOST_CPU_C_ABI} = powerpc; then
   case "${host_os}" in
-    aix*) CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).o' ;;
+    aix*) CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).lo' ;;
     *) ;;
   esac
 fi
 if test ${HOST_CPU_C_ABI} = sparc -o ${HOST_CPU_C_ABI} = sparc64 -o ${HOST_CPU_C_ABI} = alpha -o ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = powerpc64-elfv2; then
-  CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).o'
+  CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).lo'
 fi
 if test ${HOST_CPU_C_ABI} = powerpc; then
   case "${host_os}" in
     aix*) ;;
-    *) CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).o' ;;
+    *) CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).lo' ;;
   esac
 fi
 AC_SUBST([CPU_OBJECTS])
