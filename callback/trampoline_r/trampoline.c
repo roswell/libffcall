@@ -204,6 +204,27 @@ extern void __TR_clear_cache();
 #endif
 #endif
 
+#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+/* Opens a file descriptor and attempts to make it non-inheritable. */
+static int open_noinherit (const char *filename, int flags, int mode)
+{
+# if O_CLOEXEC
+  return open (filename, flags | O_CLOEXEC, mode);
+# else
+  int fd = open (filename, flags, mode);
+#  ifdef F_SETFD
+  if (fd >= 0)
+    {
+      int flags = fcntl (fd, F_GETFD, 0);
+      if (flags >= 0)
+        fcntl (fd, F_SETFD, flags | FD_CLOEXEC);
+    }
+#  endif
+  return fd;
+# endif
+}
+#endif
+
 /* Length and alignment of trampoline */
 #ifdef __i386__
 #define TRAMP_LENGTH 12
@@ -341,7 +362,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
       {
         char filename[100];
         sprintf(filename, "%s/trampdata-%d-%ld", "/tmp", getpid (), random ());
-        file_fd = open (filename, O_CREAT | O_RDWR | O_TRUNC | O_CLOEXEC, 0700);
+        file_fd = open_noinherit (filename, O_CREAT | O_RDWR | O_TRUNC, 0700);
         if (file_fd < 0)
           { fprintf(stderr,"trampoline: Cannot open %s!\n",filename); abort(); }
         /* Remove the file from the file system as soon as possible, to make

@@ -1,5 +1,12 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	Fix compilation error on CentOS 5.
+	* trampoline/trampoline.c (open_noinherit): New function.
+	(alloc_trampoline): Use it.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	Prefer https over http URLs.
 	* autogen.sh: Access ftp.gnu.org through https.
 
