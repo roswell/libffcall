@@ -15,6 +15,7 @@ AC_PREREQ([2.13])
 AC_DEFUN([PCCSR_DOC],[for pcc non-reentrant struct return convention])
 AC_DEFUN([FFCALL_PCC_STRUCT_RETURN],
 [
+  AC_REQUIRE([gl_HOST_CPU_C_ABI])
   AC_CACHE_CHECK([PCCSR_DOC], [ffcall_cv_c_struct_return_static],
     [save_CFLAGS="$CFLAGS"
      if test $CC_GCC = true; then
@@ -37,9 +38,12 @@ AC_DEFUN([FFCALL_PCC_STRUCT_RETURN],
        ],
        [ffcall_cv_c_struct_return_static=yes],
        [ffcall_cv_c_struct_return_static=no],
-       [dnl When cross-compiling, don't assume anything.
-        dnl There are even weirder return value passing conventions than pcc.
-        ffcall_cv_c_struct_return_static="guessing no"
+       [dnl When cross-compiling, guess depending on the known results.
+        dnl If we don't know, assume no.
+        case "$HOST_CPU_C_ABI" in
+          arm64 | hppa | hppa64) ffcall_cv_c_struct_return_static="guessing yes" ;;
+          *)                     ffcall_cv_c_struct_return_static="guessing no" ;;
+        esac
        ])
      CFLAGS="$save_CFLAGS"
     ])

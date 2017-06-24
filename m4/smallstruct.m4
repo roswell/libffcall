@@ -15,6 +15,8 @@ AC_PREREQ([2.13])
 AC_DEFUN([SSR_DOC],[whether small structs are returned in registers])
 AC_DEFUN([FFCALL_SMALL_STRUCT_RETURN],
 [
+  AC_REQUIRE([AC_CANONICAL_HOST])
+  AC_REQUIRE([gl_HOST_CPU_C_ABI])
   AC_CACHE_CHECK([SSR_DOC], [ffcall_cv_c_struct_return_small],
     [AC_TRY_RUN(GL_NOCRASH
        [typedef struct { long x; } foo;
@@ -30,9 +32,31 @@ AC_DEFUN([FFCALL_SMALL_STRUCT_RETURN],
        ],
        [ffcall_cv_c_struct_return_small=yes],
        [ffcall_cv_c_struct_return_small=no],
-       [dnl When cross-compiling, don't assume anything.
-        dnl There are even weirder return value passing conventions than pcc.
-        ffcall_cv_c_struct_return_small="guessing no"
+       [dnl When cross-compiling, guess depending on the ABI.
+        dnl If we don't know, don't assume anything. There are even weirder
+        dnl return value passing conventions than pcc.
+        case "$HOST_CPU_C_ABI" in
+          alpha)               ffcall_cv_c_struct_return_small="guessing no" ;;
+          arm | armhf | arm64) ffcall_cv_c_struct_return_small="guessing yes" ;;
+          hppa | hppa64)       ffcall_cv_c_struct_return_small="guessing yes" ;;
+          i386)
+            case "$host_os" in
+              cygwin* | darwin* | mingw*) ffcall_cv_c_struct_return_small="guessing yes" ;;
+              linux* | solaris*)          ffcall_cv_c_struct_return_small="guessing no" ;;
+              *)                          ffcall_cv_c_struct_return_small="guessing no" ;;
+            esac
+            ;;
+          ia64)                ffcall_cv_c_struct_return_small="guessing yes" ;;
+          mips | mipsn32)      ffcall_cv_c_struct_return_small="guessing no" ;;
+          mips64)              ffcall_cv_c_struct_return_small="guessing yes" ;;
+          powerpc | powerpc64) ffcall_cv_c_struct_return_small="guessing no" ;;
+          powerpc64-elfv2)     ffcall_cv_c_struct_return_small="guessing yes" ;;
+          s390 | s390x)        ffcall_cv_c_struct_return_small="guessing no" ;;
+          sparc)               ffcall_cv_c_struct_return_small="guessing no" ;;
+          sparc64)             ffcall_cv_c_struct_return_small="guessing yes" ;;
+          x86_64)              ffcall_cv_c_struct_return_small="guessing yes" ;;
+          *)                   ffcall_cv_c_struct_return_small="guessing no" ;;
+        esac
        ])
     ])
   case "$ffcall_cv_c_struct_return_small" in

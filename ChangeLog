@@ -1,5 +1,16 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	build: Improve guesses when cross-compiling.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC, FFCALL_CODEEXEC_PAX): When
+	cross-compiling, use the known autoconf test results.
+	* m4/mmap.m4 (FFCALL_MMAP): Likewise.
+	* m4/mprotect.m4 (FFCALL_MPROTECT): Likewise.
+	* m4/pccstruct.m4 (FFCALL_PCC_STRUCT_RETURN): Likewise.
+	* m4/shm.m4 (CL_SHM): Likewise.
+	* m4/smallstruct.m4 (FFCALL_SMALL_STRUCT_RETURN): Likewise.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	Bump version number.
 	* VERSION: Set to 2.0.
 	* NEWS: Open new section for 2.0.

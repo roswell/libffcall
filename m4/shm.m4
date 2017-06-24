@@ -23,8 +23,9 @@ AC_DEFUN([CL_SHM_H],
 
 AC_DEFUN([CL_SHM],
 [
-  AC_REQUIRE([CL_SHM_H])
   AC_BEFORE([$0], [CL_SHM_RMID])
+  AC_REQUIRE([CL_SHM_H])
+  AC_REQUIRE([AC_CANONICAL_HOST])
   if test $ac_cv_header_sys_shm_h = yes -a "$ac_cv_header_sys_ipc_h" = yes; then
     # This test is from Marcus Daniels
     AC_CACHE_CHECK([for working shared memory], [cl_cv_sys_shm_works],
@@ -55,8 +56,15 @@ AC_DEFUN([CL_SHM],
          ],
          [cl_cv_sys_shm_works=yes],
          [cl_cv_sys_shm_works=no],
-         [dnl When cross-compiling, don't assume anything.
-          cl_cv_sys_shm_works="guessing no"
+         [dnl When cross-compiling, guess yes on Linux (except on mips),
+          dnl on Solaris, and on IRIX. Otherwise, don't assume anything.
+          case "$host" in
+            mips*-*-linux*) cl_cv_sys_shm_works="guessing no" ;;
+            *-*-linux*)     cl_cv_sys_shm_works="guessing yes" ;;
+            *-*-solaris*)   cl_cv_sys_shm_works="guessing yes" ;;
+            *-*-irix*)      cl_cv_sys_shm_works="guessing yes" ;;
+            *)              cl_cv_sys_shm_works="guessing no" ;;
+          esac
          ])
       ])
   fi
