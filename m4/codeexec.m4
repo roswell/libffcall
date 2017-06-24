@@ -18,43 +18,45 @@ AC_DEFUN([FFCALL_CODEEXEC],
   AC_REQUIRE([AC_CANONICAL_HOST])
   AC_REQUIRE([gl_HOST_CPU_C_ABI])
   AC_CACHE_CHECK([CE_DOC], [ffcall_cv_codeexec],
-    [dnl The test below does not work on host=hppa*-hp-hpux* because on this system
-     dnl function pointers are actually pointers into(!) a two-pointer struct.
-     dnl The test below does not work on host=rs6000-*-* because on this system
-     dnl function pointers are actually pointers to a three-pointer struct.
-     case "$host_os" in
-       hpux*)
-         ffcall_cv_codeexec="guessing yes" ;;
+    [dnl The test below does not work on platforms with the following ABIs:
+     dnl - hppa, because function pointers are actually pointers into(!)
+     dnl   a two-pointer struct.
+     dnl - hppa64, because function pointers are actually pointers to a
+     dnl   four-pointer struct.
+     dnl - powerpc on AIX, powerpc64, because function pointers are actually
+     dnl   pointers to a three-pointer struct.
+     dnl - ia64, because function pointers are actually pointers to a
+     dnl   two-pointer struct.
+     case "$HOST_CPU_C_ABI--$host_os" in
+       hppa--* | hppa64--* | powerpc--aix* | powerpc64--* | ia64--*)
+         dnl On these platforms, it's irrelevant whether malloc'ed memory is
+         dnl executable, because the trampolines are built without executable
+         dnl code.
+         ffcall_cv_codeexec="irrelevant"
+         ;;
        *)
-         case "$HOST_CPU_C_ABI"-"$host_os" in
-           dnl On host=rs6000-*-aix3.2.5 malloc'ed memory is indeed not executable.
-           powerpc-aix*)
-             ffcall_cv_codeexec="guessing no" ;;
-           *)
-             AC_TRY_RUN(GL_NOCRASH
-               [#include <sys/types.h>
-                /* declare malloc() */
-                #include <stdlib.h>
-                int fun () { return 31415926; }
-                int main ()
-                { nocrash_init();
-                 {long size = (char*)&main - (char*)&fun;
-                  char* funcopy = (char*) malloc(size);
-                  int i;
-                  for (i = 0; i < size; i++) { funcopy[i] = ((char*)&fun)[i]; }
-                  return !((*(int(*)())funcopy)() == 31415926);
-                }}
-               ],
-               [ffcall_cv_codeexec=yes],
-               [ffcall_cv_codeexec=no],
-               [ffcall_cv_codeexec="guessing yes"])
-             ;;
-         esac
+         AC_TRY_RUN(GL_NOCRASH
+           [#include <sys/types.h>
+            /* declare malloc() */
+            #include <stdlib.h>
+            int fun () { return 31415926; }
+            int main ()
+            { nocrash_init();
+             {long size = (char*)&main - (char*)&fun;
+              char* funcopy = (char*) malloc(size);
+              int i;
+              for (i = 0; i < size; i++) { funcopy[i] = ((char*)&fun)[i]; }
+              return !((*(int(*)())funcopy)() == 31415926);
+            }}
+           ],
+           [ffcall_cv_codeexec=yes],
+           [ffcall_cv_codeexec=no],
+           [ffcall_cv_codeexec="guessing yes"])
          ;;
      esac
     ])
   case "$ffcall_cv_codeexec" in
-    *yes) AC_DEFINE([CODE_EXECUTABLE], [], CE_DOC) ;;
+    *yes | irrelevant) AC_DEFINE([CODE_EXECUTABLE], [], CE_DOC) ;;
     *no)  ;;
   esac
 ])
@@ -68,7 +70,7 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
   AC_REQUIRE([FFCALL_MPROTECT])
   AC_REQUIRE([FFCALL_CODEEXEC])
   case "$ffcall_cv_codeexec" in
-    *yes) ;;
+    *yes | irrelevant) ;;
     *)
       if test $ac_cv_func_mprotect = yes && test $cl_cv_func_mprotect_works = yes; then
         AC_CACHE_CHECK([whether mprotect can make malloc()ed memory executable],

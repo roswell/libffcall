@@ -1,5 +1,11 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	Fix result of an autoconf test on AIX.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Don't actually run the test on
+	powerpc64 (AIX and Linux) and ia64 (Linux).
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	build: Avoid testing an undefined variable.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): Before testing
 	cl_cv_func_mprotect_works, test ac_cv_func_mprotect.
