@@ -48,6 +48,19 @@ Files in this package:
         Makefile.devel  developer's Makefile
 
 
+This subdirectory produces a static library. Reason:
+The vacall-*.c files access global variables. Such accesses causes
+portability problems when combined with the option -fPIC (because of
+the small/medium/large memory models and platform dependent assembler
+syntax to access the GOT).
+Therefore Makefile.devel in this directory compiles the files without -fPIC.
+Therefore the resulting object files are not suitable for being put into
+a shared library.
+Therefore this direcory must
+  - either not use libtool,
+  - or pass '-static' to $(LIBTOOL_LINK) when creating libvacall.la.
+
+
 Copyright notice:
 
 Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
