@@ -7,7 +7,7 @@ RM = rm -f
 # ============ Rules that require cross-compilation tools ============
 
 GCC = gcc
-GCCFLAGS = -O2 -fomit-frame-pointer
+GCCFLAGS = -O2 -fomit-frame-pointer -fPIC
 CPP = $(GCC) -E
 CROSS_TOOL = cross
 

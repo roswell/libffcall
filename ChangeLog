@@ -1,5 +1,10 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Generate position-independent code.
+	* trampoline/Makefile.devel (GCCFLAGS): Add -fPIC.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Explain why not using libtool.
 	* vacall/README: Add comment about libtool.
 
