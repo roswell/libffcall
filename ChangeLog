@@ -1,5 +1,11 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	Bump version number.
+	* VERSION: Set to 2.0.
+	* NEWS: Open new section for 2.0.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	build: Use decimal notation for the version number.
 	* VERSION: Set to 1.13.
 	* configure.ac: Simplify AC_CONFIG_HEADERS invocations. Define
