@@ -1,3 +1,11 @@
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
+	Remove obsolete protexec.c file.
+	* trampoline/protexec.c: Remove file.
+	* trampoline/README: Update.
+	* callback/trampoline_r/Makefile.maint (COPIED_FILES): Remove
+	protexec.c.
+
 2017-06-21  Bruno Haible  <bruno@clisp.org>
 
 	Fix list of distributed files.
