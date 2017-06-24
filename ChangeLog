@@ -1,5 +1,11 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	Remove obsolete mention of nonexistent file.
+	* avcall/README: Don't mention underscore.h.
+	* vacall/README: Likewise.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	Remove obsolete protexec.c file.
 	* trampoline/protexec.c: Remove file.
 	* trampoline/README: Update.

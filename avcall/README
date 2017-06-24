@@ -52,7 +52,6 @@ Files in this package:
     Porting:
 
         Makefile.devel  developer's Makefile
-        underscore.h    used to build the *.S files
 
 
 Copyright notice:
