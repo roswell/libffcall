@@ -1,5 +1,10 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	Prefer https over http URLs.
+	* autogen.sh: Access ftp.gnu.org through https.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	Remove obsolete mention of nonexistent file.
 	* avcall/README: Don't mention underscore.h.
 	* vacall/README: Likewise.

@@ -58,7 +58,7 @@ if test $skip_gnulib = false; then
     else
       ( echo "File ${file} not found in ${LIBTOOL_RELEASES_DIR} ."
         echo "Download it, through"
-        echo "  wget -q --timeout=5 -O ${LIBTOOL_RELEASES_DIR}/${file} http://ftp.gnu.org/gnu/libtool/${file}"
+        echo "  wget -q --timeout=5 -O ${LIBTOOL_RELEASES_DIR}/${file} https://ftp.gnu.org/gnu/libtool/${file}"
         echo "then retry this script again."
       ) 1>&2
       exit 1
@@ -68,7 +68,7 @@ if test $skip_gnulib = false; then
       :
     else
       echo "$0: getting $file..."
-      wget -q --timeout=5 -O ${file}.tmp http://ftp.gnu.org/gnu/libtool/${file} \
+      wget -q --timeout=5 -O ${file}.tmp https://ftp.gnu.org/gnu/libtool/${file} \
         && mv ${file}.tmp ${file}
       retval=$?
       rm -f ${file}.tmp
