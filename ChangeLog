@@ -1,5 +1,14 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	Fix build error on Solaris 11 with Oracle Developer Studio 12.5.
+	* common/asm-x86_64.sh: Clarify the necessary postprocessing.
+	* common/asm-i386.sh: Document the necessary postprocessing.
+	* avcall/Makefile.in (avcall-i386.s): Do more postprocessing.
+	* vacall/Makefile.in (vacall-i386.s): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-i386.s): Likewise.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	Fix compilation error on CentOS 5.
 	* trampoline/trampoline.c (open_noinherit): New function.
 	(alloc_trampoline): Use it.

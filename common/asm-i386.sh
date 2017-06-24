@@ -1,6 +1,10 @@
 #!/bin/sh
 # Translate the assembler syntax of i386 assembler programs
-# Usage: asm-i386.sh [-no-C] < gas-asm-file > all-asm-file
+# Usage: asm-i386.sh [-no-C] < gas-asm-file > portable-asm-file
+# The portable-asm-file has to be
+#   1. preprocessed,
+#   2. grep -v '^ *#line' | grep -v '^#'
+#   3. sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$,,' -e 's/##//g'
 # Warning! All comments are stripped.
 
 # Copyright (C) 1997-2017 Bruno Haible <bruno@clisp.org>
