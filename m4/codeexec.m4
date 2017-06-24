@@ -70,7 +70,7 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
   case "$ffcall_cv_codeexec" in
     *yes) ;;
     *)
-      if test $cl_cv_func_mprotect_works = yes; then
+      if test $ac_cv_func_mprotect = yes && test $cl_cv_func_mprotect_works = yes; then
         AC_CACHE_CHECK([whether mprotect can make malloc()ed memory executable],
           [ffcall_cv_malloc_mprotect_can_exec],
           [dnl On RHEL 6 / CentOS 6 with SELinux enabled, the result of

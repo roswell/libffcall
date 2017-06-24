@@ -1,5 +1,11 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	build: Avoid testing an undefined variable.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): Before testing
+	cl_cv_func_mprotect_works, test ac_cv_func_mprotect.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	build: Add necessary AC_REQUIREs.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC): Require AC_CANONICAL_HOST and
 	gl_HOST_CPU_C_ABI.
