@@ -15,7 +15,9 @@ arg-list overflow).
 
 
 Installation instructions:
-        ./configure
+
+    Configure the parent directory. Then:
+        cd avcall
         make
         make check
         make install
@@ -41,13 +43,9 @@ Files in this package:
         avcall-structcpy.c  auxiliary function
         tests.c         test program
 
-    Installation:
+    Building:
 
-        configure       configuration script
-        configure.ac    autoconf source for the configuration script
-        ../build-aux/*  auxiliary build scripts
         Makefile.in     Makefile master
-        config.h.in     config.h master
 
     Porting:
 

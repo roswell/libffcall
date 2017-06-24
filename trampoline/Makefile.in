@@ -25,7 +25,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir)
+INCLUDES = -I. -I$(srcdir) -I..
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
@@ -50,7 +50,7 @@ INSTALL_DATA = @INSTALL_DATA@
 SHELL = /bin/sh
 
 # Needed by $(LIBTOOL).
-top_builddir = .
+top_builddir = ..
 
 OBJECTS = trampoline.lo @CPU_OBJECTS@
 
@@ -196,7 +196,7 @@ clean : force
 	$(RM) test1.o test1 test2.o test2
 
 distclean : clean
-	$(RM) config.status config.log config.cache Makefile config.h trampoline.h libtool tests.passed.*
+	$(RM) Makefile trampoline.h tests.passed.*
 
 maintainer-clean : distclean
 
@@ -208,7 +208,6 @@ SOURCE_FILES = \
   Makefile.devel \
   Makefile.maint \
   Makefile.in Makefile.mingw32 Makefile.msvc \
-  configure.ac \
   trampoline.h.in \
   trampoline.c \
   tramp-hppa-macro.S \

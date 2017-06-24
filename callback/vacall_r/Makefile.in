@@ -25,7 +25,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir)
+INCLUDES = -I. -I$(srcdir) -I../..
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
@@ -51,7 +51,7 @@ INSTALL_DATA = @INSTALL_DATA@
 SHELL = /bin/sh
 
 # Needed by $(LIBTOOL).
-top_builddir = .
+top_builddir = ../..
 
 OBJECTS = vacall.lo misc.lo vacall-structcpy.lo
 
@@ -204,7 +204,7 @@ vacall-s390x.lo : vacall-s390x.s
 vacall-s390x.s : $(srcdir)/vacall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
 
-misc.lo : $(srcdir)/misc.c vacall_r.h config.h
+misc.lo : $(srcdir)/misc.c vacall_r.h ../../config.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/misc.c
 
 vacall-structcpy.lo : $(srcdir)/vacall-structcpy.c $(srcdir)/../../common/structcpy.c
@@ -261,7 +261,7 @@ clean : force
 	$(RM) -r .libs _libs
 
 distclean : clean
-	$(RM) config.status config.log config.cache Makefile vacall_r.h config.h libtool
+	$(RM) Makefile vacall_r.h
 
 maintainer-clean : distclean
 
@@ -273,7 +273,6 @@ SOURCE_FILES = \
   Makefile.devel \
   Makefile.maint \
   Makefile.in Makefile.mingw32 Makefile.msvc \
-  configure.ac \
   vacall_r.h.in \
   vacall-alpha.c vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm.c vacall-arm-macro.S \

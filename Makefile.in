@@ -43,7 +43,7 @@ mostlyclean : force
 clean : force
 	cd @subdir@ && $(MAKE) clean
 
-DISTCLEANFILES = config.status config.log config.cache Makefile
+DISTCLEANFILES = config.status config.log config.cache Makefile config.h libtool
 
 distclean : force
 	cd @subdir@; if test -f Makefile; then $(MAKE) distclean; fi
@@ -63,7 +63,6 @@ SOURCE_FILES = \
   Makefile.maint \
   Makefile.in Makefile.mingw32 Makefile.msvc \
   configure.ac \
-  build-aux/ac-help.sed \
   m4/as-underscore.m4 \
   m4/cc-gcc.m4 \
   m4/codeexec.m4 \
@@ -135,18 +134,7 @@ COPIED_FILES = \
 GENERATED_FILES = \
   aclocal.m4 \
   configure \
-  avcall/configure \
-  avcall/config.h.in \
-  vacall/configure \
-  vacall/config.h.in \
-  trampoline/configure \
-  trampoline/config.h.in \
-  callback/configure \
-  callback/config.h.in \
-  callback/vacall_r/configure \
-  callback/vacall_r/config.h.in \
-  callback/trampoline_r/configure \
-  callback/trampoline_r/config.h.in \
+  config.h.in \
   common/asm-i386.h
 # List of distributed files.
 DISTFILES = $(SOURCE_FILES) $(IMPORTED_FILES) $(COPIED_FILES) $(GENERATED_FILES)

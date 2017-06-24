@@ -14,10 +14,10 @@ all : callback.man \
 callback.man : callback.3
 	$(ROFF_MAN) callback.3 > callback.man
 
-vacall_r/config.h.msvc : vacall_r/config.h.in
+vacall_r/config.h.msvc : ../config.h.in
 	cd vacall_r && $(MAKE) -f Makefile.maint config.h.msvc
 
-vacall_r/config.h.mingw32 : vacall_r/config.h.in
+vacall_r/config.h.mingw32 : ../config.h.in
 	cd vacall_r && $(MAKE) -f Makefile.maint config.h.mingw32
 
 vacall_r/vacall_r.h.msvc : vacall_r/vacall_r.h.in
@@ -35,10 +35,10 @@ vacall_r/vacall-i386-mingw32.c : vacall_r/vacall-i386-macro.S
 trampoline_r/trampoline_r.man : trampoline_r/trampoline_r.3
 	cd trampoline_r && $(MAKE) -f Makefile.maint trampoline_r.man
 
-trampoline_r/config.h.msvc : trampoline_r/config.h.in
+trampoline_r/config.h.msvc : ../config.h.in
 	cd trampoline_r && $(MAKE) -f Makefile.maint config.h.msvc
 
-trampoline_r/config.h.mingw32 : trampoline_r/config.h.in
+trampoline_r/config.h.mingw32 : ../config.h.in
 	cd trampoline_r && $(MAKE) -f Makefile.maint config.h.mingw32
 
 totally-clean : force

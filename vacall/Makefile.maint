@@ -26,11 +26,11 @@ vacall.h.mingw32 : vacall.h.in ../VERSION
 	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
 	    -e 's,^#undef __SMALL_STRUCT_RETURN__$$,#define __SMALL_STRUCT_RETURN__ 1,' < vacall.h.in > vacall.h.mingw32
 
-config.h.msvc : config.h.in
-	cp config.h.in config.h.msvc
+config.h.msvc : ../config.h.in
+	cp ../config.h.in config.h.msvc
 
-config.h.mingw32 : config.h.in
-	cp config.h.in config.h.mingw32
+config.h.mingw32 : ../config.h.in
+	cp ../config.h.in config.h.mingw32
 
 vacall-i386-msvc.c : vacall-i386-macro.S
 	(echo '#ifdef _MSC_VER' ; echo '#include "vacall.h"' ; echo '#endif' ; cat vacall-i386-macro.S) > vacall-i386-msvc.c

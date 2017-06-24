@@ -24,7 +24,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir)
+INCLUDES = -I. -I$(srcdir) -I..
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
@@ -47,12 +47,12 @@ INSTALL_DATA = @INSTALL_DATA@
 SHELL = /bin/sh
 
 # Needed by $(LIBTOOL).
-top_builddir = .
+top_builddir = ..
 
 all : all-subdirs callback.h vacall_r.h trampoline_r.h libcallback.la $(srcdir)/callback.3 $(srcdir)/callback.html
 
 all-subdirs : force
-	cd @subdir@ && $(MAKE) all
+	cd @callback_subdir@ && $(MAKE) all
 
 callback.h :
 	$(LN_S) $(srcdir)/callback.h.in callback.h
@@ -69,14 +69,14 @@ libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
 install-lib : all force
-	cd @subdir@ && $(MAKE) install-lib libdir='$(libdir)' includedir='$(includedir)'
+	cd @callback_subdir@ && $(MAKE) install-lib libdir='$(libdir)' includedir='$(includedir)'
 	mkdir -p $(libdir)
 	$(LIBTOOL_INSTALL) $(INSTALL_DATA) libcallback.la $(libdir)/libcallback.la
 	mkdir -p $(includedir)
 	$(INSTALL_DATA) callback.h $(includedir)/callback.h
 
 install : force
-	cd @subdir@ && $(MAKE) install
+	cd @callback_subdir@ && $(MAKE) install
 	mkdir -p $(DESTDIR)$(prefix)
 	mkdir -p $(DESTDIR)$(exec_prefix)
 	mkdir -p $(DESTDIR)$(libdir)
@@ -91,7 +91,7 @@ install : force
 	$(INSTALL_DATA) $(srcdir)/callback.html $(DESTDIR)$(htmldir)/callback.html
 
 installdirs : force
-	cd @subdir@ && $(MAKE) installdirs
+	cd @callback_subdir@ && $(MAKE) installdirs
 	mkdir -p $(DESTDIR)$(prefix)
 	mkdir -p $(DESTDIR)$(exec_prefix)
 	mkdir -p $(DESTDIR)$(libdir)
@@ -102,7 +102,7 @@ installdirs : force
 	mkdir -p $(DESTDIR)$(htmldir)
 
 uninstall : force
-	cd @subdir@ && $(MAKE) uninstall
+	cd @callback_subdir@ && $(MAKE) uninstall
 	$(LIBTOOL_UNINSTALL) $(RM) $(DESTDIR)$(libdir)/libcallback.la
 	$(RM) $(DESTDIR)$(includedir)/callback.h
 	$(RM) $(DESTDIR)$(mandir)/man3/callback.3
@@ -124,7 +124,7 @@ minitests : minitests.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libcallback.la $(LDFLAGS) -o minitests
 
 check-subdirs : force
-	cd @subdir@ && $(MAKE) check
+	cd @callback_subdir@ && $(MAKE) check
 
 check : all check-subdirs test1 minitests
 	./test1
@@ -142,7 +142,7 @@ tests : tests.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libcallback.la $(LDFLAGS) -o tests
 
 extracheck-subdirs : force
-	cd @subdir@ && $(MAKE) extracheck
+	cd @callback_subdir@ && $(MAKE) extracheck
 
 extracheck : all extracheck-subdirs tests
 	./tests > tests.out
@@ -158,27 +158,27 @@ MOSTLYCLEANFILES = \
   tests.o tests.s tests tests.out
 
 mostlyclean : force
-	cd @subdir@ && $(MAKE) mostlyclean
+	cd @callback_subdir@ && $(MAKE) mostlyclean
 	$(RM) -r $(MOSTLYCLEANDIRS)
 	$(RM) $(MOSTLYCLEANFILES)
 
 clean : force
-	cd @subdir@ && $(MAKE) clean
+	cd @callback_subdir@ && $(MAKE) clean
 	$(RM) -r $(MOSTLYCLEANDIRS)
 	$(RM) $(MOSTLYCLEANFILES)
 
 DISTCLEANFILES = \
-  config.status config.log config.cache Makefile config.h libtool \
+  Makefile \
   minitests.output.* tests.output.*
 
 distclean : force
-	cd @subdir@ && if test -f Makefile; then $(MAKE) distclean; fi
+	cd @callback_subdir@ && if test -f Makefile; then $(MAKE) distclean; fi
 	$(RM) -r $(MOSTLYCLEANDIRS)
 	$(RM) $(MOSTLYCLEANFILES)
 	$(RM) $(DISTCLEANFILES)
 
 maintainer-clean : force
-	cd @subdir@ && if test -f Makefile; then $(MAKE) maintainer-clean; fi
+	cd @callback_subdir@ && if test -f Makefile; then $(MAKE) maintainer-clean; fi
 	$(RM) -r $(MOSTLYCLEANDIRS)
 	$(RM) $(MOSTLYCLEANFILES)
 	$(RM) $(DISTCLEANFILES)
@@ -189,7 +189,6 @@ SOURCE_FILES = \
   COPYING MIGRATION PLATFORMS README callback.3 callback.html elf-hack.txt \
   Makefile.maint \
   Makefile.in Makefile.mingw32 Makefile.msvc \
-  configure.ac \
   callback.h.in \
   test1.c \
   minitests.c \
@@ -205,7 +204,7 @@ distdir : $(DISTFILES)
 	  if test -f $$file; then dir='.'; else dir='$(srcdir)'; fi; \
 	  cp -p "$$dir/$$file" '$(distdir)'/$$file || exit 1; \
 	done
-	test -d '$(distdir)'/@subdir@ || mkdir '$(distdir)'/@subdir@; cd @subdir@ && $(MAKE) distdir distdir='$(distdir)'/@subdir@
+	test -d '$(distdir)'/@callback_subdir@ || mkdir '$(distdir)'/@callback_subdir@; cd @callback_subdir@ && $(MAKE) distdir distdir='$(distdir)'/@callback_subdir@
 
 
 force :

@@ -25,7 +25,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir)
+INCLUDES = -I. -I$(srcdir) -I..
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
 AR = @AR@
@@ -195,7 +195,7 @@ vacall-s390x.o : vacall-s390x.s
 vacall-s390x.s : $(srcdir)/vacall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
 
-misc.o : $(srcdir)/misc.c vacall.h config.h
+misc.o : $(srcdir)/misc.c vacall.h ../config.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/misc.c
 
 vacall-structcpy.o : $(srcdir)/vacall-structcpy.c $(srcdir)/../common/structcpy.c
@@ -273,7 +273,7 @@ clean : force
 	$(RM) tests.o tests.s tests tests.out
 
 distclean : clean
-	$(RM) config.status config.log config.cache Makefile vacall.h config.h minitests.output.* tests.output.*
+	$(RM) Makefile vacall.h minitests.output.* tests.output.*
 
 maintainer-clean : distclean
 
@@ -285,7 +285,6 @@ SOURCE_FILES = \
   Makefile.devel \
   Makefile.maint \
   Makefile.in Makefile.mingw32 Makefile.msvc \
-  configure.ac \
   vacall.h.in \
   vacall-alpha.c vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm.c vacall-arm-macro.S \

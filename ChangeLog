@@ -1,5 +1,68 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	Merge all autoconf configurations into a single one.
+	* configure.ac: Include the body of all other configure.ac files.
+	Use a single config.h file. Inline FFCALL_COMMON_LIBTOOL and
+	FFCALL_COMMON_TRAMPOLINE.
+	* avcall/configure.ac: Remove file.
+	* vacall/configure.ac: Remove file.
+	* trampoline/configure.ac: Remove file.
+	* callback/configure.ac: Remove file.
+	* callback/vacall_r/configure.ac: Remove file.
+	* callback/trampoline_r/configure.ac: Remove file.
+	* m4/general.m4 (FFCALL_COMMON_LIBTOOL, FFCALL_COMMON_TRAMPOLINE):
+	Remove macros.
+	* build-aux/ac-help.sed: Remove file.
+	* Makefile.maint (CONFIGURED_SUBDIRS, SUBDIRS_CONFIGURE): Remove
+	variables.
+	(ALL_CONFIGURE): Keep only the top-level configure.
+	(%/configure): Remove rule.
+	(ALL_CONFIG_H_IN): Set to only the top-level config.h.in.
+	(config.h.in): Replace the %/config.h.in rule.
+	* vacall/Makefile.maint (config.h.msvc, config.h.mingw32): Use top-level
+	config.h.in.
+	* trampoline/Makefile.maint (config.h.msvc, config.h.mingw32): Use
+	top-level config.h.in.
+	* callback/Makefile.maint (vacall_r/config.h.msvc,
+	vacall_r/config.h.mingw32, trampoline_r/config.h.msvc,
+	trampoline_r/config.h.mingw32): Update dependencies.
+	* callback/vacall_r/Makefile.maint (config.h.msvc, config.h.mingw32):
+	Use top-level config.h.in.
+	* callback/trampoline_r/Makefile.maint (config.h.msvc,
+	config.h.mingw32): Use top-level config.h.in.
+	* Makefile.in (DISTCLEANFILES): Add config.h, libtool.
+	(SOURCE_FILES): Remove build-aux/ac-help.sed.
+	(GENERATED_FILES): Add config.h.in. Remove */config* and
+	callback/*/config*.
+	* avcall/Makefile.in (INCLUDES): Look also in '..'.
+	(top_builddir): Set to '..'.
+	(distclean): Don't remove config* and libtool.
+	(SOURCE_FILES): Remove configure.ac.
+	* vacall/Makefile.in (INCLUDES): Look also in '..'.
+	(misc.o): Update dependency.
+	(distclean): Don't remove config* and libtool.
+	(SOURCE_FILES): Remove configure.ac.
+	* trampoline/Makefile.in (INCLUDES): Look also in '..'.
+	(top_builddir): Set to '..'.
+	(distclean): Don't remove config* and libtool.
+	(SOURCE_FILES): Remove configure.ac.
+	* callback/Makefile.in (INCLUDES): Look also in '..'.
+	(top_builddir): Set to '..'.
+	(DISTCLEANFILES): Remove config* and libtool.
+	(SOURCE_FILES): Remove configure.ac.
+	* callback/vacall_r/Makefile.in (INCLUDES): Look also in '../..'.
+	(top_builddir): Set to '../..'.
+	(misc.lo): Update dependency.
+	(distclean): Don't remove config* and libtool.
+	(SOURCE_FILES): Remove configure.ac.
+	* callback/trampoline_r/Makefile.in (INCLUDES): Look also in '../..'.
+	(top_builddir): Set to '../..'.
+	(distclean): Don't remove config* and libtool.
+	(SOURCE_FILES): Remove configure.ac.
+	* README, */README: Update.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Build library using libtool.
 	* trampoline/configure.ac: Invoke FFCALL_COMMON_LIBTOOL.
 	(CPU_OBJECTS): Now contains .lo file names instead of .o file names.

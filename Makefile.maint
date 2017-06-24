@@ -107,14 +107,7 @@ gnulib-clean : force
 
 AUTOCONF_CACHE = autom4te.cache
 
-CONFIGURED_SUBDIRS = \
-  avcall \
-  vacall \
-  trampoline \
-  callback callback/vacall_r callback/trampoline_r
-
-SUBDIRS_CONFIGURE = $(patsubst %,%/configure,$(CONFIGURED_SUBDIRS))
-ALL_CONFIGURE = configure $(SUBDIRS_CONFIGURE)
+ALL_CONFIGURE = configure
 ALL_CONFIGURE_AC = $(patsubst %,%.ac,$(ALL_CONFIGURE))
 
 aclocal.m4 : $(ALL_CONFIGURE_AC) $(wildcard m4/*.m4) $(wildcard glm4/*.m4)
@@ -133,21 +126,18 @@ AUTOCONF_FILES = aclocal.m4 $(wildcard m4/*.m4) $(wildcard glm4/*.m4)
 configure : configure.ac $(AUTOCONF_FILES)
 	$(AUTOCONF) && rm -rf autom4te.cache
 
-$(SUBDIRS_CONFIGURE) : %/configure : %/configure.ac $(AUTOCONF_FILES)
-	srcdir=`pwd`; cd $* && $(AUTOCONF) --include="$$srcdir" && rm -rf autom4te.cache
-
 .PHONY : check-configures
 check-configures : $(ALL_CONFIGURE)
 	set -e; for f in $(ALL_CONFIGURE); do bash -x -n $$f; done
 
 
-ALL_CONFIG_H_IN = $(patsubst %,%/config.h.in,$(CONFIGURED_SUBDIRS))
+ALL_CONFIG_H_IN = config.h.in
 
 .PHONY : config-h-in
 config-h-in : $(ALL_CONFIG_H_IN)
 
-$(ALL_CONFIG_H_IN) : %/config.h.in : %/configure.ac $(AUTOCONF_FILES)
-	srcdir=`pwd`; cd $* && $(AUTOHEADER) --include="$$srcdir" && rm -rf autom4te.cache
+config.h.in : configure.ac $(AUTOCONF_FILES)
+	srcdir=`pwd`; $(AUTOHEADER) --include="$$srcdir" && rm -rf autom4te.cache
 
 
 # Other generated files.

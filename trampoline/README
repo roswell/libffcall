@@ -10,7 +10,8 @@ and call-back functions passed to other libraries.
 
 Installation instructions:
 
-        ./configure
+    Configure the parent directory. Then:
+        cd trampoline
         make
         make check
         make install
@@ -36,13 +37,9 @@ Files in this package:
         test1.c          test program
         test2.c          test program
 
-    Installation:
+    Building:
 
-        configure        configuration script
-        configure.ac     autoconf source for the configuration script
-        ../build-aux/*   auxiliary build scripts
         Makefile.in      Makefile master
-        config.h.in      config.h master
 
     Porting:
 

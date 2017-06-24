@@ -1,6 +1,6 @@
 dnl AUTOCONF configuration for LIBFFCALL
 dnl Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
-dnl Copyright 2008-2010 Sam Steingold <sds@gnu.org>
+dnl Copyright 2003-2010 Sam Steingold <sds@gnu.org>
 dnl
 dnl This program is free software: you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
@@ -15,11 +15,105 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 dnl
+
 AC_INIT([GNU libffcall],m4_normalize(m4_esyscmd([cat VERSION])),[https://savannah.gnu.org/projects/libffcall],[libffcall])
+
 AC_CONFIG_SRCDIR([trampoline/trampoline.h.in])
+
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([avcall/avcall.h],
+  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" avcall/avcall.h > tmp && mv -f tmp avcall/avcall.h],
+  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
+AC_CONFIG_HEADERS([vacall/vacall.h],
+  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" vacall/vacall.h > tmp && mv -f tmp vacall/vacall.h],
+  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
+AC_CONFIG_HEADERS([trampoline/trampoline.h],
+  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" trampoline/trampoline.h > tmp && mv -f tmp trampoline/trampoline.h],
+  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
+AC_CONFIG_HEADERS([callback/callback.h],
+  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" callback/callback.h > tmp && mv -f tmp callback/callback.h],
+  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
+AC_CONFIG_HEADERS([callback/vacall_r/vacall_r.h],
+  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" callback/vacall_r/vacall_r.h > tmp && mv -f tmp callback/vacall_r/vacall_r.h],
+  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
+AC_CONFIG_HEADERS([callback/trampoline_r/trampoline_r.h],
+  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" callback/trampoline_r/trampoline_r.h > tmp && mv -f tmp callback/trampoline_r/trampoline_r.h],
+  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
+
 AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([avcall/Makefile])
+AC_CONFIG_FILES([vacall/Makefile])
+AC_CONFIG_FILES([trampoline/Makefile])
+AC_CONFIG_FILES([callback/Makefile])
+AC_CONFIG_FILES([callback/vacall_r/Makefile])
+AC_CONFIG_FILES([callback/trampoline_r/Makefile])
+
 AC_CONFIG_AUX_DIR([build-aux])
 AC_PROG_MAKE_SET
+
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_GCC_TRADITIONAL
+CL_CC_GCC
+CL_AS_UNDERSCORE
+
+dnl For a 64-bit build on AIX, AC_PROG_RANLIB is not sufficient.
+gl_PROG_AR_RANLIB
+
+AC_PROG_INSTALL
+CL_PROG_LN
+CL_PROG_LN_S
+
+gl_HOST_CPU_C_ABI
+FFCALL_ENDIANNESS
+
+PACKAGE=libffcall
+LT_INIT([disable-shared])
+
+dnl Checks for avcall, vacall, vacall_r.
+FFCALL_PCC_STRUCT_RETURN
+FFCALL_SMALL_STRUCT_RETURN
+FFCALL_IREG_FLOAT_RETURN
+AC_TYPE_LONG_LONG_INT
+AC_C_CHAR_UNSIGNED
+
+dnl Checks for trampoline, trampoline_r.
+AC_CHECK_HEADERS([unistd_h])
+AC_HEADER_STDC
+CL_GETPAGESIZE
+CL_MACH_VM
+FFCALL_MMAP
+FFCALL_MPROTECT
+CL_SHM_H
+CL_SHM
+FFCALL_CODEEXEC
+FFCALL_CODEEXEC_PAX
+
+dnl List of object files for trampoline, trampoline_r.
+CPU_OBJECTS=''
+if test ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = powerpc64 -o ${HOST_CPU_C_ABI} = ia64; then
+  CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).lo'
+fi
+if test ${HOST_CPU_C_ABI} = powerpc; then
+  case "${host_os}" in
+    aix*) CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).lo' ;;
+    *) ;;
+  esac
+fi
+if test ${HOST_CPU_C_ABI} = sparc -o ${HOST_CPU_C_ABI} = sparc64 -o ${HOST_CPU_C_ABI} = alpha -o ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = powerpc64-elfv2; then
+  CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).lo'
+fi
+if test ${HOST_CPU_C_ABI} = powerpc; then
+  case "${host_os}" in
+    aix*) ;;
+    *) CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).lo' ;;
+  esac
+fi
+AC_SUBST([CPU_OBJECTS])
+if test ${HOST_CPU_C_ABI} = mips -o ${HOST_CPU_C_ABI} = mipsn32 -o ${HOST_CPU_C_ABI} = mips64; then
+  AC_CHECK_HEADERS([sys/cachectl.h])
+fi
+
 gl_EARLY
 gl_INIT
 
@@ -43,21 +137,18 @@ p
 d
 }
 '
-AC_CONFIG_SUBDIRS([avcall vacall trampoline callback])
-
-dnl Ensure that "configure --help" lists all the command line options that
-dnl are usable with the subdir configures. Really AC_CONFIG_SUBDIRS should
-dnl do it by itself.
-dnl System types:
-AC_CANONICAL_HOST
-dnl Optional Features: AC_ARG_ENABLE calls
-dnl Optional Packages: AC_ARG_WITH calls
-dnl Some influential environment variables: AC_ARG_VAR calls
-esyscmd([{
-cd avcall && autoconf -I.. --trace=AC_ARG_ENABLE:'$n([$1],[$2])' --trace=AC_ARG_WITH:'$n([$1],[$2])' --trace=AC_ARG_VAR:'$n($@)' && cd ..;
-cd vacall && autoconf -I.. --trace=AC_ARG_ENABLE:'$n([$1],[$2])' --trace=AC_ARG_WITH:'$n([$1],[$2])' --trace=AC_ARG_VAR:'$n($@)' && cd ..;
-cd trampoline && autoconf -I.. --trace=AC_ARG_ENABLE:'$n([$1],[$2])' --trace=AC_ARG_WITH:'$n([$1],[$2])' --trace=AC_ARG_VAR:'$n($@)' && cd ..;
-cd callback && autoconf -I.. --trace=AC_ARG_ENABLE:'$n([$1],[$2])' --trace=AC_ARG_WITH:'$n([$1],[$2])' --trace=AC_ARG_VAR:'$n($@)' && cd ..;
-} | sed -f build-aux/ac-help.sed ])
+dnl Likewise for the callback subdirectory.
+extrasub="$extrasub"'
+/@callback_subdir@/{
+h
+g
+s/@callback_subdir@/vacall_r/g
+p
+g
+s/@callback_subdir@/trampoline_r/g
+p
+d
+}
+'
 
 AC_OUTPUT

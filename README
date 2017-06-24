@@ -74,11 +74,11 @@ Files in this package:
         trampoline/*    the trampoline package
         callback/*      the callback package
 
-    Installation:
+    Building:
 
         configure       configuration script
         configure.ac    autoconf source for the configuration script
-        autoconf/*      auxiliary configuration scripts
+        m4/*            auxiliary configuration scripts
         Makefile.in     Makefile master
 
 
