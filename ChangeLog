@@ -1,5 +1,11 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	build: Add necessary AC_REQUIREs.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Require AC_CANONICAL_HOST and
+	gl_HOST_CPU_C_ABI.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	Fix build error on Solaris 11 with Oracle Developer Studio 12.5.
 	* common/asm-x86_64.sh: Clarify the necessary postprocessing.
 	* common/asm-i386.sh: Document the necessary postprocessing.

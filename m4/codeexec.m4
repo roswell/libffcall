@@ -15,6 +15,8 @@ AC_PREREQ([2.13])
 AC_DEFUN([CE_DOC],[whether code in malloc()ed memory is executable])
 AC_DEFUN([FFCALL_CODEEXEC],
 [
+  AC_REQUIRE([AC_CANONICAL_HOST])
+  AC_REQUIRE([gl_HOST_CPU_C_ABI])
   AC_CACHE_CHECK([CE_DOC], [ffcall_cv_codeexec],
     [dnl The test below does not work on host=hppa*-hp-hpux* because on this system
      dnl function pointers are actually pointers into(!) a two-pointer struct.
