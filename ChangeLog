@@ -1,5 +1,10 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	build: Assume a single configure.ac file.
+	* Makefile.maint (ALL_CONFIGURE_AC, aclocal.m4): Simplify.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	Merge all autoconf configurations into a single one.
 	* configure.ac: Include the body of all other configure.ac files.
 	Use a single config.h file. Inline FFCALL_COMMON_LIBTOOL and

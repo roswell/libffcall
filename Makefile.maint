@@ -108,15 +108,10 @@ gnulib-clean : force
 AUTOCONF_CACHE = autom4te.cache
 
 ALL_CONFIGURE = configure
-ALL_CONFIGURE_AC = $(patsubst %,%.ac,$(ALL_CONFIGURE))
+ALL_CONFIGURE_AC = configure.ac
 
 aclocal.m4 : $(ALL_CONFIGURE_AC) $(wildcard m4/*.m4) $(wildcard glm4/*.m4)
-	{ echo 'AC_INIT'; cat $(ALL_CONFIGURE_AC) | grep -v '\(AC_INIT(\|AC_OUTPUT(\|AC_CONFIG_HEADERS(\|AC_CONFIG_FILES(\)' | sed -e 's/esyscmd/ifelse/'; } > configure.ac-tmp
-	mv configure.ac configure.ac-save && \
-	{ mv configure.ac-tmp configure.ac && \
-	  $(ACLOCAL) --output=aclocal.m4 -I m4 -I glm4; \
-	  ret=$$?; mv configure.ac-save configure.ac; exit $$ret; \
-	}
+	$(ACLOCAL) --output=aclocal.m4 -I m4 -I glm4
 
 .PHONY : configures
 configures : $(ALL_CONFIGURE)
