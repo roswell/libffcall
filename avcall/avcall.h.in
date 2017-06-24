@@ -25,7 +25,8 @@
  ----------------------------------------------------------------------*/
 
 #if !defined(LIBFFCALL_VERSION)
-# define LIBFFCALL_VERSION @LIBFFCALL_VERSION@
+/* Version number of libffcall: (major<<8) + minor. */
+# define LIBFFCALL_VERSION 0
 #endif
 
 /* These definitions are adjusted by ‘configure’ automatically. */

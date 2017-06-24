@@ -1,5 +1,19 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	build: Use decimal notation for the version number.
+	* VERSION: Set to 1.13.
+	* configure.ac: Simplify AC_CONFIG_HEADERS invocations. Define
+	LIBFFCALL_VERSION as C macro, based on PACKAGE_VERSION.
+	* avcall/avcall.h.in (LIBFFCALL_VERSION): Use a plain #define, for
+	substitution by config.status.
+	* vacall/vacall.h.in: Likewise.
+	* trampoline/trampoline.h.in: Likewise.
+	* callback/callback.h.in: Likewise.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* callback/trampoline_r/trampoline_r.h.in: Likewise.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	trampoline, callback: Make multithread-safe.
 	* Makefile.maint (AUTOMAKE): New variable.
 	(all): Depend on Makefile-ins.

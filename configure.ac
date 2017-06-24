@@ -23,24 +23,12 @@ AM_INIT_AUTOMAKE([])
 AC_CONFIG_SRCDIR([trampoline/trampoline.h.in])
 
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_HEADERS([avcall/avcall.h],
-  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" avcall/avcall.h > tmp && mv -f tmp avcall/avcall.h],
-  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
-AC_CONFIG_HEADERS([vacall/vacall.h],
-  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" vacall/vacall.h > tmp && mv -f tmp vacall/vacall.h],
-  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
-AC_CONFIG_HEADERS([trampoline/trampoline.h],
-  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" trampoline/trampoline.h > tmp && mv -f tmp trampoline/trampoline.h],
-  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
-AC_CONFIG_HEADERS([callback/callback.h],
-  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" callback/callback.h > tmp && mv -f tmp callback/callback.h],
-  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
-AC_CONFIG_HEADERS([callback/vacall_r/vacall_r.h],
-  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" callback/vacall_r/vacall_r.h > tmp && mv -f tmp callback/vacall_r/vacall_r.h],
-  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
-AC_CONFIG_HEADERS([callback/trampoline_r/trampoline_r.h],
-  [sed "s/@LIBFFCALL_VERSION@/${LIBFFCALL_VERSION}/" callback/trampoline_r/trampoline_r.h > tmp && mv -f tmp callback/trampoline_r/trampoline_r.h],
-  [LIBFFCALL_VERSION=$PACKAGE_VERSION])
+AC_CONFIG_HEADERS([avcall/avcall.h])
+AC_CONFIG_HEADERS([vacall/vacall.h])
+AC_CONFIG_HEADERS([trampoline/trampoline.h])
+AC_CONFIG_HEADERS([callback/callback.h])
+AC_CONFIG_HEADERS([callback/vacall_r/vacall_r.h])
+AC_CONFIG_HEADERS([callback/trampoline_r/trampoline_r.h])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([gnulib-lib/Makefile])
@@ -50,6 +38,24 @@ AC_CONFIG_FILES([trampoline/Makefile])
 AC_CONFIG_FILES([callback/Makefile])
 AC_CONFIG_FILES([callback/vacall_r/Makefile])
 AC_CONFIG_FILES([callback/trampoline_r/Makefile])
+
+dnl Substitutable version number.
+changequote(,)
+sed_extract_major='/^[0-9]/{s/^\([0-9]*\).*/\1/p;q;}
+i\
+0
+q
+'
+sed_extract_minor='/^[0-9][0-9]*[.][0-9]/{s/^[0-9]*[.]\([0-9]*\).*/\1/p;q;}
+i\
+0
+q
+'
+changequote([,])
+version_major=`echo "${PACKAGE_VERSION}" | sed -n -e "$sed_extract_major"`
+version_minor=`echo "${PACKAGE_VERSION}" | sed -n -e "$sed_extract_minor"`
+HEXVERSION=`printf '0x%02X%02X' $version_major $version_minor`
+AC_DEFINE_UNQUOTED([LIBFFCALL_VERSION], [$HEXVERSION], [Version number: (major<<8) + minor])
 
 AC_PROG_MAKE_SET
 
