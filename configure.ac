@@ -17,6 +17,8 @@ dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 dnl
 
 AC_INIT([GNU libffcall],m4_normalize(m4_esyscmd([cat VERSION])),[https://savannah.gnu.org/projects/libffcall],[libffcall])
+AC_CONFIG_AUX_DIR([build-aux])
+AM_INIT_AUTOMAKE([])
 
 AC_CONFIG_SRCDIR([trampoline/trampoline.h.in])
 
@@ -41,6 +43,7 @@ AC_CONFIG_HEADERS([callback/trampoline_r/trampoline_r.h],
   [LIBFFCALL_VERSION=$PACKAGE_VERSION])
 
 AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([gnulib-lib/Makefile])
 AC_CONFIG_FILES([avcall/Makefile])
 AC_CONFIG_FILES([vacall/Makefile])
 AC_CONFIG_FILES([trampoline/Makefile])
@@ -48,7 +51,6 @@ AC_CONFIG_FILES([callback/Makefile])
 AC_CONFIG_FILES([callback/vacall_r/Makefile])
 AC_CONFIG_FILES([callback/trampoline_r/Makefile])
 
-AC_CONFIG_AUX_DIR([build-aux])
 AC_PROG_MAKE_SET
 
 AC_PROG_CC
@@ -63,6 +65,8 @@ gl_PROG_AR_RANLIB
 AC_PROG_INSTALL
 CL_PROG_LN
 CL_PROG_LN_S
+
+gl_EARLY
 
 gl_HOST_CPU_C_ABI
 FFCALL_ENDIANNESS
@@ -114,7 +118,6 @@ if test ${HOST_CPU_C_ABI} = mips -o ${HOST_CPU_C_ABI} = mipsn32 -o ${HOST_CPU_C_
   AC_CHECK_HEADERS([sys/cachectl.h])
 fi
 
-gl_EARLY
 gl_INIT
 
 dnl This piece of sed script replaces every line containing '@subdir@'
@@ -122,6 +125,9 @@ dnl by several consecutive lines, each referencing one subdir.
 extrasub="$extrasub"'
 /@subdir@/{
 h
+g
+s/@subdir@/gnulib-lib/g
+p
 g
 s/@subdir@/avcall/g
 p

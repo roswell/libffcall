@@ -25,7 +25,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir) -I../..
+INCLUDES = -I. -I$(srcdir) -I../.. -I../../gnulib-lib -I$(srcdir)/../../gnulib-lib
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
@@ -44,6 +44,9 @@ LN_S = @LN_S@
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
+
+# Libtool options for linking with the thread library.
+LTLIBTHREAD = @LTLIBTHREAD@
 
 #### End of system configuration section. ####
 
@@ -133,8 +136,8 @@ cache-powerpc64-elfv2.lo : cache-powerpc64-elfv2.s
 cache-powerpc64-elfv2.s : $(srcdir)/cache-powerpc64-elfv2-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/cache-powerpc64-elfv2-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-powerpc64-elfv2.s
 
-libtrampoline.la : $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS) $(LDFLAGS)
+libtrampoline.la : $(OBJECTS) ../../gnulib-lib/libgnu.la
+	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS) ../../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
@@ -175,14 +178,14 @@ uninstall : force
 test1.o : $(srcdir)/test1.c trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
-test1 : test1.o $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o $(OBJECTS) $(LDFLAGS) -o test1
+test1 : test1.o libtrampoline.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o libtrampoline.la $(LDFLAGS) -o test1
 
 test2.o : $(srcdir)/test2.c trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test2.c
 
-test2 : test2.o $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test2.o $(OBJECTS) $(LDFLAGS) -o test2
+test2 : test2.o libtrampoline.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test2.o libtrampoline.la $(LDFLAGS) -o test2
 
 check1 : all test1
 	./test1

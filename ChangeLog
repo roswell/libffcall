@@ -1,5 +1,46 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	trampoline, callback: Make multithread-safe.
+	* Makefile.maint (AUTOMAKE): New variable.
+	(all): Depend on Makefile-ins.
+	(GNULIB_MODULES): Add 'lock'.
+	(gnulib-m4/gnulib-cache.m4): Don't remove generated gnulib-lib files.
+	(ALL_MAKEFILE_IN_FROM_AM): New variable.
+	(Makefile-ins, gnulib-lib/Makefile.in): New targets.
+	* configure.ac: Invoke AM_INIT_AUTOMAKE. Arrange to generate
+	gnulib-lib/Makefile. Invoke gl_EARLY earlier. Recurse into gnulib-lib
+	directory.
+	* Makefile.in (DISTCLEANFILES): Add the various stamp-h* files created
+	by config.status at the end of the 'configure' run.
+	(AUTOMAKE_IMPORTED_FILES): New variable.
+	(IMPORTED_FILES): Use it.
+	* trampoline/Makefile.in (INCLUDES): Reference the gnulib build dir and
+	source dir.
+	(LTLIBTHREAD): New variable.
+	(libtrampoline.la): Link against libgnu.la, with options $(LTLIBTHREAD).
+	(test1, test2): Link against libtrampoline.la.
+	* trampoline/trampoline.c: Include glthread/lock.h.
+	(zero_fd, file_fd, file_length): Move to file scope.
+	(for_mmap_init): New function, extracted from alloc_trampoline.
+	(for_mmap_once): New variable.
+	(freelist_lock): New variable.
+	(alloc_trampoline): Use once-only execution and locking.
+	* callback/trampoline_r/Makefile.in (INCLUDES): Reference the gnulib
+	build dir and source dir.
+	(LTLIBTHREAD): New variable.
+	(libtrampoline.la): Link against libgnu.la, with options $(LTLIBTHREAD).
+	(test1, test2): Link against libtrampoline.la.
+	* callback/trampoline_r/trampoline.c: Include glthread/lock.h.
+	(zero_fd, file_fd, file_length): Move to file scope.
+	(for_mmap_init): New function, extracted from alloc_trampoline.
+	(for_mmap_once): New variable.
+	(freelist_lock): New variable.
+	(alloc_trampoline_r): Use once-only execution and locking.
+	* callback/Makefile.in (LTLIBTHREAD): New variable.
+	(libcallback.la): Link against libgnu.la, with options $(LTLIBTHREAD).
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	build: Rename glm4 to gnulib-m4.
 	* autogen.sh: Write gnulib-m4 instead of glm4.
 	* Makefile.maint: Likewise.

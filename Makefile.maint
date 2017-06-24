@@ -6,6 +6,7 @@ MAKE = make
 # You need to use this precise version of GNU Automake.
 # If you want to use a different version of GNU Automake, you are on your own!
 ACLOCAL = aclocal-1.15
+AUTOMAKE = automake-1.15
 
 # You need to use this precise version of GNU Autoconf and create
 # symbolic links
@@ -21,7 +22,7 @@ RM = rm -f
 # ==================== Easily regeneratable files ====================
 
 .PHONY : all
-all : aclocal.m4 configures check-configures config-h-in common/asm-i386.h force
+all : aclocal.m4 configures check-configures config-h-in Makefile-ins common/asm-i386.h force
 	cd avcall && $(MAKE) -f Makefile.maint all
 	cd vacall && $(MAKE) -f Makefile.maint all
 	cd trampoline && $(MAKE) -f Makefile.maint all
@@ -66,14 +67,14 @@ libtool-clean : force
 
 GNULIB_MODULES = \
   host-cpu-c-abi \
+  lock \
   longlong \
   nocrash
 
 gnulib-m4/gnulib-cache.m4 :
 	if test -n "$$GNULIB_TOOL"; then \
-	  $$GNULIB_TOOL --source-base=gllib --m4-base=gnulib-m4 --aux-dir=build-aux --no-changelog \
+	  $$GNULIB_TOOL --source-base=gnulib-lib --m4-base=gnulib-m4 --aux-dir=build-aux --libtool --no-changelog \
 	    --import $(GNULIB_MODULES); \
-	  rm -rf gllib; \
 	fi
 
 .PHONY : gnulib-imported-files
@@ -133,6 +134,17 @@ config-h-in : $(ALL_CONFIG_H_IN)
 
 config.h.in : configure.ac $(AUTOCONF_FILES)
 	srcdir=`pwd`; $(AUTOHEADER) --include="$$srcdir" && rm -rf autom4te.cache
+
+
+ALL_MAKEFILE_IN_FROM_AM = gnulib-lib/Makefile.in
+
+.PHONY: Makefile-ins
+Makefile-ins : $(ALL_MAKEFILE_IN_FROM_AM)
+
+gnulib-lib/Makefile.in : gnulib-lib/Makefile.am configure.ac $(AUTOCONF_FILES)
+	: "Make sure we get new versions of files brought in by automake."
+	(cd build-aux && rm -f depcomp missing)
+	$(AUTOMAKE) --add-missing --copy && rm -rf autom4te.cache
 
 
 # Other generated files.

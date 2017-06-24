@@ -23,9 +23,15 @@
 /build-aux/ar-lib
 /build-aux/compile
 /build-aux/config.guess
+/build-aux/config.rpath
 /build-aux/config.sub
 /build-aux/install-sh
+/gnulib-lib/
 /gnulib-m4/
+
+# Files brought in by automake:
+/build-aux/depcomp
+/build-aux/missing
 
 # Other files brought in by autogen.sh:
 # Files copied from trampoline:
@@ -290,6 +296,13 @@ autom4te.cache/
 /Makefile
 /config.h
 /libtool
+/stamp-h1
+/avcall/stamp-h2
+/vacall/stamp-h3
+/trampoline/stamp-h4
+/callback/stamp-h5
+/callback/vacall_r/stamp-h6
+/callback/trampoline_r/stamp-h7
 # Erased by avcall/Makefile.
 /avcall/Makefile
 /avcall/avcall.h

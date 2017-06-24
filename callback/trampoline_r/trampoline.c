@@ -204,6 +204,9 @@ extern void __TR_clear_cache();
 #endif
 #endif
 
+/* Support for multithread-safe coding. */
+#include "glthread/lock.h"
+
 #if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
 /* Opens a file descriptor and attempts to make it non-inheritable. */
 static int open_noinherit (const char *filename, int flags, int mode)
@@ -323,12 +326,54 @@ static int open_noinherit (const char *filename, int flags, int mode)
 static long pagesize = 0;
 #endif
 
+#if !defined(CODE_EXECUTABLE) && (defined(EXECUTABLE_VIA_MMAP_DEVZERO) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED))
+
+/* Variables needed for obtaining memory pages via mmap(). */
+#if defined(EXECUTABLE_VIA_MMAP_DEVZERO)
+static int zero_fd;
+#endif
+#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+static int file_fd;
+static long file_length;
+#endif
+
+/* Initialization of these variables. */
+static void for_mmap_init (void)
+{
+#if defined(EXECUTABLE_VIA_MMAP_DEVZERO)
+  zero_fd = open("/dev/zero",O_RDONLY,0644);
+  if (zero_fd < 0)
+    { fprintf(stderr,"trampoline: Cannot open /dev/zero!\n"); abort(); }
+#endif
+#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+  {
+    char filename[100];
+    sprintf(filename, "%s/trampdata-%d-%ld", "/tmp", getpid (), random ());
+    file_fd = open_noinherit (filename, O_CREAT | O_RDWR | O_TRUNC, 0700);
+    if (file_fd < 0)
+      { fprintf(stderr,"trampoline: Cannot open %s!\n",filename); abort(); }
+    /* Remove the file from the file system as soon as possible, to make
+       sure there is no leftover after this process terminates or crashes. */
+    unlink(filename);
+  }
+  file_length = 0;
+#endif
+}
+
+/* Once-only initializer for these variables. */
+gl_once_define(static, for_mmap_once)
+
+#endif
+
 #if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT)
 /* AIX doesn't support mprotect() in malloc'ed memory. Must get pages of
  * memory with execute permission via mmap(). Then keep a free list of
  * free trampolines.
  */
 static char* freelist = NULL;
+/* Lock that protects the freelist from simultaneous access from multiple
+   threads. */
+gl_lock_define_initialized(static, freelist_lock)
 #endif
 
 __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data1)
@@ -338,38 +383,20 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   char* data;
 
 #if !defined(CODE_EXECUTABLE)
-#if defined(EXECUTABLE_VIA_MMAP_DEVZERO)
-  static int zero_fd;
-#endif
-#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
-  static int file_fd;
-  static long file_length;
-#endif
   /* First, get the page size once and for all. */
   if (!pagesize)
     {
+      /* Simultaneous execution of this initialization in multiple threads
+         is OK. */
 #if defined(HAVE_MACH_VM)
       pagesize = vm_page_size;
 #else
       pagesize = getpagesize();
 #endif
-#if defined(EXECUTABLE_VIA_MMAP_DEVZERO)
-      zero_fd = open("/dev/zero",O_RDONLY,0644);
-      if (zero_fd < 0)
-        { fprintf(stderr,"trampoline: Cannot open /dev/zero!\n"); abort(); }
-#endif
-#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
-      {
-        char filename[100];
-        sprintf(filename, "%s/trampdata-%d-%ld", "/tmp", getpid (), random ());
-        file_fd = open_noinherit (filename, O_CREAT | O_RDWR | O_TRUNC, 0700);
-        if (file_fd < 0)
-          { fprintf(stderr,"trampoline: Cannot open %s!\n",filename); abort(); }
-        /* Remove the file from the file system as soon as possible, to make
-           sure there is no leftover after this process terminates or crashes. */
-        unlink(filename);
-      }
-      file_length = 0;
+#if defined(EXECUTABLE_VIA_MMAP_DEVZERO) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+      /* Use a once-only initializer here, since simultaneous execution of
+         for_mmap_init() in multiple threads must be avoided. */
+      gl_once (for_mmap_once, for_mmap_init);
 #endif
     }
 #endif
@@ -377,13 +404,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   /* 1. Allocate room */
 
 #if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT)
-  /* Note: This memory allocation is not multithread-safe. We might need
-   * to add special (platform dependent) code for locking.
-   * Fortunately, most modern systems where multithread-safety matters
-   * have EXECUTABLE_VIA_MPROTECT, and those which don't (AIX on powerpc and
-   * HP-UX on hppa) have CODE_EXECUTABLE. Thus no locking code is needed
-   * for the moment.
-   */
+  gl_lock_lock(freelist_lock);
   if (freelist == NULL)
     { /* Get a new page. */
       char* page;
@@ -443,6 +464,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
         *last = NULL;
     } }
   function = freelist; freelist = *(char**)freelist;
+  gl_lock_unlock(freelist_lock);
 #else
   { char* room = (char*) malloc(sizeof(void*) + TRAMP_TOTAL_LENGTH + TRAMP_ALIGN-1);
     if (!room)

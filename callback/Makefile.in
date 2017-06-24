@@ -42,6 +42,9 @@ INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 
+# Libtool options for linking with the thread library.
+LTLIBTHREAD = @LTLIBTHREAD@
+
 #### End of system configuration section. ####
 
 SHELL = /bin/sh
@@ -64,7 +67,7 @@ trampoline_r.h :
 	$(LN_S) trampoline_r/trampoline_r.h trampoline_r.h
 
 libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la
-	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) vacall_r/vacall.lo vacall_r/misc.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo $(LDFLAGS)
+	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) vacall_r/vacall.lo vacall_r/misc.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
