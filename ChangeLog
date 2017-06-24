@@ -1,5 +1,12 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	build: Rename glm4 to gnulib-m4.
+	* autogen.sh: Write gnulib-m4 instead of glm4.
+	* Makefile.maint: Likewise.
+	* Makefile.in (GNULIB_IMPORTED_FILES): Likewise.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	build: Assume a single configure.ac file.
 	* Makefile.maint (ALL_CONFIGURE_AC, aclocal.m4): Simplify.
 

@@ -105,7 +105,7 @@ GNULIB_IMPORTED_FILES = \
   build-aux/config.guess \
   build-aux/config.sub \
   build-aux/install-sh \
-  glm4/*.m4
+  gnulib-m4/*.m4
 IMPORTED_FILES = $(LIBTOOL_IMPORTED_FILES) $(GNULIB_IMPORTED_FILES)
 # List of files copied by autogen.sh.
 COPIED_FILES = \

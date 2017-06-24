@@ -97,7 +97,7 @@ if test $skip_gnulib = false; then
   # Skip the gnulib-tool step if gnulib-tool was not found.
   if test -n "$GNULIB_TOOL"; then
     make -f Makefile.maint \
-         gnulib-clean glm4/gnulib-cache.m4 gnulib-imported-files \
+         gnulib-clean gnulib-m4/gnulib-cache.m4 gnulib-imported-files \
          GNULIB_TOOL="$GNULIB_TOOL"
   fi
 fi
