@@ -455,13 +455,13 @@ typedef struct
   __vaword       iarg[__VA_IARG_NUM];
 #endif
 #if defined(__s390__) && !defined(__s390x__)
-  float*         memfargptr;
-  double*        memdargptr;
-  float          farg[2];
-  double         darg[2];
   __vaword       iarg[5];
   unsigned long  saptr;
   int            onstack;
+#define __VA_FARG_NUM 2
+  unsigned int   fanum;
+  float          farg[__VA_FARG_NUM];
+  double         darg[__VA_FARG_NUM];
 #endif
 #if defined(__s390x__)
 #define __VA_IARG_NUM 5
@@ -1174,10 +1174,10 @@ typedef __va_alist* va_alist;
   )  )
 #endif
 #if defined(__s390__) && !defined(__s390x__)
-/* The first 2 floating-point args have been stored elsewhere. */
+/* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define va_arg_float(LIST)  \
-  ((LIST)->memfargptr < &(LIST)->farg[2]				\
-   ? (LIST)->memdargptr++, (float) *((LIST)->memfargptr++)		\
+  ((LIST)->fanum < __VA_FARG_NUM					\
+   ? (LIST)->farg[(LIST)->fanum++]					\
    : ((LIST)->aptr = ((LIST)->onstack == 0				\
                        ? ((LIST)->onstack=1, (LIST)->saptr)		\
                        : (LIST)->aptr					\
@@ -1186,8 +1186,8 @@ typedef __va_alist* va_alist;
       *(float*)((LIST)->aptr - sizeof(float))				\
   ))
 #define va_arg_double(LIST)  \
-  ((LIST)->memdargptr < &(LIST)->darg[2]				\
-    ? (LIST)->memfargptr++, *((LIST)->memdargptr++)			\
+  ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (LIST)->darg[(LIST)->fanum++]					\
     : ((LIST)->aptr = ((LIST)->onstack == 0				\
                        ? ((LIST)->onstack=1, (LIST)->saptr)		\
                        : (LIST)->aptr					\

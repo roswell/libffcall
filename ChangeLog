@@ -1,6 +1,15 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
 	s390: Simplify code.
+	* vacall/vacall.h.in (__va_alist) [s390]: Use a counter instead of
+	2 pointers.
+	(va_arg_float, va_arg_double): Update accordingly;
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-s390.c: Update accordingly.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
+	s390: Simplify code.
 	* avcall/avcall.h.in (av_alist) [s390]: Use a counter instead of
 	4 pointers. Use 2 bitmasks instead of 2 int[] arrays.
 	(__av_start1, av_float, av_double): Update accordingly.
