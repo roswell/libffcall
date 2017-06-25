@@ -58,29 +58,20 @@ __builtin_avcall(av_alist* l)
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
   __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
   int arglen = l->aptr - l->args;
-  int farglen = l->faptr - l->fargs;
+  unsigned int fanum = l->fanum;
   int iargwords = (arglen-l->fargwords)<5?arglen-l->fargwords:5;
   __avword i;
 
   for (i = iargwords; i < arglen; i++) /* push function args onto stack */
    argframe[i-iargwords] = l->args[i];
 
-  /* pass first 2 floating-point args in registers */
-  if (farglen == 1) {
-    if(l->fargsused[0])  farg1 = l->fargs[0]; else darg1 = l->dargs[0];
-   }
-  else if (farglen == 2) {
-    if(l->fargsused[0] && l->fargsused[1]) {
-       farg1 = l->fargs[0]; farg2 = l->fargs[1];
-    }
-    else if(l->fargsused[0] && !l->fargsused[1]) {
-       farg1 = l->fargs[0]; darg2 = l->dargs[1];
-    }
-    else if(!l->fargsused[0] && l->fargsused[1]) {
-       darg1 = l->dargs[0]; farg2 = l->fargs[1];
-    }
-    else if(!l->fargsused[0] && !l->fargsused[1]) {
-       darg1 = l->dargs[0]; darg2 = l->dargs[1];
+  /* Put upto 2 floating-point args into registers. */
+  if (fanum >= 1) {
+    if (l->darg_mask & (1 << 0)) darg1 = l->dargs[0];
+    else if (l->farg_mask & (1 << 0)) farg1 = l->fargs[0];
+    if (fanum >= 2) {
+      if (l->darg_mask & (1 << 1)) darg2 = l->dargs[1];
+      else if (l->farg_mask & (1 << 1)) farg2 = l->fargs[1];
     }
   }
 

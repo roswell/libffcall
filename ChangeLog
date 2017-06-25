@@ -1,5 +1,13 @@
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
+	s390: Simplify code.
+	* avcall/avcall.h.in (av_alist) [s390]: Use a counter instead of
+	4 pointers. Use 2 bitmasks instead of 2 int[] arrays.
+	(__av_start1, av_float, av_double): Update accordingly.
+	* avcall/avcall-s390.c (__builtin_avcall): Likewise.
+
+2017-06-24  Bruno Haible  <bruno@clisp.org>
+
 	build: Improve guesses when cross-compiling.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC, FFCALL_CODEEXEC_PAX): When
 	cross-compiling, use the known autoconf test results.

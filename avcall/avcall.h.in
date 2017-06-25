@@ -432,14 +432,12 @@ typedef struct
 #if (defined(__s390__) && !defined(__s390x__))
   /* store the floating-point arguments in an extra array */
   int   		fargwords;
-  float*		faptr;
-  float 		fargs[2];
-  int*			fargsusedptr;
-  int			fargsused[2];
-  double*		daptr;
-  double		dargs[2];
-  int*			dargsusedptr;
-  int			dargsused[2];
+#define __AV_FARG_NUM 2
+  unsigned int		fanum;		/* number of fargs[] words that are occupied so far */
+  unsigned int		farg_mask;	/* bitmask of those entries in fargs[] which have a float value */
+  unsigned int		darg_mask;	/* bitmask of those entries in dargs[] which have a double value */
+  float			fargs[__AV_FARG_NUM];
+  double		dargs[__AV_FARG_NUM];
 #endif
 #if defined(__s390x__)
 #define __AV_IARG_NUM 5
@@ -561,10 +559,9 @@ typedef struct
 #define __av_start1(LIST)						\
    (LIST).aptr = &(LIST).args[0],					\
    (LIST).fargwords = 0,						\
-   (LIST).faptr = &(LIST).fargs[0],					\
-   (LIST).daptr = &(LIST).dargs[0],					\
-   (LIST).fargsusedptr = &(LIST).fargsused[0],				\
-   (LIST).dargsusedptr = &(LIST).dargsused[0],				\
+   (LIST).fanum = 0,							\
+   (LIST).farg_mask = 0,						\
+   (LIST).darg_mask = 0,						\
    (LIST).eptr = &(LIST).args[__AV_ALIST_WORDS],
 #endif
 
@@ -1329,8 +1326,11 @@ typedef struct
  */
 
 #define av_float(LIST,VAL)						\
-  ((LIST).faptr < &(LIST).fargs[2]					\
-   ? (LIST).daptr++, *(LIST).fargsusedptr++ = 1, *(LIST).dargsusedptr++ = 0, ((*(LIST).faptr++ = (float)(VAL)), 0) \
+  ((LIST).fanum < __AV_FARG_NUM						\
+   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
+      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
+      (LIST).fanum++,							\
+      0)								\
    : ((LIST).aptr >= __av_eptr(LIST)					\
       ? -1 :								\
       ((LIST).aptr++,							\
@@ -1339,8 +1339,11 @@ typedef struct
        0)))
 
 #define av_double(LIST,VAL)						\
-  ((LIST).daptr < &(LIST).dargs[2]					\
-   ? (LIST).faptr++, *(LIST).dargsusedptr++ = 1, *(LIST).fargsusedptr++ = 0, ((*(LIST).daptr++ = (double)(VAL)), 0) \
+  ((LIST).fanum < __AV_FARG_NUM						\
+   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
+       (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
+       (LIST).fanum++,							\
+       0)								\
    : ((LIST).aptr + 2 > __av_eptr(LIST)					\
       ? -1 :								\
       ((LIST).aptr += 2,						\
