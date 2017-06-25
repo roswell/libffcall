@@ -1,0 +1,49 @@
+Function pointers
+=================
+
+On all platforms, a function pointer has the same size as a data pointer (void*).
+
+You can determine what a function pointer actually is by compiling
+proto.c (for 32-bit platforms) or proto64.c (for 64-bit platforms)
+with -O -fomit-frame-pointer -S and looking at the resulting output,
+especially of function 'tramp'.
+
+On most platforms, function pointers are just a pointer to the code, i.e. to
+the first instruction to be executed.
+
+On powerpc-aix and powerpc64-aix, a function pointer is actually a pointer to a
+struct {
+  void* code_address;
+  void* toc_pointer;  /* gets loaded into register r2 */
+  void* static_chain; /* gets loaded into register r11 */
+}.
+
+Likewise on powerpc64-linux (but not on powerpc-linux and
+not on powerpc64-elfv2-linux!).
+
+On ia64 (both ia64-linux and ia64-hpux), a function pointer is actually
+a pointer to a
+struct {
+  void* code_address;
+  void* global_pointer; /* for PIC code, gets loaded into register r1 */
+}.
+
+Similarly on ia64-ilp32-hpux; here the struct contains two 8-byte pointers,
+although an ordinary pointer is only 4 bytes wide.
+
+On hppa, you don't see anything from the .s file, because the interesting
+details are hidden in a function named $$dyncall. You need to compile funcptr.s
+and actually look at the values in the debugger.
+A function pointer is a pointer to a
+struct {
+  void* code_address;
+  void* pic_base; /* for PIC code, gets loaded into register r19 */
+}, plus 2 (misaligned!).
+
+On hppa64, a function pointer is a pointer to a
+struct {
+  void* some_other_code_address;
+  void* some_other_pic_base;
+  void* code_address;
+  void* pic_base; /* for PIC code, gets loaded into register r27 */
+}.

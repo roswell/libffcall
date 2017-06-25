@@ -1,0 +1,158 @@
+ABIs and calling conventions
+============================
+
+In the context of libffcall,
+  - an ABI <https://en.wikipedia.org/wiki/Application_binary_interface>
+and
+  - a function calling convention <https://en.wikipedia.org/wiki/Calling_convention>
+are nearly the same thing. Every ABI specifies a calling convention
+(although some functions can be declared to use a non-default
+calling convention, cf. __stdcall on Windows). ABIs specify also details
+that are irrelevant for the calling convention, such as whether specific
+CPU instructions may assumed to be present, or the absolute file name
+of ld.so.
+
+Implementing support for a new ABI / calling convention
+=======================================================
+
+libffcall needs small pieces of assembly language and an understanding of the
+calling convention for each ABI. No one can be familiar with more than 10
+CPU instruction sets. Therefore, unlike libffi which requires 300..600 lines
+of code written in assembly language, libffcall needs less than 10 instructions
+written in assembly language. The rest (the details of the calling convention)
+are embodied in C code and macros.
+
+The easiest way to port libffcall to a new ABI / calling convention is as
+follows.
+
+1) Add to cross-tools/cross.conf the configuration of the gcc and binutils
+   that you want to use, and build and install the cross tools through the
+   cross-tools/cross-build.sh script.
+
+2) Compile the first part of avcall/tests.c (the definition of the various
+   sample functions) with
+     $ cross <ABI> gcc -O -S -DHAVE_LONG_LONG_INT -fomit-frame-pointer tests.c
+   and look through the resulting tests.s file. This will get you a basic
+   understanding of the instruction set and assembly language syntax.
+
+3) Determine the set of call-used registers and the lexical closure register.
+   Update the file call-used-registers.txt accordingly.
+
+4) Port the trampoline package.
+
+ 4.1) Determine what a "function pointer" in C actually is: read
+      function-pointer,txt (in this directory).
+
+ 4.2) Compile proto.c or proto64.c with the cross-compiler, to understand
+      which instructions make up a jump into a different function. Extend
+      trampoline/Makefile.devel accordingly.
+
+ 4.3) Write a file tramp-<ABI>.S that loads 3 specific values into registers,
+      performs a memory assignment, then a jump.
+      On some 32-bit platforms, it is possible to put together a 32-bit
+      value using two or three instructions. On other platforms, especially
+      64-bit platforms, it is more efficient (fewer instructions) to store
+      the values in memory adjacent to the code and use PC-relative addressing
+      to fetch the values.
+      The code that you write here must only use call-used registers (see
+      step 3).
+      Compile this file to a .o:
+        $ cross <ABI> as -o tramp-<ABI>.o tramp-<ABI>.S
+      Look at the binary representation of these instructions:
+        $ cross <ABI> objdump --disassemble tramp-<ABI>.S
+
+ 4.4) Put into trampoline.c the code that assembles such a trampoline.
+
+ 4.5) Test it ("make && make check"). If test1 fails with "Illegal instruction",
+      the reason is most likely that some kind cache flushing is necessary:
+      first, the data cache in the CPU needs to be written out, then selected
+      rows of the instruction cache of the CPU need to be invalidated, so that
+      they will be fetched from memory.
+      On platforms where compilers other than gcc and clang are used, put the
+      code for flushing the cache into a file cache-<ABI>.c and compile it
+      to cache-<ABI>-macro.S.
+      On platforms where only gcc or clang are to be used, you can put the
+      code for flushing the cache as __asm__ statements into trampoline.c.
+
+5) Port the callback/trampoline_r package.
+
+ 5.1) Modify proto.c or proto64.c to reference the lexical closure register
+      (known from step 3).
+
+ 5.2) Compile proto.c or proto64.c with the cross-compiler, to understand
+      which instruction will load a value into this register.
+
+ 5.3) Write a file tramp-<ABI>.S that loads a specific value into the lexical
+      closure register and then jumps to a specific location.
+      The code that you write here must only use call-used registers (see
+      step 3).
+      Compile this file to a .o:
+        $ cross <ABI> as -o tramp-<ABI>.o tramp-<ABI>.S
+      Look at the binary representation of these instructions:
+        $ cross <ABI> objdump --disassemble tramp-<ABI>.S
+
+ 5.4) Put into trampoline.c the code that assembles such a trampoline.
+
+ 5.5) Put into trampoline.c also the cache-related changes from step 4,5.
+      except that here the code may need to flush a different number of
+      cache lines (depending on the trampoline size).
+
+ 5.6) Test it ("make && make check").
+
+6) Get a deeper understanding of the function calling convention.
+   * Look at the generated tests.s from step 2 in detail.
+   * Update reg-struct-return.txt by repeating step 2 with the gcc option
+     '-freg-struct-return' and looking at the code of the functions that
+     return structs (I_III and so on).
+   * Read the ABI specs (if you could find such specs on the web).
+   * Start writing an avcall/avcall-<ABI>.c, by formulating the function
+     calling convention in your own words.
+   * In the GCC source code for the respective CPU (under gcc/config/<CPU>/)
+     search for
+       - _arg_structure and CUMULATIVE_ARGS
+       - _function_arg_advance
+   * Update stack-frame.txt with info about this ABI.
+
+7) Port the avcall package.
+
+ 7.1) Go through avcall.h.in and add conditionals for this ABI.
+
+ 7.2) Write avcall-<ABI>.c.
+
+ 7.3) To Makefile.devel add a rule for generating avcall-<ABI>-macro.S from
+      avcall-<ABI>.c. Run it.
+
+ 7.4) To Makefile.in add two rules:
+        - a rule for generating avcall-<ABI>.s from avcall-<ABI>-macro.S,
+        - a rule for generating avcall-<ABI>.lo from avcall-<ABI>.s.
+
+ 7.5) Test it ("make && make check").
+
+8) Port the vacall package.
+
+ 8.1) Go through vacall.h.in and add conditionals for this ABI.
+
+ 8.2) Write vacall-<ABI>.c.
+
+ 8.3) To Makefile.devel add a rule for generating vacall-<ABI>-macro.S from
+      vacall-<ABI>.c. Run it.
+
+ 8.4) To Makefile.in add two rules:
+        - a rule for generating vacall-<ABI>.s from vacall-<ABI>-macro.S,
+        - a rule for generating vacall-<ABI>.o from vacall-<ABI>.s.
+
+ 8.5) Test it ("make && make check").
+
+9) Port the vacall_r package.
+
+ 9.1) Copy the changes to vacall/vacall.h.in to callback/vacall_r/vacall_r.h.in.
+
+ 9.2) In callback/vacall_r/Makefile.maint, variable COPIED_FILES, add
+      vacall-<ABI>.c. Then run "make -f Makefile.maint".
+
+ 9.3) Test the callback/vacall_r package ("make && make check").
+
+ 9.4) Test the callback package ("make check" here as well).
+
+10) Update the various file lists in the Makefiles and .gitignore.
+

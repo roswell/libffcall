@@ -35,7 +35,10 @@ int foo (int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7)
 Among these, we can use the lexical closure reg, because __vacall_r has no
 lexical closure (more precisely, we are building a lexical closure for it).
 
-grep STATIC_CHAIN_REGNUM and TRAMPOLINE_TEMPLATE in the machine description.
+To find this lexical closure register:
+- grep STATIC_CHAIN_REGNUM and TRAMPOLINE_TEMPLATE in the machine description.
+- Or compile funcptr.c using "gcc -O -S" and look at the definition of the
+  'add' function.
 
              Machine description         first two (a,b)     Lexical closure reg
 i386         eax,edx,ecx                 eax,edx                 ecx

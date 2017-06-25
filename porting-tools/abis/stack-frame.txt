@@ -1,0 +1,351 @@
+Layout of the stack frame, and the argument registers
+=====================================================
+
+In many ABIs, there are a few general-purpose argument registers
+(for integer, pointer, and sometimes also float or double values) that
+form the "head" of the argument list that is continued on the stack.
+
+Assume we have R arg words in registers and N-R arg words in the stack:
+
+  word1, ..., wordR;  saptr -> [arg(R+1), ..., arg(N)]
+
+it makes processing of these arguments (in particular structure arguments!)
+easier if we can concatenate them:
+
+  saptr-R -> [word1, ..., wordR, arg(R+1), ..., arg(N)]
+
+1) Do we need this?
+2) Can we do this?
+
+
+Ad 1)
+It depends whether some argument (especially 'double', 'long long', or
+structure) can be partially in general-purpose argument registers and
+partially on the stack. We call it "split" in this case.
+
+This can be determined by compiling code gpargs[4568].c with gcc -O.
+
+Here's the table of architectures and whether it's needed:
+
+              R  Argument registers     Is needed?
+i386          0  -                      N (trivial case)
+m68k          0  -                      N (trivial case)
+mips          4  r4-r7                  Y (split struct)
+mips{n32,64}  8  r4-r11                 Y (split struct)
+sparc         6  o0-o5                  Y (split long long)
+sparc64       6  o0-o5                  N
+alpha         6  $16-$21                Y (split struct)
+hppa          4  23-26                  N
+arm           4  r0-r3                  Y (split struct)
+arm64         8  x0-x7                  N
+powerpc{,64}  8  3-10                   Y (split struct)
+ia64          8  r32-r39                Y (split struct)
+x86_64        6  rdi,rsi,rdx,rcx,r8,r9  N
+s390,s390x    5  r2-r6                  N
+
+If "Is needed?" is N, the easiest solution is that the __va_alist contains
+room (iarg[] or regarg[]) for the values of the general-purpose argument
+registers.
+
+
+Ad 2)
+But we can do this only
+  * if R = 0 (trivial case)
+  * or if room is already allocated on the stack below saptr
+    (to determine this, search the GCC source code for REG_PARM_STACK_SPACE),
+  * or if through some other hack, word1, ..., wordR won't clobber the stack frame.
+
+Here's the table of architectures and their stack frame structure:
+
+              R  Argument registers     words below saptr             Can concatenate?
+i386          0  -                      ebp, retaddr                  Y (trivial case)
+m68k          0  -                      a6, retaddr                   Y (trivial case)
+mips          4  r4-r7                  fp, retaddr, word1,...,wordN  Y (preallocated room)
+mips{n32,64}  8  r4-r11                 fp, retaddr, others           (needs postprocessing hack)
+sparc{,64}    6  o0-o5                  ?                             Y (preallocated room)
+alpha         6  $16-$21                retaddr, fp, others           (needs 'locals' struct hack)
+hppa          4  23-26                                                Y (preallocated room)
+arm           4  r0-r3                  fp, sp, retaddr, dummy(opt)   Y (allocated room through split struct)
+arm64         8  x0-x7                  {fp,lr}, others               N
+powerpc{,64}  8  3-10                                                 Y (preallocated room) on AIX and Darwin,
+                                                                      N otherwise
+ia64          8  r32-r39                ?                             (needs 'locals' struct hack)
+x86_64        6  rdi,rsi,rdx,rcx,r8,r9  rbp, retaddr                  N
+s390,s390x    5  r2-r6                                                N
+
+The canonical function prologue, epilogue, and call sequence can be determined
+by looking at the compiled code (with "-O0 -fno-omit-frame-pointer -S") of a
+function like
+
+void f (int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9)
+{ printf("%d%d%d%d%d%d%d%d%d\n", a1, a2, a3, a4, a5, a6, a7, a8, a9); }
+
+========== i386 ==========
+Prologue
+    pushl %ebp
+    movl %esp,%ebp
+    subl $nn,%esp
+Call
+    push arguments
+    call printf         ; pushes retaddr on the stack
+Epilogue
+    leave
+    ret (or ret $N if option -mrtd)
+==========================
+
+========== m68k ==========
+Prologue
+    link.w %a6,#nn
+Call
+    jbsr printf         ; pushes retaddr on the stack
+Epilogue
+    lea (nn,%sp),%sp
+    unlk %a6
+    rts
+==========================
+
+========== mips ==========
+Prologue
+    .cpload $25
+    subu $sp,$sp,nn
+    sw $31,...($sp)
+    sw $fp,...($sp)
+    move $fp,$sp
+Call
+    la $25,printf
+    jal $31,$25         ; puts retaddr in $31, not on the stack
+Epilogue
+    move $sp,$fp
+    lw $fp,...($sp)
+    lw $31,...($sp)
+    addu $sp,$sp,64
+    j $31
+==========================
+
+========== mipsn32 ==========
+Prologue
+    .cpload $25
+    subu $sp,$sp,nn
+    sd $31,...($sp)
+    sd $fp,...($sp)
+    move $fp,$sp
+Call
+    la $25,printf
+    jal $31,$25         ; puts retaddr in $31, not on the stack
+Epilogue
+    move $sp,$fp
+    ld $fp,...($sp)
+    ld $31,...($sp)
+    addu $sp,$sp,nn
+    j $31
+==========================
+
+========== mips64 ==========
+Prologue
+    .cpload $25
+    dsubu $sp,$sp,nn
+    sd $31,...($sp)
+    sd $fp,...($sp)
+    move $fp,$sp
+Call
+    la $25,printf
+    jal $31,$25         ; puts retaddr in $31, not on the stack
+Epilogue
+    move $sp,$fp
+    ld $fp,...($sp)
+    ld $31,...($sp)
+    daddu $sp,$sp,nn
+    j $31
+==========================
+
+========== sparc ==========
+Prologue
+    save %sp,-nn,%sp
+Call
+    call printf,0       ; puts retaddr-8 in %o7
+Epilogue
+    restore
+    jmp %o7+8
+==========================
+
+========== sparc64 ==========
+Prologue
+    save %sp,-nn,%sp
+Call
+    call printf,0       ; puts retaddr-8 in %o7
+Epilogue
+    return %i7+8
+==========================
+
+========== alpha ==========
+Note: $15=$fp, $30=$sp, $26=retaddr, $27=thisfunc, $29=gp.
+Prologue
+    lda $30,-nn($30)
+    stq $26,...($30)
+    stq $15,...($30)
+    mov $30,$15
+Call
+    ldq $27,printf($29)
+    jsr $26,($27),0     ; puts retaddr in $26
+Epilogue
+    mov $15,$30
+    ldq $15,...($30)
+    ldq $26,...($30)
+    lda $30,nn($30)
+    ret $31,($26),1
+==========================
+
+========== hppa ==========
+Note: %r30 = stack pointer, %r3 = frame pointer, %r2 = return address, %r19 = pic_base
+Prologue
+    stw %r2,-20(%r30)
+    copy %r3,%r1
+    copy %r30,%r3
+    stwm %r1,128(%r30)
+Call
+    bl printf,%r2     ; puts retaddr in %r2
+Epilogue
+    ldw -20(%r3),%r2
+    ldo 64(%r3),%r30
+    ldwm -64(%r30),%r3
+    bv,n %r0(%r2)
+==========================
+
+========== arm ==========
+Prologue
+    mov ip,sp
+    stmfd sp!,{fp,ip,lr,pc}
+    sub fp,ip,#4
+    sub sp,sp,#nn
+Call
+    bl printf           ; puts retaddr in lr
+Epilogue
+    ldmea fp,{fp,sp,pc}
+==========================
+or (without use of register ip):
+========== arm ==========
+Prologue
+    stmfd sp!,{fp,lr}
+    add fp,sp,#4
+    sub sp,sp,#nn
+Call
+    bl printf           ; puts retaddr in lr
+Epilogue
+    sub     sp,fp,#4
+    ldmea fp,{fp,pc}
+==========================
+
+========== arm64 ==========
+Note: x29=fp, x30=lr
+Prologue
+    sub sp,sp,#nn
+    stp fp,lr,[sp,16]
+    add fp,sp,16
+Call
+    bl printf           ; puts retaddr in lr
+Epilogue
+    sub sp,fp,#16
+    ldp fp,lr,[sp,16]
+    add sp,sp,nn
+    ret
+  or
+    add sp,fp,0
+    ldp fp,lr,[sp],nn-16
+    ret
+==========================
+
+========== powerpc-linux ==========
+Note: 1 = stack pointer, 31 = frame pointer
+Prologue
+    stwu 1,-64(1)
+    mflr 0
+    stw 31,60(1)
+    stw 0,68(1)
+    mr 31,1
+Call
+    bl printf
+Epilogue
+    lwz 11,0(1)
+    lwz 0,4(11)
+    mtlr 0
+    lwz 31,-4(11)
+    mr 1,11
+    blr
+==========================
+
+========== powerpc64-elfv2 ==========
+Note: 1 = stack pointer, 31 = frame pointer, 2 = TOC
+Prologue
+    mflr 0
+    std 0,16(1)
+    std 31,-8(1)
+    stdu 1,-nn(1)
+    mr 31,1
+Call
+Epilogue
+    addi 1,31,nn
+    ld 0,16(1)
+    mtlr 0
+    ld 31,-8(1)
+    blr
+==========================
+
+========== ia64 ==========
+Note: r12 = stack pointer
+Prologue
+    alloc r41 = ar.pfs, 8, 4, 8, 0
+    mov r42 = r12
+    adds r12 = -48, r12
+    mov r40 = b0
+Call
+    br.call.sptk.many b0 = printf#    ; puts retaddr in b0
+Epilogue
+    mov ar.pfs = r41
+    mov b0 = r40
+    mov r12 = r42
+    br.ret.sptk.many b0
+==========================
+
+========== x86_64 ==========
+Prologue
+    pushq %rbp
+    movq %rsp,%rbp
+    subq $nn,%rsp
+Call
+    push arguments
+    call printf         ; pushes retaddr on the stack
+Epilogue
+    addq $nn,%rsp       ; may be omitted
+    leave
+    ret
+==========================
+
+========== s390 ==========
+Note: %r15 = stack pointer, %r11 = frame pointer
+Prologue
+    stm %r6,%r15,24(%r15)
+    ahi %r15,-nn
+Call
+    l %r1,<printf>
+    basr %r14,%r1
+Epilogue
+    l %r4,nn+56(%r15)
+    lm %r6,%r15,nn+24(%r15)
+    br %r4
+==========================
+
+========== s390x ==========
+Prologue
+    stmg %r6,%r15,48(%r15)
+    aghi %r15,-nn
+Call
+    brasl %r14,printf
+Epilogue
+    lg %r4,nn+112(%r15)
+    lmg %r6,%r15,nn+48(%r15)
+    br %r4
+==========================
+
+If "Can concatenate?" is N, the __va_alist must contain room (iarg[] or regarg[])
+for the values of the general-purpose argument registers.
+
