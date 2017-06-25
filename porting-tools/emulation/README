@@ -1,0 +1,75 @@
+Emulating some porting targets
+==============================
+
+For testing libffcall on target platforms, you need access to a
+machine of this target:
+  - either a physical machine (thanks to the several hosters that help me
+    by offering such access),
+  - or an emulated machine or environment.
+
+For the emulation, let's assume the actual hardware is x86_64 based
+(like most PCs, laptops, and servers nowadays).
+
+x86 targets
+-----------
+
+Emulation of an i386 or x86_64 is possible with near-native speed using
+KVM, Xen, VirtualBox, VMware.
+  - I use VirtualBox because it provides good speed and a decent GUI.
+  - I don't use KVM nor Xen because I fear the effort of configurating it.
+  - I don't use VMware because there are long-standing unresolved allegations
+    that the (closed-source!) VMware code violates the GPL of the Linux kernel.
+    https://sfconservancy.org/copyleft-compliance/vmware-lawsuit-faq.html
+
+Installing such targets involves the following steps:
+  - Download the installation ISO CD/DVD image.
+  - Create a new VM in e.g. VirtualBox.
+  - Boot it with the specific ISO image "in" the virtual CD/DVD ROM device.
+  - Follow the installation instructions for the guest OS.
+  - Configure the network card so that you can access package repositories
+    on the internet from within the VM.
+  - Install development tools (gcc, gdb, emacs, vim, etc.) using the
+    package system of the guest OS.
+
+Non-x86 targets
+---------------
+
+Emulation of other CPUs is possible using QEMU. The speed is reasonable;
+it is roughly like the speed of real hardware in 1995-2000. That is, you
+need to wait a couple of minutes for a complete
+  $ ./configure && make && make check
+of libffcall.
+
+An article about this approach:
+  - "Developing for non-x86 targets using QEMU", by Rob Landley and Mark Miller
+    https://landley.net/aboriginal/presentation.html
+
+With QEMU I can build an emulated GNU/Linux environment for the following
+CPUs:
+  - mips, mips64
+  - sparc, sparc64
+  - alpha
+  - arm (armel, armelhf)
+  - arm64
+  - powerpc, powerpc64, powerpc64le
+  - s390x
+
+The CPUs that I cannot emulate this way are
+  - m68k (but possibly use https://github.com/vivier/qemu-m68k ?)
+  - hppa (but possibly use hppa-linux emulation in QEMU 2.9 ?)
+  - ia64
+
+Other emulators than QEMU exist; see the article
+  - "Virtual machines" by Nelson Beebe
+    http://www.math.utah.edu/~beebe/vm.html
+but they don't have the ease of installation and configuration that QEMU has.
+
+Installing the QEMU target machines involves the following steps:
+  - Install a recent release of QEMU from source.
+  - Follow the specific instructions in each of the target platforms
+    (in this directory).
+These instructions are based on the prior work of Torbjörn Granlund in this
+ares: https://gmplib.org/~tege/qemu.html
+
+Also find a set of QEMU usage tricks in qemu-tricks.txt.
+

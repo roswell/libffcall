@@ -1,0 +1,93 @@
+Building a Linux/s390x guest machine using QEMU
+===============================================
+
+This guest machine implements the target platforms
+  - s390-linux  - compile with CC="gcc -m31"
+  - s390x-linux - compile with CC="gcc -m64"
+
+References:
+  - QEMU wiki page:
+    http://wiki.qemu.org/Documentation/Platforms/S390X
+  - Torbjörn Granlund's recipe:
+    https://gmplib.org/~tege/qemu.html#s390-debian
+
+Installation instructions
+-------------------------
+
+Use qemu-2.8.0
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.8.0/bin:$PATH
+
+Create empty disk:
+$ qemu-img create -f raw debian86.img 10G
+
+Pull kernel and initrd from the ftp server:
+$ mkdir boot-for-install
+$ (cd boot-for-install
+ wget ftp://ftp.de.debian.org/pub/debian/dists/jessie/main/installer-s390x/current/images/generic/kernel.debian
+ wget ftp://ftp.de.debian.org/pub/debian/dists/jessie/main/installer-s390x/current/images/generic/initrd.debian)
+
+Run installer:
+Which network hardware?
+  -netdev user,id=net0 -device virtio-net-ccw,netdev=net0,mac=52:54:00:71:f3:5c,devno=fe.0.0001
+Which disk hardware?
+  -drive file=debian86.img,if=none,format=raw,id=hd0 -device virtio-blk-ccw,drive=hd0
+$ common_args="-M s390-ccw-virtio -m 512 -drive file=debian86.img,if=none,format=raw,id=hd0 -device virtio-blk-ccw,drive=hd0 -monitor stdio -netdev user,id=net0 -device virtio-net-ccw,netdev=net0,mac=52:54:00:71:f3:5c,devno=fe.0.0001 -display gtk "
+$ qemu-system-s390x $common_args -kernel boot-for-install/kernel.debian -initrd boot-for-install/initrd.debian
+
+Network device: virtio
+IP address: 10.0.2.15
+Netmask: 255.255.255.0
+Gateway: 10.0.2.2
+Name server: 10.0.2.3
+
+Disk: vda
+Partition: yes
+Free space to partition: pri/log
+Create a new partition.
+  0.2 GB, Primary, /boot
+  9.5 GB, Primary, /
+  1 GB, Primary, swap area
+
+Once installation finished:
+$ sudo kpartx -av debian86.img
+$ sudo mount -r -t ext4 /dev/mapper/loop0p1 /mnt
+$ mkdir boot
+$ (cd /mnt && sudo tar cf - --exclude=lost+found .) | (cd boot && tar xvf -)
+$ sudo umount /mnt
+$ sudo kpartx -dv debian86.img
+
+Booting the installed disk
+--------------------------
+
+$ qemu-system-s390x $common_args -kernel boot/vmlinuz -initrd boot/initrd.img -append "root=/dev/vda2"
+
+Post-installation instructions
+------------------------------
+
+$ sudo bash
+# apt-get update
+# apt-get install make
+# apt-get install gcc binutils-doc glibc-doc libc-dbg gdb
+# apt-get install vim-nox vim-doc
+# apt-get install emacs-nox emacs24-el
+# apt-get install libc6-dev-s390
+
+Script that runs the guest VM
+-----------------------------
+
+#!/bin/sh
+PATH=$HOME/inst-qemu/2.8.1/bin:$PATH
+cd $HOME/vms/qemu/s390x
+machine_args="-M s390-ccw-virtio -m 512"
+disk_args="-drive file=debian86.img,if=none,format=raw,id=hd0 -device virtio-blk-ccw,drive=hd0"
+net_args="" # alternative: "-netdev user,id=net0 -device virtio-net-ccw,netdev=net0,mac=52:54:00:71:f3:5c,devno=fe.0.0001"
+if test "$1" = "-nographic"; then
+  display_args="-nographic"
+else
+  display_args="-display gtk -monitor stdio"
+fi
+common_args="$machine_args $disk_args $net_args $display_args"
+exec qemu-system-s390x $common_args -kernel boot/vmlinuz -initrd boot/initrd.img -append "root=/dev/vda2"
+
+Usage notes
+-----------

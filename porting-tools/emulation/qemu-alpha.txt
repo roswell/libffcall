@@ -1,0 +1,90 @@
+Building a Linux/alpha guest machine using QEMU
+===============================================
+
+This guest machine implements the alpha-linux target platform.
+
+References:
+  - QEMU wiki page:
+    http://wiki.qemu.org/Documentation/Platforms/Alpha
+  - Torbjörn Granlund's recipe:
+    https://gmplib.org/~tege/qemu.html#alpha-debian
+
+Installation instructions
+-------------------------
+
+Use qemu-2.8.0
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.8.0/bin:$PATH
+
+Create empty disk:
+$ qemu-img create -f raw debian5010.img 10G
+
+Pull kernel and initrd out of the installation CD:
+$ sudo mount -r -t iso9660 -o loop /os-install-media/Linux/Debian/debian-5010-alpha-netinst.iso /mnt
+$ mkdir boot-for-install
+$ cp -p /mnt/boot/* boot-for-install/
+$ sudo umount /mnt
+
+Run installer:
+Which network hardware?
+  none (defaults)
+Which disk hardware?
+  -drive file=debian5010.img,format=raw,id=hd0
+$ common_args="-M clipper -m 256 -drive file=debian5010.img,format=raw,id=hd0 -monitor stdio -display gtk"
+$ qemu-system-alpha $common_args -kernel boot-for-install/vmlinux -initrd boot-for-install/initrd.gz -drive file=/os-install-media/Linux/Debian/debian-5010-alpha-netinst.iso,if=ide,media=cdrom
+
+When asked for the mirror: enter manually
+  ftp.de.debian.org
+  /debian-archive/debian/   (instead of /debian/)
+
+Since kpartx won't work here:
+At the "Finishing the installation" screen, save the contents of the boot partition:
+  - Go back
+  - Execute a shell
+  - mount -t proc proc /target/proc
+    mount --rbind /sys /target/sys
+    mount --rbind /dev /target/dev
+    chroot /target bash
+    tar cvf /dev/boot.tar --exclude=lost+found boot
+    ftp www.haible.de
+    ftp> passive
+    ftp> put /dev/boot.tar ...
+Extract this boot partition here. Then:
+gunzip -c < boot/vmlinuz > boot/vmlinux
+
+Booting the installed disk
+--------------------------
+
+$ qemu-system-alpha $common_args -kernel boot/vmlinux -initrd boot/initrd.img -append "root=/dev/hda3"
+
+Post-installation instructions
+------------------------------
+
+login as root
+# apt-get update
+# apt-get install make
+# apt-get install gcc binutils-doc glibc-doc libc-dbg gdb
+# apt-get install vim-nox vim-doc
+# apt-get install emacs22-nox emacs22-el
+# apt-get install bzip2
+
+Script that runs the guest VM
+-----------------------------
+
+#!/bin/sh
+PATH=$HOME/inst-qemu/2.8.1/bin:$PATH
+cd $HOME/vms/qemu/alpha
+machine_args="-M clipper -m 256"
+disk_args="-drive file=debian5010.img,format=raw,id=hd0"
+net_args="" # equivalent to "-netdev user -netdev nic"
+if test "$1" = "-nographic"; then
+  display_args="-nographic"
+else
+  display_args="-display gtk -monitor stdio"
+fi
+common_args="$machine_args $disk_args $net_args $display_args"
+exec qemu-system-alpha $common_args -kernel boot/vmlinux -initrd boot/initrd.img -append "root=/dev/hda3"
+
+Usage notes
+-----------
+
+To shutdown: Use 'reboot' - because 'shutdown' only navigates among the runlevels.

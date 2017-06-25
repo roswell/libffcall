@@ -1,0 +1,119 @@
+Building a Linux/mips64 guest machine using QEMU
+================================================
+
+This guest machine implements the target platforms
+  - mips-linux    - compile with CC="gcc -mabi=32"
+  - mipsn32-linux - compile with CC="gcc -mabi=n32"
+  - mips64-linux  - compile with CC="gcc -mabi=64"
+
+References:
+  - QEMU wiki page:
+    http://wiki.qemu.org/Documentation/Platforms/MIPS
+  - Torbjörn Granlund's recipe:
+    https://gmplib.org/~tege/qemu.html#mips64-debian
+
+Installation instructions
+-------------------------
+
+Use qemu-2.8.0
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.8.0/bin:$PATH
+
+Create empty disk:
+$ qemu-img create -f raw debian87.img 10G
+
+Get kernel and initrd:
+$ mkdir boot-for-install
+$ (cd boot-for-install
+ wget ftp://ftp.de.debian.org/pub/debian/dists/jessie/main/installer-mips/current/images/malta/netboot/vmlinux-3.16.0-4-4kc-malta
+ wget ftp://ftp.de.debian.org/pub/debian/dists/jessie/main/installer-mips/current/images/malta/netboot/initrd.gz
+)
+
+Run installer:
+There is no graphics hardware!
+  Use -nographic, no -display option, and use Ctrl-a h to get help about the stdio multiplexing.
+  The terminal emulator window should be 24 lines high.
+Which network hardware?
+  Default is OK.
+Which disk hardware?
+  -drive file=debian87.img,format=raw,index=0
+$ common_args="-M malta -m 256 -nographic -drive file=debian87.img,format=raw,index=0"
+$ qemu-system-mips $common_args -kernel boot-for-install/vmlinux-3.16.0-4-4kc-malta -initrd boot-for-install/initrd.gz
+
+You get the message:
+"No boot loader installed
+You will need to boot manually with the /vmlinuz kernel on partition /dev/sda1
+and root=/dev/sda1 passed as kernel argument."
+
+Once installation finished:
+$ sudo kpartx -av debian87.img
+$ sudo mount -r -t ext4 /dev/mapper/loop1p1 /mnt
+$ mkdir boot
+$ (cd /mnt/boot && tar chf - --exclude=lost+found vmlinux-* initrd.img-*) | (cd boot && tar xvf -)
+$ sudo umount /mnt
+$ sudo kpartx -dv debian87.img
+
+Booting the installed disk
+--------------------------
+
+$ qemu-system-mips $common_args -kernel boot/vmlinux-3.16.0-4-4kc-malta -initrd boot/initrd.img-3.16.0-4-4kc-malta -append "root=/dev/sda1"
+
+Post-installation instructions
+------------------------------
+
+Networking is not working!
+It's a DNS problem. /etc/resolv.conf contains: "nameserver fec0::3"
+Replace it with: "nameserver 8.8.8.8"
+This works temporarily.
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=844592
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=844566
+Workaround: Disable IPv6 through
+echo 'net.ipv6.conf.all.disable_ipv6 = 1' > /etc/sysctl.d/01-disable-ipv6.conf
+See https://www.thomas-krenn.com/de/wiki/IPv6_deaktivieren
+
+$ sudo bash
+# apt-get update
+# apt-get install make
+# apt-get install gcc binutils-doc glibc-doc libc-dbg gdb
+# apt-get install vim-nox vim-doc
+# apt-get install emacs-nox emacs24-el
+
+Support for "gcc -mabi=n32" and "gcc -mabi=64":
+$ sudo bash
+# apt-get install libc6-dev-mipsn32 libc6-dev-mips64
+
+Install a 64-bit kernel:
+$ sudo bash
+# apt-cache pkgnames | sort | grep linux | grep image
+# apt-get install linux-image-5kc-malta
+
+Reboot:
+$ sudo shutdown now
+
+$ sudo kpartx -av debian87.img
+$ sudo mount -r -t ext4 /dev/mapper/loop1p1 /mnt
+$ mkdir boot
+$ (cd /mnt/boot && tar chf - --exclude=lost+found *-5kc-malta) | (cd boot && tar xvf -)
+$ sudo umount /mnt
+$ sudo kpartx -dv debian87.img
+
+Booting the installed disk, with a 64-bit kernel now:
+-----------------------------------------------------
+
+$ common_args="$common_args -cpu 5KEc"
+$ qemu-system-mips64 $common_args -kernel boot/vmlinux-3.16.0-4-5kc-malta -initrd boot/initrd.img-3.16.0-4-5kc-malta -append "root=/dev/sda1"
+
+Script that runs the guest VM
+-----------------------------
+
+#!/bin/sh
+PATH=$HOME/inst-qemu/2.8.0/bin:$PATH
+cd $HOME/vms/qemu/mips64eb
+machine_args="-M malta -cpu 5KEc -m 256 -nographic"
+disk_args="-drive file=debian87.img,format=raw,index=0"
+net_args="" # equivalent to "-netdev user -netdev nic"
+display_args=""
+common_args="$machine_args $disk_args $net_args $display_args"
+exec qemu-system-mips64 $common_args -kernel boot/vmlinux-3.16.0-4-5kc-malta -initrd boot/initrd.img-3.16.0-4-5kc-malta -append "root=/dev/sda1"
+
+Usage notes
+-----------

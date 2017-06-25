@@ -1,0 +1,86 @@
+Building a Linux/powerpc64 guest machine using QEMU
+===================================================
+
+These guest machines implements the target platforms:
+  - powerpc64-elfv2-linux
+
+References:
+  - QEMU wiki page:
+    http://wiki.qemu.org/Documentation/Platforms/POWER
+  - Torbjörn Granlund's recipe:
+    https://gmplib.org/~tege/qemu.html#ppc64-debian
+
+Installation instructions
+-------------------------
+
+Use qemu-2.8.0
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.8.0/bin:$PATH
+
+Create empty disk:
+$ qemu-img create -f raw debian86.img 10G
+
+Run installer:
+Which CPU? There are more than 300!!
+  -cpu POWER8
+Which network hardware?
+  default
+Which disk hardware?
+  -drive file=debian86.img,if=scsi,format=raw,index=0
+$ common_args="-M pseries -cpu POWER8 -m 512 -drive file=debian86.img,if=scsi,format=raw,index=0 -display gtk"
+$ qemu-system-ppc64 $common_args -cdrom /os-install-media/Linux/Debian/debian-8.6.0-ppc64el-netinst.iso
+
+Just before the end of the installation:
+Go back.
+Start a shell.
+# mount -t proc proc /target/proc
+# mount --rbind /sys /target/sys
+# mount --rbind /dev /target/dev
+# chroot /target bash
+# tar cf - boot | ssh bruno@10.0.2.2 'cat > /tmp/boot.tar'
+
+Once installation finished:
+
+Booting the installed disk
+--------------------------
+
+$ qemu-system-ppc64 $common_args
+
+Post-installation instructions
+------------------------------
+
+Networking is not working!
+It's a DNS problem. /etc/resolv.conf contains: "nameserver fec0::3"
+Replace it with: "nameserver 8.8.8.8"
+This works temporarily.
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=844592
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=844566
+Workaround: Disable IPv6 through
+echo 'net.ipv6.conf.all.disable_ipv6 = 1' > /etc/sysctl.d/01-disable-ipv6.conf
+See https://www.thomas-krenn.com/de/wiki/IPv6_deaktivieren
+
+$ sudo bash
+# apt-get update
+# apt-get install make
+# apt-get install gcc binutils-doc glibc-doc libc-dbg gdb
+# apt-get install vim-nox vim-doc
+# apt-get install emacs-nox emacs24-el
+
+Script that runs the guest VM
+-----------------------------
+
+#!/bin/sh
+PATH=$HOME/inst-qemu/2.8.1/bin:$PATH
+cd $HOME/vms/qemu/ppc64el
+machine_args="-M pseries -cpu POWER8 -m 512"
+disk_args="-drive file=debian86.img,if=scsi,format=raw,index=0"
+net_args=""
+if test "$1" = "-nographic"; then
+  display_args="-nographic"
+else
+  display_args="-display gtk -monitor stdio"
+fi
+common_args="$machine_args $disk_args $net_args $display_args"
+exec qemu-system-ppc64 $common_args
+
+Usage notes
+-----------

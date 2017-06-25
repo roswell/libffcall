@@ -1,0 +1,102 @@
+Building a Linux/arm64 guest machine using QEMU
+===============================================
+
+This guest machine implements the arm64-linux target platform.
+
+References:
+  - QEMU wiki page:
+    http://wiki.qemu.org/Documentation/Platforms/ARM
+  - Torbjörn Granlund's recipe:
+    https://gmplib.org/~tege/qemu.html#arm64-debian
+
+
+Installation instructions
+-------------------------
+
+Use qemu-2.8.0
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.8.0/bin:$PATH
+
+Create empty disk:
+$ qemu-img create -f raw debian86.img 10G
+
+$ mkdir boot-for-install
+$ (cd boot-for-install
+ wget ftp://ftp.de.debian.org/pub/debian/dists/jessie/main/installer-arm64/current/images/netboot/debian-installer/arm64/linux
+ wget ftp://ftp.de.debian.org/pub/debian/dists/jessie/main/installer-arm64/current/images/netboot/debian-installer/arm64/initrd.gz
+)
+
+Run installer:
+Which CPU? Cf.
+  https://www.debian.org/releases/stable/arm64/ch02s01.html.en#arm64-supported-platforms
+  https://en.wikipedia.org/wiki/Comparison_of_ARMv8-A_cores
+Which network hardware?
+  default
+  hub 0
+   \ hub0port1: user.0: index=0,type=user,net=10.0.2.0,restrict=off
+   \ hub0port0: virtio-net-pci.0: index=0,type=nic,model=virtio-net-pci,macaddr=52:54:00:12:34:56
+  is not recognized. Instead:
+  -netdev type=user,id=net0 -device virtio-net-device,netdev=net0,mac=52:54:00:12:34:56
+Which disk hardware?
+  use virtual driver:
+  -drive file=debian86.img,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
+$ common_args="-M virt -cpu cortex-a53 -m 256 -drive file=debian86.img,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev type=user,id=net0 -device virtio-net-device,netdev=net0,mac=52:54:00:12:34:56 -nographic"
+$ qemu-system-aarch64 $common_args -kernel boot-for-install/linux -initrd boot-for-install/initrd.gz
+
+You get the message:
+"No boot loader installed
+You will need to boot manually with the /boot/vmlinuz kernel on partition /dev/vda1
+and root=/dev/vda2 passed as kernel argument."
+
+Once installation finished:
+$ sudo kpartx -av debian86.img
+$ sudo mount -r -t ext2 /dev/mapper/loop2p1 /mnt
+$ mkdir boot
+$ (cd /mnt && tar cf - --exclude=lost+found .) | (cd boot && tar xvf -)
+$ sudo umount /mnt
+$ sudo kpartx -dv debian86.img
+
+Booting the installed disk
+--------------------------
+
+$ qemu-system-aarch64 $common_args -kernel boot/vmlinuz -initrd boot/initrd.img -append "root=/dev/vda2"
+
+Post-installation instructions
+------------------------------
+
+Networking is not working!
+It's a DNS problem. /etc/resolv.conf contains: "nameserver fec0::3"
+Replace it with: "nameserver 8.8.8.8"
+This works temporarily.
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=844592
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=844566
+Workaround: Disable IPv6 through
+# echo 'net.ipv6.conf.all.disable_ipv6 = 1' > /etc/sysctl.d/01-disable-ipv6.conf
+See https://www.thomas-krenn.com/de/wiki/IPv6_deaktivieren
+
+$ sudo bash
+# apt-get update
+# apt-get install make
+# apt-get install gcc binutils-doc glibc-doc libc-dbg gdb
+# apt-get install vim-nox vim-doc
+# apt-get install emacs-nox emacs24-el
+
+Script that runs the guest VM
+-----------------------------
+
+#!/bin/sh
+PATH=$HOME/inst-qemu/2.8.1/bin:$PATH
+cd $HOME/vms/qemu/arm64
+machine_args="-M virt -cpu cortex-a53 -m 256"
+disk_args="-drive file=debian86.img,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0"
+net_args="-netdev type=user,id=net0 -device virtio-net-device,netdev=net0,mac=52:54:00:12:34:56"
+if test "$1" = "-nographic"; then
+  display_args="-nographic"
+else
+  display_args="-display gtk -monitor stdio"
+fi
+common_args="$machine_args $disk_args $net_args $display_args"
+exec qemu-system-aarch64 $common_args -kernel boot/vmlinuz -initrd boot/initrd.img -append "root=/dev/vda2"
+
+Usage notes
+-----------
+

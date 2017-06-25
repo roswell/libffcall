@@ -1,0 +1,83 @@
+Generic QEMU tricks
+===================
+
+Some tricks regarding the configuration of a QEMU target machine.
+
+Display
+-------
+
+* "-display gtk" is comfortable.
+* "-display vnc:14" is also possible, then view the screen with
+  "krdc vnc://localhost:14"
+* On some machines (e.g. mips), there is no graphics card, therefore you don't
+  see anything in the display; the only meaningful option is "-nographic".
+
+Monitor
+-------
+
+The option "-monitor stdio" is nice, so that I can see the kernel output in
+the window.
+But when it is not possible (due to -nographic option):
+
+C-a h    print this help
+C-a x    exit emulator
+C-a s    save disk data back to file (if -snapshot)
+C-a t    toggle console timestamps
+C-a b    send break (magic sysrq)
+C-a c    switch between console and monitor
+C-a C-a  sends C-a
+
+Networking
+----------
+
+The two main kinds of network interface are "-netdev user" and "-netdev tap".
+* "-netdev user" does not require any configuration. The drawback is that
+  the target machine does not accept incoming network connections. I.e.
+  no ssh from the host to the guest, only ssh from the guest to the host.
+* "-netdev tap" virtually clumps the guest's ethernet card on the host's
+  ethernet card. The drawbacks are:
+    - It does not work when the host is connecting to the internet through
+      wifi, only if the host is connecting through an ethernet card.
+    - It requires configuration.
+
+Tips for "-netdev user":
+* Don't specify a network interface. The default is
+  (POSSIBLY equivalent to SOMETHING LIKE
+   "-netdev user,id=net0 -device e1000,netdev=net0,mac=52:54:00:12:34:56")
+    hub 0
+     \ hub0port1: user.0: index=0,type=user,net=10.0.2.0,restrict=off
+     \ hub0port0: e1000.0: index=0,type=nic,model=e1000,macaddr=52:54:00:12:34:56
+  which produces an outgoing connection.
+* The built-in router DNS server in QEMU produce this network topology:
+    guest ip address = 10.0.2.15 (assigned by DHCP server)
+    host = gateway = DHCP server = 10.0.2.2
+    DNS server = 10.0.2.3
+    SMB server (optional) = 10.0.2.4
+  and I can access not only the internet, but also the host:
+    $ ssh bruno@10.0.2.2
+  The topology is like this:
+    10.0.2.15 -> local network 10.0.2.*
+                 gateway 10.0.2.2       -> local network of my host
+                                           gateway of my host       -> internet
+
+Tips for "-netdev tap":
+* Give each machine its own macaddr, in case I want to run them at the same
+  time.
+
+Useful monitor commands:
+  info network  -- show the network state
+  info usernet  -- show user network stack connection states
+
+Safe rebooting
+--------------
+
+On Linux, use "sudo reboot".
+On BSD systems, logout, login as root and do "reboot".
+Don't use "shutdown" or "halt" - because in some systems, this only switches
+to a different runlevel and does not reboot.
+
+When rebooting, you see a flood of kernel messages, each prefixed with a
+number [xxxxxx.yyy], which is the number of seconds since boot. When these
+numbers have restarted near 0, a new boot is in progress. It's safe to
+turn off the machne then (within ca. 3 seconds of boot start).
+

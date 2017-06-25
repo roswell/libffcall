@@ -1,3 +1,8 @@
+2017-06-25  Bruno Haible  <bruno@clisp.org>
+
+	Add doc about emulation of target platforms.
+	* porting-tools/emulation: New directory.
+
 2017-06-24  Bruno Haible  <bruno@clisp.org>
 
 	s390: Simplify code.

@@ -1,0 +1,221 @@
+Building a Linux/sparc64 guest machine using QEMU
+=================================================
+
+This guest machine implements the target platforms
+  - sparc-linux   - compile with CC="gcc -m32"
+  - sparc64-linux - compile with CC="gcc -m64"
+
+References:
+  - QEMU wiki page:
+    http://wiki.qemu.org/Documentation/Platforms/SPARC
+  - Torbjörn Granlund's recipe:
+    https://gmplib.org/~tege/qemu.html#sparc64-debian
+
+Installation instructions
+-------------------------
+
+Use qemu-2.8.0
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.8.0/bin:$PATH
+
+Create empty disk:
+$ qemu-img create -f raw debian90.img 10G
+
+Get kernel and initrd:
+$ mkdir boot-for-install
+$ (cd boot-for-install
+ wget ftp://ftp.de.debian.org/pub/debian/dists/wheezy/main/installer-sparc/current/images/cdrom/vmlinuz-3.2.0-4-sparc64
+ wget ftp://ftp.de.debian.org/pub/debian/dists/wheezy/main/installer-sparc/current/images/cdrom/initrd.gz
+)
+
+Run installer:
+There is no graphics hardware!
+  Use -nographic, no -display option, and use Ctrl-a h to get help about the stdio multiplexing.
+  The terminal emulator window should be 24 lines high.
+Which network hardware?
+  Default is not OK.
+  hub 0
+   \ hub0port1: user.0: index=0,type=user,net=10.0.2.0,restrict=off
+   \ hub0port0: ne2k_pci.0: index=0,type=nic,model=ne2k_pci,macaddr=52:54:00:12:34:56
+  Instead use: -netdev user,id=hostnet0 -device virtio-net-pci,disable-modern=off,disable-legacy=off,disable-modern=on,netdev=hostnet0
+  virtio-net-pci.0: index=0,type=nic,model=virtio-net-pci,macaddr=52:54:00:12:34:56
+   \ hostnet0: index=0,type=user,net=10.0.2.0,restrict=off
+Which disk hardware?
+  -drive file=debian60.img,format=raw,index=0
+$ common_args="-m 512 -nographic -drive file=debian90.img,format=raw,index=0"
+
+Download https://people.debian.org/~glaubitz/debian-cd/2016-05-04/debian-9.0-sparc64-NETINST-1.iso
+
+$ qemu-system-sparc64 $common_args -cdrom /os-install-media/Linux/Debian/debian-9.0-sparc64-NETINST-1.iso -boot d
+
+But I cannot boot. "Cannot find /etc/silo.conf" Solution:
+- Make a boot partition at the beginning of the disk, max. 1 GB large.
+  See http://www.justskins.com/forums/fun-installing-debian-in-219272.html
+
+Partitioning:
+  Manual.
+  - /dev/sda1: 250 MB, ext2, /boot, bootable: true
+  - /dev/sda2: 9.5 GB, ext4, /
+  - Rest: swap
+
+# fdisk -l
+Disk /dev/sda: 10 GiB, 10737418240 bytes, 20971520 sectors
+Geometry: 255 heads, 63 sectors/track, 1305 cylinders
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: sun
+
+Device        Start      End  Sectors   Size Id Type         Flags
+/dev/sda1         0   481949   481950 235.3M  1 Boot              
+/dev/sda2    481950 19037024 18555075   8.9G 83 Linux native      
+/dev/sda3         0 20964824 20964825    10G  5 Whole disk        
+/dev/sda4  19037025 20964824  1927800 941.3M 82 Linux swap        
+
+# ls -l `find /dev/ -type l` | grep sda1
+lrwxrwxrwx    1 root     root             7 Jan 24 16:25 /dev/block/8:1 -> ../sda1
+lrwxrwxrwx    1 root     root            10 Jan 24 16:25 /dev/disk/by-id/ata-QEMU_HARDDISK_QM00001-part1 -> ../../sda1
+lrwxrwxrwx    1 root     root            10 Jan 24 16:25 /dev/disk/by-path/platform-ffe2d650-pci-0000:00:05.0-ata-1-part1 -> ../../sda1
+
+# ls -l /target/boot
+-rw-r--r--    1 root     root       2245942 Apr 30  2016 System.map-4.5.0-2-sparc64
+lrwxrwxrwx    1 root     root             1 Jan 24 17:06 boot -> .
+-rw-r--r--    1 root     root        126918 Apr 30  2016 config-4.5.0-2-sparc64
+lrwxrwxrwx    1 root     root             1 Jan 24 17:06 etc -> .
+-rw-r--r--    1 root     root          1024 Jan 22  2016 fd.b
+-rw-r--r--    1 root     root           512 Jan 22  2016 first.b
+-rw-r--r--    1 root     root          1024 Jan 22  2016 generic.b
+-rw-r--r--    1 root     root           800 Jan 22  2016 ieee32.b
+lrwxrwxrwx    1 root     root            26 Jan 24 16:46 initrd.img -> initrd.img-4.5.0-2-sparc64
+-rw-r--r--    1 root     root      16041790 Jan 24 16:48 initrd.img-4.5.0-2-sparc64
+-rw-r--r--    1 root     root          6752 Jan 22  2016 isofs.b
+drwx------    2 root     root         12288 Jan 24 16:25 lost+found
+-rw-r--r--    1 root     root          7680 Jan 24 17:06 old.b
+-rw-r--r--    1 root     root         53760 Jan 24 17:06 second.b
+-rw-r--r--    1 root     root           172 Jan 24 17:06 silo.conf
+-rw-r--r--    1 root     root         51437 Jan 22  2016 silotftp.b
+-rw-r--r--    1 root     root           512 Jan 22  2016 ultra.b
+lrwxrwxrwx    1 root     root            23 Jan 24 16:46 vmlinuz -> vmlinuz-4.5.0-2-sparc64
+-rw-r--r--    1 root     root       3526042 Apr 30  2016 vmlinuz-4.5.0-2-sparc64
+
+# mount
+/dev/sda2 on / type ext4 (rw,relatime,errors=remount-ro,data=ordered)
+/dev/sda1 on /boot type ext2 (rw,relatime,block_validity,barrier,user_xattr,acl)
+...
+
+Booting the installed disk
+--------------------------
+
+$ qemu-system-sparc64 $common_args -vga none -boot c
+
+Post-installation instructions
+------------------------------
+
+The network is still not available.
+
+# ifconfig -a
+enp0s4: flags=4098<BROADCAST,MULTICAST>  mtu 1500
+        ether 52:54:00:12:34:56  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1  (Local Loopback)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+# ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp0s4: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:12:34:56 brd ff:ff:ff:ff:ff:ff
+
+# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp0s4: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+    link/ether 52:54:00:12:34:56 brd ff:ff:ff:ff:ff:ff
+
+# lspci
+00:01.0 PCI bridge: Oracle/SUN Simba Advanced PCI Bridge (rev 11)
+00:01.1 PCI bridge: Oracle/SUN Simba Advanced PCI Bridge (rev 11)
+00:02.0 Bridge: Oracle/SUN EBUS (rev 01)
+00:03.0 IDE interface: Silicon Image, Inc. PCI0646 (rev 07)
+00:04.0 Ethernet controller: Red Hat, Inc Virtio network device
+
+# ls -l /sys/class/net/
+total 0
+lrwxrwxrwx 1 root root 0 Jan 28 02:35 enp0s4 -> ../../devices/root/ffe2d650/pci0000:00/0000:00:04.0/virtio0/net/enp0s4
+lrwxrwxrwx 1 root root 0 Jan 28 02:35 lo -> ../../devices/virtual/net/lo
+
+# cat /proc/net/dev
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+enp0s4:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0
+
+# lsmod | grep virt
+virtio_net             24168  0
+virtio_pci             14583  0
+virtio_ring            12099  2 virtio_net,virtio_pci
+virtio                  6188  2 virtio_net,virtio_pci
+
+# cat -n /etc/network/interfaces
+     1  # This file describes the network interfaces available on your system
+     2  # and how to activate them. For more information, see interfaces(5).
+     3
+     4  source /etc/network/interfaces.d/*
+     5
+     6  # The loopback network interface
+     7  auto lo
+     8  iface lo inet loopback
+     9
+    10  # The primary network interface
+    11  allow-hotplug enp0s5
+    12  iface enp0s5 inet dhcp
+
+Fix: Edit /etc/network/interfaces, to mention enp0s4 instead of enp0s5.
+
+Networking is not working!
+It's a DNS problem. /etc/resolv.conf contains: "nameserver fec0::3"
+Replace it with: "nameserver 8.8.8.8"
+This works temporarily.
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=844592
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=844566
+Workaround: Disable IPv6 through
+# echo 'net.ipv6.conf.all.disable_ipv6 = 1' > /etc/sysctl.d/01-disable-ipv6.conf
+See https://www.thomas-krenn.com/de/wiki/IPv6_deaktivieren
+
+sudo bash
+Edit /etc/apt/sources.list, see https://wiki.debian.org/Sparc64
+# apt-get update
+# apt-get install make
+# apt-get install gcc binutils-doc glibc-doc libc-dbg gdb
+# apt-get install vim-nox vim-doc
+# apt-get install emacs-nox emacs24-el
+# apt-get install libc6-dev-sparc
+
+Script that runs the guest VM
+-----------------------------
+
+#!/bin/sh
+PATH=$HOME/inst-qemu/2.8.0/bin:$PATH
+cd $HOME/vms/qemu/sparc64
+machine_args="-m 512 -vga none"
+disk_args="-drive file=debian90.img,format=raw,index=0"
+net_args="-netdev user,id=hostnet0 -device virtio-net-pci,disable-modern=off,disable-legacy=off,disable-modern=on,netdev=hostnet0"
+display_args="-nographic"
+common_args="$machine_args $disk_args $net_args $display_args"
+exec qemu-system-sparc64 $common_args -boot c
+
+Usage notes
+-----------
