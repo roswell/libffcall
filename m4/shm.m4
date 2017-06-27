@@ -30,7 +30,8 @@ AC_DEFUN([CL_SHM],
     # This test is from Marcus Daniels
     AC_CACHE_CHECK([for working shared memory], [cl_cv_sys_shm_works],
       [AC_TRY_RUN(
-         [#include <sys/types.h>
+         [#include <stdlib.h>
+          #include <sys/types.h>
           #include <sys/ipc.h>
           #include <sys/shm.h>
           /* try attaching a single segment to multiple addresses */

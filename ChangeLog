@@ -1,3 +1,8 @@
+2017-06-27  Bruno Haible  <bruno@clisp.org>
+
+	build: Fix warning in autoconf test.
+	* m4/shm.m4 (CL_SHM): Include <stdlib.h>, to declare exit().
+
 2017-06-25  Bruno Haible  <bruno@clisp.org>
 
 	Add doc about ABIs and calling conventions.
