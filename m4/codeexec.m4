@@ -34,6 +34,11 @@ AC_DEFUN([FFCALL_CODEEXEC],
          dnl code.
          ffcall_cv_codeexec="irrelevant"
          ;;
+       arm64--freebsd*)
+         dnl On this platform, malloc()ed memory is not executable, and the
+         dnl test program loops endlessly.
+         ffcall_cv_codeexec=no
+         ;;
        *)
          AC_TRY_RUN(GL_NOCRASH
            [#include <sys/types.h>

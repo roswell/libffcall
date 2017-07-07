@@ -1,3 +1,10 @@
+2017-07-07  Bruno Haible  <bruno@clisp.org>
+
+	build: Avoid a hanging configure test on FreeBSD/arm64.
+	Seen with FreeBSD 11.1-RC1 on arm64 (under qemu 2.9.0).
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Avoid running the test on
+	FreeBSD/arm64.
+
 2017-06-27  Bruno Haible  <bruno@clisp.org>
 
 	build: Fix warning in autoconf test.
