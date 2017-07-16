@@ -57,6 +57,11 @@ libtool-imported-files : force
 	  fi; \
 	done
 	rm -rf libtool.tmp
+	: "Allow building statically linked binaries, through LDFLAGS=-static ."
+	wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-allow-static.diff https://lists.gnu.org/archive/html/bug-libtool/2017-07/txt7Q9LRXv6HS.txt
+	chmod u+w build-aux/ltmain.sh
+	patch build-aux/ltmain.sh < libtool-allow-static.diff
+	rm -f libtool-allow-static.diff
 
 .PHONY : libtool-clean
 libtool-clean : force
