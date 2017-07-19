@@ -59,7 +59,7 @@ __builtin_avcall(av_alist* l)
   __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
   int arglen = l->aptr - l->args;
   unsigned int fanum = l->fanum;
-  int iargwords = (arglen-l->fargwords)<5?arglen-l->fargwords:5;
+  int iargwords = l->ianum<5 ? l->ianum : 5;
   __avword i;
 
   for (i = iargwords; i < arglen; i++) /* push function args onto stack */

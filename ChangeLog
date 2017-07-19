@@ -1,3 +1,12 @@
+2017-07-19  Bruno Haible  <bruno@clisp.org>
+
+	s390: Simplify avcall code.
+	* avcall/avcall.h.in (av_alist, __av_start1, __av_start_struct4,
+	__av_word, __av_longlong, av_float, av_double,
+	__av_struct_rightadjusted, __av_struct) [s390]: Use 'ianum' field
+	instead of 'fargwords' field.
+	* avcall/avcall-s390.c (__builtin_avcall): Update accordingly.
+
 2017-07-16  Bruno Haible  <bruno@clisp.org>
 
 	Allow building statically linked binaries, through LDFLAGS="-static".
