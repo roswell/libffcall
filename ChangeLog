@@ -1,5 +1,12 @@
 2017-07-19  Bruno Haible  <bruno@clisp.org>
 
+	s390: Make avcall code more robust.
+	* avcall/avcall-s390.c (STACK_OFFSET): Remove macro.
+	(__builtin_avcall): Don't rely on a particular stack frame layout
+	produced by GCC. Use __builtin_alloca instead.
+
+2017-07-19  Bruno Haible  <bruno@clisp.org>
+
 	s390: Make avcall code more similar to s390x, arm64, x86_64 cases.
 	* avcall/avcall.h.in (av_alist, __av_start_struct4, __av_word, av_long,
 	av_ulong, av_ptr, __av_longlong, __av_struct) [s390]: Use iargs[] array

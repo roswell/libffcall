@@ -37,8 +37,6 @@
   ----------------------------------------------------------------------*/
 #include "avcall.h.in"
 
-#define STACK_OFFSET 24
-
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 register float  farg1	__asm__("f0");
@@ -55,8 +53,7 @@ __builtin_avcall(av_alist* l)
   register float	fret	__asm__("f0");
   register double	dret	__asm__("f0");
 
-  __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
-  __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
+  __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;
   unsigned int fanum = l->fanum;
   __avword i;
