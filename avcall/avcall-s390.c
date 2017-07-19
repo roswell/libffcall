@@ -59,11 +59,10 @@ __builtin_avcall(av_alist* l)
   __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
   int arglen = l->aptr - l->args;
   unsigned int fanum = l->fanum;
-  int iargwords = l->ianum<5 ? l->ianum : 5;
   __avword i;
 
-  for (i = iargwords; i < arglen; i++) /* push function args onto stack */
-   argframe[i-iargwords] = l->args[i];
+  for (i = 0; i < arglen; i++)		/* push function args onto stack */
+   argframe[i] = l->args[i];
 
   /* Put upto 2 floating-point args into registers. */
   if (fanum >= 1) {
@@ -76,8 +75,8 @@ __builtin_avcall(av_alist* l)
   }
 
 				/* call function, pass 5 args in registers */
-  i = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3],
-		 l->args[4]);
+  i = (*l->func)(l->iargs[0], l->iargs[1], l->iargs[2], l->iargs[3],
+		 l->iargs[4]);
 
   /* save return value */
   if (l->rtype == __AVvoid) {

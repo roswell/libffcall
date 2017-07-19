@@ -1,5 +1,14 @@
 2017-07-19  Bruno Haible  <bruno@clisp.org>
 
+	s390: Make avcall code more similar to s390x, arm64, x86_64 cases.
+	* avcall/avcall.h.in (av_alist, __av_start_struct4, __av_word, av_long,
+	av_ulong, av_ptr, __av_longlong, __av_struct) [s390]: Use iargs[] array
+	for the first 5 general-purpose argument words, like on s390x.
+	(__av_struct_rightadjusted) [s390]: Remove macro.
+	* avcall/avcall-s390.c (__builtin_avcall): Update accordingly.
+
+2017-07-19  Bruno Haible  <bruno@clisp.org>
+
 	s390: Simplify avcall code.
 	* avcall/avcall.h.in (av_alist, __av_start1, __av_start_struct4,
 	__av_word, __av_longlong, av_float, av_double,
