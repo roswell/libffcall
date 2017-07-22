@@ -440,10 +440,13 @@ typedef struct
   /* store the integer arguments in an extra array */
   unsigned int		ianum;
   __avword		iargs[__AV_IARG_NUM];
+#define __AV_FARG_NUM 8
+#else
+#define __AV_FARG_NUM 13
 #endif
   /* store the floating-point arguments in an extra array */
   double*		faptr;
-  double		fargs[13];
+  double		fargs[__AV_FARG_NUM];
 #endif
 #if (defined(__s390__) && !defined(__s390x__))
 #define __AV_IARG_NUM 5
@@ -1198,7 +1201,7 @@ typedef struct
 
 #if defined(__powerpc_aix__)
 
-/* Up to 13 float or double non-varargs args can be passed in
+/* Up to __AV_FARG_NUM float or double non-varargs args can be passed in
  * float registers, but we also push them into the corresponding int
  * registers in case of varargs.
  */
@@ -1208,7 +1211,7 @@ typedef struct
    ? -1 :								\
    ((LIST).aptr++,							\
     ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
-    (LIST).faptr < &(LIST).fargs[13] && (*(LIST).faptr++ = (double)(float)(VAL)), \
+    (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 
 #define av_double(LIST,VAL)						\
@@ -1218,19 +1221,19 @@ typedef struct
     (LIST).tmp._double = (double)(VAL),					\
     (LIST).aptr[-2] = (LIST).tmp.words[0],				\
     (LIST).aptr[-1] = (LIST).tmp.words[1],				\
-    (LIST).faptr < &(LIST).fargs[13] && (*(LIST).faptr++ = (LIST).tmp._double), \
+    (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (LIST).tmp._double), \
     0))
 
 #endif
 
 #if defined(__powerpc_sysv4__)
 
-/* Up to 8 float or double non-varargs args can be passed in
+/* Up to __AV_FARG_NUM float or double non-varargs args can be passed in
  * float registers, without occupying space in the general registers.
  */
 
 #define av_float(LIST,VAL)						\
-  ((LIST).faptr < &(LIST).fargs[8]					\
+  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
    ? ((*(LIST).faptr++ = (double)(float)(VAL)), 0)			\
    : ((LIST).aptr >= __av_eptr(LIST)					\
       ? -1 :								\
@@ -1239,7 +1242,7 @@ typedef struct
        0)))
 
 #define av_double(LIST,VAL)						\
-  ((LIST).faptr < &(LIST).fargs[8]					\
+  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
    ? ((*(LIST).faptr++ = (double)(VAL)), 0)				\
    : ((LIST).aptr + 2 > __av_eptr(LIST)					\
       ? -1 :								\
@@ -1253,7 +1256,7 @@ typedef struct
 
 #if defined(__powerpc64__)
 
-/* Up to 13 float or double non-varargs args can be passed in
+/* Up to __AV_FARG_NUM float or double non-varargs args can be passed in
  * float registers, but we also push them into the corresponding int
  * registers in case of varargs.
  */
@@ -1264,7 +1267,7 @@ typedef struct
    ? -1 :								\
    ((LIST).aptr++,							\
     ((float*)(LIST).aptr)[(LIST).flags & __AV_AIXCC_FLOAT_ARGS ? -2 : -1] = (float)(VAL), \
-    (LIST).faptr < &(LIST).fargs[13] && (*(LIST).faptr++ = (double)(float)(VAL)), \
+    (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 #elif defined(_LITTLE_ENDIAN)
 #define av_float(LIST,VAL)						\
@@ -1272,7 +1275,7 @@ typedef struct
    ? -1 :								\
    ((LIST).aptr++,							\
     ((float*)(LIST).aptr)[-2] = (float)(VAL),				\
-    (LIST).faptr < &(LIST).fargs[13] && (*(LIST).faptr++ = (double)(float)(VAL)), \
+    (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 #else /* _BIG_ENDIAN */
 #define av_float(LIST,VAL)						\
@@ -1280,7 +1283,7 @@ typedef struct
    ? -1 :								\
    ((LIST).aptr++,							\
     ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
-    (LIST).faptr < &(LIST).fargs[13] && (*(LIST).faptr++ = (double)(float)(VAL)), \
+    (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 #endif
 
@@ -1289,7 +1292,7 @@ typedef struct
    ? -1 :								\
    ((LIST).aptr++,							\
     ((double*)(LIST).aptr)[-1] = (double)(VAL),				\
-    (LIST).faptr < &(LIST).fargs[13] && (*(LIST).faptr++ = (double)(VAL)), \
+    (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(VAL)), \
     0))
 
 #endif
