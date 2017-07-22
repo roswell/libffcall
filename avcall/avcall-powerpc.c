@@ -88,15 +88,16 @@ __builtin_avcall(av_alist* l)
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
   __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
   int arglen = l->aptr - l->args;
+  __avword i;
 #if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
   int farglen = 0;
-#else /* __powerpc_sysv4__ */
-  int farglen = l->faptr - l->fargs;
-#endif
-  __avword i;
 
   for (i = (8-farglen); i < arglen; i++) /* push function args onto stack */
     argframe[i-8+farglen] = l->args[i];
+#else /* __powerpc_sysv4__ */
+  for (i = 0; i < arglen; i++) /* push function args onto stack */
+    argframe[i] = l->args[i];
+#endif
 
   /* pass first 13 floating-point args in registers */
   arglen = l->faptr - l->fargs;
@@ -128,9 +129,15 @@ __builtin_avcall(av_alist* l)
   fargs2: farg2 = l->fargs[1];
   fargs1: farg1 = l->fargs[0];
   fargs0: ;
+
+#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
 				/* call function, pass 8 args in registers */
   i = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3],
 		 l->args[4], l->args[5], l->args[6], l->args[7]);
+#else /* __powerpc_sysv4__ */
+  i = (*l->func)(l->iargs[0], l->iargs[1], l->iargs[2], l->iargs[3],
+		 l->iargs[4], l->iargs[5], l->iargs[6], l->iargs[7]);
+#endif
 
   /* save return value */
   if (l->rtype == __AVvoid) {

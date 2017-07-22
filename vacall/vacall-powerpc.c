@@ -102,9 +102,8 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 #if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
   list.aptr = (long)(&firstword - 8);
 #else /* __powerpc_sysv4__ */
-  list.aptr = (long)(&list.iarg[0]);
-  list.saptr = (long)(&firstword);
-  list.onstack = 0;
+  list.aptr = (long)(&firstword);
+  list.ianum = 0;
 #endif
   list.raddr = (void*)0;
   list.rtype = __VAvoid;

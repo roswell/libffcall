@@ -1,5 +1,24 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	powerpc: Fix a bug (failing tests f_f12i, f_f13i, d_d12i, d_d13i).
+	* avcall/avcall.h.in [__powerpc_sysv4__]: Store integer register
+	arguments in iargs[] and their count in ianum.
+	(__av_start1, __av_start_struct4, av_long, av_ulong, av_ptr,
+	__av_longlong, __av_struct): Update implementation accordingly.
+	* avcall/avcall-powerpc.c (__builtin_avcall): Update accordingly.
+	Ignore farglen in the arg copy loop.
+	* vacall/vacall.h.in (__va_alist, __va_start_struct2,
+	__va_arg_leftadjusted, __va_arg_rightadjusted, __va_arg_longlong,
+	va_arg_float, va_arg_double) [__powerpc_sysv4__]: Use 'ianum' field
+	instead of 'saptr', 'onstack' fields. Don't bump 'ianum' in
+	va_arg_float, va_arg_double.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-powerpc.c (__vacall): Update accordingly
+	* porting-tools/abis/stack-frame.txt: Fix information.
+	* NEWS: Mention the fix.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	powerpc: Simplify #if expressions.
 	* avcall/avcall.h.in (__powerpc_aix__, __powerpc_sysv4__): New macros.
 	Use them in #if expressions.

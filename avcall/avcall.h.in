@@ -435,6 +435,12 @@ typedef struct
 #endif
   __avword		args[__AV_ALIST_WORDS]; /* sizeof(double)-aligned */
 #if defined(__powerpc__) || defined(__powerpc64__)
+#if defined(__powerpc_sysv4__)
+#define __AV_IARG_NUM 8
+  /* store the integer arguments in an extra array */
+  unsigned int		ianum;
+  __avword		iargs[__AV_IARG_NUM];
+#endif
   /* store the floating-point arguments in an extra array */
   double*		faptr;
   double		fargs[13];
@@ -553,6 +559,7 @@ typedef struct
 #if defined(__powerpc_sysv4__)
 #define __av_start1(LIST)						\
    (LIST).aptr = &(LIST).args[0],					\
+   (LIST).ianum = 0,							\
    (LIST).faptr = &(LIST).fargs[0],                                     \
    (LIST).eptr = &(LIST).args[__AV_ALIST_WORDS],
 #endif
@@ -727,7 +734,7 @@ typedef struct
 #endif
 /* Return structure pointer is passed as first arg.
  */
-#if defined(__alpha__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__powerpc64__)
+#if defined(__alpha__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc_aix__) || defined(__powerpc64__)
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
    (*(LIST).aptr++ = (__avword)((LIST).raddr), 0)
 #endif
@@ -742,7 +749,7 @@ typedef struct
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
    (*(LIST).iaptr++ = (__avword)((LIST).raddr), 0)
 #endif
-#if defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
    ((LIST).iargs[(LIST).ianum++] = (__avword)((LIST).raddr), 0)
 #endif
@@ -799,7 +806,7 @@ typedef struct
 
 /* integer argument types */
 
-#if defined(__arm64__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define av_long(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
@@ -815,7 +822,7 @@ typedef struct
 #define av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define av_ulong(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
@@ -831,7 +838,7 @@ typedef struct
 #define av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define av_ptr(LIST,TYPE,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
@@ -907,13 +914,26 @@ typedef struct
     *(TYPE*)(LIST).aptr = (TYPE)(VAL),					\
     0))
 #endif
-#if defined(__arm__) || defined(__armhf__) || defined(__powerpc_sysv4__)
+#if defined(__arm__) || defined(__armhf__)
 #define __av_longlong(LIST,TYPE,VAL)					\
   ((__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE)) > __av_eptr(LIST) \
    ? -1 :								\
    ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE)), \
     ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
     0))
+#endif
+#if defined(__powerpc_sysv4__)
+#define __av_longlong(LIST,TYPE,VAL)					\
+  ((((LIST).ianum + sizeof(TYPE)/sizeof(__avword)+__AV_alignof(TYPE)/sizeof(__avword)-1) & -(long)(__AV_alignof(TYPE)/sizeof(__avword))) <= __AV_IARG_NUM \
+   ? ((LIST).ianum = (((LIST).ianum + sizeof(TYPE)/sizeof(__avword)+__AV_alignof(TYPE)/sizeof(__avword)-1) & -(long)(__AV_alignof(TYPE)/sizeof(__avword))), \
+      ((TYPE*)&(LIST).iargs[(LIST).ianum])[-1] = (TYPE)(VAL),		\
+      0)								\
+   : ((LIST).ianum = __AV_IARG_NUM,					\
+      ((__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE)) > __av_eptr(LIST) \
+       ? -1 :								\
+       ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE)), \
+        ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
+        0))))
 #endif
 #if defined(__x86_64_x32__)
 #define __av_longlong(LIST,TYPE,VAL)					\
@@ -1551,7 +1571,7 @@ typedef struct
      ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)((__avword)(LIST).aptr-(TYPE_SIZE)),VAL),\
      0))
 #endif
-#if (defined(__sparc__) && !defined(__sparc64__)) || defined(__powerpc_sysv4__)
+#if (defined(__sparc__) && !defined(__sparc64__))
 /* Structures are passed as pointers to caller-made local copies. We
  * grab space for the copies from the end of the argument list space
  * and always use maximal (double) alignment.
@@ -1649,6 +1669,26 @@ typedef struct
          (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
           (LIST).aptr[-1] = (__avword)(LIST).eptr,			\
           0))))
+#endif
+#if defined(__powerpc_sysv4__)
+/* Structures are passed as pointers to caller-made local copies. We
+ * grab space for the copies from the end of the argument list space
+ * and always use maximal (double) alignment.
+ */
+#define __av_struct(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)		\
+   ((LIST).ianum < __AV_IARG_NUM					\
+    ? ((LIST).aptr							\
+       > ((LIST).eptr = (__avword*)((long)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
+       ? -1 :								\
+       (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
+        (LIST).iargs[(LIST).ianum++] = (__avword)(LIST).eptr,		\
+        0))								\
+    : (++(LIST).aptr							\
+       > ((LIST).eptr = (__avword*)((long)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
+       ? -1 :								\
+       (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
+        (LIST).aptr[-1] = (__avword)(LIST).eptr,			\
+        0)))
 #endif
 #if defined(__x86_64__)
 /* Structures <= 16 bytes can be passed in integer or floating-point registers
