@@ -36,6 +36,8 @@
   'int' in r0 gets passed in (r2,r3), not in (r1,r2)). This implies that
   they are passed entirely in registers or entirely on the stack.
   Structure args are passed as true structures embedded in the argument stack.
+  A structure arg may be allocated partially in registers (r0,...,r3) and
+  partially on the stack, if no previous args already consume stack space.
   To return a structure, the called function copies the return value to the
   address supplied in register r0.
 

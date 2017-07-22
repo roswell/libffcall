@@ -2,6 +2,7 @@ New in 2.0:
 
 * Fixed a bug regarding floating-point arguments followed by
   non-floating-point arguments on the following platforms:
+  - arm: Linux 32-bit, with hardware floats.
   - powerpc: Linux 32-bit.
   - s390: Linux.
 

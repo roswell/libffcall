@@ -1,5 +1,16 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	armhf: Fix a bug in avcall (failing tests f_f17l3L, d_d17l3L).
+	* avcall/avcall.h.in [__armhf__]: Store integer argument count in ianum.
+	(__av_start1, __av_start_struct4, __av_word, __av_longlong, av_float,
+	av_double, __av_struct): Update implementation accordingly.
+	* avcall/avcall-arm.c: Add comment.
+	* avcall/avcall-armhf.c: Likewise.
+	* porting-tools/abis/stack-frame.txt: Update information.
+	* NEWS: Mention the fix.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	powerpc: Make avcall code more robust.
 	* avcall/avcall-powerpc.c (__builtin_avcall) [_AIX]: Don't rely on a
 	particular stack frame layout produced by GCC. Use __builtin_alloca

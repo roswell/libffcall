@@ -36,7 +36,7 @@ sparc         6  o0-o5                  Y (split long long)
 sparc64       6  o0-o5                  N
 alpha         6  $16-$21                Y (split struct)
 hppa          4  23-26                  N
-arm           4  r0-r3                  Y (split struct)
+arm,armhf     4  r0-r3                  Y (split struct)
 arm64         8  x0-x7                  N
 powerpc       8  3-10                   Y (split struct) on AIX and Darwin,
                                         N otherwise
@@ -67,7 +67,7 @@ mips{n32,64}  8  r4-r11                 fp, retaddr, others           (needs pos
 sparc{,64}    6  o0-o5                  ?                             Y (preallocated room)
 alpha         6  $16-$21                retaddr, fp, others           (needs 'locals' struct hack)
 hppa          4  23-26                                                Y (preallocated room)
-arm           4  r0-r3                  fp, sp, retaddr, dummy(opt)   Y (allocated room through split struct)
+arm,armhf     4  r0-r3                  fp, sp, retaddr, dummy(opt)   Y (allocated room through split struct)
 arm64         8  x0-x7                  {fp,lr}, others               N
 powerpc       8  3-10                                                 Y (preallocated room) on AIX and Darwin,
                                                                       N otherwise
