@@ -1,5 +1,9 @@
 New in 2.0:
 
+* Fixed a bug regarding floating-point arguments followed by
+  non-floating-point arguments on the following platforms:
+  - s390: Linux.
+
 New in 1.13:
 
 * The license has been changed from GPLv2 to GPLv2+.

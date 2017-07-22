@@ -1158,15 +1158,13 @@ typedef __va_alist* va_alist;
 #define va_arg_float(LIST)  \
   ((LIST)->fanum < __VA_FARG_NUM					\
    ? (LIST)->farg[(LIST)->fanum++]					\
-   : ((LIST)->ianum = __VA_IARG_NUM,					\
-      (LIST)->aptr += sizeof(float),					\
+   : ((LIST)->aptr += sizeof(float),					\
       *(float*)((LIST)->aptr - sizeof(float))				\
   )  )
 #define va_arg_double(LIST)  \
   ((LIST)->fanum < __VA_FARG_NUM					\
    ? (LIST)->darg[(LIST)->fanum++]					\
-   : ((LIST)->ianum = __VA_IARG_NUM,					\
-      __va_align_double(LIST)						\
+   : (__va_align_double(LIST)						\
       (LIST)->aptr += sizeof(double),					\
       *(double*)((LIST)->aptr - sizeof(double))				\
   )  )
