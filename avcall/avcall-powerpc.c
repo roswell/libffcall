@@ -54,10 +54,10 @@
   ----------------------------------------------------------------------*/
 #include "avcall.h.in"
 
-#ifdef __linux__
-#define STACK_OFFSET 2
-#else
+#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
 #define STACK_OFFSET 14
+#else /* __powerpc_sysv4__ */
+#define STACK_OFFSET 2
 #endif
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
@@ -88,9 +88,9 @@ __builtin_avcall(av_alist* l)
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
   __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
   int arglen = l->aptr - l->args;
-#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))
+#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
   int farglen = 0;
-#else
+#else /* __powerpc_sysv4__ */
   int farglen = l->faptr - l->fargs;
 #endif
   __avword i;

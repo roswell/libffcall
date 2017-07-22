@@ -1,5 +1,15 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	powerpc: Simplify #if expressions.
+	* avcall/avcall.h.in (__powerpc_aix__, __powerpc_sysv4__): New macros.
+	Use them in #if expressions.
+	* vacall/vacall.h.in: Likewise.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* avcall/avcall-powerpc.c: Add comments.
+	* vacall/vacall-powerpc.c: Likewise.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	s390, s390x: Merge common code.
 	* vacall/vacall.h.in (va_arg_float, va_arg_double) [s390,s390x]: Merge.
 	* callback/vacall_r/vacall_r.h.in: Likewise.

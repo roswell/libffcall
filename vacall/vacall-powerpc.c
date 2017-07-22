@@ -57,7 +57,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
           __vaword firstword)
 {
   __va_alist list;
-#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))
+#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
   /* gcc-2.6.3 source says: When a parameter is passed in a register,
    * stack space is still allocated for it.
    */
@@ -70,7 +70,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   (&firstword)[-3] = word6;
   (&firstword)[-2] = word7;
   (&firstword)[-1] = word8;
-#else
+#else /* __powerpc_sysv4__ */
   /* Move the arguments passed in registers to temp storage, since
      moving them to the stack would mess up the stack */
   list.iarg[0] = word1;
@@ -90,7 +90,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   list.farg[5] = farg6;
   list.farg[6] = farg7;
   list.farg[7] = farg8;
-#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))
+#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
   list.farg[8] = farg9;
   list.farg[9] = farg10;
   list.farg[10] = farg11;
@@ -99,9 +99,9 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 #endif
   /* Prepare the va_alist. */
   list.flags = 0;
-#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))
+#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
   list.aptr = (long)(&firstword - 8);
-#else
+#else /* __powerpc_sysv4__ */
   list.aptr = (long)(&list.iarg[0]);
   list.saptr = (long)(&firstword);
   list.onstack = 0;
