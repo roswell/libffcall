@@ -64,11 +64,10 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 
   /* Prepare the va_alist. */
   list.flags = 0;
-  list.aptr = (long)(&list.iarg[0]);
-  list.saptr = (long)(&firstword);
-  list.onstack = 0;
+  list.aptr = (long)&firstword;
   list.raddr = (void*)0;
   list.rtype = __VAvoid;
+  list.ianum = 0;
   list.fanum = 0;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
