@@ -386,7 +386,7 @@ typedef struct
 #if defined(__x86_64__)
 #define __AV_IARG_NUM 6
   /* store the integer arguments in an extra array */
-  __avword*		iaptr;
+  unsigned int		ianum;
   __avword		iargs[__AV_IARG_NUM];
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
@@ -580,7 +580,7 @@ typedef struct
 #if defined(__x86_64__)
 #define __av_start1(LIST)						\
    (LIST).aptr = &(LIST).args[0],					\
-   (LIST).iaptr = &(LIST).iargs[0],					\
+   (LIST).ianum = 0,							\
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 
@@ -758,11 +758,7 @@ typedef struct
     0									\
    )
 #endif
-#if defined(__x86_64__)
-#define __av_start_struct4(LIST,TYPE_SIZE)				\
-   (*(LIST).iaptr++ = (__avword)((LIST).raddr), 0)
-#endif
-#if defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
    ((LIST).iargs[(LIST).ianum++] = (__avword)((LIST).raddr), 0)
 #endif
@@ -829,49 +825,31 @@ typedef struct
 
 /* integer argument types */
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define av_long(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)			\
    : __av_word(LIST,(long)(VAL)))
-#elif defined(__x86_64__)
-/* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define av_long(LIST,VAL)						\
-  ((LIST).iaptr < &(LIST).iargs[__AV_IARG_NUM]				\
-   ? (*(LIST).iaptr++ = (long)(VAL), 0)					\
-   : __av_word(LIST,(long)(VAL)))
 #else
 #define av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define av_ulong(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
    : __av_word(LIST,(unsigned long)(VAL)))
-#elif defined(__x86_64__)
-/* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define av_ulong(LIST,VAL)						\
-  ((LIST).iaptr < &(LIST).iargs[__AV_IARG_NUM]				\
-   ? (*(LIST).iaptr++ = (unsigned long)(VAL), 0)			\
-   : __av_word(LIST,(unsigned long)(VAL)))
 #else
 #define av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define av_ptr(LIST,TYPE,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (__avword)(TYPE)(VAL), 0)		\
-   : __av_word(LIST,(TYPE)(VAL)))
-#elif defined(__x86_64__)
-/* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define av_ptr(LIST,TYPE,VAL)						\
-  ((LIST).iaptr < &(LIST).iargs[__AV_IARG_NUM]				\
-   ? (*(LIST).iaptr++ = (__avword)(TYPE)(VAL), 0)			\
    : __av_word(LIST,(TYPE)(VAL)))
 #else
 #define av_ptr(LIST,TYPE,VAL)	__av_word(LIST,(TYPE)(VAL))
@@ -981,8 +959,8 @@ typedef struct
 #endif
 #if defined(__x86_64_x32__)
 #define __av_longlong(LIST,TYPE,VAL)					\
-  ((LIST).iaptr < &(LIST).iargs[__AV_IARG_NUM]				\
-   ? (*(LIST).iaptr++ = (__avword)(TYPE)(VAL), 0)			\
+  ((LIST).ianum < __AV_IARG_NUM						\
+   ? ((LIST).iargs[(LIST).ianum++] = (__avword)(TYPE)(VAL), 0)		\
    : __av_word(LIST,(TYPE)(VAL)))
 #endif
 #if (defined(__s390__) && !defined(__s390x__))
@@ -1782,9 +1760,9 @@ typedef struct
    on the arg stack. */
 #define __av_struct(LIST,TYPE,TYPE_SIZE,TYPE_ALIGN,ASSIGN,VAL)			\
   (((TYPE_SIZE) <= 2*sizeof(__avword)						\
-    && (LIST).iaptr + ((TYPE_SIZE) + sizeof(__avword)-1) / sizeof(__avword) <= &(LIST).iargs[__AV_IARG_NUM]) \
-   ? (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).iaptr,VAL),		\
-      (LIST).iaptr += ((TYPE_SIZE) + sizeof(__avword)-1) / sizeof(__avword),	\
+    && (LIST).ianum + ((TYPE_SIZE) + sizeof(__avword)-1) / sizeof(__avword) <= __AV_IARG_NUM) \
+   ? (ASSIGN(TYPE,TYPE_SIZE,TYPE_ALIGN,(void*)&(LIST).iargs[(LIST).ianum],VAL),	\
+      (LIST).ianum += ((TYPE_SIZE) + sizeof(__avword)-1) / sizeof(__avword),	\
       0)									\
    : ((__avword*)((__avword)(LIST).aptr + (((TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN))) > __av_eptr(LIST) \
       ? -1 :									\

@@ -1,5 +1,11 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Undo premature optimization.
+	* avcall/avcall.h.in [__x86_64__]: Use 'ianum' field instead of 'iaptr'
+	field.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	ia64, x86_64: Use symbolic constants.
 	* avcall/avcall.h.in (__AV_FARG_NUM) [__ia64__ || __x86_64__]:
 	New macro.
