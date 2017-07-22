@@ -47,8 +47,6 @@
   ----------------------------------------------------------------------*/
 #include "avcall.h.in"
 
-#define STACK_OFFSET 14
-
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 register double farg1	__asm__("fr1");

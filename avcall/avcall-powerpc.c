@@ -85,8 +85,12 @@ __builtin_avcall(av_alist* l)
   register float	fret	__asm__("fr1");
   register double	dret	__asm__("fr1");
 
-  __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
+#if defined(_AIX) /* for some reason, this does not work on Mac OS X and Linux! */
+  __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
+#else
+  __avword space[__AV_ALIST_WORDS];    /* space for callee's stack frame */
   __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
+#endif
   int arglen = l->aptr - l->args;
   __avword i;
 #if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */

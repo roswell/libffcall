@@ -1,5 +1,13 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	powerpc: Make avcall code more robust.
+	* avcall/avcall-powerpc.c (__builtin_avcall) [_AIX]: Don't rely on a
+	particular stack frame layout produced by GCC. Use __builtin_alloca
+	instead.
+	* avcall/avcall-powerpc64.c (STACK_OFFSET): Remove unused macro.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	powerpc: Don't ever access out-of-range array elements.
 	* avcall/avcall-powerpc.c (__builtin_avcall): Access only 8 fargs when
 	only 8 exist.
