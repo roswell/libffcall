@@ -65,7 +65,7 @@ m68k          0  -                      a6, retaddr                   Y (trivial
 mips          4  r4-r7                  fp, retaddr, word1,...,wordN  Y (preallocated room)
 mips{n32,64}  8  r4-r11                 fp, retaddr, others           Y (allocated room through split struct)
 sparc{,64}    6  o0-o5                  ?                             Y (preallocated room)
-alpha         6  $16-$21                retaddr, fp, others           (needs 'locals' struct hack)
+alpha         6  $16-$21                retaddr, fp, others           Y (allocated room through split struct)
 hppa          4  23-26                                                Y (preallocated room)
 arm,armhf     4  r0-r3                  fp, sp, retaddr, dummy(opt)   Y (allocated room through split struct)
 arm64         8  x0-x7                  {fp,lr}, others               N
