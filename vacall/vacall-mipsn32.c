@@ -63,28 +63,32 @@ register float		fret2	__asm__("$f2");
 register double		dret	__asm__("$f0");
 register double		dret2	__asm__("$f2");
 
+/* The ABI requires that the first 8 general-purpose argument words are
+   being passed in registers, even if these words belong to a struct. No room
+   is allocated for these register words on the stack by the caller, but the
+   callee allocates room for them - at the right place in the stack frame,
+   that is, above the usual {fp, retaddr} combo - if and only if they are part
+   of a larger struct that extends to the stack and the address of this struct
+   is taken. */
+struct gpargsequence {
+  __vaword word1; /* r4 */
+  __vaword word2; /* r5 */
+  __vaword word3; /* r6 */
+  __vaword word4; /* r7 */
+  __vaword word5; /* r8 */
+  __vaword word6; /* r9 */
+  __vaword word7; /* r10 */
+  __vaword word8; /* r11 */
+  __vaword firststackword;
+};
+
 #ifdef REENTRANT
 static
 #endif
 void /* the return type is variable, not void! */
-__vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
-          __vaword word5, __vaword word6, __vaword word7, __vaword word8,
-          __vaword firstword)
+__vacall (struct gpargsequence gpargs)
 {
-  /* gcc-4.0.2 does not allocate stack space for word1,...,word8. */
-  /* The following account for the stack frame increase from 192 to 256 bytes
-   * done by postprocessing. */
-#define firstword (*(&firstword+8))
-  /* Move the arguments passed in registers to their stack locations. */
-  (&firstword)[-8] = iarg0; /* word1 */
-  (&firstword)[-7] = iarg1; /* word2 */
-  (&firstword)[-6] = iarg2; /* word3 */
-  (&firstword)[-5] = iarg3; /* word4 */
-  (&firstword)[-4] = iarg4; /* word5 */
-  (&firstword)[-3] = iarg5; /* word6 */
-  (&firstword)[-2] = iarg6; /* word7 */
-  (&firstword)[-1] = iarg7; /* word8 */
- {__va_alist list;
+  __va_alist list;
   list.darg[0] = darg0;
   list.darg[1] = darg1;
   list.darg[2] = darg2;
@@ -103,10 +107,10 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   list.farg[7] = farg7;
   /* Prepare the va_alist. */
   list.flags = 0;
-  list.aptr = (long)(&firstword - 8);
+  list.aptr = (long)&gpargs;
   list.raddr = (void*)0;
   list.rtype = __VAvoid;
-  list.memargptr = (long)&firstword;
+  list.memargptr = (long)&gpargs.firststackword;
   list.anum = 0;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
@@ -444,7 +448,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
       }
     }
   }
-}}
+}
 
 #ifdef REENTRANT
 __vacall_r_t

@@ -1,5 +1,19 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	mipsn32, mips64: Make vacall code more robust.
+	* vacall/Makefile.devel (vacall-mipsn32eb-macro.S,
+	vacall-mipsn32el-macro.S, vacall-mips64eb-macro.S,
+	vacall-mips64el-macro.S): Remove post-processing hack.
+	* callback/vacall_r/Makefile.devel (vacall-mipsn32eb-macro.S,
+	vacall-mipsn32el-macro.S, vacall-mips64eb-macro.S,
+	vacall-mips64el-macro.S): Likewise.
+	* vacall/vacall-mipsn32.c: Use a split struct to allocate room for the
+	8 leading words in the callee's stack.
+	* vacall/vacall-mips64.c: Likewise.
+	* porting-tools/abis/stack-frame.txt: Mention the change.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	mips: Don't store dynamic state in the flags.
 	* avcall/avcall.h.in (__AV_FLOAT_1, __AV_FLOAT_2, __AV_DOUBLE_1,
 	__AV_DOUBLE_2): Remove enum values.
