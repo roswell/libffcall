@@ -118,11 +118,12 @@ __vacall (__vaword ignored1, __vaword ignored2, __vaword ignored3, __vaword igno
   /* Prepare the va_alist. */
   list.flags = 0;
 #ifndef REENTRANT
-  list.aptr = (long)&gpargs;
+  list.iarg = (__vaword*)&gpargs;
 #else /* REENTRANT */
-  list.aptr = (long)&firstword;
+  list.iarg = (__vaword*)&firstword;
 #endif
-  list.saptr = list.aptr + 4*sizeof(__vaword);
+  list.aptr = (long)(list.iarg + __VA_IARG_NUM);
+  list.ianum = 0;
   list.fanum = 0;
   list.raddr = (void*)0;
   list.rtype = __VAvoid;

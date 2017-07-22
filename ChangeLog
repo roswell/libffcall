@@ -1,5 +1,16 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	armhf: Fix a bug in vacall (failing tests d_d13i, f_f17l3L, d_d17l3L).
+	* vacall/vacall.h.in (__va_alist, __va_start_struct2,
+	__va_arg_leftadjusted, __va_arg_rightadjusted, __va_arg_longlong)
+	[__armhf__]: Use 'iarg' and 'ianum' fields instead of 'saptr' field.
+	(va_arg_float, va_arg_double) [__armhf__]: Don't force all remaining
+	integer arguments to the stack.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-armhf.c (__vacall): Update accordingly.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	armhf: Fix a bug in avcall (failing tests f_f17l3L, d_d17l3L).
 	* avcall/avcall.h.in [__armhf__]: Store integer argument count in ianum.
 	(__av_start1, __av_start_struct4, __av_word, __av_longlong, av_float,
