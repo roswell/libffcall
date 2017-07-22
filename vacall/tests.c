@@ -84,6 +84,7 @@ typedef struct { char c; float f; } A;
 typedef struct { double d; int i[3]; } B;
 typedef struct { long l1; long l2; } J;
 typedef struct { long l1; long l2; long l3; long l4; } K;
+typedef struct { long l1; long l2; long l3; long l4; long l5; long l6; } L;
 typedef struct { char x1; } Size1;
 typedef struct { char x1; char x2; } Size2;
 typedef struct { char x1; char x2; char x3; } Size3;
@@ -121,7 +122,7 @@ float f1=0.1, f2=0.2, f3=0.3, f4=0.4, f5=0.5, f6=0.6, f7=0.7, f8=0.8, f9=0.9,
       f10=1.1, f11=1.2, f12=1.3, f13=1.4, f14=1.5, f15=1.6, f16=1.7, f17=1.8,
       f18=1.9, f19=2.1, f20=2.2, f21=2.3, f22=2.4, f23=2.5, f24=2.6;
 double d1=0.1, d2=0.2, d3=0.3, d4=0.4, d5=0.5, d6=0.6, d7=0.7, d8=0.8, d9=0.9,
-       d10=1.1, d11=1.2, d12=1.3, d13=1.4, d14=1.5, d15=1.6, d16=1.7;
+       d10=1.1, d11=1.2, d12=1.3, d13=1.4, d14=1.5, d15=1.6, d16=1.7, d17=1.8;
 
 uchar uc1='a', uc2=127, uc3=128, uc4=255, uc5=(uchar)-1;
 ushort us1=1, us2=2, us3=3, us4=4, us5=5, us6=6, us7=7, us8=8, us9=9;
@@ -139,6 +140,7 @@ A A1={'a',0.1},A2={'b',0.2},A3={'\377',0.3};
 B B1={0.1,{1,2,3}},B2={0.2,{5,4,3}};
 J J1={47,11},J2={73,55};
 K K1={19,69,12,28};
+L L1={561,1105,1729,2465,2821,6601}; /* A002997 */
 Size1 Size1_1={'a'};
 Size2 Size2_1={'a','b'};
 Size3 Size3_1={'a','b','c'};
@@ -662,6 +664,29 @@ long l_l6K (long a1, long a2, long a3, long a4, long a5, long a6, K b, long c)
 {
   long r = a1 + a2 + a3 + a4 + a5 + a6 + b.l1 + b.l2 + b.l3 + b.l4 + c;
   fprintf(out,"long f(6*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+/* These tests is crafted on the knowledge that for all known ABIs:
+   * 17 > number of floating-point argument registers,
+   * 3 < number of general-purpose argument registers < 3 + 6. */
+float f_f17l3L (float a, float b, float c, float d, float e, float f, float g,
+                float h, float i, float j, float k, float l, float m, float n,
+                float o, float p, float q,
+                long s, long t, long u, L z)
+{
+  float r = a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+z.l1+z.l2+z.l3+z.l4+z.l5+z.l6;
+  fprintf(out,"float f(17*float,3*int,L):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,z.l1,z.l2,z.l3,z.l4,z.l5,z.l6);
+  fflush(out);
+  return r;
+}
+double d_d17l3L (double a, double b, double c, double d, double e, double f,
+                 double g, double h, double i, double j, double k, double l,
+                 double m, double n, double o, double p, double q,
+                 long s, long t, long u, L z)
+{
+  double r = a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+z.l1+z.l2+z.l3+z.l4+z.l5+z.l6;
+  fprintf(out,"double f(17*double,3*int,L):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,z.l1,z.l2,z.l3,z.l4,z.l5,z.l6);
   fflush(out);
   return r;
 }
@@ -1695,6 +1720,64 @@ void simulator (va_alist alist)
       fflush(out);
       va_return_long(alist, r);
     }}
+  else if (current_function == (void*)&f_f17l3L)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      float b = va_arg_float(alist);
+      float c = va_arg_float(alist);
+      float d = va_arg_float(alist);
+      float e = va_arg_float(alist);
+      float f = va_arg_float(alist);
+      float g = va_arg_float(alist);
+      float h = va_arg_float(alist);
+      float i = va_arg_float(alist);
+      float j = va_arg_float(alist);
+      float k = va_arg_float(alist);
+      float l = va_arg_float(alist);
+      float m = va_arg_float(alist);
+      float n = va_arg_float(alist);
+      float o = va_arg_float(alist);
+      float p = va_arg_float(alist);
+      float q = va_arg_float(alist);
+      long s = va_arg_long(alist);
+      long t = va_arg_long(alist);
+      long u = va_arg_long(alist);
+      L z = va_arg_struct(alist, L);
+      float r = a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+z.l1+z.l2+z.l3+z.l4+z.l5+z.l6;
+      fprintf(out,"float f(17*float,3*int,L):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,z.l1,z.l2,z.l3,z.l4,z.l5,z.l6);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&d_d17l3L)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      double b = va_arg_double(alist);
+      double c = va_arg_double(alist);
+      double d = va_arg_double(alist);
+      double e = va_arg_double(alist);
+      double f = va_arg_double(alist);
+      double g = va_arg_double(alist);
+      double h = va_arg_double(alist);
+      double i = va_arg_double(alist);
+      double j = va_arg_double(alist);
+      double k = va_arg_double(alist);
+      double l = va_arg_double(alist);
+      double m = va_arg_double(alist);
+      double n = va_arg_double(alist);
+      double o = va_arg_double(alist);
+      double p = va_arg_double(alist);
+      double q = va_arg_double(alist);
+      long s = va_arg_long(alist);
+      long t = va_arg_long(alist);
+      long u = va_arg_long(alist);
+      L z = va_arg_struct(alist, L);
+      double r = a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+z.l1+z.l2+z.l3+z.l4+z.l5+z.l6;
+      fprintf(out,"double f(17*double,3*int,L):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,z.l1,z.l2,z.l3,z.l4,z.l5,z.l6);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
 #ifdef HAVE_LONG_LONG_INT
   else if (current_function == (void*)&ll_l2ll)
     {
@@ -2453,6 +2536,7 @@ int main (void)
 #ifdef HAVE_LONG_LONG_INT
     long long llr;
 #endif
+    float fr;
     double dr;
 
     lr = l_l0K(K1,l9);
@@ -2509,6 +2593,22 @@ int main (void)
     lr = 0; clear_traces();
     current_function = (void*) &l_l6K; lr = ((long (*) (long,long,long,long,long,long,K,long)) vacall) (l1,l2,l3,l4,l5,l6,K1,l9);
     fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    fr = f_f17l3L(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,l6,l7,l8,L1);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_f17l3L; fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,float,long,long,long,L)) vacall) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,l6,l7,l8,L1);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    dr = d_d17l3L(d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,d14,d15,d16,d17,l6,l7,l8,L1);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_d17l3L; dr = ((double (*) (double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,double,long,long,long,L)) vacall) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,d14,d15,d16,d17,l6,l7,l8,L1);
+    fprintf(out,"->%g\n",dr);
     fflush(out);
 
 #ifdef HAVE_LONG_LONG_INT

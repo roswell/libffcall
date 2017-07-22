@@ -61,6 +61,7 @@ typedef struct { char c; float f; } A;
 typedef struct { double d; int i[3]; } B;
 typedef struct { long l1; long l2; } J;
 typedef struct { long l1; long l2; long l3; long l4; } K;
+typedef struct { long l1; long l2; long l3; long l4; long l5; long l6; } L;
 typedef struct { char x1; } Size1;
 typedef struct { char x1; char x2; } Size2;
 typedef struct { char x1; char x2; char x3; } Size3;
@@ -98,7 +99,7 @@ float f1=0.1, f2=0.2, f3=0.3, f4=0.4, f5=0.5, f6=0.6, f7=0.7, f8=0.8, f9=0.9,
       f10=1.1, f11=1.2, f12=1.3, f13=1.4, f14=1.5, f15=1.6, f16=1.7, f17=1.8,
       f18=1.9, f19=2.1, f20=2.2, f21=2.3, f22=2.4, f23=2.5, f24=2.6;
 double d1=0.1, d2=0.2, d3=0.3, d4=0.4, d5=0.5, d6=0.6, d7=0.7, d8=0.8, d9=0.9,
-       d10=1.1, d11=1.2, d12=1.3, d13=1.4, d14=1.5, d15=1.6, d16=1.7;
+       d10=1.1, d11=1.2, d12=1.3, d13=1.4, d14=1.5, d15=1.6, d16=1.7, d17=1.8;
 
 uchar uc1='a', uc2=127, uc3=128, uc4=255, uc5=(uchar)-1;
 ushort us1=1, us2=2, us3=3, us4=4, us5=5, us6=6, us7=7, us8=8, us9=9;
@@ -116,6 +117,7 @@ A A1={'a',0.1},A2={'b',0.2},A3={'\377',0.3};
 B B1={0.1,{1,2,3}},B2={0.2,{5,4,3}};
 J J1={47,11},J2={73,55};
 K K1={19,69,12,28};
+L L1={561,1105,1729,2465,2821,6601}; /* A002997 */
 Size1 Size1_1={'a'};
 Size2 Size2_1={'a','b'};
 Size3 Size3_1={'a','b','c'};
@@ -643,6 +645,29 @@ long l_l6K (long a1, long a2, long a3, long a4, long a5, long a6, K b, long c)
 {
   long r = a1 + a2 + a3 + a4 + a5 + a6 + b.l1 + b.l2 + b.l3 + b.l4 + c;
   fprintf(out,"long f(6*long,K,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,b.l1,b.l2,b.l3,b.l4,c);
+  fflush(out);
+  return r;
+}
+/* These tests is crafted on the knowledge that for all known ABIs:
+   * 17 > number of floating-point argument registers,
+   * 3 < number of general-purpose argument registers < 3 + 6. */
+float f_f17l3L (float a, float b, float c, float d, float e, float f, float g,
+                float h, float i, float j, float k, float l, float m, float n,
+                float o, float p, float q,
+                long s, long t, long u, L z)
+{
+  float r = a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+z.l1+z.l2+z.l3+z.l4+z.l5+z.l6;
+  fprintf(out,"float f(17*float,3*int,L):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,z.l1,z.l2,z.l3,z.l4,z.l5,z.l6);
+  fflush(out);
+  return r;
+}
+double d_d17l3L (double a, double b, double c, double d, double e, double f,
+                 double g, double h, double i, double j, double k, double l,
+                 double m, double n, double o, double p, double q,
+                 long s, long t, long u, L z)
+{
+  double r = a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+q+s+t+u+z.l1+z.l2+z.l3+z.l4+z.l5+z.l6;
+  fprintf(out,"double f(17*double,3*int,L):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,s,t,u,z.l1,z.l2,z.l3,z.l4,z.l5,z.l6);
   fflush(out);
   return r;
 }
@@ -1693,6 +1718,7 @@ void
 #ifdef HAVE_LONG_LONG_INT
   long long llr;
 #endif
+  float fr;
   double dr;
 
   lr = l_l0K(K1,l9);
@@ -1791,6 +1817,66 @@ void
   av_long(a,l9);
   av_call(a);
   fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  fr = f_f17l3L(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,l6,l7,l8,L1);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_float(a,f_f17l3L,&dr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_float(a,f3);
+  av_float(a,f4);
+  av_float(a,f5);
+  av_float(a,f6);
+  av_float(a,f7);
+  av_float(a,f8);
+  av_float(a,f9);
+  av_float(a,f10);
+  av_float(a,f11);
+  av_float(a,f12);
+  av_float(a,f13);
+  av_float(a,f14);
+  av_float(a,f15);
+  av_float(a,f16);
+  av_float(a,f17);
+  av_long(a,l6);
+  av_long(a,l7);
+  av_long(a,l8);
+  av_struct(a,L,L1);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  dr = d_d17l3L(d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,d14,d15,d16,d17,l6,l7,l8,L1);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_d17l3L,&dr);
+  av_double(a,d1);
+  av_double(a,d2);
+  av_double(a,d3);
+  av_double(a,d4);
+  av_double(a,d5);
+  av_double(a,d6);
+  av_double(a,d7);
+  av_double(a,d8);
+  av_double(a,d9);
+  av_double(a,d10);
+  av_double(a,d11);
+  av_double(a,d12);
+  av_double(a,d13);
+  av_double(a,d14);
+  av_double(a,d15);
+  av_double(a,d16);
+  av_double(a,d17);
+  av_long(a,l6);
+  av_long(a,l7);
+  av_long(a,l8);
+  av_struct(a,L,L1);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
   fflush(out);
 
 #ifdef HAVE_LONG_LONG_INT
