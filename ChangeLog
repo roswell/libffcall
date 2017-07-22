@@ -1,5 +1,14 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	mipsn32, mips64: Remove unused field.
+	* vacall/vacall.h.in (__va_alist) [__mipsn32__ || __mips64__]: Remove
+	field 'memargptr'.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-mipsn32.c (__vacall): Update accordingly.
+	* vacall/vacall-mips64.c (__vacall): Likewise.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	mipsn32, mips64: Make vacall code more robust.
 	* vacall/Makefile.devel (vacall-mipsn32eb-macro.S,
 	vacall-mipsn32el-macro.S, vacall-mips64eb-macro.S,

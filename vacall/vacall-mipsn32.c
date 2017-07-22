@@ -110,7 +110,6 @@ __vacall (struct gpargsequence gpargs)
   list.aptr = (long)&gpargs;
   list.raddr = (void*)0;
   list.rtype = __VAvoid;
-  list.memargptr = (long)&gpargs.firststackword;
   list.anum = 0;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT

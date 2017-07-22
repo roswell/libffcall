@@ -400,7 +400,7 @@ typedef struct
 #if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm64__) || defined(__ia64__)
   void*          structraddr;
 #endif
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__alpha__) || defined(__hppa__)
+#if (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || defined(__alpha__) || defined(__hppa__)
   long           memargptr;
 #endif
 #if defined(__hppa__)
