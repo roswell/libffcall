@@ -339,6 +339,130 @@ long long ll_flli (float a, long long b, int c)
 }
 #endif
 
+float f_fi (float a, int z)
+{
+  float r = a+z;
+  fprintf(out,"float f(float,int):(%g,%d)",a,z);
+  fflush(out);
+  return r;
+}
+float f_f2i (float a, float b, int z)
+{
+  float r = a+b+z;
+  fprintf(out,"float f(2*float,int):(%g,%g,%d)",a,b,z);
+  fflush(out);
+  return r;
+}
+float f_f3i (float a, float b, float c, int z)
+{
+  float r = a+b+c+z;
+  fprintf(out,"float f(3*float,int):(%g,%g,%g,%d)",a,b,c,z);
+  fflush(out);
+  return r;
+}
+float f_f4i (float a, float b, float c, float d, int z)
+{
+  float r = a+b+c+d+z;
+  fprintf(out,"float f(4*float,int):(%g,%g,%g,%g,%d)",a,b,c,d,z);
+  fflush(out);
+  return r;
+}
+float f_f7i (float a, float b, float c, float d, float e, float f, float g,
+             int z)
+{
+  float r = a+b+c+d+e+f+g+z;
+  fprintf(out,"float f(7*float,int):(%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,z);
+  fflush(out);
+  return r;
+}
+float f_f8i (float a, float b, float c, float d, float e, float f, float g,
+             float h, int z)
+{
+  float r = a+b+c+d+e+f+g+h+z;
+  fprintf(out,"float f(8*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,z);
+  fflush(out);
+  return r;
+}
+float f_f12i (float a, float b, float c, float d, float e, float f, float g,
+              float h, float i, float j, float k, float l, int z)
+{
+  float r = a+b+c+d+e+f+g+h+i+j+k+l+z;
+  fprintf(out,"float f(12*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,z);
+  fflush(out);
+  return r;
+}
+float f_f13i (float a, float b, float c, float d, float e, float f, float g,
+              float h, float i, float j, float k, float l, float m, int z)
+{
+  float r = a+b+c+d+e+f+g+h+i+j+k+l+m+z;
+  fprintf(out,"float f(13*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,m,z);
+  fflush(out);
+  return r;
+}
+
+double d_di (double a, int z)
+{
+  double r = a+z;
+  fprintf(out,"double f(double,int):(%g,%d)",a,z);
+  fflush(out);
+  return r;
+}
+double d_d2i (double a, double b, int z)
+{
+  double r = a+b+z;
+  fprintf(out,"double f(2*double,int):(%g,%g,%d)",a,b,z);
+  fflush(out);
+  return r;
+}
+double d_d3i (double a, double b, double c, int z)
+{
+  double r = a+b+c+z;
+  fprintf(out,"double f(3*double,int):(%g,%g,%g,%d)",a,b,c,z);
+  fflush(out);
+  return r;
+}
+double d_d4i (double a, double b, double c, double d, int z)
+{
+  double r = a+b+c+d+z;
+  fprintf(out,"double f(4*double,int):(%g,%g,%g,%g,%d)",a,b,c,d,z);
+  fflush(out);
+  return r;
+}
+double d_d7i (double a, double b, double c, double d, double e, double f,
+              double g, int z)
+{
+  double r = a+b+c+d+e+f+g+z;
+  fprintf(out,"double f(7*double,int):(%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,z);
+  fflush(out);
+  return r;
+}
+double d_d8i (double a, double b, double c, double d, double e, double f,
+              double g, double h, int z)
+{
+  double r = a+b+c+d+e+f+g+h+z;
+  fprintf(out,"double f(8*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,z);
+  fflush(out);
+  return r;
+}
+double d_d12i (double a, double b, double c, double d, double e, double f,
+               double g, double h, double i, double j, double k, double l,
+               int z)
+{
+  double r = a+b+c+d+e+f+g+h+i+j+k+l+z;
+  fprintf(out,"double f(12*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,z);
+  fflush(out);
+  return r;
+}
+double d_d13i (double a, double b, double c, double d, double e, double f,
+               double g, double h, double i, double j, double k, double l,
+               double m, int z)
+{
+  double r = a+b+c+d+e+f+g+h+i+j+k+l+m+z;
+  fprintf(out,"double f(13*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,m,z);
+  fflush(out);
+  return r;
+}
+
 /* small structure return tests */
 Size1 S1_v (void)
 {
@@ -946,6 +1070,7 @@ void
   av_alist a;
   uchar ucr;
   ushort usr;
+  float fr;
   double dr;
 #ifdef HAVE_LONG_LONG_INT
   long long llr;
@@ -1062,6 +1187,266 @@ void
   fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
   fflush(out);
 #endif
+
+  fr = f_fi(f1,i9);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_fi,&fr);
+  av_float(a,f1);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  fr = f_f2i(f1,f2,i9);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f2i,&fr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  fr = f_f3i(f1,f2,f3,i9);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f3i,&fr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_float(a,f3);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  fr = f_f4i(f1,f2,f3,f4,i9);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f4i,&fr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_float(a,f3);
+  av_float(a,f4);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  fr = f_f7i(f1,f2,f3,f4,f5,f6,f7,i9);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f7i,&fr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_float(a,f3);
+  av_float(a,f4);
+  av_float(a,f5);
+  av_float(a,f6);
+  av_float(a,f7);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  fr = f_f8i(f1,f2,f3,f4,f5,f6,f7,f8,i9);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f8i,&fr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_float(a,f3);
+  av_float(a,f4);
+  av_float(a,f5);
+  av_float(a,f6);
+  av_float(a,f7);
+  av_float(a,f8);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  fr = f_f12i(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,i9);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f12i,&fr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_float(a,f3);
+  av_float(a,f4);
+  av_float(a,f5);
+  av_float(a,f6);
+  av_float(a,f7);
+  av_float(a,f8);
+  av_float(a,f9);
+  av_float(a,f10);
+  av_float(a,f11);
+  av_float(a,f12);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  fr = f_f13i(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,i9);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f13i,&fr);
+  av_float(a,f1);
+  av_float(a,f2);
+  av_float(a,f3);
+  av_float(a,f4);
+  av_float(a,f5);
+  av_float(a,f6);
+  av_float(a,f7);
+  av_float(a,f8);
+  av_float(a,f9);
+  av_float(a,f10);
+  av_float(a,f11);
+  av_float(a,f12);
+  av_float(a,f13);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",fr);
+  fflush(out);
+
+  dr = d_di(d1,i9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_di,&dr);
+  av_double(a,d1);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_d2i(d1,d2,i9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_d2i,&dr);
+  av_double(a,d1);
+  av_double(a,d2);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_d3i(d1,d2,d3,i9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_d3i,&dr);
+  av_double(a,d1);
+  av_double(a,d2);
+  av_double(a,d3);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_d4i(d1,d2,d3,d4,i9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_d4i,&dr);
+  av_double(a,d1);
+  av_double(a,d2);
+  av_double(a,d3);
+  av_double(a,d4);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_d7i(d1,d2,d3,d4,d5,d6,d7,i9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_d7i,&dr);
+  av_double(a,d1);
+  av_double(a,d2);
+  av_double(a,d3);
+  av_double(a,d4);
+  av_double(a,d5);
+  av_double(a,d6);
+  av_double(a,d7);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_d8i(d1,d2,d3,d4,d5,d6,d7,d8,i9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_d8i,&dr);
+  av_double(a,d1);
+  av_double(a,d2);
+  av_double(a,d3);
+  av_double(a,d4);
+  av_double(a,d5);
+  av_double(a,d6);
+  av_double(a,d7);
+  av_double(a,d8);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_d12i(d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,i9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_d12i,&dr);
+  av_double(a,d1);
+  av_double(a,d2);
+  av_double(a,d3);
+  av_double(a,d4);
+  av_double(a,d5);
+  av_double(a,d6);
+  av_double(a,d7);
+  av_double(a,d8);
+  av_double(a,d9);
+  av_double(a,d10);
+  av_double(a,d11);
+  av_double(a,d12);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+
+  dr = d_d13i(d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,i9);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
+  dr = 0.0; clear_traces();
+  av_start_double(a,d_d13i,&dr);
+  av_double(a,d1);
+  av_double(a,d2);
+  av_double(a,d3);
+  av_double(a,d4);
+  av_double(a,d5);
+  av_double(a,d6);
+  av_double(a,d7);
+  av_double(a,d8);
+  av_double(a,d9);
+  av_double(a,d10);
+  av_double(a,d11);
+  av_double(a,d12);
+  av_double(a,d13);
+  av_int(a,i9);
+  av_call(a);
+  fprintf(out,"->%g\n",dr);
+  fflush(out);
 
   return;
 }

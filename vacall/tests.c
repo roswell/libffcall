@@ -362,6 +362,130 @@ long long ll_flli (float a, long long b, int c)
 }
 #endif
 
+float f_fi (float a, int z)
+{
+  float r = a+z;
+  fprintf(out,"float f(float,int):(%g,%d)",a,z);
+  fflush(out);
+  return r;
+}
+float f_f2i (float a, float b, int z)
+{
+  float r = a+b+z;
+  fprintf(out,"float f(2*float,int):(%g,%g,%d)",a,b,z);
+  fflush(out);
+  return r;
+}
+float f_f3i (float a, float b, float c, int z)
+{
+  float r = a+b+c+z;
+  fprintf(out,"float f(3*float,int):(%g,%g,%g,%d)",a,b,c,z);
+  fflush(out);
+  return r;
+}
+float f_f4i (float a, float b, float c, float d, int z)
+{
+  float r = a+b+c+d+z;
+  fprintf(out,"float f(4*float,int):(%g,%g,%g,%g,%d)",a,b,c,d,z);
+  fflush(out);
+  return r;
+}
+float f_f7i (float a, float b, float c, float d, float e, float f, float g,
+             int z)
+{
+  float r = a+b+c+d+e+f+g+z;
+  fprintf(out,"float f(7*float,int):(%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,z);
+  fflush(out);
+  return r;
+}
+float f_f8i (float a, float b, float c, float d, float e, float f, float g,
+             float h, int z)
+{
+  float r = a+b+c+d+e+f+g+h+z;
+  fprintf(out,"float f(8*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,z);
+  fflush(out);
+  return r;
+}
+float f_f12i (float a, float b, float c, float d, float e, float f, float g,
+              float h, float i, float j, float k, float l, int z)
+{
+  float r = a+b+c+d+e+f+g+h+i+j+k+l+z;
+  fprintf(out,"float f(12*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,z);
+  fflush(out);
+  return r;
+}
+float f_f13i (float a, float b, float c, float d, float e, float f, float g,
+              float h, float i, float j, float k, float l, float m, int z)
+{
+  float r = a+b+c+d+e+f+g+h+i+j+k+l+m+z;
+  fprintf(out,"float f(13*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,m,z);
+  fflush(out);
+  return r;
+}
+
+double d_di (double a, int z)
+{
+  double r = a+z;
+  fprintf(out,"double f(double,int):(%g,%d)",a,z);
+  fflush(out);
+  return r;
+}
+double d_d2i (double a, double b, int z)
+{
+  double r = a+b+z;
+  fprintf(out,"double f(2*double,int):(%g,%g,%d)",a,b,z);
+  fflush(out);
+  return r;
+}
+double d_d3i (double a, double b, double c, int z)
+{
+  double r = a+b+c+z;
+  fprintf(out,"double f(3*double,int):(%g,%g,%g,%d)",a,b,c,z);
+  fflush(out);
+  return r;
+}
+double d_d4i (double a, double b, double c, double d, int z)
+{
+  double r = a+b+c+d+z;
+  fprintf(out,"double f(4*double,int):(%g,%g,%g,%g,%d)",a,b,c,d,z);
+  fflush(out);
+  return r;
+}
+double d_d7i (double a, double b, double c, double d, double e, double f,
+              double g, int z)
+{
+  double r = a+b+c+d+e+f+g+z;
+  fprintf(out,"double f(7*double,int):(%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,z);
+  fflush(out);
+  return r;
+}
+double d_d8i (double a, double b, double c, double d, double e, double f,
+              double g, double h, int z)
+{
+  double r = a+b+c+d+e+f+g+h+z;
+  fprintf(out,"double f(8*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,z);
+  fflush(out);
+  return r;
+}
+double d_d12i (double a, double b, double c, double d, double e, double f,
+               double g, double h, double i, double j, double k, double l,
+               int z)
+{
+  double r = a+b+c+d+e+f+g+h+i+j+k+l+z;
+  fprintf(out,"double f(12*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,z);
+  fflush(out);
+  return r;
+}
+double d_d13i (double a, double b, double c, double d, double e, double f,
+               double g, double h, double i, double j, double k, double l,
+               double m, int z)
+{
+  double r = a+b+c+d+e+f+g+h+i+j+k+l+m+z;
+  fprintf(out,"double f(13*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,m,z);
+  fflush(out);
+  return r;
+}
+
 /* small structure return tests */
 Size1 S1_v (void)
 {
@@ -1018,6 +1142,250 @@ void simulator (va_alist alist)
       va_return_longlong(alist, r);
     }}
 #endif
+  else if (current_function == (void*)&f_fi)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      int z = va_arg_int(alist);
+      float r = a+z;
+      fprintf(out,"float f(float,int):(%g,%d)",a,z);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&f_f2i)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      float b = va_arg_float(alist);
+      int z = va_arg_int(alist);
+      float r = a+b+z;
+      fprintf(out,"float f(2*float,int):(%g,%g,%d)",a,b,z);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&f_f3i)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      float b = va_arg_float(alist);
+      float c = va_arg_float(alist);
+      int z = va_arg_int(alist);
+      float r = a+b+c+z;
+      fprintf(out,"float f(3*float,int):(%g,%g,%g,%d)",a,b,c,z);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&f_f4i)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      float b = va_arg_float(alist);
+      float c = va_arg_float(alist);
+      float d = va_arg_float(alist);
+      int z = va_arg_int(alist);
+      float r = a+b+c+d+z;
+      fprintf(out,"float f(4*float,int):(%g,%g,%g,%g,%d)",a,b,c,d,z);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&f_f7i)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      float b = va_arg_float(alist);
+      float c = va_arg_float(alist);
+      float d = va_arg_float(alist);
+      float e = va_arg_float(alist);
+      float f = va_arg_float(alist);
+      float g = va_arg_float(alist);
+      int z = va_arg_int(alist);
+      float r = a+b+c+d+e+f+g+z;
+      fprintf(out,"float f(7*float,int):(%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,z);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&f_f8i)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      float b = va_arg_float(alist);
+      float c = va_arg_float(alist);
+      float d = va_arg_float(alist);
+      float e = va_arg_float(alist);
+      float f = va_arg_float(alist);
+      float g = va_arg_float(alist);
+      float h = va_arg_float(alist);
+      int z = va_arg_int(alist);
+      float r = a+b+c+d+e+f+g+h+z;
+      fprintf(out,"float f(8*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,z);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&f_f12i)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      float b = va_arg_float(alist);
+      float c = va_arg_float(alist);
+      float d = va_arg_float(alist);
+      float e = va_arg_float(alist);
+      float f = va_arg_float(alist);
+      float g = va_arg_float(alist);
+      float h = va_arg_float(alist);
+      float i = va_arg_float(alist);
+      float j = va_arg_float(alist);
+      float k = va_arg_float(alist);
+      float l = va_arg_float(alist);
+      int z = va_arg_int(alist);
+      float r = a+b+c+d+e+f+g+h+i+j+k+l+z;
+      fprintf(out,"float f(12*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,z);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&f_f13i)
+    {
+      va_start_float(alist);
+     {float a = va_arg_float(alist);
+      float b = va_arg_float(alist);
+      float c = va_arg_float(alist);
+      float d = va_arg_float(alist);
+      float e = va_arg_float(alist);
+      float f = va_arg_float(alist);
+      float g = va_arg_float(alist);
+      float h = va_arg_float(alist);
+      float i = va_arg_float(alist);
+      float j = va_arg_float(alist);
+      float k = va_arg_float(alist);
+      float l = va_arg_float(alist);
+      float m = va_arg_float(alist);
+      int z = va_arg_int(alist);
+      float r = a+b+c+d+e+f+g+h+i+j+k+l+m+z;
+      fprintf(out,"float f(13*float,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,m,z);
+      fflush(out);
+      va_return_float(alist, r);
+    }}
+  else if (current_function == (void*)&d_di)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      int z = va_arg_int(alist);
+      double r = a+z;
+      fprintf(out,"double f(double,int):(%g,%d)",a,z);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
+  else if (current_function == (void*)&d_d2i)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      double b = va_arg_double(alist);
+      int z = va_arg_int(alist);
+      double r = a+b+z;
+      fprintf(out,"double f(2*double,int):(%g,%g,%d)",a,b,z);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
+  else if (current_function == (void*)&d_d3i)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      double b = va_arg_double(alist);
+      double c = va_arg_double(alist);
+      int z = va_arg_int(alist);
+      double r = a+b+c+z;
+      fprintf(out,"double f(3*double,int):(%g,%g,%g,%d)",a,b,c,z);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
+  else if (current_function == (void*)&d_d4i)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      double b = va_arg_double(alist);
+      double c = va_arg_double(alist);
+      double d = va_arg_double(alist);
+      int z = va_arg_int(alist);
+      double r = a+b+c+d+z;
+      fprintf(out,"double f(4*double,int):(%g,%g,%g,%g,%d)",a,b,c,d,z);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
+  else if (current_function == (void*)&d_d7i)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      double b = va_arg_double(alist);
+      double c = va_arg_double(alist);
+      double d = va_arg_double(alist);
+      double e = va_arg_double(alist);
+      double f = va_arg_double(alist);
+      double g = va_arg_double(alist);
+      int z = va_arg_int(alist);
+      double r = a+b+c+d+e+f+g+z;
+      fprintf(out,"double f(7*double,int):(%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,z);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
+  else if (current_function == (void*)&d_d8i)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      double b = va_arg_double(alist);
+      double c = va_arg_double(alist);
+      double d = va_arg_double(alist);
+      double e = va_arg_double(alist);
+      double f = va_arg_double(alist);
+      double g = va_arg_double(alist);
+      double h = va_arg_double(alist);
+      int z = va_arg_int(alist);
+      double r = a+b+c+d+e+f+g+h+z;
+      fprintf(out,"double f(8*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,z);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
+  else if (current_function == (void*)&d_d12i)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      double b = va_arg_double(alist);
+      double c = va_arg_double(alist);
+      double d = va_arg_double(alist);
+      double e = va_arg_double(alist);
+      double f = va_arg_double(alist);
+      double g = va_arg_double(alist);
+      double h = va_arg_double(alist);
+      double i = va_arg_double(alist);
+      double j = va_arg_double(alist);
+      double k = va_arg_double(alist);
+      double l = va_arg_double(alist);
+      int z = va_arg_int(alist);
+      double r = a+b+c+d+e+f+g+h+i+j+k+l+z;
+      fprintf(out,"double f(12*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,z);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
+  else if (current_function == (void*)&d_d13i)
+    {
+      va_start_double(alist);
+     {double a = va_arg_double(alist);
+      double b = va_arg_double(alist);
+      double c = va_arg_double(alist);
+      double d = va_arg_double(alist);
+      double e = va_arg_double(alist);
+      double f = va_arg_double(alist);
+      double g = va_arg_double(alist);
+      double h = va_arg_double(alist);
+      double i = va_arg_double(alist);
+      double j = va_arg_double(alist);
+      double k = va_arg_double(alist);
+      double l = va_arg_double(alist);
+      double m = va_arg_double(alist);
+      int z = va_arg_int(alist);
+      double r = a+b+c+d+e+f+g+h+i+j+k+l+m+z;
+      fprintf(out,"double f(13*double,int):(%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%g,%d)",a,b,c,d,e,f,g,h,i,j,k,l,m,z);
+      fflush(out);
+      va_return_double(alist, r);
+    }}
 
   /* small structure return tests */
   else if (current_function == (void*)&S1_v)
@@ -1712,6 +2080,7 @@ int main (void)
   /* mixed number tests */
   { uchar ucr;
     ushort usr;
+    float fr;
     double dr;
 #ifdef HAVE_LONG_LONG_INT
     long long llr;
@@ -1782,6 +2151,134 @@ int main (void)
     fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
     fflush(out);
 #endif
+
+    fr = f_fi(f1,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_fi; fr = ((float (*) (float,int)) vacall) (f1,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    fr = f_f2i(f1,f2,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_f2i; fr = ((float (*) (float,float,int)) vacall) (f1,f2,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    fr = f_f3i(f1,f2,f3,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_f3i; fr = ((float (*) (float,float,float,int)) vacall) (f1,f2,f3,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    fr = f_f4i(f1,f2,f3,f4,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_f4i; fr = ((float (*) (float,float,float,float,int)) vacall) (f1,f2,f3,f4,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    fr = f_f7i(f1,f2,f3,f4,f5,f6,f7,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_f7i; fr = ((float (*) (float,float,float,float,float,float,float,int)) vacall) (f1,f2,f3,f4,f5,f6,f7,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    fr = f_f8i(f1,f2,f3,f4,f5,f6,f7,f8,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_f8i; fr = ((float (*) (float,float,float,float,float,float,float,float,int)) vacall) (f1,f2,f3,f4,f5,f6,f7,f8,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    fr = f_f12i(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_f12i; fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,int)) vacall) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    fr = f_f13i(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+    fr = 0.0; clear_traces();
+    current_function = (void*) &f_f13i; fr = ((float (*) (float,float,float,float,float,float,float,float,float,float,float,float,float,int)) vacall) (f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,i9);
+    fprintf(out,"->%g\n",fr);
+    fflush(out);
+
+    dr = d_di(d1,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_di; dr = ((double (*) (double,int)) vacall) (d1,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_d2i(d1,d2,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_d2i; dr = ((double (*) (double,double,int)) vacall) (d1,d2,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_d3i(d1,d2,d3,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_d3i; dr = ((double (*) (double,double,double,int)) vacall) (d1,d2,d3,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_d4i(d1,d2,d3,d4,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_d4i; dr = ((double (*) (double,double,double,double,int)) vacall) (d1,d2,d3,d4,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_d7i(d1,d2,d3,d4,d5,d6,d7,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_d7i; dr = ((double (*) (double,double,double,double,double,double,double,int)) vacall) (d1,d2,d3,d4,d5,d6,d7,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_d8i(d1,d2,d3,d4,d5,d6,d7,d8,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_d8i; dr = ((double (*) (double,double,double,double,double,double,double,double,int)) vacall) (d1,d2,d3,d4,d5,d6,d7,d8,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_d12i(d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_d12i; dr = ((double (*) (double,double,double,double,double,double,double,double,double,double,double,double,int)) vacall) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+
+    dr = d_d13i(d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
+    dr = 0.0; clear_traces();
+    current_function = (void*) &d_d13i; dr = ((double (*) (double,double,double,double,double,double,double,double,double,double,double,double,double,int)) vacall) (d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11,d12,d13,i9);
+    fprintf(out,"->%g\n",dr);
+    fflush(out);
   }
 
   /* small structure return tests */
