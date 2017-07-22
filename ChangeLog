@@ -1,5 +1,17 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	ia64, x86_64: Use symbolic constants.
+	* avcall/avcall.h.in (__AV_FARG_NUM) [__ia64__ || __x86_64__]:
+	New macro.
+	(av_float, av_double): Use it.
+	(__av_struct): Use __AV_IARG_NUM.
+	* vacall/vacall.h.in (__VA_FARG_NUM) [__ia64__ || __x86_64__]:
+	New macro.
+	(va_arg_float, va_arg_double): Use it.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	armhf: Fix a bug in vacall (failing tests d_d13i, f_f17l3L, d_d17l3L).
 	* vacall/vacall.h.in (__va_alist, __va_start_struct2,
 	__va_arg_leftadjusted, __va_arg_rightadjusted, __va_arg_longlong)
