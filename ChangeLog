@@ -1,5 +1,11 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	powerpc: Don't ever access out-of-range array elements.
+	* avcall/avcall-powerpc.c (__builtin_avcall): Access only 8 fargs when
+	only 8 exist.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	powerpc, powerpc64: Use symbolic constants.
 	* avcall/avcall.h.in (__AV_FARG_NUM) [__powerpc__ || __powerpc64__]:
 	New macro.

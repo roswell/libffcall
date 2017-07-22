@@ -110,6 +110,7 @@ __builtin_avcall(av_alist* l)
   else if (arglen == 6) goto fargs6;
   else if (arglen == 7) goto fargs7;
   else if (arglen == 8) goto fargs8;
+#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
   else if (arglen == 9) goto fargs9;
   else if (arglen == 10) goto fargs10;
   else if (arglen == 11) goto fargs11;
@@ -120,6 +121,7 @@ __builtin_avcall(av_alist* l)
   fargs11: farg11 = l->fargs[10];
   fargs10: farg10 = l->fargs[9];
   fargs9: farg9 = l->fargs[8];
+#endif
   fargs8: farg8 = l->fargs[7];
   fargs7: farg7 = l->fargs[6];
   fargs6: farg6 = l->fargs[5];
