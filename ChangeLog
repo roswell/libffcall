@@ -1,5 +1,11 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	s390, s390x: Merge common code.
+	* vacall/vacall.h.in (va_arg_float, va_arg_double) [s390,s390x]: Merge.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	s390: Fix a bug (failing tests f_f3i...f_f13i, d_d3i...d_d13i).
 	* vacall/vacall.h.in (va_arg_float, va_arg_double) [s390]: Don't bump
 	ianum,

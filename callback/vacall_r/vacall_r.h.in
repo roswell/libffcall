@@ -1153,23 +1153,7 @@ typedef __va_alist* va_alist;
       *(double*)((LIST)->aptr - sizeof(__vaword))			\
   )  )
 #endif
-#if defined(__s390__) && !defined(__s390x__)
-/* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
-#define va_arg_float(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->farg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(float),					\
-      *(float*)((LIST)->aptr - sizeof(float))				\
-  )  )
-#define va_arg_double(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->darg[(LIST)->fanum++]					\
-   : (__va_align_double(LIST)						\
-      (LIST)->aptr += sizeof(double),					\
-      *(double*)((LIST)->aptr - sizeof(double))				\
-  )  )
-#endif
-#if defined(__s390x__)
+#if defined(__s390__) || defined(__s390x__)
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define va_arg_float(LIST)  \
   ((LIST)->fanum < __VA_FARG_NUM					\
@@ -1180,8 +1164,8 @@ typedef __va_alist* va_alist;
 #define va_arg_double(LIST)  \
   ((LIST)->fanum < __VA_FARG_NUM					\
    ? (LIST)->darg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(__vaword),					\
-      *(double*)((LIST)->aptr - sizeof(__vaword))			\
+   : ((LIST)->aptr += sizeof(double),					\
+      *(double*)((LIST)->aptr - sizeof(double))				\
   )  )
 #endif
 #ifndef va_arg_float
