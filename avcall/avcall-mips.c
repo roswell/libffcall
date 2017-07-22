@@ -69,14 +69,14 @@ __builtin_avcall(av_alist* l)
   double dret;
 
   /* load leading float args */
-  if (l->flags & __AV_FLOAT_1)
-    __asm__("l.s $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,floatarg[0]));
-  if (l->flags & __AV_DOUBLE_1)
-    __asm__("l.d $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,doublearg[0]));
-  if ((l->flags & __AV_FLOAT_2) && (l->flags & (__AV_FLOAT_1 | __AV_DOUBLE_1)))
-    __asm__("l.s $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,floatarg[1]));
-  if ((l->flags & __AV_DOUBLE_2) && (l->flags & (__AV_FLOAT_1 | __AV_DOUBLE_1)))
-    __asm__("l.d $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,doublearg[1]));
+  if (l->farg_mask & (1 << 0))
+    __asm__("l.s $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,fargs[0]));
+  if (l->darg_mask & (1 << 0))
+    __asm__("l.d $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,dargs[0]));
+  if (l->farg_mask & (1 << 1))
+    __asm__("l.s $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,fargs[1]));
+  if (l->darg_mask & (1 << 1))
+    __asm__("l.d $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,dargs[1]));
 
   for (i = 4; i < arglen; i++)		/* push excess function args */
     argframe[i] = l->args[i];

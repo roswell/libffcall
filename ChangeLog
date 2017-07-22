@@ -1,5 +1,25 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	mips: Don't store dynamic state in the flags.
+	* avcall/avcall.h.in (__AV_FLOAT_1, __AV_FLOAT_2, __AV_DOUBLE_1,
+	__AV_DOUBLE_2): Remove enum values.
+	(av_alist) [mips]: Store the number of floating-point register arguments
+	in fanum. Store bitmasks in farg_mask and darg_mask. Rename field
+	'floatarg' to 'fargs'. Rename field 'doublearg' to 'dargs'.
+	(__av_start1, av_float, av_double): Update implementation accordingly.
+	* avcall/avcall-mips.c (__builtin_avcall): Access farg_mask and
+	darg_mask instead of the flags.
+	* vacall/vacall.h.in (__VA_FLOAT_1, __VA_FLOAT_2): Remove enum values.
+	(__VA_REGISTER_FLOATSTRUCT_RETURN, __VA_REGISTER_DOUBLESTRUCT_RETURN):
+	Change values.
+	(__va_alist, va_arg_float, va_arg_double) [mips]: Store the number of
+	floating-point register arguments in fanum. Use it instead of the
+	__VA_FLOAT_1 flag.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-mips.c (__vacall): Update accordingly.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	powerpc, powerpc64, ia64, x86_64: Undo premature optimization.
 	* vacall/vacall.h.in: Use 'fanum' field instead of 'memfargptr' field.
 	* callback/vacall_r/vacall_r.h.in: Likewise.

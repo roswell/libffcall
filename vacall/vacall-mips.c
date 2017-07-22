@@ -67,6 +67,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   list.rtype = __VAvoid;
   list.memargptr = (long)&firstword;
   list.anum = 0;
+  list.fanum = 0;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
   (*vacall_function) (&list);
