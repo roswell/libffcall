@@ -1,5 +1,14 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	alpha: Make vacall code more maintainable.
+	* vacall/vacall.h.in (__va_alist, va_arg_double, va_arg_float) [alpha]:
+	Add fields 'farg_offset', 'farg'.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-alpha.c (__vacall): Don't allocate the fargs in the
+	'locals' struct. Initialize 'farg_offset' field.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	mipsn32, mips64: Remove unused field.
 	* vacall/vacall.h.in (__va_alist) [__mipsn32__ || __mips64__]: Remove
 	field 'memargptr'.

@@ -57,7 +57,6 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
    * order on the stack. */
   struct {
     __va_alist list;
-    double farg1, farg2, farg3, farg4, farg5, farg6;
     long arg1, arg2, arg3, arg4, arg5, arg6;
   } locals;
   /* MAGIC ALERT! This is the last struct on the stack, so that
@@ -70,18 +69,19 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   /* locals.arg4 = */ (&firstword)[-3] = word4; /* $19 */
   /* locals.arg5 = */ (&firstword)[-2] = word5; /* $20 */
   /* locals.arg6 = */ (&firstword)[-1] = word6; /* $21 */
-  locals.farg1 = farg1;
-  locals.farg2 = farg2;
-  locals.farg3 = farg3;
-  locals.farg4 = farg4;
-  locals.farg5 = farg5;
-  locals.farg6 = farg6;
+  locals.list.farg[0] = farg1;
+  locals.list.farg[1] = farg2;
+  locals.list.farg[2] = farg3;
+  locals.list.farg[3] = farg4;
+  locals.list.farg[4] = farg5;
+  locals.list.farg[5] = farg6;
   /* Prepare the va_alist. */
   locals.list.flags = 0;
   locals.list.aptr = (long)(&firstword - 6);
   locals.list.raddr = (void*)0;
   locals.list.rtype = __VAvoid;
   locals.list.memargptr = (long)&firstword;
+  locals.list.farg_offset = (long)&locals.list.farg[0] - locals.list.aptr;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
   (*vacall_function) (&locals.list);
