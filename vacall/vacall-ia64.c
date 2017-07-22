@@ -82,7 +82,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   locals.list.flags = 0;
   locals.list.aptr = (long)(&firstword - 8);
   locals.list.saptr = &firstword - 8;
-  locals.list.memfargptr = &locals.list.farg[0];
+  locals.list.fanum = 0;
   locals.list.raddr = (void*)0;
   locals.list.rtype = __VAvoid;
   locals.list.structraddr = sret;

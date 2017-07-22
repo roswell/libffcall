@@ -87,7 +87,7 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   list.aptr = (long)(&firstword - 8);
   list.raddr = (void*)0;
   list.rtype = __VAvoid;
-  list.memfargptr = &list.farg[0];
+  list.fanum = 0;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
   (*vacall_function) (&list);

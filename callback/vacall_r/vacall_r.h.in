@@ -456,18 +456,18 @@ typedef struct
 #else
 #define __VA_FARG_NUM 13
 #endif
-  double*        memfargptr;
+  unsigned int   fanum;
   double         farg[__VA_FARG_NUM];
 #endif
 #if defined(__ia64__)
   __vaword*      saptr;
 #define __VA_FARG_NUM 8
-  double*        memfargptr;
+  unsigned int   fanum;
   double         farg[__VA_FARG_NUM];
 #endif
 #if defined(__x86_64__)
 #define __VA_FARG_NUM 8
-  double*        memfargptr;
+  unsigned int   fanum;
   double         farg[__VA_FARG_NUM];
 #define __VA_IARG_NUM 6
   unsigned int   ianum;
@@ -1127,29 +1127,29 @@ typedef __va_alist* va_alist;
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define va_arg_float(LIST)  \
   ((LIST)->aptr += sizeof(float),					\
-   ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-    ? (float) *((LIST)->memfargptr++)					\
+   ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (float) (LIST)->farg[(LIST)->fanum++]				\
     : *(float*)((LIST)->aptr - sizeof(float))				\
   ))
 #define va_arg_double(LIST)  \
   (__va_align_double(LIST)						\
    (LIST)->aptr += sizeof(double),					\
-   ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-    ? *((LIST)->memfargptr++)						\
+   ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (LIST)->farg[(LIST)->fanum++]					\
     : *(double*)((LIST)->aptr - sizeof(double))				\
   ))
 #endif
 #if defined(__powerpc_sysv4__)
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define va_arg_float(LIST)  \
-  ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-   ? (float) *((LIST)->memfargptr++)					\
+  ((LIST)->fanum < __VA_FARG_NUM					\
+   ? (float) (LIST)->farg[(LIST)->fanum++]				\
    : ((LIST)->aptr += sizeof(float),					\
       *(float*)((LIST)->aptr - sizeof(float))				\
   )  )
 #define va_arg_double(LIST)  \
-  ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-   ? *((LIST)->memfargptr++)						\
+  ((LIST)->fanum < __VA_FARG_NUM					\
+   ? (LIST)->farg[(LIST)->fanum++]					\
    : (__va_align_double(LIST)						\
       (LIST)->aptr += sizeof(double),					\
       *(double*)((LIST)->aptr - sizeof(double))				\
@@ -1160,30 +1160,30 @@ typedef __va_alist* va_alist;
 #if defined(_AIX)
 #define va_arg_float(LIST)  \
   ((LIST)->aptr += sizeof(__vaword),					\
-   ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-    ? (float) *((LIST)->memfargptr++)					\
+   ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (float) (LIST)->farg[(LIST)->fanum++]				\
     : ((float*)(LIST)->aptr)[(LIST)->flags & __VA_AIXCC_FLOAT_ARGS ? -2 : -1] \
   ))
 #elif defined(_LITTLE_ENDIAN)
 #define va_arg_float(LIST)  \
   ((LIST)->aptr += sizeof(__vaword),					\
-   ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-    ? (float) *((LIST)->memfargptr++)					\
+   ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (float) (LIST)->farg[(LIST)->fanum++]				\
     : ((float*)(LIST)->aptr)[-2]					\
   ))
 #else /* _BIG_ENDIAN */
 #define va_arg_float(LIST)  \
   ((LIST)->aptr += sizeof(__vaword),					\
-   ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-    ? (float) *((LIST)->memfargptr++)					\
+   ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (float) (LIST)->farg[(LIST)->fanum++]				\
     : ((float*)(LIST)->aptr)[-1]					\
   ))
 #endif
 #define va_arg_double(LIST)  \
   (__va_align_double(LIST)						\
    (LIST)->aptr += sizeof(double),					\
-   ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-    ? *((LIST)->memfargptr++)						\
+   ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (LIST)->farg[(LIST)->fanum++]					\
     : *(double*)((LIST)->aptr - sizeof(double))				\
   ))
 #endif
@@ -1191,31 +1191,29 @@ typedef __va_alist* va_alist;
 /* The first 8 floating-point args have been stored elsewhere. */
 #define va_arg_float(LIST)  \
   ((LIST)->aptr += sizeof(__vaword),					\
-   ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-    ? (float) *((LIST)->memfargptr++)					\
+   ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (float) (LIST)->farg[(LIST)->fanum++]				\
     : *(float*)((LIST)->aptr - sizeof(__vaword))			\
   ))
 #define va_arg_double(LIST)  \
   (__va_align_double(LIST)						\
    (LIST)->aptr += sizeof(double),					\
-   ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-    ? *((LIST)->memfargptr++)						\
+   ((LIST)->fanum < __VA_FARG_NUM					\
+    ? (LIST)->farg[(LIST)->fanum++]					\
     : *(double*)((LIST)->aptr - sizeof(double))				\
   ))
 #endif
 #if defined(__x86_64__)
 /* The first 8 floating-point args have been stored elsewhere. */
 #define va_arg_float(LIST)  \
-  ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-   ? ((LIST)->memfargptr++,						\
-      *(float*)((LIST)->memfargptr - 1)					\
-     )									\
+  ((LIST)->fanum < __VA_FARG_NUM					\
+   ? *(float*)&(LIST)->farg[(LIST)->fanum++]				\
    : ((LIST)->aptr += sizeof(__vaword),					\
       *(float*)((LIST)->aptr - sizeof(__vaword))			\
   )  )
 #define va_arg_double(LIST)  \
-  ((LIST)->memfargptr < &(LIST)->farg[__VA_FARG_NUM]			\
-   ? *(LIST)->memfargptr++						\
+  ((LIST)->fanum < __VA_FARG_NUM					\
+   ? (LIST)->farg[(LIST)->fanum++]					\
    : ((LIST)->aptr += sizeof(__vaword),					\
       *(double*)((LIST)->aptr - sizeof(__vaword))			\
   )  )

@@ -1,5 +1,15 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	powerpc, powerpc64, ia64, x86_64: Undo premature optimization.
+	* vacall/vacall.h.in: Use 'fanum' field instead of 'memfargptr' field.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-ia64.c: Update accordingly.
+	* vacall/vacall-powerpc.c: Likewise.
+	* vacall/vacall-powerpc64.c: Likewise.
+	* vacall/vacall-x86_64.c: Likewise.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Undo premature optimization.
 	* vacall/vacall.h.in [__x86_64__]: Use 'ianum' field instead of
 	'memiargptr' field.
