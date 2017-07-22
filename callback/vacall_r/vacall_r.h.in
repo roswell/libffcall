@@ -470,7 +470,7 @@ typedef struct
   double*        memfargptr;
   double         farg[__VA_FARG_NUM];
 #define __VA_IARG_NUM 6
-  __vaword*      memiargptr;
+  unsigned int   ianum;
   __vaword       iarg[__VA_IARG_NUM];
 #endif
 #if defined(__s390__) && !defined(__s390x__)
@@ -706,14 +706,7 @@ typedef __va_alist* va_alist;
    0									\
   )
 #endif
-#if defined(__x86_64__)
-/* Return structure pointer is passed as first arg. */
-#define __va_start_struct2(LIST)  \
-  ((LIST)->raddr = (void *)(*(LIST)->memiargptr++),			\
-   0									\
-  )
-#endif
-#if defined(__powerpc_sysv4__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
   ((LIST)->raddr = (void*)((LIST)->iarg[(LIST)->ianum++]),		\
@@ -882,9 +875,9 @@ typedef __va_alist* va_alist;
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (((TYPE_SIZE) <= 2*sizeof(__vaword)					\
-    && (LIST)->memiargptr + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= &(LIST)->iarg[__VA_IARG_NUM]) \
-   ? ((LIST)->memiargptr += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
-      (LIST)->memiargptr - ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) \
+    && (LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM) \
+   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
+      &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword)] \
      )									\
    : (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
   )

@@ -1,6 +1,14 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
 	x86_64: Undo premature optimization.
+	* vacall/vacall.h.in [__x86_64__]: Use 'ianum' field instead of
+	'memiargptr' field.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-x86_64.c (__vacall): Update accordingly.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
+	x86_64: Undo premature optimization.
 	* avcall/avcall.h.in [__x86_64__]: Use 'ianum' field instead of 'iaptr'
 	field.
 
