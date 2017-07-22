@@ -72,7 +72,7 @@ arm64         8  x0-x7                  {fp,lr}, others               N
 powerpc       8  3-10                                                 Y (preallocated room) on AIX and Darwin,
                                                                       N otherwise
 powerpc64     8  3-10                                                 Y (preallocated room)
-ia64          8  r32-r39                ?                             (needs 'locals' struct hack)
+ia64          8  r32-r39                ?                             Y (allocated room through split struct)
 x86_64        6  rdi,rsi,rdx,rcx,r8,r9  rbp, retaddr                  N
 s390,s390x    5  r2-r6                                                N
 

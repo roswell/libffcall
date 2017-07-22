@@ -1,5 +1,12 @@
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
+	ia64: Make vacall code more robust.
+	* vacall/vacall-ia64.c: Use a split struct to allocate room for the
+	8 leading words in the callee's stack.
+	* porting-tools/abis/stack-frame.txt: Mention the change.
+
+2017-07-22  Bruno Haible  <bruno@clisp.org>
+
 	alpha: Make vacall code more robust.
 	* vacall/vacall-alpha.c: Use a split struct to allocate room for the
 	6 leading words in the callee's stack.
