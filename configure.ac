@@ -23,6 +23,7 @@ AM_INIT_AUTOMAKE([])
 AC_CONFIG_SRCDIR([trampoline/trampoline.h.in])
 
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([ffcall-version.h:ffcall-version.in.h])
 AC_CONFIG_HEADERS([avcall/avcall.h])
 AC_CONFIG_HEADERS([vacall/vacall.h])
 AC_CONFIG_HEADERS([trampoline/trampoline.h])

@@ -8,17 +8,11 @@ RM = rm -f
 all : vacall_r.h.msvc config.h.msvc vacall_r.h.mingw32 config.h.mingw32 \
       vacall-i386-msvc.c vacall-i386-mingw32.c
 
-VERSION = $(shell cat ../../VERSION)
+vacall_r.h.msvc : vacall_r.h.in
+	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' < vacall_r.h.in > vacall_r.h.msvc
 
-vacall_r.h.msvc : vacall_r.h.in ../../VERSION
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
-	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
-	    < vacall_r.h.in > vacall_r.h.msvc
-
-vacall_r.h.mingw32 : vacall_r.h.in ../../VERSION
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' \
-	    -e 's,@LIBFFCALL_VERSION@,$(VERSION),' \
-	    < vacall_r.h.in > vacall_r.h.mingw32
+vacall_r.h.mingw32 : vacall_r.h.in
+	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' < vacall_r.h.in > vacall_r.h.mingw32
 
 config.h.msvc : ../../config.h.in
 	cp ../../config.h.in config.h.msvc

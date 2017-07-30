@@ -1,5 +1,34 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Move libffcall version number to a separate include file.
+	Rationale: Prepare for getting rid of most .h.in -> .h substitutions.
+	* ffcall-version.in.h: New file.
+	* configure.ac: Invoke AC_CONFIG_HEADERS for ffcall-version.h.
+	* avcall/avcall.h.in (LIBFFCALL_VERSION): Remove definition. Include
+	ffcall-version.h instead.
+	* vacall/vacall.h.in: Likewise.
+	* trampoline/trampoline.h.in: Likewise.
+	* callback/callback.h.in: Likewise.
+	* callback/vacall_r/vacall_r.h.in (LIBFFCALL_VERSION): Remove
+	definition.
+	* callback/trampoline_r/trampoline_r.h.in (LIBFFCALL_VERSION): Likewise.
+	* dummy/ffcall-version.h: New file.
+	* avcall/Makefile.devel (GCCFLAGS): Add -I option to find a dummy
+	ffcall-version.h.
+	* vacall/Makefile.devel (GCCFLAGS): Likewise.
+	* callback/vacall_r/Makefile.devel (GCCFLAGS): Likewise.
+	* vacall/Makefile.maint (VERSION): Remove macro.
+	(vacall.h.msvc, vacall.h.mingw32): Don't substitute LIBFFCALL_VERSION.
+	* callback/vacall_r/Makefile.maint (VERSION): Remove macro.
+	(vacall_r.h.msvc, vacall_r.h.mingw32): Don't substitute
+	LIBFFCALL_VERSION.
+	* Makefile.in (ffcall-version.h): New target.
+	(install, installdirs, uninstall): Install/uninstall ffcall-version.h.
+	(DISTCLEANFILES): Add ffcall-version.h. Update stamp file list.
+	(SOURCE_FILES): Add ffcall-version.in.h, dummy/ffcall-version.h.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Remove configure test for 'long long'. Assume the compiler has it.
 	Rationale: All compilers nowadays have 'long long', for years.
 	* configure.ac: Don't invoke AC_TYPE_LONG_LONG_INT.

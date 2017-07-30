@@ -18,11 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined(LIBFFCALL_VERSION)
-/* Version number of libffcall: (major<<8) + minor. */
-# define LIBFFCALL_VERSION 0
-#endif
-
 /* These definitions are adjusted by ‘configure’ automatically. */
 
 /* CPU */

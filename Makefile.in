@@ -2,6 +2,9 @@
 
 #### Start of system configuration section. ####
 
+# Directories used by "make":
+srcdir = @srcdir@
+
 # Directories used by "make install":
 prefix = @prefix@
 local_prefix = /usr/local
@@ -9,27 +12,41 @@ exec_prefix = @exec_prefix@
 libdir = @libdir@
 includedir = @includedir@
 mandir = @mandir@
+datadir = @datadir@
 datarootdir = @datarootdir@
 
 # Programs used by "make":
 RM = rm -f
 @SET_MAKE@
 
+# Programs used by "make install":
+INSTALL = @INSTALL@
+INSTALL_DATA = @INSTALL_DATA@
+
 #### End of system configuration section. ####
 
 SHELL = /bin/sh
 
-all : force
+all : ffcall-version.h force
 	cd @subdir@ && $(MAKE) all
 
+ffcall-version.h : $(srcdir)/ffcall-version.in.h
+	cd .. && ./config.status --header=ffcall-version.h:ffcall-version.in.h
+
 install : force
+	mkdir -p $(DESTDIR)$(prefix)
+	mkdir -p $(DESTDIR)$(includedir)
+	$(INSTALL_DATA) ffcall-version.h $(DESTDIR)$(includedir)/ffcall-version.h
 	cd @subdir@ && $(MAKE) install
 
 installdirs : force
+	mkdir -p $(DESTDIR)$(prefix)
+	mkdir -p $(DESTDIR)$(includedir)
 	cd @subdir@ && $(MAKE) installdirs
 
 uninstall : force
 	cd @subdir@ && $(MAKE) uninstall
+	$(RM) $(DESTDIR)$(includedir)/ffcall-version.h
 
 check : force
 	cd @subdir@ && $(MAKE) check
@@ -44,14 +61,14 @@ clean : force
 	cd @subdir@ && $(MAKE) clean
 
 DISTCLEANFILES = \
-  config.status config.log config.cache Makefile config.h libtool \
-  stamp-h1 \
-  avcall/stamp-h2 \
-  vacall/stamp-h3 \
-  trampoline/stamp-h4 \
-  callback/stamp-h5 \
-  callback/vacall_r/stamp-h6 \
-  callback/trampoline_r/stamp-h7
+  config.status config.log config.cache Makefile config.h ffcall-version.h libtool \
+  stamp-h1 stamp-h2 \
+  avcall/stamp-h3 \
+  vacall/stamp-h4 \
+  trampoline/stamp-h5 \
+  callback/stamp-h6 \
+  callback/vacall_r/stamp-h7 \
+  callback/trampoline_r/stamp-h8
 
 distclean : force
 	cd @subdir@; if test -f Makefile; then $(MAKE) distclean; fi
@@ -97,7 +114,8 @@ SOURCE_FILES = \
   common/asm-x86_64.sh common/asm-x86_64.h \
   common/noexecstack.h common/noexecstack-arm.h \
   common/structcpy.c \
-  common/uniq-u.c
+  common/uniq-u.c \
+  ffcall-version.in.h dummy/ffcall-version.h
 # List of distributed files imported from other packages or directories.
 LIBTOOL_IMPORTED_FILES = \
   build-aux/ltmain.sh \

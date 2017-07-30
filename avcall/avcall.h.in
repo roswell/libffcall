@@ -24,10 +24,7 @@
   and call a function on it.
  ----------------------------------------------------------------------*/
 
-#if !defined(LIBFFCALL_VERSION)
-/* Version number of libffcall: (major<<8) + minor. */
-# define LIBFFCALL_VERSION 0
-#endif
+#include "ffcall-version.h"
 
 /* These definitions are adjusted by ‘configure’ automatically. */
 
