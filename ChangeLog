@@ -1,5 +1,15 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Move ABI indicator macro definitions to a separate include file.
+	Rationale: Prepare for getting rid of most .h.in -> .h substitutions.
+	* ffcall-abi.h: New file.
+	* Makefile.in (install, uninstall): Install/uninstall ffcall-abi.h.
+	(SOURCE_FILES): Add ffcall-abi.h.
+	* porting-tools/abis/predefines.c: New file.
+	* porting-tools/abis/README: Update.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Move libffcall version number to a separate include file.
 	Rationale: Prepare for getting rid of most .h.in -> .h substitutions.
 	* ffcall-version.in.h: New file.

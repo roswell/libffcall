@@ -37,6 +37,7 @@ install : force
 	mkdir -p $(DESTDIR)$(prefix)
 	mkdir -p $(DESTDIR)$(includedir)
 	$(INSTALL_DATA) ffcall-version.h $(DESTDIR)$(includedir)/ffcall-version.h
+	$(INSTALL_DATA) $(srcdir)/ffcall-abi.h $(DESTDIR)$(includedir)/ffcall-abi.h
 	cd @subdir@ && $(MAKE) install
 
 installdirs : force
@@ -46,6 +47,7 @@ installdirs : force
 
 uninstall : force
 	cd @subdir@ && $(MAKE) uninstall
+	$(RM) $(DESTDIR)$(includedir)/ffcall-abi.h
 	$(RM) $(DESTDIR)$(includedir)/ffcall-version.h
 
 check : force
@@ -115,7 +117,8 @@ SOURCE_FILES = \
   common/noexecstack.h common/noexecstack-arm.h \
   common/structcpy.c \
   common/uniq-u.c \
-  ffcall-version.in.h dummy/ffcall-version.h
+  ffcall-version.in.h dummy/ffcall-version.h \
+  ffcall-abi.h
 # List of distributed files imported from other packages or directories.
 LIBTOOL_IMPORTED_FILES = \
   build-aux/ltmain.sh \

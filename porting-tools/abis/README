@@ -158,5 +158,12 @@ follows.
 
  9.4) Test the callback package ("make check" here as well).
 
-10) Update the various file lists in the Makefiles and .gitignore.
+10) Port the ffcall-abi.h file.
+
+ 10.1) Add #ifdefs for possible predefined symbols to predefines.c.
+
+ 10.2) Preprocess predefines.c with various compilers. Determine a set of
+       predefined macros that identify this ABI.
+
+11) Update the various file lists in the Makefiles and .gitignore.
 
