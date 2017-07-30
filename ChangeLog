@@ -1,5 +1,13 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Remove special optimization of av_struct macro.
+	* avcall/avcall.h.in (av_struct): Take the address of VAL.
+	(__av_struct_assign): Remove macro.
+	(__av_struct, __av_struct_leftadjusted, __av_struct_rightadjusted):
+	Remove ASSIGN argument; use __av_struct_copy instead.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Evaluate __AV_ALIST_WORDS only during av_start_* macros. Part 1.
 	* avcall/avcall.h.in (av_alist): Enable 'eptr' field on all platforms.
 	(__av_eptr): Remove macro. Use (LIST).eptr eveywhere instead.
