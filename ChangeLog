@@ -1,5 +1,14 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Evaluate __AV_ALIST_WORDS only during av_start_* macros. Part 1.
+	* avcall/avcall.h.in (av_alist): Enable 'eptr' field on all platforms.
+	(__av_eptr): Remove macro. Use (LIST).eptr eveywhere instead.
+	(__av_start_init_eptr): New macro.
+	(__av_start): Invoke it.
+	(__av_start1): Don't initialize (LIST).eptr here.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Prefix all exported symbols at linker level with 'avcall_'.
 	* avcall/avcall.h.in (avcall_call): Renamed from __builtin_avcall.
 	* avcall/avcall-*.c: Update accordingly.
