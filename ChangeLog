@@ -1,5 +1,12 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Remove unused configure test AC_C_CHAR_UNSIGNED.
+	* vacall/vacall.h.in (__CHAR_UNSIGNED__): Remove unuseed macro.
+	* callback/vacall_r/vacall_r.h.in (__CHAR_UNSIGNED__): Likewise.
+	* configure.ac: Don't invoke AC_C_CHAR_UNSIGNED.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Don't depend on FFCALL_IREG_FLOAT_RETURN configure result.
 	Rationale: The installed .h files should be compiler independent.
 	* avcall/avcall.h.in (__IREG_FLOAT_RETURN__): Remove macro. Assume it is

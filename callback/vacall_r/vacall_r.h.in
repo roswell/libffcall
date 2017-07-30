@@ -93,11 +93,6 @@
 #undef HAVE_LONG_LONG_INT
 #endif
 
-/* AC_C_CHAR_UNSIGNED */
-#ifndef __CHAR_UNSIGNED__
-#undef __CHAR_UNSIGNED__
-#endif
-
 /* End of definitions adjusted by ‘configure’. */
 
 

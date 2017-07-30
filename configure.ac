@@ -84,7 +84,6 @@ dnl Checks for avcall, vacall, vacall_r.
 FFCALL_SMALL_STRUCT_RETURN
 FFCALL_IREG_FLOAT_RETURN
 AC_TYPE_LONG_LONG_INT
-AC_C_CHAR_UNSIGNED
 
 dnl Checks for trampoline, trampoline_r.
 AC_CHECK_HEADERS([unistd_h])
