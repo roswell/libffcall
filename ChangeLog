@@ -1,5 +1,19 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	vacall, callback: Allow compiler optimizations regarding noreturn.
+	* Makefile.maint (GNULIB_MODULES): Add 'stdnoreturn'.
+	* vacall/vacall-libapi.c: Include <stdnoreturn.h>.
+	(__va_struct_buffer_t): Moved to here.
+	(vacall_struct_buffer): Declare static.
+	(vacall_error_type_mismatch, vacall_error_struct_too_large): Declare
+	static and noreturn.
+	* callback/vacall_r/vacall-libapi.c: Likewise.
+	* vacall/vacall-internal.h (__va_start_struct, __va_return): Update.
+	(vacall_error_type_mismatch, vacall_error_struct_too_large,
+	__va_struct_buffer_t, vacall_struct_buffer): Remove declarations.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	vacall, callback: Move copyright notice up.
 	* vacall/vacall.h: Put double-inclusion guard after copyright header.
 	* callback/vacall_r/vacall_r.h: Likewise.

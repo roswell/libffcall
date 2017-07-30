@@ -18,34 +18,30 @@
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdnoreturn.h>
 
 #include "vacall-internal.h"
 
 /* Room for returning structs according to the Sun C non-reentrant struct return convention. */
-__va_struct_buffer_t vacall_struct_buffer;
+typedef union { __vaword room[__VA_ALIST_WORDS]; double align; } __va_struct_buffer_t;
+static __va_struct_buffer_t vacall_struct_buffer;
 
-int /* no return type, since this never returns */
+static _Noreturn void
 vacall_error_type_mismatch (enum __VAtype start_type, enum __VAtype return_type)
 {
   /* If you see this, fix your code. */
   fprintf (stderr, "vacall: va_start type %d and va_return type %d disagree.\n",
                    (int)start_type, (int)return_type);
   abort();
-#if defined(__cplusplus)
-  return 0;
-#endif
 }
 
-int /* no return type, since this never returns */
+static _Noreturn void
 vacall_error_struct_too_large (unsigned int size)
 {
   /* If you see this, increase __VA_ALIST_WORDS: */
   fprintf (stderr, "vacall: struct of size %u too large for Sun C struct return.\n",
                    size);
   abort();
-#if defined(__cplusplus)
-  return 0;
-#endif
 }
 
 void vacall_start (va_alist list, int rettype, int flags)

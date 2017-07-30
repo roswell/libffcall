@@ -74,7 +74,8 @@ GNULIB_MODULES = \
   host-cpu-c-abi \
   lock \
   longlong \
-  nocrash
+  nocrash \
+  stdnoreturn
 
 gnulib-m4/gnulib-cache.m4 :
 	if test -n "$$GNULIB_TOOL"; then \
