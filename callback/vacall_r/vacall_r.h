@@ -290,7 +290,32 @@ enum __VA_alist_flags
 /*
  * Definition of the ‘va_alist’ type.
  */
-struct vacall_alist;
+struct vacall_alist
+/* GNU clisp pokes in internals of the alist! */
+#ifdef LISPFUN
+{
+  /* some va_... macros need these flags */
+  int            flags;
+  /* temporary storage for return value */
+  union {
+    char                _char;
+    signed char         _schar;
+    unsigned char       _uchar;
+    short               _short;
+    unsigned short      _ushort;
+    int                 _int;
+    unsigned int        _uint;
+    long                _long;
+    unsigned long       _ulong;
+    long long           _longlong;
+    unsigned long long  _ulonglong;
+    float               _float;
+    double              _double;
+    void*               _ptr;
+  }              tmp;
+}
+#endif
+;
 typedef struct vacall_alist * va_alist;
 
 

@@ -54,23 +54,6 @@ typedef struct vacall_alist
 {
   /* some va_... macros need these flags */
   int            flags;
-  /* current pointer into the argument array */
-  unsigned long  aptr;
-  /* structure return pointer, return type, return type size */
-  void*          raddr;
-  enum __VAtype  rtype;
-  unsigned long  rsize;
-#if defined(__i386__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__) && defined(__MACH__) && defined(__APPLE__))
-  /* Filler word, needed if the numbers of words up to now in this structure */
-  /* is odd.                                                                 */
-  /* - On MSVC, alignof(double) = 8, but normally on i386 it is = 4.         */
-  /* - On ARM, GCC 3.1 produces code for an ABI where alignof(double) = 4    */
-  /*   and alignof(long long) = 4. But in the newer AAPCS ABI, these         */
-  /*   alignments are 8.                                                     */
-  /* - On Mac OS X, the Apple compiler has alignof(double) = 8 whereas the   */
-  /*   standard GCC has alignof(double) = 4.                                 */
-  __vaword       filler1;
-#endif
   /* temporary storage for return value */
   union {
     char                _char;
@@ -91,6 +74,23 @@ typedef struct vacall_alist
     void*               _ptr;
     __vaword            _words[2];
   }              tmp;
+  /* current pointer into the argument array */
+  unsigned long  aptr;
+  /* structure return pointer, return type, return type size */
+  void*          raddr;
+  enum __VAtype  rtype;
+  unsigned long  rsize;
+#if defined(__i386__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__) && defined(__MACH__) && defined(__APPLE__))
+  /* Filler word, needed if the numbers of words up to now in this structure */
+  /* is odd.                                                                 */
+  /* - On MSVC, alignof(double) = 8, but normally on i386 it is = 4.         */
+  /* - On ARM, GCC 3.1 produces code for an ABI where alignof(double) = 4    */
+  /*   and alignof(long long) = 4. But in the newer AAPCS ABI, these         */
+  /*   alignments are 8.                                                     */
+  /* - On Mac OS X, the Apple compiler has alignof(double) = 8 whereas the   */
+  /*   standard GCC has alignof(double) = 4.                                 */
+  __vaword       filler1;
+#endif
 #if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm64__) || defined(__ia64__)
   void*          structraddr;
 #endif

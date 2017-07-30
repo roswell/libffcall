@@ -1,5 +1,13 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Ensure source compatibility with existing versions of GNU clisp, part 3.
+	* vacall/vacall-internal.h (__va_alist): Move the 'flags' and 'tmp'
+	fields to the beginning.
+	* callback/vacall_r/vacall_r.h (vacall_alist): When used by GNU clisp,
+	declare 'flags' and 'tmp' members.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Ensure source compatibility with existing versions of GNU clisp, part 2.
 	* avcall/avcall-alist.h (__av_alist): Move the 'flags' field to the
 	beginning.
