@@ -1,22 +1,23 @@
-#ifndef _avcall_h				/*-*- C -*-*/
-#define _avcall_h
-/**
-  Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+/*
+ * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
+ * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
+#ifndef _AVCALL_H
+#define _AVCALL_H
 /*----------------------------------------------------------------------
   av_call() foreign function interface.
 
@@ -435,4 +436,4 @@ extern int avcall_call (av_alist* /* LIST */);
 #define __av_offset4(slot1,slot2,slot3,slot4)  \
   ((__av_offset3(slot1,slot2,slot3)+sizeof(slot3)+__AV_alignof(slot4)-1) & -(long)__AV_alignof(slot4))
 
-#endif /* _avcall_h */
+#endif /* _AVCALL_H */

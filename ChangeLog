@@ -1,5 +1,11 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Modernize.
+	* avcall/avcall.h: Change double-include guard. Modernize copyright
+	header.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Allow for binary-compatible future changes of the __av_* macros.
 	* avcall/avcall.h: New file, extracted from avcall/avcall.h.in.
 	Include <stddef.h>, ffcall-abi.h.
