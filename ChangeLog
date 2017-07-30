@@ -1,5 +1,11 @@
 2017-07-31  Bruno Haible  <bruno@clisp.org>
 
+	Fix preprocessor warning "Unknown preprocessing directive".
+	* common/asm-hppa.sh: Eliminate #APP, #NO_APP lines.
+	* common/asm-powerpc.sh: Likewise.
+
+2017-07-31  Bruno Haible  <bruno@clisp.org>
+
 	trampoline_r: Rework API.
 	* callback/trampoline_r/trampoline_r.h (trampoline_r_address,
 	trampoline_r_data0, trampoline_r_data1): Change signatures.

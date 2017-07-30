@@ -27,7 +27,9 @@ tmpremove='rm -f $tmpscript1 $tmpscript2'
 trap "$tmpremove" 1 2 15
 
 cat > $tmpscript1 << \EOF
-# ----------- Remove gcc self-identification
+# ----------- Remove #APP/#NO_APP lines and gcc self-identification
+/^#APP$/d
+/^#NO_APP$/d
 /gcc2_compiled/d
 /gnu_compiled_c/d
 /\.ident/d
