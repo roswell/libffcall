@@ -1,5 +1,17 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Remove copied files from callback/vacall_r/.
+	* callback/vacall_r/Makefile.devel (vacall-*.s): Compile
+	../../vacall/vacall-*.c directly.
+	* autogen.sh: Don't invoke target 'copied-files' in callback/vacall_r/.
+	* Makefile.devel (precompiled): Likewise.
+	* Makefile.in (COPIED_FILES): Remove callback/vacall_r/*.
+	* callback/vacall_r/Makefile.maint (COPIED_FILES): Remove variable.
+	(copied-files): Remove target.
+	* callback/vacall_r/Makefile.in (SOURCE_FILES): Remove vacall-*.c.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	callback: Allow for binary-compatible future changes of main API.
 	* callback/callback.h: Renamed from callback/callback.h.in.
 	Don't include trampoline_r.h.

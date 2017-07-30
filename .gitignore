@@ -40,25 +40,6 @@
 /callback/trampoline_r/cache-alpha.c
 /callback/trampoline_r/cache-hppa.c
 /callback/trampoline_r/protexec.c
-# Files copied from vacall:
-/callback/vacall_r/vacall-alpha.c
-/callback/vacall_r/vacall-arm.c
-/callback/vacall_r/vacall-armhf.c
-/callback/vacall_r/vacall-arm64.c
-/callback/vacall_r/vacall-hppa.c
-/callback/vacall_r/vacall-i386.c
-/callback/vacall_r/vacall-ia64.c
-/callback/vacall_r/vacall-m68k.c
-/callback/vacall_r/vacall-mips.c
-/callback/vacall_r/vacall-mipsn32.c
-/callback/vacall_r/vacall-mips64.c
-/callback/vacall_r/vacall-powerpc.c
-/callback/vacall_r/vacall-powerpc64.c
-/callback/vacall_r/vacall-s390.c
-/callback/vacall_r/vacall-s390x.c
-/callback/vacall_r/vacall-sparc.c
-/callback/vacall_r/vacall-sparc64.c
-/callback/vacall_r/vacall-x86_64.c
 
 # Files created by cross-build.sh:
 /cross-tools/build/

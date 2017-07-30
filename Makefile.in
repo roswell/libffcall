@@ -134,23 +134,6 @@ IMPORTED_FILES = \
   $(LIBTOOL_IMPORTED_FILES) $(GNULIB_IMPORTED_FILES) $(AUTOMAKE_IMPORTED_FILES)
 # List of files copied by autogen.sh.
 COPIED_FILES = \
-  callback/vacall_r/vacall-arm.c \
-  callback/vacall_r/vacall-armhf.c \
-  callback/vacall_r/vacall-arm64.c \
-  callback/vacall_r/vacall-hppa.c \
-  callback/vacall_r/vacall-i386.c \
-  callback/vacall_r/vacall-ia64.c \
-  callback/vacall_r/vacall-m68k.c \
-  callback/vacall_r/vacall-mips.c \
-  callback/vacall_r/vacall-mipsn32.c \
-  callback/vacall_r/vacall-mips64.c \
-  callback/vacall_r/vacall-powerpc.c \
-  callback/vacall_r/vacall-powerpc64.c \
-  callback/vacall_r/vacall-s390.c \
-  callback/vacall_r/vacall-s390x.c \
-  callback/vacall_r/vacall-sparc.c \
-  callback/vacall_r/vacall-sparc64.c \
-  callback/vacall_r/vacall-x86_64.c \
   callback/trampoline_r/PORTING \
   callback/trampoline_r/cache.c \
   callback/trampoline_r/cache-alpha.c \

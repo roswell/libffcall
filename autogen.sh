@@ -103,7 +103,6 @@ if test $skip_gnulib = false; then
 fi
 
 # Copy files between directories.
-(cd callback/vacall_r && make -f Makefile.maint copied-files)
 (cd callback/trampoline_r && make -f Makefile.maint copied-files)
 
 make -f Makefile.maint totally-clean all || exit $?
