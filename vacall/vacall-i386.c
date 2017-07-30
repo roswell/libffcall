@@ -24,7 +24,7 @@
 #endif
 
 #ifdef REENTRANT
-#define __vacall __vacall_r
+#define vacall_receiver callback_receiver
 typedef struct { void (*vacall_function) (void*,va_alist); void* arg; } env_t;
 register env_t*	env	__asm__("%ecx");
 #endif
@@ -36,7 +36,7 @@ register int	iret	__asm__("%eax");
 static
 #endif
 void /* the return type is variable, not void! */
-__vacall (__vaword firstword)
+vacall_receiver (__vaword firstword)
 {
   __va_alist list;
   /* Prepare the va_alist. */
@@ -161,8 +161,8 @@ __vacall (__vaword firstword)
 
 #ifdef REENTRANT
 __vacall_r_t
-get__vacall_r (void)
+callback_get_receiver (void)
 {
-  return (__vacall_r_t)(void*)&__vacall;
+  return (__vacall_r_t)(void*)&callback_receiver;
 }
 #endif

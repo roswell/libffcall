@@ -1,5 +1,41 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	vacall, callback: Prefix all exported symbols at linker level.
+	* vacall/vacall-*.c: Define vacall_receiver instead of __vacall,
+	callback_receiver instead of __vacall_r,
+	callback_get_receiver instead of get__vacall_r.
+	* vacall/vacall-libapi.c: Include config.h first.
+	(vacall_receiver): Renamed from __vacall.
+	(vacall_struct_buffer): Renamed from __va_struct_buffer.
+	(vacall_error_type_mismatch): Renamed from __va_error1.
+	(vacall_error_struct_too_large): Renamed from __va_error2.
+	* vacall/vacall.h.in (_va_start_struct, __va_return): Update.
+	(vacall_error_type_mismatch): Renamed from __va_error1.
+	(vacall_error_struct_too_large): Renamed from __va_error2.
+	(vacall_struct_buffer): Renamed from __va_struct_buffer.
+	* callback/vacall_r/vacall-libapi.c: Include config.h first.
+	(vacall_struct_buffer): Renamed from __va_struct_buffer.
+	(vacall_error_type_mismatch): Renamed from __va_error1.
+	(vacall_error_struct_too_large): Renamed from __va_error2.
+	* callback/vacall_r/vacall_r.h.in (vacall_error_type_mismatch,
+	vacall_error_struct_too_large, vacall_structcpy, vacall_struct_buffer):
+	Define to symbols that start with 'callback_'.
+	(_va_start_struct, __va_return): Update.
+	(callback_receiver): Renamed from __vacall_r.
+	(callback_get_receiver): Renamed from get__vacall_r.
+	(vacall_error_type_mismatch): Renamed from __va_error1.
+	(vacall_error_struct_too_large): Renamed from __va_error2.
+	(vacall_struct_buffer): Renamed from __va_struct_buffer.
+	* callback/callback.h.in: Update.
+	* callback/trampoline_r/trampoline_r.h.in (alloc_trampoline_r,
+	free_trampoline_r, is_trampoline_r, trampoline_r_address,
+	trampoline_r_data0, trampoline_r_data1): Define to symbols that start
+	with 'callback_trampoline_'.
+	* callback/elf-hack.txt: Update.
+	* porting-tools/abis/call-used-registers.txt: Update.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	callback: Use distinct object file names in static library.
 	* callback/vacall_r/vacall-libapi.c: Renamed from
 	callback/vacall_r/misc.c.

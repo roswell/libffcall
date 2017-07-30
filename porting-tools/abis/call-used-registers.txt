@@ -32,8 +32,8 @@ int foo (int a0, int a1, int a2, int a3, int a4, int a5, int a6, int a7)
   return a0+a1+a2+a3+a4+a5+a6+a7;
 }
 
-Among these, we can use the lexical closure reg, because __vacall_r has no
-lexical closure (more precisely, we are building a lexical closure for it).
+Among these, we can use the lexical closure reg, because callback_receiver has
+no lexical closure (more precisely, we are building a lexical closure for it).
 
 To find this lexical closure register:
 - grep STATIC_CHAIN_REGNUM and TRAMPOLINE_TEMPLATE in the machine description.
@@ -61,10 +61,10 @@ We don't follow the special choices of NetBSD here. The generic choice for
 each CPU is good enough. We could actually use any of the registers in the
 second column.
 
-There is a complication on arm: We cannot build a __vacall_r function that
-receives a value in the r12 register, because this register is used in the
-standard function prologue, and it is hard to convince GCC to not clobber r12
-in the prologue.
+There is a complication on arm: We cannot build a callback_receiver function
+that receives a value in the r12 register, because this register is used in
+the standard function prologue, and it is hard to convince GCC to not clobber
+r12 in the prologue.
 And we cannot pick a different register either, because r12 is the only
 available register. (The arm platform is unique in this respect: On all other
 platforms, there are at least 2 available registers. See the table above.)

@@ -511,8 +511,8 @@ typedef __va_alist* va_alist;
    ((LIST)->flags & __VA_SUNPROCC_STRUCT_RETURN				\
     ? __va_start_struct2(LIST)						\
     : ((LIST)->flags & __VA_SUNCC_STRUCT_RETURN				\
-       ? ((TYPE_SIZE) <= sizeof(__va_struct_buffer) || __va_error2(TYPE_SIZE), \
-          (LIST)->raddr = &__va_struct_buffer,				\
+       ? ((TYPE_SIZE) <= sizeof(vacall_struct_buffer) || vacall_error_struct_too_large(TYPE_SIZE), \
+          (LIST)->raddr = &vacall_struct_buffer,			\
           0								\
          )								\
        : (((LIST)->flags & __VA_SMALL_STRUCT_RETURN)			\
@@ -1351,7 +1351,7 @@ typedef __va_alist* va_alist;
  * Definition of the va_return_xxx macros.
  */
 #define __va_return(LIST,RETTYPE)  \
-  (((LIST)->rtype == (RETTYPE)) || __va_error1((LIST)->rtype,RETTYPE))
+  (((LIST)->rtype == (RETTYPE)) || vacall_error_type_mismatch((LIST)->rtype,RETTYPE))
 #define va_return_void(LIST)  \
   __va_return(LIST,__VAvoid)
 #define va_return_char(LIST,VAL)  \
@@ -1437,11 +1437,11 @@ extern "C" void (*vacall) (); /* the return type is variable, not void! */
 extern void (*vacall) (); /* the return type is variable, not void! */
 #endif
 extern void (* vacall_function) (va_alist);
-extern int __va_error1 (enum __VAtype, enum __VAtype);
-extern int __va_error2 (unsigned int);
+extern int vacall_error_type_mismatch (enum __VAtype, enum __VAtype);
+extern int vacall_error_struct_too_large (unsigned int);
 extern void vacall_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
 typedef union { __vaword room[__VA_ALIST_WORDS]; double align; } __va_struct_buffer_t;
-extern __va_struct_buffer_t __va_struct_buffer;
+extern __va_struct_buffer_t vacall_struct_buffer;
 
 
 #endif /* _VACALL_H */

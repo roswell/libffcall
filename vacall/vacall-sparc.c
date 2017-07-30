@@ -1,7 +1,7 @@
 /* vacall function for sparc CPU */
 
 /*
- * Copyright 1995-2005 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #endif
 
 #ifdef REENTRANT
-#define __vacall __vacall_r
+#define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *	env	__asm__("%g2");
 #endif
@@ -36,9 +36,9 @@ register float	fret	__asm__("%f0");	/* %f0 */
 register double	dret	__asm__("%f0");	/* %f0,%f1 */
 
 void /* the return type is variable, not void! */
-__vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
-          __vaword word5, __vaword word6,
-          __vaword firstword)
+vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
+                 __vaword word5, __vaword word6,
+                 __vaword firstword)
 {
   __va_alist list;
   /* gcc-2.6.3 source says: When a parameter is passed in a register,

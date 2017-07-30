@@ -33,12 +33,12 @@ extern __VA_function callback_address (void*);
 extern void* callback_data (void*);
 #else
 #define alloc_callback(address,data)  \
-  alloc_trampoline_r((__TR_function)get__vacall_r(),(void*)(__VA_function)(address),(void*)(data))
+  alloc_trampoline_r((__TR_function)callback_get_receiver(),(void*)(__VA_function)(address),(void*)(data))
 #define free_callback(function)  \
   free_trampoline_r(function)
 #define is_callback(function)  \
-  (is_trampoline_r(function)                                           \
-   && trampoline_r_address(function) == (__TR_function)get__vacall_r() \
+  (is_trampoline_r(function)                                                   \
+   && trampoline_r_address(function) == (__TR_function)callback_get_receiver() \
   )
 #define callback_address(function)  \
   (__VA_function)trampoline_r_data0(function)

@@ -24,7 +24,7 @@
 #endif
 
 #ifdef REENTRANT
-#define __vacall __vacall_r
+#define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("r15");
 #endif
@@ -67,7 +67,7 @@ struct gpargsequence {
 static
 #endif
 void /* the return type is variable, not void! */
-__vacall (struct gpargsequence gpargs)
+vacall_receiver (struct gpargsequence gpargs)
 {
   __va_alist list;
   /* Move the arguments passed in registers to their stack locations. */
@@ -215,8 +215,8 @@ __vacall (struct gpargsequence gpargs)
 
 #ifdef REENTRANT
 __vacall_r_t
-get__vacall_r (void)
+callback_get_receiver (void)
 {
-  return (__vacall_r_t)(void*)&__vacall;
+  return (__vacall_r_t)(void*)&callback_receiver;
 }
 #endif

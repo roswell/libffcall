@@ -85,6 +85,13 @@
 /* End of definitions adjusted by ‘configure’. */
 
 
+/* Use a consistent prefix for all symbols in libcallback. */
+#define vacall_error_type_mismatch     callback_error_type_mismatch
+#define vacall_error_struct_too_large  callback_error_struct_too_large
+#define vacall_structcpy               callback_structcpy
+#define vacall_struct_buffer           callback_struct_buffer
+
+
 /* These two variants of powerpc ABIs are quite different. */
 #if defined(__powerpc__) && !defined(__powerpc64__)
 #if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))
@@ -509,8 +516,8 @@ typedef __va_alist* va_alist;
    ((LIST)->flags & __VA_SUNPROCC_STRUCT_RETURN				\
     ? __va_start_struct2(LIST)						\
     : ((LIST)->flags & __VA_SUNCC_STRUCT_RETURN				\
-       ? ((TYPE_SIZE) <= sizeof(__va_struct_buffer) || __va_error2(TYPE_SIZE), \
-          (LIST)->raddr = &__va_struct_buffer,				\
+       ? ((TYPE_SIZE) <= sizeof(vacall_struct_buffer) || vacall_error_struct_too_large(TYPE_SIZE), \
+          (LIST)->raddr = &vacall_struct_buffer,			\
           0								\
          )								\
        : (((LIST)->flags & __VA_SMALL_STRUCT_RETURN)			\
@@ -1349,7 +1356,7 @@ typedef __va_alist* va_alist;
  * Definition of the va_return_xxx macros.
  */
 #define __va_return(LIST,RETTYPE)  \
-  (((LIST)->rtype == (RETTYPE)) || __va_error1((LIST)->rtype,RETTYPE))
+  (((LIST)->rtype == (RETTYPE)) || vacall_error_type_mismatch((LIST)->rtype,RETTYPE))
 #define va_return_void(LIST)  \
   __va_return(LIST,__VAvoid)
 #define va_return_char(LIST,VAL)  \
@@ -1432,39 +1439,39 @@ typedef __va_alist* va_alist;
 
 #if defined(__sparc__) || defined(__sparc64__)
 /* On SPARC, PIC compiled code crashes when used outside of a shared library.
-   Therefore, don't use the get__vacall_r indirection on this platform. */
+   Therefore, don't use the callback_get_receiver indirection on this platform. */
 
 extern
 #ifdef __cplusplus
 "C"
 #endif
-void __vacall_r (); /* Actually it takes arguments and returns values! */
+void callback_receiver (); /* Actually it takes arguments and returns values! */
 
-#define get__vacall_r() (&__vacall_r)
+#define callback_get_receiver() (&callback_receiver)
 
 #else
 
-/* A fake type for __vacall_r.
+/* A fake type for callback_receiver.
    Actually it takes arguments and returns values. */
 typedef void (*__vacall_r_t) (void);
 
-/* This function returns the address of __vacall_r.
-   __vacall_r is not a global symbol, because on ELF platforms, functions with
-   global visibility cannot accept additional arguments in registers. See
+/* This function returns the address of callback_receiver.
+   callback_receiver is not a global symbol, because on ELF platforms, functions
+   with global visibility cannot accept additional arguments in registers. See
    elf-hack.txt for more details. */
 extern
 #ifdef __cplusplus
 "C"
 #endif
-__vacall_r_t get__vacall_r (void);
+__vacall_r_t callback_get_receiver (void);
 
 #endif
 
-extern int __va_error1 (enum __VAtype, enum __VAtype);
-extern int __va_error2 (unsigned int);
-extern void callback_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
+extern int vacall_error_type_mismatch (enum __VAtype, enum __VAtype);
+extern int vacall_error_struct_too_large (unsigned int);
+extern void vacall_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
 typedef union { __vaword room[__VA_ALIST_WORDS]; double align; } __va_struct_buffer_t;
-extern __va_struct_buffer_t __va_struct_buffer;
+extern __va_struct_buffer_t vacall_struct_buffer;
 
 
 #endif /* _VACALL_R_H */

@@ -24,7 +24,7 @@
 #endif
 
 #ifdef REENTRANT
-#define __vacall __vacall_r
+#define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("r0");
 #endif
@@ -53,9 +53,9 @@ register double dret __asm__("f0");
 static
 #endif
 void /* the return type is variable, not void! */
-__vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
-          __vaword word5,
-          __vaword firstword)
+vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
+                 __vaword word5,
+                 __vaword firstword)
 {
   __va_alist list;
   /* Move the arguments passed in registers to temp storage. */
@@ -131,8 +131,8 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 
 #ifdef REENTRANT
 __vacall_r_t
-get__vacall_r (void)
+callback_get_receiver (void)
 {
-  return (__vacall_r_t)(void*)&__vacall;
+  return (__vacall_r_t)(void*)&callback_receiver;
 }
 #endif

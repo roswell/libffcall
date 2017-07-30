@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -23,7 +24,6 @@
 #else /* REENTRANT */
 #include "vacall_r.h"
 #endif
-#include "config.h"
 
 #ifndef REENTRANT
 
@@ -32,11 +32,11 @@
    is casted to a function pointer with different return type.
    (http://gcc.gnu.org/ml/gcc-patches/2003-12/msg01767.html) */
 #ifdef __cplusplus
-extern "C" void __vacall (); /* the return type is variable, not void! */
+extern "C" void vacall_receiver (); /* the return type is variable, not void! */
 #else
-extern void __vacall (); /* the return type is variable, not void! */
+extern void vacall_receiver (); /* the return type is variable, not void! */
 #endif
-void (*vacall) () = __vacall;
+void (*vacall) () = vacall_receiver;
 
 /* This is the function called by vacall(). */
 void (* vacall_function) (va_alist);
@@ -44,10 +44,10 @@ void (* vacall_function) (va_alist);
 #endif
 
 /* Room for returning structs according to the Sun C non-reentrant struct return convention. */
-__va_struct_buffer_t __va_struct_buffer;
+__va_struct_buffer_t vacall_struct_buffer;
 
 int /* no return type, since this never returns */
-__va_error1 (enum __VAtype start_type, enum __VAtype return_type)
+vacall_error_type_mismatch (enum __VAtype start_type, enum __VAtype return_type)
 {
   /* If you see this, fix your code. */
   fprintf (stderr, "vacall: va_start type %d and va_return type %d disagree.\n",
@@ -59,7 +59,7 @@ __va_error1 (enum __VAtype start_type, enum __VAtype return_type)
 }
 
 int /* no return type, since this never returns */
-__va_error2 (unsigned int size)
+vacall_error_struct_too_large (unsigned int size)
 {
   /* If you see this, increase __VA_ALIST_WORDS: */
   fprintf (stderr, "vacall: struct of size %u too large for Sun C struct return.\n",

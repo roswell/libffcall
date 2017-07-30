@@ -26,7 +26,7 @@
 #ifndef REENTRANT
 typedef void (*func_pointer)(va_alist);
 #else /* REENTRANT */
-#define __vacall __vacall_r
+#define vacall_receiver callback_receiver
 typedef void (*func_pointer)(void*,va_alist);
 register struct { func_pointer vacall_function; void* arg; }
          *	env	__asm__("$2");
@@ -44,8 +44,8 @@ register double	dret	__asm__("$f0");
 static
 #endif
 void /* the return type is variable, not void! */
-__vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
-          __vaword firstword)
+vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
+                 __vaword firstword)
 {
   __va_alist list;
   /* gcc-2.6.3 source says: When a parameter is passed in a register,
@@ -134,8 +134,8 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 
 #ifdef REENTRANT
 __vacall_r_t
-get__vacall_r (void)
+callback_get_receiver (void)
 {
-  return (__vacall_r_t)(void*)&__vacall;
+  return (__vacall_r_t)(void*)&callback_receiver;
 }
 #endif

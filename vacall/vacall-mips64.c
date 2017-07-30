@@ -26,7 +26,7 @@
 #ifndef REENTRANT
 typedef void (*func_pointer)(va_alist);
 #else /* REENTRANT */
-#define __vacall __vacall_r
+#define vacall_receiver callback_receiver
 typedef void (*func_pointer)(void*,va_alist);
 register struct { func_pointer vacall_function; void* arg; }
          *	env	__asm__("$2");
@@ -86,7 +86,7 @@ struct gpargsequence {
 static
 #endif
 void /* the return type is variable, not void! */
-__vacall (struct gpargsequence gpargs)
+vacall_receiver (struct gpargsequence gpargs)
 {
   __va_alist list;
   list.darg[0] = darg0;
@@ -445,8 +445,8 @@ __vacall (struct gpargsequence gpargs)
 
 #ifdef REENTRANT
 __vacall_r_t
-get__vacall_r (void)
+callback_get_receiver (void)
 {
-  return (__vacall_r_t)(void*)&__vacall;
+  return (__vacall_r_t)(void*)&callback_receiver;
 }
 #endif

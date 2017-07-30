@@ -48,7 +48,7 @@
 #endif
 
 #ifdef REENTRANT
-#define __vacall __vacall_r
+#define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *	env	__asm__("%r29");
 #endif
@@ -73,8 +73,8 @@ register __vaword iret2	__asm__("%r29");
 static
 #endif
 void /* the return type is variable, not void! */
-__vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
-          __vaword firstword)
+vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
+                 __vaword firstword)
 {
   /* gcc-2.6.3 source says: When a parameter is passed in a register,
    * stack space is still allocated for it.
@@ -231,8 +231,8 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 
 #ifdef REENTRANT
 __vacall_r_t
-get__vacall_r (void)
+callback_get_receiver (void)
 {
-  return (__vacall_r_t)(void*)&__vacall;
+  return (__vacall_r_t)(void*)&callback_receiver;
 }
 #endif

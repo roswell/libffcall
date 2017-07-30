@@ -15,17 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "vacall_r.h"
-#include "config.h"
 
 /* Room for returning structs according to the Sun C non-reentrant struct return convention. */
-__va_struct_buffer_t __va_struct_buffer;
+__va_struct_buffer_t vacall_struct_buffer;
 
 int /* no return type, since this never returns */
-__va_error1 (enum __VAtype start_type, enum __VAtype return_type)
+vacall_error_type_mismatch (enum __VAtype start_type, enum __VAtype return_type)
 {
   /* If you see this, fix your code. */
   fprintf (stderr, "vacall: va_start type %d and va_return type %d disagree.\n",
@@ -37,7 +37,7 @@ __va_error1 (enum __VAtype start_type, enum __VAtype return_type)
 }
 
 int /* no return type, since this never returns */
-__va_error2 (unsigned int size)
+vacall_error_struct_too_large (unsigned int size)
 {
   /* If you see this, increase __VA_ALIST_WORDS: */
   fprintf (stderr, "vacall: struct of size %u too large for Sun C struct return.\n",
