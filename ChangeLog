@@ -1,5 +1,10 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	m68k: Fix build failure on Linux.
+	* common/asm-m68k.sh: In mit syntax, recognize 'pc' as a register name.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Limit the exported symbols of the installed shared libraries.
 	* avcall/Makefile.in (LIBAVCALL_EXPORTED_SYMBOLS_REGEX): New variable.
 	(libavcall.la): Use libtool's -export-symbols-regex option.

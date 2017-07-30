@@ -51,8 +51,8 @@ s/^L\([A-Za-z0-9_:]\+\)/L(\1)/
 s/ L\([A-Za-z0-9_]\+\)/ L(\1)/
 # ----------- Prefix register names with $, to be turned into % later
 s/,/, /g
-s/\([^A-Za-z0-9_]\)\([ad][0-7]\|sp\|fp[0-7]\)\([^A-Za-z0-9_]\)/\1$\2\3/g
-s/\([^A-Za-z0-9_]\)\([ad][0-7]\|sp\|fp[0-7]\)$/\1$\2/g
+s/\([^A-Za-z0-9_]\)\([ad][0-7]\|sp\|fp[0-7]\|pc\)\([^A-Za-z0-9_]\)/\1$\2\3/g
+s/\([^A-Za-z0-9_]\)\([ad][0-7]\|sp\|fp[0-7]\|pc\)$/\1$\2/g
 s/, /,/g
 # ----------- Declare global symbols as functions (we have no variables)
 s/\.globl[ 	]_\([A-Za-z0-9_]*\)$/.globl _\1\
