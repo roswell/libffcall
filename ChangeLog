@@ -1,5 +1,15 @@
 2017-07-31  Bruno Haible  <bruno@clisp.org>
 
+	trampoline_r: Rework API.
+	* callback/trampoline_r/trampoline_r.h (trampoline_r_address,
+	trampoline_r_data0, trampoline_r_data1): Change signatures.
+	* callback/trampoline_r/trampoline.c (trampoline_r_address,
+	trampoline_r_data0, trampoline_r_data1): Update accordingly.
+	* callback/trampoline_r/test2.c: Update.
+	* callback/callback-libapi.c (is_callback): Likewise.
+
+2017-07-31  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Fix build error on IRIX with cc (regression from 2017-07-30).
 	* vacall/vacall-internal.h (__va_arg_adjusted, __va_arg_struct): Cast
 	result of __va_arg_leftadjusted and __va_arg_rightadjusted to 'void*'.

@@ -39,7 +39,7 @@ void free_callback (callback_t callback)
 int is_callback (void* callback)
 {
   return is_trampoline_r(callback)
-         && trampoline_r_address(callback) == (__TR_function)callback_get_receiver();
+         && trampoline_r_address((__TR_function)callback) == (__TR_function)callback_get_receiver();
 }
 
 callback_function_t callback_address (callback_t callback)

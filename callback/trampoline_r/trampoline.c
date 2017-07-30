@@ -1299,7 +1299,7 @@ int is_trampoline_r (void* function)
 #endif
 }
 
-__TR_function trampoline_r_address (void* function)
+__TR_function trampoline_r_address (__TR_function function)
 {
 #ifdef tramp_address
   return (__TR_function)(tramp_address(((char*)function - TRAMP_BIAS)));
@@ -1308,7 +1308,7 @@ __TR_function trampoline_r_address (void* function)
 #endif
 }
 
-void* trampoline_r_data0 (void* function)
+void* trampoline_r_data0 (__TR_function function)
 {
 #ifdef tramp_data
   return ((void**)((char*)function-TRAMP_BIAS+TRAMP_LENGTH))[0];
@@ -1317,7 +1317,7 @@ void* trampoline_r_data0 (void* function)
 #endif
 }
 
-void* trampoline_r_data1 (void* function)
+void* trampoline_r_data1 (__TR_function function)
 {
 #ifdef tramp_data
   return ((void**)((char*)function-TRAMP_BIAS+TRAMP_LENGTH))[1];

@@ -41,11 +41,11 @@ int main ()
     { printf("is_trampoline_r(&main) returns true!\n"); exit(1); }
   if (!is_trampoline_r((void*)cf))
     { printf("is_trampoline_r() returns false!\n"); exit(1); }
-  if (trampoline_r_address((void*)cf) != (function)&f)
+  if (trampoline_r_address(cf) != (function)&f)
     { printf("trampoline_r_address() doesn't work!\n"); exit(1); }
-  if (trampoline_r_data0((void*)cf) != (void*)MAGIC1)
+  if (trampoline_r_data0(cf) != (void*)MAGIC1)
     { printf("trampoline_r_data0() doesn't work!\n"); exit(1); }
-  if (trampoline_r_data1((void*)cf) != (void*)MAGIC2)
+  if (trampoline_r_data1(cf) != (void*)MAGIC2)
     { printf("trampoline_r_data1() doesn't work!\n"); exit(1); }
   printf("test2 passed.\n");
   exit(0);
