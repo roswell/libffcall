@@ -1,5 +1,14 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Don't depend on FFCALL_IREG_FLOAT_RETURN configure result.
+	Rationale: The installed .h files should be compiler independent.
+	* avcall/avcall.h.in (__IREG_FLOAT_RETURN__): Remove macro. Assume it is
+	not defined on m68k.
+	* vacall/vacall.h.in (__IREG_FLOAT_RETURN__): Likewise.
+	* callback/vacall_r/vacall_r.h.in (__IREG_FLOAT_RETURN__): Likewise.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Don't depend on FFCALL_SMALL_STRUCT_RETURN configure result.
 	Rationale: The installed .h files should be compiler independent.
 	* avcall/avcall.h.in (__SMALL_STRUCT_RETURN__): Remove macro. Use

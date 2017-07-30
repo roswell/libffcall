@@ -87,10 +87,6 @@
 #undef __s390x__
 #endif
 
-/* Calling convention */
-/* Define if floating-point results are returned in the integer registers */
-#undef __IREG_FLOAT_RETURN__
-
 /* AC_TYPE_LONG_LONG_INT */
 /* Define if your compiler supports the 'long long' type. */
 #ifndef HAVE_LONG_LONG_INT
@@ -255,7 +251,7 @@ enum __VA_alist_flags
 #ifndef __VA_FLOAT_RETURN
 #if (defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))) && !defined(__GNUC__) && defined(sun) && !defined(__SUNPRO_C)  /* sun cc */
   __VA_FLOAT_RETURN		= __VA_SUNCC_FLOAT_RETURN,
-#elif (defined(__m68k__) && !defined(__IREG_FLOAT_RETURN__))
+#elif defined(__m68k__)
   __VA_FLOAT_RETURN		= __VA_FREG_FLOAT_RETURN,
 #else
   __VA_FLOAT_RETURN		= 0,
