@@ -1,5 +1,13 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Use distinct object file names in static library.
+	* vacall/vacall-libapi.c: Renamed from vacall/misc.c.
+	* vacall/Makefile.in (OBJECTS, SOURCE_FILES): Update.
+	(vacall-libapi.o): Renamed from misc.o.
+	* vacall/README: Update.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Modernize.
 	* avcall/avcall.h: Change double-include guard. Modernize copyright
 	header.
