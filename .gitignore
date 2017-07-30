@@ -296,7 +296,6 @@ autom4te.cache/
 /stamp-h1
 /stamp-h2
 /callback/stamp-h3
-/callback/trampoline_r/stamp-h4
 # Erased by avcall/Makefile.
 /avcall/Makefile
 /avcall/avcall.h
@@ -318,7 +317,6 @@ autom4te.cache/
 /callback/vacall_r/Makefile
 # Erased by callback/trampoline_r/Makefile.
 /callback/trampoline_r/Makefile
-/callback/trampoline_r/trampoline_r.h
 /callback/trampoline_r/tests.passed.*
 
 # ---------- "make clean" gets you here ----------

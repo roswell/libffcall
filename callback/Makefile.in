@@ -64,7 +64,7 @@ vacall_r.h :
 	$(LN_S) $(srcdir)/vacall_r/vacall_r.h vacall_r.h
 
 trampoline_r.h :
-	$(LN_S) trampoline_r/trampoline_r.h trampoline_r.h
+	$(LN_S) $(srcdir)/trampoline_r/trampoline_r.h trampoline_r.h
 
 libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la
 	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) vacall_r/vacall.lo vacall_r/vacall-libapi.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)

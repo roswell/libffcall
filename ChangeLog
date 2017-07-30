@@ -1,5 +1,22 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	callback: Remove version number from trampoline_r.h.
+	Rationale: It is already present in callback.h.
+	* callback/trampoline_r/trampoline_r.h: Renamed from
+	callback/trampoline_r/trampoline_r.h.in.
+	(LIBFFCALL_VERSION): Remove macro.
+	* configure.ac: Don't create callback/trampoline_r/trampoline_r.h.
+	* callback/trampoline_r/Makefile.in (trampoline_r.h): Remove target.
+	(trampoline.lo, test1.o, test2.o): Update dependencies.
+	(install-lib, install): Update.
+	(distclean): Don't remove trampoline_r.h.
+	(SOURCE_FILES): Add trampoline_r.h. Remove trampoline_r.h.in.
+	* callback/Makefile.in (trampoline_r.h): Link to
+	$(srcdir)/trampoline_r/trampoline_r.h.
+	* Makefile.in (DISTCLEANFILES): Update stamp file list.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	vacall, callback: Allow compiler optimizations regarding noreturn.
 	* Makefile.maint (GNULIB_MODULES): Add 'stdnoreturn'.
 	* vacall/vacall-libapi.c: Include <stdnoreturn.h>.
