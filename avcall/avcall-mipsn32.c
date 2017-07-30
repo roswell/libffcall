@@ -57,7 +57,7 @@
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   register __avword*	sp	__asm__("$sp");  /* C names for registers */
   register float	fret	__asm__("$f0");
@@ -73,40 +73,41 @@ avcall_call(av_alist* l)
   if (l->farg_mask)
     { /* push leading float args */
       if (l->farg_mask & (1<<0))
-        __asm__("lwc1 $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,farg[0]));
+        __asm__("lwc1 $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[0]));
       if (l->farg_mask & (1<<1))
-        __asm__("lwc1 $f13,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,farg[1]));
+        __asm__("lwc1 $f13,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[1]));
       if (l->farg_mask & (1<<2))
-        __asm__("lwc1 $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,farg[2]));
+        __asm__("lwc1 $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[2]));
       if (l->farg_mask & (1<<3))
-        __asm__("lwc1 $f15,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,farg[3]));
+        __asm__("lwc1 $f15,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[3]));
       if (l->farg_mask & (1<<4))
-        __asm__("lwc1 $f16,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,farg[4]));
+        __asm__("lwc1 $f16,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[4]));
       if (l->farg_mask & (1<<5))
-        __asm__("lwc1 $f17,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,farg[5]));
+        __asm__("lwc1 $f17,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[5]));
       if (l->farg_mask & (1<<6))
-        __asm__("lwc1 $f18,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,farg[6]));
+        __asm__("lwc1 $f18,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[6]));
       if (l->farg_mask & (1<<7))
-        __asm__("lwc1 $f19,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,farg[7]));
+        __asm__("lwc1 $f19,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[7]));
     }
   if (l->darg_mask)
     { /* push leading double args */
+      __avword* a = l->args;
       if (l->darg_mask & (1<<0))
-        __asm__("ldc1 $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,args[0]));
+        __asm__("ldc1 $f12,%1(%0)" : : "p" (a), "i" (0 * sizeof (__avword)));
       if (l->darg_mask & (1<<1))
-        __asm__("ldc1 $f13,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,args[1]));
+        __asm__("ldc1 $f13,%1(%0)" : : "p" (a), "i" (1 * sizeof (__avword)));
       if (l->darg_mask & (1<<2))
-        __asm__("ldc1 $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,args[2]));
+        __asm__("ldc1 $f14,%1(%0)" : : "p" (a), "i" (2 * sizeof (__avword)));
       if (l->darg_mask & (1<<3))
-        __asm__("ldc1 $f15,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,args[3]));
+        __asm__("ldc1 $f15,%1(%0)" : : "p" (a), "i" (3 * sizeof (__avword)));
       if (l->darg_mask & (1<<4))
-        __asm__("ldc1 $f16,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,args[4]));
+        __asm__("ldc1 $f16,%1(%0)" : : "p" (a), "i" (4 * sizeof (__avword)));
       if (l->darg_mask & (1<<5))
-        __asm__("ldc1 $f17,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,args[5]));
+        __asm__("ldc1 $f17,%1(%0)" : : "p" (a), "i" (5 * sizeof (__avword)));
       if (l->darg_mask & (1<<6))
-        __asm__("ldc1 $f18,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,args[6]));
+        __asm__("ldc1 $f18,%1(%0)" : : "p" (a), "i" (6 * sizeof (__avword)));
       if (l->darg_mask & (1<<7))
-        __asm__("ldc1 $f19,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,args[7]));
+        __asm__("ldc1 $f19,%1(%0)" : : "p" (a), "i" (7 * sizeof (__avword)));
     }
 
   for (i = 8; i < arglen; i++)		/* push excess function args */

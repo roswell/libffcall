@@ -59,7 +59,7 @@ register double farg7 __asm__("xmm6");
 register double farg8 __asm__("xmm7");
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   register __avword*	sp	__asm__("rsp");	/* C names for registers */
   register __avword	iret	__asm__("rax");

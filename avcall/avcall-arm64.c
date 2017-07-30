@@ -75,7 +75,7 @@ register double darg7 __asm__("d6");
 register double darg8 __asm__("d7");
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   register __avword*	sp	__asm__("sp");	/* C names for registers */
   register __avword	iret	__asm__("x0");

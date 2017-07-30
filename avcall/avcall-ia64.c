@@ -64,7 +64,7 @@ register double		farg7	__asm__("f14");
 register double		farg8	__asm__("f15");
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   register __avword*	sp	__asm__("r12"); /* C names for registers */
 

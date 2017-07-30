@@ -54,7 +54,7 @@
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   register __avword*	sp	__asm__("sp");	/* C names for registers */
 /*register __avword	iret	__asm__("eax"); */

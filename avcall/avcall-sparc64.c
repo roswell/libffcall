@@ -100,7 +100,7 @@ register __avword o4	__asm__("%o4");
 register __avword o5	__asm__("%o5");
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   register __avword* sp	__asm__("%sp");  /* C names for registers */
   register float fret	__asm__("%f0");  /* %f0 */
@@ -112,38 +112,39 @@ avcall_call(av_alist* l)
 
   if (l->darg_mask) {
     /* push leading float/double args */
+      __avword* a = l->args;
     if (l->darg_mask & (1<<0))
-      __asm__("ldd [%0+%1],%%f0" : : "p" (l), "i" OFFSETOF(av_alist,args[0]));
+      __asm__("ldd [%0+%1],%%f0" : : "p" (a), "i" (0 * sizeof (__avword)));
     if (l->darg_mask & (1<<1))
-      __asm__("ldd [%0+%1],%%f2" : : "p" (l), "i" OFFSETOF(av_alist,args[1]));
+      __asm__("ldd [%0+%1],%%f2" : : "p" (a), "i" (1 * sizeof (__avword)));
     if (l->darg_mask & (1<<2))
-      __asm__("ldd [%0+%1],%%f4" : : "p" (l), "i" OFFSETOF(av_alist,args[2]));
+      __asm__("ldd [%0+%1],%%f4" : : "p" (a), "i" (2 * sizeof (__avword)));
     if (l->darg_mask & (1<<3))
-      __asm__("ldd [%0+%1],%%f6" : : "p" (l), "i" OFFSETOF(av_alist,args[3]));
+      __asm__("ldd [%0+%1],%%f6" : : "p" (a), "i" (3 * sizeof (__avword)));
     if (l->darg_mask & (1<<4))
-      __asm__("ldd [%0+%1],%%f8" : : "p" (l), "i" OFFSETOF(av_alist,args[4]));
+      __asm__("ldd [%0+%1],%%f8" : : "p" (a), "i" (4 * sizeof (__avword)));
     if (l->darg_mask & (1<<5))
-      __asm__("ldd [%0+%1],%%f10" : : "p" (l), "i" OFFSETOF(av_alist,args[5]));
+      __asm__("ldd [%0+%1],%%f10" : : "p" (a), "i" (5 * sizeof (__avword)));
     if (l->darg_mask & (1<<6))
-      __asm__("ldd [%0+%1],%%f12" : : "p" (l), "i" OFFSETOF(av_alist,args[6]));
+      __asm__("ldd [%0+%1],%%f12" : : "p" (a), "i" (6 * sizeof (__avword)));
     if (l->darg_mask & (1<<7))
-      __asm__("ldd [%0+%1],%%f14" : : "p" (l), "i" OFFSETOF(av_alist,args[7]));
+      __asm__("ldd [%0+%1],%%f14" : : "p" (a), "i" (7 * sizeof (__avword)));
     if (l->darg_mask & (1<<8))
-      __asm__("ldd [%0+%1],%%f16" : : "p" (l), "i" OFFSETOF(av_alist,args[8]));
+      __asm__("ldd [%0+%1],%%f16" : : "p" (a), "i" (8 * sizeof (__avword)));
     if (l->darg_mask & (1<<9))
-      __asm__("ldd [%0+%1],%%f18" : : "p" (l), "i" OFFSETOF(av_alist,args[9]));
+      __asm__("ldd [%0+%1],%%f18" : : "p" (a), "i" (9 * sizeof (__avword)));
     if (l->darg_mask & (1<<10))
-      __asm__("ldd [%0+%1],%%f20" : : "p" (l), "i" OFFSETOF(av_alist,args[10]));
+      __asm__("ldd [%0+%1],%%f20" : : "p" (a), "i" (10 * sizeof (__avword)));
     if (l->darg_mask & (1<<11))
-      __asm__("ldd [%0+%1],%%f22" : : "p" (l), "i" OFFSETOF(av_alist,args[11]));
+      __asm__("ldd [%0+%1],%%f22" : : "p" (a), "i" (11 * sizeof (__avword)));
     if (l->darg_mask & (1<<12))
-      __asm__("ldd [%0+%1],%%f24" : : "p" (l), "i" OFFSETOF(av_alist,args[12]));
+      __asm__("ldd [%0+%1],%%f24" : : "p" (a), "i" (12 * sizeof (__avword)));
     if (l->darg_mask & (1<<13))
-      __asm__("ldd [%0+%1],%%f26" : : "p" (l), "i" OFFSETOF(av_alist,args[13]));
+      __asm__("ldd [%0+%1],%%f26" : : "p" (a), "i" (13 * sizeof (__avword)));
     if (l->darg_mask & (1<<14))
-      __asm__("ldd [%0+%1],%%f28" : : "p" (l), "i" OFFSETOF(av_alist,args[14]));
+      __asm__("ldd [%0+%1],%%f28" : : "p" (a), "i" (14 * sizeof (__avword)));
     if (l->darg_mask & (1<<15))
-      __asm__("ldd [%0+%1],%%f30" : : "p" (l), "i" OFFSETOF(av_alist,args[15]));
+      __asm__("ldd [%0+%1],%%f30" : : "p" (a), "i" (15 * sizeof (__avword)));
   }
 
   if (arglen > 6) {

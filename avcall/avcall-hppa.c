@@ -56,7 +56,7 @@
 register __avword*	sret	__asm__("%r28");  /* structure return pointer */
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   register __avword*	sp	__asm__("%r30");  /* C names for registers */
   register float	fret	__asm__("%fr4");

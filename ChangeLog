@@ -1,5 +1,29 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Separate the fixed-size part from the variable part of av_alist.
+	* avcall/avcall.h.in (__av_alist): Renamed from av_alist. Add 'args'
+	field as a pointer.
+	(av_alist): New type.
+	(_av_overflown): Renamed from av_overflown.
+	(av_overflown): New macro.
+	(__av_start): Add LIST_ARGS argument.
+	(av_start_*, _av_start_struct): Update accordingly.
+	(_av_long): Renamed from av_long.
+	(_av_ulong): Renamed from av_ulong.
+	(_av_ptr): Renamed from av_ptr.
+	(av_long, av_ulong, av_ptr): New macros.
+	(_av_longlong): Renamed from av_longlong.
+	(_av_ulonglong): Renamed from av_ulonglong.
+	(av_longlong, av_ulonglong): New macros.
+	(_av_float): Renamed from av_float.
+	(_av_double): Renamed from av_double.
+	(av_float, av_double): New macros.
+	(av_struct, _av_struct, av_call): Update.
+	(avcall_call): Take an '__av_alist*' parameter.
+	* avcall/avcall-*.c (avcall_call): Take an '__av_alist*' parameter.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Remove unused macro argument TYPE.
 	* avcall/avcall.h.in (__av_struct_copy, __av_struct_leftadjusted,
 	__av_struct_rightadjusted, __av_struct): Remove TYPE argument.

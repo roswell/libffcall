@@ -54,7 +54,7 @@
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   register __avword*	sp __asm__("$sp");  /* C names for registers */
   register __avword	iret2 __asm__("$3");
@@ -70,13 +70,13 @@ avcall_call(av_alist* l)
 
   /* load leading float args */
   if (l->farg_mask & (1 << 0))
-    __asm__("l.s $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,fargs[0]));
+    __asm__("l.s $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[0]));
   if (l->darg_mask & (1 << 0))
-    __asm__("l.d $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,dargs[0]));
+    __asm__("l.d $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,dargs[0]));
   if (l->farg_mask & (1 << 1))
-    __asm__("l.s $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,fargs[1]));
+    __asm__("l.s $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[1]));
   if (l->darg_mask & (1 << 1))
-    __asm__("l.d $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(av_alist,dargs[1]));
+    __asm__("l.d $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,dargs[1]));
 
   for (i = 4; i < arglen; i++)		/* push excess function args */
     argframe[i] = l->args[i];

@@ -69,7 +69,7 @@ register __avword o4	__asm__("%o4");
 register __avword o5	__asm__("%o5");
 
 int
-avcall_call(av_alist* l)
+avcall_call(__av_alist* l)
 {
   /*?? We probably need to make space for Sun cc
     struct return somewhere here. */

@@ -339,6 +339,8 @@ typedef struct
   unsigned long		rsize;
   /* current pointer into the args[] array */
   __avword*		aptr;
+  /* beginning of the args[] array */
+  __avword*		args;
   /* limit pointer into the args[] array */
   __avword*		eptr;
 #if defined(__i386__) && 0
@@ -415,7 +417,6 @@ typedef struct
   double*		faptr;
   double		fargs[__AV_FARG_NUM];
 #endif
-  __avword		args[__AV_ALIST_WORDS]; /* sizeof(double)-aligned */
 #if defined(__powerpc__) || defined(__powerpc64__)
 #if defined(__powerpc_sysv4__)
 #define __AV_IARG_NUM 8
@@ -456,13 +457,41 @@ typedef struct
   float			fargs[__AV_FARG_NUM];
   double		dargs[__AV_FARG_NUM];
 #endif
+} __av_alist;
+
+typedef struct
+{
+  /* First part: Fixed size __av_alist. */
+  union {
+    __av_alist _av_m_alist;
+    /* For alignment. */
+    long align1;
+    double align2;
+#if defined(HAVE_LONG_LONG_INT)
+    long long align3;
+#endif
+    long double align4;
+  } _av_alist_head;
+  /* Second part: An array whose size depends on __AV_ALIST_WORDS. */
+  union {
+    __avword _av_m_args[__AV_ALIST_WORDS];
+    /* For alignment. */
+    long align1;
+    double align2;
+#if defined(HAVE_LONG_LONG_INT)
+    long long align3;
+#endif
+    long double align4;
+  } _av_alist_flexarray;
 } av_alist;
+#define _av_inner _av_alist_head._av_m_alist
 
 /* Delayed overflow detection */
+#define av_overflown(LIST) _av_overflown((LIST)._av_inner)
 #if defined(__hppa__)
-#define av_overflown(LIST) ((LIST).aptr < (LIST).eptr)
+#define _av_overflown(LIST) ((LIST).aptr < (LIST).eptr)
 #else
-#define av_overflown(LIST) ((LIST).aptr > (LIST).eptr)
+#define _av_overflown(LIST) ((LIST).aptr > (LIST).eptr)
 #endif
 
 
@@ -473,10 +502,11 @@ typedef struct
 #define __AV_START_FLAGS  \
   __AV_STRUCT_RETURN | __AV_FLOAT_RETURN | __AV_STRUCT_ARGS | __AV_FLOAT_ARGS | __AV_CLEANUP
 
-#define __av_start(LIST,FUNC,RADDR,RETTYPE)				\
+#define __av_start(LIST,LIST_ARGS,FUNC,RADDR,RETTYPE)				\
   ((LIST).func = (__avword(*)())(FUNC),					\
    (LIST).raddr = (void*)(RADDR),					\
    (LIST).rtype = (RETTYPE),						\
+   (LIST).args = (LIST_ARGS),						\
    __av_start1(LIST)							\
    __av_start_init_eptr(LIST)						\
    (LIST).flags = __AV_START_FLAGS)
@@ -561,28 +591,28 @@ typedef struct
    (LIST).eptr = &(LIST).args[__AV_ALIST_WORDS],
 #endif
 
-#define av_start_void(LIST,FUNC)		__av_start(LIST,FUNC,0,    __AVvoid)
-#define av_start_char(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVchar)
-#define av_start_schar(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVschar)
-#define av_start_uchar(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVuchar)
-#define av_start_short(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVshort)
-#define av_start_ushort(LIST,FUNC,RADDR)	__av_start(LIST,FUNC,RADDR,__AVushort)
-#define av_start_int(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVint)
-#define av_start_uint(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVuint)
-#define av_start_long(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVlong)
-#define av_start_ulong(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVulong)
-#define av_start_longlong(LIST,FUNC,RADDR)	__av_start(LIST,FUNC,RADDR,__AVlonglong)
-#define av_start_ulonglong(LIST,FUNC,RADDR)	__av_start(LIST,FUNC,RADDR,__AVulonglong)
-#define av_start_float(LIST,FUNC,RADDR)		__av_start(LIST,FUNC,RADDR,__AVfloat)
-#define av_start_double(LIST,FUNC,RADDR)	__av_start(LIST,FUNC,RADDR,__AVdouble)
-#define av_start_ptr(LIST,FUNC,TYPE,RADDR)	__av_start(LIST,FUNC,RADDR,__AVvoidp)
+#define av_start_void(LIST,FUNC)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,0,    __AVvoid)
+#define av_start_char(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVchar)
+#define av_start_schar(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVschar)
+#define av_start_uchar(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVuchar)
+#define av_start_short(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVshort)
+#define av_start_ushort(LIST,FUNC,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVushort)
+#define av_start_int(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVint)
+#define av_start_uint(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVuint)
+#define av_start_long(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVlong)
+#define av_start_ulong(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVulong)
+#define av_start_longlong(LIST,FUNC,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVlonglong)
+#define av_start_ulonglong(LIST,FUNC,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVulonglong)
+#define av_start_float(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVfloat)
+#define av_start_double(LIST,FUNC,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVdouble)
+#define av_start_ptr(LIST,FUNC,TYPE,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVvoidp)
 
 #define av_start_struct(LIST,FUNC,TYPE,TYPE_SPLITTABLE,RADDR)		\
   _av_start_struct(LIST,FUNC,sizeof(TYPE),TYPE_SPLITTABLE,RADDR)
 #define _av_start_struct(LIST,FUNC,TYPE_SIZE,TYPE_SPLITTABLE,RADDR)	\
-  (__av_start(LIST,FUNC,RADDR,__AVstruct),				\
-   (LIST).rsize = TYPE_SIZE,						\
-   __av_start_struct2(LIST,TYPE_SIZE,TYPE_SPLITTABLE),			\
+  (__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVstruct), \
+   (LIST)._av_inner.rsize = TYPE_SIZE,					\
+   __av_start_struct2((LIST)._av_inner,TYPE_SIZE,TYPE_SPLITTABLE),	\
    0)
 
 #if (defined(__sparc__) && !defined(__sparc64__))
@@ -794,34 +824,38 @@ typedef struct
 
 /* integer argument types */
 
+#define av_long(LIST,VAL)	_av_long((LIST)._av_inner,VAL)
+#define av_ulong(LIST,VAL)	_av_ulong((LIST)._av_inner,VAL)
+#define av_ptr(LIST,TYPE,VAL)	_av_ptr((LIST)._av_inner,TYPE,VAL)
+
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define av_long(LIST,VAL)						\
+#define _av_long(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)			\
    : __av_word(LIST,(long)(VAL)))
 #else
-#define av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
+#define _av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
 #endif
 
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define av_ulong(LIST,VAL)						\
+#define _av_ulong(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
    : __av_word(LIST,(unsigned long)(VAL)))
 #else
-#define av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
+#define _av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
 #endif
 
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define av_ptr(LIST,TYPE,VAL)						\
+#define _av_ptr(LIST,TYPE,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (__avword)(TYPE)(VAL), 0)		\
    : __av_word(LIST,(TYPE)(VAL)))
 #else
-#define av_ptr(LIST,TYPE,VAL)	__av_word(LIST,(TYPE)(VAL))
+#define _av_ptr(LIST,TYPE,VAL)	__av_word(LIST,(TYPE)(VAL))
 #endif
 
 #define av_char			av_long
@@ -832,18 +866,21 @@ typedef struct
 #define av_ushort		av_ulong
 #define av_uint			av_ulong
 
+#define av_longlong(LIST,VAL)	_av_longlong((LIST)._av_inner,VAL)
+#define av_ulonglong(LIST,VAL)	_av_ulonglong((LIST)._av_inner,VAL)
+
 #if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__)) || defined(__s390x__)
 /* ‘long long’ and ‘long’ are identical. */
-#define av_longlong		av_long
-#define av_ulonglong		av_ulong
+#define _av_longlong		_av_long
+#define _av_ulonglong		_av_ulong
 #elif defined(__mipsn32__)
 /* ‘long long’ fits in __avword. */
-#define av_longlong		__av_word
-#define av_ulonglong(LIST,VAL)	__av_word(LIST,(unsigned long long)(VAL))
+#define _av_longlong		__av_word
+#define _av_ulonglong(LIST,VAL)	__av_word(LIST,(unsigned long long)(VAL))
 #elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__))
 /* ‘long long’s are passed embedded on the arg stack. */
-#define av_longlong(LIST,VAL)	__av_longlong(LIST,long long,VAL)
-#define av_ulonglong(LIST,VAL)	__av_longlong(LIST,unsigned long long,VAL)
+#define _av_longlong(LIST,VAL)	__av_longlong(LIST,long long,VAL)
+#define _av_ulonglong(LIST,VAL)	__av_longlong(LIST,unsigned long long,VAL)
 #if defined(__i386__) || defined(__m68k__) || defined(__powerpc_aix__)
 /* ‘long long’s are (at most) word-aligned. */
 #define __av_longlong(LIST,TYPE,VAL)					\
@@ -951,9 +988,12 @@ typedef struct
 
 /* floating-point argument types */
 
+#define av_float(LIST,VAL)	_av_float((LIST)._av_inner,VAL)
+#define av_double(LIST,VAL)	_av_double((LIST)._av_inner,VAL)
+
 #if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))
 
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -961,7 +1001,7 @@ typedef struct
     0))
 
 /* This assumes sizeof(double) == 2*sizeof(__avword). */
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).aptr + 2 > (LIST).eptr					\
    ? -1 :								\
    ((LIST).aptr += 2,							\
@@ -979,7 +1019,7 @@ typedef struct
  * registers in case of varargs. For doubles we need to align the aptr
  * to an even boundary.
  */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -994,7 +1034,7 @@ typedef struct
     (LIST).anum++,							\
     0))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((__avword*)(((__avword)(LIST).aptr+15)&-8) > (LIST).eptr		\
    ? -1 :								\
    ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+15)&-8),		\
@@ -1017,7 +1057,7 @@ typedef struct
  * float registers, but we also push them into the corresponding int
  * registers in case of varargs.
  */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    (((LIST).anum < 8							\
@@ -1028,7 +1068,7 @@ typedef struct
     (LIST).aptr++,							\
     0))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    (((LIST).anum < 8 && ((LIST).darg_mask |= (1 << (LIST).anum))),	\
@@ -1045,7 +1085,7 @@ typedef struct
  * float registers, but we also push them into the corresponding int
  * registers in case of varargs.
  */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -1054,7 +1094,7 @@ typedef struct
     (LIST).anum++,							\
     0))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -1067,14 +1107,14 @@ typedef struct
 
 #if defined(__alpha__)
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
     ((double*)(LIST).aptr)[-1] = (double)(VAL),				\
     0))
 
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1									\
    : ((LIST).aptr++,							\
@@ -1092,14 +1132,14 @@ typedef struct
 
 #if defined(__hppa__)
 
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr <= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr--,							\
     *(float*)(LIST).aptr = (float)(VAL),				\
     0))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((__avword*)(((long)(LIST).aptr-sizeof(double)) & -(long)sizeof(double)) < (LIST).eptr \
     ? -1 :								\
     ((LIST).aptr = (__avword*)(((long)(LIST).aptr-sizeof(double)) & -(long)sizeof(double)), \
@@ -1110,14 +1150,14 @@ typedef struct
 
 #if defined(__arm__) && !defined(__armhf__)
 
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
     ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
     0))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((__avword*)(((__avword)(LIST).aptr + 15) & -8) > (LIST).eptr		\
    ? -1 :								\
    ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr + 15) & -8),	\
@@ -1133,7 +1173,7 @@ typedef struct
 /* Up to 16 float or up to 8 double args can be passed in float registers.
  * But they overlap: {s0,s1} = d0, {s2,s3} = d1, and so on.
  */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).fanum <= 15							\
    ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
       (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
@@ -1145,7 +1185,7 @@ typedef struct
        (LIST).aptr++,							\
        0)))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   (((LIST).fanum % 2 ? ((LIST).fanum++, 0) : 0),			\
    ((LIST).fanum <= 14							\
     ? ((LIST).dargs[(LIST).fanum / 2] = (double)(VAL),			\
@@ -1163,7 +1203,7 @@ typedef struct
 #if defined(__arm64__)
 
 /* Up to __AV_FARG_NUM float or double args can be passed in float registers. */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).fanum < __AV_FARG_NUM						\
    ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
       (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
@@ -1175,7 +1215,7 @@ typedef struct
        (LIST).aptr++,							\
        0)))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   (((LIST).fanum < __AV_FARG_NUM					\
     ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
        (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
@@ -1196,7 +1236,7 @@ typedef struct
  * registers in case of varargs.
  */
 
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -1204,7 +1244,7 @@ typedef struct
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).aptr + 2 > (LIST).eptr					\
    ? -1 :								\
    ((LIST).aptr += 2,							\
@@ -1222,7 +1262,7 @@ typedef struct
  * float registers, without occupying space in the general registers.
  */
 
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
    ? ((*(LIST).faptr++ = (double)(float)(VAL)), 0)			\
    : ((LIST).aptr >= (LIST).eptr					\
@@ -1231,7 +1271,7 @@ typedef struct
        ((float*)(LIST).aptr)[-1] = (float)(VAL),			\
        0)))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
    ? ((*(LIST).faptr++ = (double)(VAL)), 0)				\
    : ((LIST).aptr + 2 > (LIST).eptr					\
@@ -1252,7 +1292,7 @@ typedef struct
  */
 
 #if defined(_AIX)
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -1260,7 +1300,7 @@ typedef struct
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 #elif defined(_LITTLE_ENDIAN)
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -1268,7 +1308,7 @@ typedef struct
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 #else /* _BIG_ENDIAN */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -1277,7 +1317,7 @@ typedef struct
     0))
 #endif
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr++,							\
@@ -1293,7 +1333,7 @@ typedef struct
  * float registers, but we also push them into the corresponding int
  * registers in case of varargs.
  */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    ((*(float*)(LIST).aptr = (float)(VAL)),				\
@@ -1301,7 +1341,7 @@ typedef struct
     (LIST).aptr++,							\
     0))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
    (*(double*)(LIST).aptr = (double)(VAL),				\
@@ -1315,7 +1355,7 @@ typedef struct
 
 /* Up to 8 leading float or double args can be passed in float registers.
  */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
    ? (*(LIST).faptr = 0.0, *(float*)(LIST).faptr = (float)(VAL),	\
       (LIST).faptr++,							\
@@ -1326,7 +1366,7 @@ typedef struct
        (LIST).aptr++,							\
        0)))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
    ? (*(LIST).faptr = (double)(VAL),					\
       (LIST).faptr++,							\
@@ -1345,7 +1385,7 @@ typedef struct
  * float registers, without occupying space in the general registers.
  */
 
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).fanum < __AV_FARG_NUM						\
    ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
       (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
@@ -1357,7 +1397,7 @@ typedef struct
        ((float*)(LIST).aptr)[-1] = (float)(VAL),			\
        0)))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   ((LIST).fanum < __AV_FARG_NUM						\
    ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
        (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
@@ -1376,7 +1416,7 @@ typedef struct
 #if defined(__s390x__)
 
 /* Up to __AV_FARG_NUM float or double args can be passed in float registers. */
-#define av_float(LIST,VAL)						\
+#define _av_float(LIST,VAL)						\
   ((LIST).fanum < __AV_FARG_NUM						\
    ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
       (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
@@ -1388,7 +1428,7 @@ typedef struct
        ((float*)(LIST).aptr)[-1] = (float)(VAL),			\
        0)))
 
-#define av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)						\
   (((LIST).fanum < __AV_FARG_NUM					\
     ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
        (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
@@ -1410,12 +1450,12 @@ typedef struct
   avcall_structcpy(PLACE,VAL_ADDR,TYPE_SIZE,TYPE_ALIGN)
 
 #define av_struct(LIST,TYPE,VAL)					\
-  __av_struct(LIST,sizeof(TYPE),__AV_alignof(TYPE),&(VAL))
+  __av_struct((LIST)._av_inner,sizeof(TYPE),__AV_alignof(TYPE),&(VAL))
 /* _av_struct() is like av_struct(), except that you pass the type's size and alignment
  * and the value's address instead of the type and the value themselves.
  */
 #define _av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)			\
-  __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)
+  __av_struct((LIST)._av_inner,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)
 /* Structure argument alignment. */
 #if defined(__i386__) && defined(_MSC_VER)
 /* In MSVC, doubles inside structures have alignment 8, i.e.
@@ -1778,7 +1818,7 @@ typedef struct
  * calling the function
  */
 
-#define av_call(LIST) avcall_call(&(LIST))
+#define av_call(LIST) avcall_call(&(LIST)._av_inner)
 
 /* Determine whether a struct type is word-splittable, i.e. whether each of
  * its components fit into a register.
@@ -1814,7 +1854,7 @@ typedef struct
  * Miscellaneous declarations.
  */
 
-extern int avcall_call (av_alist* l);
+extern int avcall_call (__av_alist* l);
 extern void avcall_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
 
 #endif /*_avcall_h */
