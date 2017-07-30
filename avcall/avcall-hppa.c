@@ -48,7 +48,7 @@
   register variables, then replace the -120 in the second save statement
   "stw %r3,-120(0,%r30)" by -1060, or use the assembler version.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
@@ -56,13 +56,15 @@
 register __avword*	sret	__asm__("%r28");  /* structure return pointer */
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("%r30");  /* C names for registers */
   register float	fret	__asm__("%fr4");
   register double	dret	__asm__("%fr4");
 /*register __avword	iret1	__asm__("%r28"); */
   register __avword	iret2	__asm__("%r29");
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
   __avword* argframe = sp - 8;		/* stack offset for argument list */

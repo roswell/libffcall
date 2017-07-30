@@ -55,7 +55,7 @@
       in r2. The callee fills it and returns the same pointer in r2.
 
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
@@ -76,7 +76,7 @@ register double darg3 __asm__("f4");
 register double darg4 __asm__("f6");
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("r15");	/* C names for registers */
   register __avword	iret	__asm__("r2");
@@ -84,6 +84,8 @@ avcall_call(__av_alist* l)
 
   /* We need to put a value in r6, but it's a call-saved register. */
   __avword saved_iarg5 = iarg5;
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;

@@ -44,18 +44,20 @@
   Compile this routine with gcc -O (or -O2 or -g -O) to get the right
   register variables, or use the assembler version.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register unsigned long sp	__asm__("r13");  /* C names for registers */
 /*register __avword	iret	__asm__("r0"); */
   register __avword	iret2	__asm__("r1");
   register float	fret	__asm__("r0");	/* r0 */
   register double	dret	__asm__("r0");	/* r0,r1 */
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
 

@@ -8,17 +8,10 @@ RM = rm -f
 ROFF_MAN = groff -Tutf8 -mandoc
 
 all : avcall.man \
-      avcall.h.msvc avcall.h.mingw32 \
       avcall-i386-msvc.c avcall-i386-mingw32.c
 
 avcall.man : avcall.3
 	$(ROFF_MAN) avcall.3 > avcall.man
-
-avcall.h.msvc : avcall.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' < avcall.h.in > avcall.h.msvc
-
-avcall.h.mingw32 : avcall.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' < avcall.h.in > avcall.h.mingw32
 
 avcall-i386-msvc.c : avcall-i386-macro.S
 	cp -p avcall-i386-macro.S avcall-i386-msvc.c
@@ -28,7 +21,6 @@ avcall-i386-mingw32.c : avcall-i386-macro.S
 
 totally-clean : force
 	$(RM) avcall.man
-	$(RM) avcall.h.msvc avcall.h.mingw32
 	$(RM) avcall-i386-msvc.c avcall-i386-mingw32.c
 
 

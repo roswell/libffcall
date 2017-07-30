@@ -38,7 +38,7 @@
   function copies the value to space pointed to by its first argument,
   and all other arguments are shifted down by one.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
@@ -59,12 +59,14 @@ register double farg7 __asm__("xmm6");
 register double farg8 __asm__("xmm7");
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("rsp");	/* C names for registers */
   register __avword	iret	__asm__("rax");
   register __avword	iret2	__asm__("rdx");
   register double	dret	__asm__("xmm0");
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;

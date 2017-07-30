@@ -37,9 +37,10 @@ Files in this package:
 
     Source:
 
-        avcall.h.in     master for main include file avcall.h
-        avcall-*.c      source for the interface function
+        avcall.h        main include file
+        avcall-*.c      source for the main interface function
         avcall-*.[sS]   its translation to assembly language
+        avcall-libapi.c     implementation of other library API
         avcall-structcpy.c  auxiliary function
         tests.c         test program
 

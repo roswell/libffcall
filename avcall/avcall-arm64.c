@@ -41,7 +41,7 @@
   larger than 16 bytes, the called function copies the value to space
   pointed to by x8.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
@@ -75,12 +75,14 @@ register double darg7 __asm__("d6");
 register double darg8 __asm__("d7");
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("sp");	/* C names for registers */
   register __avword	iret	__asm__("x0");
   register __avword	iret2	__asm__("x1");
   register double	dret	__asm__("d0");
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;

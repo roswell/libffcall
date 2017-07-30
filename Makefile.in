@@ -65,11 +65,10 @@ clean : force
 DISTCLEANFILES = \
   config.status config.log config.cache Makefile config.h ffcall-version.h libtool \
   stamp-h1 stamp-h2 \
-  avcall/stamp-h3 \
-  vacall/stamp-h4 \
-  callback/stamp-h5 \
-  callback/vacall_r/stamp-h6 \
-  callback/trampoline_r/stamp-h7
+  vacall/stamp-h3 \
+  callback/stamp-h4 \
+  callback/vacall_r/stamp-h5 \
+  callback/trampoline_r/stamp-h6
 
 distclean : force
 	cd @subdir@; if test -f Makefile; then $(MAKE) distclean; fi

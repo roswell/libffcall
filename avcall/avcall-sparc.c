@@ -56,7 +56,7 @@
   correct offset. (%sp is used differently in non-optimized code).
   For Sun cc, use the pre-compiled assembler version of this routine.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
@@ -69,13 +69,15 @@ register __avword o4	__asm__("%o4");
 register __avword o5	__asm__("%o5");
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   /*?? We probably need to make space for Sun cc
     struct return somewhere here. */
   register __avword* sp	__asm__("%sp");  /* C names for registers */
   register float fret	__asm__("%f0");  /* %f0 */
   register double dret	__asm__("%f0");  /* %f0,%f1 */
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword trampoline[6];		/* room for a trampoline */
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */

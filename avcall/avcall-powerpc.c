@@ -52,7 +52,7 @@
   to get the right register variables. For other compilers use the
   pre-compiled assembler version.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
 #define STACK_OFFSET 14
@@ -77,13 +77,15 @@ register double farg12	__asm__("fr12");
 register double farg13	__asm__("fr13");
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("r1");  /* C names for registers */
 /*register __avword	iret	__asm__("r3"); */
   register __avword	iret2	__asm__("r4");
   register float	fret	__asm__("fr1");
   register double	dret	__asm__("fr1");
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
 #if defined(_AIX) /* for some reason, this does not work on Mac OS X and Linux! */
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */

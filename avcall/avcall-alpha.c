@@ -40,12 +40,12 @@
   optimisation on (-O or -O2 or -g -O) so that argframe is set to the
   correct offset.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("$30");  /* C names for registers */
   register long		arg1	__asm__("$16");
@@ -63,6 +63,8 @@ avcall_call(__av_alist* l)
   register double	farg6	__asm__("$f21");
 /*register __avword	iret	__asm__("$0"); */
   register __avword	iret2	__asm__("$1");
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = ((unsigned long) l->aptr - (unsigned long) l->args) / sizeof (__avword);

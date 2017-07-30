@@ -1,504 +1,36 @@
-#ifndef _avcall_h				/*-*- C -*-*/
-#define _avcall_h
-/**
-  Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-**/
-/*----------------------------------------------------------------------
-  av_call() foreign function interface.
-
-  Varargs-style macros to build a C argument list incrementally
-  and call a function on it.
- ----------------------------------------------------------------------*/
-
-#include "ffcall-version.h"
-
-/* These definitions are adjusted by ‘configure’ automatically. */
-
-/* CPU */
-#ifndef __i386__
-#undef __i386__
-#endif
-#ifndef __m68k__
-#undef __m68k__
-#endif
-#ifndef __mips__
-#undef __mips__
-#endif
-#ifndef __mipsn32__
-#undef __mipsn32__
-#endif
-#ifndef __mips64__
-#undef __mips64__
-#endif
-#ifndef __sparc__
-#undef __sparc__
-#endif
-#ifndef __sparc64__
-#undef __sparc64__
-#endif
-#ifndef __alpha__
-#undef __alpha__
-#endif
-#ifndef __hppa__
-#undef __hppa__
-#endif
-#ifndef __arm__
-#undef __arm__
-#endif
-#ifndef __armhf__
-#undef __armhf__
-#endif
-#ifndef __arm64__
-#undef __arm64__
-#endif
-#ifndef __powerpc__
-#undef __powerpc__
-#endif
-#ifndef __powerpc64__
-#undef __powerpc64__
-#endif
-#ifndef __powerpc64_elfv2__
-#undef __powerpc64_elfv2__
-#endif
-#ifndef __ia64__
-#undef __ia64__
-#endif
-#ifndef __x86_64__
-#undef __x86_64__
-#endif
-#ifndef __x86_64_x32__
-#undef __x86_64_x32__
-#endif
-#ifndef __s390__
-#undef __s390__
-#endif
-#ifndef __s390x__
-#undef __s390x__
-#endif
-
-/* End of definitions adjusted by ‘configure’. */
-
-
-/* These two variants of powerpc ABIs are quite different. */
-#if defined(__powerpc__) && !defined(__powerpc64__)
-#if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__))
-#define __powerpc_aix__ 1
-#else
-#define __powerpc_sysv4__ 1
-#endif
-#endif
-
-
-/* Max # words in argument-list and temporary structure storage.
+/*
+ * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
+ * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __AV_ALIST_WORDS
-#define __AV_ALIST_WORDS  256
-#endif
 
-/* Determine the alignment of a type at compile time.
- */
-#if defined(__GNUC__)
-#define __AV_alignof __alignof__
-#else
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) /* SGI compiler */
-#define __AV_alignof __builtin_alignof
-#else
-#define __AV_offsetof(type,ident)  ((unsigned long)&(((type*)0)->ident))
-#define __AV_alignof(type)  __AV_offsetof(struct { char __slot1; type __slot2; }, __slot2)
-#endif
-#endif
+#ifndef _AVCALL_INTERNAL_H
+#define _AVCALL_INTERNAL_H
 
-/* C builtin types.
- */
-#if defined(__mipsn32__) || defined(__x86_64_x32__)
-typedef long long __avword;
-#else
-typedef long __avword;
-#endif
+/* Include the public definitions and "avcall-alist.h",  */
+#include "avcall.h"
 
-enum __AVtype
-{
-  __AVword,
-  __AVvoid,
-  __AVchar,
-  __AVschar,
-  __AVuchar,
-  __AVshort,
-  __AVushort,
-  __AVint,
-  __AVuint,
-  __AVlong,
-  __AVulong,
-  __AVlonglong,
-  __AVulonglong,
-  __AVfloat,
-  __AVdouble,
-  __AVvoidp,
-  __AVstruct
-};
 
-enum __AV_alist_flags
-{
-
-  /* how to return structs */
-  /* There are basically 3 ways to return structs:
-   * a. The called function returns a pointer to static data. Not reentrant.
-   *    Not supported any more.
-   * b. The caller passes the return structure address in a dedicated register
-   *    or as a first (or last), invisible argument. The called function stores
-   *    its result there.
-   * c. Like b, and the called function also returns the return structure
-   *    address in the return value register. (This is not very distinguishable
-   *    from b.)
-   * Independently of this,
-   * r. small structures (<= 4 or <= 8 bytes) may be returned in the return
-   *    value register(s), or
-   * m. even small structures are passed in memory.
-   */
-  /* gcc-2.6.3 employs the following strategy:
-   *   - If PCC_STATIC_STRUCT_RETURN is defined in the machine description
-   *     it uses method a, else method c.
-   *   - If flag_pcc_struct_return is set (either by -fpcc-struct-return or if
-   *     DEFAULT_PCC_STRUCT_RETURN is defined to 1 in the machine description)
-   *     it uses method m, else (either by -freg-struct-return or if
-   *     DEFAULT_PCC_STRUCT_RETURN is defined to 0 in the machine description)
-   *     method r.
-   */
-  __AV_SMALL_STRUCT_RETURN	= 1<<1,	/* r: special case for small structs */
-  __AV_GCC_STRUCT_RETURN	= 1<<2,	/* consider 8 byte structs as small */
-#if defined(__sparc__) && !defined(__sparc64__)
-  __AV_SUNCC_STRUCT_RETURN	= 1<<3,
-  __AV_SUNPROCC_STRUCT_RETURN	= 1<<4,
-#endif
-#if defined(__i386__)
-  __AV_NEXTGCC_STRUCT_RETURN	= 1<<3,
-  __AV_MSVC_STRUCT_RETURN	= 1<<4,
-#endif
-#if defined(__hppa__)
-  __AV_OLDGCC_STRUCT_RETURN	= 1<<3,
-#endif
-  /* the default way to return structs */
-  /* This choice here is based on the assumption that the function you are
-   * going to call has been compiled with the same compiler you are using to
-   * include this file.
-   * If you want to call functions with another struct returning convention,
-   * just  #define __AV_STRUCT_RETURN ...
-   * before or after #including <avcall.h>.
-   */
-#ifndef __AV_STRUCT_RETURN
-  __AV_STRUCT_RETURN		=
-#if defined(__sparc__) && !defined(__sparc64__) && defined(sun) && defined(__SUNPRO_C) /* SUNWspro cc */
-				  __AV_SUNPROCC_STRUCT_RETURN,
-#else
-#if (defined(__i386__) && (defined(_WIN32) || defined(__CYGWIN__) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__hppa__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || defined(__powerpc64_elfv2__) || defined(__ia64__) || defined(__x86_64__)
-				  __AV_SMALL_STRUCT_RETURN |
-#endif
-#if defined(__GNUC__) && !((defined(__mipsn32__) || defined(__mips64__)) && ((__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)))
-				  __AV_GCC_STRUCT_RETURN |
-#endif
-#if defined(__i386__) && defined(NeXT) && defined(__GNUC__) /* NeXT gcc-2.5.8 */
-				  __AV_NEXTGCC_STRUCT_RETURN |
-#endif
-#if defined(__i386__) && defined(_MSC_VER) /* MSVC 4.0 */
-				  __AV_MSVC_STRUCT_RETURN |
-#endif
-#if defined(__hppa__) && defined(__GNUC__) && (__GNUC__ < 3) && (__GNUC_MINOR__ < 7)
-				  __AV_OLDGCC_STRUCT_RETURN |
-#endif
-  				  0,
-#endif
-#endif
-
-  /* how to return floats */
-#if defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))
-  __AV_SUNCC_FLOAT_RETURN	= 1<<5,
-#endif
-#if defined(__m68k__)
-  __AV_FREG_FLOAT_RETURN	= 1<<6,
-#endif
-  /* the default way to return floats */
-  /* This choice here is based on the assumption that the function you are
-   * going to call has been compiled with the same compiler you are using to
-   * include this file.
-   * If you want to call functions with another float returning convention,
-   * just  #define __AV_FLOAT_RETURN ...
-   * before or after #including <avcall.h>.
-   */
-#ifndef __AV_FLOAT_RETURN
-#if (defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))) && !defined(__GNUC__) && defined(sun) && !defined(__SUNPRO_C)  /* sun cc */
-  __AV_FLOAT_RETURN		= __AV_SUNCC_FLOAT_RETURN,
-#elif defined(__m68k__)
-  __AV_FLOAT_RETURN		= __AV_FREG_FLOAT_RETURN,
-#else
-  __AV_FLOAT_RETURN		= 0,
-#endif
-#endif
-
-  /* how to pass structs */
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
-  __AV_SGICC_STRUCT_ARGS	= 1<<7,
-#endif
-#if defined(__powerpc__) || defined(__powerpc64__)
-  __AV_AIXCC_STRUCT_ARGS	= 1<<7,
-#endif
-  /* the default way to pass structs */
-  /* This choice here is based on the assumption that the function you are
-   * going to call has been compiled with the same compiler you are using to
-   * include this file.
-   * If you want to call functions with another struct passing convention,
-   * just  #define __AV_STRUCT_ARGS ...
-   * before or after #including <avcall.h>.
-   */
-#ifndef __AV_STRUCT_ARGS
-#if (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) && !defined(__GNUC__) /* SGI mips cc */
-  __AV_STRUCT_ARGS		= __AV_SGICC_STRUCT_ARGS,
-#else
-#if (defined(__mipsn32__) || defined(__mips64__)) && (!defined(__GNUC__) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)) /* SGI mips cc or gcc >= 3.4 */
-  __AV_STRUCT_ARGS		= __AV_SGICC_STRUCT_ARGS,
-#else
-#if defined(__powerpc__) && !defined(__powerpc64__) && defined(_AIX) && !defined(__GNUC__) /* AIX 32-bit cc, xlc */
-  __AV_STRUCT_ARGS		= __AV_AIXCC_STRUCT_ARGS,
-#else
-#if defined(__powerpc64__) && defined(_AIX) /* AIX 64-bit cc, xlc, gcc */
-  __AV_STRUCT_ARGS		= __AV_AIXCC_STRUCT_ARGS,
-#else
-  __AV_STRUCT_ARGS		= 0,
-#endif
-#endif
-#endif
-#endif
-#endif
-
-  /* how to pass floats */
-  /* ANSI C compilers and GNU gcc pass floats as floats.
-   * K&R C compilers pass floats as doubles. We don't support them any more.
-   */
-#if defined(__powerpc64__)
-  __AV_AIXCC_FLOAT_ARGS         = 1<<8,      /* pass floats in the low 4 bytes of an 8-bytes word */
-#endif
-  /* the default way to pass floats */
-  /* This choice here is based on the assumption that the function you are
-   * going to call has been compiled with the same compiler you are using to
-   * include this file.
-   * If you want to call functions with another float passing convention,
-   * just  #define __AV_FLOAT_ARGS ...
-   * before or after #including <avcall.h>.
-   */
-#ifndef __AV_FLOAT_ARGS
-#if defined(__powerpc64__) && defined(_AIX) && !defined(__GNUC__) /* AIX 64-bit xlc */
-  __AV_FLOAT_ARGS		= __AV_AIXCC_FLOAT_ARGS,
-#else
-  __AV_FLOAT_ARGS		= 0,
-#endif
-#endif
-
-  /* how to pass and return small integer arguments */
-  __AV_ANSI_INTEGERS		= 0, /* no promotions */
-  __AV_TRADITIONAL_INTEGERS	= 0, /* promote [u]char, [u]short to [u]int */
-  /* Fortunately these two methods are compatible. Our macros work with both. */
-
-  /* stack cleanup policy */
-  __AV_CDECL_CLEANUP		= 0, /* caller pops args after return */
-  __AV_STDCALL_CLEANUP		= 0, /* callee pops args before return */
-				     /* currently only supported on __i386__ */
-#ifndef __AV_CLEANUP
-  __AV_CLEANUP			= __AV_CDECL_CLEANUP,
-#endif
-
-  /* These are for internal use only */
-#if defined(__i386__) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__) || (defined(__s390__) && !defined(__s390x__))
-  __AV_REGISTER_STRUCT_RETURN	= 1<<9,
-#endif
-
-  __AV_flag_for_broken_compilers_that_dont_like_trailing_commas
-};
-
-typedef struct
-{
-  /* function to be called */
-  __avword		(*func)();
-  /* some av_... macros need these flags */
-  int			flags;
-  /* return type, address for the result */
-  void*			raddr;
-  enum __AVtype		rtype;
-  unsigned long		rsize;
-  /* current pointer into the args[] array */
-  __avword*		aptr;
-  /* beginning of the args[] array */
-  __avword*		args;
-  /* limit pointer into the args[] array */
-  __avword*		eptr;
-#if defined(__i386__) && 0
-  /* Filler word, needed if the numbers of words up to now in this structure */
-  /* is odd (because on MSVC, alignof(double) = 8, normally = 4).            */
-  __avword		filler1;
-#endif
-#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__s390__) && !defined(__s390x__))
-  /* temporary storage, used to split doubles into two words */
-  union {
-    double	_double;
-#if defined(__sparc__) && !defined(__sparc64__)
-    long long	_longlong;
-#endif
-    __avword	words[2];
-  }			tmp;
-#endif
-#if defined(__x86_64__)
-#define __AV_IARG_NUM 6
-  /* store the integer arguments in an extra array */
-  unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
-#endif
-#if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
-#define __AV_FARG_NUM 2
-  /* store the floating-point arguments in an extra array */
-  unsigned int		anum;
-  unsigned int		fanum;
-  unsigned int		farg_mask;	/* bitmask of those entries in fargs[] which have a float value */
-  unsigned int		darg_mask;	/* bitmask of those entries in dargs[] which have a double value */
-  float			fargs[__AV_FARG_NUM];
-  double		dargs[__AV_FARG_NUM];
-#endif
-#if defined(__mipsn32__) || defined(__mips64__)
-  /* store the floating-point arguments in an extra array */
-  int			anum;		/* redundant: (LIST).aptr = &(LIST).args[(LIST).anum] */
-  unsigned int		farg_mask;	/* bitmask of those entries in farg[] which have a value */
-  unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a double value */
-  float			farg[8];
-#endif
-#if defined(__sparc64__)
-  /* store the floating-point arguments in an extra array */
-  int			anum;		/* redundant: (LIST).aptr = &(LIST).args[(LIST).anum] */
-  unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a float or double value */
-#endif
-#if defined(__armhf__)
-#define __AV_IARG_NUM 4
-  /* The first __AV_IARG_NUM integer arguments are passed in registers, even if
-     some floating-point arguments have already been allocated on the stack. */
-  unsigned int		ianum;
-  /* store the floating-point arguments in an extra array */
-  unsigned int		fanum;		/* number of fargs[] words that are occupied so far */
-  unsigned int		farg_mask;	/* bitmask of those entries in fargs[] which have a float value */
-  unsigned int		darg_mask;	/* bitmask of those entries in dargs[] which have a double value */
-  float			fargs[16];
-  double		dargs[8];
-#endif
-#if defined(__arm64__)
-#define __AV_IARG_NUM 8
-  /* store the integer arguments in an extra array */
-  unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
-#define __AV_FARG_NUM 8
-  /* store the floating-point arguments in an extra array */
-  unsigned int		fanum;		/* number of fargs[] words that are occupied so far */
-  unsigned int		farg_mask;	/* bitmask of those entries in fargs[] which have a float value */
-  unsigned int		darg_mask;	/* bitmask of those entries in dargs[] which have a double value */
-  float			fargs[__AV_FARG_NUM];
-  double		dargs[__AV_FARG_NUM];
-#endif
-#if defined(__ia64__) || defined(__x86_64__)
-  /* store the floating-point arguments in an extra array */
-#define __AV_FARG_NUM 8
-  double*		faptr;
-  double		fargs[__AV_FARG_NUM];
-#endif
-#if defined(__powerpc__) || defined(__powerpc64__)
-#if defined(__powerpc_sysv4__)
-#define __AV_IARG_NUM 8
-  /* store the integer arguments in an extra array */
-  unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
-#define __AV_FARG_NUM 8
-#else
-#define __AV_FARG_NUM 13
-#endif
-  /* store the floating-point arguments in an extra array */
-  double*		faptr;
-  double		fargs[__AV_FARG_NUM];
-#endif
-#if (defined(__s390__) && !defined(__s390x__))
-#define __AV_IARG_NUM 5
-  /* store the integer arguments in an extra array */
-  unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
-  /* store the floating-point arguments in an extra array */
-#define __AV_FARG_NUM 2
-  unsigned int		fanum;		/* number of fargs[] words that are occupied so far */
-  unsigned int		farg_mask;	/* bitmask of those entries in fargs[] which have a float value */
-  unsigned int		darg_mask;	/* bitmask of those entries in dargs[] which have a double value */
-  float			fargs[__AV_FARG_NUM];
-  double		dargs[__AV_FARG_NUM];
-#endif
-#if defined(__s390x__)
-#define __AV_IARG_NUM 5
-  /* store the integer arguments in an extra array */
-  unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
-#define __AV_FARG_NUM 4
-  /* store the floating-point arguments in an extra array */
-  unsigned int		fanum;		/* number of fargs[] words that are occupied so far */
-  unsigned int		farg_mask;	/* bitmask of those entries in fargs[] which have a float value */
-  unsigned int		darg_mask;	/* bitmask of those entries in dargs[] which have a double value */
-  float			fargs[__AV_FARG_NUM];
-  double		dargs[__AV_FARG_NUM];
-#endif
-} __av_alist;
-
-/* An upper bound for sizeof(__av_alist).
-   The total size of the __av_alist fields, ignoring alignment of fields,
-   varies from
-     40 bytes (for __i386__, __m68k__, __sparc__, __hppa__, __arm__)
-   to
-     232 bytes (for __arm64__). */
-#define __AV_ALIST_SIZE_BOUND 256
 /* Verify at compile time that sizeof(__av_alist) <= __AV_ALIST_SIZE_BOUND. */
 typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist))+1];
 
-typedef struct
-{
-  /* First part: Fixed size __av_alist. */
-  union {
-    __av_alist _av_m_alist;
-    char _av_m_room[__AV_ALIST_SIZE_BOUND];
-    /* For alignment. */
-    long align1;
-    double align2;
-#if defined(HAVE_LONG_LONG_INT)
-    long long align3;
-#endif
-    long double align4;
-  } _av_alist_head;
-  /* Second part: An array whose size depends on __AV_ALIST_WORDS. */
-  union {
-    __avword _av_m_args[__AV_ALIST_WORDS];
-    /* For alignment. */
-    long align1;
-    double align2;
-#if defined(HAVE_LONG_LONG_INT)
-    long long align3;
-#endif
-    long double align4;
-  } _av_alist_flexarray;
-} av_alist;
-#define _av_inner _av_alist_head._av_m_alist
+/* Conversion from the public, mostly opaque, 'av_alist*' to '__av_alist*'. */
+#define AV_LIST_INNER(list) ((list)->_av_alist_head._av_m_alist)
+
 
 /* Delayed overflow detection */
-#define av_overflown(LIST) _av_overflown((LIST)._av_inner)
 #if defined(__hppa__)
 #define _av_overflown(LIST) ((LIST).aptr < (LIST).eptr)
 #else
@@ -507,27 +39,24 @@ typedef struct
 
 
 /*
- *  av_start_<type> macros which specify the return type
+ * Initialization of an __av_alist
  */
 
-#define __AV_START_FLAGS  \
-  __AV_STRUCT_RETURN | __AV_FLOAT_RETURN | __AV_STRUCT_ARGS | __AV_FLOAT_ARGS | __AV_CLEANUP
-
-#define __av_start(LIST,LIST_ARGS,FUNC,RADDR,RETTYPE)				\
-  ((LIST).func = (__avword(*)())(FUNC),					\
-   (LIST).raddr = (void*)(RADDR),					\
+#define __av_start(LIST,LIST_ARGS,LIST_ARGS_END,FUNC,RADDR,RETTYPE,FLAGS) \
+  ((LIST).func = (FUNC),						\
+   (LIST).raddr = (RADDR),						\
    (LIST).rtype = (RETTYPE),						\
    (LIST).args = (LIST_ARGS),						\
-   __av_start1(LIST)							\
-   __av_start_init_eptr(LIST)						\
-   (LIST).flags = __AV_START_FLAGS)
+   __av_start1(LIST,LIST_ARGS_END)					\
+   __av_start_init_eptr(LIST,LIST_ARGS_END)				\
+   (LIST).flags = (FLAGS))
 
 #if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__))
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).anum = 0,							\
    (LIST).fanum = 0,							\
    (LIST).farg_mask = 0,						\
@@ -535,28 +64,28 @@ typedef struct
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).anum = 0,							\
    (LIST).farg_mask = 0,						\
    (LIST).darg_mask = 0,						\
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__sparc__) && !defined(__sparc64__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__sparc64__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).anum = 0,							\
    (LIST).darg_mask = 0,						\
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__hppa__)
-#define __av_start1(LIST)						\
-   (LIST).aptr = &(LIST).args[__AV_ALIST_WORDS],
+#define __av_start1(LIST,LIST_ARGS_END)					\
+   (LIST).aptr = (LIST_ARGS_END),
 #endif
 #if defined(__armhf__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[__AV_IARG_NUM],				\
    (LIST).ianum = 0,							\
    (LIST).fanum = 0,							\
@@ -564,7 +93,7 @@ typedef struct
    (LIST).darg_mask = 0,
 #endif
 #if defined(__arm64__) || defined(__s390__) || defined(__s390x__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[0],					\
    (LIST).ianum = 0,							\
    (LIST).fanum = 0,							\
@@ -572,58 +101,40 @@ typedef struct
    (LIST).darg_mask = 0,
 #endif
 #if defined(__powerpc_aix__) || defined(__powerpc64__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[0],					\
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 #if defined(__powerpc_sysv4__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[0],					\
    (LIST).ianum = 0,							\
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 #if defined(__ia64__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[0],					\
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 #if defined(__x86_64__)
-#define __av_start1(LIST)						\
+#define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[0],					\
    (LIST).ianum = 0,							\
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 
 #if defined(__hppa__)
-#define __av_start_init_eptr(LIST)					\
+#define __av_start_init_eptr(LIST,LIST_ARGS_END)			\
    (LIST).eptr = &(LIST).args[0],
 #else
-#define __av_start_init_eptr(LIST)					\
-   (LIST).eptr = &(LIST).args[__AV_ALIST_WORDS],
+#define __av_start_init_eptr(LIST,LIST_ARGS_END)			\
+   (LIST).eptr = (LIST_ARGS_END),
 #endif
 
-#define av_start_void(LIST,FUNC)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,0,    __AVvoid)
-#define av_start_char(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVchar)
-#define av_start_schar(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVschar)
-#define av_start_uchar(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVuchar)
-#define av_start_short(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVshort)
-#define av_start_ushort(LIST,FUNC,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVushort)
-#define av_start_int(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVint)
-#define av_start_uint(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVuint)
-#define av_start_long(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVlong)
-#define av_start_ulong(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVulong)
-#define av_start_longlong(LIST,FUNC,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVlonglong)
-#define av_start_ulonglong(LIST,FUNC,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVulonglong)
-#define av_start_float(LIST,FUNC,RADDR)		__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVfloat)
-#define av_start_double(LIST,FUNC,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVdouble)
-#define av_start_ptr(LIST,FUNC,TYPE,RADDR)	__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVvoidp)
-
-#define av_start_struct(LIST,FUNC,TYPE,TYPE_SPLITTABLE,RADDR)		\
-  _av_start_struct(LIST,FUNC,sizeof(TYPE),TYPE_SPLITTABLE,RADDR)
-#define _av_start_struct(LIST,FUNC,TYPE_SIZE,TYPE_SPLITTABLE,RADDR)	\
-  (__av_start((LIST)._av_inner,(LIST)._av_alist_flexarray._av_m_args,FUNC,RADDR,__AVstruct), \
-   (LIST)._av_inner.rsize = TYPE_SIZE,					\
-   __av_start_struct2((LIST)._av_inner,TYPE_SIZE,TYPE_SPLITTABLE),	\
+#define __av_start_struct(LIST,LIST_ARGS,LIST_ARGS_END,FUNC,TYPE_SIZE,TYPE_SPLITTABLE,RADDR,FLAGS) \
+  (__av_start(LIST,LIST_ARGS,LIST_ARGS_END,FUNC,RADDR,__AVstruct,FLAGS), \
+   (LIST).rsize = (TYPE_SIZE),						\
+   __av_start_struct2(LIST,TYPE_SIZE,TYPE_SPLITTABLE),			\
    0)
 
 #if (defined(__sparc__) && !defined(__sparc64__))
@@ -835,66 +346,51 @@ typedef struct
 
 /* integer argument types */
 
-#define av_long(LIST,VAL)	_av_long((LIST)._av_inner,VAL)
-#define av_ulong(LIST,VAL)	_av_ulong((LIST)._av_inner,VAL)
-#define av_ptr(LIST,TYPE,VAL)	_av_ptr((LIST)._av_inner,TYPE,VAL)
-
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define _av_long(LIST,VAL)						\
+#define __av_long(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)			\
    : __av_word(LIST,(long)(VAL)))
 #else
-#define _av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
+#define __av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
 #endif
 
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define _av_ulong(LIST,VAL)						\
+#define __av_ulong(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
    : __av_word(LIST,(unsigned long)(VAL)))
 #else
-#define _av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
+#define __av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
 #endif
 
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define _av_ptr(LIST,TYPE,VAL)						\
+#define __av_ptr(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (__avword)(TYPE)(VAL), 0)		\
-   : __av_word(LIST,(TYPE)(VAL)))
+   ? ((LIST).iargs[(LIST).ianum++] = (__avword)(VAL), 0)		\
+   : __av_word(LIST,VAL))
 #else
-#define _av_ptr(LIST,TYPE,VAL)	__av_word(LIST,(TYPE)(VAL))
+#define __av_ptr(LIST,VAL)	__av_word(LIST,VAL)
 #endif
-
-#define av_char			av_long
-#define av_schar		av_long
-#define av_short		av_long
-#define av_int			av_long
-#define av_uchar		av_ulong
-#define av_ushort		av_ulong
-#define av_uint			av_ulong
-
-#define av_longlong(LIST,VAL)	_av_longlong((LIST)._av_inner,VAL)
-#define av_ulonglong(LIST,VAL)	_av_ulonglong((LIST)._av_inner,VAL)
 
 #if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__)) || defined(__s390x__)
 /* ‘long long’ and ‘long’ are identical. */
-#define _av_longlong		_av_long
-#define _av_ulonglong		_av_ulong
+#define __av_longlong		__av_long
+#define __av_ulonglong		__av_ulong
 #elif defined(__mipsn32__)
 /* ‘long long’ fits in __avword. */
-#define _av_longlong		__av_word
-#define _av_ulonglong(LIST,VAL)	__av_word(LIST,(unsigned long long)(VAL))
+#define __av_longlong			__av_word
+#define __av_ulonglong(LIST,VAL)	__av_word(LIST,(unsigned long long)(VAL))
 #elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__))
 /* ‘long long’s are passed embedded on the arg stack. */
-#define _av_longlong(LIST,VAL)	__av_longlong(LIST,long long,VAL)
-#define _av_ulonglong(LIST,VAL)	__av_longlong(LIST,unsigned long long,VAL)
+#define __av_longlong(LIST,VAL)		__av_arg_longlong(LIST,long long,VAL)
+#define __av_ulonglong(LIST,VAL)	__av_arg_longlong(LIST,unsigned long long,VAL)
 #if defined(__i386__) || defined(__m68k__) || defined(__powerpc_aix__)
 /* ‘long long’s are (at most) word-aligned. */
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((LIST).aptr + sizeof(TYPE)/sizeof(__avword) > (LIST).eptr		\
    ? -1 :								\
    ((LIST).aptr += sizeof(TYPE)/sizeof(__avword),			\
@@ -904,7 +400,7 @@ typedef struct
 #if defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc_sysv4__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__))
 /* ‘long long’s have alignment 4 or 8. */
 #if defined(__mips__)
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE)) > (LIST).eptr \
    ? -1 :								\
    (((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE))), \
@@ -915,7 +411,7 @@ typedef struct
 #if defined(__sparc__) && !defined(__sparc64__)
 /* Within the arg stack, the alignment is only 4, not 8. */
 /* This assumes sizeof(long long) == 2*sizeof(__avword). */
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((LIST).aptr + sizeof(TYPE)/sizeof(__avword) > (LIST).eptr		\
    ? -1 :								\
    ((LIST).aptr += sizeof(TYPE)/sizeof(__avword),			\
@@ -925,7 +421,7 @@ typedef struct
     0))
 #endif
 #if defined(__hppa__)
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((__avword*)(((__avword)(LIST).aptr & -(long)__AV_alignof(TYPE)) - sizeof(TYPE)) < (LIST).eptr \
    ? -1 :								\
    ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr & -(long)__AV_alignof(TYPE)) - sizeof(TYPE)), \
@@ -933,7 +429,7 @@ typedef struct
     0))
 #endif
 #if defined(__arm__) && !defined(__armhf__)
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE)) > (LIST).eptr \
    ? -1 :								\
    ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(long)__AV_alignof(TYPE)), \
@@ -941,7 +437,7 @@ typedef struct
     0))
 #endif
 #if defined(__armhf__)
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((((LIST).ianum + sizeof(TYPE)/sizeof(__avword)+__AV_alignof(TYPE)/sizeof(__avword)-1) & -(long)(__AV_alignof(TYPE)/sizeof(__avword))) <= __AV_IARG_NUM \
    ? ((LIST).ianum = (((LIST).ianum + sizeof(TYPE)/sizeof(__avword)+__AV_alignof(TYPE)/sizeof(__avword)-1) & -(long)(__AV_alignof(TYPE)/sizeof(__avword))), \
       ((TYPE*)&(LIST).args[(LIST).ianum])[-1] = (TYPE)(VAL),		\
@@ -962,7 +458,7 @@ typedef struct
           0))))
 #endif
 #if defined(__powerpc_sysv4__)
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((((LIST).ianum + sizeof(TYPE)/sizeof(__avword)+__AV_alignof(TYPE)/sizeof(__avword)-1) & -(long)(__AV_alignof(TYPE)/sizeof(__avword))) <= __AV_IARG_NUM \
    ? ((LIST).ianum = (((LIST).ianum + sizeof(TYPE)/sizeof(__avword)+__AV_alignof(TYPE)/sizeof(__avword)-1) & -(long)(__AV_alignof(TYPE)/sizeof(__avword))), \
       ((TYPE*)&(LIST).iargs[(LIST).ianum])[-1] = (TYPE)(VAL),		\
@@ -975,14 +471,14 @@ typedef struct
         0))))
 #endif
 #if defined(__x86_64_x32__)
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (__avword)(TYPE)(VAL), 0)		\
    : __av_word(LIST,(TYPE)(VAL)))
 #endif
 #if (defined(__s390__) && !defined(__s390x__))
 /* Within the arg stack, the alignment is only 4, not 8. */
-#define __av_longlong(LIST,TYPE,VAL)					\
+#define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((LIST).ianum + (sizeof(TYPE)+sizeof(__avword)-1)/sizeof(__avword) <= __AV_IARG_NUM \
    ? ((LIST).ianum += (sizeof(TYPE)+sizeof(__avword)-1)/sizeof(__avword), \
       ((TYPE*)&(LIST).iargs[(LIST).ianum])[-1] = (TYPE)(VAL),		\
@@ -998,9 +494,6 @@ typedef struct
 #endif
 
 /* floating-point argument types */
-
-#define av_float(LIST,VAL)	_av_float((LIST)._av_inner,VAL)
-#define av_double(LIST,VAL)	_av_double((LIST)._av_inner,VAL)
 
 #if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))
 
@@ -1457,16 +950,11 @@ typedef struct
  * structure argument types
  */
 
+extern void avcall_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
+
 #define __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,PLACE,VAL_ADDR)		\
   avcall_structcpy(PLACE,VAL_ADDR,TYPE_SIZE,TYPE_ALIGN)
 
-#define av_struct(LIST,TYPE,VAL)					\
-  __av_struct((LIST)._av_inner,sizeof(TYPE),__AV_alignof(TYPE),&(VAL))
-/* _av_struct() is like av_struct(), except that you pass the type's size and alignment
- * and the value's address instead of the type and the value themselves.
- */
-#define _av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)			\
-  __av_struct((LIST)._av_inner,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)
 /* Structure argument alignment. */
 #if defined(__i386__) && defined(_MSC_VER)
 /* In MSVC, doubles inside structures have alignment 8, i.e.
@@ -1825,47 +1313,5 @@ typedef struct
           0))))
 #endif
 
-/*
- * calling the function
- */
 
-#define av_call(LIST) avcall_call(&(LIST)._av_inner)
-
-/* Determine whether a struct type is word-splittable, i.e. whether each of
- * its components fit into a register.
- * The entire computation is done at compile time.
- */
-#define av_word_splittable_1(slot1)  \
-  (__av_offset1(slot1)/sizeof(__avword) == (__av_offset1(slot1)+sizeof(slot1)-1)/sizeof(__avword))
-#define av_word_splittable_2(slot1,slot2)  \
-  ((__av_offset1(slot1)/sizeof(__avword) == (__av_offset1(slot1)+sizeof(slot1)-1)/sizeof(__avword)) \
-   && (__av_offset2(slot1,slot2)/sizeof(__avword) == (__av_offset2(slot1,slot2)+sizeof(slot2)-1)/sizeof(__avword)) \
-  )
-#define av_word_splittable_3(slot1,slot2,slot3)  \
-  ((__av_offset1(slot1)/sizeof(__avword) == (__av_offset1(slot1)+sizeof(slot1)-1)/sizeof(__avword)) \
-   && (__av_offset2(slot1,slot2)/sizeof(__avword) == (__av_offset2(slot1,slot2)+sizeof(slot2)-1)/sizeof(__avword)) \
-   && (__av_offset3(slot1,slot2,slot3)/sizeof(__avword) == (__av_offset3(slot1,slot2,slot3)+sizeof(slot3)-1)/sizeof(__avword)) \
-  )
-#define av_word_splittable_4(slot1,slot2,slot3,slot4)  \
-  ((__av_offset1(slot1)/sizeof(__avword) == (__av_offset1(slot1)+sizeof(slot1)-1)/sizeof(__avword)) \
-   && (__av_offset2(slot1,slot2)/sizeof(__avword) == (__av_offset2(slot1,slot2)+sizeof(slot2)-1)/sizeof(__avword)) \
-   && (__av_offset3(slot1,slot2,slot3)/sizeof(__avword) == (__av_offset3(slot1,slot2,slot3)+sizeof(slot3)-1)/sizeof(__avword)) \
-   && (__av_offset4(slot1,slot2,slot3,slot4)/sizeof(__avword) == (__av_offset4(slot1,slot2,slot3,slot4)+sizeof(slot4)-1)/sizeof(__avword)) \
-  )
-#define __av_offset1(slot1)  \
-  0
-#define __av_offset2(slot1,slot2)  \
-  ((__av_offset1(slot1)+sizeof(slot1)+__AV_alignof(slot2)-1) & -(long)__AV_alignof(slot2))
-#define __av_offset3(slot1,slot2,slot3)  \
-  ((__av_offset2(slot1,slot2)+sizeof(slot2)+__AV_alignof(slot3)-1) & -(long)__AV_alignof(slot3))
-#define __av_offset4(slot1,slot2,slot3,slot4)  \
-  ((__av_offset3(slot1,slot2,slot3)+sizeof(slot3)+__AV_alignof(slot4)-1) & -(long)__AV_alignof(slot4))
-
-/*
- * Miscellaneous declarations.
- */
-
-extern int avcall_call (__av_alist* l);
-extern void avcall_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
-
-#endif /*_avcall_h */
+#endif /* _AVCALL_INTERNAL_H */

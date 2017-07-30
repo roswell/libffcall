@@ -1,5 +1,59 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Allow for binary-compatible future changes of the __av_* macros.
+	* avcall/avcall.h: New file, extracted from avcall/avcall.h.in.
+	Include <stddef.h>, ffcall-abi.h.
+	When included from avcall-internal.h, include avcall-alist.h and add
+	member '_av_m_alist' in av_alist type.
+	(avcall_overflown, avcall_start, avcall_start_struct, avcall_arg_long,
+	avcall_arg_ulong, avcall_arg_ptr, avcall_arg_longlong,
+	avcall_arg_ulonglong, avcall_arg_float, avcall_arg_double,
+	avcall_arg_struct): New declarations.
+	(av_overflown, av_start_void, av_start_char, av_start_schar,
+	av_start_uchar, av_start_short, av_start_ushort, av_start_int,
+	av_start_uint, av_start_long, av_start_ulong, av_start_longlong,
+	av_start_ulonglong, av_start_float, av_start_double, av_start_ptr,
+	_av_start_struct, av_char, av_schar, av_short, av_int, av_long,
+	av_uchar, av_ushort, av_uint, av_ulong, av_ptr, av_longlong,
+	av_ulonglong, av_float, av_double, av_struct, _av_struct, av_call):
+	Define in terms of these functions.
+	* avcall/avcall-libapi.c: New file.
+	* avcall/avcall-alist.h: New file, extracted from avcall/avcall.h.in.
+	* avcall/avcall-internal.h: New file, extracted from avcall/avcall.h.in.
+	(__av_start): Add LIST_ARGS_END and FLAGS arguments.
+	(__av_start1, __av_start_init_eptr): Add LIST_ARGS_END argument.
+	(__av_start_struct): Add LIST_ARGS, LIST_ARGS_END, FLAGS arguments.
+	(__av_long): Renamed from _av_long.
+	(__av_ulong): Renamed from _av_ulong.
+	(__av_ptr): Renamed from _av_ptr. Remove TYPE argument.
+	(__av_arg_longlong): Renamed from __av_longlong.
+	(__av_longlong): Renamed from _av_longlong.
+	(__av_ulonglong): Renamed from _av_ulonglong.
+	* avcall/avcall.h.in: Remove file.
+	* configure.ac: Don't create avcall.h by substitution.
+	* avcall/avcall-*.c: Include avcall-internal.h instead of avcall.h.in.
+	(avcall_call): Change argument type to 'av_alist*'.
+	* avcall/Makefile.devel (GCCFLAGS): Add -I option for ffcall-abi.h.
+	(avcall-*.s): Update dependencies.
+	(tests-*.s): Likewise. No more need to symlink avcall.h.
+	* avcall/Makefile.maint (avcall.h.msvc, avcall.h.mingw32): Remove
+	targets.
+	(totally-clean): Don't remove them.
+	* avcall/Makefile.in (INCLUDES): Add -I option for ffcall-abi.h.
+	(OBJECTS): Add avcall-libapi.lo.
+	(avcall-libapi.lo): New target.
+	(install-lib, install): Update.
+	(minitests.o, minitests.s, tests.o, tests.s): Update dependency.
+	(distclean): Don't remove avcall.h.
+	(SOURCE_FILES): Add avcall.h, avcall-internal.h, avcall-alist.h,
+	avcall-libapi.c. Remove avcall.h.in.
+	(GENERATED_FILES): Remove avcall.h.mingw32, avcall.h.msvc.
+	* Makefile.in (DISTCLEANFILES): Update stamp file list.
+	* avcall/README: Update.
+	* porting-tools/abis/README: Update.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Allow for binary-compatible future changes of __av_alist.
 	* avcall/avcall.h.in (__AV_ALIST_SIZE_BOUND): New macro.
 	(__av_alist_verify): New verification.

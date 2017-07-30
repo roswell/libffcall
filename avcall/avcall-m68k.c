@@ -34,12 +34,12 @@
   Compile this routine with gcc -O (or -O2 or -g -O) to get the right
   register variables, or use the assembler version.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("sp");  /* C names for registers */
   register __avword*	sret	__asm__("a1");	/* structure return pointer */
@@ -49,6 +49,8 @@ avcall_call(__av_alist* l)
   register double	dret	__asm__("d0");	/* d0,d1 */
   register float	fp_fret	__asm__("fp0");
   register double	fp_dret	__asm__("fp0");
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;

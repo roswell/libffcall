@@ -119,7 +119,8 @@ follows.
 
 7) Port the avcall package.
 
- 7.1) Go through avcall.h.in and add conditionals for this ABI.
+ 7.1) Go through avcall.h and avcall-alist.h and avcall-internal.h and add
+      conditionals for this ABI.
 
  7.2) Write avcall-<ABI>.c.
 

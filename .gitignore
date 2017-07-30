@@ -244,8 +244,6 @@
 /common/asm-i386.h
 # Built by avcall/Makefile.maint.
 /avcall/avcall.man
-/avcall/avcall.h.mingw32
-/avcall/avcall.h.msvc
 /avcall/avcall-i386-mingw32.c
 /avcall/avcall-i386-msvc.c
 # Built by vacall/Makefile.maint.
@@ -299,11 +297,10 @@ autom4te.cache/
 /libtool
 /stamp-h1
 /stamp-h2
-/avcall/stamp-h3
-/vacall/stamp-h4
-/callback/stamp-h5
-/callback/vacall_r/stamp-h6
-/callback/trampoline_r/stamp-h7
+/vacall/stamp-h3
+/callback/stamp-h4
+/callback/vacall_r/stamp-h5
+/callback/trampoline_r/stamp-h6
 # Erased by avcall/Makefile.
 /avcall/Makefile
 /avcall/avcall.h

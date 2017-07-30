@@ -43,7 +43,7 @@
   Larger structures are returned in memory; the caller passes the address
   of the target memory area in r8, and it is returned unmodified in r8.
   ----------------------------------------------------------------------*/
-#include "avcall.h.in"
+#include "avcall-internal.h"
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
@@ -64,9 +64,11 @@ register double		farg7	__asm__("f14");
 register double		farg8	__asm__("f15");
 
 int
-avcall_call(__av_alist* l)
+avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("r12"); /* C names for registers */
+
+  __av_alist* l = &AV_LIST_INNER(list);
 
   __avword* argframe = (sp -= __AV_ALIST_WORDS) + 2; /* make room for argument list */
   int arglen = l->aptr - l->args;
