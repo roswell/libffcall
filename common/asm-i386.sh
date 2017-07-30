@@ -53,8 +53,8 @@ EOF
 
 cat > $tmpscript03 << \EOF
 # ----------- Global symbols depends on ASM_UNDERSCORE
-s/^\([A-Za-z0-9_:]\+\)/C(\1)/
-s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
+s/^\([A-Za-z0-9_]\+\)/C(\1)/
+s/\.L\([A-Za-z0-9_]\+\)/L(\1)/
 # ----------- Massage the beginning of functions
 /\.type/{
 s/\.type	\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/
@@ -164,7 +164,7 @@ s/\.text/TEXT()/
 s/^\([^#]*\)\.align \(.*\)/\1ALIGN(\2)/
 s/\.p2align \([^,]*\),,\(.*\)/P2ALIGN(\1,\2)/
 s/\.globl\( \+\)\(.*\)$/GLOBL(C(\2))/
-s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
+s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
 # The next 5 lines add FUNEND() after each ret followed by an empty line
 /[ 	]ret *$/{
 n

@@ -76,7 +76,7 @@
 #define FUNEND(name,size_expression) .size C(name),size_expression
 #endif
 #endif
-#define FUNBEGIN(name) C(name##:)
+#define FUNBEGIN(name) C(name):
 
 // Section of frame info for exception handlers
 #if defined __APPLE__ && defined __MACH__

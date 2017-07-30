@@ -1,5 +1,21 @@
 2017-07-31  Bruno Haible  <bruno@clisp.org>
 
+	Fix preprocessor warning "does not give a valid preprocessing token".
+	Reported by Reini Urban at <https://savannah.gnu.org/support/?109280>.
+	* common/asm-arm.sh: Don't put a colon inside the C() or L() argument.
+	* common/asm-i386.sh: Likewise.
+	* common/asm-m68k.sh: Likewise.
+	* common/asm-sparc.sh: Likewise.
+	* common/asm-x86_64.sh: Likewise.
+	* common/asm-arm.h (FUNBEGIN): Don't put a colon inside the C()
+	argument.
+	* common/asm-i386.hh (FUNBEGIN): Likewise.
+	* common/asm-m68k.h (FUNBEGIN): Likewise.
+	* common/asm-sparc.h (FUNBEGIN): Likewise.
+	* common/asm-x86_64.h (FUNBEGIN): Likewise.
+
+2017-07-31  Bruno Haible  <bruno@clisp.org>
+
 	Fix preprocessor warning "Unknown preprocessing directive".
 	* common/asm-hppa.sh: Eliminate #APP, #NO_APP lines.
 	* common/asm-powerpc.sh: Likewise.

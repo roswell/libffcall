@@ -66,4 +66,4 @@
 #define DECLARE_FUNCTION(name)
 #define FUNEND(name)
 #endif
-#define FUNBEGIN(name) C(name##:)
+#define FUNBEGIN(name) C(name):

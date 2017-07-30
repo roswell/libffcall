@@ -270,7 +270,7 @@
 #define FUNBEGIN(name) __declspec(naked) void name () { __asm {
 #define FUNEND(name,size_expression)                  }       }
 #else
-#define FUNBEGIN(name) C(name##:)
+#define FUNBEGIN(name) C(name):
 #if defined(BSD_SYNTAX)
 #define FUNEND(name,size_expression)
 #else

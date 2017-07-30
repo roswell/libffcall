@@ -36,8 +36,8 @@ EOF
 
 cat > $tmpscript2 << \EOF
 # ----------- Global symbols depends on ASM_UNDERSCORE
-s/^\([A-Za-z0-9_:]\+\)/C(\1)/
-s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
+s/^\([A-Za-z0-9_]\+\)/C(\1)/
+s/\.L\([A-Za-z0-9_]\+\)/L(\1)/
 s/\.globl \([A-Za-z0-9_]*\)/.globl C(\1)/
 s/\([A-Za-z0-9_]\+\)(%rip)/C(\1)(%rip)/
 # ----------- Massage the beginning of functions
@@ -66,7 +66,7 @@ cat > $tmpscript3 << \EOF
 # ----------- Introduce macro syntax for assembler pseudo-ops
 s/\.p2align \([^,]*\),,\(.*\)/P2ALIGN(\1,\2)/
 /\.section\([ 	]\+\).*GNU-stack/d
-s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
+s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
 EOF
 
 sed -f $tmpscript1 | \

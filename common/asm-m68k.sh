@@ -47,7 +47,7 @@ EOF
 if test $syntax = mit; then
 cat > $tmpscript2 << \EOF
 # ----------- Global symbols depends on ASM_UNDERSCORE
-s/^L\([A-Za-z0-9_:]\+\)/L(\1)/
+s/^L\([A-Za-z0-9_]\+\)/L(\1)/
 s/ L\([A-Za-z0-9_]\+\)/ L(\1)/
 # ----------- Prefix register names with $, to be turned into % later
 s/,/, /g
@@ -58,8 +58,8 @@ s/, /,/g
 s/\.globl[ 	]_\([A-Za-z0-9_]*\)$/.globl _\1\
 	DECLARE_FUNCTION(\1)/
 # ----------- Global symbols depends on ASM_UNDERSCORE
-s/_\([A-Za-z0-9_:]*\)/C(\1)/
-s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
+s/_\([A-Za-z0-9_]*\)/C(\1)/
+s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
 /FUNBEGIN(/{
 h
 }
@@ -75,12 +75,12 @@ fi
 if test $syntax = motorola; then
 cat > $tmpscript2 << \EOF
 # ----------- Global symbols depends on ASM_UNDERSCORE
-s/^\([A-Za-z0-9_:]\+\)/C(\1)/
-s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
+s/^\([A-Za-z0-9_]\+\)/C(\1)/
+s/\.L\([A-Za-z0-9_]\+\)/L(\1)/
 s/\.globl[ 	]\([A-Za-z0-9_]*\)/.globl C(\1)/
 # ----------- Introduce macro syntax for assembler pseudo-ops
 /\.file\([ 	]\+\)/d
-s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
+s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
 # ----------- Massage the beginning of functions
 /\.type/{
 s/\.type[ 	]\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/

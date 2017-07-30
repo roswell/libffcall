@@ -35,13 +35,13 @@ EOF
 
 cat > $tmpscript2 << \EOF
 # ----------- Global symbols depends on ASM_UNDERSCORE
-s/^\([A-Za-z0-9_:]\+\)/C(\1)/
-s/\.L\([A-Za-z0-9_:]\+\)/L(\1)/
+s/^\([A-Za-z0-9_]\+\)/C(\1)/
+s/\.L\([A-Za-z0-9_]\+\)/L(\1)/
 s/\.global[ 	]\([A-Za-z0-9_]*\)$/.global C(\1)/
 # ----------- Introduce macro syntax for assembler pseudo-ops
 /\.file\([ 	]\+\)/d
 /\.section\([ 	]\+\).*GNU-stack/d
-s/^C(\([A-Za-z0-9_]*\):)/FUNBEGIN(\1)/
+s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
 # ----------- Massage the beginning of functions
 /\.type/{
 s/\.type[ 	]\([A-Za-z0-9_]*\), *#function/DECLARE_FUNCTION(\1)/
