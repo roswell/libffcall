@@ -28,12 +28,6 @@
 #define MAGIC2  0xa2f9d045
 #define MAGIC3  0x7aff3cb4
 
-#ifdef __cplusplus
-typedef int (*function)(...);
-#else
-typedef int (*function)();
-#endif
-
 int f (int x)
 {
   return x + MAGIC3;
@@ -50,7 +44,7 @@ void vf (void* data, va_alist alist)
 
 int main ()
 {
-  function cf = alloc_callback((function)&vf, (void*)MAGIC1);
+  callback_t cf = alloc_callback(&vf, (void*)MAGIC1);
   if ((*cf)(MAGIC2) == MAGIC2+MAGIC3)
     { free_callback(cf); printf("Works, test1 passed.\n"); exit(0); }
   else

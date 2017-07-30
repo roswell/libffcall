@@ -1,5 +1,32 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	callback: Allow for binary-compatible future changes of main API.
+	* callback/callback.h: Renamed from callback/callback.h.in.
+	Don't include trampoline_r.h.
+	(callback_t, __TR_function): New types.
+	(callback_function_t): Renamed from __VA_function.
+	(alloc_callback, free_callback, is_callback, callback_address,
+	callback_data): Declare as functions, not as macros.
+	* callback/callback-libapi.c: New file.
+	* configure.ac: Don't create callback/callback.h.
+	* callback/Makefile.in (LIBTOOL_COMPILE): New variable.
+	(callback.h): Remove target
+	(callback-libapi.lo): New target.
+	(libcallback.la): Include it.
+	(install-lib, install, installdirs, uninstall): Don't recurse into
+	'trampoline_r' directory.
+	(test1.o, minitests.o, minitests.s, tests.o, tests.s): Update
+	dependency.
+	(MOSTLYCLEANFILES): Remove callback.h.
+	(SOURCE_FILES): Add callback.h, callback-libapi.c. Remove callback.h.in.
+	* callback/test1.c (function): Remove type.
+	(main): Remove a cast.
+	* callback/tests.c (main): Use the type 'callback_t'.
+	* Makefile.in (DISTCLEANFILES): Update stamp file list.
+	* NEWS: Mention the improvement.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	callback: Remove version number from trampoline_r.h.
 	Rationale: It is already present in callback.h.
 	* callback/trampoline_r/trampoline_r.h: Renamed from

@@ -2052,7 +2052,7 @@ void clear_traces (void)
 
 int main (void)
 {
-  __TR_function callback;
+  callback_t callback;
 
   out = stdout;
 

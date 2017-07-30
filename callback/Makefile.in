@@ -27,6 +27,7 @@ CPP = @CPP@
 INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/..
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
+LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
 LIBTOOL_INSTALL = $(LIBTOOL) --mode=install
 LIBTOOL_UNINSTALL = $(LIBTOOL) --mode=uninstall
@@ -52,13 +53,10 @@ SHELL = /bin/sh
 # Needed by $(LIBTOOL).
 top_builddir = ..
 
-all : all-subdirs callback.h vacall_r.h trampoline_r.h libcallback.la $(srcdir)/callback.3 $(srcdir)/callback.html
+all : all-subdirs vacall_r.h trampoline_r.h libcallback.la $(srcdir)/callback.3 $(srcdir)/callback.html
 
 all-subdirs : force
 	cd @callback_subdir@ && $(MAKE) all
-
-callback.h :
-	$(LN_S) $(srcdir)/callback.h.in callback.h
 
 vacall_r.h :
 	$(LN_S) $(srcdir)/vacall_r/vacall_r.h vacall_r.h
@@ -66,26 +64,29 @@ vacall_r.h :
 trampoline_r.h :
 	$(LN_S) $(srcdir)/trampoline_r/trampoline_r.h trampoline_r.h
 
-libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la
-	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) vacall_r/vacall.lo vacall_r/vacall-libapi.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
+callback-libapi.lo : $(srcdir)/callback-libapi.c $(srcdir)/callback.h trampoline_r.h ../config.h
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/callback-libapi.c
+
+libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la callback-libapi.lo
+	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) vacall_r/vacall.lo vacall_r/vacall-libapi.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo callback-libapi.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
 install-lib : all force
-	cd @callback_subdir@ && $(MAKE) install-lib libdir='$(libdir)' includedir='$(includedir)'
+	cd vacall_r && $(MAKE) install-lib libdir='$(libdir)' includedir='$(includedir)'
 	mkdir -p $(libdir)
 	$(LIBTOOL_INSTALL) $(INSTALL_DATA) libcallback.la $(libdir)/libcallback.la
 	mkdir -p $(includedir)
-	$(INSTALL_DATA) callback.h $(includedir)/callback.h
+	$(INSTALL_DATA) $(srcdir)/callback.h $(includedir)/callback.h
 
 install : force
-	cd @callback_subdir@ && $(MAKE) install
+	cd vacall_r && $(MAKE) install
 	mkdir -p $(DESTDIR)$(prefix)
 	mkdir -p $(DESTDIR)$(exec_prefix)
 	mkdir -p $(DESTDIR)$(libdir)
 	$(LIBTOOL_INSTALL) $(INSTALL_DATA) libcallback.la $(DESTDIR)$(libdir)/libcallback.la
 	mkdir -p $(DESTDIR)$(includedir)
-	$(INSTALL_DATA) callback.h $(DESTDIR)$(includedir)/callback.h
+	$(INSTALL_DATA) $(srcdir)/callback.h $(DESTDIR)$(includedir)/callback.h
 	mkdir -p $(DESTDIR)$(mandir)
 	mkdir -p $(DESTDIR)$(mandir)/man3
 	$(INSTALL_DATA) $(srcdir)/callback.3 $(DESTDIR)$(mandir)/man3/callback.3
@@ -94,7 +95,7 @@ install : force
 	$(INSTALL_DATA) $(srcdir)/callback.html $(DESTDIR)$(htmldir)/callback.html
 
 installdirs : force
-	cd @callback_subdir@ && $(MAKE) installdirs
+	cd vacall_r && $(MAKE) installdirs
 	mkdir -p $(DESTDIR)$(prefix)
 	mkdir -p $(DESTDIR)$(exec_prefix)
 	mkdir -p $(DESTDIR)$(libdir)
@@ -105,22 +106,22 @@ installdirs : force
 	mkdir -p $(DESTDIR)$(htmldir)
 
 uninstall : force
-	cd @callback_subdir@ && $(MAKE) uninstall
+	cd vacall_r && $(MAKE) uninstall
 	$(LIBTOOL_UNINSTALL) $(RM) $(DESTDIR)$(libdir)/libcallback.la
 	$(RM) $(DESTDIR)$(includedir)/callback.h
 	$(RM) $(DESTDIR)$(mandir)/man3/callback.3
 	$(RM) $(DESTDIR)$(htmldir)/callback.html
 
-test1.o : $(srcdir)/test1.c callback.h vacall_r.h trampoline_r.h
+test1.o : $(srcdir)/test1.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
 test1 : test1.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o libcallback.la $(LDFLAGS) -o test1
 
-minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
+minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
 
-minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
+minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
 minitests : minitests.o libcallback.la
@@ -135,10 +136,10 @@ check : all check-subdirs test1 minitests
 	LC_ALL=C uniq -u < minitests.out > minitests.output.$(HOST)
 	test '!' -s minitests.output.$(HOST)
 
-tests.o : $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
+tests.o : $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/tests.c
 
-tests.s : $(srcdir)/tests.c callback.h vacall_r.h trampoline_r.h
+tests.s : $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
 tests : tests.o libcallback.la
@@ -155,7 +156,7 @@ extracheck : all extracheck-subdirs tests
 MOSTLYCLEANDIRS = .libs _libs
 MOSTLYCLEANFILES = \
   *.o *.lo core \
-  callback.h vacall_r.h trampoline_r.h libcallback.* \
+  vacall_r.h trampoline_r.h libcallback.* \
   test1.o test1 \
   minitests.o minitests.s minitests minitests.out \
   tests.o tests.s tests tests.out
@@ -192,7 +193,8 @@ SOURCE_FILES = \
   COPYING MIGRATION PLATFORMS README callback.3 callback.html elf-hack.txt \
   Makefile.maint \
   Makefile.in Makefile.mingw32 Makefile.msvc \
-  callback.h.in \
+  callback.h \
+  callback-libapi.c \
   test1.c \
   minitests.c \
   tests.c

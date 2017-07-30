@@ -1,5 +1,9 @@
 New in 2.0:
 
+* The installed include files are now platform independent. This means that
+  you can now install libffcall for different ABIs on the same system, using
+  the same --prefix option but different --exec-prefix options for each ABI.
+
 * API changes in <trampoline.h>:
   - The second argument of alloc_trampoline() is now a 'void**', rather
     than a 'void*'.

@@ -24,7 +24,6 @@ AC_CONFIG_SRCDIR([trampoline/trampoline.h])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_HEADERS([ffcall-version.h:ffcall-version.in.h])
-AC_CONFIG_HEADERS([callback/callback.h])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([gnulib-lib/Makefile])
