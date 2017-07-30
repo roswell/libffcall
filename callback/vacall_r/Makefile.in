@@ -25,7 +25,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir) -I$(srcdir)/../../vacall -I../.. -I$(srcdir)/../..
+INCLUDES = -I. -I$(srcdir) -I$(srcdir)/../../vacall -I../.. -I$(srcdir)/../.. -I../../gnulib-lib -I$(srcdir)/../../gnulib-lib
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@

@@ -1,3 +1,9 @@
+2017-07-31  Bruno Haible  <bruno@clisp.org>
+
+	Fix build error (regression from 2017-07-30).
+	* vacall/Makefile.in (INCLUDES): Add -I options for <stdnoreturn.h>.
+	* callback/vacall_r/Makefile.in (INCLUDES): Likewise.
+
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
 	vacall: Polish Makefile.in.
