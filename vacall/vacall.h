@@ -1,6 +1,3 @@
-#ifndef _VACALL_H                               /*-*- C -*-*/
-#define _VACALL_H
-
 /*
  * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
  *
@@ -17,6 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef _VACALL_H
+#define _VACALL_H
 
 #include <stddef.h>
 

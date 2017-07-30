@@ -1,5 +1,11 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	vacall, callback: Move copyright notice up.
+	* vacall/vacall.h: Put double-inclusion guard after copyright header.
+	* callback/vacall_r/vacall_r.h: Likewise.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	callback: Allow for binary-compatible future changes of __va_* macros.
 	* callback/vacall_r/vacall_r.h: New file, extracted from
 	callback/vacall_r/vacall_r.h.in. Include <stddef.h>, ffcall-abi.h.
