@@ -76,3 +76,10 @@ int avcall_arg_struct (av_alist* list, size_t type_size, size_t type_align, cons
 {
   return __av_struct(AV_LIST_INNER(list),type_size,type_align,val_addr);
 }
+
+#include <stdlib.h>
+
+/* A dummy symbol, so that GNU clisp's autoconfiguration recognizes this
+   library. */
+#undef __builtin_avcall
+void __builtin_avcall (void) { abort(); }

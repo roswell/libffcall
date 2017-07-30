@@ -51,3 +51,10 @@ void* callback_data (callback_t callback)
 {
   return trampoline_r_data1(callback);
 }
+
+#include <stdlib.h>
+
+/* A dummy symbol, so that GNU clisp's autoconfiguration recognizes this
+   library. */
+#undef trampoline_r_data0
+void trampoline_r_data0 (void) { abort(); }

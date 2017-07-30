@@ -1,5 +1,11 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Ensure source compatibility with existing versions of GNU clisp, part 1.
+	* avcall/avcall-libapi.c (__builtin_avcall): New dummy function.
+	* callback/callback-libapi.c (trampoline_r_data0): New dummy function.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Remove copied files from callback/vacall_r/.
 	* callback/vacall_r/Makefile.devel (vacall-*.s): Compile
 	../../vacall/vacall-*.c directly.
