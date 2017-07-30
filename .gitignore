@@ -263,8 +263,6 @@
 # Built by callback/vacall_r/Makefile.maint.
 /callback/vacall_r/config.h.mingw32
 /callback/vacall_r/config.h.msvc
-/callback/vacall_r/vacall_r.h.mingw32
-/callback/vacall_r/vacall_r.h.msvc
 /callback/vacall_r/vacall-i386-mingw32.c
 /callback/vacall_r/vacall-i386-msvc.c
 # Built by callback/trampoline_r/Makefile.maint.
@@ -298,8 +296,7 @@ autom4te.cache/
 /stamp-h1
 /stamp-h2
 /callback/stamp-h3
-/callback/vacall_r/stamp-h4
-/callback/trampoline_r/stamp-h5
+/callback/trampoline_r/stamp-h4
 # Erased by avcall/Makefile.
 /avcall/Makefile
 /avcall/avcall.h
@@ -319,7 +316,6 @@ autom4te.cache/
 /callback/tests.output.*
 # Erased by callback/vacall_r/Makefile.
 /callback/vacall_r/Makefile
-/callback/vacall_r/vacall_r.h
 # Erased by callback/trampoline_r/Makefile.
 /callback/trampoline_r/Makefile
 /callback/trampoline_r/trampoline_r.h

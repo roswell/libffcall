@@ -17,11 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef REENTRANT
 #include "vacall-internal.h"
-#else /* REENTRANT */
-#include "vacall_r.h.in"
-#endif
 
 #ifndef REENTRANT
 typedef void (*func_pointer)(va_alist);

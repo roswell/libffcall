@@ -5,14 +5,8 @@ RM = rm -f
 
 # ==================== Easily regeneratable files ====================
 
-all : vacall_r.h.msvc config.h.msvc vacall_r.h.mingw32 config.h.mingw32 \
+all : config.h.msvc config.h.mingw32 \
       vacall-i386-msvc.c vacall-i386-mingw32.c
-
-vacall_r.h.msvc : vacall_r.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' < vacall_r.h.in > vacall_r.h.msvc
-
-vacall_r.h.mingw32 : vacall_r.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' < vacall_r.h.in > vacall_r.h.mingw32
 
 config.h.msvc : ../../config.h.in
 	cp ../../config.h.in config.h.msvc
@@ -27,7 +21,7 @@ vacall-i386-mingw32.c : vacall-i386-macro.S
 	(echo '#ifdef __MINGW32__' ; echo '#include "vacall_r.h"' ; echo '#endif' ; cat vacall-i386-macro.S) > vacall-i386-mingw32.c
 
 totally-clean : force
-	$(RM) vacall_r.h.msvc config.h.msvc vacall_r.h.mingw32 config.h.mingw32
+	$(RM) config.h.msvc config.h.mingw32
 	$(RM) vacall-i386-msvc.c vacall-i386-mingw32.c
 
 

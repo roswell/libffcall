@@ -19,11 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef REENTRANT
 #include "vacall-internal.h"
-#else /* REENTRANT */
-#include "vacall_r.h"
-#endif
 
 /* This is the implementation of the library API.
    The symbols that the linker sees are all prefixed with 'vacall',

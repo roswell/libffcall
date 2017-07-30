@@ -24,7 +24,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir) -I..
+INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/..
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
 LIBTOOL_LINK = $(LIBTOOL) --mode=link
@@ -61,7 +61,7 @@ callback.h :
 	$(LN_S) $(srcdir)/callback.h.in callback.h
 
 vacall_r.h :
-	$(LN_S) vacall_r/vacall_r.h vacall_r.h
+	$(LN_S) $(srcdir)/vacall_r/vacall_r.h vacall_r.h
 
 trampoline_r.h :
 	$(LN_S) trampoline_r/trampoline_r.h trampoline_r.h

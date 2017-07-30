@@ -1,5 +1,75 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	callback: Allow for binary-compatible future changes of __va_* macros.
+	* callback/vacall_r/vacall_r.h: New file, extracted from
+	callback/vacall_r/vacall_r.h.in. Include <stddef.h>, ffcall-abi.h.
+	(vacall_*): Define to symbols that start with 'callback_'.
+	(va_alist): Define als pointer to 'struct vacall_alist'.
+	(vacall_start, vacall_start_struct, vacall_arg_char, vacall_arg_schar,
+	vacall_arg_uchar, vacall_arg_short, vacall_arg_ushort, vacall_arg_int,
+	vacall_arg_uint, vacall_arg_long, vacall_arg_ulong, vacall_arg_longlong,
+	vacall_arg_ulonglong, vacall_arg_float, vacall_arg_double,
+	vacall_arg_ptr, vacall_arg_struct, vacall_return_void,
+	vacall_return_char, vacall_return_schar, vacall_return_uchar,
+	vacall_return_short, vacall_return_ushort, vacall_return_int,
+	vacall_return_uint, vacall_return_long, vacall_return_ulong,
+	vacall_return_longlong, vacall_return_ulonglong, vacall_return_float,
+	vacall_return_double, vacall_return_ptr, vacall_return_struct): New
+	declarations.
+	(va_start_void, va_start_char, va_start_schar, va_start_uchar,
+	va_start_short, va_start_ushort, va_start_int, va_start_uint,
+	va_start_long, va_start_ulong, va_start_longlong, va_start_ulonglong,
+	va_start_float, va_start_double, va_start_ptr, _va_start_struct,
+	va_arg_char, va_arg_schar, va_arg_uchar, va_arg_short, va_arg_ushort,
+	va_arg_int, va_arg_uint, va_arg_long, va_arg_ulong, va_arg_longlong,
+	va_arg_ulonglong, va_arg_float, va_arg_double, va_arg_ptr,
+	va_arg_struct, _va_arg_struct, va_return_void, va_return_char,
+	va_return_schar, va_return_uchar, va_return_short, va_return_ushort,
+	va_return_int, va_return_uint, va_return_long, va_return_ulong,
+	va_return_longlong, va_return_ulonglong, va_return_float,
+	va_return_double, va_return_ptr, _va_return_struct): Define in terms of
+	these functions.
+	* callback/vacall_r/vacall-libapi.c: Include vacall-internal.h instead
+	of vacall_r.h.in.
+	(vacall_start, vacall_start_struct, vacall_arg_char, vacall_arg_schar,
+	vacall_arg_uchar, vacall_arg_short, vacall_arg_ushort, vacall_arg_int,
+	vacall_arg_uint, vacall_arg_long, vacall_arg_ulong, vacall_arg_longlong,
+	vacall_arg_ulonglong, vacall_arg_float, vacall_arg_double,
+	vacall_arg_ptr, vacall_arg_struct, vacall_return_void,
+	vacall_return_char, vacall_return_schar, vacall_return_uchar,
+	vacall_return_short, vacall_return_ushort, vacall_return_int,
+	vacall_return_uint, vacall_return_long, vacall_return_ulong,
+	vacall_return_longlong, vacall_return_ulonglong, vacall_return_float,
+	vacall_return_double, vacall_return_ptr, vacall_return_struct): New
+	functions.
+	* vacall/vacall-internal.h: If REENTRANT, include vacall_r.h.
+	* callback/vacall_r/vacall_r.h.in: Remove file.
+	* vacall/vacall-*.c: Include vacall-internal.h instead of vacall_r.h.in.
+	* vacall/vacall-libapi.c: Likewise.
+	* callback/vacall_r/Makefile.devel (GCCFLAGS): Add -I option for
+	ffcall-abi.h.
+	(vacall-*.s): Update dependencies. Pass -I options to gcc.
+	* configure.ac: Don't create callback/vacall_r/vacall_r.h.
+	* callback/vacall_r/Makefile.maint (vacall_r.h.msvc,
+	vacall_r.h.mingw32): Remove targets.
+	(totally-clean): Don't remove vacall_r.h.msvc, vacall_r.h.mingw32.
+	* callback/Makefile.maint (vacall_r/vacall_r.h.msvc,
+	vacall_r/vacall_r.h.mingw32): Remove targets.
+	* callback/vacall_r/Makefile.in (INCLUDES): Add -I options for
+	vacall-internal.h and ffcall-abi.h.
+	(all): Don't depend on vacall_r.h.
+	(vacall-libapi.lo): Update dependencies. Pass -DREENTRANT option.
+	(install-lib, install): Update.
+	(distclean): Don't remove vacall_r.h.
+	(SOURCE_FILES): Add vacall_r.h. Remove vacall_r.h.in.
+	(GENERATED_FILES): Remove vacall_r.h.mingw32, vacall_r.h.msvc.
+	* callback/Makefile.in (INCLUDES): Add -I option for ffcall-abi.h.
+	(vacall_r.h): Link to $(srcdir)/vacall_r/vacall_r.h.
+	* Makefile.in (DISTCLEANFILES): Update.
+	* porting-tools/abis/README: Update.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Allow for binary-compatible future changes of the __va_* macros.
 	* vacall/vacall.h: New file, extracted from vacall/vacall.h.in.
 	Include <stddef.h>, ffcall-abi.h.

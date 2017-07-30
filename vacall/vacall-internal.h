@@ -19,7 +19,11 @@
 #define _VACALL_INTERNAL_H
 
 /* Include the public definitions,  */
+#ifndef REENTRANT
 #include "vacall.h"
+#else
+#include "vacall_r.h"
+#endif
 
 
 /* The platform indicator symbols (__i386__, etc.) come from

@@ -41,11 +41,7 @@
   the address supplied in register "%r28".
 ---------------------------------------------------------------------------*/
 
-#ifndef REENTRANT
 #include "vacall-internal.h"
-#else /* REENTRANT */
-#include "vacall_r.h.in"
-#endif
 
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
