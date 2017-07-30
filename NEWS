@@ -1,5 +1,13 @@
 New in 2.0:
 
+* API changes in <trampoline.h>:
+  - The second argument of alloc_trampoline() is now a 'void**', rather
+    than a 'void*'.
+  - The return value of trampoline_variable() is now a 'void**', rather
+    than a 'void*'.
+  - The argument of trampoline_address(), trampoline_variable(),
+    trampoline_data() is now a function pointer instead of a 'void*'.
+
 * Fixed a bug regarding floating-point arguments followed by
   non-floating-point arguments on the following platforms:
   - arm: Linux 32-bit, with hardware floats.

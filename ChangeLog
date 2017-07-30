@@ -1,5 +1,19 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Rework API.
+	* trampoline/trampoline.h: Add C++ guards. Add comments.
+	(trampoline_function_t): Renamed from __TR_function.
+	(alloc_trampoline, trampoline_address, trampoline_variable,
+	trampoline_data): Change signatures.
+	* trampoline/trampoline.c: Update accordingly.
+	* trampoline/test1.c (function): Remove type.
+	(main): Update.
+	* trampoline/test2.c (function): Remove type.
+	(main): Update.
+	* NEWS: Mention the changes.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Restructure include file.
 	* trampoline/trampoline.h: Renamed from trampoline/trampoline.h.in.
 	* configure.ac: Don't create trampoline.h by substitution.

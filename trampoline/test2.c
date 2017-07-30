@@ -1,7 +1,7 @@
 /* Trampoline accessor test */
 
 /*
- * Copyright 1995-2005 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +22,6 @@
 
 #include "trampoline.h"
 
-#ifdef __cplusplus
-typedef int (*function)(...);
-#else
-typedef int (*function)();
-#endif
-
 int f (int x)
 { return x; }
 
@@ -37,16 +31,16 @@ static int data;
 
 int main ()
 {
-  function cf = alloc_trampoline((function)&f, &variable, &data);
+  trampoline_function_t cf = alloc_trampoline((trampoline_function_t)&f, &variable, &data);
   if (is_trampoline((void*)&main))
     { printf("is_trampoline(&main) returns true!\n"); exit(1); }
   if (!is_trampoline((void*)cf))
     { printf("is_trampoline() returns false!\n"); exit(1); }
-  if (trampoline_address((void*)cf) != (function)&f)
+  if (trampoline_address(cf) != (trampoline_function_t)&f)
     { printf("trampoline_address() doesn't work!\n"); exit(1); }
-  if (trampoline_variable((void*)cf) != &variable)
+  if (trampoline_variable(cf) != &variable)
     { printf("trampoline_variable() doesn't work!\n"); exit(1); }
-  if (trampoline_data((void*)cf) != &data)
+  if (trampoline_data(cf) != &data)
     { printf("trampoline_data() doesn't work!\n"); exit(1); }
   printf("test2 passed.\n");
   exit(0);

@@ -378,7 +378,7 @@ static char* freelist = NULL;
 gl_lock_define_initialized(static, freelist_lock)
 #endif
 
-__TR_function alloc_trampoline (__TR_function address, void* variable, void* data)
+trampoline_function_t alloc_trampoline (trampoline_function_t address, void** variable, void* data)
 {
   char* function;
   char* function_x;
@@ -1460,13 +1460,13 @@ __TR_function alloc_trampoline (__TR_function address, void* variable, void* dat
 #endif
 
   /* 5. Return. */
-  return (__TR_function) (function_x + TRAMP_BIAS);
+  return (trampoline_function_t) (function_x + TRAMP_BIAS);
 }
 
-void free_trampoline (__TR_function function)
+void free_trampoline (trampoline_function_t function)
 {
 #if TRAMP_BIAS
-  function = (__TR_function)((char*)function - TRAMP_BIAS);
+  function = (trampoline_function_t)((char*)function - TRAMP_BIAS);
 #endif
 #if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT)
 #ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
@@ -1495,25 +1495,25 @@ int is_trampoline (void* function)
 #endif
 }
 
-__TR_function trampoline_address (void* function)
+trampoline_function_t trampoline_address (trampoline_function_t function)
 {
 #ifdef tramp_address
-  return (__TR_function)(tramp_address(((char*)function - TRAMP_BIAS)));
+  return (trampoline_function_t)(tramp_address(((char*)function - TRAMP_BIAS)));
 #else
   abort();
 #endif
 }
 
-void* trampoline_variable (void* function)
+void** trampoline_variable (trampoline_function_t function)
 {
 #ifdef tramp_variable
-  return (void*)(tramp_variable(((char*)function - TRAMP_BIAS)));
+  return (void**)(tramp_variable(((char*)function - TRAMP_BIAS)));
 #else
   abort();
 #endif
 }
 
-void* trampoline_data (void* function)
+void* trampoline_data (trampoline_function_t function)
 {
 #ifdef tramp_data
   return (void*)(tramp_data(((char*)function - TRAMP_BIAS)));

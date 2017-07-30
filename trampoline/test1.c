@@ -1,7 +1,7 @@
 /* Trampoline test */
 
 /*
- * Copyright 1995-2005 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,12 +27,6 @@
 
 static int magic = MAGIC1;
 
-#ifdef __cplusplus
-typedef int (*function)(...);
-#else
-typedef int (*function)();
-#endif
-
 void* function_data;
 
 int f (int x)
@@ -40,7 +34,7 @@ int f (int x)
 
 int main ()
 {
-  function cf = alloc_trampoline((function)&f, &function_data, &magic);
+  trampoline_function_t cf = alloc_trampoline((trampoline_function_t)&f, &function_data, &magic);
   /* calling cf shall set  function_data = &magic  and then call f(x),
    * thus returning  magic + x.
    */
