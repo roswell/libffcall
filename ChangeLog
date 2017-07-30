@@ -1,5 +1,17 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Restructure include file.
+	* trampoline/trampoline.h: Renamed from trampoline/trampoline.h.in.
+	* configure.ac: Don't create trampoline.h by substitution.
+	* trampoline/Makefile.in (trampoline.h): Remove target.
+	(trampoline.lo, test1.o, test2.o): Update dependency.
+	(install, SOURCE_FILES): Update.
+	(distclean): Don't remove trampoline.h.
+	* trampoline/README: Update.
+	* Makefile.in (DISTCLEANFILES): Update stamp file list.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Move ABI indicator macro definitions to a separate include file.
 	Rationale: Prepare for getting rid of most .h.in -> .h substitutions.
 	* ffcall-abi.h: New file.

@@ -20,13 +20,12 @@ AC_INIT([GNU libffcall],m4_normalize(m4_esyscmd([cat VERSION])),[https://savanna
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([])
 
-AC_CONFIG_SRCDIR([trampoline/trampoline.h.in])
+AC_CONFIG_SRCDIR([trampoline/trampoline.h])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_HEADERS([ffcall-version.h:ffcall-version.in.h])
 AC_CONFIG_HEADERS([avcall/avcall.h])
 AC_CONFIG_HEADERS([vacall/vacall.h])
-AC_CONFIG_HEADERS([trampoline/trampoline.h])
 AC_CONFIG_HEADERS([callback/callback.h])
 AC_CONFIG_HEADERS([callback/vacall_r/vacall_r.h])
 AC_CONFIG_HEADERS([callback/trampoline_r/trampoline_r.h])

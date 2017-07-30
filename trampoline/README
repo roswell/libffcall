@@ -29,7 +29,7 @@ Files in this package:
 
     Source:
 
-        trampoline.h.in  include file
+        trampoline.h     include file
         trampoline.c     implementation of the library functions
         tramp-hppa.s     the trampoline for hppa, in assembly language
         tramp-powerpc.S  the trampoline for powerpc, in assembly language

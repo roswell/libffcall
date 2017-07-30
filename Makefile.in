@@ -67,10 +67,9 @@ DISTCLEANFILES = \
   stamp-h1 stamp-h2 \
   avcall/stamp-h3 \
   vacall/stamp-h4 \
-  trampoline/stamp-h5 \
-  callback/stamp-h6 \
-  callback/vacall_r/stamp-h7 \
-  callback/trampoline_r/stamp-h8
+  callback/stamp-h5 \
+  callback/vacall_r/stamp-h6 \
+  callback/trampoline_r/stamp-h7
 
 distclean : force
 	cd @subdir@; if test -f Makefile; then $(MAKE) distclean; fi
