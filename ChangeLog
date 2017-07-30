@@ -1,5 +1,11 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Polish Makefile.in.
+	* vacall/Makefile.in (vacall-x86_64-x32.o): Remove spurious reference to
+	LIBTOOL_COMPILE.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	m68k: Fix callback test crash on Linux.
 	* avcall/Makefile.in (avcall-m68k.s): Use the .S file in Motorola
 	syntax (cross-compiled for m68k-linux), not the one in MIT syntax
