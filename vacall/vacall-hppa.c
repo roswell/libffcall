@@ -42,7 +42,7 @@
 ---------------------------------------------------------------------------*/
 
 #ifndef REENTRANT
-#include "vacall.h.in"
+#include "vacall-internal.h"
 #else /* REENTRANT */
 #include "vacall_r.h.in"
 #endif

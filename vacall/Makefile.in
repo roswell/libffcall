@@ -25,7 +25,7 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir) -I..
+INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/..
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
 AR = @AR@
@@ -47,7 +47,7 @@ SHELL = /bin/sh
 
 OBJECTS = vacall.o vacall-libapi.o vacall-structcpy.o
 
-all : $(OBJECTS) libvacall.a vacall.h $(srcdir)/vacall.3 $(srcdir)/vacall.html
+all : $(OBJECTS) libvacall.a $(srcdir)/vacall.3 $(srcdir)/vacall.html
 
 vacall.o : vacall-$(CPU).o
 	$(RM) vacall.o
@@ -195,7 +195,7 @@ vacall-s390x.o : vacall-s390x.s
 vacall-s390x.s : $(srcdir)/vacall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
 
-vacall-libapi.o : $(srcdir)/vacall-libapi.c vacall.h ../config.h
+vacall-libapi.o : $(srcdir)/vacall-libapi.c $(srcdir)/vacall-internal.h $(srcdir)/vacall.h ../config.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-libapi.c
 
 vacall-structcpy.o : $(srcdir)/vacall-structcpy.c $(srcdir)/../common/structcpy.c
@@ -212,7 +212,7 @@ install : all force
 	mkdir -p $(DESTDIR)$(libdir)
 	$(INSTALL_DATA) libvacall.a $(DESTDIR)$(libdir)/libvacall.a
 	mkdir -p $(DESTDIR)$(includedir)
-	$(INSTALL_DATA) vacall.h $(DESTDIR)$(includedir)/vacall.h
+	$(INSTALL_DATA) $(srcdir)/vacall.h $(DESTDIR)$(includedir)/vacall.h
 	mkdir -p $(DESTDIR)$(mandir)
 	mkdir -p $(DESTDIR)$(mandir)/man3
 	$(INSTALL_DATA) $(srcdir)/vacall.3 $(DESTDIR)$(mandir)/man3/vacall.3
@@ -236,10 +236,10 @@ uninstall : force
 	$(RM) $(DESTDIR)$(mandir)/man3/vacall.3
 	$(RM) $(DESTDIR)$(htmldir)/vacall.html
 
-minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c vacall.h
+minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
 
-minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c vacall.h
+minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
 minitests : minitests.o libvacall.a
@@ -250,10 +250,10 @@ check : all minitests
 	LC_ALL=C uniq -u < minitests.out > minitests.output.$(HOST)
 	test '!' -s minitests.output.$(HOST)
 
-tests.o : $(srcdir)/tests.c vacall.h
+tests.o : $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/tests.c
 
-tests.s : $(srcdir)/tests.c vacall.h
+tests.s : $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
 tests : tests.o libvacall.a
@@ -273,7 +273,7 @@ clean : force
 	$(RM) tests.o tests.s tests tests.out
 
 distclean : clean
-	$(RM) Makefile vacall.h minitests.output.* tests.output.*
+	$(RM) Makefile minitests.output.* tests.output.*
 
 maintainer-clean : distclean
 
@@ -285,7 +285,7 @@ SOURCE_FILES = \
   Makefile.devel \
   Makefile.maint \
   Makefile.in Makefile.mingw32 Makefile.msvc \
-  vacall.h.in \
+  vacall.h vacall-internal.h \
   vacall-alpha.c vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm.c vacall-arm-macro.S \
   vacall-armhf.c vacall-armhf-macro.S \
@@ -314,7 +314,6 @@ SOURCE_FILES = \
 GENERATED_FILES = \
   vacall.man \
   config.h.mingw32 config.h.msvc \
-  vacall.h.mingw32 vacall.h.msvc \
   vacall-i386-mingw32.c vacall-i386-msvc.c
 # List of distributed files.
 DISTFILES = $(SOURCE_FILES) $(GENERATED_FILES)

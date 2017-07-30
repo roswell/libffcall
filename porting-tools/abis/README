@@ -135,7 +135,8 @@ follows.
 
 8) Port the vacall package.
 
- 8.1) Go through vacall.h.in and add conditionals for this ABI.
+ 8.1) Go through vacall.h and vacall-internal.h and add conditionals for this
+      ABI.
 
  8.2) Write vacall-<ABI>.c.
 
@@ -150,7 +151,8 @@ follows.
 
 9) Port the vacall_r package.
 
- 9.1) Copy the changes to vacall/vacall.h.in to callback/vacall_r/vacall_r.h.in.
+ 9.1) Copy the changes to vacall/vacall-internal.h to
+      callback/vacall_r/vacall_r.h.in.
 
  9.2) In callback/vacall_r/Makefile.maint, variable COPIED_FILES, add
       vacall-<ABI>.c. Then run "make -f Makefile.maint".

@@ -297,10 +297,9 @@ autom4te.cache/
 /libtool
 /stamp-h1
 /stamp-h2
-/vacall/stamp-h3
-/callback/stamp-h4
-/callback/vacall_r/stamp-h5
-/callback/trampoline_r/stamp-h6
+/callback/stamp-h3
+/callback/vacall_r/stamp-h4
+/callback/trampoline_r/stamp-h5
 # Erased by avcall/Makefile.
 /avcall/Makefile
 /avcall/avcall.h

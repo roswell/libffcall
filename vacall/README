@@ -30,7 +30,7 @@ Files in this package:
 
     Source:
 
-        vacall.h.in     master for main include file vacall.h
+        vacall.h        main include file
         vacall-*.c      source for the main interface function
         vacall-*.[sS]   its translation to assembly language
         vacall-libapi.c     implementation of other library API
