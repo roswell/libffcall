@@ -1,5 +1,17 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Limit the exported symbols of the installed shared libraries.
+	* avcall/Makefile.in (LIBAVCALL_EXPORTED_SYMBOLS_REGEX): New variable.
+	(libavcall.la): Use libtool's -export-symbols-regex option.
+	* trampoline/Makefile.in (LIBTRAMPOLINE_EXPORTED_SYMBOLS_REGEX): New
+	variable.
+	(libtrampoline.la): Use libtool's -export-symbols-regex option.
+	* callback/Makefile.in (LIBCALLBACK_EXPORTED_SYMBOLS_REGEX): New
+	variable.
+	(libcallback.la): Use libtool's -export-symbols-regex option.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Ensure source compatibility with existing versions of GNU clisp, part 3.
 	* vacall/vacall-internal.h (__va_alist): Move the 'flags' and 'tmp'
 	fields to the beginning.

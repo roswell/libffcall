@@ -55,6 +55,10 @@ top_builddir = ..
 
 OBJECTS = avcall.lo avcall-libapi.lo avcall-structcpy.lo
 
+# Limit the set of exported symbols, on those platforms where libtool supports it.
+# Currently this does not exclude any symbol; maybe sometime in the future...
+LIBAVCALL_EXPORTED_SYMBOLS_REGEX = '^avcall_|^__builtin_avcall$$'
+
 all : $(OBJECTS) libavcall.la $(srcdir)/avcall.3 $(srcdir)/avcall.html
 
 avcall.lo : avcall-$(CPU).lo
@@ -211,7 +215,7 @@ avcall-structcpy.lo : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-structcpy.c
 
 libavcall.la : $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) -o libavcall.la -rpath $(libdir) $(OBJECTS) $(LDFLAGS)
+	$(LIBTOOL_LINK) $(CC) -o libavcall.la -rpath $(libdir) -export-symbols-regex $(LIBAVCALL_EXPORTED_SYMBOLS_REGEX) $(OBJECTS) $(LDFLAGS)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.

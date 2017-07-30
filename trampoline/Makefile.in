@@ -57,6 +57,10 @@ top_builddir = ..
 
 OBJECTS = trampoline.lo @CPU_OBJECTS@
 
+# Limit the set of exported symbols, on those platforms where libtool supports it.
+# Currently this excludes the symbols from gnulib modules.
+LIBTRAMPOLINE_EXPORTED_SYMBOLS_REGEX = 'trampoline'
+
 all : $(OBJECTS) libtrampoline.la $(srcdir)/trampoline.3 $(srcdir)/trampoline.html
 
 trampoline.lo : $(srcdir)/trampoline.c $(srcdir)/trampoline.h
@@ -134,7 +138,7 @@ cache-powerpc64-elfv2.s : $(srcdir)/cache-powerpc64-elfv2-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/cache-powerpc64-elfv2-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-powerpc64-elfv2.s
 
 libtrampoline.la : $(OBJECTS) ../gnulib-lib/libgnu.la
-	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS) ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
+	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) -export-symbols-regex $(LIBTRAMPOLINE_EXPORTED_SYMBOLS_REGEX) $(OBJECTS) ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 install : all force
 	mkdir -p $(DESTDIR)$(prefix)
