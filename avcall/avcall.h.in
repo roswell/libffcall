@@ -459,11 +459,22 @@ typedef struct
 #endif
 } __av_alist;
 
+/* An upper bound for sizeof(__av_alist).
+   The total size of the __av_alist fields, ignoring alignment of fields,
+   varies from
+     40 bytes (for __i386__, __m68k__, __sparc__, __hppa__, __arm__)
+   to
+     232 bytes (for __arm64__). */
+#define __AV_ALIST_SIZE_BOUND 256
+/* Verify at compile time that sizeof(__av_alist) <= __AV_ALIST_SIZE_BOUND. */
+typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist))+1];
+
 typedef struct
 {
   /* First part: Fixed size __av_alist. */
   union {
     __av_alist _av_m_alist;
+    char _av_m_room[__AV_ALIST_SIZE_BOUND];
     /* For alignment. */
     long align1;
     double align2;

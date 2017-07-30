@@ -1,5 +1,12 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Allow for binary-compatible future changes of __av_alist.
+	* avcall/avcall.h.in (__AV_ALIST_SIZE_BOUND): New macro.
+	(__av_alist_verify): New verification.
+	(av_alist): Use it to allocate room.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Separate the fixed-size part from the variable part of av_alist.
 	* avcall/avcall.h.in (__av_alist): Renamed from av_alist. Add 'args'
 	field as a pointer.
