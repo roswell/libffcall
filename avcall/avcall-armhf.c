@@ -59,7 +59,7 @@
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
-__builtin_avcall(av_alist* l)
+avcall_call(av_alist* l)
 {
   register unsigned long sp	__asm__("r13");  /* C names for registers */
 /*register __avword	iret	__asm__("r0"); */

@@ -45,7 +45,7 @@ register double darg1	__asm__("f0");
 register double darg2	__asm__("f2");
 
 int
-__builtin_avcall(av_alist* l)
+avcall_call(av_alist* l)
 {
   register __avword*	sp	__asm__("r15");  /* C names for registers */
 /*register __avword	iret	__asm__("r2"); */

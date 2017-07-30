@@ -3,7 +3,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!--
 Copyright (C) 1993 Bill Triggs
-Copyright (C) 1995-2016 Bruno Haible
+Copyright (C) 1995-2017 Bruno Haible
 
 This manual is covered by the GNU GPL.  You can redistribute it and/or
 modify it under the terms of the GNU General Public License (GPL), either
@@ -232,7 +232,7 @@ in  the  gcc source, file <SAMP>gcc-2.6.3/config/<VAR>cpu</VAR>/<VAR>cpu</VAR>.h
 Some of the grunge is usually handled by a C  or  assembly
 level  glue  routine  that  actually pushes the arguments,
 calls the function and unpacks  any  return  value. This is
-called <CODE>__builtin_avcall()</CODE>. A precompiled assembler version for
+called <CODE>avcall_call()</CODE>. A precompiled assembler version for
 people without gcc is also made available. The routine should ideally
 have flags for the passing conventions of other compilers.
 <P>

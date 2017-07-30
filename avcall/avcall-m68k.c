@@ -39,7 +39,7 @@
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
-__builtin_avcall(av_alist* l)
+avcall_call(av_alist* l)
 {
   register __avword*	sp	__asm__("sp");  /* C names for registers */
   register __avword*	sret	__asm__("a1");	/* structure return pointer */

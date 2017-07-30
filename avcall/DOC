@@ -103,7 +103,7 @@ help things along quite a bit, but I don't speak assembler at all well.
 to be possible to port avcall to many machines. Some of the grunge is
 usually handled by a C or assembly level glue routine that actually
 pushes the arguments, calls the function and unpacks any return value.
-This is called __builtin_avcall(). A precompiled assembler version for
+This is called avcall_call(). A precompiled assembler version for
 people without gcc is also made available. The routine should ideally
 have flags for the passing conventions of other compilers.
 ----------------------------------------------------------------------
@@ -124,7 +124,7 @@ This work was partly supported by EC-ESPRIT Basic Research Action SECOND.
 
 ================================================================================
 Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
-Copyright 1995-2016 Bruno Haible <bruno@clisp.org>
+Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
 
 This manual is covered by the GNU GPL.  You can redistribute it and/or
 modify it under the terms of the GNU General Public License (GPL), either

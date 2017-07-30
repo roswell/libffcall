@@ -100,7 +100,7 @@ register __avword o4	__asm__("%o4");
 register __avword o5	__asm__("%o5");
 
 int
-__builtin_avcall(av_alist* l)
+avcall_call(av_alist* l)
 {
   register __avword* sp	__asm__("%sp");  /* C names for registers */
   register float fret	__asm__("%f0");  /* %f0 */

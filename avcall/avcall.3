@@ -1,5 +1,5 @@
 .\" Copyright (C) 1993 Bill Triggs
-.\" Copyright (C) 1995-2001 Bruno Haible
+.\" Copyright (C) 1995-2017 Bruno Haible
 .\"
 .\" This manual is covered by the GNU GPL.  You can redistribute it and/or
 .\" modify it under the terms of the GNU General Public License (GPL), either
@@ -7,7 +7,7 @@
 .\" by the Free Software Foundation (FSF).
 .\" A copy of the license is at <https://www.gnu.org/licenses/old-licenses/gpl-2.0>.
 .\"
-.TH AVCALL 3 "14 January 2001"
+.TH AVCALL 3 "23 July 2017"
 .SH NAME
 avcall \- build a C argument list incrementally and call a C function on it.
 .SH SYNOPSIS
@@ -254,7 +254,7 @@ section "Stack layout; function entry, exit and calling."
 Some of the grunge is usually handled by a C or assembly level glue
 routine that actually pushes the arguments, calls the function and
 unpacks any return value.
-This is called __builtin_avcall(\|). A precompiled assembler version for
+This is called avcall_call(\|). A precompiled assembler version for
 people without gcc is also made available. The routine should ideally
 have flags for the passing conventions of other compilers.
 

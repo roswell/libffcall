@@ -1,5 +1,14 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Prefix all exported symbols at linker level with 'avcall_'.
+	* avcall/avcall.h.in (avcall_call): Renamed from __builtin_avcall.
+	* avcall/avcall-*.c: Update accordingly.
+	* avcall/DOC: Likewise.
+	* avcall/avcall.3: Likewise.
+	* avcall/avcall.html: Likewise.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Rework API.
 	* trampoline/trampoline.h: Add C++ guards. Add comments.
 	(trampoline_function_t): Renamed from __TR_function.

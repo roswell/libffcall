@@ -1784,7 +1784,7 @@ typedef struct
  * calling the function
  */
 
-#define av_call(LIST) __builtin_avcall(&(LIST))
+#define av_call(LIST) avcall_call(&(LIST))
 
 /* Determine whether a struct type is word-splittable, i.e. whether each of
  * its components fit into a register.
@@ -1820,7 +1820,7 @@ typedef struct
  * Miscellaneous declarations.
  */
 
-extern int __builtin_avcall (av_alist* l);
+extern int avcall_call (av_alist* l);
 extern void avcall_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
 
 #endif /*_avcall_h */

@@ -54,7 +54,7 @@
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
 int
-__builtin_avcall(av_alist* l)
+avcall_call(av_alist* l)
 {
   register __avword*	sp __asm__("$sp");  /* C names for registers */
   register __avword	iret2 __asm__("$3");
