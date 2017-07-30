@@ -1,5 +1,12 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Remove special optimization of va_return_struct macro.
+	* vacall/vacall.h.in (va_return_struct): Define through
+	_va_return_struct.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	vacall, callback: Prefix all exported symbols at linker level.
 	* vacall/vacall-*.c: Define vacall_receiver instead of __vacall,
 	callback_receiver instead of __vacall_r,

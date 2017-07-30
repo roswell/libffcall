@@ -1390,7 +1390,7 @@ typedef __va_alist* va_alist;
 #define va_return_ptr(LIST,TYPE,VAL)  \
   (__va_return(LIST,__VAvoidp), (LIST)->tmp._ptr = (void*)(TYPE)(VAL))
 #define va_return_struct(LIST,TYPE,VAL)  \
-  (__va_return(LIST,__VAstruct), *(TYPE*)((LIST)->raddr) = (VAL))
+  _va_return_struct(LIST,sizeof(TYPE),__VA_alignof(TYPE),&(VAL))
 #define _va_return_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)  \
   (__va_return(LIST,__VAstruct),					\
    vacall_structcpy((void*)((LIST)->raddr),VAL_ADDR,TYPE_SIZE,TYPE_ALIGN)	\
