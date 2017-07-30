@@ -31,7 +31,7 @@ follows.
 
 2) Compile the first part of avcall/tests.c (the definition of the various
    sample functions) with
-     $ cross <ABI> gcc -O -S -DHAVE_LONG_LONG_INT -fomit-frame-pointer tests.c
+     $ cross <ABI> gcc -O -S -fomit-frame-pointer tests.c
    and look through the resulting tests.s file. This will get you a basic
    understanding of the instruction set and assembly language syntax.
 

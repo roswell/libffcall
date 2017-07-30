@@ -92,9 +92,7 @@ short s1=32767, s2=(short)32768, s3=3, s4=4, s5=5, s6=6, s7=7, s8=8, s9=9;
 int i1=1, i2=2, i3=3, i4=4, i5=5, i6=6, i7=7, i8=8, i9=9,
     i10=11, i11=12, i12=13, i13=14, i14=15, i15=16, i16=17;
 long l1=1, l2=2, l3=3, l4=4, l5=5, l6=6, l7=7, l8=8, l9=9;
-#ifdef HAVE_LONG_LONG_INT
 long long ll1 = 3875056143130689530LL;
-#endif
 float f1=0.1, f2=0.2, f3=0.3, f4=0.4, f5=0.5, f6=0.6, f7=0.7, f8=0.8, f9=0.9,
       f10=1.1, f11=1.2, f12=1.3, f13=1.4, f14=1.5, f15=1.6, f16=1.7, f17=1.8,
       f18=1.9, f19=2.1, f20=2.2, f21=2.3, f22=2.4, f23=2.5, f24=2.6;
@@ -324,7 +322,6 @@ ushort us_cdcd (char a, double b, char c, double d)
   return r;
 }
 
-#ifdef HAVE_LONG_LONG_INT
 long long ll_iiilli (int a, int b, int c, long long d, int e)
 {
   long long r = (long long)(int)a+(long long)(int)b+(long long)(int)c+d+(long long)(int)e;
@@ -339,7 +336,6 @@ long long ll_flli (float a, long long b, int c)
   fflush(out);
   return r;
 }
-#endif
 
 float f_fi (float a, int z)
 {
@@ -672,7 +668,6 @@ double d_d17l3L (double a, double b, double c, double d, double e, double f,
   return r;
 }
 
-#ifdef HAVE_LONG_LONG_INT
 long long ll_l2ll (long a1, long a2, long long b, long c)
 {
   long r = (long long) (a1 + a2) + b + c;
@@ -715,7 +710,6 @@ long long ll_l7ll (long a1, long a2, long a3, long a4, long a5, long a6, long a7
   fflush(out);
   return r;
 }
-#endif
 
 double d_l2d (long a1, long a2, double b, long c)
 {
@@ -1097,9 +1091,7 @@ void
   ushort usr;
   float fr;
   double dr;
-#ifdef HAVE_LONG_LONG_INT
   long long llr;
-#endif
 
   /* Unsigned types.
    */
@@ -1183,7 +1175,6 @@ void
   fprintf(out,"->%u\n",usr);
   fflush(out);
 
-#ifdef HAVE_LONG_LONG_INT
   /* Long long types.
    */
   llr = ll_iiilli(i1,i2,i3,ll1,i13);
@@ -1211,7 +1202,6 @@ void
   av_call(a);
   fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
   fflush(out);
-#endif
 
   fr = f_fi(f1,i9);
   fprintf(out,"->%g\n",fr);
@@ -1715,9 +1705,7 @@ void
 {
   av_alist a;
   long lr;
-#ifdef HAVE_LONG_LONG_INT
   long long llr;
-#endif
   float fr;
   double dr;
 
@@ -1879,7 +1867,6 @@ void
   fprintf(out,"->%g\n",dr);
   fflush(out);
 
-#ifdef HAVE_LONG_LONG_INT
   llr = ll_l2ll(l1,l2,ll1,l9);
   fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
   fflush(out);
@@ -1972,7 +1959,6 @@ void
   av_call(a);
   fprintf(out,"->0x%lx%08lx\n",(long)(llr>>32),(long)(llr&0xffffffff));
   fflush(out);
-#endif
 
   dr = d_l2d(l1,l2,d2,l9);
   fprintf(out,"->%g\n",dr);

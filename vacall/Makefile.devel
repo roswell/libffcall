@@ -8,7 +8,7 @@ RM = rm -f
 # ============ Rules that require cross-compilation tools ============
 
 GCC = gcc
-GCCFLAGS = -O2 -fno-omit-frame-pointer -DHAVE_LONG_LONG_INT
+GCCFLAGS = -O2 -fno-omit-frame-pointer
 SED = sed
 CROSS_TOOL = cross
 

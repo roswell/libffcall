@@ -93,10 +93,6 @@
 #undef __s390x__
 #endif
 
-/* AC_TYPE_LONG_LONG_INT */
-/* Define if your compiler supports the 'long long' type. */
-#undef HAVE_LONG_LONG_INT
-
 /* End of definitions adjusted by ‘configure’. */
 
 
@@ -359,7 +355,7 @@ typedef struct
   /* temporary storage, used to split doubles into two words */
   union {
     double	_double;
-#if defined(__sparc__) && !defined(__sparc64__) && defined(HAVE_LONG_LONG_INT)
+#if defined(__sparc__) && !defined(__sparc64__)
     long long	_longlong;
 #endif
     __avword	words[2];

@@ -1,5 +1,20 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Remove configure test for 'long long'. Assume the compiler has it.
+	Rationale: All compilers nowadays have 'long long', for years.
+	* configure.ac: Don't invoke AC_TYPE_LONG_LONG_INT.
+	* avcall/avcall.h.in (HAVE_LONG_LONG_INT): Remove macro.
+	* vacall/vacall.h.in (HAVE_LONG_LONG_INT): Likewise.
+	* callback/vacall_r/vacall_r.h.in (HAVE_LONG_LONG_INT): Likewise.
+	* vacall/Makefile.devel (GCCFLAGS): Remove -DHAVE_LONG_LONG_INT.
+	* callback/vacall_r/Makefile.devel (GCCFLAGS): Likewise.
+	* avcall/tests.c: Remove test for HAVE_LONG_LONG_INT.
+	* vacall/tests.c: Likewise.
+	* callback/tests.c: Likewise.
+	* porting-tools/abis/README: Update.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Remove unused configure test AC_C_CHAR_UNSIGNED.
 	* vacall/vacall.h.in (__CHAR_UNSIGNED__): Remove unuseed macro.
 	* callback/vacall_r/vacall_r.h.in (__CHAR_UNSIGNED__): Likewise.
