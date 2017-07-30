@@ -112,6 +112,10 @@ follows.
        - _arg_structure and CUMULATIVE_ARGS
        - _function_arg_advance
    * Update stack-frame.txt with info about this ABI.
+   * (Optional) If you still have doubts about the struct argument and
+     return conventions, compile
+       $ cross <ABI> gcc -O -S port-structs.c
+     and look at the generated port-structs.s file.
 
 7) Port the avcall package.
 

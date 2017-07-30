@@ -1,5 +1,11 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Move a file.
+	* avcall/port-structs.c: Moved to porting-tools/abis/.
+	* porting-tools/abis/README: Mention it.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Remove support for old PCC struct return convention.
 	It is not reentrant and therefore a fortiori not multithread-safe.
 	* m4/pccstruct.m4: Remove file.
