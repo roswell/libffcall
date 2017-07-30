@@ -1,5 +1,14 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	callback: Use distinct object file names in static library.
+	* callback/vacall_r/vacall-libapi.c: Renamed from
+	callback/vacall_r/misc.c.
+	* callback/vacall_r/Makefile.in (OBJECTS, SOURCE_FILES): Update.
+	(vacall-libapi.lo): Renamed from misc.lo.
+	* callback/Makefile.in (libcallback.la): Update.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Use distinct object file names in static library.
 	* vacall/vacall-libapi.c: Renamed from vacall/misc.c.
 	* vacall/Makefile.in (OBJECTS, SOURCE_FILES): Update.
