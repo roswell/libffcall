@@ -1,5 +1,19 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Don't depend on FFCALL_SMALL_STRUCT_RETURN configure result.
+	Rationale: The installed .h files should be compiler independent.
+	* avcall/avcall.h.in (__SMALL_STRUCT_RETURN__): Remove macro. Use
+	explicit ABI conditional instead.
+	* vacall/vacall.h.in (__SMALL_STRUCT_RETURN__): Likewise.
+	* callback/vacall_r/vacall_r.h.in (__SMALL_STRUCT_RETURN__): Likewise.
+	* avcall/Makefile.maint (avcall.h.msvc, avcall.h.mingw32): Don't
+	substitute __SMALL_STRUCT_RETURN__.
+	* vacall/Makefile.maint (vacall.h.msvc, vacall.h.mingw32): Likewise.
+	* callback/vacall_r/Makefile.maint (vacall_r.h.msvc,
+	vacall_r.h.mingw32): Likewise.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Move a file.
 	* avcall/port-structs.c: Moved to porting-tools/abis/.
 	* porting-tools/abis/README: Mention it.
