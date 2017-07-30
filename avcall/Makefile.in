@@ -88,7 +88,7 @@ avcall-m68k.lo : avcall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-m68k.s
 
 avcall-m68k.s : $(srcdir)/avcall-m68k.mit.S $(srcdir)/avcall-m68k.motorola.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-m68k.mit.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' | if test @AS_UNDERSCORE@ = true; then sed -e 's/\$$//g'; else sed -e 's/\$$/%/g'; fi > avcall-m68k.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-m68k.motorola.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' | if test @AS_UNDERSCORE@ = true; then sed -e 's/\$$//g'; else sed -e 's/\$$/%/g'; fi > avcall-m68k.s
 
 avcall-mips.lo : avcall-mips.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-mips.s

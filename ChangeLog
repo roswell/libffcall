@@ -1,5 +1,15 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	m68k: Fix callback test crash on Linux.
+	* avcall/Makefile.in (avcall-m68k.s): Use the .S file in Motorola
+	syntax (cross-compiled for m68k-linux), not the one in MIT syntax
+	(cross-compiled for m68k-sun).
+	* vacall/Makefile.in (vacall-m68k.s): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-m68k.s): Likewise.
+	* avcall/PLATFORM, NEWS: Update.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	m68k: Fix build failure on Linux.
 	* common/asm-m68k.sh: In mit syntax, recognize 'pc' as a register name.
 

@@ -18,6 +18,10 @@ New in 2.0:
   - powerpc: Linux 32-bit.
   - s390: Linux.
 
+* Added support for the following platforms:
+  (Previously, a build on these platforms failed.)
+  - m68k: Linux.
+
 New in 1.13:
 
 * The license has been changed from GPLv2 to GPLv2+.
