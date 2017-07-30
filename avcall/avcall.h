@@ -275,12 +275,22 @@ typedef struct
 #ifdef _AVCALL_INTERNAL_H
     __av_alist _av_m_alist;
 #endif
+/* GNU clisp pokes in internals of the alist!
+   When used by GNU clisp, assume a C compiler that supports anonymous unions
+   (GCC or an ISO C 11 compiler). */
+#ifdef LISPFUN
+    int flags;
+#endif
     /* For alignment. */
     long align1;
     double align2;
     long long align3;
     long double align4;
-  } _av_alist_head;
+  }
+#ifndef LISPFUN
+  _av_alist_head
+#endif
+  ;
   /* Second part: An array whose size depends on __AV_ALIST_WORDS. */
   union {
     __avword _av_m_args[__AV_ALIST_WORDS];

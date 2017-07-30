@@ -36,10 +36,10 @@
 
 typedef struct
 {
-  /* function to be called */
-  __avword		(*func)();
   /* some av_... macros need these flags */
   int			flags;
+  /* function to be called */
+  __avword		(*func)();
   /* return type, address for the result */
   void*			raddr;
   enum __AVtype		rtype;

@@ -1,5 +1,13 @@
 2017-07-30  Bruno Haible  <bruno@clisp.org>
 
+	Ensure source compatibility with existing versions of GNU clisp, part 2.
+	* avcall/avcall-alist.h (__av_alist): Move the 'flags' field to the
+	beginning.
+	* avcall/avcall.h (av_alist): When used by GNU clisp, declare a 'flags'
+	member.
+
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
 	Ensure source compatibility with existing versions of GNU clisp, part 1.
 	* avcall/avcall-libapi.c (__builtin_avcall): New dummy function.
 	* callback/callback-libapi.c (trampoline_r_data0): New dummy function.
