@@ -118,21 +118,15 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = (long)list.tmp._ptr;
   } else
   if (list.rtype == __VAstruct) {
-    if (list.flags & __VA_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention */
-      iret = (long) list.raddr;
-    } else {
-      /* normal struct return convention */
-      if (list.flags & __VA_SMALL_STRUCT_RETURN) {
-        if (list.rsize == sizeof(char)) {
-          iret = *(unsigned char *) list.raddr;
-        } else
-        if (list.rsize == sizeof(short)) {
-          iret = *(unsigned short *) list.raddr;
-        } else
-        if (list.rsize == sizeof(int)) {
-          iret = *(unsigned int *) list.raddr;
-        }
+    if (list.flags & __VA_SMALL_STRUCT_RETURN) {
+      if (list.rsize == sizeof(char)) {
+        iret = *(unsigned char *) list.raddr;
+      } else
+      if (list.rsize == sizeof(short)) {
+        iret = *(unsigned short *) list.raddr;
+      } else
+      if (list.rsize == sizeof(int)) {
+        iret = *(unsigned int *) list.raddr;
       }
     }
   }

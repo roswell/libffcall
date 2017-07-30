@@ -82,7 +82,6 @@ SOURCE_FILES = \
   m4/mach-vm.m4 \
   m4/mmap.m4 \
   m4/mprotect.m4 \
-  m4/pccstruct.m4 \
   m4/proto.m4 \
   m4/shm.m4 \
   m4/smallstruct.m4 \

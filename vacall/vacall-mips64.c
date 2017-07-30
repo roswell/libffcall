@@ -163,285 +163,279 @@ __vacall (struct gpargsequence gpargs)
     iret = (long)list.tmp._ptr;
   } else
   if (list.rtype == __VAstruct) {
-    if (list.flags & __VA_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention */
-      iret = (long) list.raddr;
-    } else {
-      /* normal struct return convention */
-      if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
-        if (list.flags & __VA_GCC_STRUCT_RETURN) {
-          /* gcc returns structs of size 1,2,4,8 in registers. */
-          if (list.rsize == sizeof(char)) {
-            iret = *(unsigned char *) list.raddr;
+    if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
+      if (list.flags & __VA_GCC_STRUCT_RETURN) {
+        /* gcc returns structs of size 1,2,4,8 in registers. */
+        if (list.rsize == sizeof(char)) {
+          iret = *(unsigned char *) list.raddr;
+        } else
+        if (list.rsize == sizeof(short)) {
+          iret = *(unsigned short *) list.raddr;
+        } else
+        if (list.rsize == sizeof(int)) {
+          iret = *(unsigned int *) list.raddr;
+        } else
+        if (list.rsize == sizeof(long)) {
+          iret = *(unsigned long *) list.raddr;
+        }
+      } else {
+        /* cc returns structs of size <= 16 in registers. */
+        /* Maybe this big if cascade could be replaced with
+         * if (list.rsize > 0 && list.rsize <= 16)
+         *   __asm__ ("ldl $2,%0 ; ldr $2,%1"
+         *            : : "m" (((unsigned char *) list.raddr)[0]),
+         *                "m" (((unsigned char *) list.raddr)[7]));
+         */
+        if (list.rsize > 0 && list.rsize <= 16) {
+          if (list.rsize == 1) {
+            #if defined(_MIPSEL)
+            iret =   (__vaword)((unsigned char *) list.raddr)[0];
+            #else
+            iret =   (__vaword)((unsigned char *) list.raddr)[0] << 56;
+            #endif
           } else
-          if (list.rsize == sizeof(short)) {
-            iret = *(unsigned short *) list.raddr;
+          if (list.rsize == 2) {
+            #if defined(_MIPSEL)
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 8);
+            #else
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48);
+            #endif
           } else
-          if (list.rsize == sizeof(int)) {
-            iret = *(unsigned int *) list.raddr;
+          if (list.rsize == 3) {
+            #if defined(_MIPSEL)
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 16);
+            #else
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40);
+            #endif
           } else
-          if (list.rsize == sizeof(long)) {
-            iret = *(unsigned long *) list.raddr;
-          }
-        } else {
-          /* cc returns structs of size <= 16 in registers. */
-          /* Maybe this big if cascade could be replaced with
-           * if (list.rsize > 0 && list.rsize <= 16)
-           *   __asm__ ("ldl $2,%0 ; ldr $2,%1"
-           *            : : "m" (((unsigned char *) list.raddr)[0]),
-           *                "m" (((unsigned char *) list.raddr)[7]));
-           */
-          if (list.rsize > 0 && list.rsize <= 16) {
-            if (list.rsize == 1) {
+          if (list.rsize == 4) {
+            #if defined(_MIPSEL)
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 24);
+            #else
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32);
+            #endif
+          } else
+          if (list.rsize == 5) {
+            #if defined(_MIPSEL)
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[4] << 32);
+            #else
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[4] << 24);
+            #endif
+          } else
+          if (list.rsize == 6) {
+            #if defined(_MIPSEL)
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[5] << 40);
+            #else
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[5] << 16);
+            #endif
+          } else
+          if (list.rsize == 7) {
+            #if defined(_MIPSEL)
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[5] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[6] << 48);
+            #else
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[5] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[6] << 8);
+            #endif
+          } else
+          if (list.rsize >= 8 && list.rsize <= 16) {
+            #if defined(_MIPSEL)
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0])
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[5] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[6] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[7] << 56);
+            #else
+            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[5] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[6] << 8)
+                  |  (__vaword)((unsigned char *) list.raddr)[7];
+            #endif
+            /* Maybe this big if cascade could be replaced with
+             * if (list.rsize > 8 && list.rsize <= 16)
+             *   __asm__ ("ldl $3,%0 ; ldr $3,%1"
+             *            : : "m" (((unsigned char *) list.raddr)[8]),
+             *                "m" (((unsigned char *) list.raddr)[15]));
+             */
+            if (list.rsize == 8) {
+            } else
+            if (list.rsize == 9) {
               #if defined(_MIPSEL)
-              iret =   (__vaword)((unsigned char *) list.raddr)[0];
+              iret2 =   (__vaword)((unsigned char *) list.raddr)[8];
               #else
-              iret =   (__vaword)((unsigned char *) list.raddr)[0] << 56;
+              iret2 =   (__vaword)((unsigned char *) list.raddr)[8] << 56;
               #endif
             } else
-            if (list.rsize == 2) {
+            if (list.rsize == 10) {
               #if defined(_MIPSEL)
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0])
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 8);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 8);
               #else
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 48);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 48);
               #endif
             } else
-            if (list.rsize == 3) {
+            if (list.rsize == 11) {
               #if defined(_MIPSEL)
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0])
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 16);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 16);
               #else
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 40);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 40);
               #endif
             } else
-            if (list.rsize == 4) {
+            if (list.rsize == 12) {
               #if defined(_MIPSEL)
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0])
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 24);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 24);
               #else
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 32);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 32);
               #endif
             } else
-            if (list.rsize == 5) {
+            if (list.rsize == 13) {
               #if defined(_MIPSEL)
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0])
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[4] << 32);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
+                     | ((__vaword)((unsigned char *) list.raddr)[12] << 32);
               #else
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[4] << 24);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
+                     | ((__vaword)((unsigned char *) list.raddr)[12] << 24);
               #endif
             } else
-            if (list.rsize == 6) {
+            if (list.rsize == 14) {
               #if defined(_MIPSEL)
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0])
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[5] << 40);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
+                     | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
+                     | ((__vaword)((unsigned char *) list.raddr)[13] << 40);
               #else
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[5] << 16);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
+                     | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
+                     | ((__vaword)((unsigned char *) list.raddr)[13] << 16);
               #endif
             } else
-            if (list.rsize == 7) {
+            if (list.rsize == 15) {
               #if defined(_MIPSEL)
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0])
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[5] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[6] << 48);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
+                     | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
+                     | ((__vaword)((unsigned char *) list.raddr)[13] << 40)
+                     | ((__vaword)((unsigned char *) list.raddr)[14] << 48);
               #else
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[5] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[6] << 8);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
+                     | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
+                     | ((__vaword)((unsigned char *) list.raddr)[13] << 16)
+                     | ((__vaword)((unsigned char *) list.raddr)[14] << 8);
               #endif
             } else
-            if (list.rsize >= 8 && list.rsize <= 16) {
+            if (list.rsize == 16) {
               #if defined(_MIPSEL)
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0])
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[5] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[6] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[7] << 56);
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
+                     | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
+                     | ((__vaword)((unsigned char *) list.raddr)[13] << 40)
+                     | ((__vaword)((unsigned char *) list.raddr)[14] << 48)
+                     | ((__vaword)((unsigned char *) list.raddr)[15] << 56);
               #else
-              iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[5] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[6] << 8)
-                    |  (__vaword)((unsigned char *) list.raddr)[7];
+              iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                     | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                     | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                     | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
+                     | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
+                     | ((__vaword)((unsigned char *) list.raddr)[13] << 16)
+                     | ((__vaword)((unsigned char *) list.raddr)[14] << 8)
+                     |  (__vaword)((unsigned char *) list.raddr)[15];
               #endif
-              /* Maybe this big if cascade could be replaced with
-               * if (list.rsize > 8 && list.rsize <= 16)
-               *   __asm__ ("ldl $3,%0 ; ldr $3,%1"
-               *            : : "m" (((unsigned char *) list.raddr)[8]),
-               *                "m" (((unsigned char *) list.raddr)[15]));
-               */
-              if (list.rsize == 8) {
-              } else
-              if (list.rsize == 9) {
-                #if defined(_MIPSEL)
-                iret2 =   (__vaword)((unsigned char *) list.raddr)[8];
-                #else
-                iret2 =   (__vaword)((unsigned char *) list.raddr)[8] << 56;
-                #endif
-              } else
-              if (list.rsize == 10) {
-                #if defined(_MIPSEL)
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 8);
-                #else
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 48);
-                #endif
-              } else
-              if (list.rsize == 11) {
-                #if defined(_MIPSEL)
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 16);
-                #else
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 40);
-                #endif
-              } else
-              if (list.rsize == 12) {
-                #if defined(_MIPSEL)
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 24);
-                #else
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 32);
-                #endif
-              } else
-              if (list.rsize == 13) {
-                #if defined(_MIPSEL)
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
-                       | ((__vaword)((unsigned char *) list.raddr)[12] << 32);
-                #else
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
-                       | ((__vaword)((unsigned char *) list.raddr)[12] << 24);
-                #endif
-              } else
-              if (list.rsize == 14) {
-                #if defined(_MIPSEL)
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
-                       | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
-                       | ((__vaword)((unsigned char *) list.raddr)[13] << 40);
-                #else
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
-                       | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
-                       | ((__vaword)((unsigned char *) list.raddr)[13] << 16);
-                #endif
-              } else
-              if (list.rsize == 15) {
-                #if defined(_MIPSEL)
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
-                       | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
-                       | ((__vaword)((unsigned char *) list.raddr)[13] << 40)
-                       | ((__vaword)((unsigned char *) list.raddr)[14] << 48);
-                #else
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
-                       | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
-                       | ((__vaword)((unsigned char *) list.raddr)[13] << 16)
-                       | ((__vaword)((unsigned char *) list.raddr)[14] << 8);
-                #endif
-              } else
-              if (list.rsize == 16) {
-                #if defined(_MIPSEL)
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8])
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 8)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 16)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 24)
-                       | ((__vaword)((unsigned char *) list.raddr)[12] << 32)
-                       | ((__vaword)((unsigned char *) list.raddr)[13] << 40)
-                       | ((__vaword)((unsigned char *) list.raddr)[14] << 48)
-                       | ((__vaword)((unsigned char *) list.raddr)[15] << 56);
-                #else
-                iret2 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                       | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                       | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                       | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
-                       | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
-                       | ((__vaword)((unsigned char *) list.raddr)[13] << 16)
-                       | ((__vaword)((unsigned char *) list.raddr)[14] << 8)
-                       |  (__vaword)((unsigned char *) list.raddr)[15];
-                #endif
-              }
             }
           }
-          if (list.flags & __VA_REGISTER_FLOATSTRUCT_RETURN) {
-            if (list.rsize == sizeof(float)) {
-              fret = *(float*)list.raddr;
-            } else
-            if (list.rsize == 2*sizeof(float)) {
-              fret = *(float*)list.raddr;
-              fret2 = *(float*)((char*)list.raddr + 4);
-            }
+        }
+        if (list.flags & __VA_REGISTER_FLOATSTRUCT_RETURN) {
+          if (list.rsize == sizeof(float)) {
+            fret = *(float*)list.raddr;
+          } else
+          if (list.rsize == 2*sizeof(float)) {
+            fret = *(float*)list.raddr;
+            fret2 = *(float*)((char*)list.raddr + 4);
           }
-          if (list.flags & __VA_REGISTER_DOUBLESTRUCT_RETURN) {
-            if (list.rsize == sizeof(double)) {
-              dret = *(double*)list.raddr;
-            } else
-            if (list.rsize == 2*sizeof(double)) {
-              dret = *(double*)list.raddr;
-              dret2 = *(double*)((char*)list.raddr + 8);
-            }
+        }
+        if (list.flags & __VA_REGISTER_DOUBLESTRUCT_RETURN) {
+          if (list.rsize == sizeof(double)) {
+            dret = *(double*)list.raddr;
+          } else
+          if (list.rsize == 2*sizeof(double)) {
+            dret = *(double*)list.raddr;
+            dret2 = *(double*)((char*)list.raddr + 8);
           }
         }
       }

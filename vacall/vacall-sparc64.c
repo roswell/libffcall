@@ -174,225 +174,219 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = (long)list.tmp._ptr;
   } else
   if (list.rtype == __VAstruct) {
-    if (list.flags & __VA_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention */
-      iret = (long) list.raddr;
-    } else {
-      /* normal struct return convention */
-      if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
-        /* Return structs of size <= 32 in registers. */
-        if (list.rsize > 0 && list.rsize <= 32) {
-          if (list.rsize == 1) {
-            iret =   (__vaword)((unsigned char *) list.raddr)[0] << 56;
+    if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
+      /* Return structs of size <= 32 in registers. */
+      if (list.rsize > 0 && list.rsize <= 32) {
+        if (list.rsize == 1) {
+          iret =   (__vaword)((unsigned char *) list.raddr)[0] << 56;
+        } else
+        if (list.rsize == 2) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 48);
+        } else
+        if (list.rsize == 3) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 40);
+        } else
+        if (list.rsize == 4) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 32);
+        } else
+        if (list.rsize == 5) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[4] << 24);
+        } else
+        if (list.rsize == 6) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[5] << 16);
+        } else
+        if (list.rsize == 7) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[5] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[6] << 8);
+        } else
+        if (list.rsize >= 8 && list.rsize <= 32) {
+          iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[5] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[6] << 8)
+                |  (__vaword)((unsigned char *) list.raddr)[7];
+          if (list.rsize == 8) {
           } else
-          if (list.rsize == 2) {
-            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48);
+          if (list.rsize == 9) {
+            o1 =   (__vaword)((unsigned char *) list.raddr)[8] << 56;
           } else
-          if (list.rsize == 3) {
-            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40);
+          if (list.rsize == 10) {
+            o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[9] << 48);
           } else
-          if (list.rsize == 4) {
-            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32);
+          if (list.rsize == 11) {
+            o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[10] << 40);
           } else
-          if (list.rsize == 5) {
-            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
-                  | ((__vaword)((unsigned char *) list.raddr)[4] << 24);
+          if (list.rsize == 12) {
+            o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[11] << 32);
           } else
-          if (list.rsize == 6) {
-            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
-                  | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
-                  | ((__vaword)((unsigned char *) list.raddr)[5] << 16);
+          if (list.rsize == 13) {
+            o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[12] << 24);
           } else
-          if (list.rsize == 7) {
-            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
-                  | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
-                  | ((__vaword)((unsigned char *) list.raddr)[5] << 16)
-                  | ((__vaword)((unsigned char *) list.raddr)[6] << 8);
+          if (list.rsize == 14) {
+            o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[13] << 16);
           } else
-          if (list.rsize >= 8 && list.rsize <= 32) {
-            iret =  ((__vaword)((unsigned char *) list.raddr)[0] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[1] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[2] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[3] << 32)
-                  | ((__vaword)((unsigned char *) list.raddr)[4] << 24)
-                  | ((__vaword)((unsigned char *) list.raddr)[5] << 16)
-                  | ((__vaword)((unsigned char *) list.raddr)[6] << 8)
-                  |  (__vaword)((unsigned char *) list.raddr)[7];
-            if (list.rsize == 8) {
+          if (list.rsize == 15) {
+            o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[13] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[14] << 8);
+          } else
+          if (list.rsize >= 16 && list.rsize <= 32) {
+            o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
+                | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
+                | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
+                | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
+                | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
+                | ((__vaword)((unsigned char *) list.raddr)[13] << 16)
+                | ((__vaword)((unsigned char *) list.raddr)[14] << 8)
+                |  (__vaword)((unsigned char *) list.raddr)[15];
+            if (list.rsize == 16) {
             } else
-            if (list.rsize == 9) {
-              o1 =   (__vaword)((unsigned char *) list.raddr)[8] << 56;
+            if (list.rsize == 17) {
+              o2 =   (__vaword)((unsigned char *) list.raddr)[16] << 56;
             } else
-            if (list.rsize == 10) {
-              o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[9] << 48);
+            if (list.rsize == 18) {
+              o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[17] << 48);
             } else
-            if (list.rsize == 11) {
-              o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[10] << 40);
+            if (list.rsize == 19) {
+              o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[18] << 40);
             } else
-            if (list.rsize == 12) {
-              o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[11] << 32);
+            if (list.rsize == 20) {
+              o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[19] << 32);
             } else
-            if (list.rsize == 13) {
-              o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
-                  | ((__vaword)((unsigned char *) list.raddr)[12] << 24);
+            if (list.rsize == 21) {
+              o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[19] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[20] << 24);
             } else
-            if (list.rsize == 14) {
-              o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
-                  | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
-                  | ((__vaword)((unsigned char *) list.raddr)[13] << 16);
+            if (list.rsize == 22) {
+              o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[19] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[20] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[21] << 16);
             } else
-            if (list.rsize == 15) {
-              o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
-                  | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
-                  | ((__vaword)((unsigned char *) list.raddr)[13] << 16)
-                  | ((__vaword)((unsigned char *) list.raddr)[14] << 8);
+            if (list.rsize == 23) {
+              o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[19] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[20] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[21] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[22] << 8);
             } else
-            if (list.rsize >= 16 && list.rsize <= 32) {
-              o1 =  ((__vaword)((unsigned char *) list.raddr)[8] << 56)
-                  | ((__vaword)((unsigned char *) list.raddr)[9] << 48)
-                  | ((__vaword)((unsigned char *) list.raddr)[10] << 40)
-                  | ((__vaword)((unsigned char *) list.raddr)[11] << 32)
-                  | ((__vaword)((unsigned char *) list.raddr)[12] << 24)
-                  | ((__vaword)((unsigned char *) list.raddr)[13] << 16)
-                  | ((__vaword)((unsigned char *) list.raddr)[14] << 8)
-                  |  (__vaword)((unsigned char *) list.raddr)[15];
-              if (list.rsize == 16) {
+            if (list.rsize >= 24 && list.rsize <= 32) {
+              o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
+                  | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
+                  | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
+                  | ((__vaword)((unsigned char *) list.raddr)[19] << 32)
+                  | ((__vaword)((unsigned char *) list.raddr)[20] << 24)
+                  | ((__vaword)((unsigned char *) list.raddr)[21] << 16)
+                  | ((__vaword)((unsigned char *) list.raddr)[22] << 8)
+                  |  (__vaword)((unsigned char *) list.raddr)[23];
+              if (list.rsize == 24) {
               } else
-              if (list.rsize == 17) {
-                o2 =   (__vaword)((unsigned char *) list.raddr)[16] << 56;
+              if (list.rsize == 25) {
+                o3 =   (__vaword)((unsigned char *) list.raddr)[24] << 56;
               } else
-              if (list.rsize == 18) {
-                o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[17] << 48);
+              if (list.rsize == 26) {
+                o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
+                    | ((__vaword)((unsigned char *) list.raddr)[25] << 48);
               } else
-              if (list.rsize == 19) {
-                o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[18] << 40);
+              if (list.rsize == 27) {
+                o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
+                    | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
+                    | ((__vaword)((unsigned char *) list.raddr)[26] << 40);
               } else
-              if (list.rsize == 20) {
-                o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[19] << 32);
+              if (list.rsize == 28) {
+                o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
+                    | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
+                    | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
+                    | ((__vaword)((unsigned char *) list.raddr)[27] << 32);
               } else
-              if (list.rsize == 21) {
-                o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[19] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[20] << 24);
+              if (list.rsize == 29) {
+                o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
+                    | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
+                    | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
+                    | ((__vaword)((unsigned char *) list.raddr)[27] << 32)
+                    | ((__vaword)((unsigned char *) list.raddr)[28] << 24);
               } else
-              if (list.rsize == 22) {
-                o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[19] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[20] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[21] << 16);
+              if (list.rsize == 30) {
+                o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
+                    | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
+                    | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
+                    | ((__vaword)((unsigned char *) list.raddr)[27] << 32)
+                    | ((__vaword)((unsigned char *) list.raddr)[28] << 24)
+                    | ((__vaword)((unsigned char *) list.raddr)[29] << 16);
               } else
-              if (list.rsize == 23) {
-                o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[19] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[20] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[21] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[22] << 8);
+              if (list.rsize == 31) {
+                o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
+                    | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
+                    | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
+                    | ((__vaword)((unsigned char *) list.raddr)[27] << 32)
+                    | ((__vaword)((unsigned char *) list.raddr)[28] << 24)
+                    | ((__vaword)((unsigned char *) list.raddr)[29] << 16)
+                    | ((__vaword)((unsigned char *) list.raddr)[30] << 8);
               } else
-              if (list.rsize >= 24 && list.rsize <= 32) {
-                o2 =  ((__vaword)((unsigned char *) list.raddr)[16] << 56)
-                    | ((__vaword)((unsigned char *) list.raddr)[17] << 48)
-                    | ((__vaword)((unsigned char *) list.raddr)[18] << 40)
-                    | ((__vaword)((unsigned char *) list.raddr)[19] << 32)
-                    | ((__vaword)((unsigned char *) list.raddr)[20] << 24)
-                    | ((__vaword)((unsigned char *) list.raddr)[21] << 16)
-                    | ((__vaword)((unsigned char *) list.raddr)[22] << 8)
-                    |  (__vaword)((unsigned char *) list.raddr)[23];
-                if (list.rsize == 24) {
-                } else
-                if (list.rsize == 25) {
-                  o3 =   (__vaword)((unsigned char *) list.raddr)[24] << 56;
-                } else
-                if (list.rsize == 26) {
-                  o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
-                      | ((__vaword)((unsigned char *) list.raddr)[25] << 48);
-                } else
-                if (list.rsize == 27) {
-                  o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
-                      | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
-                      | ((__vaword)((unsigned char *) list.raddr)[26] << 40);
-                } else
-                if (list.rsize == 28) {
-                  o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
-                      | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
-                      | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
-                      | ((__vaword)((unsigned char *) list.raddr)[27] << 32);
-                } else
-                if (list.rsize == 29) {
-                  o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
-                      | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
-                      | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
-                      | ((__vaword)((unsigned char *) list.raddr)[27] << 32)
-                      | ((__vaword)((unsigned char *) list.raddr)[28] << 24);
-                } else
-                if (list.rsize == 30) {
-                  o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
-                      | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
-                      | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
-                      | ((__vaword)((unsigned char *) list.raddr)[27] << 32)
-                      | ((__vaword)((unsigned char *) list.raddr)[28] << 24)
-                      | ((__vaword)((unsigned char *) list.raddr)[29] << 16);
-                } else
-                if (list.rsize == 31) {
-                  o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
-                      | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
-                      | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
-                      | ((__vaword)((unsigned char *) list.raddr)[27] << 32)
-                      | ((__vaword)((unsigned char *) list.raddr)[28] << 24)
-                      | ((__vaword)((unsigned char *) list.raddr)[29] << 16)
-                      | ((__vaword)((unsigned char *) list.raddr)[30] << 8);
-                } else
-                if (list.rsize == 32) {
-                  o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
-                      | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
-                      | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
-                      | ((__vaword)((unsigned char *) list.raddr)[27] << 32)
-                      | ((__vaword)((unsigned char *) list.raddr)[28] << 24)
-                      | ((__vaword)((unsigned char *) list.raddr)[29] << 16)
-                      | ((__vaword)((unsigned char *) list.raddr)[30] << 8)
-                      |  (__vaword)((unsigned char *) list.raddr)[31];
-                }
+              if (list.rsize == 32) {
+                o3 =  ((__vaword)((unsigned char *) list.raddr)[24] << 56)
+                    | ((__vaword)((unsigned char *) list.raddr)[25] << 48)
+                    | ((__vaword)((unsigned char *) list.raddr)[26] << 40)
+                    | ((__vaword)((unsigned char *) list.raddr)[27] << 32)
+                    | ((__vaword)((unsigned char *) list.raddr)[28] << 24)
+                    | ((__vaword)((unsigned char *) list.raddr)[29] << 16)
+                    | ((__vaword)((unsigned char *) list.raddr)[30] << 8)
+                    |  (__vaword)((unsigned char *) list.raddr)[31];
               }
             }
           }

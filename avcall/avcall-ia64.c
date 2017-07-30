@@ -164,94 +164,73 @@ __builtin_avcall(av_alist* l)
       RETURN(void*, i);
     } else
     if (l->rtype == __AVstruct) {
-      if (l->flags & __AV_PCC_STRUCT_RETURN) {
-        /* pcc struct return convention: need a  *(TYPE*)l->raddr = *(TYPE*)i;  */
-        if (l->rsize == sizeof(char)) {
-          RETURN(char, *(char*)i);
-        } else
-        if (l->rsize == sizeof(short)) {
-          RETURN(short, *(short*)i);
-        } else
-        if (l->rsize == sizeof(int)) {
-          RETURN(int, *(int*)i);
-        } else
-        if (l->rsize == sizeof(long)) {
-          RETURN(long, *(long*)i);
-        } else {
-          int n = (l->rsize + sizeof(__avword)-1)/sizeof(__avword);
-          while (--n >= 0)
-            ((__avword*)l->raddr)[n] = ((__avword*)i)[n];
-        }
-      } else {
-        /* normal struct return convention */
-        if (l->flags & __AV_REGISTER_STRUCT_RETURN) {
-          /* Return structs of size <= 32 in registers. */
-          if (l->rsize > 0 && l->rsize <= 32) {
-            if (l->rsize >= 1)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(i);
-            if (l->rsize >= 2)
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>8);
-            if (l->rsize >= 3)
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>16);
-            if (l->rsize >= 4)
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(i>>24);
-            if (l->rsize >= 5)
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(i>>32);
-            if (l->rsize >= 6)
-              ((unsigned char *)l->raddr)[5] = (unsigned char)(i>>40);
-            if (l->rsize >= 7)
-              ((unsigned char *)l->raddr)[6] = (unsigned char)(i>>48);
-            if (l->rsize >= 8)
-              ((unsigned char *)l->raddr)[7] = (unsigned char)(i>>56);
-            if (l->rsize >= 9) {
-              ((unsigned char *)l->raddr)[8] = (unsigned char)(iret2);
-              if (l->rsize >= 10)
-                ((unsigned char *)l->raddr)[9] = (unsigned char)(iret2>>8);
-              if (l->rsize >= 11)
-                ((unsigned char *)l->raddr)[10] = (unsigned char)(iret2>>16);
-              if (l->rsize >= 12)
-                ((unsigned char *)l->raddr)[11] = (unsigned char)(iret2>>24);
-              if (l->rsize >= 13)
-                ((unsigned char *)l->raddr)[12] = (unsigned char)(iret2>>32);
-              if (l->rsize >= 14)
-                ((unsigned char *)l->raddr)[13] = (unsigned char)(iret2>>40);
-              if (l->rsize >= 15)
-                ((unsigned char *)l->raddr)[14] = (unsigned char)(iret2>>48);
-              if (l->rsize >= 16)
-                ((unsigned char *)l->raddr)[15] = (unsigned char)(iret2>>56);
-              if (l->rsize >= 17) {
-                ((unsigned char *)l->raddr)[16] = (unsigned char)(iret3);
-                if (l->rsize >= 18)
-                  ((unsigned char *)l->raddr)[17] = (unsigned char)(iret3>>8);
-                if (l->rsize >= 19)
-                  ((unsigned char *)l->raddr)[18] = (unsigned char)(iret3>>16);
-                if (l->rsize >= 20)
-                  ((unsigned char *)l->raddr)[19] = (unsigned char)(iret3>>24);
-                if (l->rsize >= 21)
-                  ((unsigned char *)l->raddr)[20] = (unsigned char)(iret3>>32);
-                if (l->rsize >= 22)
-                  ((unsigned char *)l->raddr)[21] = (unsigned char)(iret3>>40);
-                if (l->rsize >= 23)
-                  ((unsigned char *)l->raddr)[22] = (unsigned char)(iret3>>48);
-                if (l->rsize >= 24)
-                  ((unsigned char *)l->raddr)[23] = (unsigned char)(iret3>>56);
-                if (l->rsize >= 25) {
-                  ((unsigned char *)l->raddr)[24] = (unsigned char)(iret4);
-                  if (l->rsize >= 26)
-                    ((unsigned char *)l->raddr)[25] = (unsigned char)(iret4>>8);
-                  if (l->rsize >= 27)
-                    ((unsigned char *)l->raddr)[26] = (unsigned char)(iret4>>16);
-                  if (l->rsize >= 28)
-                    ((unsigned char *)l->raddr)[27] = (unsigned char)(iret4>>24);
-                  if (l->rsize >= 29)
-                    ((unsigned char *)l->raddr)[28] = (unsigned char)(iret4>>32);
-                  if (l->rsize >= 30)
-                    ((unsigned char *)l->raddr)[29] = (unsigned char)(iret4>>40);
-                  if (l->rsize >= 31)
-                    ((unsigned char *)l->raddr)[30] = (unsigned char)(iret4>>48);
-                  if (l->rsize >= 32)
-                    ((unsigned char *)l->raddr)[31] = (unsigned char)(iret4>>56);
-                }
+      if (l->flags & __AV_REGISTER_STRUCT_RETURN) {
+        /* Return structs of size <= 32 in registers. */
+        if (l->rsize > 0 && l->rsize <= 32) {
+          if (l->rsize >= 1)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(i);
+          if (l->rsize >= 2)
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>8);
+          if (l->rsize >= 3)
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>16);
+          if (l->rsize >= 4)
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(i>>24);
+          if (l->rsize >= 5)
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(i>>32);
+          if (l->rsize >= 6)
+            ((unsigned char *)l->raddr)[5] = (unsigned char)(i>>40);
+          if (l->rsize >= 7)
+            ((unsigned char *)l->raddr)[6] = (unsigned char)(i>>48);
+          if (l->rsize >= 8)
+            ((unsigned char *)l->raddr)[7] = (unsigned char)(i>>56);
+          if (l->rsize >= 9) {
+            ((unsigned char *)l->raddr)[8] = (unsigned char)(iret2);
+            if (l->rsize >= 10)
+              ((unsigned char *)l->raddr)[9] = (unsigned char)(iret2>>8);
+            if (l->rsize >= 11)
+              ((unsigned char *)l->raddr)[10] = (unsigned char)(iret2>>16);
+            if (l->rsize >= 12)
+              ((unsigned char *)l->raddr)[11] = (unsigned char)(iret2>>24);
+            if (l->rsize >= 13)
+              ((unsigned char *)l->raddr)[12] = (unsigned char)(iret2>>32);
+            if (l->rsize >= 14)
+              ((unsigned char *)l->raddr)[13] = (unsigned char)(iret2>>40);
+            if (l->rsize >= 15)
+              ((unsigned char *)l->raddr)[14] = (unsigned char)(iret2>>48);
+            if (l->rsize >= 16)
+              ((unsigned char *)l->raddr)[15] = (unsigned char)(iret2>>56);
+            if (l->rsize >= 17) {
+              ((unsigned char *)l->raddr)[16] = (unsigned char)(iret3);
+              if (l->rsize >= 18)
+                ((unsigned char *)l->raddr)[17] = (unsigned char)(iret3>>8);
+              if (l->rsize >= 19)
+                ((unsigned char *)l->raddr)[18] = (unsigned char)(iret3>>16);
+              if (l->rsize >= 20)
+                ((unsigned char *)l->raddr)[19] = (unsigned char)(iret3>>24);
+              if (l->rsize >= 21)
+                ((unsigned char *)l->raddr)[20] = (unsigned char)(iret3>>32);
+              if (l->rsize >= 22)
+                ((unsigned char *)l->raddr)[21] = (unsigned char)(iret3>>40);
+              if (l->rsize >= 23)
+                ((unsigned char *)l->raddr)[22] = (unsigned char)(iret3>>48);
+              if (l->rsize >= 24)
+                ((unsigned char *)l->raddr)[23] = (unsigned char)(iret3>>56);
+              if (l->rsize >= 25) {
+                ((unsigned char *)l->raddr)[24] = (unsigned char)(iret4);
+                if (l->rsize >= 26)
+                  ((unsigned char *)l->raddr)[25] = (unsigned char)(iret4>>8);
+                if (l->rsize >= 27)
+                  ((unsigned char *)l->raddr)[26] = (unsigned char)(iret4>>16);
+                if (l->rsize >= 28)
+                  ((unsigned char *)l->raddr)[27] = (unsigned char)(iret4>>24);
+                if (l->rsize >= 29)
+                  ((unsigned char *)l->raddr)[28] = (unsigned char)(iret4>>32);
+                if (l->rsize >= 30)
+                  ((unsigned char *)l->raddr)[29] = (unsigned char)(iret4>>40);
+                if (l->rsize >= 31)
+                  ((unsigned char *)l->raddr)[30] = (unsigned char)(iret4>>48);
+                if (l->rsize >= 32)
+                  ((unsigned char *)l->raddr)[31] = (unsigned char)(iret4>>56);
               }
             }
           }

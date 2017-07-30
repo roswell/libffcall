@@ -94,8 +94,6 @@
 #endif
 
 /* Calling convention */
-/* Define if using pcc non-reentrant struct return convention */
-#undef __PCC_STRUCT_RETURN__
 /* Define if small structs are returned in registers */
 #undef __SMALL_STRUCT_RETURN__
 /* Define if floating-point results are returned in the integer registers */
@@ -172,6 +170,7 @@ enum __AV_alist_flags
   /* how to return structs */
   /* There are basically 3 ways to return structs:
    * a. The called function returns a pointer to static data. Not reentrant.
+   *    Not supported any more.
    * b. The caller passes the return structure address in a dedicated register
    *    or as a first (or last), invisible argument. The called function stores
    *    its result there.
@@ -192,7 +191,6 @@ enum __AV_alist_flags
    *     DEFAULT_PCC_STRUCT_RETURN is defined to 0 in the machine description)
    *     method r.
    */
-  __AV_PCC_STRUCT_RETURN	= 1<<0,	/* a: need to copy the struct */
   __AV_SMALL_STRUCT_RETURN	= 1<<1,	/* r: special case for small structs */
   __AV_GCC_STRUCT_RETURN	= 1<<2,	/* consider 8 byte structs as small */
 #if defined(__sparc__) && !defined(__sparc64__)
@@ -219,9 +217,6 @@ enum __AV_alist_flags
 #if defined(__sparc__) && !defined(__sparc64__) && defined(sun) && defined(__SUNPRO_C) /* SUNWspro cc */
 				  __AV_SUNPROCC_STRUCT_RETURN,
 #else
-#if defined(__PCC_STRUCT_RETURN__) && !defined(__hppa__) && !defined(__arm64__) /* defined through configure, see above */
-				  __AV_PCC_STRUCT_RETURN,
-#else
 #if defined(__SMALL_STRUCT_RETURN__) || defined(__mipsn32__) || defined(__mips64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) /* defined through configure, see above */
 				  __AV_SMALL_STRUCT_RETURN |
 #endif
@@ -238,7 +233,6 @@ enum __AV_alist_flags
 				  __AV_OLDGCC_STRUCT_RETURN |
 #endif
   				  0,
-#endif
 #endif
 #endif
 
@@ -606,17 +600,9 @@ typedef struct
 #define _av_start_struct(LIST,FUNC,TYPE_SIZE,TYPE_SPLITTABLE,RADDR)	\
   (__av_start(LIST,FUNC,RADDR,__AVstruct),				\
    (LIST).rsize = TYPE_SIZE,						\
-   __av_start_struct1(LIST,TYPE_SIZE,TYPE_SPLITTABLE),			\
+   __av_start_struct2(LIST,TYPE_SIZE,TYPE_SPLITTABLE),			\
    0)
 
-#define __av_start_struct1(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((LIST).flags & __AV_PCC_STRUCT_RETURN				\
-   ? /* pcc struct return convention:					\
-      * called function returns pointer to value, we'll copy its contents afterwards. \
-      */								\
-     0									\
-   : __av_start_struct2(LIST,TYPE_SIZE,TYPE_SPLITTABLE)			\
-  )
 #if (defined(__sparc__) && !defined(__sparc64__))
 /* Return structure pointer is passed in a special register.
  */

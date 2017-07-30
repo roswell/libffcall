@@ -1,3 +1,23 @@
+2017-07-30  Bruno Haible  <bruno@clisp.org>
+
+	Remove support for old PCC struct return convention.
+	It is not reentrant and therefore a fortiori not multithread-safe.
+	* m4/pccstruct.m4: Remove file.
+	* Makefile.in (SOURCE_FILES): Remove it.
+	* configure.ac: Remove FFCALL_PCC_STRUCT_RETURN invocation.
+	* avcall/avcall.h.in (__PCC_STRUCT_RETURN__): Remove macro.
+	(__AV_PCC_STRUCT_RETURN): Remove enum value.
+	(__av_start_struct1): Remove macro.
+	(_av_start_struct): Use __av_start_struct2 instead.
+	* avcall/avcall-*.c: Remove support for __AV_PCC_STRUCT_RETURN flag.
+	* vacall/vacall.h.in (__PCC_STRUCT_RETURN__): Remove macro.
+	(__VA_PCC_STRUCT_RETURN): Remove enum value.
+	(_va_start_struct): Update accordingly.
+	* callback/vacall_r/vacall_r.h.in: Likewise.
+	* vacall/vacall-*.c: Remove support for __VA_PCC_STRUCT_RETURN flag.
+	* vacall/misc.c (__va_error2): Update error message.
+	* callback/vacall_r/misc.c (__va_error2): Likewise.
+
 2017-07-22  Bruno Haible  <bruno@clisp.org>
 
 	ia64: Make vacall code more robust.

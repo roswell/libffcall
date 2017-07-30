@@ -151,46 +151,40 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = (long)list.tmp._ptr;
   } else
   if (list.rtype == __VAstruct) {
-    if (list.flags & __VA_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention */
-      iret = (long) list.raddr;
-    } else {
-      /* normal struct return convention */
-      if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
-        /* Return structs of size <= 16 in registers. */
-        if (list.rsize > 0 && list.rsize <= 16) {
-          iret = (__vaword)((unsigned char *) list.raddr)[0];
-          if (list.rsize >= 2)
-            iret |= (__vaword)((unsigned char *) list.raddr)[1] << 8;
-          if (list.rsize >= 3)
-            iret |= (__vaword)((unsigned char *) list.raddr)[2] << 16;
-          if (list.rsize >= 4)
-            iret |= (__vaword)((unsigned char *) list.raddr)[3] << 24;
-          if (list.rsize >= 5)
-            iret |= (__vaword)((unsigned char *) list.raddr)[4] << 32;
-          if (list.rsize >= 6)
-            iret |= (__vaword)((unsigned char *) list.raddr)[5] << 40;
-          if (list.rsize >= 7)
-            iret |= (__vaword)((unsigned char *) list.raddr)[6] << 48;
-          if (list.rsize >= 8)
-            iret |= (__vaword)((unsigned char *) list.raddr)[7] << 56;
-          if (list.rsize >= 9) {
-            iret2 = (__vaword)((unsigned char *) list.raddr)[8];
-            if (list.rsize >= 10)
-              iret2 |= (__vaword)((unsigned char *) list.raddr)[9] << 8;
-            if (list.rsize >= 11)
-              iret2 |= (__vaword)((unsigned char *) list.raddr)[10] << 16;
-            if (list.rsize >= 12)
-              iret2 |= (__vaword)((unsigned char *) list.raddr)[11] << 24;
-            if (list.rsize >= 13)
-              iret2 |= (__vaword)((unsigned char *) list.raddr)[12] << 32;
-            if (list.rsize >= 14)
-              iret2 |= (__vaword)((unsigned char *) list.raddr)[13] << 40;
-            if (list.rsize >= 15)
-              iret2 |= (__vaword)((unsigned char *) list.raddr)[14] << 48;
-            if (list.rsize >= 16)
-              iret2 |= (__vaword)((unsigned char *) list.raddr)[15] << 56;
-          }
+    if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
+      /* Return structs of size <= 16 in registers. */
+      if (list.rsize > 0 && list.rsize <= 16) {
+        iret = (__vaword)((unsigned char *) list.raddr)[0];
+        if (list.rsize >= 2)
+          iret |= (__vaword)((unsigned char *) list.raddr)[1] << 8;
+        if (list.rsize >= 3)
+          iret |= (__vaword)((unsigned char *) list.raddr)[2] << 16;
+        if (list.rsize >= 4)
+          iret |= (__vaword)((unsigned char *) list.raddr)[3] << 24;
+        if (list.rsize >= 5)
+          iret |= (__vaword)((unsigned char *) list.raddr)[4] << 32;
+        if (list.rsize >= 6)
+          iret |= (__vaword)((unsigned char *) list.raddr)[5] << 40;
+        if (list.rsize >= 7)
+          iret |= (__vaword)((unsigned char *) list.raddr)[6] << 48;
+        if (list.rsize >= 8)
+          iret |= (__vaword)((unsigned char *) list.raddr)[7] << 56;
+        if (list.rsize >= 9) {
+          iret2 = (__vaword)((unsigned char *) list.raddr)[8];
+          if (list.rsize >= 10)
+            iret2 |= (__vaword)((unsigned char *) list.raddr)[9] << 8;
+          if (list.rsize >= 11)
+            iret2 |= (__vaword)((unsigned char *) list.raddr)[10] << 16;
+          if (list.rsize >= 12)
+            iret2 |= (__vaword)((unsigned char *) list.raddr)[11] << 24;
+          if (list.rsize >= 13)
+            iret2 |= (__vaword)((unsigned char *) list.raddr)[12] << 32;
+          if (list.rsize >= 14)
+            iret2 |= (__vaword)((unsigned char *) list.raddr)[13] << 40;
+          if (list.rsize >= 15)
+            iret2 |= (__vaword)((unsigned char *) list.raddr)[14] << 48;
+          if (list.rsize >= 16)
+            iret2 |= (__vaword)((unsigned char *) list.raddr)[15] << 56;
         }
       }
     }

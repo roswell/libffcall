@@ -174,269 +174,248 @@ __builtin_avcall(av_alist* l)
     RETURN(void*, iret);
   } else
   if (l->rtype == __AVstruct) {
-    if (l->flags & __AV_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention: need a  *(TYPE*)l->raddr = *(TYPE*)i;  */
-      if (l->rsize == sizeof(char)) {
-        RETURN(char, *(char*)iret);
-      } else
-      if (l->rsize == sizeof(short)) {
-        RETURN(short, *(short*)iret);
-      } else
-      if (l->rsize == sizeof(int)) {
-        RETURN(int, *(int*)iret);
-      } else
-      if (l->rsize == sizeof(long long)) {
-        RETURN(long, *(long long*)iret);
+    if (l->flags & __AV_REGISTER_STRUCT_RETURN) {
+      if (l->flags & __AV_GCC_STRUCT_RETURN) {
+        /* gcc returns structs of size 1,2,4,8 in registers. */
+        if (l->rsize == sizeof(char)) {
+          RETURN(char, iret);
+        } else
+        if (l->rsize == sizeof(short)) {
+          RETURN(short, iret);
+        } else
+        if (l->rsize == sizeof(int)) {
+          RETURN(int, iret);
+        } else
+        if (l->rsize == sizeof(long long)) {
+          RETURN(long long, iret);
+        }
       } else {
-        int n = (l->rsize + sizeof(__avword)-1)/sizeof(__avword);
-        while (--n >= 0)
-          ((__avword*)l->raddr)[n] = ((__avword*)iret)[n];
-      }
-    } else {
-      /* normal struct return convention */
-      if (l->flags & __AV_REGISTER_STRUCT_RETURN) {
-        if (l->flags & __AV_GCC_STRUCT_RETURN) {
-          /* gcc returns structs of size 1,2,4,8 in registers. */
-          if (l->rsize == sizeof(char)) {
-            RETURN(char, iret);
+        /* cc returns structs of size <= 16 in registers. */
+        if (l->rsize > 0 && l->rsize <= 16) {
+          if (l->rsize == 1) {
+            #if defined(_MIPSEL)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+            #else
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+            #endif
           } else
-          if (l->rsize == sizeof(short)) {
-            RETURN(short, iret);
+          if (l->rsize == 2) {
+            #if defined(_MIPSEL)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
+            #else
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
+            #endif
           } else
-          if (l->rsize == sizeof(int)) {
-            RETURN(int, iret);
+          if (l->rsize == 3) {
+            #if defined(_MIPSEL)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
+            #else
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
+            #endif
           } else
-          if (l->rsize == sizeof(long long)) {
-            RETURN(long long, iret);
-          }
-        } else {
-          /* cc returns structs of size <= 16 in registers. */
-          if (l->rsize > 0 && l->rsize <= 16) {
-            if (l->rsize == 1) {
+          if (l->rsize == 4) {
+            #if defined(_MIPSEL)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
+            #else
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
+            #endif
+          } else
+          if (l->rsize == 5) {
+            #if defined(_MIPSEL)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>32);
+            #else
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>24);
+            #endif
+          } else
+          if (l->rsize == 6) {
+            #if defined(_MIPSEL)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>32);
+            ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>40);
+            #else
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>24);
+            ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>16);
+            #endif
+          } else
+          if (l->rsize == 7) {
+            #if defined(_MIPSEL)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>32);
+            ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>40);
+            ((unsigned char *)l->raddr)[6] = (unsigned char)(iret>>48);
+            #else
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>24);
+            ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>16);
+            ((unsigned char *)l->raddr)[6] = (unsigned char)(iret>>8);
+            #endif
+          } else
+          if (l->rsize >= 8 && l->rsize <= 16) {
+            #if defined(_MIPSEL)
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>32);
+            ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>40);
+            ((unsigned char *)l->raddr)[6] = (unsigned char)(iret>>48);
+            ((unsigned char *)l->raddr)[7] = (unsigned char)(iret>>56);
+            #else
+            ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+            ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
+            ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
+            ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
+            ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>24);
+            ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>16);
+            ((unsigned char *)l->raddr)[6] = (unsigned char)(iret>>8);
+            ((unsigned char *)l->raddr)[7] = (unsigned char)(iret);
+            #endif
+            if (l->rsize == 8) {
+            } else
+            if (l->rsize == 9) {
               #if defined(_MIPSEL)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
               #else
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
               #endif
             } else
-            if (l->rsize == 2) {
+            if (l->rsize == 10) {
               #if defined(_MIPSEL)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
               #else
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
               #endif
             } else
-            if (l->rsize == 3) {
+            if (l->rsize == 11) {
               #if defined(_MIPSEL)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
               #else
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
               #endif
             } else
-            if (l->rsize == 4) {
+            if (l->rsize == 12) {
               #if defined(_MIPSEL)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
               #else
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
               #endif
             } else
-            if (l->rsize == 5) {
+            if (l->rsize == 13) {
               #if defined(_MIPSEL)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>32);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
+              ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>32);
               #else
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>24);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
+              ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>24);
               #endif
             } else
-            if (l->rsize == 6) {
+            if (l->rsize == 14) {
               #if defined(_MIPSEL)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>32);
-              ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>40);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
+              ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>32);
+              ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>40);
               #else
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>24);
-              ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>16);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
+              ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>24);
+              ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>16);
               #endif
             } else
-            if (l->rsize == 7) {
+            if (l->rsize == 15) {
               #if defined(_MIPSEL)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>32);
-              ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>40);
-              ((unsigned char *)l->raddr)[6] = (unsigned char)(iret>>48);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
+              ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>32);
+              ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>40);
+              ((unsigned char *)l->raddr)[8+6] = (unsigned char)(iret2>>48);
               #else
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>24);
-              ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>16);
-              ((unsigned char *)l->raddr)[6] = (unsigned char)(iret>>8);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
+              ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>24);
+              ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>16);
+              ((unsigned char *)l->raddr)[8+6] = (unsigned char)(iret2>>8);
               #endif
             } else
-            if (l->rsize >= 8 && l->rsize <= 16) {
+            if (l->rsize == 16) {
               #if defined(_MIPSEL)
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>8);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>16);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>24);
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>32);
-              ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>40);
-              ((unsigned char *)l->raddr)[6] = (unsigned char)(iret>>48);
-              ((unsigned char *)l->raddr)[7] = (unsigned char)(iret>>56);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
+              ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>32);
+              ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>40);
+              ((unsigned char *)l->raddr)[8+6] = (unsigned char)(iret2>>48);
+              ((unsigned char *)l->raddr)[8+7] = (unsigned char)(iret2>>56);
               #else
-              ((unsigned char *)l->raddr)[0] = (unsigned char)(iret>>56);
-              ((unsigned char *)l->raddr)[1] = (unsigned char)(iret>>48);
-              ((unsigned char *)l->raddr)[2] = (unsigned char)(iret>>40);
-              ((unsigned char *)l->raddr)[3] = (unsigned char)(iret>>32);
-              ((unsigned char *)l->raddr)[4] = (unsigned char)(iret>>24);
-              ((unsigned char *)l->raddr)[5] = (unsigned char)(iret>>16);
-              ((unsigned char *)l->raddr)[6] = (unsigned char)(iret>>8);
-              ((unsigned char *)l->raddr)[7] = (unsigned char)(iret);
+              ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
+              ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
+              ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
+              ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
+              ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>24);
+              ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>16);
+              ((unsigned char *)l->raddr)[8+6] = (unsigned char)(iret2>>8);
+              ((unsigned char *)l->raddr)[8+7] = (unsigned char)(iret2);
               #endif
-              if (l->rsize == 8) {
-              } else
-              if (l->rsize == 9) {
-                #if defined(_MIPSEL)
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
-                #else
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
-                #endif
-              } else
-              if (l->rsize == 10) {
-                #if defined(_MIPSEL)
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
-                #else
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
-                #endif
-              } else
-              if (l->rsize == 11) {
-                #if defined(_MIPSEL)
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
-                #else
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
-                #endif
-              } else
-              if (l->rsize == 12) {
-                #if defined(_MIPSEL)
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
-                #else
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
-                #endif
-              } else
-              if (l->rsize == 13) {
-                #if defined(_MIPSEL)
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
-                ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>32);
-                #else
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
-                ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>24);
-                #endif
-              } else
-              if (l->rsize == 14) {
-                #if defined(_MIPSEL)
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
-                ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>32);
-                ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>40);
-                #else
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
-                ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>24);
-                ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>16);
-                #endif
-              } else
-              if (l->rsize == 15) {
-                #if defined(_MIPSEL)
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
-                ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>32);
-                ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>40);
-                ((unsigned char *)l->raddr)[8+6] = (unsigned char)(iret2>>48);
-                #else
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
-                ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>24);
-                ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>16);
-                ((unsigned char *)l->raddr)[8+6] = (unsigned char)(iret2>>8);
-                #endif
-              } else
-              if (l->rsize == 16) {
-                #if defined(_MIPSEL)
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>8);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>16);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>24);
-                ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>32);
-                ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>40);
-                ((unsigned char *)l->raddr)[8+6] = (unsigned char)(iret2>>48);
-                ((unsigned char *)l->raddr)[8+7] = (unsigned char)(iret2>>56);
-                #else
-                ((unsigned char *)l->raddr)[8+0] = (unsigned char)(iret2>>56);
-                ((unsigned char *)l->raddr)[8+1] = (unsigned char)(iret2>>48);
-                ((unsigned char *)l->raddr)[8+2] = (unsigned char)(iret2>>40);
-                ((unsigned char *)l->raddr)[8+3] = (unsigned char)(iret2>>32);
-                ((unsigned char *)l->raddr)[8+4] = (unsigned char)(iret2>>24);
-                ((unsigned char *)l->raddr)[8+5] = (unsigned char)(iret2>>16);
-                ((unsigned char *)l->raddr)[8+6] = (unsigned char)(iret2>>8);
-                ((unsigned char *)l->raddr)[8+7] = (unsigned char)(iret2);
-                #endif
-              }
             }
           }
         }

@@ -135,28 +135,22 @@ __vacall (struct gpargsequence gpargs)
     iret = (long)list.tmp._ptr;
   } else
   if (list.rtype == __VAstruct) {
-    if (list.flags & __VA_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention */
-      iret = (long) list.raddr;
-    } else {
-      /* normal struct return convention */
-      if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
-        if (list.rsize == sizeof(char)) {
-          iret = *(unsigned char *) list.raddr;
-        } else
-        if (list.rsize == sizeof(short)) {
-          iret = *(unsigned short *) list.raddr;
-        } else
-        if (list.rsize == sizeof(int)) {
-          iret = *(unsigned int *) list.raddr;
-        } else
-        if (list.rsize == sizeof(long)) {
-          iret = *(unsigned long *) list.raddr;
-        } else
-        if (list.rsize == 2*sizeof(__vaword)) {
-          iret  = ((__vaword *) list.raddr)[0];
-          iret2 = ((__vaword *) list.raddr)[1];
-        }
+    if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
+      if (list.rsize == sizeof(char)) {
+        iret = *(unsigned char *) list.raddr;
+      } else
+      if (list.rsize == sizeof(short)) {
+        iret = *(unsigned short *) list.raddr;
+      } else
+      if (list.rsize == sizeof(int)) {
+        iret = *(unsigned int *) list.raddr;
+      } else
+      if (list.rsize == sizeof(long)) {
+        iret = *(unsigned long *) list.raddr;
+      } else
+      if (list.rsize == 2*sizeof(__vaword)) {
+        iret  = ((__vaword *) list.raddr)[0];
+        iret2 = ((__vaword *) list.raddr)[1];
       }
     }
   }

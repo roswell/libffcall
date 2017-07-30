@@ -174,7 +174,6 @@ __builtin_avcall(av_alist* l)
     RETURN(void*, iret);
   } else
   if (l->rtype == __AVstruct) {
-    /* __AV_PCC_STRUCT_RETURN is ignored */
 #ifdef __powerpc64_elfv2__
     if (l->flags & __AV_REGISTER_STRUCT_RETURN) {
       /* In the ELFv2 ABI, gcc returns structs of size <= 16 in registers. */

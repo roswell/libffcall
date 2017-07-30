@@ -81,7 +81,6 @@ PACKAGE=libffcall
 LT_INIT([disable-shared])
 
 dnl Checks for avcall, vacall, vacall_r.
-FFCALL_PCC_STRUCT_RETURN
 FFCALL_SMALL_STRUCT_RETURN
 FFCALL_IREG_FLOAT_RETURN
 AC_TYPE_LONG_LONG_INT

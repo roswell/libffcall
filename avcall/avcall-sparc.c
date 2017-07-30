@@ -173,37 +173,15 @@ __builtin_avcall(av_alist* l)
     RETURN(void*, i);
   } else
   if (l->rtype == __AVstruct) {
-    if (l->flags & __AV_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention: need a  *(TYPE*)l->raddr = *(TYPE*)i;  */
+    if (l->flags & __AV_SMALL_STRUCT_RETURN) {
       if (l->rsize == sizeof(char)) {
-        RETURN(char, *(char*)i);
+        RETURN(char, i);
       } else
       if (l->rsize == sizeof(short)) {
-        RETURN(short, *(short*)i);
+        RETURN(short, i);
       } else
       if (l->rsize == sizeof(int)) {
-        RETURN(int, *(int*)i);
-      } else
-      if (l->rsize == sizeof(double)) {
-        ((int*)l->raddr)[0] = ((int*)i)[0];
-        ((int*)l->raddr)[1] = ((int*)i)[1];
-      } else {
-        int n = (l->rsize + sizeof(__avword)-1)/sizeof(__avword);
-        while (--n >= 0)
-          ((__avword*)l->raddr)[n] = ((__avword*)i)[n];
-      }
-    } else {
-      /* normal struct return convention */
-      if (l->flags & __AV_SMALL_STRUCT_RETURN) {
-        if (l->rsize == sizeof(char)) {
-          RETURN(char, i);
-        } else
-        if (l->rsize == sizeof(short)) {
-          RETURN(short, i);
-        } else
-        if (l->rsize == sizeof(int)) {
-          RETURN(int, i);
-        }
+        RETURN(int, i);
       }
     }
   }

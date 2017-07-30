@@ -123,28 +123,23 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
         ret++; /* skip the "unimp n" instruction at the return address */
         /* else the "unimp n" instruction will cause a core dump */
     } else {
-      if (list.flags & __VA_PCC_STRUCT_RETURN) {
-        /* pcc struct return convention */
-        iret = (long) list.raddr;
-      } else {
-        /* normal struct return convention */
-        if (list.flags & __VA_SMALL_STRUCT_RETURN) {
-          if (list.rsize == sizeof(char)) {
-            iret = *(unsigned char *) list.raddr;
-            goto done;
-          } else
-          if (list.rsize == sizeof(short)) {
-            iret = *(unsigned short *) list.raddr;
-            goto done;
-          } else
-          if (list.rsize == sizeof(int)) {
-            iret = *(unsigned int *) list.raddr;
-            goto done;
-          }
+      /* normal struct return convention */
+      if (list.flags & __VA_SMALL_STRUCT_RETURN) {
+        if (list.rsize == sizeof(char)) {
+          iret = *(unsigned char *) list.raddr;
+          goto done;
+        } else
+        if (list.rsize == sizeof(short)) {
+          iret = *(unsigned short *) list.raddr;
+          goto done;
+        } else
+        if (list.rsize == sizeof(int)) {
+          iret = *(unsigned int *) list.raddr;
+          goto done;
         }
-        ret++; /* skip the "unimp n" instruction at the return address */
-        done: ;
       }
+      ret++; /* skip the "unimp n" instruction at the return address */
+      done: ;
     }
   }
 }

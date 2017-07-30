@@ -140,7 +140,6 @@ __vacall (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = (long)list.tmp._ptr;
   } else
   if (list.rtype == __VAstruct) {
-    /* __VA_PCC_STRUCT_RETURN is ignored */
 #ifdef __powerpc64_elfv2__
     if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
       /* In the ELFv2 ABI, gcc returns structs of size <= 16 in registers. */

@@ -178,20 +178,14 @@ __vacall (__vaword ignored1, __vaword ignored2, __vaword ignored3, __vaword igno
   } else
   if (list.rtype == __VAstruct) {
     /* NB: On arm, all structure sizes are divisible by 4. */
-    if (list.flags & __VA_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention */
-      iret = (long) list.raddr;
-    } else {
-      /* normal struct return convention */
-      if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
-        if (list.rsize == sizeof(char)) { /* can't occur */
-          iret = *(unsigned char *) list.raddr;
-        } else
-        if (list.rsize == sizeof(short)) { /* can't occur */
-          iret = *(unsigned short *) list.raddr;
-        } else
-          iret = *(unsigned int *) list.raddr; /* struct of size 3 :) */
-      }
+    if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
+      if (list.rsize == sizeof(char)) { /* can't occur */
+        iret = *(unsigned char *) list.raddr;
+      } else
+      if (list.rsize == sizeof(short)) { /* can't occur */
+        iret = *(unsigned short *) list.raddr;
+      } else
+        iret = *(unsigned int *) list.raddr; /* struct of size 3 :) */
     }
   }
 }

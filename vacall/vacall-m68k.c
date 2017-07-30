@@ -116,29 +116,18 @@ __vacall (__vaword firstword)
     if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
       if (list.rsize == sizeof(char)) { /* can't occur */
         iret = *(unsigned char *) list.raddr;
-        goto done;
       } else
       if (list.rsize == sizeof(short)) {
         iret = *(unsigned short *) list.raddr;
-        goto done;
       } else
       if (list.rsize == sizeof(int)) {
         iret = *(unsigned int *) list.raddr;
-        goto done;
       } else
       if (list.rsize == 2*sizeof(__vaword)) {
         iret  = ((__vaword *) list.raddr)[0];
         iret2 = ((__vaword *) list.raddr)[1];
-        goto done;
       }
     }
-    if (list.flags & __VA_PCC_STRUCT_RETURN) {
-      /* pcc struct return convention */
-      pret = iret = (long) list.raddr;
-    } else {
-      /* normal struct return convention */
-    }
-    done: ;
   }
 }
 
