@@ -1,5 +1,11 @@
 2017-07-31  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Fix build error on IRIX with cc (regression from 2017-07-30).
+	* vacall/vacall-internal.h (__va_arg_adjusted, __va_arg_struct): Cast
+	result of __va_arg_leftadjusted and __va_arg_rightadjusted to 'void*'.
+
+2017-07-31  Bruno Haible  <bruno@clisp.org>
+
 	Fix "make check" failure on arm (regression from 2017-07-30).
 	* vacall/vacall-internal.h (__va_alist): Move the 'filler1' field right
 	before the 'tmp' field.

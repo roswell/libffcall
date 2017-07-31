@@ -516,22 +516,24 @@ typedef struct vacall_alist
 #if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || ((defined(__arm__) || defined(__armhf__)) && defined(__ARMEL__)) || defined(__ia64__) || (defined(__powerpc64__) && defined(_LITTLE_ENDIAN))
 /* little endian -> small args < 1 word are adjusted to the left */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
+  (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
 #endif
 #if defined(__m68k__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEB)) || defined(__sparc__) || defined(__sparc64__) || defined(__hppa__) || ((defined(__arm__) || defined(__armhf__)) && !defined(__ARMEL__)) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__powerpc64__) && defined(_BIG_ENDIAN))
 /* big endian -> small args < 1 word are adjusted to the right */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
+  (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
 #ifdef _MIPSEB
 /* big endian -> small args < 1 word are adjusted to the right */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->anum++, __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))
+  ((LIST)->anum++,							\
+   (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))
 #else /* _MIPSEL */
 /* little endian -> small args < 1 word are adjusted to the left */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->anum++, __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))
+  ((LIST)->anum++,							\
+   (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))
 #endif
 #endif
 #if defined(__arm64__)
@@ -944,14 +946,14 @@ typedef struct vacall_alist
   (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
    ((LIST)->flags & __VA_SGICC_STRUCT_ARGS				\
     ? /* SGI MIPS cc passes small structures left-adjusted, although big-endian! */\
-      __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)			\
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
     : /* SGI MIPS gcc passes small structures within the first four words left-	   \
        * adjusted, for compatibility with cc. But structures in memory are passed  \
        * right-adjusted!! See gcc-2.6.3/config/mips/mips.c:function_arg().	   \
        */									   \
       ((LIST)->aptr < (LIST)->memargptr					\
-       ? __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
-       : __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+       ? (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)	\
+       : (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)	\
   ))  )
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
@@ -960,9 +962,9 @@ typedef struct vacall_alist
   (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
    ((LIST)->flags & __VA_SGICC_STRUCT_ARGS				\
     ? /* SGI MIPS cc and gcc >= 3.4 passes small structures left-adjusted, although big-endian! */\
-      __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)			\
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
     : /* SGI MIPS gcc < 3.4 passes small structures right-adjusted. */	\
-      __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)			\
+      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
   ))
 #endif
 #if defined(__powerpc_aix__) || (defined(__powerpc64__) && defined(_AIX))
@@ -971,9 +973,9 @@ typedef struct vacall_alist
   (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
    ((LIST)->flags & __VA_AIXCC_STRUCT_ARGS				\
     ? /* AIX cc and xlc pass small structures left-adjusted, although big-endian! */\
-      __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)			\
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
     : /* gcc passes small structures right-adjusted. */			\
-      __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)			\
+      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
   ))
 #endif
 #if defined(__powerpc_sysv4__)
