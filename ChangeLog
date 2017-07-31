@@ -1,5 +1,13 @@
 2017-07-31  Bruno Haible  <bruno@clisp.org>
 
+	Fix "make check" failure on arm (regression from 2017-07-30).
+	* vacall/vacall-internal.h (__va_alist): Move the 'filler1' field right
+	before the 'tmp' field.
+	* callback/vacall_r/vacall_r.h (vacall_alist): Add 'filler1' field
+	between 'flags' and 'tmp' fields.
+
+2017-07-31  Bruno Haible  <bruno@clisp.org>
+
 	Fix build error (regression from 2017-07-30).
 	* vacall/Makefile.in (INCLUDES): Add -I options for <stdnoreturn.h>.
 	* callback/vacall_r/Makefile.in (INCLUDES): Likewise.

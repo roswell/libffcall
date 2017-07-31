@@ -296,6 +296,9 @@ struct vacall_alist
 {
   /* some va_... macros need these flags */
   int            flags;
+#if defined(__i386__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__) && defined(__MACH__) && defined(__APPLE__))
+  __vaword       filler1;
+#endif
   /* temporary storage for return value */
   union {
     char                _char;
