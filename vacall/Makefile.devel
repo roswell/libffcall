@@ -88,18 +88,28 @@ vacall-mips64el-macro.S : vacall-mips64el-linux.s ../common/asm-mips.sh $(THISFI
 vacall-sparc-linux.s : vacall-sparc.c vacall-internal.h vacall.h $(THISFILE)
 	$(CROSS_TOOL) sparc-linux gcc -V 3.1 $(GCCFLAGS) -D__sparc__ -S vacall-sparc.c -o vacall-sparc-linux.s
 
-vacall-sparc-macro.S : vacall-sparc-linux.s ../common/asm-sparc.sh ../common/noexecstack.h $(THISFILE)
-	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < vacall-sparc-linux.s | sed -e 's/vacall_function/C(vacall_function)/g' ; cat ../common/noexecstack.h) > vacall-sparc-macro.S
+vacall-sparc-linux-pic.s : vacall-sparc.c vacall-internal.h vacall.h $(THISFILE)
+	$(CROSS_TOOL) sparc-linux gcc -V 3.1 $(GCCFLAGS) -fPIC -D__sparc__ -S vacall-sparc.c -o vacall-sparc-linux-pic.s
+
+vacall-sparc-macro.S : vacall-sparc-linux.s vacall-sparc-linux-pic.s ../common/asm-sparc.sh ../common/noexecstack.h $(THISFILE)
+# For references to global symbols, we need to distinguish the PIC and non-PIC case.
+# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81653
+	(echo '#include "asm-sparc.h"' ; echo '#ifdef __PIC__' ; ../common/asm-sparc.sh < vacall-sparc-linux-pic.s | sed -e 's/vacall_function/C(vacall_function)/g' ; echo '#else' ; ../common/asm-sparc.sh < vacall-sparc-linux.s | sed -e 's/vacall_function/C(vacall_function)/g' ; echo '#endif' ; cat ../common/noexecstack.h) > vacall-sparc-macro.S
 
 vacall-sparc64-linux.s : vacall-sparc64.c vacall-internal.h vacall.h $(THISFILE)
-# For references to global symbols:
+# For references to global symbols in non-PIC mode:
 # - -mcmodel=medlow uses 2 instructions, but the code does not work on Solaris (error "ld: fatal: relocation error: R_SPARC_HI22").
 # - -mcmodel=medmid uses 3 instructions, but the code still makes some assumptions about the address space.
 # - -mcmodel=medany uses 4 instructions.
 	$(CROSS_TOOL) sparc64-linux gcc -V 4.0.2 -mcmodel=medany $(GCCFLAGS) -D__sparc64__ -S vacall-sparc64.c -o vacall-sparc64-linux.s
 
-vacall-sparc64-macro.S : vacall-sparc64-linux.s ../common/asm-sparc.sh ../common/noexecstack.h $(THISFILE)
-	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < vacall-sparc64-linux.s | sed -e 's/vacall_function/C(vacall_function)/g' ; cat ../common/noexecstack.h) > vacall-sparc64-macro.S
+vacall-sparc64-linux-pic.s : vacall-sparc64.c vacall-internal.h vacall.h $(THISFILE)
+	$(CROSS_TOOL) sparc64-linux gcc -V 4.0.2 $(GCCFLAGS) -fPIC -D__sparc64__ -S vacall-sparc64.c -o vacall-sparc64-linux-pic.s
+
+vacall-sparc64-macro.S : vacall-sparc64-linux.s vacall-sparc64-linux-pic.s ../common/asm-sparc.sh ../common/noexecstack.h $(THISFILE)
+# For references to global symbols, we need to distinguish the PIC and non-PIC case.
+# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81653
+	(echo '#include "asm-sparc.h"' ; echo '#ifdef __PIC__' ; ../common/asm-sparc.sh < vacall-sparc64-linux-pic.s | sed -e 's/vacall_function/C(vacall_function)/g' ; echo '#else' ; ../common/asm-sparc.sh < vacall-sparc64-linux.s | sed -e 's/vacall_function/C(vacall_function)/g' ; echo '#endif' ; cat ../common/noexecstack.h) > vacall-sparc64-macro.S
 
 
 vacall-alpha-linux.s : vacall-alpha.c vacall-internal.h vacall.h $(THISFILE)
