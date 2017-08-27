@@ -24,16 +24,6 @@
 #include "vacall.h"
 FILE* out;
 
-#if defined(__hppa__) && defined(__GNUC__)
-#if (__GNUC__ == 2 && __GNUC_MINOR__ < 6)
-/* gcc-2.5.2 bugs prevent the T test from working. */
-#define SKIP_T
-#endif
-#endif
-#if defined(__m68k__) && defined(__sun) && !defined(__GNUC__)
-/* A SunOS 4.0.3 cc bug is triggered by the va_arg_struct macro. */
-#define SKIP_STRUCTS
-#endif
 #if defined(__m68k__) && defined(__GNUC__)
 /* "gcc-2.6.3 -freg-struct-return" returns  T = struct { char c[3]; }  (which
  * has size 4 !) in memory, in contrast to  struct { char a,b,c; }  and
@@ -41,19 +31,6 @@ FILE* out;
  * size and the same alignment but are returned in registers. I don't know why.
  */
 #define SKIP_T
-#endif
-#if defined(__i386__) && defined(__GNUC__)
-#if (__GNUC__ == 2) && (__GNUC_MINOR__ == 7)
-/* Problem with gcc-2.7.x on Linux/ELF: The X test fails.
- * The calling convention for C functions returning structures of size > 8 bytes
- * apparently has changed between gcc-2.6.3 and gcc-2.7 (all i386 platforms),
- * and vacall supports only the old one. Since gcc-2.8 will switch back to
- * gcc-2.6.3's calling convention, I won't change libffcall/vacall for this.
- * Just hide the problem by not running the test. The impact isn't big for
- * CLISP: Callbacks returning structures > 8 bytes won't work.
- */
-#define SKIP_X
-#endif
 #endif
 #if defined(__sparc__) && defined(__sun) && defined(__SUNPRO_C) /* SUNWspro cc */
 /* SunPRO cc miscompiles the simulator function for X_BcdB: d.i[1] is
@@ -1486,7 +1463,6 @@ void simulator (va_alist alist)
       va_return_struct(alist, Size16, r);
     }
 
-#ifndef SKIP_STRUCTS
   /* structure tests */
   else if (current_function == (void*)&I_III)
     {
@@ -1616,7 +1592,6 @@ void simulator (va_alist alist)
       fflush(out);
       va_return_struct(alist, X, r);
     }
-#endif
 #endif
 
   /* gpargs boundary tests */
@@ -2432,7 +2407,6 @@ int main (void)
     fflush(out);
   }
 
-#ifndef SKIP_STRUCTS
   /* structure tests */
   { Int Ir;
     Char Cr;
@@ -2514,7 +2488,6 @@ int main (void)
 #endif
 #endif
   }
-#endif
 
   /* gpargs boundary tests */
   { long lr;

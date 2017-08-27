@@ -1,5 +1,11 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	vacall, callback: Remove workarounds for obsolete platforms.
+	* vacall/tests.c: Remove workarounds for SunOS 4 cc, gcc-2.5, gcc-2.7.x.
+	* callback/tests.c: Likewise.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Add tests that verify the C++ support.
 	* Makefile.maint (GNULIB_MODULES): Add ansi-c++-opt.
 	* configure.ac: Invoke gl_PROG_ANSI_CXX. Set IF_CXX.
