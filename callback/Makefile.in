@@ -62,6 +62,10 @@ top_builddir = ..
 # Currently this excludes the symbols from gnulib modules.
 LIBCALLBACK_EXPORTED_SYMBOLS_REGEX = '^callback_|_callback$$|^trampoline_r_data0$$'
 
+# Before making a release, change this according to the libtool documentation,
+# section "Library interface versions".
+LIBCALLBACK_VERSION_INFO = 1:0:0
+
 all : all-subdirs vacall_r.h trampoline_r.h libcallback.la $(srcdir)/callback.3 $(srcdir)/callback.html
 
 all-subdirs : force
@@ -77,7 +81,7 @@ callback-libapi.lo : $(srcdir)/callback-libapi.c $(srcdir)/callback.h trampoline
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/callback-libapi.c
 
 libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la callback-libapi.lo
-	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) -export-symbols-regex $(LIBCALLBACK_EXPORTED_SYMBOLS_REGEX) vacall_r/vacall.lo vacall_r/vacall-libapi.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo callback-libapi.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
+	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) -export-symbols-regex $(LIBCALLBACK_EXPORTED_SYMBOLS_REGEX) -version-info $(LIBCALLBACK_VERSION_INFO) vacall_r/vacall.lo vacall_r/vacall-libapi.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo callback-libapi.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.

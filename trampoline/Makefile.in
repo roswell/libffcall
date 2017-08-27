@@ -67,6 +67,10 @@ OBJECTS = trampoline.lo @CPU_OBJECTS@
 # Currently this excludes the symbols from gnulib modules.
 LIBTRAMPOLINE_EXPORTED_SYMBOLS_REGEX = 'trampoline'
 
+# Before making a release, change this according to the libtool documentation,
+# section "Library interface versions".
+LIBTRAMPOLINE_VERSION_INFO = 1:0:0
+
 all : $(OBJECTS) libtrampoline.la $(srcdir)/trampoline.3 $(srcdir)/trampoline.html
 
 trampoline.lo : $(srcdir)/trampoline.c $(srcdir)/trampoline.h
@@ -144,7 +148,7 @@ cache-powerpc64-elfv2.s : $(srcdir)/cache-powerpc64-elfv2-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/cache-powerpc64-elfv2-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-powerpc64-elfv2.s
 
 libtrampoline.la : $(OBJECTS) ../gnulib-lib/libgnu.la
-	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) -export-symbols-regex $(LIBTRAMPOLINE_EXPORTED_SYMBOLS_REGEX) $(OBJECTS) ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
+	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) -export-symbols-regex $(LIBTRAMPOLINE_EXPORTED_SYMBOLS_REGEX) -version-info $(LIBTRAMPOLINE_VERSION_INFO) $(OBJECTS) ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 install : all force
 	mkdir -p $(DESTDIR)$(prefix)

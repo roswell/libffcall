@@ -1,5 +1,17 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Do proper versioning of shared libraries.
+	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): New variable.
+	(libavcall.la): Use libtool option -version-info.
+	* trampoline/Makefile.in (LIBTRAMPOLINE_VERSION_INFO): New variable.
+	(libtrampoline.la): Use libtool option -version-info.
+	* callback/Makefile.in (LIBCALLBACK_VERSION_INFO): New variable.
+	(libcallback.la): Use libtool option -version-info.
+	* README: Remove statement of problem. Update figures about code size.
+	* NEWS: Mention the change.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Fix warnings on 64-bit native Windows.
 	* testcases.c (vp_vpdpcpsp): Use %p to display the value of a pointer.
 	* vacall/tests.c (simulator): Likewise.

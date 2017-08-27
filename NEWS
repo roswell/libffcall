@@ -1,5 +1,9 @@
 New in 2.0:
 
+* The installed shared libraries are now properly versioned. This means that
+  when installing with --enable-shared, upgrading to a newer version of
+  libffcall will not break existing binaries.
+
 * The installed include files are now platform independent. This means that
   you can now install libffcall for different ABIs on the same system, using
   the same --prefix option but different --exec-prefix options for each ABI.
