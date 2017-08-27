@@ -68,21 +68,21 @@ avcall_call(av_alist* list)
 
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
   __avword* argframe = sp - 8;		/* stack offset for argument list */
-  int arglen = &l->args[__AV_ALIST_WORDS] - l->aptr;
+  int arglen = l->args_end - l->aptr;
   __avword i;
 
   {
     int i;
     for (i = -arglen; i < -4; i++)	/* push function args onto stack */
-      argframe[i] = l->args[__AV_ALIST_WORDS+i];
+      argframe[i] = l->args_end[i];
   }
 
   if (l->rtype == __AVstruct)		/* push struct return address */
     sret = l->raddr;
 
 				/* call function, pass 4 args in registers */
-  i = (*l->func)(l->args[__AV_ALIST_WORDS-1], l->args[__AV_ALIST_WORDS-2],
-		 l->args[__AV_ALIST_WORDS-3], l->args[__AV_ALIST_WORDS-4]);
+  i = (*l->func)(l->args_end[-1], l->args_end[-2],
+		 l->args_end[-3], l->args_end[-4]);
 
   /* save return value */
   if (l->rtype == __AVvoid) {

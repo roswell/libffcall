@@ -82,7 +82,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #endif
 #if defined(__hppa__)
 #define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = (LIST_ARGS_END),
+   (LIST).aptr = (LIST).args_end = (LIST_ARGS_END),
 #endif
 #if defined(__armhf__)
 #define __av_start1(LIST,LIST_ARGS_END)					\

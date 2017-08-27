@@ -48,6 +48,10 @@ typedef struct
   __avword*		aptr;
   /* beginning of the args[] array */
   __avword*		args;
+#if defined(__hppa__)
+  /* end of the args[] array */
+  __avword*		args_end;
+#endif
   /* limit pointer into the args[] array */
   __avword*		eptr;
 #if defined(__i386__) && 0

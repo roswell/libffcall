@@ -1,5 +1,13 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Evaluate __AV_ALIST_WORDS only during av_start_* macros. Part 2.
+	* avcall/avcall-alist.h (__av_alist) [__hppa__]: Add 'args_end' field.
+	* avcall/avcall-internal.h (__av_start1) [__hppa__]: Initialize it.
+	* avcall/avcall-hppa.c (avcall_call): Use it to reduce the use of
+	__AV_ALIST_WORDS.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Fix overflow detection bug on hppa.
 	* avcall/avcall-internal.h (__av_struct) [__hppa__]: Use LIST.eptr
 	instead of &LIST.args[0].
