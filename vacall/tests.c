@@ -330,7 +330,7 @@ void simulator (va_alist alist)
       char* c = va_arg_ptr(alist, char*);
       Int* d = va_arg_ptr(alist, Int*);
       void* ret = (char*)b + 1;
-      fprintf(out,"void* f(void*,double*,char*,Int*):(0x%lx,0x%lx,0x%lx,0x%lx)",(long)a,(long)b,(long)c,(long)d);
+      fprintf(out,"void* f(void*,double*,char*,Int*):(0x%p,0x%p,0x%p,0x%p)",a,b,c,d);
       fflush(out);
       va_return_ptr(alist, void*, ret);
     }}

@@ -1,5 +1,12 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Fix warnings on 64-bit native Windows.
+	* testcases.c (vp_vpdpcpsp): Use %p to display the value of a pointer.
+	* vacall/tests.c (simulator): Likewise.
+	* callback/tests.c (vp_vpdpcpsp_simulator): Likewise,
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Remove code duplication of test cases.
 	* testcases.c: New file, extracted from avcall/tests.c.
 	* Makefile.in (SOURCE_FILES): Add it.
