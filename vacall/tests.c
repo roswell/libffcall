@@ -31,7 +31,7 @@ FILE* out;
 #define SKIP_T
 #endif
 #endif
-#if defined(__m68k__) && defined(sun) && !defined(__GNUC__)
+#if defined(__m68k__) && defined(__sun) && !defined(__GNUC__)
 /* A SunOS 4.0.3 cc bug is triggered by the va_arg_struct macro. */
 #define SKIP_STRUCTS
 #endif
@@ -56,7 +56,7 @@ FILE* out;
 #define SKIP_X
 #endif
 #endif
-#if defined(__sparc__) && defined(sun) && defined(__SUNPRO_C) /* SUNWspro cc */
+#if defined(__sparc__) && defined(__sun) && defined(__SUNPRO_C) /* SUNWspro cc */
 /* SunPRO cc miscompiles the simulator function for X_BcdB: d.i[1] is
  * temporarily stored in %l2 and put onto the stack from %l2, but in between
  * the copy of X has used %l2 as a counter without saving and restoring its
