@@ -54,11 +54,20 @@ AC_DEFINE_UNQUOTED([LIBFFCALL_VERSION], [$HEXVERSION], [Version number: (major<<
 
 AC_PROG_MAKE_SET
 
+dnl The libraries are built in C.
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_GCC_TRADITIONAL
 CL_CC_GCC
 CL_AS_UNDERSCORE
+dnl But some tests use C++.
+gl_PROG_ANSI_CXX([CXX], [ANSICXX])
+if test "$CXX" != no; then
+  IF_CXX=''
+else
+  IF_CXX='# '
+fi
+AC_SUBST([IF_CXX])
 
 dnl For a 64-bit build on AIX, AC_PROG_RANLIB is not sufficient.
 gl_PROG_AR_RANLIB

@@ -71,6 +71,7 @@ libtool-clean : force
 # Files brought in by gnulib-tool.
 
 GNULIB_MODULES = \
+  ansi-c++-opt \
   host-cpu-c-abi \
   lock \
   longlong \

@@ -282,11 +282,13 @@ autom4te.cache/
 /avcall/Makefile
 /avcall/avcall.h
 /avcall/minitests.output.*
+/avcall/minitests-c++.output.*
 /avcall/tests.output.*
 # Erased by vacall/Makefile.
 /vacall/Makefile
 /vacall/vacall.h
 /vacall/minitests.output.*
+/vacall/minitests-c++.output.*
 /vacall/tests.output.*
 # Erased by trampoline/Makefile.
 /trampoline/Makefile
@@ -294,6 +296,7 @@ autom4te.cache/
 # Erased by callback/Makefile.
 /callback/Makefile
 /callback/minitests.output.*
+/callback/minitests-c++.output.*
 /callback/tests.output.*
 # Erased by callback/vacall_r/Makefile.
 /callback/vacall_r/Makefile
@@ -361,6 +364,10 @@ autom4te.cache/
 /avcall/minitests
 /avcall/minitests.exe
 /avcall/minitests.out
+/avcall/minitests-c++.o
+/avcall/minitests-c++
+/avcall/minitests-c++.exe
+/avcall/minitests-c++.out
 /avcall/tests.o
 /avcall/tests.s
 /avcall/tests
@@ -395,6 +402,10 @@ autom4te.cache/
 /vacall/minitests
 /vacall/minitests.exe
 /vacall/minitests.out
+/vacall/minitests-c++.o
+/vacall/minitests-c++
+/vacall/minitests-c++.exe
+/vacall/minitests-c++.out
 /vacall/tests.o
 /vacall/tests.s
 /vacall/tests
@@ -441,6 +452,9 @@ autom4te.cache/
 /trampoline/test2.o
 /trampoline/test2
 /trampoline/test2.exe
+/trampoline/test2-c++.o
+/trampoline/test2-c++
+/trampoline/test2-c++.exe
 # Erased by callback/Makefile.
 /callback/*.o
 /callback/*.lo
@@ -456,6 +470,10 @@ autom4te.cache/
 /callback/minitests
 /callback/minitests.exe
 /callback/minitests.out
+/callback/minitests-c++.o
+/callback/minitests-c++
+/callback/minitests-c++.exe
+/callback/minitests-c++.out
 /callback/tests.o
 /callback/tests.s
 /callback/tests

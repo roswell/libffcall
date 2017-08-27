@@ -1,5 +1,37 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Add tests that verify the C++ support.
+	* Makefile.maint (GNULIB_MODULES): Add ansi-c++-opt.
+	* configure.ac: Invoke gl_PROG_ANSI_CXX. Set IF_CXX.
+	* avcall/minitests-c++.cc: New file.
+	* avcall/Makefile.in (CXX, CXXFLAGS): New variables.
+	(minitests-c++.o, minitests-c++): New targets.
+	(check): Optionally, test also minitests-c++.
+	(clean): Remove minitests-c++.o, minitests-c++, minitests-c++.out.
+	(SOURCE_FILES): Add minitests-c++.cc.
+	* vacall/minitests-c++.cc: New file.
+	* vacall/Makefile.in (CXX, CXXFLAGS): New variables.
+	(minitests-c++.o, minitests-c++): New targets.
+	(check): Optionally, test also minitests-c++.
+	(clean): Remove minitests-c++.o, minitests-c++, minitests-c++.out.
+	(SOURCE_FILES): Add minitests-c++.cc.
+	* trampoline/test2-c++.cc: New file.
+	* trampoline/test2.c (main): Don't test &main in C++ mode.
+	* trampoline/Makefile.in (CXX, CXXFLAGS): New variables.
+	(test2-c++.o, test2-c++): New targets.
+	(check): Optionally, test also test2-c++.
+	(clean): Remove test2-c++.o, test2-c++.
+	(SOURCE_FILES): test2-c++.cc.
+	* callback/minitests-c++.cc: New file.
+	* callback/Makefile.in (CXX, CXXFLAGS): New variables.
+	(minitests-c++.o, minitests-c++): New targets.
+	(check): Optionally, test also minitests-c++.
+	(MOSTLYCLEANFILES): Add minitests-c++.o, minitests-c++,
+	minitests-c++.out.
+	(SOURCE_FILES): Add minitests-c++.cc.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Add support for SUNWspro C++ on Solaris.
 	* avcall/avcall.h: Treat SUNWspro C++ like SUNWspro C.
 	* vacall/vacall.h: Likewise.

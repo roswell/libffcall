@@ -32,8 +32,12 @@ static int data;
 int main ()
 {
   trampoline_function_t cf = alloc_trampoline((trampoline_function_t)&f, &variable, &data);
+  if (is_trampoline((void*)&f))
+    { printf("is_trampoline(&f) returns true!\n"); exit(1); }
+#if !defined(__cplusplus)
   if (is_trampoline((void*)&main))
     { printf("is_trampoline(&main) returns true!\n"); exit(1); }
+#endif
   if (!is_trampoline((void*)cf))
     { printf("is_trampoline() returns false!\n"); exit(1); }
   if (trampoline_address(cf) != (trampoline_function_t)&f)
