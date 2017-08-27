@@ -54,7 +54,7 @@
 #if defined(__NetBSD__) || defined(__OpenBSD__)
 #define DECLARE_FUNCTION(name) .type C(name),@function
 #define FUNEND(name) .size C(name),.-C(name)
-#elif defined(__svr4__) || defined(__ELF__)
+#elif defined(__SVR4) || defined(__ELF__)
 // Solaris, Linux/ELF
 // Some preprocessors keep the backslash in place, some don't.
 // Some complain about the # being not in front of an ANSI C macro.

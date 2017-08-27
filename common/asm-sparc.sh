@@ -4,7 +4,7 @@
 # The portable-asm-file has to be
 #   1. preprocessed,
 #   2. grep -v '^ *#line' | grep -v '^#'
-#   3. sed -e 's,% ,%,g' -e 's,//.*$,,' -e 's,\$,#,g'
+#   3. sed -e 's,% ,%,g' -e 's,//.*$,,' -e 's,\$,#,g' -e 's,# ,#,g'
 
 # Copyright (C) 1999-2017 Bruno Haible <bruno@clisp.org>
 #

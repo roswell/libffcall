@@ -1,5 +1,19 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Fix build failure with --enable-shared on Solaris/SPARC with cc.
+	* common/asm-sparc.h: Test __SVR4, not __svr4__.
+	* common/asm-sparc.sh: Fix comment about postprocessing.
+	* avcall/Makefile.in (avcall-sparc.s, avcall-sparc64.s): Remove space
+	after '#'.
+	* vacall/Makefile.in (vacall-sparc.s, vacall-sparc64.s): Likewise.
+	* trampoline/Makefile.in (cache-sparc.s, cache-sparc64.s): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-sparc.s, vacall-sparc64.s):
+	Likewise.
+	* callback/trampoline_r/Makefile.in (cache-sparc.s, cache-sparc64.s):
+	Likewise.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Fix build failure with gcc configured with --enable-default-pie.
 	Works around a GCC bug, reported at
 	<https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81653>.

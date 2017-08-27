@@ -76,13 +76,13 @@ avcall-sparc.lo : avcall-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc.s
 
 avcall-sparc.s : $(srcdir)/avcall-sparc-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > avcall-sparc.s
 
 avcall-sparc64.lo : avcall-sparc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc64.s
 
 avcall-sparc64.s : $(srcdir)/avcall-sparc64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > avcall-sparc64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > avcall-sparc64.s
 
 avcall-m68k.lo : avcall-m68k.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-m68k.s

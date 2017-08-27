@@ -90,13 +90,13 @@ cache-sparc.lo : cache-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-sparc.s
 
 cache-sparc.s : $(srcdir)/cache-sparc-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common - < $(srcdir)/cache-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common - < $(srcdir)/cache-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > cache-sparc.s
 
 cache-sparc64.lo : cache-sparc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-sparc64.s
 
 cache-sparc64.s : $(srcdir)/cache-sparc64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common - < $(srcdir)/cache-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' > cache-sparc64.s
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common - < $(srcdir)/cache-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > cache-sparc64.s
 
 cache-alpha.lo : cache-alpha.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-alpha.s
