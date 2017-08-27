@@ -29,10 +29,9 @@ follows.
    that you want to use, and build and install the cross tools through the
    cross-tools/cross-build.sh script.
 
-2) Compile the first part of avcall/tests.c (the definition of the various
-   sample functions) with
-     $ cross <ABI> gcc -O -S -fomit-frame-pointer tests.c
-   and look through the resulting tests.s file. This will get you a basic
+2) Compile testcases.c with
+     $ cross <ABI> gcc -O -S -fomit-frame-pointer testcases.c
+   and look through the resulting testcases.s file. This will get you a basic
    understanding of the instruction set and assembly language syntax.
 
 3) Determine the set of call-used registers and the lexical closure register.
@@ -100,7 +99,7 @@ follows.
  5.6) Test it ("make && make check").
 
 6) Get a deeper understanding of the function calling convention.
-   * Look at the generated tests.s from step 2 in detail.
+   * Look at the generated testcases.s from step 2 in detail.
    * Update reg-struct-return.txt by repeating step 2 with the gcc option
      '-freg-struct-return' and looking at the code of the functions that
      return structs (I_III and so on).

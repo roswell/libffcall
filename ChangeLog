@@ -1,5 +1,16 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Remove code duplication of test cases.
+	* testcases.c: New file, extracted from avcall/tests.c.
+	* Makefile.in (SOURCE_FILES): Add it.
+	* avcall/tests.c: Remove testcases functions. Include testcases.c
+	instead.
+	* vacall/tests.c: Likewise.
+	* callback/tests.c: Likewise.
+	* porting-tools/abis/README: Update.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Fix weakness in tests (added on 2017-01-29).
 	* avcall/tests.c (ll_l2ll, ll_l3ll, ll_l4ll, ll_l5ll, ll_l6ll, ll_l7ll):
 	Use a temporary variable of type 'long long'.
