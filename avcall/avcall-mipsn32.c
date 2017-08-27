@@ -76,21 +76,21 @@ avcall_call(av_alist* list)
   if (l->farg_mask)
     { /* push leading float args */
       if (l->farg_mask & (1<<0))
-        __asm__("lwc1 $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[0]));
+        __asm__("lwc1 $f12,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[0]));
       if (l->farg_mask & (1<<1))
-        __asm__("lwc1 $f13,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[1]));
+        __asm__("lwc1 $f13,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[1]));
       if (l->farg_mask & (1<<2))
-        __asm__("lwc1 $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[2]));
+        __asm__("lwc1 $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[2]));
       if (l->farg_mask & (1<<3))
-        __asm__("lwc1 $f15,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[3]));
+        __asm__("lwc1 $f15,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[3]));
       if (l->farg_mask & (1<<4))
-        __asm__("lwc1 $f16,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[4]));
+        __asm__("lwc1 $f16,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[4]));
       if (l->farg_mask & (1<<5))
-        __asm__("lwc1 $f17,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[5]));
+        __asm__("lwc1 $f17,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[5]));
       if (l->farg_mask & (1<<6))
-        __asm__("lwc1 $f18,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[6]));
+        __asm__("lwc1 $f18,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[6]));
       if (l->farg_mask & (1<<7))
-        __asm__("lwc1 $f19,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,farg[7]));
+        __asm__("lwc1 $f19,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,fargs[7]));
     }
   if (l->darg_mask)
     { /* push leading double args */

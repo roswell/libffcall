@@ -1,5 +1,13 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Align field names.
+	* avcall/avcall-alist.h (__av_alist): Rename field 'farg' to 'fargs'.
+	* avcall/avcall-internal.h (_av_float): Update.
+	* avcall/avcall-mipsn32.c (avcall_call): Likewise.
+	* avcall/avcall-mips64.c (avcall_call): Likewise.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Remove support for old NeXTstep.
 	* avcall/avcall.h (__AV_NEXTGCC_STRUCT_RETURN): Remove enum value.
 	* avcall/avcall-internal.h (__av_start_struct4) [__i386__]: Remove test

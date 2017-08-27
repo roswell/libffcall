@@ -90,7 +90,7 @@ typedef struct
   int			anum;		/* redundant: (LIST).aptr = &(LIST).args[(LIST).anum] */
   unsigned int		farg_mask;	/* bitmask of those entries in farg[] which have a value */
   unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a double value */
-  float			farg[8];
+  float			fargs[8];
 #endif
 #if defined(__sparc64__)
   /* store the floating-point arguments in an extra array */

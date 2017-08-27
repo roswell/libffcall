@@ -555,7 +555,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
    ? -1 :								\
    (((LIST).anum < 8							\
      ? ((LIST).farg_mask |= (1 << (LIST).anum),				\
-        (LIST).farg[(LIST).anum] = *(float*)(LIST).aptr = (float)(VAL))	\
+        (LIST).fargs[(LIST).anum] = *(float*)(LIST).aptr = (float)(VAL)) \
      : (*(float*)(LIST).aptr = (float)(VAL))),				\
     (LIST).anum++,							\
     (LIST).aptr++,							\
