@@ -114,7 +114,7 @@ vacall_receiver (__vaword firstword)
         goto done;
       }
     }
-    if (!(list.flags & (__VA_NEXTGCC_STRUCT_RETURN | __VA_MSVC_STRUCT_RETURN))) {
+    if (!(list.flags & __VA_MSVC_STRUCT_RETURN)) {
       /* We have to pop the struct return address off the stack. */
       /* Callers compiled with -fomit-frame-pointer expect this. */
       /* Return via a "ret $4" instruction. */

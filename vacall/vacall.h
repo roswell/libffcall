@@ -102,7 +102,6 @@ enum __VA_alist_flags
   __VA_SUNPROCC_STRUCT_RETURN	= 0,
 #endif
 #if defined(__i386__)
-  __VA_NEXTGCC_STRUCT_RETURN	= 1<<3,
   __VA_MSVC_STRUCT_RETURN	= 1<<4,
 #endif
   /* the default way to return structs */
@@ -123,9 +122,6 @@ enum __VA_alist_flags
 #endif
 #if defined(__GNUC__) && !((defined(__mipsn32__) || defined(__mips64__)) && ((__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)))
 				  __VA_GCC_STRUCT_RETURN |
-#endif
-#if defined(__i386__) && defined(NeXT) && defined(__GNUC__) /* NeXT gcc-2.5.8 */
-				  __VA_NEXTGCC_STRUCT_RETURN |
 #endif
 #if defined(__i386__) && defined(_MSC_VER) /* MSVC 4.0 */
 				  __VA_MSVC_STRUCT_RETURN |

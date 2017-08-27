@@ -246,14 +246,6 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_start_struct3(LIST)  \
   ((LIST).flags |= __AV_REGISTER_STRUCT_RETURN, 0)
 #endif
-#if defined(__i386__)
-/* Return structure pointer is passed in a special register or as first arg. */
-#define __av_start_struct4(LIST,TYPE_SIZE)				\
-  ((LIST).flags & __AV_NEXTGCC_STRUCT_RETURN				\
-   ? 0						 /* special register */	\
-   : (*(LIST).aptr++ = (__avword)((LIST).raddr), 0)	/* first arg */	\
-  )
-#endif
 #if defined(__m68k__) || defined(__hppa__) || defined(__arm64__) || defined(__ia64__)
 /* Return structure pointer is passed in a special register.
  */
@@ -261,7 +253,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #endif
 /* Return structure pointer is passed as first arg.
  */
-#if defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__powerpc_aix__) || defined(__powerpc64__)
+#if defined(__i386__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__powerpc_aix__) || defined(__powerpc64__)
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
    (*(LIST).aptr++ = (__avword)((LIST).raddr), 0)
 #endif

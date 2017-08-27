@@ -31,9 +31,7 @@
 
   To return a structure, the called function copies the value to space
   pointed to by its first argument, and all other arguments are shifted
-  down by one. On NeXTstep, however, the called function copies the return
-  value to the address supplied in register "%ebx". Gcc without
-  -fpcc-struct-return returns <= 4 byte structures as integers.
+  down by one. GCC returns <= 4 byte structures as integers.
 
   Compile this routine with gcc -O (or -O2 -fno-omit-frame-pointer or -g -O)
   to get the right register variables. For other compilers use the
@@ -68,10 +66,6 @@ avcall_call(av_alist* list)
 
   for (i = 0; i < arglen; i++)		/* push function args onto stack */
     argframe[i] = l->args[i];
-
-  /* struct return address */
-  if ((l->flags & __AV_NEXTGCC_STRUCT_RETURN) && (l->rtype == __AVstruct))
-    __asm__("movl %0,%%ebx" : : "g" (l->raddr) : "bx" /* %ebx */);
 
   /* call function */
   if (l->rtype == __AVfloat) {

@@ -124,9 +124,6 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #ifdef HAVE_MACH_VM
 #include <sys/resource.h>
 #include <mach/mach_interface.h>
-#ifdef NeXT
-#include <mach/mach_init.h>
-#endif
 #ifdef __osf__
 #include <mach_init.h>
 #endif

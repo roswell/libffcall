@@ -11,8 +11,7 @@ Supported CPUs:  (Put the GNU config.guess values here.)
               i486-unknown-sco3.2v4.2 (gcc, cc -Of)  i386/486/586  SCO
               i386-pc-cygwin32 (gcc)                 i386/486/586  Cygwin32
               i386-pc-win32 (msvc4, msvc5)           i386/486/586  Win32
-   m68k       m68k-next-nextstep3 (cc)               NeXT          NeXTstep 3
-              m68k-sun-sunos4.0 (cc)                 Sun3          SunOS 4.0.3
+   m68k       m68k-sun-sunos4.0 (cc)                 Sun3          SunOS 4.0.3
               m68k-unknown-linux (gcc)               emulated      Linux
    mips       mips-sgi-irix4.0.5 (gcc,               SGI mips      Irix 4.0.x
                   cc -ansi, cc -D__STDC__, cc -cckr)

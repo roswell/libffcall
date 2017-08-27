@@ -341,17 +341,7 @@ typedef struct vacall_alist
 /*
  * Preparing structure return in memory.
  */
-#if defined(__i386__)
-/* Return structure pointer is passed in a special register or as first arg. */
-#define __va_start_struct2(LIST)  \
-  ((LIST)->flags & __VA_NEXTGCC_STRUCT_RETURN				\
-   ? ((LIST)->raddr = (LIST)->structraddr, 0)	 /* special register */	\
-   : ((LIST)->raddr = *(void* *)((LIST)->aptr),		/* first arg */	\
-      (LIST)->aptr += sizeof(void*),					\
-      0									\
-  )  )
-#endif
-#if defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__powerpc_aix__) || defined(__powerpc64__)
+#if defined(__i386__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__powerpc_aix__) || defined(__powerpc64__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
   ((LIST)->raddr = *(void* *)((LIST)->aptr),				\
