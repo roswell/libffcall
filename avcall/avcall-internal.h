@@ -1205,13 +1205,13 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
          *(LIST).aptr = (__avword)((long)(LIST).eptr - (((TYPE_SIZE) + 7) & -8)), \
          0))								\
    : ((TYPE_SIZE) > 4							\
-      ? ((__avword*)((((long)(LIST).aptr & -8) - (long)(TYPE_SIZE)) & -8) < &(LIST).args[0] \
+      ? ((__avword*)((((long)(LIST).aptr & -8) - (long)(TYPE_SIZE)) & -8) < (LIST).eptr \
          ? -1 :								\
          ((LIST).aptr = (__avword*)((((long)(LIST).aptr & -8) - (long)(TYPE_SIZE)) & -8), \
           __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).aptr,VAL), \
           0))								\
       : /* FIXME: gcc-2.6.3 passes structures <= 4 bytes in memory left-adjusted! ?? */\
-        ((__avword*)(((long)(LIST).aptr & -4) - (long)(TYPE_SIZE)) < &(LIST).args[0] \
+        ((__avword*)(((long)(LIST).aptr & -4) - (long)(TYPE_SIZE)) < (LIST).eptr \
          ? -1 :									\
          ((LIST).aptr = (__avword*)(((long)(LIST).aptr & -4) - (long)(TYPE_SIZE)), \
           __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).aptr,VAL), \

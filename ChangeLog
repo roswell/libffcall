@@ -1,5 +1,11 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Fix overflow detection bug on hppa.
+	* avcall/avcall-internal.h (__av_struct) [__hppa__]: Use LIST.eptr
+	instead of &LIST.args[0].
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Fix build failure with --enable-shared on Solaris/SPARC with cc.
 	* common/asm-sparc.h: Test __SVR4, not __svr4__.
 	* common/asm-sparc.sh: Fix comment about postprocessing.
