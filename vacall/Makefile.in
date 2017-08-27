@@ -25,7 +25,8 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/.. -I../gnulib-lib -I$(srcdir)/../gnulib-lib
+INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/..
+INCLUDES_WITH_GNULIB = $(INCLUDES) -I../gnulib-lib -I$(srcdir)/../gnulib-lib
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
 AR = @AR@
@@ -196,7 +197,7 @@ vacall-s390x.s : $(srcdir)/vacall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
 
 vacall-libapi.o : $(srcdir)/vacall-libapi.c $(srcdir)/vacall-internal.h $(srcdir)/vacall.h ../config.h
-	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-libapi.c
+	$(CC) $(INCLUDES_WITH_GNULIB) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-libapi.c
 
 vacall-structcpy.o : $(srcdir)/vacall-structcpy.c $(srcdir)/../common/structcpy.c
 	$(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-structcpy.c

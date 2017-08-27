@@ -25,7 +25,8 @@ CC = @CC@
 CFLAGS = @CFLAGS@
 CPPFLAGS = @CPPFLAGS@
 CPP = @CPP@
-INCLUDES = -I. -I$(srcdir) -I../.. -I../../gnulib-lib -I$(srcdir)/../../gnulib-lib
+INCLUDES = -I. -I$(srcdir) -I../.. -I$(srcdir)/../..
+INCLUDES_WITH_GNULIB = $(INCLUDES) -I../../gnulib-lib -I$(srcdir)/../../gnulib-lib
 ASPFLAGS = `if test @AS_UNDERSCORE@ = true; then echo '-DASM_UNDERSCORE'; fi`
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
@@ -60,7 +61,7 @@ OBJECTS = trampoline.lo @CPU_OBJECTS@
 all : $(OBJECTS) libtrampoline.la $(srcdir)/trampoline_r.3 $(srcdir)/trampoline_r.html
 
 trampoline.lo : $(srcdir)/trampoline.c $(srcdir)/trampoline_r.h
-	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/trampoline.c
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES_WITH_GNULIB) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/trampoline.c
 
 tramp-hppa.lo : tramp-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-hppa.s

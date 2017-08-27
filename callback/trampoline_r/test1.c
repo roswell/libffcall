@@ -17,12 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"  /* Define __${host_cpu}__ */
-
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "trampoline_r.h"
+#include "ffcall-abi.h"  /* Define __${host_cpu}__ */
 
 /* Set when we can check that the env register is being passed correctly. */
 #if defined __GNUC__ && !defined __clang__ && !defined(__arm__)

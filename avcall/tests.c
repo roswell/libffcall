@@ -24,7 +24,7 @@
   and some varargs ones, and also try to test structure alignment more
   throughly.
  ----------------------------------------------------------------------*/
-#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

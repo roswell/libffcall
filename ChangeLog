@@ -1,5 +1,30 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Make sure the tests use only the public include files.
+	* avcall/tests.c: Don't include config.h.
+	* vacall/tests.c: Don't include config.h.
+	* callback/tests.c: Likewise.
+	* callback/trampoline_r/test1.c: Likewise. Include ffcall-abi.h instead.
+	* avcall/Makefile.in (avcall-libapi.lo): Use $(INCLUDES).
+	* vacall/Makefile.in (INCLUDES): Remove -I options that reference
+	gnulib-lib.
+	(INCLUDES_WITH_GNULIB): New variable.
+	(vacall-libapi.o): Use INCLUDES_WITH_GNULIB instead of INCLUDES.
+	* trampoline/Makefile.in (INCLUDES): Remove -I options that reference
+	gnulib-lib.
+	(INCLUDES_WITH_GNULIB): New variable.
+	(trampoline.lo): Use INCLUDES_WITH_GNULIB instead of INCLUDES.
+	* callback/vacall_r/Makefile.in (INCLUDES): Remove -I options that
+	reference gnulib-lib.
+	(INCLUDES_WITH_GNULIB): New variable.
+	(vacall-libapi.lo): Use INCLUDES_WITH_GNULIB instead of INCLUDES.
+	* callback/trampoline_r/Makefile.in (INCLUDES): Remove -I options that
+	reference gnulib-lib.
+	(INCLUDES_WITH_GNULIB): New variable.
+	(trampoline.lo): Use INCLUDES_WITH_GNULIB instead of INCLUDES.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Make recognition of Solaris more robust.
 	* avcall/avcall.h: Test for '__sun', not for 'sun'.
 	* vacall/vacall.h: Likewise.
