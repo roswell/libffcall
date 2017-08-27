@@ -39,8 +39,8 @@
 #endif
 
 /* On mips, there are three ABIs:
-   - 32 or o32: It defines _ABIO32 and _MIPS_SZLONG == 32.
-   - n32: It defines _ABIN32 and _MIPS_SZLONG == 32.
+   - 32 or o32: It defines _MIPS_SIM == _ABIO32 and _MIPS_SZLONG == 32.
+   - n32: It defines _MIPS_SIM == _ABIN32 and _MIPS_SZLONG == 32.
    - 64: It defines _MIPS_SZLONG == 64.
  */
 /* Note: When __mipsn32__ or __mips64__ is defined, __mips__ may or may not be
@@ -55,7 +55,7 @@
 #endif
 #endif
 #ifndef __mipsn32__
-#if defined(__mips__) && defined(_ABIN32)
+#if defined(__mips__) && (_MIPS_SIM == _ABIN32)
 #define __mipsn32__ 1
 #endif
 #endif
