@@ -1,5 +1,18 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	ia64: Test __GNUC__ only in av/va_start_* (regression from 2017-07-30).
+	* avcall/avcall.h (__AV_OLDGCC_STRUCT_ARGS): New enum item.
+	(__AV_STRUCT_ARGS): Use it.
+	* avcall/avcall-internal.h (__av_struct) [__ia64__]: Test flag
+	__AV_OLDGCC_STRUCT_ARGS, not __GNUC__.
+	* vacall/vacall.h (__VA_OLDGCC_STRUCT_ARGS): New enum item.
+	(__VA_STRUCT_ARGS): Use it.
+	* callback/vacall_r/vacall_r.h: Likewise.
+	* vacall/vacall-internal.h (__va_arg_struct): Test flag
+	__VA_OLDGCC_STRUCT_ARGS, not __GNUC__.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Fix "make check" failure on Linux/mips (regression from 2017-07-30).
 	* ffcall-abi.h: For mipsn32, test _MIPS_SIM, because <sgidefs.h> defines
 	both _ABIO32 and _ABIN32.

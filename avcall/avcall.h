@@ -183,6 +183,9 @@ enum __AV_alist_flags
 #if defined(__powerpc__) || defined(__powerpc64__)
   __AV_AIXCC_STRUCT_ARGS	= 1<<7,
 #endif
+#if defined(__ia64__)
+  __AV_OLDGCC_STRUCT_ARGS	= 1<<7,
+#endif
   /* the default way to pass structs */
   /* This choice here is based on the assumption that the function you are
    * going to call has been compiled with the same compiler you are using to
@@ -204,7 +207,11 @@ enum __AV_alist_flags
 #if defined(__powerpc64__) && defined(_AIX) /* AIX 64-bit cc, xlc, gcc */
   __AV_STRUCT_ARGS		= __AV_AIXCC_STRUCT_ARGS,
 #else
+#if defined(__ia64__) && !(defined(__GNUC__) && (__GNUC__ >= 3))
+  __AV_STRUCT_ARGS		= __AV_OLDGCC_STRUCT_ARGS,
+#else
   __AV_STRUCT_ARGS		= 0,
+#endif
 #endif
 #endif
 #endif

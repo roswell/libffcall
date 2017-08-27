@@ -934,7 +934,7 @@ typedef struct vacall_alist
 #endif
 #define __va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (LIST)->aptr = ((LIST)->aptr + __va_struct_alignment(TYPE_ALIGN)-1) & -(long)__va_struct_alignment(TYPE_ALIGN),
-#if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc64__) && !defined(_AIX)) || (defined(__ia64__) && defined(__GNUC__) && (__GNUC__ >= 3)) || defined(__x86_64__)
+#if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc64__) && !defined(_AIX)) || defined(__x86_64__)
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
    __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)				\
@@ -1028,11 +1028,11 @@ typedef struct vacall_alist
      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
   )
 #endif
-#if defined(__ia64__) && !(defined(__GNUC__) && (__GNUC__ >= 3))
-/* Types larger than a word have 2-word alignment. */
+#if defined(__ia64__)
+/* With GCC < 3, types larger than a word have 2-word alignment. */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
-   ((TYPE_SIZE) > sizeof(__vaword) && (((__vaword*)(LIST)->aptr - (LIST)->saptr) & 1) ? (LIST)->aptr += sizeof(__vaword) : 0), \
+   (((LIST)->flags & __VA_OLDGCC_STRUCT_ARGS) && (TYPE_SIZE) > sizeof(__vaword) && (((__vaword*)(LIST)->aptr - (LIST)->saptr) & 1) ? (LIST)->aptr += sizeof(__vaword) : 0), \
    __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)				\
   )
 #endif

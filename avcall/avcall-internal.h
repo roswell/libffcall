@@ -974,7 +974,7 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
  * different alignment.
  */
 /* little endian -> small structures < 1 word are adjusted to the left (i.e. occupy the low bits of the word) */
-#if defined(__i386__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__) && defined(__ARMEL__)) || (defined(__ia64__) && defined(__GNUC__) && (__GNUC__ >= 3)) || defined(__x86_64__)
+#if defined(__i386__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__) && defined(__ARMEL__)) || defined(__x86_64__)
 #define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
   ((__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)) > (LIST).eptr \
    ? -1 :								\
@@ -982,16 +982,22 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
     (LIST).aptr = (__avword*)(((((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)) +sizeof(__avword)-1) & -(long)sizeof(__avword)), \
     0))
 #endif
-#if defined(__ia64__) && !(defined(__GNUC__) && (__GNUC__ >= 3))
-/* Types larger than a word have 2-word alignment. */
+#if defined(__ia64__)
+/* With GCC < 3, types larger than a word have 2-word alignment. */
 #define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)), \
-   ((TYPE_SIZE) > sizeof(__avword) && (((LIST).aptr - &(LIST).args[0]) & 1) ? ++(LIST).aptr : 0), \
-   ((LIST).aptr > (LIST).eptr						\
-    ? -1 :								\
-    (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((__avword)(LIST).aptr-(TYPE_SIZE)),VAL), \
-     (LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(__avword)-1) & -(long)sizeof(__avword)), \
-     0)))
+  (((LIST).flags & __AV_OLDGCC_STRUCT_ARGS)				\
+   ? ((LIST).aptr = (__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)), \
+      ((TYPE_SIZE) > sizeof(__avword) && (((LIST).aptr - &(LIST).args[0]) & 1) ? ++(LIST).aptr : 0), \
+      ((LIST).aptr > (LIST).eptr					\
+       ? -1 :								\
+       (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((__avword)(LIST).aptr-(TYPE_SIZE)),VAL), \
+        (LIST).aptr = (__avword*)(((__avword)(LIST).aptr+sizeof(__avword)-1) & -(long)sizeof(__avword)), \
+        0)))								\
+   : ((__avword*)(((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)) > (LIST).eptr \
+      ? -1 :								\
+      (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
+       (LIST).aptr = (__avword*)(((((__avword)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(long)__av_struct_alignment(TYPE_ALIGN)) +sizeof(__avword)-1) & -(long)sizeof(__avword)), \
+       0)))
 #endif
 /* small structures < 1 word are adjusted depending on compiler */
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
