@@ -1,5 +1,11 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Fix struct returns on mips (o32 ABI).
+	* vacall/vacall-mips.c (vacall_receiver): Return the struct return
+	address in register $2.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	ia64: Test __GNUC__ only in av/va_start_* (regression from 2017-07-30).
 	* avcall/avcall.h (__AV_OLDGCC_STRUCT_ARGS): New enum item.
 	(__AV_STRUCT_ARGS): Use it.

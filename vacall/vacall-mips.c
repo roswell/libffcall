@@ -124,6 +124,8 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
       if (list.rsize == sizeof(int)) {
         iret = *(unsigned int *) list.raddr;
       }
+    } else {
+      iret = (long)list.raddr;
     }
   }
 }

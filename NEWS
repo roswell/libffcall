@@ -18,6 +18,9 @@ New in 2.0:
   - powerpc: Linux 32-bit.
   - s390: Linux.
 
+* Fixed a bug regarding structure returns on the following platforms:
+  - mips: old 32-bit ABI (Linux, IRIX).
+
 * Added support for the following platforms:
   (Previously, a build on these platforms failed.)
   - m68k: Linux.
