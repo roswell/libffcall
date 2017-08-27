@@ -65,15 +65,20 @@
 
 /* Determine the alignment of a type at compile time.
  */
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__IBM__ALIGNOF__)
 #define __VA_alignof __alignof__
-#else
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) /* SGI compiler */
+#elif defined(__cplusplus)
+template <class type> struct __VA_alignof_helper { char __slot1; type __slot2; };
+#define __VA_alignof(type) offsetof (__VA_alignof_helper<type>, __slot2)
+#elif defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) /* SGI compiler */
 #define __VA_alignof __builtin_alignof
 #else
 #define __VA_offsetof(type,ident)  ((unsigned long)&(((type*)0)->ident))
 #define __VA_alignof(type)  __VA_offsetof(struct { char __slot1; type __slot2; }, __slot2)
 #endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /* C builtin types.
@@ -529,5 +534,9 @@ __vacall_r_t callback_get_receiver (void);
 
 #endif
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _VACALL_R_H */

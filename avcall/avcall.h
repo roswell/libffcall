@@ -39,15 +39,20 @@
 
 /* Determine the alignment of a type at compile time.
  */
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__IBM__ALIGNOF__)
 #define __AV_alignof __alignof__
-#else
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) /* SGI compiler */
+#elif defined(__cplusplus)
+template <class type> struct __AV_alignof_helper { char __slot1; type __slot2; };
+#define __AV_alignof(type) offsetof (__AV_alignof_helper<type>, __slot2)
+#elif defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) /* SGI compiler */
 #define __AV_alignof __builtin_alignof
 #else
 #define __AV_offsetof(type,ident)  ((unsigned long)&(((type*)0)->ident))
 #define __AV_alignof(type)  __AV_offsetof(struct { char __slot1; type __slot2; }, __slot2)
 #endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /* C builtin types.
@@ -442,5 +447,9 @@ extern int avcall_call (av_alist* /* LIST */);
   ((__av_offset2(slot1,slot2)+sizeof(slot2)+__AV_alignof(slot3)-1) & -(long)__AV_alignof(slot3))
 #define __av_offset4(slot1,slot2,slot3,slot4)  \
   ((__av_offset3(slot1,slot2,slot3)+sizeof(slot3)+__AV_alignof(slot4)-1) & -(long)__AV_alignof(slot4))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _AVCALL_H */

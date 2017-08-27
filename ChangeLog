@@ -1,5 +1,18 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Make the include files C++-safe.
+	* avcall/avcall.h: Add C++ guards.
+	(__AV_alignof): Test __IBM__ALIGNOF__. Use template-based definition
+	for C++.
+	* vacall/vacall.h: Add C++ guards.
+	(__VA_alignof): Test __IBM__ALIGNOF__. Use template-based definition
+	for C++.
+	* callback/vacall_r/vacall_r.h: Add C++ guards.
+	(__VA_alignof): Test __IBM__ALIGNOF__. Use template-based definition
+	for C++.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Make sure the tests use only the public include files.
 	* avcall/tests.c: Don't include config.h.
 	* vacall/tests.c: Don't include config.h.
