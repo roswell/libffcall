@@ -212,7 +212,7 @@ vacall-structcpy.lo : $(srcdir)/vacall-structcpy.c $(srcdir)/../../common/struct
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-structcpy.c
 
 libvacall.la : $(OBJECTS)
-	$(LIBTOOL_LINK) $(CC) -o libvacall.la -rpath $(libdir) $(OBJECTS) $(LDFLAGS)
+	$(LIBTOOL_LINK) $(CC) -o libvacall.la -rpath $(libdir) -no-undefined $(OBJECTS) $(LDFLAGS)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.

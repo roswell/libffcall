@@ -1,5 +1,15 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Enable building shared libraries on Windows.
+	* avcall/Makefile.in (libavcall.la): Pass option '-no-undefined' to
+	$(LIBTOOL_LINK).
+	* trampoline/Makefile.in (libtrampoline.la): Likewise.
+	* callback/vacall_r/Makefile.in (libvacall.la): Likewise.
+	* callback/trampoline_r/Makefile.in (libtrampoline.la): Likewise.
+	* callback/Makefile.in (libcallback.la): Likewise.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Do proper versioning of shared libraries.
 	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): New variable.
 	(libavcall.la): Use libtool option -version-info.

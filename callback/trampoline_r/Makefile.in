@@ -135,7 +135,7 @@ cache-powerpc64-elfv2.s : $(srcdir)/cache-powerpc64-elfv2-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/cache-powerpc64-elfv2-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-powerpc64-elfv2.s
 
 libtrampoline.la : $(OBJECTS) ../../gnulib-lib/libgnu.la
-	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) $(OBJECTS) ../../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
+	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) -no-undefined $(OBJECTS) ../../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.

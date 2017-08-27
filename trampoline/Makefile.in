@@ -148,7 +148,7 @@ cache-powerpc64-elfv2.s : $(srcdir)/cache-powerpc64-elfv2-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/cache-powerpc64-elfv2-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > cache-powerpc64-elfv2.s
 
 libtrampoline.la : $(OBJECTS) ../gnulib-lib/libgnu.la
-	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) -export-symbols-regex $(LIBTRAMPOLINE_EXPORTED_SYMBOLS_REGEX) -version-info $(LIBTRAMPOLINE_VERSION_INFO) $(OBJECTS) ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
+	$(LIBTOOL_LINK) $(CC) -o libtrampoline.la -rpath $(libdir) -no-undefined -export-symbols-regex $(LIBTRAMPOLINE_EXPORTED_SYMBOLS_REGEX) -version-info $(LIBTRAMPOLINE_VERSION_INFO) $(OBJECTS) ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 install : all force
 	mkdir -p $(DESTDIR)$(prefix)
