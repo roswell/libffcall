@@ -1,5 +1,12 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	mips: Avoid warning about undeclared function 'cacheflush' on Linux.
+	* trampoline/trampoline.c: On Linux, include <sys/cachectl.h>, not
+	<asm/cachectl.h>.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Fix struct returns on mips (o32 ABI).
 	* vacall/vacall-mips.c (vacall_receiver): Return the struct return
 	address in register $2.

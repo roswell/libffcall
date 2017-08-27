@@ -183,15 +183,11 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 #endif
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
-#ifdef linux
-#include <asm/cachectl.h>
+#ifdef HAVE_SYS_CACHECTL_H /* IRIX, Linux */
+#include <sys/cachectl.h>
 #else
 #ifdef __OpenBSD__
 #include <machine/sysarch.h>
-#else
-#ifdef HAVE_SYS_CACHECTL_H
-#include <sys/cachectl.h>
-#endif
 #endif
 #endif
 #endif
