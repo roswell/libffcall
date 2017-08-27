@@ -1,5 +1,12 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	Add support for SUNWspro C++ on Solaris.
+	* avcall/avcall.h: Treat SUNWspro C++ like SUNWspro C.
+	* vacall/vacall.h: Likewise.
+	* callback/vacall_r/vacall_r.h: Likewise.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	Make the include files C++-safe.
 	* avcall/avcall.h: Add C++ guards.
 	(__AV_alignof): Test __IBM__ALIGNOF__. Use template-based definition

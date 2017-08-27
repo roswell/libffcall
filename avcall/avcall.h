@@ -130,7 +130,7 @@ enum __AV_alist_flags
    */
 #ifndef __AV_STRUCT_RETURN
   __AV_STRUCT_RETURN		=
-#if defined(__sparc__) && !defined(__sparc64__) && defined(__sun) && defined(__SUNPRO_C) /* SUNWspro cc */
+#if defined(__sparc__) && !defined(__sparc64__) && defined(__sun) && (defined(__SUNPRO_C) || defined(__SUNPRO_CC)) /* SUNWspro cc or CC */
 				  __AV_SUNPROCC_STRUCT_RETURN,
 #else
 #if (defined(__i386__) && (defined(_WIN32) || defined(__CYGWIN__) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__hppa__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || defined(__powerpc64_elfv2__) || defined(__ia64__) || defined(__x86_64__)
@@ -162,7 +162,7 @@ enum __AV_alist_flags
    * before or after #including <avcall.h>.
    */
 #ifndef __AV_FLOAT_RETURN
-#if (defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))) && !defined(__GNUC__) && defined(__sun) && !defined(__SUNPRO_C)  /* sun cc */
+#if (defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))) && !defined(__GNUC__) && defined(__sun) && !(defined(__SUNPRO_C) || defined(__SUNPRO_CC))  /* Sun cc or CC */
   __AV_FLOAT_RETURN		= __AV_SUNCC_FLOAT_RETURN,
 #elif defined(__m68k__)
   __AV_FLOAT_RETURN		= __AV_FREG_FLOAT_RETURN,
