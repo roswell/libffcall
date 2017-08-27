@@ -198,11 +198,8 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #endif
 #if defined(__hppa__)
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((LIST).flags & __AV_OLDGCC_STRUCT_RETURN				\
-   ? ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4)		\
-   : ((TYPE_SIZE) <= 8)							\
-  )
-/* Test both __AV_OLDGCC_STRUCT_RETURN and __AV_SMALL_STRUCT_RETURN at run time. */
+  ((TYPE_SIZE) <= 8)
+/* Test __AV_SMALL_STRUCT_RETURN at run time. */
 #define __av_start_struct3(LIST)  \
   0
 #endif

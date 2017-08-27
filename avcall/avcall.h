@@ -116,9 +116,6 @@ enum __AV_alist_flags
   __AV_NEXTGCC_STRUCT_RETURN	= 1<<3,
   __AV_MSVC_STRUCT_RETURN	= 1<<4,
 #endif
-#if defined(__hppa__)
-  __AV_OLDGCC_STRUCT_RETURN	= 1<<3,
-#endif
   /* the default way to return structs */
   /* This choice here is based on the assumption that the function you are
    * going to call has been compiled with the same compiler you are using to
@@ -143,9 +140,6 @@ enum __AV_alist_flags
 #endif
 #if defined(__i386__) && defined(_MSC_VER) /* MSVC 4.0 */
 				  __AV_MSVC_STRUCT_RETURN |
-#endif
-#if defined(__hppa__) && defined(__GNUC__) && (__GNUC__ < 3) && (__GNUC_MINOR__ < 7)
-				  __AV_OLDGCC_STRUCT_RETURN |
 #endif
 				  0,
 #endif

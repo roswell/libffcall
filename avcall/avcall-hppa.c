@@ -45,8 +45,7 @@
   It is forbidden to modify the stack pointer.
 
   Compile this routine with gcc -O2 -fomit-frame-pointer to get the right
-  register variables, then replace the -120 in the second save statement
-  "stw %r3,-120(0,%r30)" by -1060, or use the assembler version.
+  register variables.
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
@@ -132,71 +131,58 @@ avcall_call(av_alist* list)
   } else
   if (l->rtype == __AVstruct) {
     if (l->flags & __AV_SMALL_STRUCT_RETURN) {
-      if (l->flags & __AV_OLDGCC_STRUCT_RETURN) {
-        /* gcc <= 2.6.3 returns structs of size 1,2,4 in registers. */
-        if (l->rsize == sizeof(char)) {
-          RETURN(char, i);
-        } else
-        if (l->rsize == sizeof(short)) {
-          RETURN(short, i);
-        } else
-        if (l->rsize == sizeof(int)) {
-          RETURN(int, i);
-        }
-      } else {
-        /* cc, c89 and gcc >= 2.7 return structs of size <= 8 in registers. */
-        if (l->rsize == 1) {
-          ((unsigned char *)l->raddr)[0] = (unsigned char)(i);
-        } else
-        if (l->rsize == 2) {
-          ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>8);
-          ((unsigned char *)l->raddr)[1] = (unsigned char)(i);
-        } else
-        if (l->rsize == 3) {
-          ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>16);
-          ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>8);
-          ((unsigned char *)l->raddr)[2] = (unsigned char)(i);
-        } else
-        if (l->rsize == 4) {
-          ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>24);
-          ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>16);
-          ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>8);
-          ((unsigned char *)l->raddr)[3] = (unsigned char)(i);
-        } else
-        if (l->rsize == 5) {
-          ((unsigned char *)l->raddr)[0] = (unsigned char)(i);
-          ((unsigned char *)l->raddr)[1] = (unsigned char)(iret2>>24);
-          ((unsigned char *)l->raddr)[2] = (unsigned char)(iret2>>16);
-          ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>8);
-          ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2);
-        } else
-        if (l->rsize == 6) {
-          ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>8);
-          ((unsigned char *)l->raddr)[1] = (unsigned char)(i);
-          ((unsigned char *)l->raddr)[2] = (unsigned char)(iret2>>24);
-          ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>16);
-          ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2>>8);
-          ((unsigned char *)l->raddr)[5] = (unsigned char)(iret2);
-        } else
-        if (l->rsize == 7) {
-          ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>16);
-          ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>8);
-          ((unsigned char *)l->raddr)[2] = (unsigned char)(i);
-          ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>24);
-          ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2>>16);
-          ((unsigned char *)l->raddr)[5] = (unsigned char)(iret2>>8);
-          ((unsigned char *)l->raddr)[6] = (unsigned char)(iret2);
-        } else
-        if (l->rsize == 8) {
-          ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>24);
-          ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>16);
-          ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>8);
-          ((unsigned char *)l->raddr)[3] = (unsigned char)(i);
-          ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2>>24);
-          ((unsigned char *)l->raddr)[5] = (unsigned char)(iret2>>16);
-          ((unsigned char *)l->raddr)[6] = (unsigned char)(iret2>>8);
-          ((unsigned char *)l->raddr)[7] = (unsigned char)(iret2);
-        }
+      /* cc, c89 and gcc >= 2.7 return structs of size <= 8 in registers. */
+      if (l->rsize == 1) {
+        ((unsigned char *)l->raddr)[0] = (unsigned char)(i);
+      } else
+      if (l->rsize == 2) {
+        ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>8);
+        ((unsigned char *)l->raddr)[1] = (unsigned char)(i);
+      } else
+      if (l->rsize == 3) {
+        ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>16);
+        ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>8);
+        ((unsigned char *)l->raddr)[2] = (unsigned char)(i);
+      } else
+      if (l->rsize == 4) {
+        ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>24);
+        ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>16);
+        ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>8);
+        ((unsigned char *)l->raddr)[3] = (unsigned char)(i);
+      } else
+      if (l->rsize == 5) {
+        ((unsigned char *)l->raddr)[0] = (unsigned char)(i);
+        ((unsigned char *)l->raddr)[1] = (unsigned char)(iret2>>24);
+        ((unsigned char *)l->raddr)[2] = (unsigned char)(iret2>>16);
+        ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>8);
+        ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2);
+      } else
+      if (l->rsize == 6) {
+        ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>8);
+        ((unsigned char *)l->raddr)[1] = (unsigned char)(i);
+        ((unsigned char *)l->raddr)[2] = (unsigned char)(iret2>>24);
+        ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>16);
+        ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2>>8);
+        ((unsigned char *)l->raddr)[5] = (unsigned char)(iret2);
+      } else
+      if (l->rsize == 7) {
+        ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>16);
+        ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>8);
+        ((unsigned char *)l->raddr)[2] = (unsigned char)(i);
+        ((unsigned char *)l->raddr)[3] = (unsigned char)(iret2>>24);
+        ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2>>16);
+        ((unsigned char *)l->raddr)[5] = (unsigned char)(iret2>>8);
+        ((unsigned char *)l->raddr)[6] = (unsigned char)(iret2);
+      } else
+      if (l->rsize == 8) {
+        ((unsigned char *)l->raddr)[0] = (unsigned char)(i>>24);
+        ((unsigned char *)l->raddr)[1] = (unsigned char)(i>>16);
+        ((unsigned char *)l->raddr)[2] = (unsigned char)(i>>8);
+        ((unsigned char *)l->raddr)[3] = (unsigned char)(i);
+        ((unsigned char *)l->raddr)[4] = (unsigned char)(iret2>>24);
+        ((unsigned char *)l->raddr)[5] = (unsigned char)(iret2>>16);
+        ((unsigned char *)l->raddr)[6] = (unsigned char)(iret2>>8);
+        ((unsigned char *)l->raddr)[7] = (unsigned char)(iret2);
       }
     }
   }

@@ -272,11 +272,8 @@ typedef struct vacall_alist
 #endif
 #if defined(__hppa__)
 #define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((LIST)->flags & __VA_OLDGCC_STRUCT_RETURN				\
-   ? ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4)		\
-   : ((TYPE_SIZE) <= 8)							\
-  )
-/* Test both __VA_OLDGCC_STRUCT_RETURN and __VA_SMALL_STRUCT_RETURN at run time. */
+  ((TYPE_SIZE) <= 8)
+/* Test __VA_SMALL_STRUCT_RETURN at run time. */
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
   0
 #endif

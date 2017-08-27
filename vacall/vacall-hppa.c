@@ -153,72 +153,59 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   } else
   if (list.rtype == __VAstruct) {
     if (list.flags & __VA_SMALL_STRUCT_RETURN) {
-      if (list.flags & __VA_OLDGCC_STRUCT_RETURN) {
-        /* gcc <= 2.6.3 returns structs of size 1,2,4 in registers. */
-        if (list.rsize == sizeof(char)) {
-          iret = *(unsigned char *) list.raddr;
+      /* cc, c89 and gcc >= 2.7 return structs of size <= 8 in registers. */
+      if (list.rsize > 0 && list.rsize <= 8) {
+        if (list.rsize == 1) {
+          iret =   ((unsigned char *) list.raddr)[0];
         } else
-        if (list.rsize == sizeof(short)) {
-          iret = *(unsigned short *) list.raddr;
+        if (list.rsize == 2) {
+          iret =  (((unsigned char *) list.raddr)[0] << 8)
+                |  ((unsigned char *) list.raddr)[1];
         } else
-        if (list.rsize == sizeof(int)) {
-          iret = *(unsigned int *) list.raddr;
-        }
-      } else {
-        /* cc, c89 and gcc >= 2.7 return structs of size <= 8 in registers. */
-        if (list.rsize > 0 && list.rsize <= 8) {
-          if (list.rsize == 1) {
-            iret =   ((unsigned char *) list.raddr)[0];
-          } else
-          if (list.rsize == 2) {
-            iret =  (((unsigned char *) list.raddr)[0] << 8)
-                  |  ((unsigned char *) list.raddr)[1];
-          } else
-          if (list.rsize == 3) {
-            iret =  (((unsigned char *) list.raddr)[0] << 16)
-                  | (((unsigned char *) list.raddr)[1] << 8)
-                  |  ((unsigned char *) list.raddr)[2];
-          } else
-          if (list.rsize == 4) {
-            iret =  (((unsigned char *) list.raddr)[0] << 24)
-                  | (((unsigned char *) list.raddr)[1] << 16)
-                  | (((unsigned char *) list.raddr)[2] << 8)
-                  |  ((unsigned char *) list.raddr)[3];
-          } else
-          if (list.rsize == 5) {
-            iret1 =   ((unsigned char *) list.raddr)[0];
-            iret2 =  (((unsigned char *) list.raddr)[1] << 24)
-                   | (((unsigned char *) list.raddr)[2] << 16)
-                   | (((unsigned char *) list.raddr)[3] << 8)
-                   |  ((unsigned char *) list.raddr)[4];
-          } else
-          if (list.rsize == 6) {
-            iret1 =  (((unsigned char *) list.raddr)[0] << 8)
-                   |  ((unsigned char *) list.raddr)[1];
-            iret2 =  (((unsigned char *) list.raddr)[2] << 24)
-                   | (((unsigned char *) list.raddr)[3] << 16)
-                   | (((unsigned char *) list.raddr)[4] << 8)
-                   |  ((unsigned char *) list.raddr)[5];
-          } else
-          if (list.rsize == 7) {
-            iret1 =  (((unsigned char *) list.raddr)[0] << 16)
-                   | (((unsigned char *) list.raddr)[1] << 8)
-                   |  ((unsigned char *) list.raddr)[2];
-            iret2 =  (((unsigned char *) list.raddr)[3] << 24)
-                   | (((unsigned char *) list.raddr)[4] << 16)
-                   | (((unsigned char *) list.raddr)[5] << 8)
-                   |  ((unsigned char *) list.raddr)[6];
-          } else
-          if (list.rsize == 8) {
-            iret1 =  (((unsigned char *) list.raddr)[0] << 24)
-                   | (((unsigned char *) list.raddr)[1] << 16)
-                   | (((unsigned char *) list.raddr)[2] << 8)
-                   |  ((unsigned char *) list.raddr)[3];
-            iret2 =  (((unsigned char *) list.raddr)[4] << 24)
-                   | (((unsigned char *) list.raddr)[5] << 16)
-                   | (((unsigned char *) list.raddr)[6] << 8)
-                   |  ((unsigned char *) list.raddr)[7];
-          }
+        if (list.rsize == 3) {
+          iret =  (((unsigned char *) list.raddr)[0] << 16)
+                | (((unsigned char *) list.raddr)[1] << 8)
+                |  ((unsigned char *) list.raddr)[2];
+        } else
+        if (list.rsize == 4) {
+          iret =  (((unsigned char *) list.raddr)[0] << 24)
+                | (((unsigned char *) list.raddr)[1] << 16)
+                | (((unsigned char *) list.raddr)[2] << 8)
+                |  ((unsigned char *) list.raddr)[3];
+        } else
+        if (list.rsize == 5) {
+          iret1 =   ((unsigned char *) list.raddr)[0];
+          iret2 =  (((unsigned char *) list.raddr)[1] << 24)
+                 | (((unsigned char *) list.raddr)[2] << 16)
+                 | (((unsigned char *) list.raddr)[3] << 8)
+                 |  ((unsigned char *) list.raddr)[4];
+        } else
+        if (list.rsize == 6) {
+          iret1 =  (((unsigned char *) list.raddr)[0] << 8)
+                 |  ((unsigned char *) list.raddr)[1];
+          iret2 =  (((unsigned char *) list.raddr)[2] << 24)
+                 | (((unsigned char *) list.raddr)[3] << 16)
+                 | (((unsigned char *) list.raddr)[4] << 8)
+                 |  ((unsigned char *) list.raddr)[5];
+        } else
+        if (list.rsize == 7) {
+          iret1 =  (((unsigned char *) list.raddr)[0] << 16)
+                 | (((unsigned char *) list.raddr)[1] << 8)
+                 |  ((unsigned char *) list.raddr)[2];
+          iret2 =  (((unsigned char *) list.raddr)[3] << 24)
+                 | (((unsigned char *) list.raddr)[4] << 16)
+                 | (((unsigned char *) list.raddr)[5] << 8)
+                 |  ((unsigned char *) list.raddr)[6];
+        } else
+        if (list.rsize == 8) {
+          iret1 =  (((unsigned char *) list.raddr)[0] << 24)
+                 | (((unsigned char *) list.raddr)[1] << 16)
+                 | (((unsigned char *) list.raddr)[2] << 8)
+                 |  ((unsigned char *) list.raddr)[3];
+          iret2 =  (((unsigned char *) list.raddr)[4] << 24)
+                 | (((unsigned char *) list.raddr)[5] << 16)
+                 | (((unsigned char *) list.raddr)[6] << 8)
+                 |  ((unsigned char *) list.raddr)[7];
         }
       }
     }
