@@ -1,5 +1,11 @@
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Fix weakness in tests (added on 2017-01-29).
+	* avcall/tests.c (ll_l2ll, ll_l3ll, ll_l4ll, ll_l5ll, ll_l6ll, ll_l7ll):
+	Use a temporary variable of type 'long long'.
+
+2017-08-27  Bruno Haible  <bruno@clisp.org>
+
 	vacall, callback: Remove workarounds for obsolete platforms.
 	* vacall/tests.c: Remove workarounds for SunOS 4 cc, gcc-2.5, gcc-2.7.x.
 	* callback/tests.c: Likewise.

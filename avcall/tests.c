@@ -670,42 +670,42 @@ double d_d17l3L (double a, double b, double c, double d, double e, double f,
 
 long long ll_l2ll (long a1, long a2, long long b, long c)
 {
-  long r = (long long) (a1 + a2) + b + c;
+  long long r = (long long) (a1 + a2) + b + c;
   fprintf(out,"long long f(2*long,long long,long):(%ld,%ld,0x%lx%08lx,%ld)",a1,a2,(long)(b>>32),(long)(b&0xffffffff),c);
   fflush(out);
   return r;
 }
 long long ll_l3ll (long a1, long a2, long a3, long long b, long c)
 {
-  long r = (long long) (a1 + a2 + a3) + b + c;
+  long long r = (long long) (a1 + a2 + a3) + b + c;
   fprintf(out,"long long f(3*long,long long,long):(%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,(long)(b>>32),(long)(b&0xffffffff),c);
   fflush(out);
   return r;
 }
 long long ll_l4ll (long a1, long a2, long a3, long a4, long long b, long c)
 {
-  long r = (long long) (a1 + a2 + a3 + a4) + b + c;
+  long long r = (long long) (a1 + a2 + a3 + a4) + b + c;
   fprintf(out,"long long f(4*long,long long,long):(%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,(long)(b>>32),(long)(b&0xffffffff),c);
   fflush(out);
   return r;
 }
 long long ll_l5ll (long a1, long a2, long a3, long a4, long a5, long long b, long c)
 {
-  long r = (long long) (a1 + a2 + a3 + a4 + a5) + b + c;
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5) + b + c;
   fprintf(out,"long long f(5*long,long long,long):(%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,(long)(b>>32),(long)(b&0xffffffff),c);
   fflush(out);
   return r;
 }
 long long ll_l6ll (long a1, long a2, long a3, long a4, long a5, long a6, long long b, long c)
 {
-  long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6) + b + c;
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6) + b + c;
   fprintf(out,"long long f(6*long,long long,long):(%ld,%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,a6,(long)(b>>32),(long)(b&0xffffffff),c);
   fflush(out);
   return r;
 }
 long long ll_l7ll (long a1, long a2, long a3, long a4, long a5, long a6, long a7, long long b, long c)
 {
-  long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6 + a7) + b + c;
+  long long r = (long long) (a1 + a2 + a3 + a4 + a5 + a6 + a7) + b + c;
   fprintf(out,"long long f(7*long,long long,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,0x%lx%08lx,%ld)",a1,a2,a3,a4,a5,a6,a7,(long)(b>>32),(long)(b&0xffffffff),c);
   fflush(out);
   return r;
