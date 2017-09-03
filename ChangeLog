@@ -1,5 +1,11 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	i386: Provide disambiguating size prefixes in more cases.
+	* common/asm-i386.sh: Introduce size prefixes also for the second
+	operand of instructions with two operands.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	i386: Simplify processing of assembly-language files.
 	* common/asm-i386.sh: Remove unused introduction of FUNEND. Remove
 	no-op rule for GLOBL.

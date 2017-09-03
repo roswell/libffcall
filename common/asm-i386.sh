@@ -116,11 +116,11 @@ EOF
 
 cat > $tmpscript06 << \EOF
 # ----------- Add size prefixes to memory references
-s/\([(]f[^(,]*,s.*\),MEM/\1,X4 MEM/g
-s/\([(]f[^(,]*,l.*\),MEM/\1,X8 MEM/g
-s/\([(][^(,]*,b.*\),MEM/\1,X1 MEM/g
-s/\([(][^(,]*,w.*\),MEM/\1,X2 MEM/g
-s/\([(][^(,]*,l.*\),MEM/\1,X4 MEM/g
+s/\([(]f[^(,]*,s.*\), *MEM/\1,X4 MEM/g
+s/\([(]f[^(,]*,l.*\), *MEM/\1,X8 MEM/g
+s/\([(][^(,]*,b.*\), *MEM/\1,X1 MEM/g
+s/\([(][^(,]*,w.*\), *MEM/\1,X2 MEM/g
+s/\([(][^(,]*,l.*\), *MEM/\1,X4 MEM/g
 EOF
 
 cat > $tmpscript07 << \EOF
