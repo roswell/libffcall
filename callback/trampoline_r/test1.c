@@ -79,7 +79,7 @@ register void* env __asm__("r10");
 register void* env __asm__("r0");
 #endif
 
-  return x + (int)((long*)env)[0] + (int)((long*)env)[1] + MAGIC3;
+  return x + (int)(long)((void**)env)[0] + (int)(long)((void**)env)[1] + MAGIC3;
 #else
   return x + MAGIC3;
 #endif

@@ -76,6 +76,7 @@ GNULIB_MODULES = \
   lock \
   longlong \
   nocrash \
+  stdint \
   stdnoreturn
 
 gnulib-m4/gnulib-cache.m4 :

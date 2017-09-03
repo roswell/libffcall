@@ -1,5 +1,22 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	Add support for platforms where sizeof(long) < sizeof(void*).
+	* ffcall-stdint.h: New file.
+	* Makefile.in (SOURCE_FILES): Add it.
+	* avcall/avcall-internal.h: Include ffcall-stdint.h. Use [u]intptr_t
+	instead of 'long', 'unsigned long', or '__avword' where appropriate.
+	* vacall/vacall-internal.h: Include ffcall-stdint.h. Use [u]intptr_t
+	instead of 'long', 'unsigned long', or '__vaword' where appropriate.
+	* Makefile.maint (GNULIB_MODULES): Add stdint.
+	* trampoline/trampoline.c: Include <stdint.h>. Use [u]intptr_t instead
+	of 'long' or 'unsigned long' where appropriate. For __x86_64__, use
+	'unsigned long long' instead of 'unsigned long'.
+	* callback/trampoline_r/trampoline.c: Likewise.
+	* callback/trampoline_r/test1.c (f): Use 'void*' instead of 'long' to
+	access env.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Add support for Cygwin.
 	* porting-tools/abis/call-used-registers.txt: Add info about x86_64-ms
 	ABI.

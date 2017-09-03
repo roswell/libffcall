@@ -18,6 +18,9 @@
 #ifndef _VACALL_INTERNAL_H
 #define _VACALL_INTERNAL_H
 
+/* Get intptr_t, uintptr_t. */
+#include "ffcall-stdint.h"
+
 /* Include the public definitions,  */
 #ifndef REENTRANT
 #include "vacall.h"
@@ -95,7 +98,7 @@ typedef struct vacall_alist
     __vaword            _words[2];
   }              tmp;
   /* current pointer into the argument array */
-  unsigned long  aptr;
+  uintptr_t      aptr;
   /* structure return pointer, return type, return type size */
   void*          raddr;
   enum __VAtype  rtype;
@@ -104,7 +107,7 @@ typedef struct vacall_alist
   void*          structraddr;
 #endif
 #if (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || defined(__alpha__) || defined(__hppa__)
-  long           memargptr;
+  uintptr_t      memargptr;
 #endif
 #if defined(__alpha__)
   long           farg_offset;
@@ -412,7 +415,7 @@ typedef struct vacall_alist
 
 /* Padding of non-struct arguments. */
 #define __va_argsize(TYPE_SIZE)  \
-  (((TYPE_SIZE) + sizeof(__vaword)-1) & -(long)sizeof(__vaword))
+  (((TYPE_SIZE) + sizeof(__vaword)-1) & -(intptr_t)sizeof(__vaword))
 #if defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__arm64__) || defined(__powerpc_aix__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* args grow up */
 /* small structures < 1 word are adjusted depending on compiler */
@@ -437,9 +440,9 @@ typedef struct vacall_alist
     ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__vaword),	\
        (char*)&(LIST)->iarg[(LIST)->ianum]				\
       )									\
-    : (((LIST)->aptr == (long)&(LIST)->iarg[__VA_IARG_NUM]		\
+    : (((LIST)->aptr == (uintptr_t)&(LIST)->iarg[__VA_IARG_NUM]		\
         ? /* split case */						\
-          ((LIST)->aptr = (long)&(LIST)->iarg[(LIST)->ianum] + __va_argsize(TYPE_SIZE), \
+          ((LIST)->aptr = (uintptr_t)&(LIST)->iarg[(LIST)->ianum] + __va_argsize(TYPE_SIZE), \
            0)								\
         : ((LIST)->aptr += __va_argsize(TYPE_SIZE),			\
            0)),								\
@@ -453,9 +456,9 @@ typedef struct vacall_alist
     ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__vaword),	\
        (char*)&(LIST)->iarg[(LIST)->ianum]				\
       )									\
-    : (((LIST)->aptr == (long)&(LIST)->iarg[__VA_IARG_NUM]		\
+    : (((LIST)->aptr == (uintptr_t)&(LIST)->iarg[__VA_IARG_NUM]		\
         ? /* split case */						\
-          ((LIST)->aptr = (long)&(LIST)->iarg[(LIST)->ianum] + __va_argsize(TYPE_SIZE), \
+          ((LIST)->aptr = (uintptr_t)&(LIST)->iarg[(LIST)->ianum] + __va_argsize(TYPE_SIZE), \
            0)								\
         : ((LIST)->aptr += __va_argsize(TYPE_SIZE),			\
            0)),								\
@@ -575,7 +578,7 @@ typedef struct vacall_alist
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM \
    ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
-      (void*)((__vaword)&(LIST)->iarg[(LIST)->ianum] - (TYPE_SIZE))	\
+      (void*)((uintptr_t)&(LIST)->iarg[(LIST)->ianum] - (TYPE_SIZE))	\
      )									\
    : ((LIST)->ianum = __VA_IARG_NUM,					\
       (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
@@ -615,15 +618,15 @@ typedef struct vacall_alist
 #if defined(__mips__) || defined(__arm__)
 /* ‘long long’s have alignment 8. */
 #define __va_arg_longlong(LIST,TYPE)					\
-  ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(long)__VA_alignof(TYPE)), \
+  ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(intptr_t)__VA_alignof(TYPE)), \
    __va_arg(LIST,TYPE))
 #endif
 #if defined(__armhf__) || defined(__powerpc_sysv4__)
 /* ‘long long’s have alignment 8. */
 #define __va_arg_longlong(LIST,TYPE)					\
   (((LIST)->ianum < __VA_IARG_NUM					\
-    ? ((LIST)->ianum = (((LIST)->ianum+__VA_alignof(TYPE)/sizeof(__vaword)-1) & -(long)(__VA_alignof(TYPE)/sizeof(__vaword))), 0) \
-    : ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(long)__VA_alignof(TYPE)), 0) \
+    ? ((LIST)->ianum = (((LIST)->ianum+__VA_alignof(TYPE)/sizeof(__vaword)-1) & -(intptr_t)(__VA_alignof(TYPE)/sizeof(__vaword))), 0) \
+    : ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(intptr_t)__VA_alignof(TYPE)), 0) \
    ),									\
    __va_arg(LIST,TYPE))
 #endif
@@ -644,7 +647,7 @@ typedef struct vacall_alist
 #if defined(__hppa__)
 /* ‘long long’s have alignment 8. */
 #define __va_arg_longlong(LIST,TYPE)					\
-  ((LIST)->aptr = ((LIST)->aptr & -(long)__VA_alignof(TYPE)),		\
+  ((LIST)->aptr = ((LIST)->aptr & -(intptr_t)__VA_alignof(TYPE)),	\
    __va_arg(LIST,TYPE))
 #endif
 #endif
@@ -657,11 +660,11 @@ typedef struct vacall_alist
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__) || defined(__arm__) || defined(__armhf__)
 /* __VA_alignof(double) > sizeof(__vaword) */
 #define __va_align_double(LIST)  \
-  (LIST)->aptr = ((LIST)->aptr + sizeof(double)-1) & -(long)sizeof(double),
+  (LIST)->aptr = ((LIST)->aptr + sizeof(double)-1) & -(intptr_t)sizeof(double),
 #endif
 #if defined(__hppa__)
 #define __va_align_double(LIST)  \
-  (LIST)->aptr = (LIST)->aptr & -(long)sizeof(double),
+  (LIST)->aptr = (LIST)->aptr & -(intptr_t)sizeof(double),
 #endif
 
 #if defined(__sparc__) && !defined(__sparc64__)
@@ -946,7 +949,7 @@ typedef struct vacall_alist
   (TYPE_ALIGN)
 #endif
 #define __va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (LIST)->aptr = ((LIST)->aptr + __va_struct_alignment(TYPE_ALIGN)-1) & -(long)__va_struct_alignment(TYPE_ALIGN),
+  (LIST)->aptr = ((LIST)->aptr + __va_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__va_struct_alignment(TYPE_ALIGN),
 #if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc64__) && !defined(_AIX)) || defined(__x86_64_sysv__)
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\

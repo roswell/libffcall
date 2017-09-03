@@ -113,6 +113,7 @@ SOURCE_FILES = \
   common/uniq-u.c \
   ffcall-version.in.h dummy/ffcall-version.h \
   ffcall-abi.h \
+  ffcall-stdint.h \
   testcases.c
 # List of distributed files imported from other packages or directories.
 LIBTOOL_IMPORTED_FILES = \

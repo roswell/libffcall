@@ -106,6 +106,9 @@ extern void (*tramp) (); /* trampoline prototype */
 #include <unistd.h>
 #endif
 
+/* Define intptr_t, uintptr_t. */
+#include <stdint.h>
+
 /* Declare getpagesize(). */
 #ifdef HAVE_GETPAGESIZE
 #ifdef __cplusplus
@@ -444,8 +447,8 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
       file_length = new_file_length;
       page_end = page + pagesize;
       /* Link the two pages together. */
-      ((long*)page)[0] = page_x - page;
-      page = (char*)(((long)page + sizeof(long) + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
+      ((intptr_t*)page)[0] = page_x - page;
+      page = (char*)(((uintptr_t)page + sizeof(intptr_t) + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
 #else
 #ifdef EXECUTABLE_VIA_MMAP_THEN_MPROTECT
 #ifdef HAVE_MMAP_ANONYMOUS
@@ -481,7 +484,7 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
       { char** last = &freelist;
         while (page+TRAMP_LENGTH <= page_end)
           { *last = page; last = (char**)page;
-            page = (char*)(((long)page + TRAMP_LENGTH + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
+            page = (char*)(((uintptr_t)page + TRAMP_LENGTH + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
           }
         *last = NULL;
     } }
@@ -491,15 +494,15 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
   { char* room = (char*) malloc(sizeof(void*) + TRAMP_LENGTH + TRAMP_ALIGN-1);
     if (!room)
       { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
-    function = (char*)(((long)room + sizeof(void*) + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
+    function = (char*)(((uintptr_t)room + sizeof(void*) + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
     ((char**)function)[-1] = room; /* backpointer for free_trampoline() */
   }
 #endif
 
 #if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
   /* Find the executable address corresponding to the writable address. */
-  { unsigned long page = (unsigned long) function & -(long)pagesize;
-    function_x = function + ((long*)page)[0];
+  { uintptr_t page = (uintptr_t) function & -(intptr_t)pagesize;
+    function_x = function + ((intptr_t*)page)[0];
   }
 #else
   function_x = function;
@@ -1239,16 +1242,16 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
    *    jmp *%rax			FF E0
    */
   *(short *) (function + 0) = 0xB848;
-  *(short *) (function + 2) = (unsigned long) data & 0xffff;
-  *(int *)   (function + 4) = ((unsigned long) data >> 16) & 0xffffffff;
-  *(short *) (function + 8) = ((unsigned long) data >> 48) & 0xffff;
+  *(short *) (function + 2) = (unsigned long long) data & 0xffff;
+  *(int *)   (function + 4) = ((unsigned long long) data >> 16) & 0xffffffff;
+  *(short *) (function + 8) = ((unsigned long long) data >> 48) & 0xffff;
   *(short *) (function +10) = 0xA348;
-  *(int *)   (function +12) = (unsigned long) variable & 0xffffffff;
-  *(int *)   (function +16) = ((unsigned long) variable >> 32) & 0xffffffff;
+  *(int *)   (function +12) = (unsigned long long) variable & 0xffffffff;
+  *(int *)   (function +16) = ((unsigned long long) variable >> 32) & 0xffffffff;
   *(short *) (function +20) = 0xB848;
-  *(short *) (function +22) = (unsigned long) address & 0xffff;
-  *(int *)   (function +24) = ((unsigned long) address >> 16) & 0xffffffff;
-  *(short *) (function +28) = ((unsigned long) address >> 48) & 0xffff;
+  *(short *) (function +22) = (unsigned long long) address & 0xffff;
+  *(int *)   (function +24) = ((unsigned long long) address >> 16) & 0xffffffff;
+  *(short *) (function +28) = ((unsigned long long) address >> 48) & 0xffff;
   *(short *) (function +30) = 0xE0FF;
 #define is_tramp(function)  \
   *(unsigned short *) (function + 0) == 0xB848 && \
@@ -1256,10 +1259,10 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
   *(unsigned short *) (function +20) == 0xB848 && \
   *(unsigned short *) (function +30) == 0xE0FF
 #define hilo(hiword,loword)  \
-  (((unsigned long) (hiword) << 32) | (unsigned long) (loword))
+  (((unsigned long long) (hiword) << 32) | (unsigned long long) (loword))
 #define himidlo(hishort,midword,loshort)  \
-  (((unsigned long) (hishort) << 48) | (unsigned long) (midword) << 16 \
-   | (unsigned long) (loshort))
+  (((unsigned long long) (hishort) << 48) | (unsigned long long) (midword) << 16 \
+   | (unsigned long long) (loshort))
 #define tramp_address(function)  \
   himidlo(*(unsigned short *) (function +28), \
           *(unsigned int *)   (function +24), \
@@ -1368,11 +1371,11 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #if !defined(CODE_EXECUTABLE)
 #if defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_THEN_MPROTECT)
   /* Call mprotect on the pages that contain the range. */
-  { unsigned long start_addr = (unsigned long) function;
-    unsigned long end_addr = (unsigned long) (function + TRAMP_LENGTH);
+  { uintptr_t start_addr = (uintptr_t) function;
+    uintptr_t end_addr = (uintptr_t) (function + TRAMP_LENGTH);
     start_addr = start_addr & -pagesize;
     end_addr = (end_addr + pagesize-1) & -pagesize;
-   {unsigned long len = end_addr - start_addr;
+   {uintptr_t len = end_addr - start_addr;
 #if defined(HAVE_MACH_VM)
     if (vm_protect(task_self(),start_addr,len,0,VM_PROT_READ|VM_PROT_WRITE|VM_PROT_EXECUTE) != KERN_SUCCESS)
 #else
@@ -1402,8 +1405,8 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __m68k__
 #if defined(__NetBSD__) && defined(__GNUC__)
-  { register unsigned long _beg __asm__ ("%a1") = (unsigned long) function_x;
-    register unsigned long _len __asm__ ("%d1") = TRAMP_CODE_LENGTH;
+  { register uintptr_t _beg __asm__ ("%a1") = (uintptr_t) function_x;
+    register uintptr_t _len __asm__ ("%d1") = TRAMP_CODE_LENGTH;
     __asm__ __volatile__ (
       "move%.l %#0x80000004,%/d0\n\t" /* CC_EXTPURGE | C_IPURGE */
       "trap #12"                      /* kernel call ‘cachectl’ */
@@ -1414,8 +1417,8 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
   }
 #endif
 #if defined(__linux__) && defined(__GNUC__)
-  { register unsigned long _beg __asm__ ("%d1") = (unsigned long) function_x;
-    register unsigned long _len __asm__ ("%d4") = TRAMP_CODE_LENGTH + 32;
+  { register uintptr_t _beg __asm__ ("%d1") = (uintptr_t) function_x;
+    register uintptr_t _len __asm__ ("%d4") = TRAMP_CODE_LENGTH + 32;
     __asm__ __volatile__ (
       "move%.l %#123,%/d0\n\t"
       "move%.l %#1,%/d2\n\t"
@@ -1492,8 +1495,8 @@ void free_trampoline (trampoline_function_t function)
 #if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT)
 #ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
   /* Find the writable address corresponding to the executable address. */
-  { unsigned long page_x = (unsigned long) function & -(long)pagesize;
-    function -= ((long*)page_x)[0];
+  { uintptr_t page_x = (uintptr_t) function & -(intptr_t)pagesize;
+    function -= ((intptr_t*)page_x)[0];
   }
 #endif
   *(char**)function = freelist; freelist = (char*)function;
@@ -1508,7 +1511,7 @@ int is_trampoline (void* function)
 #ifdef is_tramp
 #ifdef __hppanew__
   void* tramp_address = &tramp;
-  if (!(((long)function & 3) == (TRAMP_BIAS & 3))) return 0;
+  if (!(((uintptr_t)function & 3) == (TRAMP_BIAS & 3))) return 0;
 #endif
   return ((is_tramp(((char*)function - TRAMP_BIAS))) ? 1 : 0);
 #else
