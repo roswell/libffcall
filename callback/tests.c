@@ -1503,12 +1503,12 @@ int main (void)
   { void* vpr;
 
     vpr = vp_vpdpcpsp(&uc1,&d2,str3,&I4);
-    fprintf(out,"->0x%lx\n",(long)vpr);
+    fprintf(out,"->0x%p\n",vpr);
     fflush(out);
     vpr = 0; clear_traces();
     callback = alloc_callback(&vp_vpdpcpsp_simulator,(void*)&vp_vpdpcpsp);
     vpr = ((void* (*) (void*,double*,char*,Int*)) callback) (&uc1,&d2,str3,&I4);
-    fprintf(out,"->0x%lx\n",(long)vpr);
+    fprintf(out,"->0x%p\n",vpr);
     fflush(out);
   }
 

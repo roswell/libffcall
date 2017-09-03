@@ -766,7 +766,7 @@ void
   void* vpr;
 
   vpr = vp_vpdpcpsp(&uc1,&d2,str3,&I4);
-  fprintf(out,"->0x%lx\n",(long)vpr);
+  fprintf(out,"->0x%p\n",vpr);
   fflush(out);
   vpr = 0; clear_traces();
   av_start_ptr(a,vp_vpdpcpsp,void*,&vpr);
@@ -775,7 +775,7 @@ void
   av_ptr(a,char*,str3);
   av_ptr(a,Int*,&I4);
   av_call(a);
-  fprintf(out,"->0x%lx\n",(long)vpr);
+  fprintf(out,"->0x%p\n",vpr);
   fflush(out);
 
   return;

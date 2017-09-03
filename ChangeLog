@@ -1,5 +1,13 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	Fix warnings on 64-bit native Windows.
+	* avcall/tests.c (pointer_tests): Use %p to display the value of a
+	pointer.
+	* vacall/tests.c (main): Likewise,
+	* callback/tests.c (main): Likewise,
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	Add support for platforms where sizeof(long) < sizeof(void*).
 	* ffcall-stdint.h: New file.
 	* Makefile.in (SOURCE_FILES): Add it.
