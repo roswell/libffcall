@@ -290,7 +290,7 @@ clean : force
 	$(RM) tests.o tests.s tests tests.out
 
 distclean : clean
-	$(RM) Makefile minitests.output.* tests.output.*
+	$(RM) Makefile minitests.output.* minitests-c++.output.* tests.output.*
 
 maintainer-clean : distclean
 

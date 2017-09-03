@@ -197,7 +197,7 @@ clean : force
 
 DISTCLEANFILES = \
   Makefile \
-  minitests.output.* tests.output.*
+  minitests.output.* minitests-c++.output.* tests.output.*
 
 distclean : force
 	cd @callback_subdir@ && if test -f Makefile; then $(MAKE) distclean; fi

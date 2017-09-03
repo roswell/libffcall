@@ -1,3 +1,10 @@
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
+	Fix leftover files after "make distclean" (regression from 2017-08-27).
+	* avcall/Makefile.in (distclean): Also remove minitests-c++.output.*.
+	* vacall/Makefile.in (distclean): Likewise.
+	* callback/Makefile.in (DISTCLEANFILES): Add minitests-c++.output.*.
+
 2017-08-27  Bruno Haible  <bruno@clisp.org>
 
 	Enable building shared libraries on Windows.
