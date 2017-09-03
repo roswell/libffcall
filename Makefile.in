@@ -82,7 +82,7 @@ SOURCE_FILES = \
   VERSION \
   Makefile.devel \
   Makefile.maint \
-  Makefile.in Makefile.mingw32 Makefile.msvc \
+  Makefile.in Makefile.msvc \
   configure.ac \
   m4/as-underscore.m4 \
   m4/cc-gcc.m4 \

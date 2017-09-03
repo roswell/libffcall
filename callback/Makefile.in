@@ -216,7 +216,7 @@ maintainer-clean : force
 SOURCE_FILES = \
   COPYING MIGRATION PLATFORMS README callback.3 callback.html elf-hack.txt \
   Makefile.maint \
-  Makefile.in Makefile.mingw32 Makefile.msvc \
+  Makefile.in Makefile.msvc \
   callback.h \
   callback-libapi.c \
   test1.c \

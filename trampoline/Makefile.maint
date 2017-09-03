@@ -7,7 +7,7 @@ RM = rm -f
 ROFF_MAN = groff -Tutf8 -mandoc
 
 all : trampoline.man \
-      config.h.msvc config.h.mingw32
+      config.h.msvc
 
 trampoline.man : trampoline.3
 	$(ROFF_MAN) trampoline.3 > trampoline.man
@@ -15,12 +15,9 @@ trampoline.man : trampoline.3
 config.h.msvc : ../config.h.in
 	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' -e 's,^#undef STDC_HEADERS$$,#define STDC_HEADERS 1,' -e 's,^#undef HAVE_GETPAGESIZE$$,#define HAVE_GETPAGESIZE 1 /* fake */,' -e 's,^#undef RETGETPAGESIZETYPE$$,#define RETGETPAGESIZETYPE unsigned long,' -e 's,^#undef CODE_EXECUTABLE$$,#define CODE_EXECUTABLE 1,' < ../config.h.in > config.h.msvc
 
-config.h.mingw32 : ../config.h.in
-	sed -e 's,^#undef __i386__$$,#define __i386__ 1,' -e 's,^#undef STDC_HEADERS$$,#define STDC_HEADERS 1,' -e 's,^#undef HAVE_GETPAGESIZE$$,#define HAVE_GETPAGESIZE 1 /* fake */,' -e 's,^#undef RETGETPAGESIZETYPE$$,#define RETGETPAGESIZETYPE unsigned long,' -e 's,^#undef CODE_EXECUTABLE$$,#define CODE_EXECUTABLE 1,' < ../config.h.in > config.h.mingw32
-
 totally-clean : force
 	$(RM) trampoline.man
-	$(RM) config.h.msvc config.h.mingw32
+	$(RM) config.h.msvc
 
 
 force :
