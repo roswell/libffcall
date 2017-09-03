@@ -451,8 +451,6 @@ autom4te.cache/
 /callback/*.o
 /callback/*.lo
 /callback/core
-/callback/vacall_r.h
-/callback/trampoline_r.h
 /callback/libcallback.*
 /callback/test1.o
 /callback/test1

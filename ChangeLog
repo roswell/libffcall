@@ -1,5 +1,21 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	Don't use symbolic links for .h files.
+	MSVC 14 does not follow the symbolic links set by Cygwin's 'ln -s'.
+	* trampoline/Makefile.in (LN_S): Remove variable.
+	* callback/trampoline_r/Makefile.in (LN_S): Remove variable.
+	* callback/Makefile.in (INCLUDES): Add an -I option for vacall_r.h.
+	(LN_S): Remove variable.
+	(vacall_r.h, trampoline_r.h): Remove targets.
+	(callback-libapi.lo): Use explicit -I option for trampoline_r.h. Update
+	dependencies.
+	(test1.o, minitests.o, minitests.s, minitests-c++.o, tests.o, tests.s):
+	Update dependencies.
+	(MOSTLYCLEANFILES): Remove vacall_r.h, trampoline_r.h.
+	* configure.ac: Don't invoke CL_PROG_LN_S.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	Remove special build infrastructure for mingw. The generic one works.
 	* avcall/Makefile.maint (avcall-i386-mingw32.c): Remove target.
 	(totally-clean): Don't remove avcall-i386-mingw32.c.

@@ -29,7 +29,7 @@ CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 # Both C and C++ compiler
 CPPFLAGS = @CPPFLAGS@
-INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/..
+INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/.. -I$(srcdir)/vacall_r
 LDFLAGS = @LDFLAGS@
 LIBTOOL = @LIBTOOL@
 LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
@@ -39,7 +39,6 @@ LIBTOOL_UNINSTALL = $(LIBTOOL) --mode=uninstall
 AR = @AR@
 AR_FLAGS = rc
 RANLIB = @RANLIB@
-LN_S = @LN_S@
 RM = rm -f
 @SET_MAKE@
 
@@ -66,19 +65,13 @@ LIBCALLBACK_EXPORTED_SYMBOLS_REGEX = '^callback_|_callback$$|^trampoline_r_data0
 # section "Library interface versions".
 LIBCALLBACK_VERSION_INFO = 1:0:0
 
-all : all-subdirs vacall_r.h trampoline_r.h libcallback.la $(srcdir)/callback.3 $(srcdir)/callback.html
+all : all-subdirs libcallback.la $(srcdir)/callback.3 $(srcdir)/callback.html
 
 all-subdirs : force
 	cd @callback_subdir@ && $(MAKE) all
 
-vacall_r.h :
-	$(LN_S) $(srcdir)/vacall_r/vacall_r.h vacall_r.h
-
-trampoline_r.h :
-	$(LN_S) $(srcdir)/trampoline_r/trampoline_r.h trampoline_r.h
-
-callback-libapi.lo : $(srcdir)/callback-libapi.c $(srcdir)/callback.h trampoline_r.h ../config.h
-	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/callback-libapi.c
+callback-libapi.lo : $(srcdir)/callback-libapi.c $(srcdir)/callback.h $(srcdir)/trampoline_r/trampoline_r.h ../config.h
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) -I$(srcdir)/trampoline_r $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/callback-libapi.c
 
 libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la callback-libapi.lo
 	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) -no-undefined -export-symbols-regex $(LIBCALLBACK_EXPORTED_SYMBOLS_REGEX) -version-info $(LIBCALLBACK_VERSION_INFO) vacall_r/vacall.lo vacall_r/vacall-libapi.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo callback-libapi.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
@@ -125,22 +118,22 @@ uninstall : force
 	$(RM) $(DESTDIR)$(mandir)/man3/callback.3
 	$(RM) $(DESTDIR)$(htmldir)/callback.html
 
-test1.o : $(srcdir)/test1.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
+test1.o : $(srcdir)/test1.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
 test1 : test1.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o libcallback.la $(LDFLAGS) -o test1
 
-minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
+minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
 
-minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
+minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
 minitests : minitests.o libcallback.la
 	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libcallback.la $(LDFLAGS) -o minitests
 
-minitests-c++.o : $(srcdir)/minitests-c++.cc $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
+minitests-c++.o : $(srcdir)/minitests-c++.cc $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CXX) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS) -c $(srcdir)/minitests-c++.cc
 
 minitests-c++ : minitests-c++.o libcallback.la
@@ -159,10 +152,10 @@ check : all check-subdirs test1 minitests
 @IF_CXX@	test '!' -s minitests-c++.output.$(HOST)
 @IF_CXX@check : minitests-c++
 
-tests.o : $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
+tests.o : $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/tests.c
 
-tests.s : $(srcdir)/tests.c $(srcdir)/callback.h vacall_r.h trampoline_r.h
+tests.s : $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
 tests : tests.o libcallback.la
@@ -179,7 +172,7 @@ extracheck : all extracheck-subdirs tests
 MOSTLYCLEANDIRS = .libs _libs
 MOSTLYCLEANFILES = \
   *.o *.lo core \
-  vacall_r.h trampoline_r.h libcallback.* \
+  libcallback.* \
   test1.o test1 \
   minitests.o minitests.s minitests minitests.out \
   minitests-c++.o minitests-c++ minitests-c++.out \
