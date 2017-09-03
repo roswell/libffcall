@@ -30,8 +30,12 @@
 //           be inside the parentheses, not outside, because otherwise some
 //           ANSI C preprocessor inserts a space between the label and the `:',
 //           and some assemblers don't like this.
+//   TEXT()
+//           Switch to the code section.
 //   P2ALIGN(log,max)
 //           Align to 2^log bytes, but insert at most max bytes.
+//   GLOBL(name)
+//           Declare `name' to be a global symbol.
 //   DECLARE_FUNCTION(name)
 //           Declare `name' to be a global function. When assembly language
 //           code is compiled into a shared library, ELF linkers need to know
@@ -41,33 +45,85 @@
 //   FUNEND(name,size_expression)
 //           End the assembly language code for the C function 'name'.
 
+#ifdef _MSC_VER
+// MSVC
+#define C(entrypoint) entrypoint
+#define L(label) $L##label
+#else
 #ifdef ASM_UNDERSCORE
 // Mac OS X
 #define C(entrypoint) _##entrypoint
 #define L(label) L##label
 #else
-// Linux/ELF
+// Linux/ELF, Solaris/ELF, Windows with GNU as
 #define C(entrypoint) entrypoint
 #define L(label) .L##label
 #endif
+#endif
 
+#ifdef _MSC_VER
+// MS assembler
+#else
+// GNU assembler version 2
+#endif
+
+#ifdef _MSC_VER
+// No pseudo-ops available in MS inline assembler.
+#define TEXT()
+#else
+#define TEXT() .text
+#endif
+
+#ifdef _MSC_VER
+// No pseudo-ops available in MS inline assembler.
+#define P2ALIGN(log,max)
+#else
 #if defined __sun
 // Solaris
 #define P2ALIGN(log,max) .align 1<<log
 #else
-// Mac OS X, Linux
+// Mac OS X, Linux, Windows with GNU as
 #define P2ALIGN(log,max) .p2align log,,max
 #endif
+#endif
 
-// When assembly language code is compiled into a shared library, ELF linkers
-// need to know which symbols are functions.
+#ifdef _MSC_VER
+#define GLOBL(name)
+#else
+#define GLOBL(name) .globl name
+#endif
+
+// Define the DECLARE_FUNCTION(name) macro.
+#ifdef _MSC_VER
+// MSVC
+#define DECLARE_FUNCTION(name)
+#else
+#if (defined _WIN32 || defined __WIN32__ || defined __CYGWIN__)
+// Windows with GNU as
+#define DECLARE_FUNCTION(name) .def C(name); .scl 2; .type 32; .endef
+#else
 #ifdef ASM_UNDERSCORE
 // Mac OS X
 #define DECLARE_FUNCTION(name)
-#define FUNEND(name,size_expression)
 #else
 // ELF
 #define DECLARE_FUNCTION(name) .type C(name),@function
+#endif
+#endif
+#endif
+
+// Define the FUNBEGIN(name) and FUNEND() macros.
+#ifdef _MSC_VER
+// The "naked" attribute avoids the compiler generated prologue and epilogue.
+#define FUNBEGIN(name) __declspec(naked) void name () { __asm {
+#define FUNEND(name,size_expression)                  }       }
+#else
+#define FUNBEGIN(name) C(name):
+#if (defined _WIN32 || defined __WIN32__ || defined __CYGWIN__) || defined(ASM_UNDERSCORE)
+// Windows with GNU as, Mac OS X
+#define FUNEND(name,size_expression)
+#else
+// ELF
 #if defined __sun
 // Solaris/ELF
 #define FUNEND(name,size_expression) .size C(name), . - C(name)
@@ -76,7 +132,7 @@
 #define FUNEND(name,size_expression) .size C(name),size_expression
 #endif
 #endif
-#define FUNBEGIN(name) C(name):
+#endif
 
 // Section of frame info for exception handlers
 #if defined __APPLE__ && defined __MACH__

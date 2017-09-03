@@ -53,7 +53,7 @@ s/\.section	\.eh_frame,"a[w]*",@progbits/.section	EH_FRAME_SECTION/
 # https://illumos.org/issues/3210)
 # Likewise this section does not assemble on Mac OS X 10.5.
 /EH_FRAME_SECTION/{
-s/^/#if !(defined __sun || (defined __APPLE__ \&\& defined __MACH__))\
+s/^/#if !(defined __sun || (defined __APPLE__ \&\& defined __MACH__) || (defined _WIN32 || defined __WIN32__ || defined __CYGWIN__))\
 /
 }
 ${
@@ -64,7 +64,11 @@ EOF
 
 cat > $tmpscript3 << \EOF
 # ----------- Introduce macro syntax for assembler pseudo-ops
+/\.file\([ 	]\+\)/d
+s/\.text/TEXT()/
 s/\.p2align \([^,]*\),,\(.*\)/P2ALIGN(\1,\2)/
+s/\.p2align 3$/P2ALIGN(3,7)/
+s/\.globl\([ 	]\+\)\(.*\)$/GLOBL(C(\2))/
 /\.section\([ 	]\+\).*GNU-stack/d
 s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
 EOF

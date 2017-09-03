@@ -1,5 +1,52 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Add support for Cygwin.
+	* porting-tools/abis/call-used-registers.txt: Add info about x86_64-ms
+	ABI.
+	* porting-tools/abis/reg-struct-return.txt: Likewise.
+	* porting-tools/abis/stack-frame.txt: Likewise.
+	* common/asm-x86_64.h: Add support for compilers on Windows.
+	(TEXT, GLOBL): New macros.
+	* common/asm-x86_64.sh: Truncate the EH_FRAME_SECTION also on Windows.
+	Eliminate .file pseudo-op. Macroize .text, .p2align, .globl directives.
+	* avcall/avcall-alist.h (__x86_64_ms__, __x86_64_sysv__): New macros.
+	(__av_alist): Add support for __x86_64_ms__.
+	* avcall/avcall-internal.h (__av_start1, __av_reg_struct_return,
+	__av_start_struct3, __av_start_struct4, __av_word, _av_float,
+	_av_double, __av_struct): Add support for __x86_64_ms__.
+	* avcall/avcall-x86_64.c: Improve comments.
+	* avcall/avcall-x86_64-windows.c: New file.
+	* avcall/Makefile.devel (avcall-x86_64-windows.s,
+	avcall-x86_64-windows-macro.S): New targets.
+	* avcall/Makefile.in (avcall-x86_64.s): On Windows, use
+	avcall-x86_64-windows-macro.S.
+	(SOURCE_FILES): Add avcall-x86_64-windows.c, avcall-x86_64-windows.s,
+	avcall-x86_64-windows-macro.S.
+	* vacall/vacall-internal.h (__x86_64_ms__, __x86_64_sysv__): New macros.
+	(__VA_FARG_NUM): Define also for __mipsn32__ || __mips64__.
+	(__va_alist): Add support for __x86_64_ms__.
+	(__va_reg_struct_return, __va_start_struct1, __va_start_struct2,
+	__va_arg_leftadjusted, __va_arg_rightadjusted, __va_arg_adjusted,
+	_va_arg_float, _va_arg_double, __va_arg_struct): Likewise.
+	* vacall/vacall-x86_64.c: Update comments.
+	* vacall/vacall-x86_64-windows.c: New file.
+	* vacall/Makefile.devel (vacall-x86_64-windows.s,
+	vacall-x86_64-windows-macro.S): New targets.
+	* vacall/Makefile.in (vacall-x86_64.s): On Windows, use
+	vacall-x86_64-windows-macro.S.
+	(SOURCE_FILES): Add vacall-x86_64-windows.c, vacall-x86_64-windows.s,
+	vacall-x86_64-windows-macro.S.
+	* callback/vacall_r/Makefile.devel (vacall-x86_64-windows.s,
+	vacall-x86_64-windows-macro.S): New targets.
+	* callback/vacall_r/Makefile.in (vacall-x86_64.s): On Windows, use
+	vacall-x86_64-windows-macro.S.
+	(SOURCE_FILES): Add vacall-x86_64-windows.s,
+	vacall-x86_64-windows-macro.S.
+	* PLATFORMS, */PLATFORMS: List the 64-bit Cygwin machine.
+	* NEWS: Mention the new port.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	Remove special build infrastructure for MSVC. The generic one works.
 	* avcall/Makefile.msvc: Remove file.
 	* avcall/Makefile.in (SOURCE_FILES): Remove it.

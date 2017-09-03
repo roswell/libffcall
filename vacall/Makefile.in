@@ -183,8 +183,12 @@ vacall-ia64.s : $(srcdir)/vacall-ia64-macro.S
 vacall-x86_64.@OBJEXT@ : vacall-x86_64.s
 	$(CC) @GCC_X_NONE@ -c vacall-x86_64.s
 
-vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
+vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S $(srcdir)/vacall-x86_64-windows-macro.S
+	case "$(OS)" in \
+	  cygwin* | mingw*) variant='-windows';; \
+	  *) variant='';; \
+	esac; \
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-x86_64$${variant}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
 
 vacall-x86_64-x32.@OBJEXT@ : vacall-x86_64-x32.s
 	$(CC) @GCC_X_NONE@ -c vacall-x86_64-x32.s
@@ -326,6 +330,7 @@ SOURCE_FILES = \
   vacall-sparc.c vacall-sparc-linux.s vacall-sparc-linux-pic.s vacall-sparc-macro.S \
   vacall-sparc64.c vacall-sparc64-linux.s vacall-sparc64-linux-pic.s vacall-sparc64-macro.S \
   vacall-x86_64.c vacall-x86_64-linux.s vacall-x86_64-macro.S vacall-x86_64-x32-linux.s \
+  vacall-x86_64-windows.c vacall-x86_64-windows.s vacall-x86_64-windows-macro.S \
   vacall-libapi.c \
   vacall-structcpy.c \
   minitests.c minitests-c++.cc \

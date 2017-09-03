@@ -1,4 +1,4 @@
-/* vacall function for x86_64 CPU with the Unix ABI ('gcc -mabi=sysv') */
+/* vacall function for x86_64 CPU with the Windows ABI ('gcc -mabi=ms') */
 
 /*
  * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
@@ -25,68 +25,62 @@ register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("r10");
 #endif
 
-register __vaword iarg1 __asm__("rdi");
-register __vaword iarg2 __asm__("rsi");
-register __vaword iarg3 __asm__("rdx");
-register __vaword iarg4 __asm__("rcx");
-register __vaword iarg5 __asm__("r8");
-register __vaword iarg6 __asm__("r9");
+register __vaword iarg1 __asm__("rcx");
+register __vaword iarg2 __asm__("rdx");
+register __vaword iarg3 __asm__("r8");
+register __vaword iarg4 __asm__("r9");
 
-register double farg1 __asm__("xmm0");
-register double farg2 __asm__("xmm1");
-register double farg3 __asm__("xmm2");
-register double farg4 __asm__("xmm3");
-register double farg5 __asm__("xmm4");
-register double farg6 __asm__("xmm5");
-register double farg7 __asm__("xmm6");
-register double farg8 __asm__("xmm7");
+register float farg1 __asm__("xmm0");
+register float farg2 __asm__("xmm1");
+register float farg3 __asm__("xmm2");
+register float farg4 __asm__("xmm3");
+
+register double darg1 __asm__("xmm0");
+register double darg2 __asm__("xmm1");
+register double darg3 __asm__("xmm2");
+register double darg4 __asm__("xmm3");
 
 register __vaword iret  __asm__("rax");
-register __vaword iret2 __asm__("rdx");
 register float  fret __asm__("xmm0");
 register double dret __asm__("xmm0");
 
 /*
- * Tell gcc to not use the call-saved registers %rbx, %rbp.
+ * Tell gcc to not use the call-saved registers %rbx, %rsi, %rdi.
  * This ensures that the return sequence does not need to restore registers
  * from the stack.
  */
 register void*	dummy1	__asm__("%rbx");
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 9)
-register void*	dummy2	__asm__("%rbp");
-#endif
+register void*	dummy2	__asm__("%rsi");
+register void*	dummy3	__asm__("%rdi");
 
 #ifdef REENTRANT
 static
 #endif
 void /* the return type is variable, not void! */
 vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
-                 __vaword word5, __vaword word6,
                  __vaword firstword)
 {
   __va_alist list;
-  /* Move the arguments passed in registers to temp storage. */
-  list.iarg[0] = iarg1;
-  list.iarg[1] = iarg2;
-  list.iarg[2] = iarg3;
-  list.iarg[3] = iarg4;
-  list.iarg[4] = iarg5;
-  list.iarg[5] = iarg6;
+  /* Move the arguments passed in registers to their stack locations. */
+  (&firstword)[-4] = word1;
+  (&firstword)[-3] = word2;
+  (&firstword)[-2] = word3;
+  (&firstword)[-1] = word4;
+  /* Move the floating-point arguments passed in registers to temp storage. */
   list.farg[0] = farg1;
   list.farg[1] = farg2;
   list.farg[2] = farg3;
   list.farg[3] = farg4;
-  list.farg[4] = farg5;
-  list.farg[5] = farg6;
-  list.farg[6] = farg7;
-  list.farg[7] = farg8;
+  list.darg[0] = darg1;
+  list.darg[1] = darg2;
+  list.darg[2] = darg3;
+  list.darg[3] = darg4;
   /* Prepare the va_alist. */
   list.flags = 0;
-  list.aptr = (long)&firstword;
+  list.aptr = (long)(&firstword - 4);
   list.raddr = (void*)0;
   list.rtype = __VAvoid;
-  list.ianum = 0;
-  list.fanum = 0;
+  list.anum = 0;
   /* Call vacall_function. The macros do all the rest. */
 #ifndef REENTRANT
   (*vacall_function) (&list);
@@ -124,18 +118,10 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = list.tmp._ulong;
   } else
   if (list.rtype == __VAlonglong) {
-#ifdef __x86_64_x32__
-    iret = list.tmp._longlong;
-#else
     iret = list.tmp._long;
-#endif
   } else
   if (list.rtype == __VAulonglong) {
-#ifdef __x86_64_x32__
-    iret = list.tmp._ulonglong;
-#else
     iret = list.tmp._ulong;
-#endif
   } else
   if (list.rtype == __VAfloat) {
     fret = list.tmp._float;
@@ -148,41 +134,32 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   } else
   if (list.rtype == __VAstruct) {
     if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
-      /* Return structs of size <= 16 in registers. */
-      if (list.rsize > 0 && list.rsize <= 16) {
-        iret = (__vaword)((unsigned char *) list.raddr)[0];
-        if (list.rsize >= 2)
-          iret |= (__vaword)((unsigned char *) list.raddr)[1] << 8;
-        if (list.rsize >= 3)
-          iret |= (__vaword)((unsigned char *) list.raddr)[2] << 16;
-        if (list.rsize >= 4)
-          iret |= (__vaword)((unsigned char *) list.raddr)[3] << 24;
-        if (list.rsize >= 5)
-          iret |= (__vaword)((unsigned char *) list.raddr)[4] << 32;
-        if (list.rsize >= 6)
-          iret |= (__vaword)((unsigned char *) list.raddr)[5] << 40;
-        if (list.rsize >= 7)
-          iret |= (__vaword)((unsigned char *) list.raddr)[6] << 48;
-        if (list.rsize >= 8)
-          iret |= (__vaword)((unsigned char *) list.raddr)[7] << 56;
-        if (list.rsize >= 9) {
-          iret2 = (__vaword)((unsigned char *) list.raddr)[8];
-          if (list.rsize >= 10)
-            iret2 |= (__vaword)((unsigned char *) list.raddr)[9] << 8;
-          if (list.rsize >= 11)
-            iret2 |= (__vaword)((unsigned char *) list.raddr)[10] << 16;
-          if (list.rsize >= 12)
-            iret2 |= (__vaword)((unsigned char *) list.raddr)[11] << 24;
-          if (list.rsize >= 13)
-            iret2 |= (__vaword)((unsigned char *) list.raddr)[12] << 32;
-          if (list.rsize >= 14)
-            iret2 |= (__vaword)((unsigned char *) list.raddr)[13] << 40;
-          if (list.rsize >= 15)
-            iret2 |= (__vaword)((unsigned char *) list.raddr)[14] << 48;
-          if (list.rsize >= 16)
-            iret2 |= (__vaword)((unsigned char *) list.raddr)[15] << 56;
-        }
+      /* Return structs of size 1, 2, 4, 8 in registers. */
+      if (list.rsize == 1) {
+        iret =    (__vaword)((unsigned char *) list.raddr)[0];
+      } else
+      if (list.rsize == 2) {
+        iret =    (__vaword)((unsigned char *) list.raddr)[0]
+               | ((__vaword)((unsigned char *) list.raddr)[1] << 8);
+      } else
+      if (list.rsize == 4) {
+        iret =    (__vaword)((unsigned char *) list.raddr)[0]
+               | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+               | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+               | ((__vaword)((unsigned char *) list.raddr)[3] << 24);
+      } else
+      if (list.rsize == 8) {
+        iret =    (__vaword)((unsigned char *) list.raddr)[0]
+               | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
+               | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
+               | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
+               | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
+               | ((__vaword)((unsigned char *) list.raddr)[5] << 40)
+               | ((__vaword)((unsigned char *) list.raddr)[6] << 48)
+               | ((__vaword)((unsigned char *) list.raddr)[7] << 56);
       }
+    } else {
+      iret = (long)list.raddr;
     }
   }
 }

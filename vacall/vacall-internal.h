@@ -40,6 +40,15 @@
 #endif
 #endif
 
+/* The Unix and Windows variants of x86_64 ABIs are quite different. */
+#if defined(__x86_64__)
+#if defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#define __x86_64_ms__ 1
+#else
+#define __x86_64_sysv__ 1
+#endif
+#endif
+
 
 /* Max # words in temporary structure storage.
  */
@@ -116,8 +125,9 @@ typedef struct vacall_alist
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
   int            anum;
-  float          farg[8];
-  double         darg[8];
+#define __VA_FARG_NUM 8
+  float          farg[__VA_FARG_NUM];
+  double         darg[__VA_FARG_NUM];
 #endif
 #if defined(__sparc64__)
   int            anum;
@@ -161,13 +171,19 @@ typedef struct vacall_alist
   unsigned int   fanum;
   double         farg[__VA_FARG_NUM];
 #endif
-#if defined(__x86_64__)
+#if defined(__x86_64_sysv__)
 #define __VA_FARG_NUM 8
   unsigned int   fanum;
   double         farg[__VA_FARG_NUM];
 #define __VA_IARG_NUM 6
   unsigned int   ianum;
   __vaword       iarg[__VA_IARG_NUM];
+#endif
+#if defined(__x86_64_ms__)
+  int            anum;
+#define __VA_FARG_NUM 4
+  float          farg[__VA_FARG_NUM];
+  double         darg[__VA_FARG_NUM];
 #endif
 #if defined(__s390__) && !defined(__s390x__)
 #define __VA_IARG_NUM 5
@@ -325,17 +341,27 @@ typedef struct vacall_alist
  * and the struct will actually be returned in registers.
  */
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
-  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,				\
+  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,			\
    0)
 #endif
-#if defined(__arm64__) || (defined(__powerpc64__) && defined(__powerpc64_elfv2__)) || defined(__x86_64__)
+#if defined(__arm64__) || (defined(__powerpc64__) && defined(__powerpc64_elfv2__)) || defined(__x86_64_sysv__)
 #define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
   ((TYPE_SIZE) <= 16)
 /* Turn on __VA_REGISTER_STRUCT_RETURN if __VA_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers.
  */
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
-  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,				\
+  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,			\
+   0)
+#endif
+#if defined(__x86_64_ms__)
+#define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8)
+/* Turn on __VA_REGISTER_STRUCT_RETURN if __VA_SMALL_STRUCT_RETURN was set
+ * and the struct will actually be returned in registers.
+ */
+#define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
+  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,			\
    0)
 #endif
 /*
@@ -349,7 +375,7 @@ typedef struct vacall_alist
    0									\
   )
 #endif
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__)
+#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__x86_64_ms__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
   ((LIST)->raddr = *(void* *)((LIST)->aptr),				\
@@ -366,7 +392,7 @@ typedef struct vacall_alist
    0									\
   )
 #endif
-#if defined(__powerpc_sysv4__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
   ((LIST)->raddr = (void*)((LIST)->iarg[(LIST)->ianum++]),		\
@@ -387,7 +413,7 @@ typedef struct vacall_alist
 /* Padding of non-struct arguments. */
 #define __va_argsize(TYPE_SIZE)  \
   (((TYPE_SIZE) + sizeof(__vaword)-1) & -(long)sizeof(__vaword))
-#if defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__arm64__) || defined(__powerpc_aix__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__) || defined(__s390__) || defined(__s390x__)
+#if defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__arm64__) || defined(__powerpc_aix__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* args grow up */
 /* small structures < 1 word are adjusted depending on compiler */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
@@ -470,7 +496,7 @@ typedef struct vacall_alist
      )									\
   )
 #endif
-#if defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__)
+#if defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__x86_64_ms__)
 /* args grow up */
 /* small structures < 1 word are adjusted depending on compiler */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
@@ -500,7 +526,7 @@ typedef struct vacall_alist
    (LIST)->aptr + ((-(TYPE_SIZE)) & 3)					\
   )
 #endif
-#if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || ((defined(__arm__) || defined(__armhf__)) && defined(__ARMEL__)) || defined(__ia64__) || (defined(__powerpc64__) && defined(_LITTLE_ENDIAN))
+#if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || ((defined(__arm__) || defined(__armhf__)) && defined(__ARMEL__)) || defined(__ia64__) || (defined(__powerpc64__) && defined(_LITTLE_ENDIAN)) || defined(__x86_64_ms__)
 /* little endian -> small args < 1 word are adjusted to the left */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
@@ -533,7 +559,7 @@ typedef struct vacall_alist
    : (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
   )
 #endif
-#if defined(__x86_64__)
+#if defined(__x86_64_sysv__)
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (((TYPE_SIZE) <= 2*sizeof(__vaword)					\
@@ -717,21 +743,21 @@ typedef struct vacall_alist
     : *(double*)((LIST)->aptr - sizeof(double))				\
   ))
 #endif
-#if defined(__mipsn32__) || defined(__mips64__)
+#if defined(__mipsn32__) || defined(__mips64__) || defined(__x86_64_ms__)
 /* The first 0,..,8 registers are stored elsewhere if they are floating-point
  * parameters.
  */
 #define _va_arg_float(LIST)  \
   (__va_align_double(LIST)						\
    (LIST)->aptr += sizeof(double),					\
-   (++(LIST)->anum <= 8							\
+   (++(LIST)->anum <= __VA_FARG_NUM					\
     ? (LIST)->farg[(LIST)->anum - 1]					\
     : *(float*)((LIST)->aptr - sizeof(double))				\
   ))
 #define _va_arg_double(LIST)  \
   (__va_align_double(LIST)						\
    (LIST)->aptr += sizeof(double),					\
-   (++(LIST)->anum <= 8							\
+   (++(LIST)->anum <= __VA_FARG_NUM					\
     ? (LIST)->darg[(LIST)->anum - 1]					\
     : *(double*)((LIST)->aptr - sizeof(double))				\
   ))
@@ -865,7 +891,7 @@ typedef struct vacall_alist
     : *(double*)((LIST)->aptr - sizeof(double))				\
   ))
 #endif
-#if defined(__x86_64__)
+#if defined(__x86_64_sysv__)
 /* The first 8 floating-point args have been stored elsewhere. */
 #define _va_arg_float(LIST)  \
   ((LIST)->fanum < __VA_FARG_NUM					\
@@ -921,7 +947,7 @@ typedef struct vacall_alist
 #endif
 #define __va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (LIST)->aptr = ((LIST)->aptr + __va_struct_alignment(TYPE_ALIGN)-1) & -(long)__va_struct_alignment(TYPE_ALIGN),
-#if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc64__) && !defined(_AIX)) || defined(__x86_64__)
+#if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc64__) && !defined(_AIX)) || defined(__x86_64_sysv__)
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
    __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)				\
@@ -994,7 +1020,7 @@ typedef struct vacall_alist
    : va_arg_ptr(LIST,void*)						\
   )
 #endif
-#if defined(__s390__) || defined(__s390x__)
+#if defined(__x86_64_ms__) || defined(__s390__) || defined(__s390x__)
 /* Structures of 1, 2, 4, 8 bytes are passed as embedded copies on the arg stack.
  * Big structures are passed as pointers to caller-made local copies.
  */

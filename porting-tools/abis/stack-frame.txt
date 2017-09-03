@@ -43,6 +43,7 @@ powerpc       8  3-10                   Y (split struct) on AIX and Darwin,
 powerpc64     8  3-10                   Y (split struct)
 ia64          8  r32-r39                Y (split struct)
 x86_64        6  rdi,rsi,rdx,rcx,r8,r9  N
+x86_64-ms     4  rdx,rcx,r8,r9          N
 s390,s390x    5  r2-r6                  N
 
 If "Is needed?" is N, the easiest solution is that the __va_alist contains
@@ -73,7 +74,8 @@ powerpc       8  3-10                                                 Y (preallo
                                                                       N otherwise
 powerpc64     8  3-10                                                 Y (preallocated room)
 ia64          8  r32-r39                ?                             Y (allocated room through split struct)
-x86_64        6  rdi,rsi,rdx,rcx,r8,r9  rbp, retaddr                  N
+x86_64        6  rdi,rsi,rdx,rcx,r8,r9  rbp(opt), retaddr             N
+x86_64-ms     4  rdx,rcx,r8,r9          rbp(opt), retaddr             N
 s390,s390x    5  r2-r6                                                N
 
 The canonical function prologue, epilogue, and call sequence can be determined
@@ -309,7 +311,7 @@ Epilogue
     br.ret.sptk.many b0
 ==========================
 
-========== x86_64 ==========
+========== x86_64, x86_64-ms ==========
 Prologue
     pushq %rbp
     movq %rsp,%rbp

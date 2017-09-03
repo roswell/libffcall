@@ -28,6 +28,7 @@ New in 2.0:
 * Added support for the following platforms:
   (Previously, a build on these platforms failed.)
   - i386: MSVC 14.
+  - x86_64: Cygwin.
   - m68k: Linux.
 
 New in 1.13:

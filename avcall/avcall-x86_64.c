@@ -16,27 +16,35 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **/
 /*----------------------------------------------------------------------
-  !!! THIS ROUTINE MUST BE COMPILED gcc -O -fno-omit-frame-pointer !!!
-
-  Foreign function interface for a Linux x86_64 (a.k.a. amd64) with gcc.
+  Foreign function interface for an x86_64 (a.k.a. amd64) with gcc
+  using the Unix ABI ('gcc -mabi=sysv').
 
   This calls a C function with an argument list built up using macros
   defined in avcall.h.
 
-  x86_64 Argument Passing Conventions are documented in
-  http://www.x86-64.org/abi.pdf.
+  x86_64 Argument Passing Conventions on Unix:
 
-  Up to six words are passed in integer registers (%rdi, %rsi, %rdx, %rcx,
-  %r8, %r9). Up to 8 float/double arguments are passed in SSE registers
-  (%xmm0..%xmm7). Varargs functions expect an upper bound for the number
-  of SSE register arguments in %al (in the range 0..8). All arguments
-  are passed on the stack with word alignment. Structure args are passed
-  as true structures embedded in the argument stack. 
+  Documentation is at https://github.com/hjl-tools/x86-psABI/wiki/X86-psABI
 
-  Integers are returned in %rax, %rdx. Float/double values are returned
-  in %xmm0, %xmm1. To return a structure larger than 16 bytes, the called
-  function copies the value to space pointed to by its first argument,
-  and all other arguments are shifted down by one.
+  * Arguments:
+    - Integer or pointer arguments:
+      The first 6 integer or pointer arguments get passed in integer
+      registers (%rdi, %rsi, %rdx, %rcx, %r8, %r9).
+      The remaining ones (as an entire word each) on the stack.
+    - Floating-point arguments:
+      Up to 8 float/double arguments are passed in SSE registers
+      (%xmm0..%xmm7).
+      The remaining ones (as an entire word each) on the stack.
+    - Structure arguments:
+      Structure args are passed as true structures embedded in the
+      argument stack.
+  * Return value:
+    Integers are returned in %rax, %rdx. Float/double values are returned
+    in %xmm0, %xmm1. To return a structure larger than 16 bytes, the called
+    function copies the value to space pointed to by its first argument,
+    and all other arguments are shifted down by one.
+  * Call-used registers: rax,rdx,rcx,rsi,rdi,r8-r11
+
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 

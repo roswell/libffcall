@@ -23,7 +23,7 @@ precompiled : \
   avcall-arm64-macro.S \
   avcall-powerpc-aix.s avcall-powerpc-linux-macro.S avcall-powerpc-sysv4-macro.S avcall-powerpc-macos.s avcall-powerpc64-aix.s avcall-powerpc64-linux.S avcall-powerpc64-elfv2-linux.S \
   avcall-ia64-macro.S \
-  avcall-x86_64-macro.S avcall-x86_64-x32-linux.s \
+  avcall-x86_64-macro.S avcall-x86_64-x32-linux.s avcall-x86_64-windows-macro.S \
   avcall-s390-macro.S avcall-s390x-macro.S
 
 
@@ -186,6 +186,12 @@ avcall-x86_64-macro.S : avcall-x86_64-linux.s ../common/asm-x86_64.sh ../common/
 
 avcall-x86_64-x32-linux.s : avcall-x86_64.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
 	$(CROSS_TOOL) x86_64-linux gcc-5.4.0 -mx32 $(GCCFLAGS) -D__x86_64__ -D__x86_64_x32__ -S avcall-x86_64.c -o avcall-x86_64-x32-linux.s
+
+avcall-x86_64-windows.s : avcall-x86_64-windows.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
+	$(CROSS_TOOL) x86_64-linux gcc-5.4.0 -mabi=ms $(GCCFLAGS) -fno-reorder-blocks-and-partition -D__x86_64__ -D_WIN32 -S avcall-x86_64-windows.c -o avcall-x86_64-windows.s
+
+avcall-x86_64-windows-macro.S : avcall-x86_64-windows.s ../common/asm-x86_64.sh ../common/noexecstack.h $(THISFILE)
+	(echo '#include "asm-x86_64.h"' ; ../common/asm-x86_64.sh < avcall-x86_64-windows.s ; cat ../common/noexecstack.h) > avcall-x86_64-windows-macro.S
 
 
 avcall-s390-linux.s : avcall-s390.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)

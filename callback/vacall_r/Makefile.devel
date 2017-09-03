@@ -23,7 +23,7 @@ precompiled : \
   vacall-arm64-macro.S \
   vacall-powerpc-aix.s vacall-powerpc-linux-macro.S vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64-aix.s vacall-powerpc64-linux.S vacall-powerpc64-elfv2-linux.S \
   vacall-ia64-macro.S \
-  vacall-x86_64-macro.S vacall-x86_64-x32-linux.s \
+  vacall-x86_64-macro.S vacall-x86_64-x32-linux.s vacall-x86_64-windows-macro.S \
   vacall-s390-macro.S vacall-s390x-macro.S
 
 
@@ -186,6 +186,12 @@ vacall-x86_64-macro.S : vacall-x86_64-linux.s ../../common/asm-x86_64.sh ../../c
 
 vacall-x86_64-x32-linux.s : ../../vacall/vacall-x86_64.c ../../vacall/vacall-internal.h vacall_r.h $(THISFILE)
 	$(CROSS_TOOL) x86_64-linux gcc-5.4.0 -mx32 $(GCCFLAGS) -D__x86_64__ -D__x86_64_x32__ -S ../../vacall/vacall-x86_64.c -I../../vacall -I. -o vacall-x86_64-x32-linux.s
+
+vacall-x86_64-windows.s : ../../vacall/vacall-x86_64-windows.c ../../vacall/vacall-internal.h vacall_r.h $(THISFILE)
+	$(CROSS_TOOL) x86_64-linux gcc-5.4.0 -mabi=ms $(GCCFLAGS) -fno-reorder-blocks-and-partition -D__x86_64__ -D_WIN32 -S ../../vacall/vacall-x86_64-windows.c -I../../vacall -I. -o vacall-x86_64-windows.s
+
+vacall-x86_64-windows-macro.S : vacall-x86_64-windows.s ../../common/asm-x86_64.sh ../../common/noexecstack.h $(THISFILE)
+	(echo '#include "asm-x86_64.h"' ; ../../common/asm-x86_64.sh < vacall-x86_64-windows.s ; cat ../../common/noexecstack.h) > vacall-x86_64-windows-macro.S
 
 
 vacall-s390-linux.s : ../../vacall/vacall-s390.c ../../vacall/vacall-internal.h vacall_r.h $(THISFILE)

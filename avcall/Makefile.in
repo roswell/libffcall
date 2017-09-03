@@ -199,8 +199,12 @@ avcall-ia64.s : $(srcdir)/avcall-ia64-macro.S
 avcall-x86_64.lo : avcall-x86_64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-x86_64.s
 
-avcall-x86_64.s : $(srcdir)/avcall-x86_64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > avcall-x86_64.s
+avcall-x86_64.s : $(srcdir)/avcall-x86_64-macro.S $(srcdir)/avcall-x86_64-windows-macro.S
+	case "$(OS)" in \
+	  cygwin* | mingw*) variant='-windows';; \
+	  *) variant='';; \
+	esac; \
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-x86_64$${variant}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > avcall-x86_64.s
 
 avcall-x86_64-x32.lo : avcall-x86_64-x32.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-x86_64-x32.s
@@ -352,6 +356,7 @@ SOURCE_FILES = \
   avcall-sparc.c avcall-sparc-linux.s avcall-sparc-macro.S \
   avcall-sparc64.c avcall-sparc64-linux.s avcall-sparc64-macro.S \
   avcall-x86_64.c avcall-x86_64-linux.s avcall-x86_64-macro.S avcall-x86_64-x32-linux.s \
+  avcall-x86_64-windows.c avcall-x86_64-windows.s avcall-x86_64-windows-macro.S \
   avcall-libapi.c \
   avcall-structcpy.c \
   minitests.c minitests-c++.cc \

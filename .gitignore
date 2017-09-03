@@ -94,6 +94,8 @@
 /avcall/avcall-x86_64-linux.s
 /avcall/avcall-x86_64-macro.S
 /avcall/avcall-x86_64-x32-linux.s
+/avcall/avcall-x86_64-windows.s
+/avcall/avcall-x86_64-windows-macro.S
 /vacall/vacall-alpha-linux.s
 /vacall/vacall-alpha-macro.S
 /vacall/vacall-arm-macro.S
@@ -142,6 +144,8 @@
 /vacall/vacall-x86_64-linux.s
 /vacall/vacall-x86_64-macro.S
 /vacall/vacall-x86_64-x32-linux.s
+/vacall/vacall-x86_64-windows.s
+/vacall/vacall-x86_64-windows-macro.S
 /trampoline/cache-alpha-linux.s
 /trampoline/cache-alpha-macro.S
 /trampoline/cache-hppa-linux.s
@@ -201,6 +205,8 @@
 /callback/vacall_r/vacall-x86_64-linux.s
 /callback/vacall_r/vacall-x86_64-macro.S
 /callback/vacall_r/vacall-x86_64-x32-linux.s
+/callback/vacall_r/vacall-x86_64-windows.s
+/callback/vacall_r/vacall-x86_64-windows-macro.S
 /callback/trampoline_r/cache-alpha-linux.s
 /callback/trampoline_r/cache-alpha-macro.S
 /callback/trampoline_r/cache-hppa-linux.s

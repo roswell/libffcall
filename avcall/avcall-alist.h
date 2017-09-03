@@ -34,6 +34,15 @@
 #endif
 #endif
 
+/* The Unix and Windows variants of x86_64 ABIs are quite different. */
+#if defined(__x86_64__)
+#if defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#define __x86_64_ms__ 1
+#else
+#define __x86_64_sysv__ 1
+#endif
+#endif
+
 typedef struct
 {
   /* some av_... macros need these flags */
@@ -69,7 +78,7 @@ typedef struct
     __avword	words[2];
   }			tmp;
 #endif
-#if defined(__x86_64__)
+#if defined(__x86_64_sysv__)
 #define __AV_IARG_NUM 6
   /* store the integer arguments in an extra array */
   unsigned int		ianum;
@@ -122,7 +131,7 @@ typedef struct
   float			fargs[__AV_FARG_NUM];
   double		dargs[__AV_FARG_NUM];
 #endif
-#if defined(__ia64__) || defined(__x86_64__)
+#if defined(__ia64__) || defined(__x86_64_sysv__)
   /* store the floating-point arguments in an extra array */
 #define __AV_FARG_NUM 8
   double*		faptr;
@@ -141,6 +150,15 @@ typedef struct
   /* store the floating-point arguments in an extra array */
   double*		faptr;
   double		fargs[__AV_FARG_NUM];
+#endif
+#if defined(__x86_64_ms__)
+  /* store the floating-point arguments in an extra array */
+  int			anum;		/* redundant: (LIST).aptr = &(LIST).args[(LIST).anum] */
+#define __AV_FARG_NUM 4
+  unsigned int		farg_mask;	/* bitmask of those entries in fargs[] which have a float value */
+  unsigned int		darg_mask;	/* bitmask of those entries in dargs[] which have a double value */
+  float			fargs[__AV_FARG_NUM];
+  double		dargs[__AV_FARG_NUM];
 #endif
 #if (defined(__s390__) && !defined(__s390x__))
 #define __AV_IARG_NUM 5
