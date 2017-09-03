@@ -1,5 +1,26 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Add support for MSVC 14.
+	* common/asm-x86_64.h (R, NUM, ADDR, ADDR_PCRELATIVE, X1, X2, X4, X8,
+	MEM, MEM_DISP, MEM_INDEX, MEM_SHINDEX, MEM_DISP_SHINDEX0,
+	MEM_DISP_SHINDEX, MEM_PCRELATIVE, INDIR, INSNCONC, INSN1, INSN2,
+	INSN2S, INSN2MOVXL, INSN2MOVXQ, INSN2MOVXLQ, _): New macros.
+	(TEXT, P2ALIGN, DECLARE_FUNCTION, FUNBEGIN, FUNEND): Implement for MSVC.
+	* common/asm-x86_64.sh: Generate instructions as macros that may expand
+	into AT&T syntax or MSVC syntax.
+	* avcall/Makefile.in (avcall-x86_64.lo): Use a different rule for MSVC.
+	(clean): Remove also avcall-x86_64.asm.
+	* vacall/Makefile.in (vacall-x86_64.@OBJEXT@): Use a different rule for
+	MSVC.
+	(clean): Remove also vacall-x86_64.asm.
+	* callback/vacall_r/Makefile.in (vacall-x86_64.lo): Use a different rule
+	for MSVC.
+	(clean): Remove also vacall-x86_64.asm.
+	* PLATFORMS, */PLATFORMS: List the 64-bit mingw machine.
+	* NEWS: Mention the new port.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Add support for mingw.
 	* avcall/avcall.h (__AV_LLP64): New macro.
 	(__avword): Use it.

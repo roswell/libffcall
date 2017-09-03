@@ -349,6 +349,7 @@ autom4te.cache/
 /avcall/avcall-powerpc64-elfv2.s
 /avcall/avcall-ia64.s
 /avcall/avcall-x86_64.s
+/avcall/avcall-x86_64.asm
 /avcall/avcall-x86_64-x32.s
 /avcall/avcall-s390.s
 /avcall/avcall-s390x.s
@@ -387,6 +388,7 @@ autom4te.cache/
 /vacall/vacall-powerpc64-elfv2.s
 /vacall/vacall-ia64.s
 /vacall/vacall-x86_64.s
+/vacall/vacall-x86_64.asm
 /vacall/vacall-x86_64-x32.s
 /vacall/vacall-s390.s
 /vacall/vacall-s390x.s
@@ -493,6 +495,7 @@ autom4te.cache/
 /callback/vacall_r/vacall-powerpc64-elfv2.s
 /callback/vacall_r/vacall-ia64.s
 /callback/vacall_r/vacall-x86_64.s
+/callback/vacall_r/vacall-x86_64.asm
 /callback/vacall_r/vacall-x86_64-x32.s
 /callback/vacall_r/vacall-s390.s
 /callback/vacall_r/vacall-s390x.s

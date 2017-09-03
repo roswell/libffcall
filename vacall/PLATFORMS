@@ -34,7 +34,7 @@ Supported CPUs:  (Put the GNU config.guess values here.)
      ia64       ia64-unknown-linux (gcc)
      x86_64     x86_64-suse-linux (gcc), x86_64-unknown-linux (gcc -mx32),
                 x86_64-pc-solaris2.10 (gcc -m64, cc -xarch=generic64),
-                x86_64-pc-cygwin (gcc), x86_64-w64-mingw32 (gcc)
+                x86_64-pc-cygwin (gcc), x86_64-w64-mingw32 (gcc, MSVC 14)
      s390       s390x-ibm-linux (gcc -m31)
      s390x      s390x-ibm-linux (gcc)
 

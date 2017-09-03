@@ -184,15 +184,21 @@ vacall-ia64.lo : vacall-ia64.s
 vacall-ia64.s : $(srcdir)/vacall-ia64-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-ia64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-ia64.s
 
-vacall-x86_64.lo : vacall-x86_64.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-x86_64.s
+@IFNOT_MSVC@vacall-x86_64.lo : vacall-x86_64.s
+@IFNOT_MSVC@	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-x86_64.s
 
-vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S $(srcdir)/vacall-x86_64-windows-macro.S
-	case "$(OS)" in \
-	  cygwin* | mingw*) variant='-windows';; \
-	  *) variant='';; \
-	esac; \
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common - < $(srcdir)/vacall-x86_64$${variant}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
+@IFNOT_MSVC@vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S $(srcdir)/vacall-x86_64-windows-macro.S
+@IFNOT_MSVC@	case "$(OS)" in \
+@IFNOT_MSVC@	  cygwin* | mingw*) variant='-windows';; \
+@IFNOT_MSVC@	  *) variant='';; \
+@IFNOT_MSVC@	esac; \
+@IFNOT_MSVC@	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common - < $(srcdir)/vacall-x86_64$${variant}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
+
+@IF_MSVC@vacall-x86_64.lo : vacall-x86_64.asm
+@IF_MSVC@	$(LIBTOOL_COMPILE) ml64 -c -nologo vacall-x86_64.asm
+
+@IF_MSVC@vacall-x86_64.asm : $(srcdir)/vacall-x86_64-windows-macro.S
+@IF_MSVC@	{ $(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-x86_64-windows-macro.S | grep -v '^#'; echo 'END'; } > vacall-x86_64.asm
 
 vacall-x86_64-x32.lo : vacall-x86_64-x32.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-x86_64-x32.s
@@ -265,7 +271,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.@OBJEXT@ *.lo *.a libvacall.* core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64.asm vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s
 	$(RM) -r .libs _libs
 
 distclean : clean
