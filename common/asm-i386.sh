@@ -32,8 +32,7 @@ tmpscript07=sed$$tmp07
 tmpscript08=sed$$tmp08
 tmpscript09=sed$$tmp09
 tmpscript10=sed$$tmp10
-tmpscript11=sed$$tmp11
-tmpremove='rm -f $tmpscript01 $tmpscript02 $tmpscript03 $tmpscript04 $tmpscript05 $tmpscript06 $tmpscript07 $tmpscript08 $tmpscript09 $tmpscript10 $tmpscript11'
+tmpremove='rm -f $tmpscript01 $tmpscript02 $tmpscript03 $tmpscript04 $tmpscript05 $tmpscript06 $tmpscript07 $tmpscript08 $tmpscript09 $tmpscript10'
 trap "$tmpremove" 1 2 15
 
 cat > $tmpscript01 << \EOF
@@ -116,7 +115,7 @@ s/repz[ 	];/REPZ/
 EOF
 
 cat > $tmpscript06 << \EOF
-# ----------- Add size prefixes to memory references' \
+# ----------- Add size prefixes to memory references
 s/\([(]f[^(,]*,s.*\),MEM/\1,X4 MEM/g
 s/\([(]f[^(,]*,l.*\),MEM/\1,X8 MEM/g
 s/\([(][^(,]*,b.*\),MEM/\1,X1 MEM/g
@@ -165,18 +164,8 @@ s/\.text/TEXT()/
 s/^\([^#]*\)\.align \(.*\)/\1ALIGN(\2)/
 s/\.p2align \([^,]*\),,\(.*\)/P2ALIGN(\1,\2)/
 s/\.globl\( \+\)\(.*\)$/GLOBL(C(\2))/
-s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
-# The next 5 lines add FUNEND() after each ret followed by an empty line
-/[ 	]ret *$/{
-n
-/^$/s/^$/FUNEND()\
-/
-}
-EOF
-
-cat > $tmpscript11 << \EOF
 # ----------- Declare global symbols as functions (we have no variables)
-s/GLOBL(C(\([A-Za-z0-9_]*\)))$/GLOBL(C(\1))/
+s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
 EOF
 
 sed -f $tmpscript01 | \
@@ -189,8 +178,7 @@ sed -f $tmpscript06 | \
 sed -f $tmpscript07 | \
 sed -f $tmpscript08 | \
 sed -f $tmpscript09 | \
-sed -f $tmpscript10 | \
-(if [ $# = 1 -a "x$1" = "x-no-C" ] ; then cat - ; else sed -f $tmpscript11 ; fi)
+sed -f $tmpscript10
 
 eval "$tmpremove"
 

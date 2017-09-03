@@ -1,5 +1,11 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	i386: Simplify processing of assembly-language files.
+	* common/asm-i386.sh: Remove unused introduction of FUNEND. Remove
+	no-op rule for GLOBL.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Add support for MSVC 14.
 	* common/asm-x86_64.h (R, NUM, ADDR, ADDR_PCRELATIVE, X1, X2, X4, X8,
 	MEM, MEM_DISP, MEM_INDEX, MEM_SHINDEX, MEM_DISP_SHINDEX0,
