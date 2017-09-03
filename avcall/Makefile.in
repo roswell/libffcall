@@ -71,15 +71,18 @@ LIBAVCALL_VERSION_INFO = 1:0:0
 all : $(OBJECTS) libavcall.la $(srcdir)/avcall.3 $(srcdir)/avcall.html
 
 avcall.lo : avcall-$(CPU).lo
-	$(RM) avcall.lo avcall.o
+	$(RM) avcall.lo avcall.@OBJEXT@
 	$(LN) avcall-$(CPU).lo avcall.lo
-	if test -f avcall-$(CPU).o; then $(LN) avcall-$(CPU).o avcall.o; fi
+	if test -f avcall-$(CPU).@OBJEXT@; then $(LN) avcall-$(CPU).@OBJEXT@ avcall.@OBJEXT@; fi
 
-avcall-i386.lo : avcall-i386.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-i386.s
+@IFNOT_MSVC@avcall-i386.lo : avcall-i386.s
+@IFNOT_MSVC@	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-i386.s
 
-avcall-i386.s : $(srcdir)/avcall-i386-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-i386-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > avcall-i386.s
+@IFNOT_MSVC@avcall-i386.s : $(srcdir)/avcall-i386-macro.S
+@IFNOT_MSVC@	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-i386-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > avcall-i386.s
+
+@IF_MSVC@avcall-i386.lo : $(srcdir)/avcall-i386-msvc.c
+@IF_MSVC@	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-i386-msvc.c -o avcall-i386.lo
 
 avcall-sparc.lo : avcall-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc.s
@@ -264,20 +267,20 @@ uninstall : force
 	$(RM) $(DESTDIR)$(mandir)/man3/avcall.3
 	$(RM) $(DESTDIR)$(htmldir)/avcall.html
 
-minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/avcall.h
+minitests.@OBJEXT@ : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/avcall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
 
 minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/avcall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
-minitests : minitests.o libavcall.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libavcall.la $(LDFLAGS) -o minitests
+minitests : minitests.@OBJEXT@ libavcall.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.@OBJEXT@ libavcall.la $(LDFLAGS) -o minitests
 
-minitests-c++.o : $(srcdir)/minitests-c++.cc $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/avcall.h
+minitests-c++.@OBJEXT@ : $(srcdir)/minitests-c++.cc $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/avcall.h
 	$(CXX) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS) -c $(srcdir)/minitests-c++.cc
 
-minitests-c++ : minitests-c++.o libavcall.la
-	$(LIBTOOL_LINK) $(CXX) $(CXXFLAGS) @GCC_X_NONE@ minitests-c++.o libavcall.la $(LDFLAGS) -o minitests-c++
+minitests-c++ : minitests-c++.@OBJEXT@ libavcall.la
+	$(LIBTOOL_LINK) $(CXX) $(CXXFLAGS) @GCC_X_NONE@ minitests-c++.@OBJEXT@ libavcall.la $(LDFLAGS) -o minitests-c++
 
 check : all minitests
 	./minitests > minitests.out
@@ -291,14 +294,14 @@ check : all minitests
 @IF_CXX@	}
 @IF_CXX@check : minitests-c++
 
-tests.o : $(srcdir)/tests.c $(srcdir)/avcall.h
+tests.@OBJEXT@ : $(srcdir)/tests.c $(srcdir)/avcall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/tests.c
 
 tests.s : $(srcdir)/tests.c $(srcdir)/avcall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
-tests : tests.o libavcall.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libavcall.la $(LDFLAGS) -o tests
+tests : tests.@OBJEXT@ libavcall.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.@OBJEXT@ libavcall.la $(LDFLAGS) -o tests
 
 extracheck : all tests
 	./tests > tests.out
@@ -308,12 +311,12 @@ extracheck : all tests
 mostlyclean : clean
 
 clean : force
-	$(RM) *.o *.lo *.a libavcall.* core
+	$(RM) *.@OBJEXT@ *.lo *.a libavcall.* core
 	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s
 	$(RM) -r .libs _libs
-	$(RM) minitests.o minitests.s minitests minitests.out
-	$(RM) minitests-c++.o minitests-c++ minitests-c++.out
-	$(RM) tests.o tests.s tests tests.out
+	$(RM) minitests.@OBJEXT@ minitests.s minitests minitests.out
+	$(RM) minitests-c++.@OBJEXT@ minitests-c++ minitests-c++.out
+	$(RM) tests.@OBJEXT@ tests.s tests tests.out
 
 distclean : clean
 	$(RM) Makefile minitests.output.* minitests-c++.output.* tests.output.*

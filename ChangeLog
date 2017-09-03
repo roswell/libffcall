@@ -1,5 +1,38 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	Make the generic build infrastructure work on MSVC.
+	* m4/as-underscore.m4: Rely on gl_ASM_SYMBOL_PREFIX from gnulib. Don't
+	define ASM_UNDERSCORE any more.
+	* configure.ac: Set IF_MSVC, IFNOT_MSVC.
+	* common/asm-i386.hh: Fix P2ALIGN parameter list.
+	* common/asm-i386.sh: Improve handling of indirect calls and jmps.
+	* avcall/Makefile.in: Use OBJEXT.
+	(avcall-i386.lo): Use a different rule for MSVC.
+	* vacall/Makefile.devel: Transform 'vacall_function' before the
+	asm-i386.sh script, not afterwards.
+	* vacall/Makefile.in: Use OBJEXT.
+	(vacall-i386.o): Use a different rule for MSVC.
+	* trampoline/trampoline.c: On native Windows, when CODE_EXECUTABLE is
+	not defined, use VirtualAlloc.
+	* trampoline/Makefile.in: Use OBJEXT.
+	* callback/vacall_r/get_receiver.c: New file.
+	* callback/vacall_r/Makefile.maint (vacall-i386-msvc.c): Use the C
+	source code of callback_get_receiver.
+	* callback/vacall_r/Makefile.in: Use OBJEXT.
+	(vacall-i386.lo): Use a different rule for MSVC.
+	(SOURCE_FILES): Add get_receiver.c.
+	* callback/trampoline_r/trampoline.c: On native Windows, when
+	CODE_EXECUTABLE is not defined, use VirtualAlloc.
+	* callback/trampoline_r/Makefile.in: Use OBJEXT.
+	* callback/Makefile.in: Use OBJEXT.
+	* README.win32: Remove file.
+	* README.windows: New file, from GNU gettext.
+	* Makefile.in (SOURCE_FILES): Remove README.win32. Add README.windows.
+	* PLATFORMS, */PLATFORMS: List the 32-bit mingw and MSVC machine.
+	* NEWS: Mention MSVC support.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	Don't use symbolic links for .h files.
 	MSVC 14 does not follow the symbolic links set by Cygwin's 'ln -s'.
 	* trampoline/Makefile.in (LN_S): Remove variable.

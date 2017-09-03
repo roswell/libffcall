@@ -59,15 +59,18 @@ OBJECTS = vacall.lo vacall-libapi.lo vacall-structcpy.lo
 all : $(OBJECTS) libvacall.la
 
 vacall.lo : vacall-$(CPU).lo
-	$(RM) vacall.lo vacall.o
+	$(RM) vacall.lo vacall.@OBJEXT@
 	$(LN) vacall-$(CPU).lo vacall.lo
-	if test -f vacall-$(CPU).o; then $(LN) vacall-$(CPU).o vacall.o; fi
+	if test -f vacall-$(CPU).@OBJEXT@; then $(LN) vacall-$(CPU).@OBJEXT@ vacall.@OBJEXT@; fi
 
-vacall-i386.lo : vacall-i386.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-i386.s
+@IFNOT_MSVC@vacall-i386.lo : vacall-i386.s
+@IFNOT_MSVC@	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-i386.s
 
-vacall-i386.s : $(srcdir)/vacall-i386-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common - < $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-i386.s
+@IFNOT_MSVC@vacall-i386.s : $(srcdir)/vacall-i386-macro.S
+@IFNOT_MSVC@	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common - < $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-i386.s
+
+@IF_MSVC@vacall-i386.lo : $(srcdir)/vacall-i386-msvc.c
+@IF_MSVC@	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) -I$(srcdir)/../../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-i386-msvc.c -o vacall-i386.lo
 
 vacall-sparc.lo : vacall-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-sparc.s
@@ -257,7 +260,7 @@ extracheck : all
 mostlyclean : clean
 
 clean : force
-	$(RM) *.o *.lo *.a libvacall.* core
+	$(RM) *.@OBJEXT@ *.lo *.a libvacall.* core
 	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s
 	$(RM) -r .libs _libs
 
@@ -275,6 +278,7 @@ SOURCE_FILES = \
   Makefile.maint \
   Makefile.in Makefile.msvc \
   vacall_r.h \
+  get_receiver.c \
   vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm-macro.S \
   vacall-armhf-macro.S \

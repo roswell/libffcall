@@ -88,7 +88,11 @@ extern void (*tramp_r) (); /* trampoline prototype */
         /* Use an shmat'ed page. */
         #define EXECUTABLE_VIA_SHM
       #else
-        ??
+        #if (defined(_WIN32) || defined(__WIN32__)) && ! defined(__CYGWIN__) /* native Windows */
+          #define EXECUTABLE_VIA_VIRTUALALLOC
+        #else
+          ??
+        #endif
       #endif
     #endif
   #endif
@@ -160,6 +164,13 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 #endif
 
+/* Declare VirtualAlloc(), GetSystemInfo. */
+#ifdef EXECUTABLE_VIA_VIRTUALALLOC
+#define WIN32_LEAN_AND_MEAN
+#define WIN32_EXTRA_LEAN
+#include <windows.h>
+#endif
+
 /* Some old mmap() implementations require the flag MAP_FILE whenever you pass
    an fd >= 0. */
 #ifndef MAP_FILE
@@ -173,7 +184,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 
 /* Support for instruction cache flush. */
 #ifdef __i386__
-#if defined(_WIN32) /* WindowsNT or Windows95 */
+#if (defined(_WIN32) || defined(__WIN32__)) && ! defined(__CYGWIN__) /* native Windows */
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>
@@ -381,7 +392,14 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     {
       /* Simultaneous execution of this initialization in multiple threads
          is OK. */
-#if defined(HAVE_MACH_VM)
+#if defined(EXECUTABLE_VIA_VIRTUALALLOC)
+      /* GetSystemInfo
+         <https://msdn.microsoft.com/en-us/library/ms724381.aspx>
+         <https://msdn.microsoft.com/en-us/library/ms724958.aspx> */
+      SYSTEM_INFO info;
+      GetSystemInfo(&info);
+      pagesize = info.dwPageSize;
+#elif defined(HAVE_MACH_VM)
       pagesize = vm_page_size;
 #else
       pagesize = getpagesize();
@@ -402,6 +420,15 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     { /* Get a new page. */
       char* page;
       char* page_end;
+#ifdef EXECUTABLE_VIA_VIRTUALALLOC
+      /* VirtualAlloc
+         <https://msdn.microsoft.com/en-us/library/aa366887.aspx>
+         <https://msdn.microsoft.com/en-us/library/aa366786.aspx> */
+      page = VirtualAlloc(NULL,pagesize,MEM_COMMIT,PAGE_EXECUTE_READWRITE);
+      if (page == NULL)
+        { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
+      page_end = page + pagesize;
+#else
 #ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
       char* page_x;
       /* Extend the file by one page. */
@@ -447,6 +474,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
       if (page == (char*)(-1))
         { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
       page_end = page + pagesize;
+#endif
 #endif
       /* Fill it with free trampolines. */
       { char** last = &freelist;

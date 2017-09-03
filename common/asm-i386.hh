@@ -232,10 +232,10 @@
 #ifdef _MSC_VER
 // No pseudo-ops available in MS inline assembler.
 #define ALIGN(log)
-#define P2ALIGN(log)
+#define P2ALIGN(log,max)
 #else
 #define ALIGN(log) .align log
-#define P2ALIGN(log) .align log
+#define P2ALIGN(log,max) .align log
 #endif
 #endif
 

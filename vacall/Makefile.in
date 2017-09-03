@@ -51,87 +51,90 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-OBJECTS = vacall.o vacall-libapi.o vacall-structcpy.o
+OBJECTS = vacall.@OBJEXT@ vacall-libapi.@OBJEXT@ vacall-structcpy.@OBJEXT@
 
 all : $(OBJECTS) libvacall.a $(srcdir)/vacall.3 $(srcdir)/vacall.html
 
-vacall.o : vacall-$(CPU).o
-	$(RM) vacall.o
-	$(LN) vacall-$(CPU).o vacall.o
+vacall.@OBJEXT@ : vacall-$(CPU).@OBJEXT@
+	$(RM) vacall.@OBJEXT@
+	$(LN) vacall-$(CPU).@OBJEXT@ vacall.@OBJEXT@
 
-vacall-i386.o : vacall-i386.s
-	$(CC) @GCC_X_NONE@ -c vacall-i386.s
+@IFNOT_MSVC@vacall-i386.@OBJEXT@ : vacall-i386.s
+@IFNOT_MSVC@	$(CC) @GCC_X_NONE@ -c vacall-i386.s
 
-vacall-i386.s : $(srcdir)/vacall-i386-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-i386.s
+@IFNOT_MSVC@vacall-i386.s : $(srcdir)/vacall-i386-macro.S
+@IFNOT_MSVC@	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-i386-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-i386.s
 
-vacall-sparc.o : vacall-sparc.s
+@IF_MSVC@vacall-i386.@OBJEXT@ : $(srcdir)/vacall-i386-msvc.c
+@IF_MSVC@	$(CC) $(INCLUDES) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-i386-msvc.c -o vacall-i386.@OBJEXT@
+
+vacall-sparc.@OBJEXT@ : vacall-sparc.s
 	$(CC) @GCC_X_NONE@ -c vacall-sparc.s
 
 vacall-sparc.s : $(srcdir)/vacall-sparc-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > vacall-sparc.s
 
-vacall-sparc64.o : vacall-sparc64.s
+vacall-sparc64.@OBJEXT@ : vacall-sparc64.s
 	$(CC) @GCC_X_NONE@ -c vacall-sparc64.s
 
 vacall-sparc64.s : $(srcdir)/vacall-sparc64-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-sparc64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > vacall-sparc64.s
 
-vacall-m68k.o : vacall-m68k.s
+vacall-m68k.@OBJEXT@ : vacall-m68k.s
 	$(CC) @GCC_X_NONE@ -c vacall-m68k.s
 
 vacall-m68k.s : $(srcdir)/vacall-m68k.mit.S $(srcdir)/vacall-m68k.motorola.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-m68k.motorola.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' | if test @AS_UNDERSCORE@ = true; then sed -e 's/\$$//g'; else sed -e 's/\$$/%/g'; fi > vacall-m68k.s
 
-vacall-mips.o : vacall-mips.s
+vacall-mips.@OBJEXT@ : vacall-mips.s
 	$(CC) @GCC_X_NONE@ -c vacall-mips.s
 
 vacall-mips.s : $(srcdir)/vacall-mips@ENDIANNESS@-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-mips@ENDIANNESS@-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mips.s
 
-vacall-mipsn32.o : vacall-mipsn32.s
+vacall-mipsn32.@OBJEXT@ : vacall-mipsn32.s
 	$(CC) @GCC_X_NONE@ -c vacall-mipsn32.s
 
 vacall-mipsn32.s : $(srcdir)/vacall-mipsn32@ENDIANNESS@-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-mipsn32@ENDIANNESS@-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mipsn32.s
 
-vacall-mips64.o : vacall-mips64.s
+vacall-mips64.@OBJEXT@ : vacall-mips64.s
 	$(CC) @GCC_X_NONE@ -c vacall-mips64.s
 
 vacall-mips64.s : $(srcdir)/vacall-mips64@ENDIANNESS@-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-mips64@ENDIANNESS@-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-mips64.s
 
-vacall-alpha.o : vacall-alpha.s
+vacall-alpha.@OBJEXT@ : vacall-alpha.s
 	$(CC) @GCC_X_NONE@ -c vacall-alpha.s
 
 vacall-alpha.s : $(srcdir)/vacall-alpha-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-alpha-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-alpha.s
 
-vacall-hppa.o : vacall-hppa.s
+vacall-hppa.@OBJEXT@ : vacall-hppa.s
 	$(CC) @GCC_X_NONE@ -c vacall-hppa.s
 
 vacall-hppa.s : $(srcdir)/vacall-hppa-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > vacall-hppa.s
 
-vacall-arm.o : vacall-arm.s
+vacall-arm.@OBJEXT@ : vacall-arm.s
 	$(CC) @GCC_X_NONE@ -c vacall-arm.s
 
 vacall-arm.s : $(srcdir)/vacall-arm-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-arm-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-arm.s
 
-vacall-armhf.o : vacall-armhf.s
+vacall-armhf.@OBJEXT@ : vacall-armhf.s
 	$(CC) @GCC_X_NONE@ -c vacall-armhf.s
 
 vacall-armhf.s : $(srcdir)/vacall-armhf-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-armhf-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-armhf.s
 
-vacall-arm64.o : vacall-arm64.s
+vacall-arm64.@OBJEXT@ : vacall-arm64.s
 	$(CC) @GCC_X_NONE@ -c vacall-arm64.s
 
 vacall-arm64.s : $(srcdir)/vacall-arm64-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-arm64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-arm64.s
 
-vacall-powerpc.o : vacall-powerpc.s
+vacall-powerpc.@OBJEXT@ : vacall-powerpc.s
 	$(CC) @GCC_X_NONE@ -c vacall-powerpc.s
 
 vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux-macro.S $(srcdir)/vacall-powerpc-macos.s $(srcdir)/vacall-powerpc-sysv4-macro.S
@@ -150,7 +153,7 @@ vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux
 	    cp $(srcdir)/vacall-powerpc-$${syntax}.s vacall-powerpc.s || exit 1 ;; \
 	esac
 
-vacall-powerpc64.o : vacall-powerpc64.s
+vacall-powerpc64.@OBJEXT@ : vacall-powerpc64.s
 	$(CC) @GCC_X_NONE@ -c vacall-powerpc64.s
 
 vacall-powerpc64.s : $(srcdir)/vacall-powerpc64-aix.s $(srcdir)/vacall-powerpc64-linux.S
@@ -165,46 +168,46 @@ vacall-powerpc64.s : $(srcdir)/vacall-powerpc64-aix.s $(srcdir)/vacall-powerpc64
 	    cp $(srcdir)/vacall-powerpc64-$${syntax}.s vacall-powerpc64.s || exit 1 ;; \
 	esac
 
-vacall-powerpc64-elfv2.o : vacall-powerpc64-elfv2.s
+vacall-powerpc64-elfv2.@OBJEXT@ : vacall-powerpc64-elfv2.s
 	$(CC) @GCC_X_NONE@ -c vacall-powerpc64-elfv2.s
 
 vacall-powerpc64-elfv2.s : $(srcdir)/vacall-powerpc64-elfv2-linux.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-powerpc64-elfv2-linux.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-powerpc64-elfv2.s
 
-vacall-ia64.o : vacall-ia64.s
+vacall-ia64.@OBJEXT@ : vacall-ia64.s
 	$(CC) @GCC_X_NONE@ -c vacall-ia64.s
 
 vacall-ia64.s : $(srcdir)/vacall-ia64-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-ia64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-ia64.s
 
-vacall-x86_64.o : vacall-x86_64.s
+vacall-x86_64.@OBJEXT@ : vacall-x86_64.s
 	$(CC) @GCC_X_NONE@ -c vacall-x86_64.s
 
 vacall-x86_64.s : $(srcdir)/vacall-x86_64-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-x86_64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$$,,' -e 's/##//g' > vacall-x86_64.s
 
-vacall-x86_64-x32.o : vacall-x86_64-x32.s
+vacall-x86_64-x32.@OBJEXT@ : vacall-x86_64-x32.s
 	$(CC) @GCC_X_NONE@ -c vacall-x86_64-x32.s
 
 vacall-x86_64-x32.s : $(srcdir)/vacall-x86_64-x32-linux.s
 	cp $(srcdir)/vacall-x86_64-x32-linux.s vacall-x86_64-x32.s
 
-vacall-s390.o : vacall-s390.s
+vacall-s390.@OBJEXT@ : vacall-s390.s
 	$(CC) @GCC_X_NONE@ -c vacall-s390.s
 
 vacall-s390.s : $(srcdir)/vacall-s390-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-s390-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390.s
 
-vacall-s390x.o : vacall-s390x.s
+vacall-s390x.@OBJEXT@ : vacall-s390x.s
 	$(CC) @GCC_X_NONE@ -c vacall-s390x.s
 
 vacall-s390x.s : $(srcdir)/vacall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
 
-vacall-libapi.o : $(srcdir)/vacall-libapi.c $(srcdir)/vacall-internal.h $(srcdir)/vacall.h ../config.h
+vacall-libapi.@OBJEXT@ : $(srcdir)/vacall-libapi.c $(srcdir)/vacall-internal.h $(srcdir)/vacall.h ../config.h
 	$(CC) $(INCLUDES_WITH_GNULIB) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-libapi.c
 
-vacall-structcpy.o : $(srcdir)/vacall-structcpy.c $(srcdir)/../common/structcpy.c
+vacall-structcpy.@OBJEXT@ : $(srcdir)/vacall-structcpy.c $(srcdir)/../common/structcpy.c
 	$(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-structcpy.c
 
 libvacall.a : $(OBJECTS)
@@ -242,20 +245,20 @@ uninstall : force
 	$(RM) $(DESTDIR)$(mandir)/man3/vacall.3
 	$(RM) $(DESTDIR)$(htmldir)/vacall.html
 
-minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/vacall.h
+minitests.@OBJEXT@ : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
 
 minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
-minitests : minitests.o libvacall.a
-	$(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libvacall.a $(LDFLAGS) -o minitests
+minitests : minitests.@OBJEXT@ libvacall.a
+	$(CC) $(CFLAGS) @GCC_X_NONE@ minitests.@OBJEXT@ libvacall.a $(LDFLAGS) -o minitests
 
-minitests-c++.o : $(srcdir)/minitests-c++.cc $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/vacall.h
+minitests-c++.@OBJEXT@ : $(srcdir)/minitests-c++.cc $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CXX) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS) -c $(srcdir)/minitests-c++.cc
 
-minitests-c++ : minitests-c++.o libvacall.a
-	$(CXX) $(CXXFLAGS) @GCC_X_NONE@ minitests-c++.o libvacall.a $(LDFLAGS) -o minitests-c++
+minitests-c++ : minitests-c++.@OBJEXT@ libvacall.a
+	$(CXX) $(CXXFLAGS) @GCC_X_NONE@ minitests-c++.@OBJEXT@ libvacall.a $(LDFLAGS) -o minitests-c++
 
 check : all minitests
 	./minitests > minitests.out
@@ -266,14 +269,14 @@ check : all minitests
 @IF_CXX@	test '!' -s minitests-c++.output.$(HOST)
 @IF_CXX@check : minitests-c++
 
-tests.o : $(srcdir)/tests.c $(srcdir)/vacall.h
+tests.@OBJEXT@ : $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/tests.c
 
 tests.s : $(srcdir)/tests.c $(srcdir)/vacall.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
-tests : tests.o libvacall.a
-	$(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libvacall.a $(LDFLAGS) -o tests
+tests : tests.@OBJEXT@ libvacall.a
+	$(CC) $(CFLAGS) @GCC_X_NONE@ tests.@OBJEXT@ libvacall.a $(LDFLAGS) -o tests
 
 extracheck : all tests
 	./tests > tests.out
@@ -283,11 +286,11 @@ extracheck : all tests
 mostlyclean : clean
 
 clean : force
-	$(RM) *.o *.a core
+	$(RM) *.@OBJEXT@ *.a core
 	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s
-	$(RM) minitests.o minitests.s minitests minitests.out
-	$(RM) minitests-c++.o minitests-c++ minitests-c++.out
-	$(RM) tests.o tests.s tests tests.out
+	$(RM) minitests.@OBJEXT@ minitests.s minitests minitests.out
+	$(RM) minitests-c++.@OBJEXT@ minitests-c++ minitests-c++.out
+	$(RM) tests.@OBJEXT@ tests.s tests tests.out
 
 distclean : clean
 	$(RM) Makefile minitests.output.* minitests-c++.output.* tests.output.*

@@ -118,26 +118,26 @@ uninstall : force
 	$(RM) $(DESTDIR)$(mandir)/man3/callback.3
 	$(RM) $(DESTDIR)$(htmldir)/callback.html
 
-test1.o : $(srcdir)/test1.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
+test1.@OBJEXT@ : $(srcdir)/test1.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
-test1 : test1.o libcallback.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o libcallback.la $(LDFLAGS) -o test1
+test1 : test1.@OBJEXT@ libcallback.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.@OBJEXT@ libcallback.la $(LDFLAGS) -o test1
 
-minitests.o : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
+minitests.@OBJEXT@ : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/minitests.c
 
 minitests.s : $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/minitests.c
 
-minitests : minitests.o libcallback.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.o libcallback.la $(LDFLAGS) -o minitests
+minitests : minitests.@OBJEXT@ libcallback.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ minitests.@OBJEXT@ libcallback.la $(LDFLAGS) -o minitests
 
-minitests-c++.o : $(srcdir)/minitests-c++.cc $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
+minitests-c++.@OBJEXT@ : $(srcdir)/minitests-c++.cc $(srcdir)/minitests.c $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CXX) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS) -c $(srcdir)/minitests-c++.cc
 
-minitests-c++ : minitests-c++.o libcallback.la
-	$(LIBTOOL_LINK) $(CXX) $(CXXFLAGS) @GCC_X_NONE@ minitests-c++.o libcallback.la $(LDFLAGS) -o minitests-c++
+minitests-c++ : minitests-c++.@OBJEXT@ libcallback.la
+	$(LIBTOOL_LINK) $(CXX) $(CXXFLAGS) @GCC_X_NONE@ minitests-c++.@OBJEXT@ libcallback.la $(LDFLAGS) -o minitests-c++
 
 check-subdirs : force
 	cd @callback_subdir@ && $(MAKE) check
@@ -152,14 +152,14 @@ check : all check-subdirs test1 minitests
 @IF_CXX@	test '!' -s minitests-c++.output.$(HOST)
 @IF_CXX@check : minitests-c++
 
-tests.o : $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
+tests.@OBJEXT@ : $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/tests.c
 
 tests.s : $(srcdir)/tests.c $(srcdir)/callback.h $(srcdir)/vacall_r/vacall_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -S $(srcdir)/tests.c
 
-tests : tests.o libcallback.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.o libcallback.la $(LDFLAGS) -o tests
+tests : tests.@OBJEXT@ libcallback.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ tests.@OBJEXT@ libcallback.la $(LDFLAGS) -o tests
 
 extracheck-subdirs : force
 	cd @callback_subdir@ && $(MAKE) extracheck
@@ -171,12 +171,12 @@ extracheck : all extracheck-subdirs tests
 
 MOSTLYCLEANDIRS = .libs _libs
 MOSTLYCLEANFILES = \
-  *.o *.lo core \
+  *.@OBJEXT@ *.lo core \
   libcallback.* \
-  test1.o test1 \
-  minitests.o minitests.s minitests minitests.out \
-  minitests-c++.o minitests-c++ minitests-c++.out \
-  tests.o tests.s tests tests.out
+  test1.@OBJEXT@ test1 \
+  minitests.@OBJEXT@ minitests.s minitests minitests.out \
+  minitests-c++.@OBJEXT@ minitests-c++ minitests-c++.out \
+  tests.@OBJEXT@ tests.s tests tests.out
 
 mostlyclean : force
 	cd @callback_subdir@ && $(MAKE) mostlyclean

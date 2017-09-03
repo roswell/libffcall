@@ -154,7 +154,8 @@ EOF
 
 cat > $tmpscript09 << \EOF
 # ----------- Treat indirect calls
-s/\(INSN1[(]\(call\|jmp\),_[^,]*,\)\*\(\(R\|MEM\)[(][^)]*[)]\)[)]$/\1INDIR(\3))/
+s/\(INSN1[(]\(call\|jmp\),_[^,]*,\)\*\(\(R\)[(][^)]*[)]\)[)]$/\1INDIR(\3))/
+s/\(INSN1[(]\(call\|jmp\),_[^,]*,\)\*\(\(MEM\|MEM_DISP\|C\)[(][^)]*[)]\)[)]$/\1INDIR(X4 \3))/
 EOF
 
 cat > $tmpscript10 << \EOF

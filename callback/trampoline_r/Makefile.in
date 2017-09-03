@@ -172,17 +172,17 @@ uninstall : force
 	$(RM) $(DESTDIR)$(mandir)/man3/trampoline_r.3
 	$(RM) $(DESTDIR)$(htmldir)/trampoline_r.html
 
-test1.o : $(srcdir)/test1.c $(srcdir)/trampoline_r.h
+test1.@OBJEXT@ : $(srcdir)/test1.c $(srcdir)/trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test1.c
 
-test1 : test1.o libtrampoline.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.o libtrampoline.la $(LDFLAGS) -o test1
+test1 : test1.@OBJEXT@ libtrampoline.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test1.@OBJEXT@ libtrampoline.la $(LDFLAGS) -o test1
 
-test2.o : $(srcdir)/test2.c $(srcdir)/trampoline_r.h
+test2.@OBJEXT@ : $(srcdir)/test2.c $(srcdir)/trampoline_r.h
 	$(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/test2.c
 
-test2 : test2.o libtrampoline.la
-	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test2.o libtrampoline.la $(LDFLAGS) -o test2
+test2 : test2.@OBJEXT@ libtrampoline.la
+	$(LIBTOOL_LINK) $(CC) $(CFLAGS) @GCC_X_NONE@ test2.@OBJEXT@ libtrampoline.la $(LDFLAGS) -o test2
 
 check1 : all test1
 	./test1
@@ -197,9 +197,9 @@ extracheck : check
 mostlyclean : clean
 
 clean : force
-	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.o/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.* core
+	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.@OBJEXT@/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.* core
 	$(RM) -r .libs _libs
-	$(RM) test1.o test1 test2.o test2
+	$(RM) test1.@OBJEXT@ test1 test2.@OBJEXT@ test2
 
 distclean : clean
 	$(RM) Makefile tests.passed.*

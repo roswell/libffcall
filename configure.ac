@@ -72,6 +72,22 @@ AC_SUBST([IF_CXX])
 dnl For a 64-bit build on AIX, AC_PROG_RANLIB is not sufficient.
 gl_PROG_AR_RANLIB
 
+dnl The Makefiles have a few special rules for MSVC.
+AC_EGREP_CPP([MicrosoftCompiler],
+  [
+#ifdef _MSC_VER
+MicrosoftCompiler
+#endif
+  ],
+  [IF_MSVC=''
+   IFNOT_MSVC='# '
+  ],
+  [IF_MSVC='# '
+   IFNOT_MSVC=''
+  ])
+AC_SUBST([IF_MSVC])
+AC_SUBST([IFNOT_MSVC])
+
 AC_PROG_INSTALL
 CL_PROG_LN
 
