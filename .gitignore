@@ -230,20 +230,15 @@
 /avcall/avcall-i386-msvc.c
 # Built by vacall/Makefile.maint.
 /vacall/vacall.man
-/vacall/config.h.msvc
-/vacall/vacall.h.msvc
 /vacall/vacall-i386-msvc.c
 # Built by trampoline/Makefile.maint.
 /trampoline/trampoline.man
-/trampoline/config.h.msvc
 # Built by callback/Makefile.maint.
 /callback/callback.man
 # Built by callback/vacall_r/Makefile.maint.
-/callback/vacall_r/config.h.msvc
 /callback/vacall_r/vacall-i386-msvc.c
 # Built by callback/trampoline_r/Makefile.maint.
 /callback/trampoline_r/trampoline_r.man
-/callback/trampoline_r/config.h.msvc
 
 # ---------- "make maintainer-clean" gets you here ----------
 

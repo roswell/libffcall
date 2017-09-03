@@ -330,7 +330,7 @@ SOURCE_FILES = \
   DOC PLATFORMS README avcall.3 avcall.html \
   Makefile.devel \
   Makefile.maint \
-  Makefile.in Makefile.msvc \
+  Makefile.in \
   avcall.h avcall-internal.h avcall-alist.h \
   avcall-alpha.c avcall-alpha-linux.s avcall-alpha-macro.S \
   avcall-arm.c avcall-arm-macro.S \

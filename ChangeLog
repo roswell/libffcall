@@ -1,5 +1,37 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	Remove special build infrastructure for MSVC. The generic one works.
+	* avcall/Makefile.msvc: Remove file.
+	* avcall/Makefile.in (SOURCE_FILES): Remove it.
+	* vacall/Makefile.maint (config.h.msvc): Remove target.
+	(totally-clean): Don't remove config.h.msvc.
+	* vacall/Makefile.msvc: Remove file.
+	* vacall/Makefile.in (SOURCE_FILES): Remove it.
+	(GENERATED_FILES): Remove config.h.msvc.
+	* trampoline/Makefile.maint (config.h.msvc): Remove target.
+	(totally-clean): Don't remove config.h.msvc.
+	* trampoline/Makefile.msvc: Remove file.
+	* trampoline/Makefile.in (SOURCE_FILES): Remove it.
+	(GENERATED_FILES): Remove config.h.msvc.
+	* callback/vacall_r/Makefile.maint (config.h.msvc): Remove target.
+	(totally-clean): Don't remove config.h.msvc.
+	* callback/vacall_r/Makefile.msvc: Remove file.
+	* callback/vacall_r/Makefile.in (SOURCE_FILES): Remove it.
+	(GENERATED_FILES): Remove config.h.msvc.
+	* callback/trampoline_r/Makefile.maint (config.h.msvc): Remove target.
+	(totally-clean): Don't remove config.h.msvc.
+	* callback/trampoline_r/Makefile.msvc: Remove file.
+	* callback/trampoline_r/Makefile.in (SOURCE_FILES): Remove it.
+	(GENERATED_FILES): Remove config.h.msvc.
+	* callback/Makefile.maint (vacall_r/config.h.msvc,
+	trampoline_r/config.h.msvc): Remove targets.
+	* callback/Makefile.msvc: Remove file.
+	* callback/Makefile.in (SOURCE_FILES): Remove it.
+	* Makefile.msvc: Remove file.
+	* Makefile.in (SOURCE_FILES): Remove it.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	Make the generic build infrastructure work on MSVC.
 	* m4/as-underscore.m4: Rely on gl_ASM_SYMBOL_PREFIX from gnulib. Don't
 	define ASM_UNDERSCORE any more.

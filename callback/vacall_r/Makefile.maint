@@ -5,17 +5,12 @@ RM = rm -f
 
 # ==================== Easily regeneratable files ====================
 
-all : config.h.msvc \
-      vacall-i386-msvc.c
-
-config.h.msvc : ../../config.h.in
-	cp ../../config.h.in config.h.msvc
+all : vacall-i386-msvc.c
 
 vacall-i386-msvc.c : vacall-i386-macro.S
 	(echo '#ifdef _MSC_VER' ; echo '#include "vacall_r.h"' ; echo '#endif' ; sed -e '/FUNEND(callback_receiver,/q' < vacall-i386-macro.S ; cat get_receiver.c) > vacall-i386-msvc.c
 
 totally-clean : force
-	$(RM) config.h.msvc
 	$(RM) vacall-i386-msvc.c
 
 
