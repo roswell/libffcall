@@ -103,7 +103,7 @@
 //           This expands to an instruction with two operands. In our notation,
 //           `src' comes first and `dst' second, but they are reversed when
 //           expanding to Intel syntax.
-//   INSN2MOVX(mnemonic,size_suffix,src,dst)
+//   INSN2MOVXL(mnemonic,size_suffix,src,dst)
 //           This expands to an instruction with two operands, of type
 //           movsbl/movzbl, which in some syntaxes requires a second suffix.
 //   INSN2SHCL(mnemonic,size_suffix,src,dst)
@@ -151,6 +151,9 @@
 // BSD_SYNTAX for GNU assembler version 2.
 // ELF_SYNTAX for SVR4 and Solaris assemblers.
 // INTEL_SYNTAX for MS assembler.
+// Note: INTEL_SYNTAX is not the same syntax as produced by "gcc masm=intel"
+// as there are syntactic differences between that syntax and the one accepted
+// by the MS assembler (for R, MEM_DISP, P2ALIGN, FUNBEGIN, FUNEND etc.).
 #ifdef _MSC_VER
 #define INTEL_SYNTAX
 #else
@@ -182,7 +185,7 @@
 #define INSNCONC(mnemonic,size_suffix)mnemonic##size_suffix
 #define INSN1(mnemonic,size_suffix,dst)INSNCONC(mnemonic,size_suffix) dst
 #define INSN2(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix) src,dst
-#define INSN2MOVX(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix##l) src,dst
+#define INSN2MOVXL(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix##l) src,dst
 #if defined(BSD_SYNTAX) || defined(COHERENT)
 #define INSN2SHCL(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix) R(cl),src,dst
 #define REPZ repe ;
@@ -221,7 +224,7 @@
 #define INSNCONC(mnemonic,suffix)mnemonic##suffix
 #define INSN1(mnemonic,size_suffix,dst)mnemonic dst
 #define INSN2(mnemonic,size_suffix,src,dst)mnemonic dst,src
-#define INSN2MOVX(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,x) dst,src
+#define INSN2MOVXL(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,x) dst,src
 #define INSN2SHCL(mnemonic,size_suffix,src,dst)mnemonic dst,src,R(cl)
 #define REPZ repz
 #define REP rep
@@ -238,6 +241,8 @@
 #define P2ALIGN(log,max) .align log
 #endif
 #endif
+
+#define _
 
 #ifdef _MSC_VER
 // No pseudo-ops available in MS inline assembler.
@@ -277,8 +282,6 @@
 #define FUNEND(name,size_expression) .size C(name),.-C(name)
 #endif
 #endif
-
-#define _
 
 // Here we go!
 

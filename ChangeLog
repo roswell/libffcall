@@ -1,5 +1,11 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	i386: Align processing of assembly-language files with x86_64 case.
+	* common/asm-i386.hh (INSN2MOVXL): Renamed from INSN2MOVX.
+	* common/asm-i386.sh: Generate INSN2MOVXL instead of INSN2MOVX.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	i386: Provide disambiguating size prefixes in more cases.
 	* common/asm-i386.sh: Introduce size prefixes also for the second
 	operand of instructions with two operands.

@@ -107,7 +107,7 @@ cat > $tmpscript05 << \EOF
 # ----------- Introduce macro syntax for instructions
 s/\(push\|pop\|mul\|div\|not\|neg\|inc\|dec\|fld\|fstp\)\(.\)\([ 	]\+\)\(.*\)$/INSN1(\1,\2	,\4)/
 s/\(call\|jmp\|jc\|jnc\|je\|jne\|jz\|jnz\|ja\|jae\|jb\|jbe\|jl\|jge\|js\|jns\)\([ 	]\+\)\(.*\)$/INSN1(\1,_	,\3)/
-s/\(movs\|movz\)\(.\)l\([ 	]\+\)\(.*\)$/INSN2MOVX(\1,\2,\4)/
+s/\(movs\|movz\)\(.\)l\([ 	]\+\)\(.*\)$/INSN2MOVXL(\1,\2,\4)/
 s/\(mov\|add\|sub\|adc\|sbb\|xor\|test\|cmp\|rcl\|rcr\|and\|or\|sar\|shr\|shl\|lea\)\(.\)\([ 	]\+\)\(.*\)$/INSN2(\1,\2	,\4)/
 s/\(shld\|shrd\)\(.\)\([ 	]\+\)shcl\( \+\)\(.*\)$/INSN2SHCL(\1,\2	,\5)/
 s/rep[ 	];/REP/
