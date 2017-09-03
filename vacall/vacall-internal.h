@@ -62,6 +62,10 @@
 /*
  * Definition of the ‘__va_alist’ type.
  */
+/* Note: This struct must not contain members of type 'long' or 'unsigned long',
+   because in the mingw port we use precompiled code that assumes 'long' is
+   64-bit whereas avcall-libapi.c is then compiled by a compiler that has a
+   32-bit 'long' type. */
 typedef struct vacall_alist
 {
   /* some va_... macros need these flags */
@@ -88,7 +92,7 @@ typedef struct vacall_alist
     unsigned int        _uint;
     long                _long;
     unsigned long       _ulong;
-#if !(defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__)))
+#if !(defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__))
     long long           _longlong;
     unsigned long long  _ulonglong;
 #endif
@@ -102,7 +106,7 @@ typedef struct vacall_alist
   /* structure return pointer, return type, return type size */
   void*          raddr;
   enum __VAtype  rtype;
-  unsigned long  rsize;
+  uintptr_t      rsize;
 #if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm64__) || defined(__ia64__)
   void*          structraddr;
 #endif
@@ -599,11 +603,11 @@ typedef struct vacall_alist
 #define _va_arg_long(LIST)	__va_arg(LIST,long)
 #define _va_arg_ulong(LIST)	__va_arg(LIST,unsigned long)
 
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__)) || defined(__s390x__)
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__VA_LLP64)) || defined(__s390x__)
 /* ‘long long’ and ‘long’ are identical. */
 #define _va_arg_longlong	_va_arg_long
 #define _va_arg_ulonglong	_va_arg_ulong
-#elif defined(__mipsn32__) || defined(__x86_64_x32__)
+#elif defined(__mipsn32__) || defined(__x86_64_x32__) || (defined(__x86_64__) && defined(__VA_LLP64))
 /* ‘long long’ fits in __vaword. */
 #define _va_arg_longlong(LIST)	__va_arg(LIST,long long)
 #define _va_arg_ulonglong(LIST)	__va_arg(LIST,unsigned long long)
@@ -1079,7 +1083,7 @@ typedef struct vacall_alist
   (__va_return(LIST,__VAlong), (LIST)->tmp._long = (VAL))
 #define _va_return_ulong(LIST,VAL)  \
   (__va_return(LIST,__VAulong), (LIST)->tmp._ulong = (VAL))
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__))
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__VA_LLP64))
 #define _va_return_longlong(LIST,VAL)  \
   (__va_return(LIST,__VAlonglong), (LIST)->tmp._long = (VAL))
 #define _va_return_ulonglong(LIST,VAL)  \

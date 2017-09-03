@@ -1,5 +1,25 @@
 2017-09-03  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Add support for mingw.
+	* avcall/avcall.h (__AV_LLP64): New macro.
+	(__avword): Use it.
+	* avcall/avcall-alist.h (__av_alist): Change fields of type
+	'unsigned long' to 'uintptr_t'.
+	* avcall/avcall-internal.h (__av_longlong): Update implementation for
+	LLP64 platforms.
+	* vacall/vacall.h (__VA_LLP64): New macro.
+	(__vaword): Use it.
+	* callback/vacall_r/vacall_r.h: Likewise.
+	* vacall/vacall-internal.h (__va_alist): Change fields of type
+	'unsigned long' to 'uintptr_t'. Don't assume that 'long long' is the
+	same as 'long' on x86_64.
+	(_va_arg_longlong, _va_arg_ulonglong, _va_return_longlong,
+	_va_return_ulonglong): Update implementation for LLP64 platforms.
+	* PLATFORMS, */PLATFORMS: List the 64-bit mingw machine.
+	* NEWS: Mention the new port.
+
+2017-09-03  Bruno Haible  <bruno@clisp.org>
+
 	Fix warnings on 64-bit native Windows.
 	* avcall/tests.c (pointer_tests): Use %p to display the value of a
 	pointer.

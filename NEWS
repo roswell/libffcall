@@ -29,6 +29,7 @@ New in 2.0:
   (Previously, a build on these platforms failed.)
   - i386: MSVC 14.
   - x86_64: Cygwin.
+  - x86_64: MinGW.
   - m68k: Linux.
 
 New in 1.13:

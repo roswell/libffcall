@@ -43,6 +43,13 @@
 #endif
 #endif
 
+/*
+ * Definition of the ‘__av_alist’ type.
+ */
+/* Note: This struct must not contain members of type 'long' or 'unsigned long',
+   because in the mingw port we use precompiled code that assumes 'long' is
+   64-bit whereas avcall-libapi.c is then compiled by a compiler that has a
+   32-bit 'long' type. */
 typedef struct
 {
   /* some av_... macros need these flags */
@@ -52,7 +59,7 @@ typedef struct
   /* return type, address for the result */
   void*			raddr;
   enum __AVtype		rtype;
-  unsigned long		rsize;
+  uintptr_t		rsize;
   /* current pointer into the args[] array */
   __avword*		aptr;
   /* beginning of the args[] array */

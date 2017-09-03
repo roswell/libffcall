@@ -384,11 +384,11 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_ptr(LIST,VAL)	__av_word(LIST,VAL)
 #endif
 
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__)) || defined(__s390x__)
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__AV_LLP64)) || defined(__s390x__)
 /* ‘long long’ and ‘long’ are identical. */
 #define __av_longlong		__av_long
 #define __av_ulonglong		__av_ulong
-#elif defined(__mipsn32__)
+#elif defined(__mipsn32__) || (defined(__x86_64__) && defined(__AV_LLP64))
 /* ‘long long’ fits in __avword. */
 #define __av_longlong			__av_word
 #define __av_ulonglong(LIST,VAL)	__av_word(LIST,(unsigned long long)(VAL))

@@ -37,6 +37,12 @@
 #define __AV_ALIST_WORDS  256
 #endif
 
+/* Determine whether the current ABI is LLP64
+   ('long' = 32-bit, 'long long' = 'void*' = 64-bit). */
+#if defined(__x86_64__) && (defined(_WIN32) || defined(__WIN32__)) && !defined(__CYGWIN__)
+#define __AV_LLP64 1
+#endif
+
 /* Determine the alignment of a type at compile time.
  */
 #if defined(__GNUC__) || defined(__IBM__ALIGNOF__)
@@ -57,7 +63,7 @@ extern "C" {
 
 /* C builtin types.
  */
-#if defined(__mipsn32__) || defined(__x86_64_x32__)
+#if defined(__mipsn32__) || defined(__x86_64_x32__) || defined(__AV_LLP64)
 typedef long long __avword;
 #else
 typedef long __avword;
