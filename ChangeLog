@@ -1,5 +1,12 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	Fix preprocessor warning "does not give a valid preprocessing token".
+	* common/asm-i386.h (NUM): Don't use token concatenation between '$'
+	and a possibly negative number.
+	* common/asm-x86_64.h (NUM): Likewise.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	hppa64: Simplify trampoline.
 	* trampoline/tramp-hppa64-old.s: Renamed from trampoline/tramp-hppa64.s.
 	* trampoline/tramp-hppa64-old.o: Renamed from trampoline/tramp-hppa64.o.

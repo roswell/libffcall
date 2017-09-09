@@ -169,7 +169,7 @@
 
 #if defined (BSD_SYNTAX) || defined (ELF_SYNTAX)
 #define R(r) %r
-#define NUM(n) $##n
+#define NUM(n) $ n
 #define ADDR(a) $##a
 #define X1
 #define X2

@@ -175,7 +175,7 @@
 #else
 // GNU assembler version 2
 #define R(r) %r
-#define NUM(n) $##n
+#define NUM(n) $ n
 #define ADDR(a) $##a
 #define ADDR_PCRELATIVE(a) a(%rip)
 #define X1
