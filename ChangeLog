@@ -1,5 +1,15 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	i386: Assume MSVC struct return convention also on 32-bit mingw.
+	* avcall/avcall.h (__AV_STRUCT_RETURN): Enable __AV_MSVC_STRUCT_RETURN
+	on 32-bit mingw.
+	* vacall/vacall.h (__VA_STRUCT_RETURN): Enable __VA_MSVC_STRUCT_RETURN
+	on 32-bit mingw.
+	* callback/vacall_r/vacall_r.h: Likewise.
+	* NEWS: Mention the fix.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Fix warnings on DragonFly BSD.
 	* vacall/vacall-internal.h (__va_start, __va_arg): Undefine first.
 

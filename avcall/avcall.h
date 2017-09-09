@@ -145,7 +145,7 @@ enum __AV_alist_flags
 #if defined(__GNUC__) && !((defined(__mipsn32__) || defined(__mips64__)) && ((__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)))
 				  __AV_GCC_STRUCT_RETURN |
 #endif
-#if defined(__i386__) && defined(_MSC_VER) /* MSVC 4.0 */
+#if defined(__i386__) && (defined(_WIN32) || defined(__WIN32__)) && !defined(__CYGWIN__) /* native Windows */
 				  __AV_MSVC_STRUCT_RETURN |
 #endif
 				  0,

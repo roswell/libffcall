@@ -23,6 +23,7 @@ New in 2.0:
   - s390: Linux.
 
 * Fixed a bug regarding structure returns on the following platforms:
+  - i386: MinGW.
   - mips: old 32-bit ABI (Linux, IRIX).
 
 * Added support for the following platforms:
