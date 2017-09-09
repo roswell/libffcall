@@ -1,5 +1,10 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Optimize struct return of small structs.
+	* avcall/avcall-*.c: Cache l->raddr in a local variable.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Improve processing of assembly-language files.
 	* common/asm-x86_64.sh: Eliminate #APP and #NO_APP directives.
 	In the MEM* patterns, recognize all 64-bit register names.

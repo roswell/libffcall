@@ -125,8 +125,9 @@ avcall_call(av_alist* list)
     RETURN(unsigned long, iret);
   } else
   if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
-    ((__avword*)l->raddr)[0] = iret;
-    ((__avword*)l->raddr)[1] = iret2;
+    void* raddr = l->raddr;
+    ((__avword*)raddr)[0] = iret;
+    ((__avword*)raddr)[1] = iret2;
   } else
   if (l->rtype == __AVfloat) {
     RETURN(float, fret);

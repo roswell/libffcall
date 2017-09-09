@@ -111,8 +111,9 @@ avcall_call(av_alist* list)
     RETURN(unsigned long, i);
   } else
   if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
-    ((__avword*)l->raddr)[0] = i;
-    ((__avword*)l->raddr)[1] = iret2;
+    void* raddr = l->raddr;
+    ((__avword*)raddr)[0] = i;
+    ((__avword*)raddr)[1] = iret2;
   } else
   if (l->rtype == __AVfloat) {
     RETURN(float, fret);
@@ -135,8 +136,9 @@ avcall_call(av_alist* list)
         RETURN(int, i);
       } else
       if (l->rsize == 2*sizeof(__avword)) {
-        ((__avword*)l->raddr)[0] = i;
-        ((__avword*)l->raddr)[1] = iret2;
+        void* raddr = l->raddr;
+        ((__avword*)raddr)[0] = i;
+        ((__avword*)raddr)[1] = iret2;
       }
     }
   }

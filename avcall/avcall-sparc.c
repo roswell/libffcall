@@ -157,8 +157,9 @@ avcall_call(av_alist* list)
     RETURN(unsigned long, i);
   } else
   if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
-    ((__avword*)l->raddr)[0] = i;
-    ((__avword*)l->raddr)[1] = o1;
+    void* raddr = l->raddr;
+    ((__avword*)raddr)[0] = i;
+    ((__avword*)raddr)[1] = o1;
   } else
   if (l->rtype == __AVfloat) {
     /* old Sun cc returns floats as doubles */
