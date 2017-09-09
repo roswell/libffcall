@@ -27,7 +27,9 @@ Supported CPUs:  (Put the GNU config.guess values here.)
                 powerpc64le-unknown-linux (gcc)
      ia64       ia64-unknown-linux
      x86_64     x86_64-suse-linux, x86_64-unknown-linux (gcc -mx32),
-                x86_64-pc-solaris2.10, x86_64-pc-cygwin, x86_64-w64-mingw32
+                x86_64-pc-solaris2.10, x86_64-pc-cygwin, x86_64-w64-mingw32,
+                x86_64-unknown-freebsd11.0, x86_64-unknown-netbsd7.0,
+                x86_64-unknown-openbsd6.0
      s390       s390x-ibm-linux
      s390x      s390x-ibm-linux
 

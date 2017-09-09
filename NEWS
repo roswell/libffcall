@@ -39,6 +39,7 @@ New in 2.0:
 * Verified support for the following platforms:
   (A build on these platforms worked and still works.)
   - i386: FreeBSD, NetBSD, OpenBSD, DragonFly BSD.
+  - x86_64: FreeBSD, NetBSD, OpenBSD.
 
 New in 1.13:
 

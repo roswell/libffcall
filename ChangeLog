@@ -1,5 +1,11 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Verify support for FreeBSD, NetBSD, OpenBSD.
+	* PLATFORMS, */PLATFORMS: List these platforms.
+	* NEWS: Likewise.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	i386: Restore support for FreeBSD, NetBSD, OpenBSD, DragonFly BSD.
 	* avcall/avcall.h (__AV_STRUCT_RETURN): Enable __AV_SMALL_STRUCT_RETURN
 	on FreeBSD/i386, OpenBSD/i386, DragonFly/i386.
