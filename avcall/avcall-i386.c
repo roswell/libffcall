@@ -31,7 +31,8 @@
 
   To return a structure, the called function copies the value to space
   pointed to by its first argument, and all other arguments are shifted
-  down by one. GCC returns <= 4 byte structures as integers.
+  down by one. At least on FreeBSD, the function also returns the pointer.
+  GCC returns structures of size 1, 2, 4, 8 like integers.
 
   Compile this routine with gcc -O (or -O2 -fno-omit-frame-pointer or -g -O)
   to get the right register variables. For other compilers use the

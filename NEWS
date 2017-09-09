@@ -23,6 +23,7 @@ New in 2.0:
   - s390: Linux.
 
 * Fixed a bug regarding structure returns on the following platforms:
+  - i386: FreeBSD.
   - i386: MinGW.
   - mips: old 32-bit ABI (Linux, IRIX).
 
@@ -34,6 +35,10 @@ New in 2.0:
   - x86_64: MSVC 14.
   - hppa64: HP-UX 11.
   - m68k: Linux.
+
+* Verified support for the following platforms:
+  (A build on these platforms worked and still works.)
+  - i386: FreeBSD, NetBSD, OpenBSD, DragonFly BSD.
 
 New in 1.13:
 

@@ -1,5 +1,19 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	i386: Restore support for FreeBSD, NetBSD, OpenBSD, DragonFly BSD.
+	* avcall/avcall.h (__AV_STRUCT_RETURN): Enable __AV_SMALL_STRUCT_RETURN
+	on FreeBSD/i386, OpenBSD/i386, DragonFly/i386.
+	* vacall/vacall.h (__VA_STRUCT_RETURN): Enable __VA_SMALL_STRUCT_RETURN
+	on FreeBSD/i386, OpenBSD/i386, DragonFly/i386.
+	* callback/vacall_r/vacall_r.h: Likewise.
+	* avcall/avcall-i386.c: Update comments.
+	* vacall/vacall-i386.c (vacall_receiver): Return the structure address
+	in %eax also for other platforms than MSVC.
+	* PLATFORMS, */PLATFORMS: List these platforms.
+	* NEWS: Likewise.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	i386: Assume MSVC struct return convention also on 32-bit mingw.
 	* avcall/avcall.h (__AV_STRUCT_RETURN): Enable __AV_MSVC_STRUCT_RETURN
 	on 32-bit mingw.

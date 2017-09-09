@@ -128,7 +128,7 @@ enum __VA_alist_flags
 #if defined(__sparc__) && !defined(__sparc64__) && defined(__sun) && (defined(__SUNPRO_C) || defined(__SUNPRO_CC)) /* SUNWspro cc or CC */
 				  __VA_SUNPROCC_STRUCT_RETURN,
 #else
-#if (defined(__i386__) && (defined(_WIN32) || defined(__CYGWIN__) || (defined(__MACH__) && defined(__APPLE__)))) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__hppa__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || defined(__powerpc64_elfv2__) || defined(__ia64__) || defined(__x86_64__)
+#if (defined(__i386__) && (defined(_WIN32) || defined(__CYGWIN__) || (defined(__MACH__) && defined(__APPLE__)) || defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__))) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__hppa__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || defined(__powerpc64_elfv2__) || defined(__ia64__) || defined(__x86_64__)
 				  __VA_SMALL_STRUCT_RETURN |
 #endif
 #if defined(__GNUC__) && !((defined(__mipsn32__) || defined(__mips64__)) && ((__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)))

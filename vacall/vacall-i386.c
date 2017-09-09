@@ -114,6 +114,9 @@ vacall_receiver (__vaword firstword)
         goto done;
       }
     }
+    /* On MSVC and on FreeBSD, must put the structure address into %eax.
+       For the other platforms, it does not matter, but doesn't hurt either. */
+    iret = (long) list.raddr;
     if (!(list.flags & __VA_MSVC_STRUCT_RETURN)) {
       /* We have to pop the struct return address off the stack. */
       /* Callers compiled with -fomit-frame-pointer expect this. */
@@ -135,10 +138,6 @@ vacall_receiver (__vaword firstword)
 #endif
       asm volatile ("ret $4");
       /*NOTREACHED*/
-    }
-    if (list.flags & __VA_MSVC_STRUCT_RETURN) {
-      /* on MSVC, must put the structure address into %eax */
-      iret = (long) list.raddr;
     }
     done: ;
   }
