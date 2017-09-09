@@ -1042,10 +1042,9 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
 #define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
    ? -1 :								\
-   ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)), \
-    ++(LIST).anum,							\
-    __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-    (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
+   (++(LIST).anum,							\
+    __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
+    (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     0))
 #define __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)	\
   ((__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
@@ -1076,9 +1075,8 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
 #define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
    ? -1 :								\
-   ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)), \
-    __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-    (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
+   (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
+    (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     ((LIST).anum < 8 && ((LIST).darg_mask |= (-1 << (LIST).anum))),	\
     (LIST).anum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))/sizeof(__avword), \
     (LIST).darg_mask &= (1 << ((LIST).anum < 8 ? (LIST).anum : 8)) - 1, \
@@ -1124,9 +1122,8 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
 #define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
    ? -1 :								\
-   ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)), \
-    __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-    (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
+   (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
+    (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     0))
 #define __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)	\
   ((__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
@@ -1222,9 +1219,8 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
        0))								\
    : ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
       ? -1 :								\
-      ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)), \
-       __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-       (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
+      (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
+       (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
        ((LIST).anum < 16 && ((LIST).darg_mask |= (-1 << (LIST).anum))),	\
        (LIST).anum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))/sizeof(__avword), \
        (LIST).darg_mask &= (1 << ((LIST).anum < 16 ? (LIST).anum : 16)) - 1, \
@@ -1251,9 +1247,8 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
       : /* FIXME: gcc-2.6.3 passes structures <= 4 bytes in memory left-adjusted! ?? */\
         ((__avword*)(((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)) < (LIST).eptr \
          ? -1 :								\
-         ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)), \
-          __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).aptr,VAL), \
-          (LIST).aptr = (__avword*)((uintptr_t)(LIST).aptr & -4),	\
+         (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)),VAL), \
+          (LIST).aptr = (__avword*)((((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)) & -4),	\
           0))))
 #endif
 #if defined(__arm64__)
@@ -1269,9 +1264,8 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
       : ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
          ? -1 :								\
          ((LIST).ianum = __AV_IARG_NUM,					\
-          (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)), \
-          __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-          (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
+          __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
+          (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
           0)))								\
    : ((LIST).ianum < __AV_IARG_NUM					\
       ? ((LIST).aptr							\
@@ -1356,9 +1350,8 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
       : ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
          ? -1 :								\
          ((LIST).ianum = __AV_IARG_NUM,					\
-          (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)), \
-          __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-          (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
+          __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
+          (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
           0)))								\
    : ((LIST).ianum < __AV_IARG_NUM					\
       ? ((LIST).aptr							\

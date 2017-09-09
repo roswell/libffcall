@@ -1,5 +1,11 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	Don't violate ISO C rules.
+	* avcall/avcall-internal.h (__av_struct): Don't store an unaligned
+	pointer in (LIST).aptr.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	Assume the C preprocessor discards // comments.
 	* common/asm-i386.h: Renamed from common/asm-i386.hh.
 	* Makefile.maint (common/asm-i386.h): Remove target.
