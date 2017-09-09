@@ -1,5 +1,86 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	hppa64: Add support for HP-PA in 64-bit mode on HP-UX.
+	* cross-tools/cross.conf: Add configuration for hppa64 cross tools.
+	* porting-tools/abis/README: Add details about platforms where function
+	pointers are actually pointers to some struct.
+	* porting-tools/abis/call-used-registers.txt: Add info about hppa64.
+	Fix info about hppa.
+	* porting-tools/abis/reg-struct-return.txt: Add info about hppa64.
+	* porting-tools/abis/stack-frame.txt: Likewise.
+	* porting-tools/execstack/voidfunc-hppa64.o: New file.
+	* common/asm-hppa64.h: New file.
+	* common/asm-hppa64.sh: New file.
+	* Makefile.in (SOURCE_FILES): Add them.
+	* avcall/avcall.h (__AV_REGISTER_STRUCT_RETURN): Add code for
+	__hppa64__.
+	* avcall/avcall-alist.h (__av_alist): Likewise.
+	* avcall/avcall-internal.h: Add code for __hppa64__, especially
+	__av_start1, __av_reg_struct_return, __av_start_struct4, __av_word,
+	__av_longlong, __av_ulonglong, _av_float, _av_double,
+	__av_struct_leftadjusted, __av_struct.
+	* avcall/avcall-hppa64.c: New file.
+	* avcall/Makefile.devel (avcall-hppa64-linux.s, avcall-hppa64-macro.S):
+	New targets.
+	* avcall/Makefile.in (avcall-hppa64.lo, avcall-hppa64.s): New targets.
+	(clean): Remove avcall-hppa64.s.
+	(SOURCE_FILES): Add avcall-hppa64.c, avcall-hppa64-linux.s,
+	avcall-hppa64-macro.S.
+	* vacall/vacall.h (__VA_REGISTER_STRUCT_RETURN): Add code for
+	__hppa64__.
+	* vacall/vacall-internal.h: Add code for __hppa64__, especially
+	__va_alist, __va_reg_struct_return, __va_start_struct2,
+	__va_arg_leftadjusted, __va_arg_rightadjusted, __va_arg_adjusted,
+	_va_arg_longlong, _va_arg_ulonglong, __va_align_double, _va_arg_float,
+	_va_arg_double, __va_arg_struct, _va_return_longlong.
+	* vacall/vacall-hppa64.c: New file.
+	* vacall/Makefile.devel (vacall-hppa64-linux.s, vacall-hppa64-macro.S):
+	New targets.
+	* vacall/Makefile.in (vacall-hppa64.@OBJEXT@, vacall-hppa64.s): New
+	targets.
+	(clean): Remove vacall-hppa64.s.
+	(SOURCE_FILES): Add vacall-hppa64.c, vacall-hppa64-linux.s,
+	vacall-hppa64-macro.S.
+	* callback/vacall_r/vacall_r.h (__VA_REGISTER_STRUCT_RETURN): Add code
+	for __hppa64__.
+	* callback/vacall_r/Makefile.devel (vacall-hppa64-linux.s,
+	vacall-hppa64-macro.S): New targets.
+	* callback/vacall_r/Makefile.in (vacall-hppa64.lo, vacall-hppa64.s): New
+	targets.
+	(clean): Remove vacall-hppa64.s.
+	(SOURCE_FILES): Add vacall-hppa64-linux.s, vacall-hppa64-macro.S.
+	* trampoline/Makefile.devel (cache-hppa64-linux.s,
+	cache-hppa64-macro.S): New targets.
+	(proto-hppa64.s, tramp-hppa64.o): New targets.
+	* trampoline/proto-hppa64.s: New generated file.
+	* trampoline/tramp-hppa64.s: New file.
+	* trampoline/tramp-hppa64.o: New generated file.
+	* trampoline/tramp-hppa-macro.S: Fix comment.
+	* trampoline/cache-hppa.c: Add code for __hppa64__.
+	* trampoline/trampoline.c: Implement for __hppa64__.
+	* trampoline/Makefile.in (cache-hppa64.lo, cache-hppa64.s): New targets.
+	(clean): Remove cache-hppa64.s.
+	(SOURCE_FILES): Add cache-hppa64-linux.s, cache-hppa64-macro.S.
+	* callback/trampoline_r/Makefile.devel (cache-hppa64-linux.s,
+	cache-hppa64-macro.S): New targets.
+	(proto-hppa64.s, tramp-hppa64.o): New targets.
+	* callback/trampoline_r/proto64.c: Add code for __hppa64__.
+	* callback/trampoline_r/proto-hppa64.s: New generated file.
+	* callback/trampoline_r/tramp-hppa64.s: New file.
+	* callback/trampoline_r/tramp-hppa64.o: New generated file.
+	* callback/trampoline_r/tramp-hppa-macro.S: Fix comment.
+	* callback/trampoline_r/trampoline.c: Implement for __hppa64__.
+	* callback/trampoline_r/test1.c: Add support for __hppa64__.
+	* callback/trampoline_r/Makefile.in (cache-hppa64.lo, cache-hppa64.s):
+	New targets.
+	(clean): Remove cache-hppa64.s.
+	(SOURCE_FILES): Add cache-hppa64-linux.s, cache-hppa64-macro.S.
+	* configure.ac (CPU_OBJECTS): Augment also for hppa64 ABI.
+	* PLATFORMS, */PLATFORMS: List the 64-bit HP-PA machine.
+	* NEWS: Mention the new port.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	Don't violate ISO C rules.
 	* avcall/avcall-internal.h (__av_struct): Don't store an unaligned
 	pointer in (LIST).aptr.

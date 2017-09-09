@@ -21,7 +21,7 @@
 #include "config.h"
 #include "trampoline.h"
 
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
 #if 0
 #define __hppaold__  /* Old trampoline, real machine code. */
 #else
@@ -203,7 +203,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 #endif
 /* Inline assembly function for instruction cache flush. */
-#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__powerpcsysv4__) || defined(__powerpc64_elfv2__)
+#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__hppa64__) || defined(__powerpcsysv4__) || defined(__powerpc64_elfv2__)
 #if defined(__sparc__) || defined(__sparc64__)
 extern void __TR_clear_cache_4();
 #else
@@ -280,6 +280,11 @@ static int open_noinherit (const char *filename, int flags, int mode)
 #define TRAMP_LENGTH 20
 #define TRAMP_ALIGN 16
 #define TRAMP_BIAS 2
+#endif
+#ifdef __hppa64__
+#define TRAMP_LENGTH 96
+#define TRAMP_ALIGN 8
+#define TRAMP_BIAS 64
 #endif
 #if defined(__arm__) || defined(__armhf__)
 #define TRAMP_LENGTH 36
@@ -975,6 +980,61 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #define tramp_data(function)  \
   ((long *) function)[3]
 #endif
+#ifdef __hppa64__
+  /* function:
+   *    mfia %r27			000014BB
+   *    ldd 40(%r27),%r31		537F0050
+   *    ldd 48(%r27),%r1		53610060
+   *    std %r1,0(%r31)			0FE112C0
+   *    ldd 56(%r27),%r27		537B0070
+   *    ldd 16(%r27),%r1		53610020
+   *    ldd 24(%r27),%r27		537B0030
+   *    bve (%r1)			E820D000
+   *     nop				08000240
+   *    .align 8
+   *    .dword <variable>
+   *    .dword <data>
+   *    .dword <address>
+   * function_pointer:
+   *    .dword 0
+   *    .dword 0
+   *    .dword function
+   *    .dword 0
+   */
+  *(int *)  (function + 0) = 0x000014BB;
+  *(int *)  (function + 4) = 0x537F0050;
+  *(int *)  (function + 8) = 0x53610060;
+  *(int *)  (function +12) = 0x0FE112C0;
+  *(int *)  (function +16) = 0x537B0070;
+  *(int *)  (function +20) = 0x53610020;
+  *(int *)  (function +24) = 0x537B0030;
+  *(int *)  (function +28) = 0xE820D000;
+  *(int *)  (function +32) = 0x08000240;
+  *(long *) (function +40) = (long)variable;
+  *(long *) (function +48) = (long)data;
+  *(long *) (function +56) = (long)address;
+  *(long *) (function +64) = (long)0;
+  *(long *) (function +72) = (long)0;
+  *(long *) (function +80) = (long)function;
+  *(long *) (function +88) = (long)0;
+#define TRAMP_CODE_LENGTH  36
+#define is_tramp(function)  \
+  *(int *) (function + 0) == 0x000014BB && \
+  *(int *) (function + 4) == 0x537F0050 && \
+  *(int *) (function + 8) == 0x53610060 && \
+  *(int *) (function +12) == 0x0FE112C0 && \
+  *(int *) (function +16) == 0x537B0070 && \
+  *(int *) (function +20) == 0x53610020 && \
+  *(int *) (function +24) == 0x537B0030 && \
+  *(int *) (function +28) == 0xE820D000 && \
+  *(int *) (function +32) == 0x08000240
+#define tramp_address(function)  \
+  (*(unsigned long *) (function +56))
+#define tramp_variable(function)  \
+  (*(unsigned long *) (function +40))
+#define tramp_data(function)  \
+  (*(unsigned long *) (function +48))
+#endif
 #if defined(__arm__) || defined(__armhf__)
   /* function:
    *	stmfd	sp!,{r0}		E92D0001
@@ -1459,7 +1519,7 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #ifdef __alpha__
   __TR_clear_cache();
 #endif
-#ifdef __hppa__
+#if defined(__hppa__) || defined(__hppa64__)
   /* This assumes that the trampoline fits in at most two cache lines. */
   __TR_clear_cache(function_x,function_x+TRAMP_CODE_LENGTH-1);
 #endif

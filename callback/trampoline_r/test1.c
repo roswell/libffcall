@@ -60,8 +60,11 @@ register void* env __asm__("%g5");
 #ifdef __alpha__
 register void* env __asm__("$1");
 #endif
-#ifdef __hppa__
+#if defined(__hppa__) && !defined(__hppa64__)
 register void* env __asm__("%r29");
+#endif
+#ifdef __hppa64__
+register void* env __asm__("%r31");
 #endif
 #ifdef __arm64__
 register void* env __asm__("x18");

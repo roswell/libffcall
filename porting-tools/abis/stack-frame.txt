@@ -35,7 +35,8 @@ mips{n32,64}  8  r4-r11                 Y (split struct)
 sparc         6  o0-o5                  Y (split long long)
 sparc64       6  o0-o5                  N
 alpha         6  $16-$21                Y (split struct)
-hppa          4  23-26                  N
+hppa          4  r23-r26                N
+hppa64        8  r19-r26,r29            Y (split struct)
 arm,armhf     4  r0-r3                  Y (split struct)
 arm64         8  x0-x7                  N
 powerpc       8  3-10                   Y (split struct) on AIX and Darwin,
@@ -67,7 +68,8 @@ mips          4  r4-r7                  fp, retaddr, word1,...,wordN  Y (preallo
 mips{n32,64}  8  r4-r11                 fp, retaddr, others           Y (allocated room through split struct)
 sparc{,64}    6  o0-o5                  ?                             Y (preallocated room)
 alpha         6  $16-$21                retaddr, fp, others           Y (allocated room through split struct)
-hppa          4  23-26                                                Y (preallocated room)
+hppa          4  r23-r26                                              Y (preallocated room)
+hppa64        8  r19-r26,r29                                          Y (preallocated room)
 arm,armhf     4  r0-r3                  fp, sp, retaddr, dummy(opt)   Y (allocated room through split struct)
 arm64         8  x0-x7                  {fp,lr}, others               N
 powerpc       8  3-10                                                 Y (preallocated room) on AIX and Darwin,
@@ -214,6 +216,21 @@ Epilogue
     ldo 64(%r3),%r30
     ldwm -64(%r30),%r3
     bv,n %r0(%r2)
+==========================
+
+========== hppa64 ==========
+Note: %r30 = stack pointer, %r2 = return address, %r27 = pic_base
+Prologue
+    std %r2,-16(%r30)
+    ldo 144(%r30),%r30
+    std %r27,-144(%r30)
+Call
+    b,l printf,%r2    ; puts retaddr in %r2
+Epilogue
+    ldd -144(%r30),%r27
+    ldd -160(%r30),%r2
+    BVE (%r2)
+     ldo -144(%r30),%r30
 ==========================
 
 ========== arm ==========

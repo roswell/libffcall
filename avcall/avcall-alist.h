@@ -64,7 +64,7 @@ typedef struct
   __avword*		aptr;
   /* beginning of the args[] array */
   __avword*		args;
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
   /* end of the args[] array */
   __avword*		args_end;
 #endif
@@ -75,7 +75,7 @@ typedef struct
   /* is odd (because on MSVC, alignof(double) = 8, normally = 4).            */
   __avword		filler1;
 #endif
-#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__s390__) && !defined(__s390x__))
+#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__s390__) && !defined(__s390x__))
   /* temporary storage, used to split doubles into two words */
   union {
     double	_double;
@@ -112,6 +112,10 @@ typedef struct
   /* store the floating-point arguments in an extra array */
   int			anum;		/* redundant: (LIST).aptr = &(LIST).args[(LIST).anum] */
   unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a float or double value */
+#endif
+#if defined(__hppa64__)
+  unsigned int		farg_mask;	/* bitmask of those entries in args[] which have a float value */
+  unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a double value */
 #endif
 #if defined(__armhf__)
 #define __AV_IARG_NUM 4

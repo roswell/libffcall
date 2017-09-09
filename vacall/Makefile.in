@@ -116,6 +116,12 @@ vacall-hppa.@OBJEXT@ : vacall-hppa.s
 vacall-hppa.s : $(srcdir)/vacall-hppa-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > vacall-hppa.s
 
+vacall-hppa64.@OBJEXT@ : vacall-hppa64.s
+	$(CC) @GCC_X_NONE@ -c vacall-hppa64.s
+
+vacall-hppa64.s : $(srcdir)/vacall-hppa64-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-hppa64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > vacall-hppa64.s
+
 vacall-arm.@OBJEXT@ : vacall-arm.s
 	$(CC) @GCC_X_NONE@ -c vacall-arm.s
 
@@ -297,7 +303,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.@OBJEXT@ *.a core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64.asm vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-hppa64.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64.asm vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s
 	$(RM) minitests.@OBJEXT@ minitests.s minitests minitests.out
 	$(RM) minitests-c++.@OBJEXT@ minitests-c++ minitests-c++.out
 	$(RM) tests.@OBJEXT@ tests.s tests tests.out
@@ -321,6 +327,7 @@ SOURCE_FILES = \
   vacall-armhf.c vacall-armhf-macro.S \
   vacall-arm64.c vacall-arm64-macro.S \
   vacall-hppa.c vacall-hppa-linux.s vacall-hppa-macro.S \
+  vacall-hppa64.c vacall-hppa64-linux.s vacall-hppa64-macro.S \
   vacall-i386.c vacall-i386-linux.s vacall-i386-macro.S \
   vacall-ia64.c vacall-ia64-linux.s vacall-ia64-macro.S \
   vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S \

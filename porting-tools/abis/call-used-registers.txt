@@ -14,7 +14,8 @@ mips{n32,64} r2-r15,r24                  r4-r11                -                
 sparc        o0-o5,g1-g4                 o0-o5                 -                 g1-g4
 sparc64      o0-o5,g1-g5                 o0-o5                 -                 g1-g5
 alpha        $0-$8,$16-$25,$28           $16-$21               -                 $0-$8,$22-$25,$28
-hppa         19-26,28-29                 23-26                 28                19-22,29
+hppa         r1,r19-r26,r28-r29,r31      r23-r26               r28               r1,r19-r22,r29,r31
+hppa64       r1,r19-r29,r31              r19-r26,r29           r28               r1,r27,r31
 arm          r0-r3,r12                   r0-r3                 -                 r12=ip
 arm64        x0-x18                      x0-x7                 x8                x9-x18
 powerpc      0,3-12                      3-10                  -                 0,11-12
@@ -49,7 +50,8 @@ mips{n32,64} r2-r3,r12-r15,r24           ?                       $2
 sparc        g1-g4                       g1-g3                   g2
 sparc64      g1-g5                       g1-g3                   g5
 alpha        $0-$8,$22-$25,$28           $2,$1                   $1
-hppa         19-22,29                    r19,r20,r21,r22         r29
+hppa         r1,r19-r22,r29,r31          r19,r20,r21,r22         r29
+hppa64       r1,r27,r31                  r1,r31,r29,r28          r31
 arm          r12=ip                      r0,r1,r3,r2             r12
 arm64        x9-x18                      x8,x9,x10,x11           x18
 powerpc      0,11-12                     0,11,12                 11 (13 in NetBSD)

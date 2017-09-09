@@ -18,7 +18,7 @@ precompiled : \
   avcall-mipseb-macro.S avcall-mipsel-macro.S avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S avcall-mips64eb-macro.S avcall-mips64el-macro.S \
   avcall-sparc-macro.S avcall-sparc64-macro.S \
   avcall-alpha-macro.S \
-  avcall-hppa-macro.S \
+  avcall-hppa-macro.S avcall-hppa64-macro.S \
   avcall-arm-macro.S avcall-armhf-macro.S \
   avcall-arm64-macro.S \
   avcall-powerpc-aix.s avcall-powerpc-linux-macro.S avcall-powerpc-sysv4-macro.S avcall-powerpc-macos.s avcall-powerpc64-aix.s avcall-powerpc64-linux.S avcall-powerpc64-elfv2-linux.S \
@@ -110,6 +110,13 @@ avcall-hppa-linux.s : avcall-hppa.c avcall-internal.h avcall.h avcall-alist.h $(
 
 avcall-hppa-macro.S : avcall-hppa-linux.s ../common/asm-hppa.sh ../common/noexecstack.h $(THISFILE)
 	(echo '#include "asm-hppa.h"' ; ../common/asm-hppa.sh < avcall-hppa-linux.s ; cat ../common/noexecstack.h) > avcall-hppa-macro.S
+
+avcall-hppa64-linux.s : avcall-hppa64.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
+	$(CROSS_TOOL) hppa64-linux gcc -V 3.1 $(GCCFLAGS) -D__hppa64__ -S avcall-hppa64.c -o avcall-hppa64-linux.s
+
+avcall-hppa64-macro.S : avcall-hppa64-linux.s ../common/asm-hppa64.sh ../common/noexecstack.h $(THISFILE)
+# Need to remove the gcc-generated instructions that clobber %r29 right before each of the calls.
+	(echo '#include "asm-hppa64.h"' ; grep -v 'ldo -16(%r30),%r29' < avcall-hppa64-linux.s | ../common/asm-hppa64.sh ; cat ../common/noexecstack.h) > avcall-hppa64-macro.S
 
 
 avcall-arm-macro.S : avcall-arm.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)

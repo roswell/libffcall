@@ -110,6 +110,12 @@ cache-hppa.lo : cache-hppa.s
 cache-hppa.s : $(srcdir)/cache-hppa-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/cache-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > cache-hppa.s
 
+cache-hppa64.lo : cache-hppa64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-hppa64.s
+
+cache-hppa64.s : $(srcdir)/cache-hppa64-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/cache-hppa64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > cache-hppa64.s
+
 cache-powerpc.lo : cache-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c cache-powerpc.s
 
@@ -197,7 +203,7 @@ extracheck : check
 mostlyclean : clean
 
 clean : force
-	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.@OBJEXT@/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.* core
+	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.@OBJEXT@/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-hppa64.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.* core
 	$(RM) -r .libs _libs
 	$(RM) test1.@OBJEXT@ test1 test2.@OBJEXT@ test2
 
@@ -222,7 +228,7 @@ SOURCE_FILES = \
   tramp-ia64-macro.S \
   cache.c \
   cache-alpha.c cache-alpha-linux.s cache-alpha-macro.S \
-  cache-hppa.c cache-hppa-linux.s cache-hppa-macro.S \
+  cache-hppa.c cache-hppa-linux.s cache-hppa-macro.S cache-hppa64-linux.s cache-hppa64-macro.S \
   cache-powerpc.c cache-powerpc-linux.s cache-powerpc-linux-macro.S cache-powerpc-macos.s \
   cache-powerpc64.c cache-powerpc64-elfv2-linux.s cache-powerpc64-elfv2-macro.S \
   cache-sparc.c cache-sparc-linux.s cache-sparc-macro.S cache-sparc64-linux.s cache-sparc64-macro.S \

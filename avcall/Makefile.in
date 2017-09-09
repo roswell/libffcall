@@ -132,6 +132,12 @@ avcall-hppa.lo : avcall-hppa.s
 avcall-hppa.s : $(srcdir)/avcall-hppa-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > avcall-hppa.s
 
+avcall-hppa64.lo : avcall-hppa64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-hppa64.s
+
+avcall-hppa64.s : $(srcdir)/avcall-hppa64-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-hppa64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > avcall-hppa64.s
+
 avcall-arm.lo : avcall-arm.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm.s
 
@@ -322,7 +328,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.@OBJEXT@ *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64.asm avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-hppa64.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64.asm avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.@OBJEXT@ minitests.s minitests minitests.out
 	$(RM) minitests-c++.@OBJEXT@ minitests-c++ minitests-c++.out
@@ -347,6 +353,7 @@ SOURCE_FILES = \
   avcall-armhf.c avcall-armhf-macro.S \
   avcall-arm64.c avcall-arm64-macro.S \
   avcall-hppa.c avcall-hppa-linux.s avcall-hppa-macro.S \
+  avcall-hppa64.c avcall-hppa64-linux.s avcall-hppa64-macro.S \
   avcall-i386.c avcall-i386-linux.s avcall-i386-macro.S \
   avcall-ia64.c avcall-ia64-linux.s avcall-ia64-macro.S \
   avcall-m68k.c avcall-m68k-linux.s avcall-m68k-sun.s avcall-m68k.mit.S avcall-m68k.motorola.S \

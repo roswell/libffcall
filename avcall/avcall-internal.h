@@ -34,7 +34,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 
 /* Delayed overflow detection */
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
 #define _av_overflown(LIST) ((LIST).aptr < (LIST).eptr)
 #else
 #define _av_overflown(LIST) ((LIST).aptr > (LIST).eptr)
@@ -83,9 +83,15 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
    (LIST).darg_mask = 0,						\
    (LIST).aptr = &(LIST).args[0],
 #endif
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
 #define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = (LIST).args_end = (LIST_ARGS_END),
+#endif
+#if defined(__hppa64__)
+#define __av_start1(LIST,LIST_ARGS_END)					\
+   (LIST).farg_mask = 0,						\
+   (LIST).darg_mask = 0,						\
+   (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__armhf__)
 #define __av_start1(LIST,LIST_ARGS_END)					\
@@ -133,7 +139,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
    (LIST).darg_mask = 0,
 #endif
 
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
 #define __av_start_init_eptr(LIST,LIST_ARGS_END)			\
    (LIST).eptr = &(LIST).args[0],
 #else
@@ -206,7 +212,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_start_struct3(LIST)  \
   ((LIST).flags |= __AV_REGISTER_STRUCT_RETURN, 0)
 #endif
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
   ((TYPE_SIZE) <= 8)
 /* Test __AV_SMALL_STRUCT_RETURN at run time. */
@@ -247,7 +253,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_start_struct3(LIST)  \
   ((LIST).flags |= __AV_REGISTER_STRUCT_RETURN, 0)
 #endif
-#if defined(__arm64__) || (defined(__powerpc64__) && defined(__powerpc64_elfv2__)) || defined(__x86_64_sysv__)
+#if defined(__hppa64__) || defined(__arm64__) || (defined(__powerpc64__) && defined(__powerpc64_elfv2__)) || defined(__x86_64_sysv__)
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
   ((TYPE_SIZE) <= 16)
 /* Turn on __AV_REGISTER_STRUCT_RETURN if __AV_SMALL_STRUCT_RETURN was set
@@ -265,7 +271,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_start_struct3(LIST)  \
   ((LIST).flags |= __AV_REGISTER_STRUCT_RETURN, 0)
 #endif
-#if defined(__m68k__) || defined(__hppa__) || defined(__arm64__) || defined(__ia64__)
+#if defined(__m68k__) || defined(__hppa__) || defined(__hppa64__) || defined(__arm64__) || defined(__ia64__)
 /* Return structure pointer is passed in a special register.
  */
 #define __av_start_struct4(LIST,TYPE_SIZE)  0
@@ -308,7 +314,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * scalar argument types
  */
 
-#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__arm64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || defined(__hppa64__) || (defined(__arm__) && !defined(__armhf__)) || defined(__arm64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* Floats and all integer types are passed as words,
  * doubles as two words (on 32-bit platforms) or one word (on 64-bit platforms).
  */
@@ -330,7 +336,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
     (LIST).anum++,							\
     0))
 #endif
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
 /* Floats and all integer types are passed as words,
  * doubles as two words.
  */
@@ -384,7 +390,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_ptr(LIST,VAL)	__av_word(LIST,VAL)
 #endif
 
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__AV_LLP64)) || defined(__s390x__)
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__AV_LLP64)) || defined(__s390x__)
 /* ‘long long’ and ‘long’ are identical. */
 #define __av_longlong		__av_long
 #define __av_ulonglong		__av_ulong
@@ -392,7 +398,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 /* ‘long long’ fits in __avword. */
 #define __av_longlong			__av_word
 #define __av_ulonglong(LIST,VAL)	__av_word(LIST,(unsigned long long)(VAL))
-#elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__))
+#elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__))
 /* ‘long long’s are passed embedded on the arg stack. */
 #define __av_longlong(LIST,VAL)		__av_arg_longlong(LIST,long long,VAL)
 #define __av_ulonglong(LIST,VAL)	__av_arg_longlong(LIST,unsigned long long,VAL)
@@ -405,7 +411,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
     ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
     0))
 #endif
-#if defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc_sysv4__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__))
+#if defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || defined(__powerpc_sysv4__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__))
 /* ‘long long’s have alignment 4 or 8. */
 #if defined(__mips__)
 #define __av_arg_longlong(LIST,TYPE,VAL)				\
@@ -428,7 +434,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
     (LIST).aptr[-1] = (LIST).tmp.words[1],				\
     0))
 #endif
-#if defined(__hppa__)
+#if (defined(__hppa__) && !defined(__hppa64__))
 #define __av_arg_longlong(LIST,TYPE,VAL)				\
   ((__avword*)(((uintptr_t)(LIST).aptr & -(intptr_t)__AV_alignof(TYPE)) - sizeof(TYPE)) < (LIST).eptr \
    ? -1 :								\
@@ -642,7 +648,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 #endif
 
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
 
 #define _av_float(LIST,VAL)						\
   ((LIST).aptr <= (LIST).eptr						\
@@ -657,6 +663,30 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
     ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr-sizeof(double)) & -(intptr_t)sizeof(double)), \
      *(double*)(LIST).aptr = (double)(VAL),				\
      0))
+
+#endif
+
+#if defined(__hppa64__)
+
+#define _av_float(LIST,VAL)						\
+  ((LIST).aptr >= (LIST).eptr						\
+   ? -1 :								\
+   (((LIST).aptr < &(LIST).args[8]					\
+     ? ((LIST).farg_mask |= (unsigned int)1 << ((LIST).aptr - (LIST).args), 0) \
+     : 0),								\
+    (LIST).aptr++,							\
+    ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
+    0))
+
+#define _av_double(LIST,VAL)						\
+  ((LIST).aptr >= (LIST).eptr						\
+   ? -1 :								\
+   (((LIST).aptr < &(LIST).args[8]					\
+     ? ((LIST).darg_mask |= (unsigned int)1 << ((LIST).aptr - (LIST).args), 0) \
+     : 0),								\
+    (LIST).aptr++,							\
+    ((double*)(LIST).aptr)[-1] = (double)(VAL),				\
+    0))
 
 #endif
 
@@ -1005,7 +1035,7 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
 #define __av_struct_alignment(TYPE_ALIGN)  \
   (TYPE_ALIGN)
 #endif
-#if defined(__i386__) || defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc_aix__) || defined(__powerpc64__) || defined(__ia64__)
+#if defined(__i386__) || defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__powerpc_aix__) || defined(__powerpc64__) || defined(__ia64__)
 /* Structures are passed as fully aligned structures on the arg stack.
  * We align the aptr, store the structure, then fill to word alignment.
  * Single-small-integer structures are NOT promoted to integers and have
@@ -1174,6 +1204,17 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
           (LIST).ianum = __AV_IARG_NUM,					\
           0))))
 #endif
+#if defined(__hppa64__)
+/* Structures are passed left-adjusted (although big-endian!). */
+#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
+  ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
+   ? -1 :								\
+   (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
+    (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
+    0))
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
+  __av_struct_leftadjusted(LIST,TYPE_SIZE,(TYPE_SIZE)>sizeof(__avword)?2*sizeof(__avword):(TYPE_ALIGN),VAL)
+#endif
 #endif
 #if defined(__m68k__)
 /* Structures are passed as embedded copies on the arg stack.
@@ -1226,7 +1267,7 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
        (LIST).darg_mask &= (1 << ((LIST).anum < 16 ? (LIST).anum : 16)) - 1, \
        0)))
 #endif
-#if defined(__hppa__)
+#if defined(__hppa__) && !defined(__hppa64__)
 /* Structures <= 8 bytes are passed as embedded copies on the arg stack.
  * Big structures are passed as pointers to caller-made local copies.
  */

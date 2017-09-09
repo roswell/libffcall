@@ -14,7 +14,7 @@ CROSS_TOOL = cross
 precompiled : \
   cache-sparc-macro.S cache-sparc64-macro.S \
   cache-alpha-macro.S \
-  cache-hppa-macro.S \
+  cache-hppa-macro.S cache-hppa64-macro.S \
   cache-powerpc-linux-macro.S cache-powerpc-macos.s \
   cache-powerpc64-elfv2-macro.S
 
@@ -46,6 +46,13 @@ cache-hppa-macro.S : cache-hppa-linux.s ../../common/asm-hppa.sh ../../common/no
 	(echo '#include "asm-hppa.h"' ; ../../common/asm-hppa.sh < cache-hppa-linux.s ; cat ../../common/noexecstack.h) > cache-hppa-macro.S
 
 
+cache-hppa64-linux.s : cache-hppa.c $(THISFILE)
+	$(CROSS_TOOL) hppa64-linux gcc -V 3.1 $(GCCFLAGS) -D__hppa64__ -S cache-hppa.c -o cache-hppa64-linux.s
+
+cache-hppa64-macro.S : cache-hppa64-linux.s ../../common/asm-hppa64.sh ../../common/noexecstack.h $(THISFILE)
+	(echo '#include "asm-hppa64.h"' ; ../../common/asm-hppa64.sh < cache-hppa64-linux.s ; cat ../../common/noexecstack.h) > cache-hppa64-macro.S
+
+
 cache-powerpc-linux.s : cache-powerpc.c $(THISFILE)
 	$(CROSS_TOOL) powerpc-linux gcc -V 3.3.6 -mno-power -mno-power2 -mno-powerpc $(GCCFLAGS) -D__powerpc__ -S cache-powerpc.c -o cache-powerpc-linux.s
 
@@ -72,7 +79,7 @@ cache-powerpc64-elfv2-macro.S : cache-powerpc64-elfv2-linux.s ../../common/asm-p
 OLDGCCFLAGS = -O2 -fomit-frame-pointer
 ASPREFIX = /usr1/gnu/lib
 
-proto-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-arm.s proto-arm64.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.c proto-x86_64.c proto-x86_64-x32.s proto-s390.s proto-s390x.s
+proto-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-hppa64.s proto-arm.s proto-arm64.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.c proto-x86_64.c proto-x86_64-x32.s proto-s390.s proto-s390x.s
 
 proto-i386.s : proto.c
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(OLDGCCFLAGS) -D__i386__ -S proto.c -o $@
@@ -100,6 +107,9 @@ proto-alpha.s : proto64.c
 
 proto-hppa.s : proto.c
 	$(GCC) -V 2.6.3 -b hppa1.0-hpux $(OLDGCCFLAGS) -D__hppa__ -S proto.c -o $@
+
+proto-hppa64.s : proto64.c
+	$(CROSS_TOOL) hppa64-linux gcc -V 3.1 $(OLDGCCFLAGS) -D__hppa64__ -S proto64.c -o $@
 
 proto-arm.s : proto.c
 	$(CROSS_TOOL) arm-linux gcc -V 3.1 $(OLDGCCFLAGS) -fno-omit-frame-pointer -D__arm__ -S proto.c -o $@
@@ -160,6 +170,9 @@ tramp-alpha.o : tramp-alpha.s
 
 tramp-hppa.o : tramp-hppa.s
 	$(ASPREFIX)/hppa1.0-hpux/bin/as tramp-hppa.s -o $@
+
+tramp-hppa64.o : tramp-hppa64.s
+	$(CROSS_TOOL) hppa64-linux as tramp-hppa64.s -o $@
 
 tramp-arm.o : tramp-arm.s
 	$(CROSS_TOOL) arm-linux as tramp-arm.s -o $@

@@ -40,13 +40,13 @@ follows.
 4) Port the trampoline package.
 
  4.1) Determine what a "function pointer" in C actually is: read
-      function-pointer,txt (in this directory).
+      function-pointer.txt (in this directory).
 
  4.2) Compile proto.c or proto64.c with the cross-compiler, to understand
       which instructions make up a jump into a different function. Extend
       trampoline/Makefile.devel accordingly.
 
- 4.3) Write a file tramp-<ABI>.S that loads 3 specific values into registers,
+ 4.3) Write a file tramp-<ABI>.s that loads 3 specific values into registers,
       performs a memory assignment, then a jump.
       On some 32-bit platforms, it is possible to put together a 32-bit
       value using two or three instructions. On other platforms, especially
@@ -55,10 +55,15 @@ follows.
       to fetch the values.
       The code that you write here must only use call-used registers (see
       step 3).
+      On platforms where function pointers are actually pointers to some struct
+      (rather than code addresses) and the function pointer is passed in a
+      standardized register, the same sequence of instructions can be used for
+      all trampolines. In this case, create a file tramp-<ABI>-macro.S instead
+      of tramp-<ABI>.s.
       Compile this file to a .o:
-        $ cross <ABI> as -o tramp-<ABI>.o tramp-<ABI>.S
+        $ cross <ABI> as -o tramp-<ABI>.o tramp-<ABI>.s
       Look at the binary representation of these instructions:
-        $ cross <ABI> objdump --disassemble tramp-<ABI>.S
+        $ cross <ABI> objdump --disassemble tramp-<ABI>.o
 
  4.4) Put into trampoline.c the code that assembles such a trampoline.
 
@@ -81,14 +86,19 @@ follows.
  5.2) Compile proto.c or proto64.c with the cross-compiler, to understand
       which instruction will load a value into this register.
 
- 5.3) Write a file tramp-<ABI>.S that loads a specific value into the lexical
+ 5.3) Write a file tramp-<ABI>.s that loads a specific value into the lexical
       closure register and then jumps to a specific location.
       The code that you write here must only use call-used registers (see
       step 3).
+      On platforms where function pointers are actually pointers to some struct
+      (rather than code addresses) and the function pointer is passed in a
+      standardized register, the same sequence of instructions can be used for
+      all trampolines. In this case, create a file tramp-<ABI>-macro.S instead
+      of tramp-<ABI>.s.
       Compile this file to a .o:
-        $ cross <ABI> as -o tramp-<ABI>.o tramp-<ABI>.S
+        $ cross <ABI> as -o tramp-<ABI>.o tramp-<ABI>.s
       Look at the binary representation of these instructions:
-        $ cross <ABI> objdump --disassemble tramp-<ABI>.S
+        $ cross <ABI> objdump --disassemble tramp-<ABI>.o
 
  5.4) Put into trampoline.c the code that assembles such a trampoline.
 
@@ -150,7 +160,7 @@ follows.
 
 9) Port the vacall_r package.
 
- 9.1) Copy the changes to vacall/vacall.in.h to callback/vacall_r/vacall_r.h.
+ 9.1) Copy the changes to vacall/vacall.h to callback/vacall_r/vacall_r.h.
 
  9.2) In callback/vacall_r/Makefile.maint, variable COPIED_FILES, add
       vacall-<ABI>.c. Then run "make -f Makefile.maint".

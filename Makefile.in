@@ -101,6 +101,7 @@ SOURCE_FILES = \
   common/asm-alpha.sh \
   common/asm-arm.sh common/asm-arm.h \
   common/asm-hppa.sh common/asm-hppa.h \
+  common/asm-hppa64.sh common/asm-hppa64.h \
   common/asm-i386.sh common/asm-i386.h \
   common/asm-m68k.sh common/asm-m68k.h \
   common/asm-mips.sh common/asm-mips.h \

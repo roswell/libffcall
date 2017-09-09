@@ -18,7 +18,7 @@ precompiled : \
   vacall-mipseb-macro.S vacall-mipsel-macro.S vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S vacall-mips64eb-macro.S vacall-mips64el-macro.S \
   vacall-sparc-macro.S vacall-sparc64-macro.S \
   vacall-alpha-macro.S \
-  vacall-hppa-macro.S \
+  vacall-hppa-macro.S vacall-hppa64-macro.S \
   vacall-arm-macro.S vacall-armhf-macro.S \
   vacall-arm64-macro.S \
   vacall-powerpc-aix.s vacall-powerpc-linux-macro.S vacall-powerpc-sysv4-macro.S vacall-powerpc-macos.s vacall-powerpc64-aix.s vacall-powerpc64-linux.S vacall-powerpc64-elfv2-linux.S \
@@ -124,6 +124,12 @@ vacall-hppa-linux.s : vacall-hppa.c vacall-internal.h vacall.h $(THISFILE)
 
 vacall-hppa-macro.S : vacall-hppa-linux.s ../common/asm-hppa.sh ../common/noexecstack.h $(THISFILE)
 	(echo '#include "asm-hppa.h"' ; ../common/asm-hppa.sh < vacall-hppa-linux.s ; echo 'IMPORT_DATA(vacall_function)' ; cat ../common/noexecstack.h) > vacall-hppa-macro.S
+
+vacall-hppa64-linux.s : vacall-hppa64.c vacall-internal.h vacall.h $(THISFILE)
+	$(CROSS_TOOL) hppa64-linux gcc -V 3.1 $(GCCFLAGS) -D__hppa64__ -S vacall-hppa64.c -o vacall-hppa64-linux.s
+
+vacall-hppa64-macro.S : vacall-hppa64-linux.s ../common/asm-hppa64.sh ../common/noexecstack.h $(THISFILE)
+	(echo '#include "asm-hppa64.h"' ; ../common/asm-hppa64.sh < vacall-hppa64-linux.s ; echo 'IMPORT_DATA(vacall_function)' ; cat ../common/noexecstack.h) > vacall-hppa64-macro.S
 
 
 vacall-arm-macro.S : vacall-arm.c vacall-internal.h vacall.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)

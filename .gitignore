@@ -55,6 +55,8 @@
 /avcall/avcall-arm64-macro.S
 /avcall/avcall-hppa-linux.s
 /avcall/avcall-hppa-macro.S
+/avcall/avcall-hppa64-linux.s
+/avcall/avcall-hppa64-macro.S
 /avcall/avcall-i386-linux.s
 /avcall/avcall-i386-macro.S
 /avcall/avcall-ia64-linux.s
@@ -103,6 +105,8 @@
 /vacall/vacall-arm64-macro.S
 /vacall/vacall-hppa-linux.s
 /vacall/vacall-hppa-macro.S
+/vacall/vacall-hppa64-linux.s
+/vacall/vacall-hppa64-macro.S
 /vacall/vacall-i386-linux.s
 /vacall/vacall-i386-macro.S
 /vacall/vacall-ia64-linux.s
@@ -150,6 +154,8 @@
 /trampoline/cache-alpha-macro.S
 /trampoline/cache-hppa-linux.s
 /trampoline/cache-hppa-macro.S
+/trampoline/cache-hppa64-linux.s
+/trampoline/cache-hppa64-macro.S
 /trampoline/cache-powerpc-linux.s
 /trampoline/cache-powerpc-linux-macro.S
 /trampoline/cache-powerpc-macos.s
@@ -166,6 +172,8 @@
 /callback/vacall_r/vacall-arm64-macro.S
 /callback/vacall_r/vacall-hppa-linux.s
 /callback/vacall_r/vacall-hppa-macro.S
+/callback/vacall_r/vacall-hppa64-linux.s
+/callback/vacall_r/vacall-hppa64-macro.S
 /callback/vacall_r/vacall-i386-linux.s
 /callback/vacall_r/vacall-i386-macro.S
 /callback/vacall_r/vacall-ia64-linux.s
@@ -211,6 +219,8 @@
 /callback/trampoline_r/cache-alpha-macro.S
 /callback/trampoline_r/cache-hppa-linux.s
 /callback/trampoline_r/cache-hppa-macro.S
+/callback/trampoline_r/cache-hppa64-linux.s
+/callback/trampoline_r/cache-hppa64-macro.S
 /callback/trampoline_r/cache-powerpc-linux.s
 /callback/trampoline_r/cache-powerpc-linux-macro.S
 /callback/trampoline_r/cache-powerpc-macos.s
@@ -340,6 +350,7 @@ autom4te.cache/
 /avcall/avcall-mips64.s
 /avcall/avcall-alpha.s
 /avcall/avcall-hppa.s
+/avcall/avcall-hppa64.s
 /avcall/avcall-arm.s
 /avcall/avcall-armhf.s
 /avcall/avcall-arm64.s
@@ -379,6 +390,7 @@ autom4te.cache/
 /vacall/vacall-mips64.s
 /vacall/vacall-alpha.s
 /vacall/vacall-hppa.s
+/vacall/vacall-hppa64.s
 /vacall/vacall-arm.s
 /vacall/vacall-armhf.s
 /vacall/vacall-arm64.s
@@ -424,6 +436,8 @@ autom4te.cache/
 /trampoline/cache-alpha.o
 /trampoline/cache-hppa.lo
 /trampoline/cache-hppa.o
+/trampoline/cache-hppa64.lo
+/trampoline/cache-hppa64.o
 /trampoline/cache-powerpc.lo
 /trampoline/cache-powerpc.o
 /trampoline/cache-powerpc64-elfv2.lo
@@ -436,6 +450,7 @@ autom4te.cache/
 /trampoline/cache-sparc64.s
 /trampoline/cache-alpha.s
 /trampoline/cache-hppa.s
+/trampoline/cache-hppa64.s
 /trampoline/cache-powerpc.s
 /trampoline/cache-powerpc64-elfv2.s
 /trampoline/libtrampoline.*
@@ -486,6 +501,7 @@ autom4te.cache/
 /callback/vacall_r/vacall-mips64.s
 /callback/vacall_r/vacall-alpha.s
 /callback/vacall_r/vacall-hppa.s
+/callback/vacall_r/vacall-hppa64.s
 /callback/vacall_r/vacall-arm.s
 /callback/vacall_r/vacall-armhf.s
 /callback/vacall_r/vacall-arm64.s
@@ -517,6 +533,8 @@ autom4te.cache/
 /callback/trampoline_r/cache-alpha.o
 /callback/trampoline_r/cache-hppa.lo
 /callback/trampoline_r/cache-hppa.o
+/callback/trampoline_r/cache-hppa64.lo
+/callback/trampoline_r/cache-hppa64.o
 /callback/trampoline_r/cache-powerpc.lo
 /callback/trampoline_r/cache-powerpc.o
 /callback/trampoline_r/cache-powerpc64-elfv2.lo
@@ -529,6 +547,7 @@ autom4te.cache/
 /callback/trampoline_r/cache-sparc64.s
 /callback/trampoline_r/cache-alpha.s
 /callback/trampoline_r/cache-hppa.s
+/callback/trampoline_r/cache-hppa64.s
 /callback/trampoline_r/cache-powerpc.s
 /callback/trampoline_r/cache-powerpc64-elfv2.s
 /callback/trampoline_r/libtrampoline.*
