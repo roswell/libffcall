@@ -1,5 +1,29 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	hppa64: Simplify trampoline.
+	* trampoline/tramp-hppa64-old.s: Renamed from trampoline/tramp-hppa64.s.
+	* trampoline/tramp-hppa64-old.o: Renamed from trampoline/tramp-hppa64.o.
+	* trampoline/tramp-hppa64-macro.S: New file.
+	* trampoline/Makefile.in (tramp-hppa64.lo, tramp-hppa64.s): New targets.
+	(clean): Remove tramp-hppa64.s.
+	(SOURCE_FILES): Add tramp-hppa64-macro.S.
+	* trampoline/trampoline.c: Distinguish __hppa64old__ and __hppa64new__.
+	Implement trampoline for __hppa64new__.
+	* callback/trampoline_r/tramp-hppa64-old.s: Renamed from
+	callback/trampoline_r/tramp-hppa64.s.
+	* callback/trampoline_r/tramp-hppa64-old.o: Renamed from
+	callback/trampoline_r/tramp-hppa64.o.
+	* callback/trampoline_r/tramp-hppa64-macro.S: New file.
+	* callback/trampoline_r/Makefile.in (tramp-hppa64.lo, tramp-hppa64.s):
+	New targets.
+	(clean): Remove tramp-hppa64.s.
+	(SOURCE_FILES): Add tramp-hppa64-macro.S.
+	* callback/trampoline_r/trampoline.c: Distinguish __hppa64old__ and
+	__hppa64new__. Implement trampoline for __hppa64new__.
+	* configure.ac (CPU_OBJECTS): Augment with tramp-hppa64.lo.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	hppa64: Add support for HP-PA in 64-bit mode on HP-UX.
 	* cross-tools/cross.conf: Add configuration for hppa64 cross tools.
 	* porting-tools/abis/README: Add details about platforms where function

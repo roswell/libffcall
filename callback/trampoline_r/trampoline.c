@@ -28,6 +28,13 @@
 #define __hppanew__  /* New trampoline, just a closure. */
 #endif
 #endif
+#if defined(__hppa64__)
+#if 0
+#define __hppa64old__  /* Old trampoline, real machine code. */
+#else
+#define __hppa64new__  /* New trampoline, just a closure. */
+#endif
+#endif
 #if defined(__powerpc__) && !defined(__powerpc64__)
 #if !defined(_AIX)
 #define __powerpcsysv4__  /* SysV.4 ABI, real machine code. */
@@ -38,10 +45,10 @@
 #if defined(__powerpc64__) && !defined(__powerpc64_elfv2__)
 #define __powerpc64aix__  /* AIX ABI, just a closure. */
 #endif
-#if defined(__hppanew__)
+#if defined(__hppanew__) || defined(__hppa64new__)
 /*
  * A function pointer is a biased pointer to a data area whose first word
- * contains the actual address of the function.
+ * (hppa) or third word (hppa64) contains the actual address of the function.
  */
 extern void tramp_r (); /* trampoline prototype */
 /* We don't need to take any special measures to make the code executable
@@ -203,7 +210,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #endif
 #endif
 /* Inline assembly function for instruction cache flush. */
-#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__hppa64__) || defined(__powerpcsysv4__) || defined(__powerpc64_elfv2__)
+#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__hppa64old__) || defined(__powerpcsysv4__) || defined(__powerpc64_elfv2__)
 #if defined(__sparc__) || defined(__sparc64__)
 extern void __TR_clear_cache_2();
 #else
@@ -277,10 +284,14 @@ static int open_noinherit (const char *filename, int flags, int mode)
 #define TRAMP_ALIGN 16
 #define TRAMP_BIAS 2
 #endif
-#ifdef __hppa64__
+#ifdef __hppa64old__
 #define TRAMP_LENGTH 80
 #define TRAMP_ALIGN 8
 #define TRAMP_BIAS 48
+#endif
+#ifdef __hppa64new__
+#define TRAMP_LENGTH 48
+#define TRAMP_ALIGN 8
 #endif
 #if defined(__arm__) || defined(__armhf__)
 #define TRAMP_LENGTH 48
@@ -851,7 +862,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   ((long *) function)[2]
 #endif
-#ifdef __hppa64__
+#ifdef __hppa64old__
   /* function:
    *    mfia %r27			000014BB
    *    ldd 32(%r27),%r31		537F0040
@@ -895,6 +906,31 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   (*(unsigned long *) (function +40))
 #define tramp_data(function)  \
   (*(unsigned long *) (function +32))
+#endif
+#ifdef __hppa64new__
+  /* function:
+   *    .dword 0
+   *    .dword 0
+   *    .dword tramp
+   *    .dword closure
+   * closure:
+   *    .dword <data>
+   *    .dword <address>
+   */
+  *(long *) (function + 0) = 0;
+  *(long *) (function + 8) = 0;
+  *(long *) (function +16) = ((long *) (void*) &tramp_r)[2];
+  *(long *) (function +24) = (long) (function + 32);
+  *(long *) (function +32) = (long) data;
+  *(long *) (function +40) = (long) address;
+#define TRAMP_CODE_LENGTH  0
+#define is_tramp(function)  \
+  ((long *) function)[2] == ((long *) (void*) &tramp_r)[2] && \
+  ((long *) function)[3] == (long) (function + 32)
+#define tramp_address(function)  \
+  ((long *) function)[5]
+#define tramp_data(function)  \
+  ((long *) function)[4]
 #endif
 #if defined(__arm__) || defined(__armhf__)
   /* function:
@@ -1236,7 +1272,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #ifndef TRAMP_CODE_LENGTH
 #define TRAMP_CODE_LENGTH TRAMP_LENGTH
 #endif
-#if !(defined(__hppanew__) || defined(__powerpcaix__) || defined(__powerpc64aix__) || defined(__ia64__))
+#if !(defined(__hppanew__) || defined(__hppa64new__) || defined(__powerpcaix__) || defined(__powerpc64aix__) || defined(__ia64__))
   /* Only needed if we really set up machine instructions. */
 #ifdef __i386__
 #if defined(_WIN32)

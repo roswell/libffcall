@@ -81,6 +81,12 @@ tramp-hppa.lo : tramp-hppa.s
 tramp-hppa.s : $(srcdir)/tramp-hppa-macro.S $(srcdir)/../common/noexecstack.h
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/tramp-hppa-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > tramp-hppa.s
 
+tramp-hppa64.lo : tramp-hppa64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-hppa64.s
+
+tramp-hppa64.s : $(srcdir)/tramp-hppa64-macro.S $(srcdir)/../common/noexecstack.h
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/tramp-hppa64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > tramp-hppa64.s
+
 tramp-powerpc.lo : tramp-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c tramp-powerpc.s
 
@@ -218,7 +224,7 @@ extracheck : check
 mostlyclean : clean
 
 clean : force
-	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.@OBJEXT@/g'` tramp-hppa.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-hppa64.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.* core
+	$(RM) $(OBJECTS) `echo $(OBJECTS) | sed -e 's/\.lo/.@OBJEXT@/g'` tramp-hppa.s tramp-hppa64.s tramp-powerpc.s tramp-powerpc64.s tramp-ia64.s cache-sparc.s cache-sparc64.s cache-alpha.s cache-hppa.s cache-hppa64.s cache-powerpc.s cache-powerpc64-elfv2.s libtrampoline.* core
 	$(RM) -r .libs _libs
 	$(RM) test1.@OBJEXT@ test1 test2.@OBJEXT@ test2 test2-c++.@OBJEXT@ test2-c++
 
@@ -238,6 +244,7 @@ SOURCE_FILES = \
   trampoline.h \
   trampoline.c \
   tramp-hppa-macro.S \
+  tramp-hppa64-macro.S \
   tramp-powerpc-aix.S \
   tramp-powerpc64-aix.S \
   tramp-ia64-macro.S \

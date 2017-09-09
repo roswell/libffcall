@@ -422,6 +422,8 @@ autom4te.cache/
 /trampoline/trampoline.o
 /trampoline/tramp-hppa.lo
 /trampoline/tramp-hppa.o
+/trampoline/tramp-hppa64.lo
+/trampoline/tramp-hppa64.o
 /trampoline/tramp-powerpc.lo
 /trampoline/tramp-powerpc.o
 /trampoline/tramp-powerpc64.lo
@@ -443,6 +445,7 @@ autom4te.cache/
 /trampoline/cache-powerpc64-elfv2.lo
 /trampoline/cache-powerpc64-elfv2.o
 /trampoline/tramp-hppa.s
+/trampoline/tramp-hppa64.s
 /trampoline/tramp-powerpc.s
 /trampoline/tramp-powerpc64.s
 /trampoline/tramp-ia64.s
@@ -519,6 +522,8 @@ autom4te.cache/
 /callback/trampoline_r/trampoline.o
 /callback/trampoline_r/tramp-hppa.lo
 /callback/trampoline_r/tramp-hppa.o
+/callback/trampoline_r/tramp-hppa64.lo
+/callback/trampoline_r/tramp-hppa64.o
 /callback/trampoline_r/tramp-powerpc.lo
 /callback/trampoline_r/tramp-powerpc.o
 /callback/trampoline_r/tramp-powerpc64.lo
@@ -540,6 +545,7 @@ autom4te.cache/
 /callback/trampoline_r/cache-powerpc64-elfv2.lo
 /callback/trampoline_r/cache-powerpc64-elfv2.o
 /callback/trampoline_r/tramp-hppa.s
+/callback/trampoline_r/tramp-hppa64.s
 /callback/trampoline_r/tramp-powerpc.s
 /callback/trampoline_r/tramp-powerpc64.s
 /callback/trampoline_r/tramp-ia64.s

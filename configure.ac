@@ -117,7 +117,7 @@ FFCALL_CODEEXEC_PAX
 
 dnl List of object files for trampoline, trampoline_r.
 CPU_OBJECTS=''
-if test ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = powerpc64 -o ${HOST_CPU_C_ABI} = ia64; then
+if test ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = hppa64 -o ${HOST_CPU_C_ABI} = powerpc64 -o ${HOST_CPU_C_ABI} = ia64; then
   CPU_OBJECTS="$CPU_OBJECTS "'tramp-$(CPU).lo'
 fi
 if test ${HOST_CPU_C_ABI} = powerpc; then
