@@ -1,5 +1,18 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	avcall, vacall: Align code style.
+	* avcall/avcall-hppa.c (avcall_call): Use variable name 'iret', like
+	for the other ABIs.
+	* avcall/avcall-ia64.c: Likewise.
+	* avcall/avcall-arm64.c (avcall_call): Use variable names 'iret' and
+	'iret2', like for the other ABIs.
+	* avcall/avcall-x86_64.c: Likewise.
+	* avcall/avcall-sparc64.c (avcall_call): Use variable names 'iret',
+	'iret2', 'iret3', 'iret4', for consistency.
+	* vacall/vacall-sparc64 (vacall_receiver): Likewise.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	x86_64: Remove register pressure on gcc.
 	* avcall/avcall-x86_64.c: Don't declare iarg[1-6].
 	(avcall_call): Pass the integer arguments through arguments.

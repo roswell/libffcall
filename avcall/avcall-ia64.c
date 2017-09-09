@@ -48,7 +48,7 @@
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 register __avword*	sret	__asm__("r8");  /* structure return pointer */
-register __avword	iret	__asm__("r8");
+/*register __avword	iret	__asm__("r8");*/
 register __avword	iret2	__asm__("r9");
 register __avword	iret3	__asm__("r10");
 register __avword	iret4	__asm__("r11");
@@ -73,10 +73,13 @@ avcall_call(av_alist* list)
   __avword* argframe = (sp -= __AV_ALIST_WORDS) + 2; /* make room for argument list */
   int arglen = l->aptr - l->args;
   int farglen = l->faptr - l->fargs;
-  __avword i;
+  __avword iret;
 
-  for (i = 8; i < arglen; i++)		/* push function args onto stack */
-    argframe[i-8] = l->args[i];
+  {
+    int i;
+    for (i = 8; i < arglen; i++)	/* push function args onto stack */
+      argframe[i-8] = l->args[i];
+  }
 
   /* struct return address */
   if (l->rtype == __AVstruct)
@@ -120,41 +123,41 @@ avcall_call(av_alist* list)
 						 l->args[4], l->args[5],
 						 l->args[6], l->args[7]);
   } else {
-    i = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3],
-		   l->args[4], l->args[5], l->args[6], l->args[7]);
+    iret = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3],
+		      l->args[4], l->args[5], l->args[6], l->args[7]);
 
     /* save return value */
     if (l->rtype == __AVvoid) {
     } else
     if (l->rtype == __AVword) {
-      RETURN(__avword, i);
+      RETURN(__avword, iret);
     } else
     if (l->rtype == __AVchar) {
-      RETURN(char, i);
+      RETURN(char, iret);
     } else
     if (l->rtype == __AVschar) {
-      RETURN(signed char, i);
+      RETURN(signed char, iret);
     } else
     if (l->rtype == __AVuchar) {
-      RETURN(unsigned char, i);
+      RETURN(unsigned char, iret);
     } else
     if (l->rtype == __AVshort) {
-      RETURN(short, i);
+      RETURN(short, iret);
     } else
     if (l->rtype == __AVushort) {
-      RETURN(unsigned short, i);
+      RETURN(unsigned short, iret);
     } else
     if (l->rtype == __AVint) {
-      RETURN(int, i);
+      RETURN(int, iret);
     } else
     if (l->rtype == __AVuint) {
-      RETURN(unsigned int, i);
+      RETURN(unsigned int, iret);
     } else
     if (l->rtype == __AVlong || l->rtype == __AVlonglong) {
-      RETURN(long, i);
+      RETURN(long, iret);
     } else
     if (l->rtype == __AVulong || l->rtype == __AVulonglong) {
-      RETURN(unsigned long, i);
+      RETURN(unsigned long, iret);
     } else
   /* see above
     if (l->rtype == __AVfloat) {
@@ -163,7 +166,7 @@ avcall_call(av_alist* list)
     } else
   */
     if (l->rtype == __AVvoidp) {
-      RETURN(void*, i);
+      RETURN(void*, iret);
     } else
     if (l->rtype == __AVstruct) {
       if (l->flags & __AV_REGISTER_STRUCT_RETURN) {
@@ -171,21 +174,21 @@ avcall_call(av_alist* list)
         if (l->rsize > 0 && l->rsize <= 32) {
           void* raddr = l->raddr;
           if (l->rsize >= 1)
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
           if (l->rsize >= 2)
-            ((unsigned char *)raddr)[1] = (unsigned char)(i>>8);
+            ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
           if (l->rsize >= 3)
-            ((unsigned char *)raddr)[2] = (unsigned char)(i>>16);
+            ((unsigned char *)raddr)[2] = (unsigned char)(iret>>16);
           if (l->rsize >= 4)
-            ((unsigned char *)raddr)[3] = (unsigned char)(i>>24);
+            ((unsigned char *)raddr)[3] = (unsigned char)(iret>>24);
           if (l->rsize >= 5)
-            ((unsigned char *)raddr)[4] = (unsigned char)(i>>32);
+            ((unsigned char *)raddr)[4] = (unsigned char)(iret>>32);
           if (l->rsize >= 6)
-            ((unsigned char *)raddr)[5] = (unsigned char)(i>>40);
+            ((unsigned char *)raddr)[5] = (unsigned char)(iret>>40);
           if (l->rsize >= 7)
-            ((unsigned char *)raddr)[6] = (unsigned char)(i>>48);
+            ((unsigned char *)raddr)[6] = (unsigned char)(iret>>48);
           if (l->rsize >= 8)
-            ((unsigned char *)raddr)[7] = (unsigned char)(i>>56);
+            ((unsigned char *)raddr)[7] = (unsigned char)(iret>>56);
           if (l->rsize >= 9) {
             ((unsigned char *)raddr)[8] = (unsigned char)(iret2);
             if (l->rsize >= 10)

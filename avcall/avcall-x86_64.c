@@ -70,8 +70,8 @@ int
 avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("rsp");	/* C names for registers */
-  register __avword	iret	__asm__("rax");
-  register __avword	iret2	__asm__("rdx");
+/*register __avword	iretreg	 __asm__("rax");*/
+  register __avword	iret2reg __asm__("rdx");
   register double	dret	__asm__("xmm0");
 
   __av_alist* l = &AV_LIST_INNER(list);
@@ -79,10 +79,13 @@ avcall_call(av_alist* list)
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;
   int farglen = l->faptr - l->fargs;
-  __avword i, i2;
+  __avword iret, iret2;
 
-  for (i = 0; i < arglen; i++)		/* push function args onto stack */
-    argframe[i] = l->args[i];
+  {
+    int i;
+    for (i = 0; i < arglen; i++)	/* push function args onto stack */
+      argframe[i] = l->args[i];
+  }
 
   /* Call function.
      It's OK to pass 8 values in SSE registers even if the called function takes
@@ -121,60 +124,60 @@ avcall_call(av_alist* list)
                               farglen > 6 ? l->fargs[6] : 0.0,
                               farglen > 7 ? l->fargs[7] : 0.0);
   } else {
-    i = (*l->func)(l->iargs[0],
-                   l->iargs[1],
-                   l->iargs[2],
-                   l->iargs[3],
-                   l->iargs[4],
-                   l->iargs[5],
-                   farglen > 0 ? l->fargs[0] : 0.0,
-                   farglen > 1 ? l->fargs[1] : 0.0,
-                   farglen > 2 ? l->fargs[2] : 0.0,
-                   farglen > 3 ? l->fargs[3] : 0.0,
-                   farglen > 4 ? l->fargs[4] : 0.0,
-                   farglen > 5 ? l->fargs[5] : 0.0,
-                   farglen > 6 ? l->fargs[6] : 0.0,
-                   farglen > 7 ? l->fargs[7] : 0.0);
-    i2 = iret2;
+    iret = (*l->func)(l->iargs[0],
+                      l->iargs[1],
+                      l->iargs[2],
+                      l->iargs[3],
+                      l->iargs[4],
+                      l->iargs[5],
+                      farglen > 0 ? l->fargs[0] : 0.0,
+                      farglen > 1 ? l->fargs[1] : 0.0,
+                      farglen > 2 ? l->fargs[2] : 0.0,
+                      farglen > 3 ? l->fargs[3] : 0.0,
+                      farglen > 4 ? l->fargs[4] : 0.0,
+                      farglen > 5 ? l->fargs[5] : 0.0,
+                      farglen > 6 ? l->fargs[6] : 0.0,
+                      farglen > 7 ? l->fargs[7] : 0.0);
+    iret2 = iret2reg;
 
     /* save return value */
     if (l->rtype == __AVvoid) {
     } else
     if (l->rtype == __AVword) {
-      RETURN(__avword, i);
+      RETURN(__avword, iret);
     } else
     if (l->rtype == __AVchar) {
-      RETURN(char, i);
+      RETURN(char, iret);
     } else
     if (l->rtype == __AVschar) {
-      RETURN(signed char, i);
+      RETURN(signed char, iret);
     } else
     if (l->rtype == __AVuchar) {
-      RETURN(unsigned char, i);
+      RETURN(unsigned char, iret);
     } else
     if (l->rtype == __AVshort) {
-      RETURN(short, i);
+      RETURN(short, iret);
     } else
     if (l->rtype == __AVushort) {
-      RETURN(unsigned short, i);
+      RETURN(unsigned short, iret);
     } else
     if (l->rtype == __AVint) {
-      RETURN(int, i);
+      RETURN(int, iret);
     } else
     if (l->rtype == __AVuint) {
-      RETURN(unsigned int, i);
+      RETURN(unsigned int, iret);
     } else
     if (l->rtype == __AVlong) {
-      RETURN(long, i);
+      RETURN(long, iret);
     } else
     if (l->rtype == __AVulong) {
-      RETURN(unsigned long, i);
+      RETURN(unsigned long, iret);
     } else
     if (l->rtype == __AVlonglong) {
-      RETURN(long long, i);
+      RETURN(long long, iret);
     } else
     if (l->rtype == __AVulonglong) {
-      RETURN(unsigned long long, i);
+      RETURN(unsigned long long, iret);
     } else
   /* see above
     if (l->rtype == __AVfloat) {
@@ -183,7 +186,7 @@ avcall_call(av_alist* list)
     } else
   */
     if (l->rtype == __AVvoidp) {
-      RETURN(void*, i);
+      RETURN(void*, iret);
     } else
     if (l->rtype == __AVstruct) {
       if (l->flags & __AV_REGISTER_STRUCT_RETURN) {
@@ -191,109 +194,109 @@ avcall_call(av_alist* list)
         if (l->rsize > 0 && l->rsize <= 16) {
           void* raddr = l->raddr;
           if (l->rsize == 1) {
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
           } else
           if (l->rsize == 2) {
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
-            ((unsigned char *)raddr)[1] = (unsigned char)(i>>8);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
           } else
           if (l->rsize == 3) {
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
-            ((unsigned char *)raddr)[1] = (unsigned char)(i>>8);
-            ((unsigned char *)raddr)[2] = (unsigned char)(i>>16);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)raddr)[2] = (unsigned char)(iret>>16);
           } else
           if (l->rsize == 4) {
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
-            ((unsigned char *)raddr)[1] = (unsigned char)(i>>8);
-            ((unsigned char *)raddr)[2] = (unsigned char)(i>>16);
-            ((unsigned char *)raddr)[3] = (unsigned char)(i>>24);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)raddr)[3] = (unsigned char)(iret>>24);
           } else
           if (l->rsize == 5) {
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
-            ((unsigned char *)raddr)[1] = (unsigned char)(i>>8);
-            ((unsigned char *)raddr)[2] = (unsigned char)(i>>16);
-            ((unsigned char *)raddr)[3] = (unsigned char)(i>>24);
-            ((unsigned char *)raddr)[4] = (unsigned char)(i>>32);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)raddr)[3] = (unsigned char)(iret>>24);
+            ((unsigned char *)raddr)[4] = (unsigned char)(iret>>32);
           } else
           if (l->rsize == 6) {
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
-            ((unsigned char *)raddr)[1] = (unsigned char)(i>>8);
-            ((unsigned char *)raddr)[2] = (unsigned char)(i>>16);
-            ((unsigned char *)raddr)[3] = (unsigned char)(i>>24);
-            ((unsigned char *)raddr)[4] = (unsigned char)(i>>32);
-            ((unsigned char *)raddr)[5] = (unsigned char)(i>>40);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)raddr)[3] = (unsigned char)(iret>>24);
+            ((unsigned char *)raddr)[4] = (unsigned char)(iret>>32);
+            ((unsigned char *)raddr)[5] = (unsigned char)(iret>>40);
           } else
           if (l->rsize == 7) {
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
-            ((unsigned char *)raddr)[1] = (unsigned char)(i>>8);
-            ((unsigned char *)raddr)[2] = (unsigned char)(i>>16);
-            ((unsigned char *)raddr)[3] = (unsigned char)(i>>24);
-            ((unsigned char *)raddr)[4] = (unsigned char)(i>>32);
-            ((unsigned char *)raddr)[5] = (unsigned char)(i>>40);
-            ((unsigned char *)raddr)[6] = (unsigned char)(i>>48);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)raddr)[3] = (unsigned char)(iret>>24);
+            ((unsigned char *)raddr)[4] = (unsigned char)(iret>>32);
+            ((unsigned char *)raddr)[5] = (unsigned char)(iret>>40);
+            ((unsigned char *)raddr)[6] = (unsigned char)(iret>>48);
           } else
           if (l->rsize >= 8 && l->rsize <= 16) {
-            ((unsigned char *)raddr)[0] = (unsigned char)(i);
-            ((unsigned char *)raddr)[1] = (unsigned char)(i>>8);
-            ((unsigned char *)raddr)[2] = (unsigned char)(i>>16);
-            ((unsigned char *)raddr)[3] = (unsigned char)(i>>24);
-            ((unsigned char *)raddr)[4] = (unsigned char)(i>>32);
-            ((unsigned char *)raddr)[5] = (unsigned char)(i>>40);
-            ((unsigned char *)raddr)[6] = (unsigned char)(i>>48);
-            ((unsigned char *)raddr)[7] = (unsigned char)(i>>56);
+            ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+            ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+            ((unsigned char *)raddr)[2] = (unsigned char)(iret>>16);
+            ((unsigned char *)raddr)[3] = (unsigned char)(iret>>24);
+            ((unsigned char *)raddr)[4] = (unsigned char)(iret>>32);
+            ((unsigned char *)raddr)[5] = (unsigned char)(iret>>40);
+            ((unsigned char *)raddr)[6] = (unsigned char)(iret>>48);
+            ((unsigned char *)raddr)[7] = (unsigned char)(iret>>56);
             if (l->rsize == 8) {
             } else
             if (l->rsize == 9) {
-              ((unsigned char *)raddr)[8+0] = (unsigned char)(i2);
+              ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2);
             } else
             if (l->rsize == 10) {
-              ((unsigned char *)raddr)[8+0] = (unsigned char)(i2);
-              ((unsigned char *)raddr)[8+1] = (unsigned char)(i2>>8);
+              ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>8);
             } else
             if (l->rsize == 11) {
-              ((unsigned char *)raddr)[8+0] = (unsigned char)(i2);
-              ((unsigned char *)raddr)[8+1] = (unsigned char)(i2>>8);
-              ((unsigned char *)raddr)[8+2] = (unsigned char)(i2>>16);
+              ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>16);
             } else
             if (l->rsize == 12) {
-              ((unsigned char *)raddr)[8+0] = (unsigned char)(i2);
-              ((unsigned char *)raddr)[8+1] = (unsigned char)(i2>>8);
-              ((unsigned char *)raddr)[8+2] = (unsigned char)(i2>>16);
-              ((unsigned char *)raddr)[8+3] = (unsigned char)(i2>>24);
+              ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>24);
             } else
             if (l->rsize == 13) {
-              ((unsigned char *)raddr)[8+0] = (unsigned char)(i2);
-              ((unsigned char *)raddr)[8+1] = (unsigned char)(i2>>8);
-              ((unsigned char *)raddr)[8+2] = (unsigned char)(i2>>16);
-              ((unsigned char *)raddr)[8+3] = (unsigned char)(i2>>24);
-              ((unsigned char *)raddr)[8+4] = (unsigned char)(i2>>32);
+              ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>24);
+              ((unsigned char *)raddr)[8+4] = (unsigned char)(iret2>>32);
             } else
             if (l->rsize == 14) {
-              ((unsigned char *)raddr)[8+0] = (unsigned char)(i2);
-              ((unsigned char *)raddr)[8+1] = (unsigned char)(i2>>8);
-              ((unsigned char *)raddr)[8+2] = (unsigned char)(i2>>16);
-              ((unsigned char *)raddr)[8+3] = (unsigned char)(i2>>24);
-              ((unsigned char *)raddr)[8+4] = (unsigned char)(i2>>32);
-              ((unsigned char *)raddr)[8+5] = (unsigned char)(i2>>40);
+              ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>24);
+              ((unsigned char *)raddr)[8+4] = (unsigned char)(iret2>>32);
+              ((unsigned char *)raddr)[8+5] = (unsigned char)(iret2>>40);
             } else
             if (l->rsize == 15) {
-              ((unsigned char *)raddr)[8+0] = (unsigned char)(i2);
-              ((unsigned char *)raddr)[8+1] = (unsigned char)(i2>>8);
-              ((unsigned char *)raddr)[8+2] = (unsigned char)(i2>>16);
-              ((unsigned char *)raddr)[8+3] = (unsigned char)(i2>>24);
-              ((unsigned char *)raddr)[8+4] = (unsigned char)(i2>>32);
-              ((unsigned char *)raddr)[8+5] = (unsigned char)(i2>>40);
-              ((unsigned char *)raddr)[8+6] = (unsigned char)(i2>>48);
+              ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>24);
+              ((unsigned char *)raddr)[8+4] = (unsigned char)(iret2>>32);
+              ((unsigned char *)raddr)[8+5] = (unsigned char)(iret2>>40);
+              ((unsigned char *)raddr)[8+6] = (unsigned char)(iret2>>48);
             } else
             if (l->rsize == 16) {
-              ((unsigned char *)raddr)[8+0] = (unsigned char)(i2);
-              ((unsigned char *)raddr)[8+1] = (unsigned char)(i2>>8);
-              ((unsigned char *)raddr)[8+2] = (unsigned char)(i2>>16);
-              ((unsigned char *)raddr)[8+3] = (unsigned char)(i2>>24);
-              ((unsigned char *)raddr)[8+4] = (unsigned char)(i2>>32);
-              ((unsigned char *)raddr)[8+5] = (unsigned char)(i2>>40);
-              ((unsigned char *)raddr)[8+6] = (unsigned char)(i2>>48);
-              ((unsigned char *)raddr)[8+7] = (unsigned char)(i2>>56);
+              ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2);
+              ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>8);
+              ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>16);
+              ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>24);
+              ((unsigned char *)raddr)[8+4] = (unsigned char)(iret2>>32);
+              ((unsigned char *)raddr)[8+5] = (unsigned char)(iret2>>40);
+              ((unsigned char *)raddr)[8+6] = (unsigned char)(iret2>>48);
+              ((unsigned char *)raddr)[8+7] = (unsigned char)(iret2>>56);
             }
           }
         }
