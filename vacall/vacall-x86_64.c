@@ -25,12 +25,12 @@ register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("r10");
 #endif
 
-register __vaword iarg1 __asm__("rdi");
-register __vaword iarg2 __asm__("rsi");
-register __vaword iarg3 __asm__("rdx");
-register __vaword iarg4 __asm__("rcx");
-register __vaword iarg5 __asm__("r8");
-register __vaword iarg6 __asm__("r9");
+/*register __vaword iarg1 __asm__("rdi");*/
+/*register __vaword iarg2 __asm__("rsi");*/
+/*register __vaword iarg3 __asm__("rdx");*/
+/*register __vaword iarg4 __asm__("rcx");*/
+/*register __vaword iarg5 __asm__("r8");*/
+/*register __vaword iarg6 __asm__("r9");*/
 
 register double farg1 __asm__("xmm0");
 register double farg2 __asm__("xmm1");
@@ -66,12 +66,12 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
 {
   __va_alist list;
   /* Move the arguments passed in registers to temp storage. */
-  list.iarg[0] = iarg1;
-  list.iarg[1] = iarg2;
-  list.iarg[2] = iarg3;
-  list.iarg[3] = iarg4;
-  list.iarg[4] = iarg5;
-  list.iarg[5] = iarg6;
+  list.iarg[0] = word1;
+  list.iarg[1] = word2;
+  list.iarg[2] = word3;
+  list.iarg[3] = word4;
+  list.iarg[4] = word5;
+  list.iarg[5] = word6;
   list.farg[0] = farg1;
   list.farg[1] = farg2;
   list.farg[2] = farg3;

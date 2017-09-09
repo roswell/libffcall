@@ -25,10 +25,10 @@ register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("r10");
 #endif
 
-register __vaword iarg1 __asm__("rcx");
-register __vaword iarg2 __asm__("rdx");
-register __vaword iarg3 __asm__("r8");
-register __vaword iarg4 __asm__("r9");
+/*register __vaword iarg1 __asm__("rcx");*/
+/*register __vaword iarg2 __asm__("rdx");*/
+/*register __vaword iarg3 __asm__("r8");*/
+/*register __vaword iarg4 __asm__("r9");*/
 
 register float farg1 __asm__("xmm0");
 register float farg2 __asm__("xmm1");

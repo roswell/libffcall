@@ -1,5 +1,16 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Remove register pressure on gcc.
+	* avcall/avcall-x86_64.c: Don't declare iarg[1-6].
+	(avcall_call): Pass the integer arguments through arguments.
+	* avcall/avcall-x86_64-windows.c: Don't declare iarg[1-4].
+	(avcall_call): Pass the integer arguments through arguments.
+	* vacall/vacall-x86_64.c: Don't declare iarg[1-6].
+	(vacall_receiver): Use another way to save the integer registers.
+	* vacall/vacall-x86_64-windows.c: Don't declare iarg[1-4].
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	Fix preprocessor warning "does not give a valid preprocessing token".
 	* common/asm-i386.h (NUM): Don't use token concatenation between '$'
 	and a possibly negative number.

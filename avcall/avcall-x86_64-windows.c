@@ -59,10 +59,10 @@
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
-register __avword iarg1 __asm__("rcx");
-register __avword iarg2 __asm__("rdx");
-register __avword iarg3 __asm__("r8");
-register __avword iarg4 __asm__("r9");
+/*register __avword iarg1 __asm__("rcx");*/
+/*register __avword iarg2 __asm__("rdx");*/
+/*register __avword iarg3 __asm__("r8");*/
+/*register __avword iarg4 __asm__("r9");*/
 
 register float farg1 __asm__("xmm0");
 register float farg2 __asm__("xmm1");
@@ -91,12 +91,6 @@ avcall_call(av_alist* list)
   for (i = 4; i < arglen; i++)		/* push function args onto stack */
     argframe[i-4] = l->args[i];
 
-  /* put 4 integer args into registers */
-  iarg1 = l->args[0];
-  iarg2 = l->args[1];
-  iarg3 = l->args[2];
-  iarg4 = l->args[3];
-
   /* put up to 4 float args into registers */
   if (l->farg_mask) {
     if (l->farg_mask & (1<<0))
@@ -123,13 +117,13 @@ avcall_call(av_alist* list)
 
   /* Call function. */
   if (l->rtype == __AVfloat) {
-    *(float*)l->raddr = (*(float(*)())l->func)();
+    *(float*)l->raddr = (*(float(*)())l->func)(l->args[0], l->args[1], l->args[2], l->args[3]);
   } else
   if (l->rtype == __AVdouble) {
-    *(double*)l->raddr = (*(double(*)())l->func)();
+    *(double*)l->raddr = (*(double(*)())l->func)(l->args[0], l->args[1], l->args[2], l->args[3]);
   } else {
     __avword iret;
-    iret = (*l->func)();
+    iret = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3]);
 
     /* save return value */
     if (l->rtype == __AVvoid) {

@@ -50,12 +50,12 @@
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
-register __avword iarg1 __asm__("rdi");
-register __avword iarg2 __asm__("rsi");
-register __avword iarg3 __asm__("rdx");
-register __avword iarg4 __asm__("rcx");
-register __avword iarg5 __asm__("r8");
-register __avword iarg6 __asm__("r9");
+/*register __avword iarg1 __asm__("rdi");*/
+/*register __avword iarg2 __asm__("rsi");*/
+/*register __avword iarg3 __asm__("rdx");*/
+/*register __avword iarg4 __asm__("rcx");*/
+/*register __avword iarg5 __asm__("r8");*/
+/*register __avword iarg6 __asm__("r9");*/
 
 register double farg1 __asm__("xmm0");
 register double farg2 __asm__("xmm1");
@@ -84,20 +84,18 @@ avcall_call(av_alist* list)
   for (i = 0; i < arglen; i++)		/* push function args onto stack */
     argframe[i] = l->args[i];
 
-  /* put 6 integer args into registers */
-  iarg1 = l->iargs[0];
-  iarg2 = l->iargs[1];
-  iarg3 = l->iargs[2];
-  iarg4 = l->iargs[3];
-  iarg5 = l->iargs[4];
-  iarg6 = l->iargs[5];
-
-  /* Call function.  It's OK to pass 8 values in SSE registers even if the
-     called function takes less than 8 float/double arguments. Similarly
-     for the integer arguments. */
+  /* Call function.
+     It's OK to pass 8 values in SSE registers even if the called function takes
+     less than 8 float/double arguments. Similarly for the integer arguments. */
   if (l->rtype == __AVfloat) {
     *(float*)l->raddr =
-      (*(float(*)())l->func)(farglen > 0 ? l->fargs[0] : 0.0,
+      (*(float(*)())l->func)(l->iargs[0],
+                             l->iargs[1],
+                             l->iargs[2],
+                             l->iargs[3],
+                             l->iargs[4],
+                             l->iargs[5],
+                             farglen > 0 ? l->fargs[0] : 0.0,
                              farglen > 1 ? l->fargs[1] : 0.0,
                              farglen > 2 ? l->fargs[2] : 0.0,
                              farglen > 3 ? l->fargs[3] : 0.0,
@@ -108,7 +106,13 @@ avcall_call(av_alist* list)
   } else
   if (l->rtype == __AVdouble) {
     *(double*)l->raddr =
-      (*(double(*)())l->func)(farglen > 0 ? l->fargs[0] : 0.0,
+      (*(double(*)())l->func)(l->iargs[0],
+                              l->iargs[1],
+                              l->iargs[2],
+                              l->iargs[3],
+                              l->iargs[4],
+                              l->iargs[5],
+                              farglen > 0 ? l->fargs[0] : 0.0,
                               farglen > 1 ? l->fargs[1] : 0.0,
                               farglen > 2 ? l->fargs[2] : 0.0,
                               farglen > 3 ? l->fargs[3] : 0.0,
@@ -117,7 +121,13 @@ avcall_call(av_alist* list)
                               farglen > 6 ? l->fargs[6] : 0.0,
                               farglen > 7 ? l->fargs[7] : 0.0);
   } else {
-    i = (*l->func)(farglen > 0 ? l->fargs[0] : 0.0,
+    i = (*l->func)(l->iargs[0],
+                   l->iargs[1],
+                   l->iargs[2],
+                   l->iargs[3],
+                   l->iargs[4],
+                   l->iargs[5],
+                   farglen > 0 ? l->fargs[0] : 0.0,
                    farglen > 1 ? l->fargs[1] : 0.0,
                    farglen > 2 ? l->fargs[2] : 0.0,
                    farglen > 3 ? l->fargs[3] : 0.0,
