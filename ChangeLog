@@ -1,5 +1,14 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	Assume the C preprocessor discards // comments.
+	* common/asm-i386.h: Renamed from common/asm-i386.hh.
+	* Makefile.maint (common/asm-i386.h): Remove target.
+	* Makefile.in (SOURCE_FILES): Add common/asm-i386.h. Remove
+	common/asm-i386.hh.
+	(GENERATED_FILES): Remove common/asm-i386.h.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Optimize struct return of small structs.
 	* avcall/avcall-*.c: Cache l->raddr in a local variable.
 

@@ -101,7 +101,7 @@ SOURCE_FILES = \
   common/asm-alpha.sh \
   common/asm-arm.sh common/asm-arm.h \
   common/asm-hppa.sh common/asm-hppa.h \
-  common/asm-i386.sh common/asm-i386.hh \
+  common/asm-i386.sh common/asm-i386.h \
   common/asm-m68k.sh common/asm-m68k.h \
   common/asm-mips.sh common/asm-mips.h \
   common/asm-powerpc.sh \
@@ -144,8 +144,7 @@ COPIED_FILES = \
 GENERATED_FILES = \
   aclocal.m4 \
   configure \
-  config.h.in \
-  common/asm-i386.h
+  config.h.in
 # List of distributed files.
 DISTFILES = $(SOURCE_FILES) $(IMPORTED_FILES) $(COPIED_FILES) $(GENERATED_FILES)
 
