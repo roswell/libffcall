@@ -1,5 +1,11 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	x86_64: Improve processing of assembly-language files.
+	* common/asm-x86_64.sh: Eliminate #APP and #NO_APP directives.
+	In the MEM* patterns, recognize all 64-bit register names.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	Fix compilation error on HP-UX (regression from 2017-09-03).
 	* avcall/avcall-libapi.c: Include <stdlib.h> before ffcall-stdint.h.
 

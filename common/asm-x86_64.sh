@@ -34,7 +34,9 @@ tmpremove='rm -f $tmpscript1 $tmpscript2 $tmpscript3 $tmpscript4 $tmpscript5 $tm
 trap "$tmpremove" 1 2 15
 
 cat > $tmpscript1 << \EOF
-# ----------- Remove gcc self-identification
+# ----------- Remove #APP/#NO_APP lines and gcc self-identification
+/^#APP$/d
+/^#NO_APP$/d
 /gcc2_compiled/d
 /gnu_compiled_c/d
 /\.ident/d
@@ -69,13 +71,13 @@ EOF
 
 cat > $tmpscript3 << \EOF
 # ----------- Introduce macro syntax for operands
-s/\([-+0-9A-Z_]\+\)[(]%\([er]..\)[)]/MEM_DISP(\2,\1)/g
+s/\([-+0-9A-Z_]\+\)[(]%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\)[)]/MEM_DISP(\2,\1)/g
 s/\(C[(][A-Za-z0-9_]\+[)]\)[(]%rip[)]/MEM_PCRELATIVE(\1)/g
-s/[(]%\([er]..\)[)]/MEM(\1)/g
-s/\([-+0-9A-Z_]\+\)[(],%\([er]..\),\([0-9]*\)[)]/MEM_DISP_SHINDEX0(\1,\2,\3)/g
-s/\([-+0-9A-Z_]\+\)[(]%\([er]..\),%\([er]..\),\([0-9]*\)[)]/MEM_DISP_SHINDEX(\2,\1,\3,\4)/g
-s/[(]%\([er]..\),%\([er]..\),\([0-9]*\)[)]/MEM_SHINDEX(\1,\2,\3)/g
-s/[(]%\([er]..\),%\([er]..\)[)]/MEM_INDEX(\1,\2)/g
+s/[(]%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\)[)]/MEM(\1)/g
+s/\([-+0-9A-Z_]\+\)[(],%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\),\([0-9]*\)[)]/MEM_DISP_SHINDEX0(\1,\2,\3)/g
+s/\([-+0-9A-Z_]\+\)[(]%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\),%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\),\([0-9]*\)[)]/MEM_DISP_SHINDEX(\2,\1,\3,\4)/g
+s/[(]%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\),%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\),\([0-9]*\)[)]/MEM_SHINDEX(\1,\2,\3)/g
+s/[(]%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\),%\(r[abcd]x\|r[sd]i\|r[bs]p\|r[89]\|r1[012345]\)[)]/MEM_INDEX(\1,\2)/g
 EOF
 
 cat > $tmpscript4 << \EOF
