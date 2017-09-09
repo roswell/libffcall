@@ -133,58 +133,97 @@ avcall_call(av_alist* list)
   if (l->rtype == __AVstruct) {
     if (l->flags & __AV_SMALL_STRUCT_RETURN) {
       /* cc, c89 and gcc >= 2.7 return structs of size <= 8 in registers. */
-      void* raddr = l->raddr;
-      if (l->rsize == 1) {
-        ((unsigned char *)raddr)[0] = (unsigned char)(iret);
-      } else
-      if (l->rsize == 2) {
-        ((unsigned char *)raddr)[0] = (unsigned char)(iret>>8);
-        ((unsigned char *)raddr)[1] = (unsigned char)(iret);
-      } else
-      if (l->rsize == 3) {
-        ((unsigned char *)raddr)[0] = (unsigned char)(iret>>16);
-        ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
-        ((unsigned char *)raddr)[2] = (unsigned char)(iret);
-      } else
-      if (l->rsize == 4) {
-        ((unsigned char *)raddr)[0] = (unsigned char)(iret>>24);
-        ((unsigned char *)raddr)[1] = (unsigned char)(iret>>16);
-        ((unsigned char *)raddr)[2] = (unsigned char)(iret>>8);
-        ((unsigned char *)raddr)[3] = (unsigned char)(iret);
-      } else
-      if (l->rsize == 5) {
-        ((unsigned char *)raddr)[0] = (unsigned char)(iret);
-        ((unsigned char *)raddr)[1] = (unsigned char)(iret2>>24);
-        ((unsigned char *)raddr)[2] = (unsigned char)(iret2>>16);
-        ((unsigned char *)raddr)[3] = (unsigned char)(iret2>>8);
-        ((unsigned char *)raddr)[4] = (unsigned char)(iret2);
-      } else
-      if (l->rsize == 6) {
-        ((unsigned char *)raddr)[0] = (unsigned char)(iret>>8);
-        ((unsigned char *)raddr)[1] = (unsigned char)(iret);
-        ((unsigned char *)raddr)[2] = (unsigned char)(iret2>>24);
-        ((unsigned char *)raddr)[3] = (unsigned char)(iret2>>16);
-        ((unsigned char *)raddr)[4] = (unsigned char)(iret2>>8);
-        ((unsigned char *)raddr)[5] = (unsigned char)(iret2);
-      } else
-      if (l->rsize == 7) {
-        ((unsigned char *)raddr)[0] = (unsigned char)(iret>>16);
-        ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
-        ((unsigned char *)raddr)[2] = (unsigned char)(iret);
-        ((unsigned char *)raddr)[3] = (unsigned char)(iret2>>24);
-        ((unsigned char *)raddr)[4] = (unsigned char)(iret2>>16);
-        ((unsigned char *)raddr)[5] = (unsigned char)(iret2>>8);
-        ((unsigned char *)raddr)[6] = (unsigned char)(iret2);
-      } else
-      if (l->rsize == 8) {
-        ((unsigned char *)raddr)[0] = (unsigned char)(iret>>24);
-        ((unsigned char *)raddr)[1] = (unsigned char)(iret>>16);
-        ((unsigned char *)raddr)[2] = (unsigned char)(iret>>8);
-        ((unsigned char *)raddr)[3] = (unsigned char)(iret);
-        ((unsigned char *)raddr)[4] = (unsigned char)(iret2>>24);
-        ((unsigned char *)raddr)[5] = (unsigned char)(iret2>>16);
-        ((unsigned char *)raddr)[6] = (unsigned char)(iret2>>8);
-        ((unsigned char *)raddr)[7] = (unsigned char)(iret2);
+      if (l->rsize > 0 && l->rsize <= 8) {
+        /* This is really weird code, unlike all other big-endian platforms. */
+        void* raddr = l->raddr;
+        #if 0 /* Unoptimized */
+        if (l->rsize == 1) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 2) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 3) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 4) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>24);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 5) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret2>>24);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret2>>16);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret2>>8);
+          ((unsigned char *)raddr)[4] = (unsigned char)(iret2);
+        } else
+        if (l->rsize == 6) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret2>>24);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret2>>16);
+          ((unsigned char *)raddr)[4] = (unsigned char)(iret2>>8);
+          ((unsigned char *)raddr)[5] = (unsigned char)(iret2);
+        } else
+        if (l->rsize == 7) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret2>>24);
+          ((unsigned char *)raddr)[4] = (unsigned char)(iret2>>16);
+          ((unsigned char *)raddr)[5] = (unsigned char)(iret2>>8);
+          ((unsigned char *)raddr)[6] = (unsigned char)(iret2);
+        } else
+        if (l->rsize == 8) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>24);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret);
+          ((unsigned char *)raddr)[4] = (unsigned char)(iret2>>24);
+          ((unsigned char *)raddr)[5] = (unsigned char)(iret2>>16);
+          ((unsigned char *)raddr)[6] = (unsigned char)(iret2>>8);
+          ((unsigned char *)raddr)[7] = (unsigned char)(iret2);
+        }
+        #else /* Optimized: fewer conditional jumps, fewer memory accesses */
+        uintptr_t count = l->rsize; /* > 0, ≤ 2*sizeof(__avword) */
+        __avword* wordaddr = (__avword*)((uintptr_t)raddr & ~(uintptr_t)(sizeof(__avword)-1));
+        uintptr_t start_offset = (uintptr_t)raddr & (uintptr_t)(sizeof(__avword)-1); /* ≥ 0, < sizeof(__avword) */
+        uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__avword) */
+        if (count <= sizeof(__avword)) {
+          /* Use iret. */
+          if (end_offset <= sizeof(__avword)) {
+            /* 0 < end_offset ≤ sizeof(__avword) */
+            __avword mask0 = ((__avword)2 << (sizeof(__avword)*8-start_offset*8-1)) - ((__avword)1 << (sizeof(__avword)*8-end_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret << (sizeof(__avword)*8-end_offset*8))) & mask0;
+          } else {
+            /* sizeof(__avword) < end_offset < 2*sizeof(__avword), start_offset > 0 */
+            __avword mask0 = ((__avword)2 << (sizeof(__avword)*8-start_offset*8-1)) - 1;
+            __avword mask1 = - ((__avword)1 << (2*sizeof(__avword)*8-end_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret >> (end_offset*8-sizeof(__avword)*8))) & mask0;
+            wordaddr[1] ^= (wordaddr[1] ^ (iret << (2*sizeof(__avword)*8-end_offset*8))) & mask1;
+          }
+        } else {
+          /* Use iret, iret2. */
+          __avword mask0 = ((__avword)2 << (sizeof(__avword)*8-start_offset*8-1)) - 1;
+          if (end_offset <= 2*sizeof(__avword)) {
+            /* sizeof(__avword) < end_offset ≤ 2*sizeof(__avword) */
+            __avword mask1 = - ((__avword)1 << (2*sizeof(__avword)*8-end_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ ((iret << (2*sizeof(__avword)*8-end_offset*8)) | (iret2 >> (end_offset*4-sizeof(__avword)*4) >> (end_offset*4-sizeof(__avword)*4)))) & mask0;
+            wordaddr[1] ^= (wordaddr[1] ^ (iret2 << (2*sizeof(__avword)*8-end_offset*8))) & mask1;
+          } else {
+            /* 2*sizeof(__avword) < end_offset < 3*sizeof(__avword), start_offset > 0 */
+            __avword mask2 = - ((__avword)1 << (3*sizeof(__avword)*8-end_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret >> (end_offset*8-2*sizeof(__avword)*8))) & mask0;
+            wordaddr[1] = (iret << (3*sizeof(__avword)*8-end_offset*8)) | (iret2 >> (end_offset*8-2*sizeof(__avword)*8));
+            wordaddr[2] ^= (wordaddr[2] ^ (iret2 << (3*sizeof(__avword)*8-end_offset*8))) & mask2;
+          }
+        }
+        #endif
       }
     }
   }

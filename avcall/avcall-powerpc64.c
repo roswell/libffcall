@@ -181,6 +181,7 @@ avcall_call(av_alist* list)
       /* In the ELFv2 ABI, gcc returns structs of size <= 16 in registers. */
       if (l->rsize > 0 && l->rsize <= 16) {
         void* raddr = l->raddr;
+        #if 0 /* Unoptimized */
         if (l->rsize == 1) {
           ((unsigned char *)raddr)[0] = (unsigned char)(iret);
         } else
@@ -287,6 +288,40 @@ avcall_call(av_alist* list)
             ((unsigned char *)raddr)[8+7] = (unsigned char)(iret2>>56);
           }
         }
+        #else /* Optimized: fewer conditional jumps, fewer memory accesses */
+        uintptr_t count = l->rsize; /* > 0, ≤ 2*sizeof(__avword) */
+        __avword* wordaddr = (__avword*)((uintptr_t)raddr & ~(uintptr_t)(sizeof(__avword)-1));
+        uintptr_t start_offset = (uintptr_t)raddr & (uintptr_t)(sizeof(__avword)-1); /* ≥ 0, < sizeof(__avword) */
+        uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__avword) */
+        if (count <= sizeof(__avword)) {
+          /* Use iret. */
+          if (end_offset <= sizeof(__avword)) {
+            /* 0 < end_offset ≤ sizeof(__avword) */
+            __avword mask0 = ((__avword)2 << (end_offset*8-1)) - ((__avword)1 << (start_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret << (start_offset*8))) & mask0;
+          } else {
+            /* sizeof(__avword) < end_offset < 2*sizeof(__avword), start_offset > 0 */
+            __avword mask0 = - ((__avword)1 << (start_offset*8));
+            __avword mask1 = ((__avword)2 << (end_offset*8-sizeof(__avword)*8-1)) - 1;
+            wordaddr[0] ^= (wordaddr[0] ^ (iret << (start_offset*8))) & mask0;
+            wordaddr[1] ^= (wordaddr[1] ^ (iret >> (sizeof(__avword)*8-start_offset*8))) & mask1;
+          }
+        } else {
+          /* Use iret, iret2. */
+          __avword mask0 = - ((__avword)1 << (start_offset*8));
+          wordaddr[0] ^= (wordaddr[0] ^ (iret << (start_offset*8))) & mask0;
+          if (end_offset <= 2*sizeof(__avword)) {
+            /* sizeof(__avword) < end_offset ≤ 2*sizeof(__avword) */
+            __avword mask1 = ((__avword)2 << (end_offset*8-sizeof(__avword)*8-1)) - 1;
+            wordaddr[1] ^= (wordaddr[1] ^ ((iret >> (sizeof(__avword)*4-start_offset*4) >> (sizeof(__avword)*4-start_offset*4)) | (iret2 << (start_offset*8)))) & mask1;
+          } else {
+            /* 2*sizeof(__avword) < end_offset < 3*sizeof(__avword), start_offset > 0 */
+            __avword mask2 = ((__avword)2 << (end_offset*8-2*sizeof(__avword)*8-1)) - 1;
+            wordaddr[1] = (iret >> (sizeof(__avword)*8-start_offset*8)) | (iret2 << (start_offset*8));
+            wordaddr[2] ^= (wordaddr[2] ^ (iret2 >> (sizeof(__avword)*8-start_offset*8))) & mask2;
+          }
+        }
+        #endif
       }
     }
 #endif

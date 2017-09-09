@@ -177,6 +177,7 @@ avcall_call(av_alist* list)
       if (l->flags & __AV_REGISTER_STRUCT_RETURN) {
         /* Return structs of size 1, 2, 4, 8 in registers. */
         void* raddr = l->raddr;
+        #if 0 /* Unoptimized */
         if (l->rsize == 1) {
           ((unsigned char *)raddr)[0] = (unsigned char)(iret);
         } else
@@ -200,6 +201,26 @@ avcall_call(av_alist* list)
           ((unsigned char *)raddr)[6] = (unsigned char)(iret>>48);
           ((unsigned char *)raddr)[7] = (unsigned char)(iret>>56);
         }
+        #else /* Optimized: fewer conditional jumps, fewer memory accesses */
+        uintptr_t count = l->rsize;
+        if (count == 1 || count == 2 || count == 4 || count == 8) {
+          /* 0 < count ≤ sizeof(__avword) */
+          __avword* wordaddr = (__avword*)((uintptr_t)raddr & ~(uintptr_t)(sizeof(__avword)-1));
+          uintptr_t start_offset = (uintptr_t)raddr & (uintptr_t)(sizeof(__avword)-1); /* ≥ 0, < sizeof(__avword) */
+          uintptr_t end_offset = start_offset + count; /* > 0, < 2*sizeof(__avword) */
+          if (end_offset <= sizeof(__avword)) {
+            /* 0 < end_offset ≤ sizeof(__avword) */
+            __avword mask0 = ((__avword)2 << (end_offset*8-1)) - ((__avword)1 << (start_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret << (start_offset*8))) & mask0;
+          } else {
+            /* sizeof(__avword) < end_offset < 2*sizeof(__avword), start_offset > 0 */
+            __avword mask0 = - ((__avword)1 << (start_offset*8));
+            __avword mask1 = ((__avword)2 << (end_offset*8-sizeof(__avword)*8-1)) - 1;
+            wordaddr[0] ^= (wordaddr[0] ^ (iret << (start_offset*8))) & mask0;
+            wordaddr[1] ^= (wordaddr[1] ^ (iret >> (sizeof(__avword)*8-start_offset*8))) & mask1;
+          }
+        }
+        #endif
       }
     }
   }

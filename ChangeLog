@@ -1,5 +1,31 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	avcall, vacall: Optimize struct return of small structs.
+	* avcall/avcall-arm64.c (avcall_call): Add alternative optimized code
+	for struct return.
+	* avcall/avcall-hppa.c (avcall_call): Likewise.
+	* avcall/avcall-ia64.c (avcall_call): Likewise.
+	* avcall/avcall-mipsn32.c (avcall_call): Likewise.
+	* avcall/avcall-mips64.c (avcall_call): Likewise.
+	* avcall/avcall-powerpc64.c (avcall_call): Likewise.
+	* avcall/avcall-sparc64.c (avcall_call): Likewise.
+	* avcall/avcall-x86_64.c (avcall_call): Likewise.
+	* avcall/avcall-x86_64-windows.c (avcall_call): Likewise.
+	* avcall/avcall-hppa64.c (avcall_call): Likewise, but don't enable it.
+	* vacall/vacall-arm64.c (vacall_receiver): Add alternative optimized
+	code for struct return.
+	* vacall/vacall-hppa.c (vacall_receiver): Likewise.
+	* vacall/vacall-ia64.c (vacall_receiver): Likewise.
+	* vacall/vacall-mipsn32.c (vacall_receiver): Likewise.
+	* vacall/vacall-mips64.c (vacall_receiver): Likewise.
+	* vacall/vacall-powerpc64.c (vacall_receiver): Likewise.
+	* vacall/vacall-sparc64.c (vacall_receiver): Likewise.
+	* vacall/vacall-x86_64.c (vacall_receiver): Likewise.
+	* vacall/vacall-x86_64-windows.c (vacall_receiver): Likewise.
+	* vacall/vacall-hppa64.c (vacall_receiver): Likewise.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	avcall, vacall: Align code style.
 	* avcall/avcall-hppa.c (avcall_call): Use variable name 'iret', like
 	for the other ABIs.

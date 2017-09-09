@@ -154,7 +154,9 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   if (list.rtype == __VAstruct) {
     if (list.flags & __VA_SMALL_STRUCT_RETURN) {
       /* cc, c89 and gcc >= 2.7 return structs of size <= 8 in registers. */
+      /* This is really weird code, unlike all other big-endian platforms. */
       if (list.rsize > 0 && list.rsize <= 8) {
+        #if 0 /* Unoptimized */
         if (list.rsize == 1) {
           iret =   ((unsigned char *) list.raddr)[0];
         } else
@@ -207,6 +209,39 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
                  | (((unsigned char *) list.raddr)[6] << 8)
                  |  ((unsigned char *) list.raddr)[7];
         }
+        #else /* Optimized: fewer conditional jumps, fewer memory accesses */
+        uintptr_t count = list.rsize; /* > 0, ≤ 2*sizeof(__vaword) */
+        __vaword* wordaddr = (__vaword*)((uintptr_t)list.raddr & ~(uintptr_t)(sizeof(__vaword)-1));
+        uintptr_t start_offset = (uintptr_t)list.raddr & (uintptr_t)(sizeof(__vaword)-1); /* ≥ 0, < sizeof(__vaword) */
+        uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__vaword) */
+        if (count <= sizeof(__vaword)) {
+          /* Assign iret. */
+          __vaword mask0 = ((__vaword)2 << (sizeof(__vaword)*8-start_offset*8-1)) - 1;
+          if (end_offset <= sizeof(__vaword)) {
+            /* 0 < end_offset ≤ sizeof(__vaword) */
+            iret = (wordaddr[0] & mask0) >> (sizeof(__vaword)*8-end_offset*8);
+          } else {
+            /* sizeof(__vaword) < end_offset < 2*sizeof(__vaword), start_offset > 0 */
+            iret = ((wordaddr[0] & mask0) << (end_offset*8-sizeof(__vaword)*8))
+                   | (wordaddr[1] >> (2*sizeof(__vaword)*8-end_offset*8));
+          }
+        } else {
+          /* Assign iret, iret2. */
+          __vaword mask0 = ((__vaword)2 << (sizeof(__vaword)*8-start_offset*8-1)) - 1;
+          if (end_offset <= 2*sizeof(__vaword)) {
+            /* sizeof(__vaword) < end_offset ≤ 2*sizeof(__vaword) */
+            iret = (wordaddr[0] & mask0) >> (2*sizeof(__vaword)*8-end_offset*8);
+            iret2 = ((wordaddr[0] & mask0) << (end_offset*4-sizeof(__vaword)*4) << (end_offset*4-sizeof(__vaword)*4))
+                    | (wordaddr[1] >> (2*sizeof(__vaword)*8-end_offset*8));
+          } else {
+            /* 2*sizeof(__vaword) < end_offset < 3*sizeof(__vaword), start_offset > 0 */
+            iret = ((wordaddr[0] & mask0) << (end_offset*8-2*sizeof(__vaword)*8))
+                   | (wordaddr[1] >> (3*sizeof(__vaword)*8-end_offset*8));
+            iret2 = (wordaddr[1] << (end_offset*8-2*sizeof(__vaword)*8))
+                    | (wordaddr[2] >> (3*sizeof(__vaword)*8-end_offset*8));
+          }
+        }
+        #endif
       }
     }
   }

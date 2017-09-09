@@ -135,6 +135,7 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   if (list.rtype == __VAstruct) {
     if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
       /* Return structs of size 1, 2, 4, 8 in registers. */
+      #if 0 /* Unoptimized */
       if (list.rsize == 1) {
         iret =    (__vaword)((unsigned char *) list.raddr)[0];
       } else
@@ -158,6 +159,23 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
                | ((__vaword)((unsigned char *) list.raddr)[6] << 48)
                | ((__vaword)((unsigned char *) list.raddr)[7] << 56);
       }
+      #else /* Optimized: fewer conditional jumps, fewer memory accesses */
+      uintptr_t count = list.rsize; /* > 0, ≤ sizeof(__vaword) */
+      if (count == 1 || count == 2 || count == 4 || count == 8) {
+        __vaword* wordaddr = (__vaword*)((uintptr_t)list.raddr & ~(uintptr_t)(sizeof(__vaword)-1));
+        uintptr_t start_offset = (uintptr_t)list.raddr & (uintptr_t)(sizeof(__vaword)-1); /* ≥ 0, < sizeof(__vaword) */
+        uintptr_t end_offset = start_offset + count; /* > 0, < 2*sizeof(__vaword) */
+        if (end_offset <= sizeof(__vaword)) {
+          /* 0 < end_offset ≤ sizeof(__vaword) */
+          __vaword mask0 = ((__vaword)2 << (end_offset*8-1)) - 1;
+          iret = (wordaddr[0] & mask0) >> (start_offset*8);
+        } else {
+          /* sizeof(__vaword) < end_offset < 2*sizeof(__vaword), start_offset > 0 */
+          __vaword mask1 = ((__vaword)2 << (end_offset*8-sizeof(__vaword)*8-1)) - 1;
+          iret = (wordaddr[0] >> (start_offset*8)) | ((wordaddr[1] & mask1) << (sizeof(__vaword)*8-start_offset*8));
+        }
+      }
+      #endif
     } else {
       iret = (long)list.raddr;
     }
