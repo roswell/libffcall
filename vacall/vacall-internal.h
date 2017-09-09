@@ -218,6 +218,11 @@ typedef struct vacall_alist
 } __va_alist;
 
 
+/* Avoid macro redefinition warnings on DragonFly BSD. */
+#undef __va_start
+#undef __va_arg
+
+
 /*
  * Definition of the va_start_xxx macros.
  */

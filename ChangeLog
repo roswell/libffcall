@@ -1,5 +1,10 @@
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Fix warnings on DragonFly BSD.
+	* vacall/vacall-internal.h (__va_start, __va_arg): Undefine first.
+
+2017-09-09  Bruno Haible  <bruno@clisp.org>
+
 	avcall, vacall: Optimize struct return of small structs.
 	* avcall/avcall-arm64.c (avcall_call): Add alternative optimized code
 	for struct return.
