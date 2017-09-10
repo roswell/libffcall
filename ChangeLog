@@ -1,5 +1,12 @@
 2017-09-10  Bruno Haible  <bruno@clisp.org>
 
+	Install the libraries as shared libraries by default.
+	* configure.ac (LT_INIT): Remove option 'disable-shared'.
+	* README: Remove outdated text.
+	* NEWS: Mention the change.
+
+2017-09-10  Bruno Haible  <bruno@clisp.org>
+
 	Install a library named libffcall.
 	* ffcall-version.c: New file.
 	* ffcall-version.in.h: Rename double-inclusion guard.

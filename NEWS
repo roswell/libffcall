@@ -4,6 +4,9 @@ New in 2.0:
   'avcall' and 'callback' packages. The libraries libavcall.{a,so} and
   libcallback.{a,so} are still installed as well, but are deprecated.
 
+* The installed libraries are now installed as shared libraries by default
+  (except for libvacall, which is still a static library only).
+
 * The installed shared libraries are now properly versioned. This means that
   when installing with --enable-shared, upgrading to a newer version of
   libffcall will not break existing binaries.

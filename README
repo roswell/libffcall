@@ -33,40 +33,6 @@ Installation instructions:
         make install
 
 
-Note: It is possible to do a build that produces shared libraries (by
-passing --enable-shared to configure), but it makes little sense to do so:
-
-1) The main function here is compiled from non-PIC assembly language.
-   I.e. relocations would remain. The GNU linker supports shared libraries
-   with relocations on x86 systems. But only on x86!
-
-2) It is an overkill: libavcall, libvacall, libcallback have less than 6 KB
-   of executable code:
-
-$ size libavcall.a
-   text    data     bss     dec     hex filename
-    383       0       0     383     17f avcall-i386.o (ex libavcall.a)
-   1132       0       0    1132     46c avcall-libapi.o (ex libavcall.a)
-    131       0       0     131      83 avcall-structcpy.o (ex libavcall.a)
-$ size libvacall.a
-   text    data     bss     dec     hex filename
-    365       0       0     365     16d vacall.o (ex libvacall.a)
-   2297       4       0    2301     8fd vacall-libapi.o (ex libvacall.a)
-    131       0       0     131      83 vacall-structcpy.o (ex libvacall.a)
-$ size libcallback.a
-   text    data     bss     dec     hex filename
-    395       0       0     395     18b vacall-i386.o (ex libcallback.a)
-   2297       0       0    2297     8f9 vacall-libapi.o (ex libcallback.a)
-    131       0       0     131      83 vacall-structcpy.o (ex libcallback.a)
-   1454       0      44    1498     5da trampoline.o (ex libcallback.a)
-    340       0       0     340     154 callback-libapi.o (ex libcallback.a)
-    573       0       0     573     23d lock.o (ex libcallback.a)
-      0       0       0       0       0 threadlib.o (ex libcallback.a)
-
-When a shared library is loaded, you spend at least 4 KB for its code,
-data and BSS. This is overkill for such a tiny library.
-
-
 Files in this package:
 
     Documentation:
