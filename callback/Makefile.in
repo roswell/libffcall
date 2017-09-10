@@ -73,8 +73,11 @@ all-subdirs : force
 callback-libapi.lo : $(srcdir)/callback-libapi.c $(srcdir)/callback.h $(srcdir)/trampoline_r/trampoline_r.h ../config.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) -I$(srcdir)/trampoline_r $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/callback-libapi.c
 
-libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la callback-libapi.lo
-	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) -no-undefined -export-symbols-regex $(LIBCALLBACK_EXPORTED_SYMBOLS_REGEX) -version-info $(LIBCALLBACK_VERSION_INFO) vacall_r/vacall.lo vacall_r/vacall-libapi.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo callback-libapi.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
+callback-compat.lo : $(srcdir)/callback-compat.c ../config.h
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/callback-compat.c
+
+libcallback.la : vacall_r/libvacall.la trampoline_r/libtrampoline.la callback-libapi.lo callback-compat.lo
+	$(LIBTOOL_LINK) $(CC) -o libcallback.la -rpath $(libdir) -no-undefined -export-symbols-regex $(LIBCALLBACK_EXPORTED_SYMBOLS_REGEX) -version-info $(LIBCALLBACK_VERSION_INFO) vacall_r/vacall.lo vacall_r/vacall-libapi.lo vacall_r/vacall-structcpy.lo trampoline_r/*.lo callback-libapi.lo callback-compat.lo ../gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
 
 # Installs the library and include files only. Typically called with only
 # $(libdir) and $(includedir) - don't use $(prefix) and $(exec_prefix) here.
@@ -212,6 +215,7 @@ SOURCE_FILES = \
   Makefile.in \
   callback.h \
   callback-libapi.c \
+  callback-compat.c \
   test1.c \
   minitests.c minitests-c++.cc \
   tests.c

@@ -1,5 +1,21 @@
 2017-09-10  Bruno Haible  <bruno@clisp.org>
 
+	Move the backward compatibility code to separate object files.
+	* avcall/avcall-compat.c: New file, extracted from
+	avcall/avcall-libapi.c.
+	* avcall/Makefile.in (SOURCE_FILES): Add it.
+	(avcall-compat.lo): New target.
+	(OBJECTS): Add it.
+	* avcall/avcall-libapi.c (__builtin_avcall): Remove function.
+	* callback/callback-compat.c: New file, extracted from
+	callback/callback-libapi.c.
+	* callback/Makefile.in (SOURCE_FILES): Add it.
+	(callback-compat.lo): New target.
+	(libcallback.la): Include it.
+	* callback/callback-libapi.c (trampoline_r_data0): Remove function.
+
+2017-09-10  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Fix build failure with gcc configured with --enable-default-pie.
 	Works around a GCC bug, reported at
 	<https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81653>.
