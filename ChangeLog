@@ -1,3 +1,11 @@
+2017-09-10  Bruno Haible  <bruno@clisp.org>
+
+	Support building shared libraries on native Windows.
+	* configure.ac (LT_INIT): Add option 'win32-dll'.
+	* avcall/Makefile.in (avcall-x86_64.lo): Copy object file into .libs/
+	directory.
+	* callback/vacall_r/Makefile.in (vacall-x86_64.lo): Likewise.
+
 2017-09-09  Bruno Haible  <bruno@clisp.org>
 
 	i386: Verify support for Hurd.

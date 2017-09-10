@@ -214,6 +214,7 @@ avcall-ia64.s : $(srcdir)/avcall-ia64-macro.S
 
 @IF_MSVC@avcall-x86_64.lo : avcall-x86_64.asm
 @IF_MSVC@	$(LIBTOOL_COMPILE) ml64 -c -nologo avcall-x86_64.asm
+@IF_MSVC@	mkdir -p .libs; cp avcall-x86_64.@OBJEXT@ .libs/avcall-x86_64.@OBJEXT@
 
 @IF_MSVC@avcall-x86_64.asm : $(srcdir)/avcall-x86_64-windows-macro.S
 @IF_MSVC@	{ $(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-x86_64-windows-macro.S | grep -v '^#'; echo 'END'; } > avcall-x86_64.asm

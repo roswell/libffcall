@@ -202,6 +202,7 @@ vacall-ia64.s : $(srcdir)/vacall-ia64-macro.S
 
 @IF_MSVC@vacall-x86_64.lo : vacall-x86_64.asm
 @IF_MSVC@	$(LIBTOOL_COMPILE) ml64 -c -nologo vacall-x86_64.asm
+@IF_MSVC@	mkdir -p .libs; cp vacall-x86_64.@OBJEXT@ .libs/vacall-x86_64.@OBJEXT@
 
 @IF_MSVC@vacall-x86_64.asm : $(srcdir)/vacall-x86_64-windows-macro.S
 @IF_MSVC@	{ $(CPP) $(ASPFLAGS) -I$(srcdir)/../../common $(srcdir)/vacall-x86_64-windows-macro.S | grep -v '^#'; echo 'END'; } > vacall-x86_64.asm

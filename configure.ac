@@ -97,7 +97,7 @@ gl_HOST_CPU_C_ABI
 FFCALL_ENDIANNESS
 
 PACKAGE=libffcall
-LT_INIT([disable-shared])
+LT_INIT([disable-shared win32-dll])
 
 dnl Checks for avcall, vacall, vacall_r.
 FFCALL_SMALL_STRUCT_RETURN
