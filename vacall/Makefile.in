@@ -69,10 +69,10 @@ vacall.@OBJEXT@ : vacall-$(CPU).@OBJEXT@
 @IF_MSVC@	$(CC) $(INCLUDES) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-i386-msvc.c -o vacall-i386.@OBJEXT@
 
 vacall-sparc.@OBJEXT@ : vacall-sparc.s
-	$(CC) @GCC_X_NONE@ -c vacall-sparc.s
+	$(CC) @WORKAROUND_BUG_81653@ @GCC_X_NONE@ -c vacall-sparc.s
 
 vacall-sparc.s : $(srcdir)/vacall-sparc-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > vacall-sparc.s
+	$(CPP) @WORKAROUND_BUG_81653@ $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/vacall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > vacall-sparc.s
 
 vacall-sparc64.@OBJEXT@ : vacall-sparc64.s
 	$(CC) @GCC_X_NONE@ -c vacall-sparc64.s

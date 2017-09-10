@@ -1,5 +1,13 @@
 2017-09-10  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Fix build failure with gcc configured with --enable-default-pie.
+	Works around a GCC bug, reported at
+	<https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81653>.
+	* configure.ac (WORKAROUND_BUG_81653): New variable.
+	* vacall/Makefile.in (vacall-sparc.@OBJEXT@, vacall-sparc.s): Use it.
+
+2017-09-10  Bruno Haible  <bruno@clisp.org>
+
 	Fix build failure "error: narrowing conversion" with g++ on arm.
 	* testcases.c (C5): Cast -1 to 'char' explicitly.
 

@@ -140,6 +140,22 @@ if test ${HOST_CPU_C_ABI} = mips -o ${HOST_CPU_C_ABI} = mipsn32 -o ${HOST_CPU_C_
   AC_CHECK_HEADERS([sys/cachectl.h])
 fi
 
+dnl Work around GCC bug <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81653>:
+dnl GCC, configured with --enable-default-pie on SPARC, miscompiles hand-written
+dnl .s files that happen to access global variables. The recommended workaround
+dnl is to use '#ifdef __PIC__' in the .s file; this works fine on 64-bit SPARC.
+dnl On 32-bit SPARC, however, the resulting executable is still broken. The
+dnl workaround here is to use -fno-pie. This option is available in gcc >= 3.4.
+WORKAROUND_BUG_81653=''
+if test ${HOST_CPU_C_ABI} = sparc && test -n "$GCC"; then
+  gcc_version=`LC_ALL=C ${CC} -v 2>&1 | grep version | sed -n -e '$p' | sed -e 's/.*version //g' -e 's/gcc //'`
+  case "$gcc_version" in
+    2.* | 3.[0-3]*) ;;
+    *) WORKAROUND_BUG_81653='-fno-pie' ;;
+  esac
+fi
+AC_SUBST([WORKAROUND_BUG_81653])
+
 gl_INIT
 
 dnl This piece of sed script replaces every line containing '@subdir@'
