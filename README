@@ -1,18 +1,26 @@
 libffcall - foreign function call libraries
 
-This is a collection of four libraries which can be used to build
-foreign function call interfaces in embedded interpreters.
+This is a library which can be used to build foreign function call interfaces
+in embedded interpreters.
 
-The four packages are:
 
-    avcall - calling C functions with variable arguments
+Installed libraries and header files:
 
-    vacall - C functions accepting variable argument prototypes
+    It installs a library libffcall.{a,so}; to link with it, use the compiler
+    option '-lffcall'.
 
-    trampoline - closures as first-class C functions
+    It consists of two parts:
+      * avcall - calling C functions with variable arguments.
+        Its include file is <avcall.h>.
+      * callback - closures with variable arguments as first-class C functions.
+        Its include file is <callback.h>.
 
-    callback - closures with variable arguments as first-class C functions
-               (a reentrant combination of vacall and trampoline)
+    Additionally, you can determine the libffcall version by including
+    <ffcall-version.h>.
+
+    For backward compatibility with versions 1.x, libraries libavcall.{a,so}
+    and libcallback.{a,so} are installed as well. But they are deprecated;
+    use libffcall.{a,so} instead.
 
 
 Installation instructions:
@@ -70,9 +78,21 @@ Files in this package:
     Source:
 
         avcall/*        the avcall package
+                        (compiled into libffcall)
+
         vacall/*        the vacall package
+                        Implements C functions accepting variable argument
+                        prototypes.
+                        This is a non-reentrant variant of part of 'callback'.
+                        *Not* compiled into libffcall.
+
         trampoline/*    the trampoline package
+                        Implements closures as first-class C functions.
+                        This is a non-reentrant variant of part of 'callback'.
+                        *Not* compiled into libffcall.
+
         callback/*      the callback package
+                        (compiled into libffcall)
 
     Building:
 
@@ -85,7 +105,7 @@ Files in this package:
 Copyright notice:
 
 Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>        (original avcall)
-Copyright 1995-2016 Bruno Haible <bruno@clisp.org>                (everything)
+Copyright 1995-2017 Bruno Haible <bruno@clisp.org>                (everything)
 Copyright 1997      Jörg Höhle <Joerg.Hoehle@gmd.de>              (m68k AmigaOS support)
 Copyright 2000      Adam Fedor <fedor@gnu.org>                    (PowerPC MacOS support)
 Copyright 2001-2012 Sam Steingold <sds@gnu.org>                   (build infrastructure)

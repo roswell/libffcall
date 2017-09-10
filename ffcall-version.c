@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 2017 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,20 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined(FFCALL_VERSION_H)
+#include "config.h"
 
-/* Version number of libffcall (include files): (major<<8) + minor. */
-#define LIBFFCALL_VERSION 0
+/* Specification.  */
+#include "ffcall-version.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/* Version number of libffcall (library): (major<<8) + minor. */
-extern int ffcall_get_version (void);
-
-#ifdef __cplusplus
+int ffcall_get_version (void)
+{
+  return LIBFFCALL_VERSION;
 }
-#endif
-
-#endif /* FFCALL_VERSION_H */

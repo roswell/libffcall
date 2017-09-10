@@ -1,5 +1,26 @@
 2017-09-10  Bruno Haible  <bruno@clisp.org>
 
+	Install a library named libffcall.
+	* ffcall-version.c: New file.
+	* ffcall-version.in.h: Rename double-inclusion guard.
+	(ffcall_get_version): New declaration.
+	* Makefile.in: Add variables for using libtool.
+	(LIBFFCALL_EXPORTED_SYMBOLS_REGEX, LIBFFCALL_VERSION_INFO): New
+	variables.
+	(all-subdirs, ffcall-version.lo, libffcall.la): New targets.
+	(all): Depend on them.
+	(install): Install also libffcall.la.
+	(installdirs): Create also $(libdir).
+	(uninstall): Uninstall also libffcall.la.
+	(MOSTLYCLEANDIRS, MOSTLYCLEANFILES): New variables.
+	(mostlyclean, clean, distclean, maintainer-clean): Delete these.
+	(SOURCE_FILES): Add ffcall-version.c.
+	* README: Mention libffcall.{a,so}. Mark libavcall and libcallback as
+	deprecated.
+	* NEWS: Mention the change.
+
+2017-09-10  Bruno Haible  <bruno@clisp.org>
+
 	Move the backward compatibility code to separate object files.
 	* avcall/avcall-compat.c: New file, extracted from
 	avcall/avcall-libapi.c.

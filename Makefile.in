@@ -16,6 +16,22 @@ datadir = @datadir@
 datarootdir = @datarootdir@
 
 # Programs used by "make":
+# C compiler
+CC = @CC@
+CFLAGS = @CFLAGS@
+CPP = @CPP@
+# Both C and C++ compiler
+CPPFLAGS = @CPPFLAGS@
+INCLUDES = -I. -I$(srcdir) -I.. -I$(srcdir)/.. -I$(srcdir)/vacall_r
+LDFLAGS = @LDFLAGS@
+LIBTOOL = @LIBTOOL@
+LIBTOOL_COMPILE = $(LIBTOOL) --mode=compile
+LIBTOOL_LINK = $(LIBTOOL) --mode=link
+LIBTOOL_INSTALL = $(LIBTOOL) --mode=install
+LIBTOOL_UNINSTALL = $(LIBTOOL) --mode=uninstall
+AR = @AR@
+AR_FLAGS = rc
+RANLIB = @RANLIB@
 RM = rm -f
 @SET_MAKE@
 
@@ -27,14 +43,35 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
-all : ffcall-version.h force
+# Needed by $(LIBTOOL).
+top_builddir = .
+
+# Limit the set of exported symbols, on those platforms where libtool supports it.
+# Currently this excludes the symbols from gnulib modules.
+LIBFFCALL_EXPORTED_SYMBOLS_REGEX = '^ffcall_|^avcall_|^callback_|_callback$$'
+
+# Before making a release, change this according to the libtool documentation,
+# section "Library interface versions".
+LIBFFCALL_VERSION_INFO = 0:0:0
+
+all : all-subdirs libffcall.la
+
+all-subdirs : ffcall-version.h force
 	cd @subdir@ && $(MAKE) all
 
 ffcall-version.h : $(srcdir)/ffcall-version.in.h
 	cd .. && ./config.status --header=ffcall-version.h:ffcall-version.in.h
 
+ffcall-version.lo : $(srcdir)/ffcall-version.c ffcall-version.h config.h
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/ffcall-version.c
+
+libffcall.la : ffcall-version.lo avcall/avcall.lo avcall/avcall-libapi.lo avcall/avcall-structcpy.lo callback/vacall_r/libvacall.la callback/trampoline_r/libtrampoline.la callback/callback-libapi.lo
+	$(LIBTOOL_LINK) $(CC) -o libffcall.la -rpath $(libdir) -no-undefined -export-symbols-regex $(LIBFFCALL_EXPORTED_SYMBOLS_REGEX) -version-info $(LIBFFCALL_VERSION_INFO) ffcall-version.lo avcall/avcall.lo avcall/avcall-libapi.lo avcall/avcall-structcpy.lo callback/vacall_r/vacall.lo callback/vacall_r/vacall-libapi.lo callback/vacall_r/vacall-structcpy.lo callback/trampoline_r/*.lo callback/callback-libapi.lo gnulib-lib/libgnu.la $(LDFLAGS) $(LTLIBTHREAD)
+
 install : force
 	mkdir -p $(DESTDIR)$(prefix)
+	mkdir -p $(DESTDIR)$(libdir)
+	$(LIBTOOL_INSTALL) $(INSTALL_DATA) libffcall.la $(DESTDIR)$(libdir)/libffcall.la
 	mkdir -p $(DESTDIR)$(includedir)
 	$(INSTALL_DATA) ffcall-version.h $(DESTDIR)$(includedir)/ffcall-version.h
 	$(INSTALL_DATA) $(srcdir)/ffcall-abi.h $(DESTDIR)$(includedir)/ffcall-abi.h
@@ -42,11 +79,13 @@ install : force
 
 installdirs : force
 	mkdir -p $(DESTDIR)$(prefix)
+	mkdir -p $(DESTDIR)$(libdir)
 	mkdir -p $(DESTDIR)$(includedir)
 	cd @subdir@ && $(MAKE) installdirs
 
 uninstall : force
 	cd @subdir@ && $(MAKE) uninstall
+	$(LIBTOOL_UNINSTALL) $(RM) $(DESTDIR)$(libdir)/libffcall.la
 	$(RM) $(DESTDIR)$(includedir)/ffcall-abi.h
 	$(RM) $(DESTDIR)$(includedir)/ffcall-version.h
 
@@ -56,11 +95,20 @@ check : force
 extracheck : force
 	cd @subdir@ && $(MAKE) extracheck
 
+MOSTLYCLEANDIRS = .libs _libs
+MOSTLYCLEANFILES = \
+  *.@OBJEXT@ *.lo core \
+  libffcall.*
+
 mostlyclean : force
 	cd @subdir@ && $(MAKE) mostlyclean
+	$(RM) -r $(MOSTLYCLEANDIRS)
+	$(RM) $(MOSTLYCLEANFILES)
 
 clean : force
 	cd @subdir@ && $(MAKE) clean
+	$(RM) -r $(MOSTLYCLEANDIRS)
+	$(RM) $(MOSTLYCLEANFILES)
 
 DISTCLEANFILES = \
   config.status config.log config.cache Makefile config.h ffcall-version.h libtool \
@@ -68,10 +116,14 @@ DISTCLEANFILES = \
 
 distclean : force
 	cd @subdir@; if test -f Makefile; then $(MAKE) distclean; fi
+	$(RM) -r $(MOSTLYCLEANDIRS)
+	$(RM) $(MOSTLYCLEANFILES)
 	$(RM) $(DISTCLEANFILES)
 
 maintainer-clean : force
 	cd @subdir@; if test -f Makefile; then $(MAKE) maintainer-clean; fi
+	$(RM) -r $(MOSTLYCLEANDIRS)
+	$(RM) $(MOSTLYCLEANFILES)
 	$(RM) $(DISTCLEANFILES)
 
 
@@ -115,6 +167,7 @@ SOURCE_FILES = \
   ffcall-version.in.h dummy/ffcall-version.h \
   ffcall-abi.h \
   ffcall-stdint.h \
+  ffcall-version.c \
   testcases.c
 # List of distributed files imported from other packages or directories.
 LIBTOOL_IMPORTED_FILES = \
