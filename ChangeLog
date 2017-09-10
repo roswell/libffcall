@@ -1,5 +1,10 @@
 2017-09-10  Bruno Haible  <bruno@clisp.org>
 
+	Fix build failure with --enable-shared on Solaris/x86 with cc.
+	* common/asm-i386.h: Test __SVR4, not __svr4__.
+
+2017-09-10  Bruno Haible  <bruno@clisp.org>
+
 	Support building shared libraries on native Windows.
 	* configure.ac (LT_INIT): Add option 'win32-dll'.
 	* avcall/Makefile.in (avcall-x86_64.lo): Copy object file into .libs/
