@@ -1,5 +1,10 @@
 2017-09-10  Bruno Haible  <bruno@clisp.org>
 
+	Fix build failure "error: narrowing conversion" with g++ on arm.
+	* testcases.c (C5): Cast -1 to 'char' explicitly.
+
+2017-09-10  Bruno Haible  <bruno@clisp.org>
+
 	Fix build failure with --enable-shared on Solaris/x86 with cc.
 	* common/asm-i386.h: Test __SVR4, not __svr4__.
 
