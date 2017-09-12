@@ -19,7 +19,8 @@ Supported CPUs:  (Put the GNU config.guess values here.)
      sparc      sparc-sun-sunos4.1.1 (gcc, cc), sparc-sun-solaris2.3 (gcc),
                 sparc-sun-solaris2.4 (gcc, cc), sparc-sun-solaris2.10 (gcc, cc),
                 sparc64-sun-solaris2.10 (gcc -m64, cc -xarch=generic64),
-                sparc-unknown-linux (gcc), sparc64-unknown-linux (gcc)
+                sparc-unknown-linux (gcc), sparc64-unknown-linux (gcc),
+                sparc-unknown-netbsdelf7.1 (gcc)
      alpha      alpha-dec-osf3.0 (gcc, cc), alpha-dec-osf4.0 (gcc, cc),
                 alphaev67-unknown-linux (gcc)
      hppa       hppa1.0-hp-hpux8.00 (gcc, cc), hppa1.1-hp-hpux9.05 (cc),

@@ -1,3 +1,8 @@
+2017-09-12  Bruno Haible  <bruno@clisp.org>
+
+	sparc: Verify support for NetBSD.
+	* PLATFORMS, */PLATFORMS: List this platform.
+
 2017-09-11  Bruno Haible  <bruno@clisp.org>
 
 	Bump version number.
