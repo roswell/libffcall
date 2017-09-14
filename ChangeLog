@@ -1,3 +1,9 @@
+2017-09-15  Bruno Haible  <bruno@clisp.org>
+
+	tests: Consistency.
+	* avcall/tests.c (pointer_tests): Move before the mixed_number_tests.
+	(gpargs_boundary_tests): Fix weakness in the f_f17l3L test.
+
 2017-09-12  Bruno Haible  <bruno@clisp.org>
 
 	sparc: Verify support for NetBSD.

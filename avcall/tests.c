@@ -378,6 +378,27 @@ void
   return;
 }
 void
+  pointer_tests (void)
+{
+  av_alist a;
+  void* vpr;
+
+  vpr = vp_vpdpcpsp(&uc1,&d2,str3,&I4);
+  fprintf(out,"->0x%p\n",vpr);
+  fflush(out);
+  vpr = 0; clear_traces();
+  av_start_ptr(a,vp_vpdpcpsp,void*,&vpr);
+  av_ptr(a,void*,&uc1);
+  av_ptr(a,double*,&d2);
+  av_ptr(a,char*,str3);
+  av_ptr(a,Int*,&I4);
+  av_call(a);
+  fprintf(out,"->0x%p\n",vpr);
+  fflush(out);
+
+  return;
+}
+void
   mixed_number_tests (void)
 {
   av_alist a;
@@ -760,27 +781,6 @@ void
   return;
 }
 void
-  pointer_tests (void)
-{
-  av_alist a;
-  void* vpr;
-
-  vpr = vp_vpdpcpsp(&uc1,&d2,str3,&I4);
-  fprintf(out,"->0x%p\n",vpr);
-  fflush(out);
-  vpr = 0; clear_traces();
-  av_start_ptr(a,vp_vpdpcpsp,void*,&vpr);
-  av_ptr(a,void*,&uc1);
-  av_ptr(a,double*,&d2);
-  av_ptr(a,char*,str3);
-  av_ptr(a,Int*,&I4);
-  av_call(a);
-  fprintf(out,"->0x%p\n",vpr);
-  fflush(out);
-
-  return;
-}
-void
   small_structure_return_tests (void)
 {
   av_alist a;
@@ -1104,8 +1104,8 @@ void
   fr = f_f17l3L(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,l6,l7,l8,L1);
   fprintf(out,"->%g\n",fr);
   fflush(out);
-  dr = 0.0; clear_traces();
-  av_start_float(a,f_f17l3L,&dr);
+  fr = 0.0; clear_traces();
+  av_start_float(a,f_f17l3L,&fr);
   av_float(a,f1);
   av_float(a,f2);
   av_float(a,f3);
@@ -1358,8 +1358,8 @@ int
   int_tests();
   float_tests();
   double_tests();
-  mixed_number_tests();
   pointer_tests();
+  mixed_number_tests();
   small_structure_return_tests();
   structure_tests();
   gpargs_boundary_tests();
