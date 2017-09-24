@@ -1,3 +1,8 @@
+2017-09-24  Bruno Haible  <bruno@clisp.org>
+
+	Update NEWS.
+	* NEWS: Mention the <callback.h> API changes in 2.0.
+
 2017-09-15  Bruno Haible  <bruno@clisp.org>
 
 	tests: Consistency.
