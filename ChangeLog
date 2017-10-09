@@ -1,3 +1,9 @@
+2017-10-09  Bruno Haible  <bruno@clisp.org>
+
+	Avoid build failures caused by parallel make.
+	Reported by Riccardo G Corsi <riccardogcorsi@gmail.com>.
+	* Makefile.in (GNUMAKEFLAGS): New variable.
+
 2017-09-24  Bruno Haible  <bruno@clisp.org>
 
 	Update NEWS.

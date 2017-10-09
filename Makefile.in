@@ -43,6 +43,10 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SHELL = /bin/sh
 
+# This package does not support parallel make.
+# So, turn off parallel execution (at least in GNU make >= 4.0).
+GNUMAKEFLAGS = -j1
+
 # Needed by $(LIBTOOL).
 top_builddir = .
 
