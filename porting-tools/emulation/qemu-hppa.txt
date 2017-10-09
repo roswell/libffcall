@@ -1,0 +1,34 @@
+Building a Linux/hppa execution environment using QEMU
+======================================================
+
+Installation instructions
+-------------------------
+
+You need a cross-compilation environment, to produce Linux/hppa binaries.
+In Ubuntu you get it by installing the package 'g++-5-hppa-linux-gnu'.
+
+For executing these binaries, you need qemu 2.9.0 or newer.
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.9.0/bin:$PATH
+
+Configuration commands:
+$ sudo update-binfmts --install qemu-hppa $HOME/inst-qemu/2.9.0/bin/qemu-hppa --magic '\x7f\x45\x4c\x46\x01\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x0f' --mask '\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff' --offset 0 --credential no
+$ QEMU_LD_PREFIX=/usr/hppa-linux-gnu; export QEMU_LD_PREFIX
+$ unset QEMU_CPU
+
+Usage
+-----
+
+Now you can set
+$ CC="hppa-linux-gnu-gcc-5 -static"; export CC
+$ CXX="hppa-linux-gnu-g++-5 -static"; export CXX
+and run configure scripts and its generated programs.
+
+Limitations
+-----------
+
+- Signal handling is not supported.
+- ioctl() are not well supported (e.g. functions that deal with ttys).
+- O_CLOEXEC is not well supported (e.g. in dup3, open).
+- Static linking is required. Because of this, networking functions and
+  <pwd.h>, <grp.h> functions don't work.
+- Thread creation does not work.

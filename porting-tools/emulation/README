@@ -55,8 +55,8 @@ CPUs:
   - s390x
 
 The CPUs that I cannot emulate this way are
-  - m68k (but possibly use https://github.com/vivier/qemu-m68k ?)
-  - hppa (but possibly use hppa-linux emulation in QEMU 2.9 ?)
+  - m68k (but see qemu-m68k.txt)
+  - hppa (but see qemu-hppa.txt)
   - ia64
 
 Other emulators than QEMU exist; see the article

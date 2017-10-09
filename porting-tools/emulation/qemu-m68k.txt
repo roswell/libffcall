@@ -1,0 +1,35 @@
+Building a Linux/m68k execution environment using QEMU
+======================================================
+
+Installation instructions
+-------------------------
+
+You need a cross-compilation environment, to produce Linux/m68k binaries.
+In Ubuntu you get it by installing the package 'g++-5-m68k-linux-gnu'.
+
+For executing these binaries, you need qemu 2.7.0 m68k development tree,
+from https://github.com/vivier/qemu-m68k .
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.7.0-m68k/bin:$PATH
+
+Configuration commands:
+$ sudo update-binfmts --install qemu-m68k $HOME/inst-qemu/2.7.0-m68k/bin/qemu-m68k --magic '\x7f\x45\x4c\x46\x01\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x04' --mask '\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff' --offset 0 --credential no
+$ QEMU_LD_PREFIX=/usr/m68k-linux-gnu; export QEMU_LD_PREFIX
+$ QEMU_CPU=m68020; export QEMU_CPU
+
+Usage
+-----
+
+Now you can set
+$ CC="m68k-linux-gnu-gcc-5 -static"; export CC
+$ CXX="m68k-linux-gnu-g++-5 -static"; export CXX
+and run configure scripts and its generated programs.
+
+Limitations
+-----------
+
+- Signal handling is not supported.
+- The emulation of floating-point operations is not good (14 gnulib test
+  failures).
+- ioctl() are not well supported (e.g. functions that deal with ttys).
+- Static linking is required. Because of this, networking functions and
+  <pwd.h>, <grp.h> functions don't work.
