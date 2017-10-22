@@ -144,7 +144,13 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     dret = list.tmp._double;
   } else
   if (list.rtype == __VAvoidp) {
+#ifdef __x86_64_x32__
+    /* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
+       from 32 bits to 64 bits. */
+    iret = (unsigned long long)(unsigned long)list.tmp._ptr;
+#else
     iret = (long)list.tmp._ptr;
+#endif
   } else
   if (list.rtype == __VAstruct) {
     if (list.flags & __VA_REGISTER_STRUCT_RETURN) {

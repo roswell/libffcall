@@ -280,22 +280,29 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  */
 #if defined(__i386__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__powerpc_aix__) || defined(__powerpc64__)
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
-   (*(LIST).aptr++ = (__avword)((LIST).raddr), 0)
+  (*(LIST).aptr++ = (__avword)((LIST).raddr), 0)
 #endif
 #if defined(__armhf__)
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
-   ((LIST).args[(LIST).ianum++] = (__avword)((LIST).raddr), 0)
+  ((LIST).args[(LIST).ianum++] = (__avword)((LIST).raddr), 0)
 #endif
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__x86_64_ms__)
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
-   (*(LIST).aptr++ = (__avword)((LIST).raddr),				\
-    (LIST).anum++,							\
-    0									\
-   )
+  (*(LIST).aptr++ = (__avword)((LIST).raddr),				\
+   (LIST).anum++,							\
+   0									\
+  )
 #endif
 #if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__x86_64_x32__)
+/* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
+   from 32 bits to 64 bits. */
 #define __av_start_struct4(LIST,TYPE_SIZE)				\
-   ((LIST).iargs[(LIST).ianum++] = (__avword)((LIST).raddr), 0)
+  ((LIST).iargs[(LIST).ianum++] = (unsigned long long)(unsigned long)((LIST).raddr), 0)
+#else
+#define __av_start_struct4(LIST,TYPE_SIZE)				\
+  ((LIST).iargs[(LIST).ianum++] = (__avword)((LIST).raddr), 0)
+#endif
 #endif
 #endif
 
@@ -382,10 +389,19 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
+#if defined(__x86_64_x32__)
+/* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
+   from 32 bits to 64 bits. */
+#define __av_ptr(LIST,VAL)						\
+  ((LIST).ianum < __AV_IARG_NUM						\
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long long)(unsigned long)(VAL), 0) \
+   : __av_word(LIST,(unsigned long long)(unsigned long)(VAL)))
+#else
 #define __av_ptr(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (__avword)(VAL), 0)		\
    : __av_word(LIST,VAL))
+#endif
 #else
 #define __av_ptr(LIST,VAL)	__av_word(LIST,VAL)
 #endif
