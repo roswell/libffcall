@@ -15,6 +15,7 @@ Supported CPUs:  (Put the GNU config.guess values here.)
               i386-unknown-dragonfly3.8 (gcc)        i386/486/586  DragonFly BSD
               i386-unknown-netbsdelf7.0 (gcc)        i386/486/586  NetBSD 7
               i386-unknown-openbsd6.0 (gcc)          i386/486/586  OpenBSD 6
+              i586-pc-haiku (gcc-x86)                i586          Haiku 2017
    m68k       m68k-sun-sunos4.0 (cc)                 Sun3          SunOS 4.0.3
               m68k-unknown-linux (gcc)               emulated      Linux
    mips       mips-sgi-irix4.0.5 (gcc,               SGI mips      Irix 4.0.x
