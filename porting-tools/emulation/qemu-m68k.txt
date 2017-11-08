@@ -13,6 +13,8 @@ $ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.7.0-m68k/bin:$PATH
 
 Configuration commands:
 $ sudo update-binfmts --install qemu-m68k $HOME/inst-qemu/2.7.0-m68k/bin/qemu-m68k --magic '\x7f\x45\x4c\x46\x01\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x04' --mask '\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff' --offset 0 --credential no
+$ sudo mkdir -p /usr/m68k-linux-gnu/etc
+$ sudo ln -s /nonexistent /usr/m68k-linux-gnu/etc/ld.so.cache
 $ QEMU_LD_PREFIX=/usr/m68k-linux-gnu; export QEMU_LD_PREFIX
 $ QEMU_CPU=m68020; export QEMU_CPU
 
@@ -20,8 +22,8 @@ Usage
 -----
 
 Now you can set
-$ CC="m68k-linux-gnu-gcc-5 -static"; export CC
-$ CXX="m68k-linux-gnu-g++-5 -static"; export CXX
+$ CC="m68k-linux-gnu-gcc-5"; export CC
+$ CXX="m68k-linux-gnu-g++-5"; export CXX
 and run configure scripts and its generated programs.
 
 Limitations
@@ -31,5 +33,3 @@ Limitations
 - The emulation of floating-point operations is not good (14 gnulib test
   failures).
 - ioctl() are not well supported (e.g. functions that deal with ttys).
-- Static linking is required. Because of this, networking functions and
-  <pwd.h>, <grp.h> functions don't work.
