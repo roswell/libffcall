@@ -1,3 +1,11 @@
+2017-11-25  Bruno Haible  <bruno@clisp.org>
+
+	mips64: Avoid unmaintainable super-optimization.
+	Reported by Sébastien Villemot <sebastien@debian.org>.
+	* trampoline/trampoline.c (alloc_trampoline) [__mips64__]: Store the
+	instructions as 32-bit words, so that the instructions come out as
+	expected, regardless of the endianness.
+
 2017-10-29  Bruno Haible  <bruno@clisp.org>
 
 	Verify support for Haiku/i386.

@@ -760,17 +760,23 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
    *    .dword <data>			<data>
    *    .dword <address>		<address>
    */
-  *(long *)          (function + 0) = 0xDF220018DF230020L;
-  *(long *)          (function + 8) = 0xFC430000DF390028L;
-  *(long *)          (function +16) = 0x0320000800000000L;
+  *(unsigned int *)  (function + 0) = 0xDF220018;
+  *(unsigned int *)  (function + 4) = 0xDF230020;
+  *(unsigned int *)  (function + 8) = 0xFC430000;
+  *(unsigned int *)  (function +12) = 0xDF390028;
+  *(unsigned int *)  (function +16) = 0x03200008;
+  *(unsigned int *)  (function +20) = 0x00000000;
   *(unsigned long *) (function +24) = (unsigned long) variable;
   *(unsigned long *) (function +32) = (unsigned long) data;
   *(unsigned long *) (function +40) = (unsigned long) address;
 #define TRAMP_CODE_LENGTH  24
 #define is_tramp(function)  \
-  *(long *)          (function + 0) == 0xDF220018DF230020L && \
-  *(long *)          (function + 8) == 0xFC430000DF390028L && \
-  *(long *)          (function +16) == 0x0320000800000000L
+  *(unsigned int *)  (function + 0) == 0xDF220018 && \
+  *(unsigned int *)  (function + 4) == 0xDF230020 && \
+  *(unsigned int *)  (function + 8) == 0xFC430000 && \
+  *(unsigned int *)  (function +12) == 0xDF390028 && \
+  *(unsigned int *)  (function +16) == 0x03200008 && \
+  *(unsigned int *)  (function +20) == 0x00000000
 #define tramp_address(function)  \
   *(unsigned long *) (function +40)
 #define tramp_variable(function)  \
