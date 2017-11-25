@@ -31,6 +31,7 @@ tramp:
 	lw	$25,20($25)
 	/* The called function expects to see its own address in $25. */
 	j	$25
+	/* Some MIPS hardware needs this nop. It fills the branch delay slot. */
 	 nop
 $LC0:	.word	0x73554711
 $LC1:	.word	0xbabebec0

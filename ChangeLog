@@ -1,10 +1,16 @@
 2017-11-25  Bruno Haible  <bruno@clisp.org>
 
-	mips64: Avoid unmaintainable super-optimization.
+	mips64: Fix crash on some real hardware mips64el (Octeon).
 	Reported by Sébastien Villemot <sebastien@debian.org>.
+	Reminder: Some real MIPS hardware executes the "branch delay slot"
+	after a branch or jump instruction. See
+	<https://stackoverflow.com/questions/3807480>
+	<https://stackoverflow.com/questions/4115847>
 	* trampoline/trampoline.c (alloc_trampoline) [__mips64__]: Store the
 	instructions as 32-bit words, so that the instructions come out as
 	expected, regardless of the endianness.
+	* trampoline/tramp-mips*.s: Update comments.
+	* callback/trampoline_r/tramp-mips*.s: Likewise.
 
 2017-10-29  Bruno Haible  <bruno@clisp.org>
 

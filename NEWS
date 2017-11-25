@@ -1,5 +1,8 @@
 New in 2.1:
 
+* Fixed a crash in trampoline on the following platforms:
+  - mips: Linux with CC="gcc -mabi=64", little endian.
+
 New in 2.0:
 
 * The package now installs a library libffcall.{a,so}. It contains the

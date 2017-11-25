@@ -45,6 +45,6 @@ tramp:
 	ori	$25,$25,0xffab
 	/* The called function expects to see its own address in $25. */
 	j	$25
-	/* Some Mips hardware running Irix-4.0.5 needs this nop. */
+	/* Some MIPS hardware needs this nop. It fills the branch delay slot. */
 	nop
 	.end	tramp

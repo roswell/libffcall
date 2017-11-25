@@ -36,7 +36,7 @@ tramp:
 	lw	$25,32($25)
 	/* The called function expects to see its own address in $25. */
 	j	$25
-	/* Some Mips hardware running Irix-4.0.5 needs this nop. */
+	/* Some MIPS hardware needs this nop. It fills the branch delay slot. */
 	nop
 	/* We'll actually store the data words immediately after the code. */
 	/* The assembler just doesn't like ".word" inside section .text. */
