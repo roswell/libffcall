@@ -1,5 +1,12 @@
 New in 2.1:
 
+* Added support for the following platforms:
+  (Previously, a build on these platforms failed.)
+  - x86_64: Solaris 11.3.
+
+* Fixed a bug regarding passing of pointers on the following platforms:
+  - x86_64: Linux with x32 ABI: CC="gcc -mx32".
+
 * Fixed a crash in trampoline on the following platforms:
   - mips: Linux with CC="gcc -mabi=64", little endian.
 
