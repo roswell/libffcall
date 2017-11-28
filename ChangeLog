@@ -1,3 +1,8 @@
+2017-11-28  Bruno Haible  <bruno@clisp.org>
+
+	mips, mipsn32, mips64: Improvement for ELF format.
+	* common/asm-mips.h (DECLARE_FUNCTION): Test __ELF__, not __GNU__.
+
 2017-11-25  Bruno Haible  <bruno@clisp.org>
 
 	mips64: Fix crash on some real hardware mips64el (Octeon).
