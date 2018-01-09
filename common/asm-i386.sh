@@ -7,7 +7,7 @@
 #   3. sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$,,' -e 's/##//g'
 # Warning! All comments are stripped.
 
-# Copyright (C) 1997-2017 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 1997-2018 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,10 +56,10 @@ s/^\([A-Za-z0-9_]\+\)/C(\1)/
 s/\.L\([A-Za-z0-9_]\+\)/L(\1)/
 # ----------- Massage the beginning of functions
 /\.type/{
-s/\.type	\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/
+s/\.type[ 	]\([A-Za-z0-9_]*\), *@function/DECLARE_FUNCTION(\1)/
 }
 # ----------- Massage the end of functions
-s/\.size	\([A-Za-z0-9_]*\),\(.*\)/FUNEND(\1,\2)/
+s/\.size[ 	]\([A-Za-z0-9_]*\),\(.*\)/FUNEND(\1,\2)/
 # ----------- Introduce conditionals for function references in PIC code
 # Note: This is hairy. It assumes that the register clobbered with
 # the 'addl $_GLOBAL_OFFSET_TABLE_ ...' instruction is the same as
@@ -109,7 +109,7 @@ s/\(push\|pop\|mul\|div\|not\|neg\|inc\|dec\|fld\|fstp\)\(.\)\([ 	]\+\)\(.*\)$/I
 s/\(call\|jmp\|jc\|jnc\|je\|jne\|jz\|jnz\|ja\|jae\|jb\|jbe\|jl\|jge\|js\|jns\)\([ 	]\+\)\(.*\)$/INSN1(\1,_	,\3)/
 s/\(movs\|movz\)\(.\)l\([ 	]\+\)\(.*\)$/INSN2MOVXL(\1,\2,\4)/
 s/\(mov\|add\|sub\|adc\|sbb\|xor\|test\|cmp\|rcl\|rcr\|and\|or\|sar\|shr\|shl\|lea\)\(.\)\([ 	]\+\)\(.*\)$/INSN2(\1,\2	,\4)/
-s/\(shld\|shrd\)\(.\)\([ 	]\+\)shcl\( \+\)\(.*\)$/INSN2SHCL(\1,\2	,\5)/
+s/\(shld\|shrd\)\(.\)\([ 	]\+\)%cl,[ 	]*\(.*\)$/INSN2SHCL(\1,\2	,\4)/
 s/rep[ 	];/REP/
 s/repz[ 	];/REPZ/
 EOF

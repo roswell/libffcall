@@ -1,7 +1,7 @@
 // Assembly language support for hppa CPU.
 // Bruno Haible 2017-01-23
 
-// Copyright (C) 2017 Bruno Haible <bruno@clisp.org>
+// Copyright (C) 2017-2018 Bruno Haible <bruno@clisp.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@
 #define TEXT1() .text
 #define TEXT2()
 #define GLOBL(symbol) .globl symbol
-#define DEF(symbol) symbol##:
+#define DEF(symbol) symbol:
 #define L(label) .L##label
 #define DECLARE_FUNCTION(name) .type name,%function
 #define FUNEND(name) .size name,.-name

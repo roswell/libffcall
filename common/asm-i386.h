@@ -1,7 +1,7 @@
 // Assembly language support for i386 CPU.
 // Bruno Haible 1997-06-21
 
-// Copyright (C) 1997-2017 Bruno Haible <bruno@clisp.org>
+// Copyright (C) 1997-2018 Bruno Haible <bruno@clisp.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -186,11 +186,14 @@
 #define INSN1(mnemonic,size_suffix,dst)INSNCONC(mnemonic,size_suffix) dst
 #define INSN2(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix) src,dst
 #define INSN2MOVXL(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix##l) src,dst
-#if defined(BSD_SYNTAX) || defined(COHERENT)
+#if defined(__SVR4) /* Solaris */
+#define INSN2SHCL(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix) src,dst
+#else
 #define INSN2SHCL(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix) R(cl),src,dst
+#endif
+#if defined(BSD_SYNTAX) || defined(COHERENT)
 #define REPZ repe ;
 #else
-#define INSN2SHCL(mnemonic,size_suffix,src,dst)INSNCONC(mnemonic,size_suffix) src,dst
 #define REPZ repz ;
 #endif
 #define REP rep ;
@@ -200,7 +203,7 @@
 #if defined(ELF_SYNTAX) || defined(__CYGWIN__) || defined(__MINGW32__)
 #define ALIGN(log) .align 1<<log
 #endif
-#if defined(__sun)
+#if defined(__SVR4) /* Solaris */
 #define P2ALIGN(log,max) .align 1<<log
 #else
 #define P2ALIGN(log,max) .p2align log,,max

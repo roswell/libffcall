@@ -6,7 +6,7 @@
 #   2. grep -v '^ *#line' | grep -v '^#'
 #   3. sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$,#,g'
 
-# Copyright (C) 1999-2017 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 1999-2018 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,7 +39,9 @@ s,@,//,g
 # ----------- Turn # into $, to avoid trouble in preprocessing
 s,#,\$,g
 # ----------- Global symbols depends on ASM_UNDERSCORE
+/[ 	]\.req[ 	]/!{
 s/^\([A-Za-z0-9_]\+\)/C(\1)/
+}
 s/\.L\([A-Za-z0-9_]\+\)/L(\1)/
 s/\.global[ 	]\([A-Za-z0-9_]*\)/.global C(\1)/
 # ----------- Introduce macro syntax for assembler pseudo-ops

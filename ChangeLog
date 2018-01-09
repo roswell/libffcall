@@ -1,3 +1,16 @@
+2018-01-09  Bruno Haible  <bruno@clisp.org>
+
+	Make processing of assembly-language files work with GNU clisp.
+	* common/asm-arm.sh: Don't introduce C() macro in .req lines.
+	* common/asm-hppa.h (DEF): Don't use token-pasting operator here, since
+	the result would not be a valid token.
+	* common/asm-hppa64.h (DEF): Likewise.
+	* common/asm-i386.h (INSN2SHCL): Omit the cl register only on Solaris.
+	All other assemblers support it.
+	(P2ALIGN): Use __SVR4, not __sun, to detect Solaris.
+	* common/asm-i386.sh: Allow spaces instead of tabs after .type and
+	.size. Recognize INSN2SHCL without assuming an 'shcl' macro.
+
 2017-11-28  Bruno Haible  <bruno@clisp.org>
 
 	mips, mipsn32, mips64: Improvement for ELF format.
