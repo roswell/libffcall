@@ -1,5 +1,15 @@
 2018-02-17  Bruno Haible  <bruno@clisp.org>
 
+	Add support for Linux/arm with PIE-enabled gcc.
+	Reported by Nelson Beebe.
+	* vacall/Makefile.devel (vacall-arm-linux.s, vacall-arm-linux-pic.s,
+	vacall-armhf-linux.s, vacall-armhf-linux-pic.s): New targets.
+	(vacall-arm-macro.S, vacall-armhf-macro.S): Include code for the PIC and
+	the non-PIC case.
+	* vacall/Makefile.in (SOURCE_FILES): Add vacall-arm*-linux*.s.
+
+2018-02-17  Bruno Haible  <bruno@clisp.org>
+
 	Add support for OpenBSD 6.1 and newer.
 	Reported by Nelson Beebe.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): Also test whether mprotect

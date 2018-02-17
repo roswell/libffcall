@@ -323,8 +323,8 @@ SOURCE_FILES = \
   Makefile.in \
   vacall.h vacall-internal.h \
   vacall-alpha.c vacall-alpha-linux.s vacall-alpha-macro.S \
-  vacall-arm.c vacall-arm-macro.S \
-  vacall-armhf.c vacall-armhf-macro.S \
+  vacall-arm.c vacall-arm-linux.s vacall-arm-linux-pic.s vacall-arm-macro.S \
+  vacall-armhf.c vacall-armhf-linux.s vacall-armhf-linux-pic.s vacall-armhf-macro.S \
   vacall-arm64.c vacall-arm64-macro.S \
   vacall-hppa.c vacall-hppa-linux.s vacall-hppa-macro.S \
   vacall-hppa64.c vacall-hppa64-linux.s vacall-hppa64-macro.S \

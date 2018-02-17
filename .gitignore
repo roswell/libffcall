@@ -100,7 +100,11 @@
 /avcall/avcall-x86_64-windows-macro.S
 /vacall/vacall-alpha-linux.s
 /vacall/vacall-alpha-macro.S
+/vacall/vacall-arm-linux.s
+/vacall/vacall-arm-linux-pic.s
 /vacall/vacall-arm-macro.S
+/vacall/vacall-armhf-linux.s
+/vacall/vacall-armhf-linux-pic.s
 /vacall/vacall-armhf-macro.S
 /vacall/vacall-arm64-macro.S
 /vacall/vacall-hppa-linux.s

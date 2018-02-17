@@ -132,20 +132,41 @@ vacall-hppa64-macro.S : vacall-hppa64-linux.s ../common/asm-hppa64.sh ../common/
 	(echo '#include "asm-hppa64.h"' ; ../common/asm-hppa64.sh < vacall-hppa64-linux.s ; echo 'IMPORT_DATA(vacall_function)' ; cat ../common/noexecstack.h) > vacall-hppa64-macro.S
 
 
-vacall-arm-macro.S : vacall-arm.c vacall-internal.h vacall.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
+vacall-arm-linux.s : vacall-arm.c vacall-internal.h vacall.h
 	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mlittle-endian $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-armel.s
 	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mbig-endian $(GCCFLAGS) -D__arm__ -S vacall-arm.c -o vacall-armeb.s
 	cmp vacall-armel.s vacall-armeb.s > /dev/null
-	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < vacall-armel.s | sed -e 's/vacall_function/C(vacall_function)/g' ; cat ../common/noexecstack-arm.h) > vacall-arm-macro.S
+	cp vacall-armel.s vacall-arm-linux.s
 	$(RM) vacall-armel.s vacall-armeb.s
 
-vacall-armhf-macro.S : vacall-armhf.c vacall-internal.h vacall.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
+vacall-arm-linux-pic.s : vacall-arm.c vacall-internal.h vacall.h
+	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mlittle-endian $(GCCFLAGS) -fPIC -D__arm__ -S vacall-arm.c -o vacall-armel-pic.s
+	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mbig-endian $(GCCFLAGS) -fPIC -D__arm__ -S vacall-arm.c -o vacall-armeb-pic.s
+	cmp vacall-armel-pic.s vacall-armeb-pic.s > /dev/null
+	cp vacall-armel-pic.s vacall-arm-linux-pic.s
+	$(RM) vacall-armel-pic.s vacall-armeb-pic.s
+
+vacall-arm-macro.S : vacall-arm-linux.s vacall-arm-linux-pic.s ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
+	(echo '#include "asm-arm.h"' ; echo '#ifdef __PIC__' ; ../common/asm-arm.sh < vacall-arm-linux-pic.s | sed -e 's/vacall_function/C(vacall_function)/g' ; echo '#else' ; ../common/asm-arm.sh < vacall-arm-linux.s | sed -e 's/vacall_function/C(vacall_function)/g' ; echo '#endif' ; cat ../common/noexecstack-arm.h) > vacall-arm-macro.S
+
+vacall-armhf-linux.s : vacall-armhf.c vacall-internal.h vacall.h
 # The option -mabi=aapcs ensures an 8-bytes-aligned stack pointer.
 	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mlittle-endian $(GCCFLAGS) -D__armhf__ -S vacall-armhf.c -o vacall-armhfel.s
 	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mbig-endian $(GCCFLAGS) -D__armhf__ -S vacall-armhf.c -o vacall-armhfeb.s
 	cmp vacall-armhfel.s vacall-armhfeb.s > /dev/null
-	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < vacall-armhfel.s | sed -e 's/vacall_function/C(vacall_function)/g' ; cat ../common/noexecstack-arm.h) > vacall-armhf-macro.S
+	cp vacall-armhfel.s vacall-armhf-linux.s
 	$(RM) vacall-armhfel.s vacall-armhfeb.s
+
+vacall-armhf-linux-pic.s : vacall-armhf.c vacall-internal.h vacall.h
+# The option -mabi=aapcs ensures an 8-bytes-aligned stack pointer.
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mlittle-endian $(GCCFLAGS) -fPIC -D__armhf__ -S vacall-armhf.c -o vacall-armhfel-pic.s
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mbig-endian $(GCCFLAGS) -fPIC -D__armhf__ -S vacall-armhf.c -o vacall-armhfeb-pic.s
+	cmp vacall-armhfel-pic.s vacall-armhfeb-pic.s > /dev/null
+	cp vacall-armhfel-pic.s vacall-armhf-linux-pic.s
+	$(RM) vacall-armhfel-pic.s vacall-armhfeb-pic.s
+
+vacall-armhf-macro.S : vacall-armhf-linux.s vacall-armhf-linux-pic.s ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
+	(echo '#include "asm-arm.h"' ; echo '#ifdef __PIC__' ; ../common/asm-arm.sh < vacall-armhf-linux-pic.s | sed -e 's/vacall_function/C(vacall_function)/g' ; echo '#else' ; ../common/asm-arm.sh < vacall-armhf-linux.s | sed -e 's/vacall_function/C(vacall_function)/g' ; echo '#endif' ; cat ../common/noexecstack-arm.h) > vacall-armhf-macro.S
 
 
 vacall-arm64-macro.S : vacall-arm64.c vacall-internal.h vacall.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
