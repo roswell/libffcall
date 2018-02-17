@@ -1,5 +1,13 @@
 2018-02-17  Bruno Haible  <bruno@clisp.org>
 
+	Bump shared library version numbers.
+	* Makefile.in (LIBFFCALL_VERSION_INFO): Bump to 0:1:0.
+	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): Bump to 1:1:0.
+	* trampoline/Makefile.in (LIBTRAMPOLINE_VERSION_INFO): Likewise.
+	* callback/Makefile.in (LIBCALLBACK_VERSION_INFO): Likewise.
+
+2018-02-17  Bruno Haible  <bruno@clisp.org>
+
 	Add support for HardenedBSD.
 	The fix was done in gnulib today.
 	* NEWS: Mention this.
