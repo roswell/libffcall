@@ -165,7 +165,12 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                       return 1;
                     p[5] = 0x77;
                     ret = mprotect (p - ((unsigned int) p & (pagesize - 1)), pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
-                    if (ret < 0 && (errno == EACCES || errno == ENOMEM))
+                    if (ret < 0
+                        && (errno == EACCES || errno == ENOMEM
+                            #ifdef ENOTSUP
+                            || errno == ENOTSUP
+                            #endif
+                       )   )
                       /* mprotect is forbidden to make malloc()ed pages executable that were writable earlier. */
                       return 2;
                     return 0;
@@ -250,7 +255,12 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                           return 1;
                         p[5] = 0x77;
                         ret = mprotect (p, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
-                        if (ret < 0 && (errno == EACCES || errno == ENOMEM))
+                        if (ret < 0
+                            && (errno == EACCES || errno == ENOMEM
+                                #ifdef ENOTSUP
+                                || errno == ENOTSUP
+                                #endif
+                           )   )
                           /* mprotect is forbidden to make mmap()ed pages executable that were writable earlier. */
                           return 2;
                         return 0;
