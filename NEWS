@@ -4,6 +4,7 @@ New in 2.1:
   (Previously, a build on these platforms failed.)
   - x86_64: Solaris 11.3.
   - OpenBSD 6.1.
+  - HardenedBSD 10 and 11.
 
 * Fixed a bug regarding passing of pointers on the following platforms:
   - x86_64: Linux with x32 ABI: CC="gcc -mx32".
