@@ -1,7 +1,10 @@
+New in 2.2:
+
 New in 2.1:
 
 * Added support for the following platforms:
   (Previously, a build on these platforms failed.)
+  - arm: Linux with PIE-enabled gcc.
   - x86_64: Solaris 11.3.
   - OpenBSD 6.1.
   - HardenedBSD 10 and 11.

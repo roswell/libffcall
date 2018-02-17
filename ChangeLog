@@ -1,5 +1,11 @@
 2018-02-17  Bruno Haible  <bruno@clisp.org>
 
+	Bump version number.
+	* VERSION: Set to 2.2.
+	* NEWS: Open new section for 2.2.
+
+2018-02-17  Bruno Haible  <bruno@clisp.org>
+
 	Bump shared library version numbers.
 	* Makefile.in (LIBFFCALL_VERSION_INFO): Bump to 0:1:0.
 	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): Bump to 1:1:0.
