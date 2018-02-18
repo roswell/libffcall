@@ -156,6 +156,35 @@ if test ${HOST_CPU_C_ABI} = sparc && test -n "$GCC"; then
 fi
 AC_SUBST([WORKAROUND_BUG_81653])
 
+dnl Some parts of avcall and vacall need to interpret memory words as 'float'
+dnl or 'double' entities. This violates the strict type-based aliasing rules
+dnl of C. In other words, we still use C as a portable assembler, but now the
+dnl compilers want to outsmart us. There are two ways to tell them not to do
+dnl this: to use union types, or specific compiler options. I prefer to do it
+dnl through compiler options, because union types produce trouble with
+dnl alignments.
+if test -n "$GCC"; then
+  DISABLE_TYPE_BASED_ALIASING='-fno-strict-aliasing'
+else
+  case "$host_os" in
+    aix*) dnl for xlc
+      DISABLE_TYPE_BASED_ALIASING='-qalias=noansi'
+      ;;
+    *)
+      AC_EGREP_CPP([yes],
+        [#ifdef __SUNPRO_C
+           yes
+         #endif
+        ],
+        [dnl for SUNWspro cc
+         DISABLE_TYPE_BASED_ALIASING='-xalias_level=weak'
+        ],
+        [DISABLE_TYPE_BASED_ALIASING=''])
+      ;;
+  esac
+fi
+AC_SUBST([DISABLE_TYPE_BASED_ALIASING])
+
 gl_INIT
 
 dnl This piece of sed script replaces every line containing '@subdir@'

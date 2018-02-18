@@ -238,7 +238,7 @@ avcall-s390x.s : $(srcdir)/avcall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-s390x.s
 
 avcall-libapi.lo : $(srcdir)/avcall-libapi.c ../config.h $(srcdir)/avcall-internal.h $(srcdir)/avcall.h $(srcdir)/avcall-alist.h
-	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-libapi.c
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) @DISABLE_TYPE_BASED_ALIASING@ -c $(srcdir)/avcall-libapi.c
 
 avcall-structcpy.lo : $(srcdir)/avcall-structcpy.c $(srcdir)/../common/structcpy.c
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/avcall-structcpy.c

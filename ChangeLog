@@ -1,3 +1,12 @@
+2018-02-18  Bruno Haible  <bruno@clisp.org>
+
+	Avoid undesired compiler optimizations.
+	Reported by Jerry James <loganjerry@gmail.com>.
+	* configure.ac (DISABLE_TYPE_BASED_ALIASING): New substituted variable.
+	* avcall/Makefile.in (avcall-libapi.lo): Use it.
+	* vacall/Makefile.in (vacall-libapi.o): Likewise.
+	* callback/vacall_r/Makefile.in (vacall-libapi.lo): Likewise.
+
 2018-02-17  Bruno Haible  <bruno@clisp.org>
 
 	Bump version number.

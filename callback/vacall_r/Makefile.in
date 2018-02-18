@@ -226,7 +226,7 @@ vacall-s390x.s : $(srcdir)/vacall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
 
 vacall-libapi.lo : $(srcdir)/vacall-libapi.c $(srcdir)/../../vacall/vacall-internal.h $(srcdir)/vacall_r.h ../../config.h
-	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES_WITH_GNULIB) $(CPPFLAGS) $(CFLAGS) -DREENTRANT -c $(srcdir)/vacall-libapi.c
+	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES_WITH_GNULIB) $(CPPFLAGS) $(CFLAGS) @DISABLE_TYPE_BASED_ALIASING@ -DREENTRANT -c $(srcdir)/vacall-libapi.c
 
 vacall-structcpy.lo : $(srcdir)/vacall-structcpy.c $(srcdir)/../../common/structcpy.c
 	$(LIBTOOL_COMPILE) $(CC) -I$(srcdir)/../../common $(CPPFLAGS) $(CFLAGS) -c $(srcdir)/vacall-structcpy.c
