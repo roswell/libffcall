@@ -328,7 +328,7 @@ SOURCE_FILES = \
   vacall-arm64.c vacall-arm64-macro.S \
   vacall-hppa.c vacall-hppa-linux.s vacall-hppa-macro.S \
   vacall-hppa64.c vacall-hppa64-linux.s vacall-hppa64-macro.S \
-  vacall-i386.c vacall-i386-linux.s vacall-i386-macro.S \
+  vacall-i386.c vacall-i386-linux.s vacall-i386-linux-pic.s vacall-i386-macro.S \
   vacall-ia64.c vacall-ia64-linux.s vacall-ia64-macro.S \
   vacall-m68k.c vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S \
   vacall-mips.c vacall-mipseb-linux.s vacall-mipsel-linux.s vacall-mipseb-macro.S vacall-mipsel-macro.S \

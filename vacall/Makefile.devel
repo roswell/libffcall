@@ -30,8 +30,11 @@ precompiled : \
 vacall-i386-linux.s : vacall-i386.c vacall-internal.h vacall.h $(THISFILE)
 	$(CROSS_TOOL) i386-linux gcc -V 3.1 $(GCCFLAGS) -D__i386__ -S vacall-i386.c -o vacall-i386-linux.s
 
-vacall-i386-macro.S : vacall-i386-linux.s ../common/asm-i386.sh ../common/noexecstack.h $(THISFILE)
-	(echo '#include "asm-i386.h"' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386-linux.s | sed -e 's/vacall_function/C(vacall_function)/g' | ../common/asm-i386.sh ; cat ../common/noexecstack.h) > vacall-i386-macro.S
+vacall-i386-linux-pic.s : vacall-i386.c vacall-internal.h vacall.h $(THISFILE)
+	$(CROSS_TOOL) i386-linux gcc -V 3.1 $(GCCFLAGS) -fPIC -D__i386__ -S vacall-i386.c -o vacall-i386-linux-pic.s
+
+vacall-i386-macro.S : vacall-i386-linux.s vacall-i386-linux-pic.s ../common/asm-i386.sh ../common/noexecstack.h $(THISFILE)
+	(echo '#include "asm-i386.h"' ; echo '#ifdef __PIC__' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386-linux-pic.s | sed -e 's/vacall_function/C(vacall_function)/g' | ../common/asm-i386.sh ; echo '#else' ; sed -e '/\.align.*,0x90$$/d' < vacall-i386-linux.s | sed -e 's/vacall_function/C(vacall_function)/g' | ../common/asm-i386.sh ; echo '#endif' ; cat ../common/noexecstack.h) > vacall-i386-macro.S
 
 
 vacall-m68k-linux.s : vacall-m68k.c vacall-internal.h vacall.h $(THISFILE)

@@ -112,6 +112,7 @@
 /vacall/vacall-hppa64-linux.s
 /vacall/vacall-hppa64-macro.S
 /vacall/vacall-i386-linux.s
+/vacall/vacall-i386-linux-pic.s
 /vacall/vacall-i386-macro.S
 /vacall/vacall-ia64-linux.s
 /vacall/vacall-ia64-macro.S
