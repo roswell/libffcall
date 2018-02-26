@@ -1,5 +1,9 @@
 New in 2.2:
 
+* Added support for the following platforms:
+  (Previously, a build on these platforms failed.)
+  - armv6 (Raspberry Pi): Linux.
+
 New in 2.1:
 
 * Added support for the following platforms:

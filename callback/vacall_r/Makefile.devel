@@ -127,8 +127,8 @@ vacall-arm-macro.S : ../../vacall/vacall-arm.c ../../vacall/vacall-internal.h va
 
 vacall-armhf-macro.S : ../../vacall/vacall-armhf.c ../../vacall/vacall-internal.h vacall_r.h ../../common/asm-arm.sh ../../common/noexecstack-arm.h $(THISFILE)
 # The option -mabi=aapcs ensures an 8-bytes-aligned stack pointer.
-	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mlittle-endian $(GCCFLAGS) -D__armhf__ -S ../../vacall/vacall-armhf.c -I../../vacall -I. -o vacall-armhfel.s
-	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -mabi=aapcs -mfloat-abi=hard -mbig-endian $(GCCFLAGS) -D__armhf__ -S ../../vacall/vacall-armhf.c -I../../vacall -I. -o vacall-armhfeb.s
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -march=armv6 -mabi=aapcs -mfloat-abi=hard -mlittle-endian $(GCCFLAGS) -D__armhf__ -S ../../vacall/vacall-armhf.c -I../../vacall -I. -o vacall-armhfel.s
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.3.0 -march=armv6 -mabi=aapcs -mfloat-abi=hard -mbig-endian $(GCCFLAGS) -D__armhf__ -S ../../vacall/vacall-armhf.c -I../../vacall -I. -o vacall-armhfeb.s
 	cmp vacall-armhfel.s vacall-armhfeb.s > /dev/null
 	(echo '#include "asm-arm.h"' ; ../../common/asm-arm.sh < vacall-armhfel.s ; cat ../../common/noexecstack-arm.h) > vacall-armhf-macro.S
 	$(RM) vacall-armhfel.s vacall-armhfeb.s
