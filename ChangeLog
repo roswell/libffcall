@@ -1,3 +1,9 @@
+2018-04-08  Bruno Haible  <bruno@clisp.org>
+
+	s390x: Trivial tweak.
+	* avcall/avcall-s390x.c (avcall_call): Rename result variable from 'i'
+	to 'iret'.
+
 2018-02-26  Bruno Haible  <bruno@clisp.org>
 
 	Add support for Linux/arm on Raspberry Pi.

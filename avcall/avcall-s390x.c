@@ -1,6 +1,6 @@
 /**
   Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+  Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ int
 avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("r15");	/* C names for registers */
-  register __avword	iret	__asm__("r2");
+  register __avword	iretreg	__asm__("r2");
   register double	dret	__asm__("f0");
 
   /* We need to put a value in r6, but it's a call-saved register. */
@@ -91,10 +91,12 @@ avcall_call(av_alist* list)
   int arglen = l->aptr - l->args;
   unsigned int ianum = l->ianum;
   unsigned int fanum = l->fanum;
-  __avword i;
 
-  for (i = 0; i < arglen; i++)		/* push function args onto stack */
-    argframe[i] = l->args[i];
+  {
+    int i;
+    for (i = 0; i < arglen; i++)	/* push function args onto stack */
+      argframe[i] = l->args[i];
+  }
 
   /* Put up to 5 integer args into registers. */
   if (ianum >= 1) {
@@ -130,7 +132,7 @@ avcall_call(av_alist* list)
       }
     }
   }
-        
+
   /* Call function. */
   if (l->rtype == __AVfloat) {
     *(float*)l->raddr = (*(float(*)())l->func)();
@@ -138,40 +140,40 @@ avcall_call(av_alist* list)
   if (l->rtype == __AVdouble) {
     *(double*)l->raddr = (*(double(*)())l->func)();
   } else {
-    i = (*l->func)();
+    __avword iret = (*l->func)();
 
     /* save return value */
     if (l->rtype == __AVvoid) {
     } else
     if (l->rtype == __AVword) {
-      RETURN(__avword, i);
+      RETURN(__avword, iret);
     } else
     if (l->rtype == __AVchar) {
-      RETURN(char, i);
+      RETURN(char, iret);
     } else
     if (l->rtype == __AVschar) {
-      RETURN(signed char, i);
+      RETURN(signed char, iret);
     } else
     if (l->rtype == __AVuchar) {
-      RETURN(unsigned char, i);
+      RETURN(unsigned char, iret);
     } else
     if (l->rtype == __AVshort) {
-      RETURN(short, i);
+      RETURN(short, iret);
     } else
     if (l->rtype == __AVushort) {
-      RETURN(unsigned short, i);
+      RETURN(unsigned short, iret);
     } else
     if (l->rtype == __AVint) {
-      RETURN(int, i);
+      RETURN(int, iret);
     } else
     if (l->rtype == __AVuint) {
-      RETURN(unsigned int, i);
+      RETURN(unsigned int, iret);
     } else
     if (l->rtype == __AVlong || l->rtype == __AVlonglong) {
-      RETURN(long, i);
+      RETURN(long, iret);
     } else
     if (l->rtype == __AVulong || l->rtype == __AVulonglong) {
-      RETURN(unsigned long, i);
+      RETURN(unsigned long, iret);
     } else
   /* see above
     if (l->rtype == __AVfloat) {
@@ -180,7 +182,7 @@ avcall_call(av_alist* list)
     } else
   */
     if (l->rtype == __AVvoidp) {
-      RETURN(void*, i);
+      RETURN(void*, iret);
     } else
     if (l->rtype == __AVstruct) {
       /* normal struct return convention */
