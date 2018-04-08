@@ -237,6 +237,12 @@ avcall-s390x.lo : avcall-s390x.s
 avcall-s390x.s : $(srcdir)/avcall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-s390x.s
 
+avcall-riscv64-lp64d.lo : avcall-riscv64-lp64d.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-riscv64-lp64d.s
+
+avcall-riscv64-lp64d.s : $(srcdir)/avcall-riscv64-lp64d-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-riscv64-lp64d-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-riscv64-lp64d.s
+
 avcall-libapi.lo : $(srcdir)/avcall-libapi.c ../config.h $(srcdir)/avcall-internal.h $(srcdir)/avcall.h $(srcdir)/avcall-alist.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) @DISABLE_TYPE_BASED_ALIASING@ -c $(srcdir)/avcall-libapi.c
 
@@ -332,7 +338,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.@OBJEXT@ *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-hppa64.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64.asm avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-hppa64.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64.asm avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s avcall-riscv64-lp64d.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.@OBJEXT@ minitests.s minitests minitests.out
 	$(RM) minitests-c++.@OBJEXT@ minitests-c++ minitests-c++.out
@@ -368,6 +374,7 @@ SOURCE_FILES = \
   avcall-powerpc-aix.s \
   avcall-powerpc-linux.s avcall-powerpc-linux-macro.S avcall-powerpc-macos.s avcall-powerpc-sysv4-macro.S \
   avcall-powerpc64.c avcall-powerpc64-aix.s avcall-powerpc64-linux.S avcall-powerpc64-elfv2-linux.S \
+  avcall-riscv64.c avcall-riscv64-lp64d-linux.s avcall-riscv64-lp64d-macro.S \
   avcall-s390.c avcall-s390-linux.s avcall-s390-macro.S \
   avcall-s390x.c avcall-s390x-linux.s avcall-s390x-macro.S \
   avcall-sparc.c avcall-sparc-linux.s avcall-sparc-macro.S \

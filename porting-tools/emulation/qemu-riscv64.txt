@@ -1,0 +1,86 @@
+Building a Linux/riscv64 guest machine using QEMU
+=================================================
+
+This guest machine implements the target platforms:
+  - riscv64-linux
+
+References:
+  - QEMU wiki page:
+    http://wiki.qemu.org/Documentation/Platforms/RISCV
+  - Debian and Fedora recipes:
+    https://wiki.debian.org/RISC-V
+    https://fedoraproject.org/wiki/Architectures/RISC-V
+
+Installation instructions
+-------------------------
+
+Build qemu:
+- Before qemu-2.12, use an up-to-date upstream qemu.
+- Configure it through
+  $ ./configure --prefix=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.11+-20180314 --target-list=riscv32-softmmu,riscv64-softmmu,riscv32-linux-user,riscv64-linux-user --disable-strip --disable-werror --enable-gtk --enable-vnc
+- Apply the floating-point patch from RWMJones
+  https://github.com/rwmjones/fedora-riscv-bootstrap/blob/master/stage1-riscv-qemu/force-float-save.patch
+
+Use qemu-2.11+-20180314
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.11+-20180314/bin:$PATH
+
+Get the ready-to-use disk image from RWMJones:
+$ wget -r -l 1 https://fedorapeople.org/groups/risc-v/disk-images/
+$ xz -d < disk-images/stage4-disk.img.xz > stage4-disk.img
+
+Booting the disk
+----------------
+
+Which network hardware?
+  "-device virtio-net-device,netdev=usernet -netdev user,id=usernet" yields
+  virtio-net-device.0: index=0,type=nic,model=virtio-net-device,macaddr=52:54:00:12:34:56
+   \ usernet: index=0,type=user,net=10.0.2.0,restrict=off
+machine_args="-machine virt -m 2G"
+disk_args="-device virtio-blk-device,drive=hd0 -drive file=stage4-disk.img,format=raw,id=hd0"
+net_args="-device virtio-net-device,netdev=usernet -netdev user,id=usernet"
+rng_args="-device virtio-rng-device,rng=rng0 -object rng-random,filename=/dev/urandom,id=rng0"
+Either
+  display_args="-nographic"
+or
+  display_args="-display gtk -monitor stdio"
+fi
+common_args="$machine_args $disk_args $net_args $rng_args $display_args"
+$ qemu-system-riscv64 $common_args -kernel disk-images/bbl -append "console=ttyS0 ro root=/dev/vda"
+
+Post-installation instructions
+------------------------------
+
+Remember the root login:
+login: root
+password: riscv
+
+# useradd bruno
+# passwd bruno
+
+Edit /etc/group, adding 'bruno' to the line 'wheel'.
+
+Edit /etc/crypto-policies/back-ends/openssh.config
+to remove unsupported 'gssapikexalgorithms' option.
+Edit /etc/ssh/ssh_config.d/05-redhat.conf
+to remove unsupported 'gssapiauthentication' option.
+
+Script that runs the guest VM
+-----------------------------
+
+#!/bin/sh
+PATH=$HOME/inst-qemu/2.11+-20180314/bin:$PATH
+cd $HOME/vms/qemu/riscv64
+machine_args="-machine virt -m 2G"
+disk_args="-device virtio-blk-device,drive=hd0 -drive file=stage4-disk.img,format=raw,id=hd0"
+net_args="-device virtio-net-device,netdev=usernet -netdev user,id=usernet"
+rng_args="-device virtio-rng-device,rng=rng0 -object rng-random,filename=/dev/urandom,id=rng0"
+if test "$1" = "-nographic"; then
+  display_args="-nographic"
+else
+  display_args="-display gtk -monitor stdio"
+fi
+common_args="$machine_args $disk_args $net_args $rng_args $display_args"
+exec qemu-system-riscv64 $common_args -kernel disk-images/bbl -append "console=ttyS0 ro root=/dev/vda"
+
+Usage notes
+-----------

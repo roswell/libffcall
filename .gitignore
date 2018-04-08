@@ -85,6 +85,8 @@
 /avcall/avcall-powerpc64-aix.s
 /avcall/avcall-powerpc64-linux.S
 /avcall/avcall-powerpc64-elfv2-linux.S
+/avcall/avcall-riscv64-lp64d-linux.s
+/avcall/avcall-riscv64-lp64d-macro.S
 /avcall/avcall-s390-linux.s
 /avcall/avcall-s390-macro.S
 /avcall/avcall-s390x-linux.s
@@ -140,6 +142,8 @@
 /vacall/vacall-powerpc64-aix.s
 /vacall/vacall-powerpc64-linux.S
 /vacall/vacall-powerpc64-elfv2-linux.S
+/vacall/vacall-riscv64-lp64d-linux.s
+/vacall/vacall-riscv64-lp64d-macro.S
 /vacall/vacall-s390-linux.s
 /vacall/vacall-s390-macro.S
 /vacall/vacall-s390x-linux.s
@@ -207,6 +211,8 @@
 /callback/vacall_r/vacall-powerpc64-aix.s
 /callback/vacall_r/vacall-powerpc64-linux.S
 /callback/vacall_r/vacall-powerpc64-elfv2-linux.S
+/callback/vacall_r/vacall-riscv64-lp64d-linux.s
+/callback/vacall_r/vacall-riscv64-lp64d-macro.S
 /callback/vacall_r/vacall-s390-linux.s
 /callback/vacall_r/vacall-s390-macro.S
 /callback/vacall_r/vacall-s390x-linux.s

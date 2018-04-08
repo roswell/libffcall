@@ -13,6 +13,7 @@ cross mips64-linux gcc -mabi=n32 -O6 -fomit-frame-pointer voidfunc.c -c -o voidf
 cross mips64-linux gcc -mabi=64 -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-mips64.o
 cross powerpc-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-powerpc.o
 cross powerpc64le-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-powerpc64le.o
+cross riscv64-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-riscv64.o
 cross s390-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-s390.o
 cross sparc-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-sparc.o
 cross sparc64-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-sparc64.o

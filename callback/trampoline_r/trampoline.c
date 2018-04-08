@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #include <windows.h>
 #endif
 #endif
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
+#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__riscv64__)
 #ifdef HAVE_SYS_CACHECTL_H /* IRIX, Linux */
 #include <sys/cachectl.h>
 #else
@@ -335,6 +335,10 @@ static int open_noinherit (const char *filename, int flags, int mode)
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __s390x__
+#define TRAMP_LENGTH 32
+#define TRAMP_ALIGN 8
+#endif
+#ifdef __riscv64__
 #define TRAMP_LENGTH 32
 #define TRAMP_ALIGN 8
 #endif
@@ -1235,6 +1239,32 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   (*(unsigned long *) (function +16))
 #endif
+#ifdef __riscv64__
+  /* function:
+   *    auipc t0,0			00000297
+   *    ld t1,24(t0)			0182B303
+   *    ld t2,16(t0)			0102B383
+   *    jr t1				00030067
+   * data:    .quad <data>
+   * address: .quad <address>
+   */
+  *(int *)   (function + 0) = 0x00000297;
+  *(int *)   (function + 4) = 0x0182B303;
+  *(int *)   (function + 8) = 0x0102B383;
+  *(int *)   (function +12) = 0x00030067;
+  *(long *)  (function +16) = (unsigned long) data;
+  *(long *)  (function +24) = (unsigned long) address;
+#define TRAMP_CODE_LENGTH  16
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0x00000297 && \
+  *(unsigned int *) (function + 4) == 0x0182B303 && \
+  *(unsigned int *) (function + 8) == 0x0102B383 && \
+  *(unsigned int *) (function +12) == 0x00030067
+#define tramp_address(function)  \
+  (*(unsigned long *) (function +24))
+#define tramp_data(function)  \
+  (*(unsigned long *) (function +16))
+#endif
   /*
    * data:
    *    <data0>				<data0>
@@ -1357,6 +1387,14 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #if defined(__powerpc__) || defined(__powerpc64__)
   __TR_clear_cache(function_x);
+#endif
+#if defined(__riscv64__)
+#if defined(__linux__)
+  /* Use the libc function. */
+  __riscv_flush_icache((void*)function_x,(void*)(function_x+TRAMP_CODE_LENGTH),0);
+#elif defined(__GNUC__)
+  __asm__ __volatile__ ("fence.i");
+#endif
 #endif
 #endif
 

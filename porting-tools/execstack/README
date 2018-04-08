@@ -107,6 +107,8 @@ Linux ia64                      2.6.18   2.17.50.0.6 crash    crash     crash   
 --- s390 / s390x
 Linux s390x 31-bit              3.16.0   2.25        OK       OK        OK         OK         OK
 Linux s390x 64-bit              3.16.0   2.25        OK       OK        OK         OK         OK
+--- riscv64
+Linux riscv64                   4.16.0   2.30        crash    crash     crash      OK         crash
 
 Notes:
 * The Linux CentOS 6 64-bit result is independent of how the SELinux flags
@@ -118,10 +120,11 @@ Notes:
   ELF header identical to the program 'forced-execstack' - surely a bug!
 * On Linux arm64 (starting with binutils 2.24) and
   Linux powerpc64 (starting with binutils 2.18) and
-  Linux ia64 (starting with binutils 2.18), an assembly language file without
-  a GNU-stack note does NOT declare the need for an executable stack. However,
-  a .o file created with the assembler option --execstack does. This is due
-  to the definition
+  Linux ia64 (starting with binutils 2.18) and
+  Linux riscv64,
+  an assembly language file without a GNU-stack note does NOT declare the need
+  for an executable stack. However, a .o file created with the assembler option
+  --execstack does. This is due to the definition
     #define elf_backend_default_execstack 0
   in GNU binutils, for these CPU types.
 * FreeBSD 11 has the support for execstack handling in binutils, but on 32-bit

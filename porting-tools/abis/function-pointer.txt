@@ -4,7 +4,8 @@ Function pointers
 On all platforms, a function pointer has the same size as a data pointer (void*).
 
 You can determine what a function pointer actually is by compiling
-proto.c (for 32-bit platforms) or proto64.c (for 64-bit platforms)
+trampoline/proto.c (for 32-bit platforms) or
+trampoline/proto64.c (for 64-bit platforms)
 with -O -fomit-frame-pointer -S and looking at the resulting output,
 especially of function 'tramp'.
 

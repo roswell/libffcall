@@ -179,7 +179,7 @@ func_version ()
 {
   echo "\
 cross-build.sh (GNU $package)
-Copyright (C) 2017 Free Software Foundation, Inc.
+Copyright (C) 2017-2018 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
@@ -509,7 +509,7 @@ func_build_gcc ()
   # Build the prerequisites.
   configure_options=
   case "$version" in
-    4.[3-9]* | 5* | 6*)
+    4.[3-9]* | [5-7]*)
       func_build_gmp 4.3.2 || func_exit 1
       configure_options="$configure_options --with-gmp=$HOST_CROSS_DIR/${target}-tools"
       func_build_mpfr 2.4.2 || func_exit 1
@@ -517,7 +517,7 @@ func_build_gcc ()
       ;;
   esac
   case "$version" in
-    4.[5-9]* | 5* | 6*)
+    4.[5-9]* | [5-7]*)
       func_build_mpc 0.8.1 || func_exit 1
       configure_options="$configure_options --with-mpc=$HOST_CROSS_DIR/${target}-tools"
       ;;
@@ -529,15 +529,20 @@ func_build_gcc ()
   #    ;;
   #esac
   case "$version" in
-    5* | 6*)
+    [5-6]*)
       func_build_isl 0.14 || func_exit 1
+      configure_options="$configure_options --with-isl=$HOST_CROSS_DIR/${target}-tools"
+      ;;
+    7*)
+      func_build_isl 0.16.1 || func_exit 1
       configure_options="$configure_options --with-isl=$HOST_CROSS_DIR/${target}-tools"
       ;;
   esac
   # Build gcc itself.
   case "$version" in
     3.[0-2]*) pkg_suffix=gz ;;
-    *)        pkg_suffix=bz2 ;;
+    [3-6]*)   pkg_suffix=bz2 ;;
+    *)        pkg_suffix=xz ;;
   esac
   func_ensure_unpacked_source gcc "$version" "$pkg_suffix" "https://ftp.gnu.org/pub/gnu/gcc/gcc-$version" || func_exit 1
   if test "$target" = armv7l-linux-gnueabihf; then

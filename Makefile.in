@@ -162,6 +162,7 @@ SOURCE_FILES = \
   common/asm-m68k.sh common/asm-m68k.h \
   common/asm-mips.sh common/asm-mips.h \
   common/asm-powerpc.sh \
+  common/asm-riscv.sh \
   common/asm-s390.sh \
   common/asm-sparc.sh common/asm-sparc.h \
   common/asm-x86_64.sh common/asm-x86_64.h \

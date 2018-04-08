@@ -1,5 +1,5 @@
 dnl AUTOCONF configuration for LIBFFCALL
-dnl Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+dnl Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
 dnl Copyright 2003-2010 Sam Steingold <sds@gnu.org>
 dnl
 dnl This program is free software: you can redistribute it and/or modify
@@ -136,9 +136,11 @@ if test ${HOST_CPU_C_ABI} = powerpc; then
   esac
 fi
 AC_SUBST([CPU_OBJECTS])
-if test ${HOST_CPU_C_ABI} = mips -o ${HOST_CPU_C_ABI} = mipsn32 -o ${HOST_CPU_C_ABI} = mips64; then
-  AC_CHECK_HEADERS([sys/cachectl.h])
-fi
+case "${HOST_CPU_C_ABI}" in
+  mips* | riscv64*)
+    AC_CHECK_HEADERS([sys/cachectl.h])
+    ;;
+esac
 
 dnl Work around GCC bug <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81653>:
 dnl GCC, configured with --enable-default-pie on SPARC, miscompiles hand-written

@@ -3,6 +3,7 @@ New in 2.2:
 * Added support for the following platforms:
   (Previously, a build on these platforms failed.)
   - armv6 (Raspberry Pi): Linux.
+  - riscv64: Linux with lp64d ABI.
 
 New in 2.1:
 

@@ -81,10 +81,11 @@ follows.
 5) Port the callback/trampoline_r package.
 
  5.1) Modify proto.c or proto64.c to reference the lexical closure register
-      (known from step 3).
+      (known from step 3). Likewise for test1.c.
 
  5.2) Compile proto.c or proto64.c with the cross-compiler, to understand
-      which instruction will load a value into this register.
+      which instruction will load a value into this register. Extend
+      callback/trampoline_r/Makefile.devel accordingly.
 
  5.3) Write a file tramp-<ABI>.s that loads a specific value into the lexical
       closure register and then jumps to a specific location.
@@ -102,7 +103,7 @@ follows.
 
  5.4) Put into trampoline.c the code that assembles such a trampoline.
 
- 5.5) Put into trampoline.c also the cache-related changes from step 4,5.
+ 5.5) Put into trampoline.c also the cache-related changes from step 4.5.
       except that here the code may need to flush a different number of
       cache lines (depending on the trampoline size).
 

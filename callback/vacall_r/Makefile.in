@@ -225,6 +225,12 @@ vacall-s390x.lo : vacall-s390x.s
 vacall-s390x.s : $(srcdir)/vacall-s390x-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
 
+vacall-riscv64-lp64d.lo : vacall-riscv64-lp64d.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-riscv64-lp64d.s
+
+vacall-riscv64-lp64d.s : $(srcdir)/vacall-riscv64-lp64d-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-riscv64-lp64d-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-riscv64-lp64d.s
+
 vacall-libapi.lo : $(srcdir)/vacall-libapi.c $(srcdir)/../../vacall/vacall-internal.h $(srcdir)/vacall_r.h ../../config.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES_WITH_GNULIB) $(CPPFLAGS) $(CFLAGS) @DISABLE_TYPE_BASED_ALIASING@ -DREENTRANT -c $(srcdir)/vacall-libapi.c
 
@@ -278,7 +284,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.@OBJEXT@ *.lo *.a libvacall.* core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-hppa64.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64.asm vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-hppa64.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64.asm vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s vacall-riscv64-lp64d.s
 	$(RM) -r .libs _libs
 
 distclean : clean
@@ -313,6 +319,7 @@ SOURCE_FILES = \
   vacall-powerpc-macos.s \
   vacall-powerpc-sysv4-macro.S \
   vacall-powerpc64-aix.s vacall-powerpc64-linux.S vacall-powerpc64-elfv2-linux.S \
+  vacall-riscv64-lp64d-linux.s vacall-riscv64-lp64d-macro.S \
   vacall-s390-linux.s vacall-s390-macro.S \
   vacall-s390x-linux.s vacall-s390x-macro.S \
   vacall-sparc-linux.s vacall-sparc-macro.S \

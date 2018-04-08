@@ -53,6 +53,7 @@ CPUs:
   - arm64
   - powerpc, powerpc64, powerpc64le
   - s390x
+  - riscv64
 
 The CPUs that I cannot emulate this way are
   - m68k (but see qemu-m68k.txt)

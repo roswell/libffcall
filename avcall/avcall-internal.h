@@ -1,6 +1,6 @@
 /*
  * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -101,7 +101,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
    (LIST).farg_mask = 0,						\
    (LIST).darg_mask = 0,
 #endif
-#if defined(__arm64__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__s390__) || defined(__s390x__) || defined(__riscv64__)
 #define __av_start1(LIST,LIST_ARGS_END)					\
    (LIST).aptr = &(LIST).args[0],					\
    (LIST).ianum = 0,							\
@@ -253,7 +253,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_start_struct3(LIST)  \
   ((LIST).flags |= __AV_REGISTER_STRUCT_RETURN, 0)
 #endif
-#if defined(__hppa64__) || defined(__arm64__) || (defined(__powerpc64__) && defined(__powerpc64_elfv2__)) || defined(__x86_64_sysv__)
+#if defined(__hppa64__) || defined(__arm64__) || (defined(__powerpc64__) && defined(__powerpc64_elfv2__)) || defined(__x86_64_sysv__) || defined(__riscv64__)
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
   ((TYPE_SIZE) <= 16)
 /* Turn on __AV_REGISTER_STRUCT_RETURN if __AV_SMALL_STRUCT_RETURN was set
@@ -293,7 +293,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
    0									\
   )
 #endif
-#if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__) || defined(__riscv64__)
 #if defined(__x86_64_x32__)
 /* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
    from 32 bits to 64 bits. */
@@ -321,7 +321,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * scalar argument types
  */
 
-#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || defined(__hppa64__) || (defined(__arm__) && !defined(__armhf__)) || defined(__arm64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || defined(__hppa64__) || (defined(__arm__) && !defined(__armhf__)) || defined(__arm64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__) || defined(__riscv64__)
 /* Floats and all integer types are passed as words,
  * doubles as two words (on 32-bit platforms) or one word (on 64-bit platforms).
  */
@@ -367,7 +367,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 /* integer argument types */
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__) || defined(__riscv64__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define __av_long(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
@@ -377,7 +377,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__) || defined(__riscv64__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define __av_ulong(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
@@ -387,7 +387,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__) || defined(__riscv64__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #if defined(__x86_64_x32__)
 /* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
@@ -406,7 +406,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_ptr(LIST,VAL)	__av_word(LIST,VAL)
 #endif
 
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__AV_LLP64)) || defined(__s390x__)
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__AV_LLP64)) || defined(__s390x__) || defined(__riscv64__)
 /* ‘long long’ and ‘long’ are identical. */
 #define __av_longlong		__av_long
 #define __av_ulonglong		__av_ulong
@@ -1030,6 +1030,45 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 #endif
 
+#if defined(__riscv64__)
+
+/* Up to __AV_FARG_NUM float or double args can be passed in float registers.
+   The remaining float or double args are passed in the general-purpose
+   argument sequence (first the integer registers, then the stack.) */
+#define _av_float(LIST,VAL)						\
+  ((LIST).fanum < __AV_FARG_NUM						\
+   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
+      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
+      (LIST).fanum++,							\
+      0)								\
+    : ((LIST).ianum < __AV_IARG_NUM					\
+       ? (*(float*)&(LIST).iargs[(LIST).ianum] = (float)(VAL),		\
+          (LIST).ianum++,						\
+          0)								\
+      : ((LIST).aptr >= (LIST).eptr					\
+         ? -1 :								\
+         ((*(float*)(LIST).aptr) = (float)(VAL),			\
+          (LIST).aptr++,						\
+          0))))
+
+#define _av_double(LIST,VAL)						\
+  (((LIST).fanum < __AV_FARG_NUM					\
+    ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
+       (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
+       (LIST).fanum++,							\
+       0)								\
+    : ((LIST).ianum < __AV_IARG_NUM					\
+       ? (*(double*)&(LIST).iargs[(LIST).ianum] = (double)(VAL),	\
+          (LIST).ianum++,						\
+          0)								\
+       : ((LIST).aptr >= (LIST).eptr					\
+          ? -1 :							\
+          ((*(double*)(LIST).aptr = (double)(VAL)),			\
+           (LIST).aptr++,						\
+           0)))))
+
+#endif
+
 /*
  * structure argument types
  */
@@ -1308,7 +1347,7 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
           (LIST).aptr = (__avword*)((((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)) & -4),	\
           0))))
 #endif
-#if defined(__arm64__)
+#if defined(__arm64__) || defined(__riscv64__)
 /* Structures <= 16 bytes are passed as embedded copies on the arg stack.
  * Big structures are passed as pointers to caller-made local copies.
  */

@@ -1,7 +1,7 @@
 /* This program tests whether the stack is executable.  */
 
 /*
- * Copyright 2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 2017-2018 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,9 @@ unsigned int voidfunc[2] = { 0x03e00008, 0x00000000 };
 #endif
 #if defined(_IBMR2) || defined(__powerpc) || defined(__powerpc__) || defined(__ppc) || defined(__ppc__)
 unsigned int voidfunc[1] = { 0x4e800020 };
+#endif
+#if defined(__riscv)
+unsigned short voidfunc[1] = { 0x8082 };
 #endif
 #if defined(__s390__)
 unsigned char voidfunc[4] = { 0x07, 0xfe, 0x07, 0x07 };
