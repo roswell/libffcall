@@ -14,15 +14,8 @@ References:
 Installation instructions
 -------------------------
 
-Build qemu:
-- Before qemu-2.12, use an up-to-date upstream qemu.
-- Configure it through
-  $ ./configure --prefix=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.11+-20180314 --target-list=riscv32-softmmu,riscv64-softmmu,riscv32-linux-user,riscv64-linux-user --disable-strip --disable-werror --enable-gtk --enable-vnc
-- Apply the floating-point patch from RWMJones
-  https://github.com/rwmjones/fedora-riscv-bootstrap/blob/master/stage1-riscv-qemu/force-float-save.patch
-
-Use qemu-2.11+-20180314
-$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.11+-20180314/bin:$PATH
+Use qemu-2.12.0
+$ PATH=/arch/x86_64-linux-gnu/gnu-inst-qemu/2.12.0/bin:$PATH
 
 Get the ready-to-use disk image from RWMJones:
 $ wget -r -l 1 https://fedorapeople.org/groups/risc-v/disk-images/
@@ -68,7 +61,7 @@ Script that runs the guest VM
 -----------------------------
 
 #!/bin/sh
-PATH=$HOME/inst-qemu/2.11+-20180314/bin:$PATH
+PATH=$HOME/inst-qemu/2.12.0/bin:$PATH
 cd $HOME/vms/qemu/riscv64
 machine_args="-machine virt -m 2G"
 disk_args="-device virtio-blk-device,drive=hd0 -drive file=stage4-disk.img,format=raw,id=hd0"
