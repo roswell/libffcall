@@ -95,7 +95,7 @@ extern void (*tramp) (); /* trampoline prototype */
         /* Use an shmat'ed page. */
         #define EXECUTABLE_VIA_SHM
       #else
-        #if (defined(_WIN32) || defined(__WIN32__)) && ! defined(__CYGWIN__) /* native Windows */
+        #if defined(_WIN32) && ! defined(__CYGWIN__) /* native Windows */
           #define EXECUTABLE_VIA_VIRTUALALLOC
         #else
           ??
@@ -194,7 +194,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 
 /* Support for instruction cache flush. */
 #ifdef __i386__
-#if (defined(_WIN32) || defined(__WIN32__)) && ! defined(__CYGWIN__) /* native Windows */
+#if defined(_WIN32) && ! defined(__CYGWIN__) /* native Windows */
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <windows.h>

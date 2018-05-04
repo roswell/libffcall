@@ -6,7 +6,7 @@
 #   2. grep -v '^ *#line' | grep -v '^#'
 #   3. sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$,,' -e 's/##//g'
 
-# Copyright (C) 1997-2017 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 1997-2018 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,7 +60,7 @@ s/\.section	\.eh_frame,"a[w]*",@progbits/.section	EH_FRAME_SECTION/
 # https://illumos.org/issues/3210)
 # Likewise this section does not assemble on Mac OS X 10.5 and on Windows.
 /EH_FRAME_SECTION/{
-s/^/#if !(defined __sun || (defined __APPLE__ \&\& defined __MACH__) || (defined _WIN32 || defined __WIN32__ || defined __CYGWIN__))\
+s/^/#if !(defined __sun || (defined __APPLE__ \&\& defined __MACH__) || (defined _WIN32 || defined __CYGWIN__))\
 /
 }
 ${

@@ -45,7 +45,7 @@
 
 /* The Unix and Windows variants of x86_64 ABIs are quite different. */
 #if defined(__x86_64__)
-#if defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__CYGWIN__)
 #define __x86_64_ms__ 1
 #else
 #define __x86_64_sysv__ 1

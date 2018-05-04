@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 2017-2018 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 /* Define integer types that are as large as a pointer, */
 
-#if defined(__x86_64__) && (defined(_WIN32) || defined(__WIN32__)) && !defined(__CYGWIN__)
+#if defined(__x86_64__) && defined(_WIN32) && !defined(__CYGWIN__)
 /* An LLP64 platform. */
 typedef long long ff_intptr_t;
 typedef unsigned long long ff_uintptr_t;

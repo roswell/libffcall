@@ -26,7 +26,7 @@
 
 /* Determine whether the current ABI is LLP64
    ('long' = 32-bit, 'long long' = 'void*' = 64-bit). */
-#if defined(__x86_64__) && (defined(_WIN32) || defined(__WIN32__)) && !defined(__CYGWIN__)
+#if defined(__x86_64__) && defined(_WIN32) && !defined(__CYGWIN__)
 #define __VA_LLP64 1
 #endif
 
@@ -134,7 +134,7 @@ enum __VA_alist_flags
 #if defined(__GNUC__) && !((defined(__mipsn32__) || defined(__mips64__)) && ((__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)))
 				  __VA_GCC_STRUCT_RETURN |
 #endif
-#if defined(__i386__) && (defined(_WIN32) || defined(__WIN32__)) && !defined(__CYGWIN__) /* native Windows */
+#if defined(__i386__) && defined(_WIN32) && !defined(__CYGWIN__) /* native Windows */
 				  __VA_MSVC_STRUCT_RETURN |
 #endif
 				  0,

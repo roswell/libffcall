@@ -1,3 +1,14 @@
+2018-05-04  Bruno Haible  <bruno@clisp.org>
+
+	Simplify code. Drop support for Borland C++ on Windows.
+	* common/asm-x86_64.h, common/asm-x86_64.sh, ffcall-stdint.h:
+	Simplify 'defined _WIN32 || defined __WIN32__' to just 'defined _WIN32'.
+	* avcall/avcall.h, avcall/avcall-alist.h: Likewise.
+	* vacall/vacall.h, vacall/vacall-internal.h: Likewise.
+	* callback/vacall_r/vacall_r.h: Likewise.
+	* trampoline/trampoline.c: Likewise.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
 2018-04-08  Bruno Haible  <bruno@clisp.org>
 
 	riscv64: Add support for riscv64-lp64d ABI.

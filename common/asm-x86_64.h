@@ -1,7 +1,7 @@
 // Assembly language support for x86_64 CPU.
 // Bruno Haible 2016-12-28
 
-// Copyright (C) 1997-2017 Bruno Haible <bruno@clisp.org>
+// Copyright (C) 1997-2018 Bruno Haible <bruno@clisp.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -234,7 +234,7 @@
 // MS assembler
 #define DECLARE_FUNCTION(name) PUBLIC name
 #else
-#if (defined _WIN32 || defined __WIN32__ || defined __CYGWIN__)
+#if defined _WIN32 || defined __CYGWIN__
 // Windows with GNU as
 #define DECLARE_FUNCTION(name) .def C(name); .scl 2; .type 32; .endef
 #else
@@ -255,7 +255,7 @@
 #define FUNEND(name,size_expression) name ENDP
 #else
 #define FUNBEGIN(name) C(name):
-#if (defined _WIN32 || defined __WIN32__ || defined __CYGWIN__) || defined(ASM_UNDERSCORE)
+#if (defined _WIN32 || defined __CYGWIN__) || defined(ASM_UNDERSCORE)
 // Windows with GNU as, Mac OS X
 #define FUNEND(name,size_expression)
 #else
