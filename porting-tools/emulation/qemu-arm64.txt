@@ -5,7 +5,7 @@ This guest machine implements the arm64-linux target platform.
 
 References:
   - QEMU wiki page:
-    http://wiki.qemu.org/Documentation/Platforms/ARM
+    https://wiki.qemu.org/Documentation/Platforms/ARM
   - Torbjörn Granlund's recipe:
     https://gmplib.org/~tege/qemu.html#arm64-debian
 

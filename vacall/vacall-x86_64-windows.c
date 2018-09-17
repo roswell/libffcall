@@ -1,4 +1,4 @@
-/* vacall function for x86_64 CPU with the Windows ABI ('gcc -mabi=ms') */
+httpsacall function for x86_64 CPU with the Windows ABI ('gcc -mabi=ms') */
 
 /*
  * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "vacall-internal.h"

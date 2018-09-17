@@ -6,7 +6,7 @@ This guest machine implements the target platforms:
 
 References:
   - QEMU wiki page:
-    http://wiki.qemu.org/Documentation/Platforms/RISCV
+    https://wiki.qemu.org/Documentation/Platforms/RISCV
   - Debian and Fedora recipes:
     https://wiki.debian.org/RISC-V
     https://fedoraproject.org/wiki/Architectures/RISC-V

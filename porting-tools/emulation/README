@@ -62,7 +62,7 @@ The CPUs that I cannot emulate this way are
 
 Other emulators than QEMU exist; see the article
   - "Virtual machines" by Nelson Beebe
-    http://www.math.utah.edu/~beebe/vm.html
+    https://www.math.utah.edu/~beebe/vm.html
 but they don't have the ease of installation and configuration that QEMU has.
 
 Installing the QEMU target machines involves the following steps:

@@ -14,7 +14,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // An assembly language file for the i386/i486/i586/i686/786 CPUs:
 // On Unix, it is preprocessed and then assembled. NB: This file requires

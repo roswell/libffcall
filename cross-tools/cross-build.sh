@@ -45,7 +45,7 @@ MAKE=make
 # gnulib-tool generates, since we don't want "sed --posix" to leak
 # into makefiles. And do it only for sed versions 4.2 or newer,
 # because "sed --posix" is buggy in GNU sed 4.1.5, see
-# <http://lists.gnu.org/archive/html/bug-gnulib/2009-02/msg00225.html>.
+# <https://lists.gnu.org/archive/html/bug-gnulib/2009-02/msg00225.html>.
 if (alias) > /dev/null 2>&1 \
    && echo | sed --posix -e d >/dev/null 2>&1 \
    && case `sed --version | sed -e 's/^[^0-9]*//' -e 1q` in \
@@ -180,7 +180,7 @@ func_version ()
   echo "\
 cross-build.sh (GNU $package)
 Copyright (C) 2017-2018 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 "

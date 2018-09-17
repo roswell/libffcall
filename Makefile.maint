@@ -92,14 +92,14 @@ gnulib-m4/gnulib-cache.m4 :
 
 .PHONY : gnulib-imported-files
 gnulib-imported-files : force
-# Get up-to-date versions of files imported from http://git.savannah.gnu.org/gitweb/?p=automake.git;a=tree;f=lib via gnulib.
+# Get up-to-date versions of files imported from https://git.savannah.gnu.org/gitweb/?p=automake.git;a=tree;f=lib via gnulib.
 	if test -n "$$GNULIB_TOOL"; then \
 	  for file in ar-lib compile install-sh; do \
 	    $$GNULIB_TOOL --copy-file build-aux/$$file || exit $$?; \
 	    chmod a+x build-aux/$$file || exit $$?; \
 	  done; \
 	fi
-# Get up-to-date versions of files imported from http://git.savannah.gnu.org/gitweb/?p=config.git;a=tree via gnulib.
+# Get up-to-date versions of files imported from https://git.savannah.gnu.org/gitweb/?p=config.git;a=tree via gnulib.
 	if test -n "$$GNULIB_TOOL"; then \
 	  for file in config.guess config.sub; do \
 	    $$GNULIB_TOOL --copy-file build-aux/$$file || exit $$?; \

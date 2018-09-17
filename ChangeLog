@@ -3927,7 +3927,7 @@
 	- by Gerard Milmeister in https://sourceforge.net/p/clisp/bugs/356/,
 	- by Pradeep Kumar in https://sourceforge.net/p/clisp/bugs/415/,
 	- by Don Cohen in
-	  http://lists.gnu.org/archive/html/libffcall/2016-12/msg00002.html,
+	  https://lists.gnu.org/archive/html/libffcall/2016-12/msg00002.html,
 	- by Nelson Beebe.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): New macro.
 	* m4/general.m4 (FFCALL_COMMON_TRAMPOLINE): Require it.
@@ -4459,7 +4459,7 @@
 2016-12-29  Bruno Haible  <bruno@clisp.org>
 
 	Fix collision between different copies of __structcpy.
-	Reported in http://savannah.gnu.org/bugs/?23474 .
+	Reported in https://savannah.gnu.org/bugs/?23474 .
 	* avcall/avcall-structcpy.c: New file.
 	* avcall/Makefile.in (avcall-structcpy.lo): Renamed from structcpy.lo.
 	(SOURCE_FILES): Add avcall-structcpy.c.
@@ -5091,7 +5091,7 @@
 	* callback/vacall_r/vacall_r.h.in:
 	support IA64 on Linux (kernel 2.6.16+ and gcc 4.1.0+)
 	https://savannah.gnu.org/bugs/index.php?22130
-	http://sourceforge.net/tracker/index.php?func=detail&aid=1528895&group_id=1355&atid=301355
+	https://sourceforge.net/tracker/index.php?func=detail&aid=1528895&group_id=1355&atid=301355
 
 2008-09-26  Sam Steingold  <sds@gnu.org>
 

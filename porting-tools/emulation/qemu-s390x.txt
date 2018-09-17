@@ -7,7 +7,7 @@ This guest machine implements the target platforms
 
 References:
   - QEMU wiki page:
-    http://wiki.qemu.org/Documentation/Platforms/S390X
+    https://wiki.qemu.org/Documentation/Platforms/S390X
   - Torbjörn Granlund's recipe:
     https://gmplib.org/~tege/qemu.html#s390-debian
 

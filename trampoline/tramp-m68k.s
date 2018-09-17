@@ -13,7 +13,7 @@
 | GNU General Public License for more details.
 |
 | You should have received a copy of the GNU General Public License
-| along with this program.  If not, see <http://www.gnu.org/licenses/>.
+| along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 | Available registers: d0, d1, a0, a1.
 

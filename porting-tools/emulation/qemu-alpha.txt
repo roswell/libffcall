@@ -5,7 +5,7 @@ This guest machine implements the alpha-linux target platform.
 
 References:
   - QEMU wiki page:
-    http://wiki.qemu.org/Documentation/Platforms/Alpha
+    https://wiki.qemu.org/Documentation/Platforms/Alpha
   - Torbjörn Granlund's recipe:
     https://gmplib.org/~tege/qemu.html#alpha-debian
 

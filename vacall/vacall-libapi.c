@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "config.h"
@@ -31,7 +31,7 @@
 /* This is the function pointer vacall(). A function pointer indirection is
    needed because gcc-3.4 generates invalid code when the address of a symbol
    is casted to a function pointer with different return type.
-   (http://gcc.gnu.org/ml/gcc-patches/2003-12/msg01767.html) */
+   (https://gcc.gnu.org/ml/gcc-patches/2003-12/msg01767.html) */
 #ifdef __cplusplus
 extern "C" void vacall_receiver (); /* the return type is variable, not void! */
 #else
