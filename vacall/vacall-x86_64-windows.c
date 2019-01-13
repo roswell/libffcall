@@ -1,4 +1,4 @@
-httpsacall function for x86_64 CPU with the Windows ABI ('gcc -mabi=ms') */
+/* vacall function for x86_64 CPU with the Windows ABI ('gcc -mabi=ms') */
 
 /*
  * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
