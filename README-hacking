@@ -69,9 +69,14 @@ After fetching the sources from the repository:
      make -f Makefile.devel
 
 3. Run
+     ./gitsub.sh pull
      ./autogen.sh
 
 4. Then you can proceed with
      ./configure
    as usual.
+
+Each time you want to update the source, do not only "git pull".  Instead do
+  git pull && ./gitsub.sh pull
+  ./autogen.sh
 
