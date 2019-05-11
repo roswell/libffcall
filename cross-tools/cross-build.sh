@@ -170,7 +170,8 @@ Usage: cross-build.sh CPU ...      Build tools for some CPUs.
        cross-build.sh --help       Show this help text.
        cross-build.sh --version    Show version and authorship information.
 
-Report bugs to <libffcall@gnu.org>."
+Report bugs in the bug tracker at <https://savannah.gnu.org/projects/libffcall>
+or by email to <libffcall@gnu.org>."
 }
 
 # func_version

@@ -101,9 +101,11 @@ git:
 $ git clone git://git.savannah.gnu.org/libffcall.git
 See https://savannah.gnu.org/git/?group=libffcall for more info.
 
-Bug reports to:
+Bug reports:
 
-  https://savannah.gnu.org/bugs/?func=additem&group=libffcall
+Report bugs
+  - in the bug tracker at <https://savannah.gnu.org/projects/libffcall>
+  - or by email to <libffcall@gnu.org>.
 
 Homepage:
 
