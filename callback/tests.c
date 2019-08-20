@@ -2,7 +2,7 @@
 
 /*
  * Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -949,6 +949,122 @@ void X_BcdB_simulator (void* data, va_alist alist)
 #endif
 
 /* gpargs boundary tests */
+void l_l0J_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l0J) { fprintf(out,"wrong data for l_l0J\n"); exit(1); }
+  va_start_long(alist);
+ {J b = va_arg_struct(alist, J);
+  long c = va_arg_long(alist);
+  long r = b.l1 + b.l2 + c;
+  fprintf(out,"long f(J,long):(%ld,%ld,%ld)",b.l1,b.l2,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l1J_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l1J) { fprintf(out,"wrong data for l_l1J\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  J b = va_arg_struct(alist, J);
+  long c = va_arg_long(alist);
+  long r = a1 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(long,J,long):(%ld,%ld,%ld,%ld)",a1,b.l1,b.l2,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l2J_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l2J) { fprintf(out,"wrong data for l_l2J\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  J b = va_arg_struct(alist, J);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(2*long,J,long):(%ld,%ld,%ld,%ld,%ld)",a1,a2,b.l1,b.l2,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l3J_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l3J) { fprintf(out,"wrong data for l_l3J\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  J b = va_arg_struct(alist, J);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(3*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,b.l1,b.l2,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l4J_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l4J) { fprintf(out,"wrong data for l_l4J\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  J b = va_arg_struct(alist, J);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + a4 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(4*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,b.l1,b.l2,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l5J_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l5J) { fprintf(out,"wrong data for l_l5J\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  J b = va_arg_struct(alist, J);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + a4 + a5 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(5*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,b.l1,b.l2,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l6J_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l6J) { fprintf(out,"wrong data for l_l6J\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  long a6 = va_arg_long(alist);
+  J b = va_arg_struct(alist, J);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + a4 + a5 + a6 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(6*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,b.l1,b.l2,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
+void l_l7J_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&l_l7J) { fprintf(out,"wrong data for l_l7J\n"); exit(1); }
+  va_start_long(alist);
+ {long a1 = va_arg_long(alist);
+  long a2 = va_arg_long(alist);
+  long a3 = va_arg_long(alist);
+  long a4 = va_arg_long(alist);
+  long a5 = va_arg_long(alist);
+  long a6 = va_arg_long(alist);
+  long a7 = va_arg_long(alist);
+  J b = va_arg_struct(alist, J);
+  long c = va_arg_long(alist);
+  long r = a1 + a2 + a3 + a4 + a5 + a6 + a7 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(7*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,a7,b.l1,b.l2,c);
+  fflush(out);
+  va_return_long(alist, r);
+}}
 void l_l0K_simulator (void* data, va_alist alist)
 {
   if (data != (void*)&l_l0K) { fprintf(out,"wrong data for l_l0K\n"); exit(1); }
@@ -1923,6 +2039,78 @@ int main (void)
     long long llr;
     float fr;
     double dr;
+
+    lr = l_l0J(J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l0J_simulator,(void*)l_l0J);
+    lr = ((long (*) (J,long)) callback) (J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l1J(l1,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l1J_simulator,(void*)l_l1J);
+    lr = ((long (*) (long,J,long)) callback) (l1,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l2J(l1,l2,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l2J_simulator,(void*)l_l2J);
+    lr = ((long (*) (long,long,J,long)) callback) (l1,l2,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l3J(l1,l2,l3,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l3J_simulator,(void*)l_l3J);
+    lr = ((long (*) (long,long,long,J,long)) callback) (l1,l2,l3,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l4J(l1,l2,l3,l4,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l4J_simulator,(void*)l_l4J);
+    lr = ((long (*) (long,long,long,long,J,long)) callback) (l1,l2,l3,l4,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l5J(l1,l2,l3,l4,l5,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l5J_simulator,(void*)l_l5J);
+    lr = ((long (*) (long,long,long,long,long,J,long)) callback) (l1,l2,l3,l4,l5,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l6J(l1,l2,l3,l4,l5,l6,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l6J_simulator,(void*)l_l6J);
+    lr = ((long (*) (long,long,long,long,long,long,J,long)) callback) (l1,l2,l3,l4,l5,l6,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l7J(l1,l2,l3,l4,l5,l6,l7,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    callback = alloc_callback(&l_l7J_simulator,(void*)l_l7J);
+    lr = ((long (*) (long,long,long,long,long,long,long,J,long)) callback) (l1,l2,l3,l4,l5,l6,l7,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
 
     lr = l_l0K(K1,l9);
     fprintf(out,"->%ld\n",lr);

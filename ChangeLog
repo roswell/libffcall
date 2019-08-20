@@ -1,5 +1,16 @@
 2019-08-19  Bruno Haible  <bruno@clisp.org>
 
+	Add some more general-purpose args boundary tests.
+	* testcases.c (l_l0J, l_l1J, l_l2J, l_l3J, l_l4J, l_l5J, l_l6J, l_l7J):
+	New functions.
+	* avcall/tests.c (gpargs_boundary_tests): Test them.
+	* vacall/tests.c (simulator, main): Likewise.
+	* callback/tests.c (l_l*J_simulator): New functions.
+	(main): Test them.
+	* porting-tools/abis/gpargs*.c: Add a corresponding test here as well.
+
+2019-08-19  Bruno Haible  <bruno@clisp.org>
+
 	riscv64: Fix bug regarding passing of more than 8 arguments.
 	* porting-tools/abis/stack-frame.txt: Correct information about riscv64
 	ABI.

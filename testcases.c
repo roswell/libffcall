@@ -1,6 +1,6 @@
 /*
  * Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -568,6 +568,62 @@ X X_BcdB (B a, char b, double c, B d)
    and partially on the stack. Different ABIs pass between 4 and 8 arguments
    (or none) in general-purpose argument registers. */
 
+long l_l0J (J b, long c)
+{
+  long r = b.l1 + b.l2 + c;
+  fprintf(out,"long f(J,long):(%ld,%ld,%ld)",b.l1,b.l2,c);
+  fflush(out);
+  return r;
+}
+long l_l1J (long a1, J b, long c)
+{
+  long r = a1 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(long,J,long):(%ld,%ld,%ld,%ld)",a1,b.l1,b.l2,c);
+  fflush(out);
+  return r;
+}
+long l_l2J (long a1, long a2, J b, long c)
+{
+  long r = a1 + a2 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(2*long,J,long):(%ld,%ld,%ld,%ld,%ld)",a1,a2,b.l1,b.l2,c);
+  fflush(out);
+  return r;
+}
+long l_l3J (long a1, long a2, long a3, J b, long c)
+{
+  long r = a1 + a2 + a3 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(3*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,b.l1,b.l2,c);
+  fflush(out);
+  return r;
+}
+long l_l4J (long a1, long a2, long a3, long a4, J b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(4*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,b.l1,b.l2,c);
+  fflush(out);
+  return r;
+}
+long l_l5J (long a1, long a2, long a3, long a4, long a5, J b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + a5 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(5*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,b.l1,b.l2,c);
+  fflush(out);
+  return r;
+}
+long l_l6J (long a1, long a2, long a3, long a4, long a5, long a6, J b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + a5 + a6 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(6*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,b.l1,b.l2,c);
+  fflush(out);
+  return r;
+}
+long l_l7J (long a1, long a2, long a3, long a4, long a5, long a6, long a7, J b, long c)
+{
+  long r = a1 + a2 + a3 + a4 + a5 + a6 + a7 + b.l1 + b.l2 + c;
+  fprintf(out,"long f(7*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,a7,b.l1,b.l2,c);
+  fflush(out);
+  return r;
+}
 long l_l0K (K b, long c)
 {
   long r = b.l1 + b.l2 + b.l3 + b.l4 + c;

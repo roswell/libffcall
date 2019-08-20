@@ -1,6 +1,6 @@
 /**
   Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+  Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -1002,6 +1002,122 @@ void
   long long llr;
   float fr;
   double dr;
+
+  lr = l_l0J(J1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l0J,&lr);
+  av_struct(a,J,J1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l1J(l1,J1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l1J,&lr);
+  av_long(a,l1);
+  av_struct(a,J,J1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l2J(l1,l2,J1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l2J,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_struct(a,J,J1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l3J(l1,l2,l3,J1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l3J,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_struct(a,J,J1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l4J(l1,l2,l3,l4,J1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l4J,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_struct(a,J,J1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l5J(l1,l2,l3,l4,l5,J1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l5J,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_struct(a,J,J1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l6J(l1,l2,l3,l4,l5,l6,J1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l6J,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_long(a,l6);
+  av_struct(a,J,J1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+
+  lr = l_l7J(l1,l2,l3,l4,l5,l6,l7,J1,l9);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
+  lr = 0; clear_traces();
+  av_start_long(a,l_l7J,&lr);
+  av_long(a,l1);
+  av_long(a,l2);
+  av_long(a,l3);
+  av_long(a,l4);
+  av_long(a,l5);
+  av_long(a,l6);
+  av_long(a,l7);
+  av_struct(a,J,J1);
+  av_long(a,l9);
+  av_call(a);
+  fprintf(out,"->%ld\n",lr);
+  fflush(out);
 
   lr = l_l0K(K1,l9);
   fprintf(out,"->%ld\n",lr);

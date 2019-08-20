@@ -2,7 +2,7 @@
 
 /*
  * Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -892,6 +892,114 @@ void simulator (va_alist alist)
 #endif
 
   /* gpargs boundary tests */
+  else if (current_function == (void*)&l_l0J)
+    {
+      va_start_long(alist);
+     {J b = va_arg_struct(alist, J);
+      long c = va_arg_long(alist);
+      long r = b.l1 + b.l2 + c;
+      fprintf(out,"long f(J,long):(%ld,%ld,%ld)",b.l1,b.l2,c);
+      fflush(out);
+      va_return_long(alist, r);
+    }}
+  else if (current_function == (void*)&l_l1J)
+    {
+      va_start_long(alist);
+     {long a1 = va_arg_long(alist);
+      J b = va_arg_struct(alist, J);
+      long c = va_arg_long(alist);
+      long r = a1 + b.l1 + b.l2 + c;
+      fprintf(out,"long f(long,J,long):(%ld,%ld,%ld,%ld)",a1,b.l1,b.l2,c);
+      fflush(out);
+      va_return_long(alist, r);
+    }}
+  else if (current_function == (void*)&l_l2J)
+    {
+      va_start_long(alist);
+     {long a1 = va_arg_long(alist);
+      long a2 = va_arg_long(alist);
+      J b = va_arg_struct(alist, J);
+      long c = va_arg_long(alist);
+      long r = a1 + a2 + b.l1 + b.l2 + c;
+      fprintf(out,"long f(2*long,J,long):(%ld,%ld,%ld,%ld,%ld)",a1,a2,b.l1,b.l2,c);
+      fflush(out);
+      va_return_long(alist, r);
+    }}
+  else if (current_function == (void*)&l_l3J)
+    {
+      va_start_long(alist);
+     {long a1 = va_arg_long(alist);
+      long a2 = va_arg_long(alist);
+      long a3 = va_arg_long(alist);
+      J b = va_arg_struct(alist, J);
+      long c = va_arg_long(alist);
+      long r = a1 + a2 + a3 + b.l1 + b.l2 + c;
+      fprintf(out,"long f(3*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,b.l1,b.l2,c);
+      fflush(out);
+      va_return_long(alist, r);
+    }}
+  else if (current_function == (void*)&l_l4J)
+    {
+      va_start_long(alist);
+     {long a1 = va_arg_long(alist);
+      long a2 = va_arg_long(alist);
+      long a3 = va_arg_long(alist);
+      long a4 = va_arg_long(alist);
+      J b = va_arg_struct(alist, J);
+      long c = va_arg_long(alist);
+      long r = a1 + a2 + a3 + a4 + b.l1 + b.l2 + c;
+      fprintf(out,"long f(4*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,b.l1,b.l2,c);
+      fflush(out);
+      va_return_long(alist, r);
+    }}
+  else if (current_function == (void*)&l_l5J)
+    {
+      va_start_long(alist);
+     {long a1 = va_arg_long(alist);
+      long a2 = va_arg_long(alist);
+      long a3 = va_arg_long(alist);
+      long a4 = va_arg_long(alist);
+      long a5 = va_arg_long(alist);
+      J b = va_arg_struct(alist, J);
+      long c = va_arg_long(alist);
+      long r = a1 + a2 + a3 + a4 + a5 + b.l1 + b.l2 + c;
+      fprintf(out,"long f(5*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,b.l1,b.l2,c);
+      fflush(out);
+      va_return_long(alist, r);
+    }}
+  else if (current_function == (void*)&l_l6J)
+    {
+      va_start_long(alist);
+     {long a1 = va_arg_long(alist);
+      long a2 = va_arg_long(alist);
+      long a3 = va_arg_long(alist);
+      long a4 = va_arg_long(alist);
+      long a5 = va_arg_long(alist);
+      long a6 = va_arg_long(alist);
+      J b = va_arg_struct(alist, J);
+      long c = va_arg_long(alist);
+      long r = a1 + a2 + a3 + a4 + a5 + a6 + b.l1 + b.l2 + c;
+      fprintf(out,"long f(6*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,b.l1,b.l2,c);
+      fflush(out);
+      va_return_long(alist, r);
+    }}
+  else if (current_function == (void*)&l_l7J)
+    {
+      va_start_long(alist);
+     {long a1 = va_arg_long(alist);
+      long a2 = va_arg_long(alist);
+      long a3 = va_arg_long(alist);
+      long a4 = va_arg_long(alist);
+      long a5 = va_arg_long(alist);
+      long a6 = va_arg_long(alist);
+      long a7 = va_arg_long(alist);
+      J b = va_arg_struct(alist, J);
+      long c = va_arg_long(alist);
+      long r = a1 + a2 + a3 + a4 + a5 + a6 + a7 + b.l1 + b.l2 + c;
+      fprintf(out,"long f(7*long,J,long):(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld)",a1,a2,a3,a4,a5,a6,a7,b.l1,b.l2,c);
+      fflush(out);
+      va_return_long(alist, r);
+    }}
   else if (current_function == (void*)&l_l0K)
     {
       va_start_long(alist);
@@ -1792,6 +1900,70 @@ int main (void)
     long long llr;
     float fr;
     double dr;
+
+    lr = l_l0J(J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    current_function = (void*) &l_l0J; lr = ((long (*) (J,long)) vacall) (J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l1J(l1,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    current_function = (void*) &l_l1J; lr = ((long (*) (long,J,long)) vacall) (l1,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l2J(l1,l2,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    current_function = (void*) &l_l2J; lr = ((long (*) (long,long,J,long)) vacall) (l1,l2,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l3J(l1,l2,l3,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    current_function = (void*) &l_l3J; lr = ((long (*) (long,long,long,J,long)) vacall) (l1,l2,l3,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l4J(l1,l2,l3,l4,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    current_function = (void*) &l_l4J; lr = ((long (*) (long,long,long,long,J,long)) vacall) (l1,l2,l3,l4,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l5J(l1,l2,l3,l4,l5,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    current_function = (void*) &l_l5J; lr = ((long (*) (long,long,long,long,long,J,long)) vacall) (l1,l2,l3,l4,l5,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l6J(l1,l2,l3,l4,l5,l6,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    current_function = (void*) &l_l6J; lr = ((long (*) (long,long,long,long,long,long,J,long)) vacall) (l1,l2,l3,l4,l5,l6,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+
+    lr = l_l7J(l1,l2,l3,l4,l5,l6,l7,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
+    lr = 0; clear_traces();
+    current_function = (void*) &l_l7J; lr = ((long (*) (long,long,long,long,long,long,long,J,long)) vacall) (l1,l2,l3,l4,l5,l6,l7,J1,l9);
+    fprintf(out,"->%ld\n",lr);
+    fflush(out);
 
     lr = l_l0K(K1,l9);
     fprintf(out,"->%ld\n",lr);
