@@ -1,3 +1,9 @@
+2019-08-19  Bruno Haible  <bruno@clisp.org>
+
+	avcall: Remove unnecessary parentheses.
+	* avcall/avcall-internal.h (av_double, _av_float, _av_double): Remove
+	unnecessary level of parentheses.
+
 2019-05-11  Bruno Haible  <bruno@clisp.org>
 
 	Update bug reporting instructions.

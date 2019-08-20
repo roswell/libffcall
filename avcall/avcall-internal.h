@@ -1,6 +1,6 @@
 /*
  * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -774,16 +774,16 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
        0)))
 
 #define _av_double(LIST,VAL)						\
-  (((LIST).fanum < __AV_FARG_NUM					\
-    ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
-       (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-       (LIST).fanum++,							\
-       0)								\
-    : ((LIST).aptr >= (LIST).eptr					\
-       ? -1 :								\
-       ((*(double*)(LIST).aptr = (double)(VAL)),			\
-        (LIST).aptr++,							\
-        0))))
+  ((LIST).fanum < __AV_FARG_NUM						\
+   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
+      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
+      (LIST).fanum++,							\
+      0)								\
+   : ((LIST).aptr >= (LIST).eptr					\
+      ? -1 :								\
+      ((*(double*)(LIST).aptr = (double)(VAL)),				\
+       (LIST).aptr++,							\
+       0)))
 
 #endif
 
@@ -1017,16 +1017,16 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
        0)))
 
 #define _av_double(LIST,VAL)						\
-  (((LIST).fanum < __AV_FARG_NUM					\
-    ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
-       (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-       (LIST).fanum++,							\
-       0)								\
-    : ((LIST).aptr >= (LIST).eptr					\
-       ? -1 :								\
-       ((*(double*)(LIST).aptr = (double)(VAL)),			\
-        (LIST).aptr++,							\
-        0))))
+  ((LIST).fanum < __AV_FARG_NUM						\
+   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
+      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
+      (LIST).fanum++,							\
+      0)								\
+   : ((LIST).aptr >= (LIST).eptr					\
+      ? -1 :								\
+      ((*(double*)(LIST).aptr = (double)(VAL)),				\
+       (LIST).aptr++,							\
+       0)))
 
 #endif
 
@@ -1041,10 +1041,10 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
       (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
       (LIST).fanum++,							\
       0)								\
-    : ((LIST).ianum < __AV_IARG_NUM					\
-       ? (*(float*)&(LIST).iargs[(LIST).ianum] = (float)(VAL),		\
-          (LIST).ianum++,						\
-          0)								\
+   : ((LIST).ianum < __AV_IARG_NUM					\
+      ? (*(float*)&(LIST).iargs[(LIST).ianum] = (float)(VAL),		\
+         (LIST).ianum++,						\
+         0)								\
       : ((LIST).aptr >= (LIST).eptr					\
          ? -1 :								\
          ((*(float*)(LIST).aptr) = (float)(VAL),			\
@@ -1052,20 +1052,20 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
           0))))
 
 #define _av_double(LIST,VAL)						\
-  (((LIST).fanum < __AV_FARG_NUM					\
-    ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
-       (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-       (LIST).fanum++,							\
-       0)								\
-    : ((LIST).ianum < __AV_IARG_NUM					\
-       ? (*(double*)&(LIST).iargs[(LIST).ianum] = (double)(VAL),	\
-          (LIST).ianum++,						\
-          0)								\
-       : ((LIST).aptr >= (LIST).eptr					\
-          ? -1 :							\
-          ((*(double*)(LIST).aptr = (double)(VAL)),			\
-           (LIST).aptr++,						\
-           0)))))
+  ((LIST).fanum < __AV_FARG_NUM						\
+   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
+      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
+      (LIST).fanum++,							\
+      0)								\
+   : ((LIST).ianum < __AV_IARG_NUM					\
+      ? (*(double*)&(LIST).iargs[(LIST).ianum] = (double)(VAL),		\
+         (LIST).ianum++,						\
+         0)								\
+      : ((LIST).aptr >= (LIST).eptr					\
+         ? -1 :								\
+         ((*(double*)(LIST).aptr = (double)(VAL)),			\
+          (LIST).aptr++,						\
+          0))))
 
 #endif
 
