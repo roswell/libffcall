@@ -5,6 +5,10 @@ New in 2.2:
   - armv6 (Raspberry Pi): Linux.
   - riscv64: Linux with lp64d ABI.
 
+* Fixed a bug regarding passing of more than 8 arguments on the following
+  platforms:
+  - arm64: Linux 64-bit.
+
 New in 2.1:
 
 * Added support for the following platforms:
