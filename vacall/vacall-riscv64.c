@@ -1,7 +1,7 @@
 /* vacall function for RISC-V 64-bit CPU */
 
 /*
- * Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,13 +57,25 @@ register __vaword iret2 __asm__("a1");
 register float  fret __asm__("fa0");
 register double dret __asm__("fa0");
 
+/* The ABI requires that the first 8 general-purpose argument words are
+   being passed in registers, even if these words belong to structs that are
+   at most 2 words large. No room is allocated for these register words on
+   the stack by the caller, but the callee allocates room for them - at the
+   right place in the stack frame, that is, above the retaddr - if and only
+   if they are part of a struct that extends to the stack and the address of
+   this struct is taken. */
+struct gpargsequence {
+  __vaword word8; /* a7 */
+  __vaword firststackword;
+};
+
 #ifdef REENTRANT
 static
 #endif
 void /* the return type is variable, not void! */
 vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
-                 __vaword word5, __vaword word6, __vaword word7, __vaword word8,
-                 __vaword firstword)
+                 __vaword word5, __vaword word6, __vaword word7,
+                 struct gpargsequence gpargs)
 {
   __va_alist list;
   /* Move the arguments passed in registers to temp storage. */
@@ -74,7 +86,7 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   list.iarg[4] = iarg5;
   list.iarg[5] = iarg6;
   list.iarg[6] = iarg7;
-  list.iarg[7] = iarg8;
+  list.iarg[7] = iarg8; /* = gpargs.word8 */
   list.farg[0] = farg1;
   list.farg[1] = farg2;
   list.farg[2] = farg3;
@@ -93,7 +105,7 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   list.darg[7] = darg8;
   /* Prepare the va_alist. */
   list.flags = 0;
-  list.aptr = (long)&firstword;
+  list.aptr = (long)&gpargs + sizeof(__vaword);
   list.raddr = (void*)0;
   list.rtype = __VAvoid;
   list.ianum = 0;

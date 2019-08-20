@@ -46,7 +46,7 @@ ia64          8  r32-r39                Y (split struct)
 x86_64        6  rdi,rsi,rdx,rcx,r8,r9  N
 x86_64-ms     4  rdx,rcx,r8,r9          N
 s390,s390x    5  r2-r6                  N
-riscv64       8  a0-a7                  N
+riscv64       8  a0-a7                  Y (split struct)
 
 If "Is needed?" is N, the easiest solution is that the __va_alist contains
 room (iarg[] or regarg[]) for the values of the general-purpose argument
@@ -80,7 +80,7 @@ ia64          8  r32-r39                ?                             Y (allocat
 x86_64        6  rdi,rsi,rdx,rcx,r8,r9  rbp(opt), retaddr             N
 x86_64-ms     4  rdx,rcx,r8,r9          rbp(opt), retaddr             N
 s390,s390x    5  r2-r6                                                N
-riscv64       8  a0-a7                  retaddr                       N
+riscv64       8  a0-a7                  retaddr                       Y (allocated room through split struct)
 
 The canonical function prologue, epilogue, and call sequence can be determined
 by looking at the compiled code (with "-O0 -fno-omit-frame-pointer -S") of a

@@ -1,5 +1,22 @@
 2019-08-19  Bruno Haible  <bruno@clisp.org>
 
+	riscv64: Fix bug regarding passing of more than 8 arguments.
+	* porting-tools/abis/stack-frame.txt: Correct information about riscv64
+	ABI.
+	* avcall/avcall-alist.h (__av_alist) [__riscv64__]: Remove ianum and
+	iargs.
+	* avcall/avcall-internal.h (__av_start1, __av_start_struct4, __av_long,
+	__av_ulong, __av_ptr, _av_float, _av_double, __av_struct) [__riscv64__]:
+	Change accordingly.
+	* avcall/avcall-riscv64.c (avcall_call): Likewise.
+	* vacall/vacall-internal.h (__va_arg_adjusted): Deal with a split struct
+	that spans the 8th and 9th argument words.
+	* vacall/vacall-riscv64.c (struct gpargsequence): New type.
+	(vacall_receiver): Use it to make sure that room is allocated when a
+	struct is passed that spans the 8th and 9th argument words.
+
+2019-08-19  Bruno Haible  <bruno@clisp.org>
+
 	arm64: Fix bug regarding passing of more than 8 arguments.
 	* vacall/vacall-internal.h (__va_arg_adjusted): Bump (LIST)->ianum when
 	switching from registers to the stack.

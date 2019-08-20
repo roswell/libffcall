@@ -219,6 +219,7 @@ typedef struct vacall_alist
 #define __VA_IARG_NUM 8
   unsigned int   ianum;
   __vaword       iarg[__VA_IARG_NUM];
+  /* Note: iarg[7] == ((__vaword *) (initial aptr))[-1]. */
 #define __VA_FARG_NUM 8
   unsigned int   fanum;
   float          farg[__VA_FARG_NUM];
@@ -631,8 +632,13 @@ typedef struct vacall_alist
    ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
       &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword)] \
      )									\
-   : (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
-  )
+   : (((LIST)->ianum < __VA_IARG_NUM					\
+       ? ((LIST)->aptr -= (__VA_IARG_NUM - (LIST)->ianum) * sizeof(__vaword), \
+          (LIST)->ianum = __VA_IARG_NUM,				\
+          0)								\
+       : 0),								\
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+  )  )
 #endif
 #define __va_arg(LIST,TYPE)  \
   *(TYPE*)__va_arg_adjusted(LIST,sizeof(TYPE),__VA_alignof(TYPE))

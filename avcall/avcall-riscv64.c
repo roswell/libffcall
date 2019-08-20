@@ -1,6 +1,6 @@
 /**
   Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
+  Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -67,32 +67,31 @@ avcall_call(av_alist* list)
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;
-  unsigned int ianum = l->ianum;
   unsigned int fanum = l->fanum;
 
   {
     int i;
-    for (i = 0; i < arglen; i++)	/* push function args onto stack */
-      argframe[i] = l->args[i];
+    for (i = 8; i < arglen; i++)	/* push function args onto stack */
+      argframe[i-8] = l->args[i];
   }
 
   /* Put up to 8 integer args into registers. */
-  if (ianum >= 1) {
-    iarg1 = l->iargs[0];
-    if (ianum >= 2) {
-      iarg2 = l->iargs[1];
-      if (ianum >= 3) {
-        iarg3 = l->iargs[2];
-        if (ianum >= 4) {
-          iarg4 = l->iargs[3];
-          if (ianum >= 5) {
-            iarg5 = l->iargs[4];
-            if (ianum >= 6) {
-              iarg6 = l->iargs[5];
-              if (ianum >= 7) {
-                iarg7 = l->iargs[6];
-                if (ianum >= 8) {
-                  iarg8 = l->iargs[7];
+  if (arglen >= 1) {
+    iarg1 = l->args[0];
+    if (arglen >= 2) {
+      iarg2 = l->args[1];
+      if (arglen >= 3) {
+        iarg3 = l->args[2];
+        if (arglen >= 4) {
+          iarg4 = l->args[3];
+          if (arglen >= 5) {
+            iarg5 = l->args[4];
+            if (arglen >= 6) {
+              iarg6 = l->args[5];
+              if (arglen >= 7) {
+                iarg7 = l->args[6];
+                if (arglen >= 8) {
+                  iarg8 = l->args[7];
                 }
               }
             }
