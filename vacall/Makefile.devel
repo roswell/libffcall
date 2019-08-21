@@ -25,7 +25,7 @@ precompiled : \
   vacall-ia64-macro.S \
   vacall-x86_64-macro.S vacall-x86_64-x32-linux.s vacall-x86_64-windows-macro.S \
   vacall-s390-macro.S vacall-s390x-macro.S \
-  vacall-riscv64-lp64d-macro.S
+  vacall-riscv32-ilp32d-macro.S vacall-riscv64-lp64d-macro.S
 
 
 vacall-i386-linux.s : vacall-i386.c vacall-internal.h vacall.h $(THISFILE)
@@ -253,6 +253,13 @@ vacall-s390x-linux.s : vacall-s390x.c vacall-internal.h vacall.h $(THISFILE)
 
 vacall-s390x-macro.S : vacall-s390x-linux.s ../common/asm-s390.sh ../common/noexecstack.h $(THISFILE)
 	(../common/asm-s390.sh < vacall-s390x-linux.s ; cat ../common/noexecstack.h) > vacall-s390x-macro.S
+
+
+vacall-riscv32-ilp32d-linux.s : vacall-riscv32.c vacall-internal.h vacall.h $(THISFILE)
+	$(CROSS_TOOL) riscv32-linux gcc-7.3.0 $(GCCFLAGS) -D__riscv32__ -S vacall-riscv32.c -o vacall-riscv32-ilp32d-linux.s
+
+vacall-riscv32-ilp32d-macro.S : vacall-riscv32-ilp32d-linux.s ../common/asm-riscv.sh ../common/noexecstack.h $(THISFILE)
+	(../common/asm-riscv.sh < vacall-riscv32-ilp32d-linux.s ; cat ../common/noexecstack.h) > vacall-riscv32-ilp32d-macro.S
 
 
 vacall-riscv64-lp64d-linux.s : vacall-riscv64.c vacall-internal.h vacall.h $(THISFILE)

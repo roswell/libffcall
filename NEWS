@@ -3,6 +3,7 @@ New in 2.2:
 * Added support for the following platforms:
   (Previously, a build on these platforms failed.)
   - armv6 (Raspberry Pi): Linux.
+  - riscv32: Linux with ilp32d ABI.
   - riscv64: Linux with lp64d ABI.
 
 * Fixed a bug regarding passing of more than 8 arguments on the following

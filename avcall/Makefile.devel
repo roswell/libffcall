@@ -25,7 +25,7 @@ precompiled : \
   avcall-ia64-macro.S \
   avcall-x86_64-macro.S avcall-x86_64-x32-linux.s avcall-x86_64-windows-macro.S \
   avcall-s390-macro.S avcall-s390x-macro.S \
-  avcall-riscv64-lp64d-macro.S
+  avcall-riscv32-ilp32d-macro.S avcall-riscv64-lp64d-macro.S
 
 
 avcall-i386-linux.s : avcall-i386.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
@@ -214,6 +214,13 @@ avcall-s390x-linux.s : avcall-s390x.c avcall-internal.h avcall.h avcall-alist.h 
 
 avcall-s390x-macro.S : avcall-s390x-linux.s ../common/asm-s390.sh ../common/noexecstack.h $(THISFILE)
 	(../common/asm-s390.sh < avcall-s390x-linux.s ; cat ../common/noexecstack.h) > avcall-s390x-macro.S
+
+
+avcall-riscv32-ilp32d-linux.s : avcall-riscv32.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
+	$(CROSS_TOOL) riscv32-linux gcc-7.3.0 $(GCCFLAGS) -D__riscv32__ -S avcall-riscv32.c -o avcall-riscv32-ilp32d-linux.s
+
+avcall-riscv32-ilp32d-macro.S : avcall-riscv32-ilp32d-linux.s ../common/asm-riscv.sh ../common/noexecstack.h $(THISFILE)
+	(../common/asm-riscv.sh < avcall-riscv32-ilp32d-linux.s ; cat ../common/noexecstack.h) > avcall-riscv32-ilp32d-macro.S
 
 
 avcall-riscv64-lp64d-linux.s : avcall-riscv64.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)

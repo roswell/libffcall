@@ -75,7 +75,7 @@ typedef struct
   /* is odd (because on MSVC, alignof(double) = 8, normally = 4).            */
   __avword		filler1;
 #endif
-#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__s390__) && !defined(__s390x__))
+#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__s390__) && !defined(__s390x__)) || defined(__riscv32__)
   /* temporary storage, used to split doubles into two words */
   union {
     double	_double;
@@ -197,7 +197,7 @@ typedef struct
   float			fargs[__AV_FARG_NUM];
   double		dargs[__AV_FARG_NUM];
 #endif
-#if defined(__riscv64__)
+#if defined(__riscv32__) || defined(__riscv64__)
 #define __AV_FARG_NUM 8
   /* store the floating-point arguments in an extra array */
   unsigned int		fanum;		/* number of fargs[] words that are occupied so far */

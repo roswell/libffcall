@@ -47,5 +47,6 @@ Supported CPUs:  (Put the GNU config.guess values here.)
                 x86_64-unknown-openbsd6.0 (gcc)
      s390       s390x-ibm-linux (gcc -m31)
      s390x      s390x-ibm-linux (gcc)
+     riscv32    riscv32-unknown-linux (gcc -mabi=ilp32d)
      riscv64    riscv64-unknown-linux (gcc -mabi=lp64d)
 

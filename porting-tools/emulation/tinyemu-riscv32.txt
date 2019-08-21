@@ -1,0 +1,130 @@
+Building a Linux/riscv32 guest machine using TinyEMU
+====================================================
+
+This guest machine implements the target platforms:
+  - riscv32-linux
+
+References:
+  - TinyEMU home page and documentation:
+    https://bellard.org/tinyemu/
+    https://bellard.org/tinyemu/readme.txt
+  - Modified buildroot for RISC-V:
+    https://bellard.org/tinyemu/buildroot.html
+  - Buildroot documentation:
+    https://buildroot.org/downloads/manual/manual.html
+  - Instructions for using TinyEMU for RISC-V 64:
+    https://fedoraproject.org/wiki/Architectures/RISC-V/Installing#Boot_under_TinyEMU_.28RISCVEMU.29
+
+Installation instructions
+-------------------------
+
+1) Download and compile TinyEMU:
+   - Download https://bellard.org/tinyemu/tinyemu-2018-09-23.tar.gz
+   - Unpack it.
+   - Build it:
+     $ make
+   - Install the 'temu' program in your PATH.
+
+2) Download the boot loader, the Linux kernel, and use it to verify that TinyEMU
+   works:
+   - Download https://bellard.org/tinyemu/diskimage-linux-riscv-2018-09-23.tar.gz
+   - Unpack it.
+   - Run
+     $ temu -rw root-riscv32.cfg
+   - To terminate it, enter
+     # sync
+     Ctrl-a x
+
+3) Build a bootable root file system with the basic packages (glibc, coreutils,
+   gcc, etc. - but no g++):
+   - Download https://bellard.org/tinyemu/buildroot-riscv-2018-10-20.tar.gz
+     This is a modified version of buildroot <https://buildroot.org/> that
+     fits well with the Linux kernel binary from step 2.
+   - Unpack it.
+   - $ cd buildroot-riscv-2018-10-20
+   - Configure it:
+     (a) You can use my configuration:
+         Copy the buildroot-riscv-2018-10-20-riscv32.config (next to this file)
+         to .config.
+     (b) Or you can do the configuration yourself:
+         $ cp configs/riscv32_defconfig .config
+         $ make menuconfig
+         Build options > Number of jobs: 1
+         Build options > Build packages with debugging symbols: yes
+         System configuration > System hostname: riscv32
+         System configuration > Init system: SystemV
+         System configuration > Install timezone info: yes
+         Target packages > Busybox: yes
+         Target packages > Compressors and decompressors: bzip2, gzip, unzip, xz-utils, zip
+         Target packages > Debugging, profiling, benchmark: lsof, strace
+         Target packages > Development tools: binutils (with binaries), gcc_target2, diffutils, findutils, gawk, gettext, grep, make, patch, sed
+         Target packages > Hardware handling > devmem2
+         Target packages > Interpreter languages and scripting: perl
+         Target packages > Libraries > Crypto: gnutls, libgcrypt
+         Target packages > Libraries > JSON, XML: expat
+         Target packages > Libraries > Other: mpc, mpfr
+         Target packages > Libraries > Text and terminal handling: libunistring, ncurses (wide char), readline
+         Target packages > Networking applications: dhcp (client), ifupdown, openssh, wget
+         Target packages > Shell and utilities: bash, file, time
+         Target packages > System tools: acl, bootutils, coreutils, procps-ng, psmisc, tar
+         Target packages > Text editors and viewers: less, vim
+         Save.
+         Exit.
+     (c) You may make additional modifications of the configuration by doing
+         $ make menuconfig
+   - Built it:
+     $ make
+   - $ cd ..
+
+4) Create TinyEMU VM configuration:
+   $ cp buildroot-riscv-2018-10-20/output/images/rootfs.ext2 my-riscv32.ext2
+   $ cp diskimage-linux-riscv-2018-09-23/root-riscv32.cfg my-riscv32.cfg
+   Edit it: Update file names to bbl32.bin and kernel-riscv32.bin
+   Edit it: Change drive0 file name to my-riscv32.ext2
+
+Booting the disk
+----------------
+
+Verify that it boots:
+- Run
+  $ temu -rw my-riscv32.cfg
+- Log in as root (no password).
+- To terminate it, enter
+  # sync
+  Ctrl-a x
+
+Post-installation instructions
+------------------------------
+
+* Add a mount that allows you to share a directory between the host and the
+  guest:
+  - Create a directory my-riscv32.share somewhere in the host file system.
+  - In my-riscv32.cfg add:
+      /* Also access to the my-riscv32.share directory.
+         Use "mount -t 9p /dev/share /mnt" to access it. */
+      fs0: { tag: "/dev/share", file: "/.../my-riscv32.share" },
+  - In the /etc/fstab in the VM, add a line:
+    /dev/share      /share          9p      defaults        0       0
+  - In the VM, do
+    # rmdir /home
+    # mkdir /share/home
+    # ln -s share/home /home
+
+* After each boot, you need to set the date again:
+  # TZ=Europe/Berlin date MMddhhmmYYYY
+
+* Add a user account, e.g. 'bruno':
+  In /etc/passwd add a line:
+    bruno:x:1000:1000:Bruno Haible:/home/bruno:/bin/bash
+  mkdir /home/bruno
+  passwd bruno
+
+Script that runs the guest VM
+-----------------------------
+
+#!/bin/sh
+cd $HOME/vms/tinyemu
+exec temu -rw my-riscv32.cfg
+
+Usage notes
+-----------

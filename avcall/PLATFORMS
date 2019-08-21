@@ -74,5 +74,6 @@ Supported CPUs:  (Put the GNU config.guess values here.)
               x86_64-unknown-openbsd6.0 (gcc)        AMD64         OpenBSD 6
    s390       s390x-ibm-linux (gcc -m31)             emulated      Linux
    s390x      s390x-ibm-linux (gcc)                  emulated      Linux
-   riscv64    riscv64-unknown-linux (gcc -mabi=lp64d)emulated      Linux
+   riscv32    riscv32-unknown-linux (gcc -mabi=ilp32d)  emulated   Linux
+   riscv64    riscv64-unknown-linux (gcc -mabi=lp64d)   emulated   Linux
 

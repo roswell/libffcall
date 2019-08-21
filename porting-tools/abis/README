@@ -163,8 +163,7 @@ follows.
 
  9.1) Copy the changes to vacall/vacall.h to callback/vacall_r/vacall_r.h.
 
- 9.2) In callback/vacall_r/Makefile.maint, variable COPIED_FILES, add
-      vacall-<ABI>.c. Then run "make -f Makefile.maint".
+ 9.2) Run "make -f Makefile.maint".
 
  9.3) Test the callback/vacall_r package ("make && make check").
 

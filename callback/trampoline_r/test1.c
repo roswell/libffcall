@@ -1,7 +1,7 @@
 /* Trampoline test */
 
 /*
- * Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ register void* env __asm__("r10");
 #if defined(__s390__) || defined(__s390x__)
 register void* env __asm__("r0");
 #endif
-#ifdef __riscv64__
+#if defined(__riscv32__) || defined(__riscv64__)
 register void* env __asm__("t2");
 #endif
 

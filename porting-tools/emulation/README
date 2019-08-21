@@ -55,6 +55,9 @@ CPUs:
   - s390x
   - riscv64
 
+Similarly, with TinyEMU I can build an emulated GNU/Linux environment for
+  - riscv32
+
 The CPUs that I cannot emulate this way are
   - m68k (but see qemu-m68k.txt)
   - hppa (but see qemu-hppa.txt)

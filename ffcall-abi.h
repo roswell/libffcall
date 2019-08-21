@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2018 Bruno Haible <bruno@clisp.org>
+ * Copyright 2017-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -235,6 +235,12 @@
 #ifndef __s390x__
 #if defined(__s390x__) /* GCC, clang */
 #define __s390x__ 1
+#endif
+#endif
+
+#ifndef __riscv32__
+#if defined(__riscv) && __riscv_xlen == 32 && !defined(__LP64__) /* GCC */
+#define __riscv32__ 1
 #endif
 #endif
 

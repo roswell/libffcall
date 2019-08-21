@@ -1,5 +1,5 @@
 dnl AUTOCONF configuration for LIBFFCALL
-dnl Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
+dnl Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
 dnl Copyright 2003-2010 Sam Steingold <sds@gnu.org>
 dnl
 dnl This program is free software: you can redistribute it and/or modify
@@ -137,7 +137,7 @@ if test ${HOST_CPU_C_ABI} = powerpc; then
 fi
 AC_SUBST([CPU_OBJECTS])
 case "${HOST_CPU_C_ABI}" in
-  mips* | riscv64*)
+  mips* | riscv*)
     AC_CHECK_HEADERS([sys/cachectl.h])
     ;;
 esac

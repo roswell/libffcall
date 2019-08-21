@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #include <windows.h>
 #endif
 #endif
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__riscv64__)
+#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__riscv32__) || defined(__riscv64__)
 #ifdef HAVE_SYS_CACHECTL_H /* IRIX, Linux */
 #include <sys/cachectl.h>
 #else
@@ -341,6 +341,10 @@ static int open_noinherit (const char *filename, int flags, int mode)
 #if defined(__s390x__)
 #define TRAMP_LENGTH 64
 #define TRAMP_ALIGN 8
+#endif
+#if defined(__riscv32__)
+#define TRAMP_LENGTH 36
+#define TRAMP_ALIGN 4
 #endif
 #if defined(__riscv64__)
 #define TRAMP_LENGTH 48
@@ -1475,6 +1479,42 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #define tramp_data(function)  \
   (*(unsigned long *) (function +40))
 #endif
+#ifdef __riscv32__
+  /* function:
+   *    auipc t3,0			00000E17
+   *    lw t0,24(t3)			018E2283
+   *    lw t1,28(t3)			01CE2303
+   *    lw t2,32(t3)			020E2383
+   *    sw t0,(t1)			00532023
+   *    jr t2				00038067
+   * data:     .word <data>
+   * variable: .word <variable>
+   * address:  .word <address>
+   */
+  *(int *)   (function + 0) = 0x00000E17;
+  *(int *)   (function + 4) = 0x018E2283;
+  *(int *)   (function + 8) = 0x01CE2303;
+  *(int *)   (function +12) = 0x020E2383;
+  *(int *)   (function +16) = 0x00532023;
+  *(int *)   (function +20) = 0x00038067;
+  *(int *)   (function +24) = (unsigned int) data;
+  *(int *)   (function +28) = (unsigned int) variable;
+  *(int *)   (function +32) = (unsigned int) address;
+#define TRAMP_CODE_LENGTH  24
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0x00000E17 && \
+  *(unsigned int *) (function + 4) == 0x018E2283 && \
+  *(unsigned int *) (function + 8) == 0x01CE2303 && \
+  *(unsigned int *) (function +12) == 0x020E2383 && \
+  *(unsigned int *) (function +16) == 0x00532023 && \
+  *(unsigned int *) (function +20) == 0x00038067
+#define tramp_address(function)  \
+  (*(unsigned int *) (function +32))
+#define tramp_variable(function)  \
+  (*(unsigned int *) (function +28))
+#define tramp_data(function)  \
+  (*(unsigned int *) (function +24))
+#endif
 #ifdef __riscv64__
   /* function:
    *    auipc t3,0			00000E17
@@ -1627,7 +1667,7 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #if defined(__powerpc__) || defined(__powerpc64__)
   __TR_clear_cache(function_x);
 #endif
-#if defined(__riscv64__)
+#if defined(__riscv32__) || defined(__riscv64__)
 #if defined(__linux__)
   /* Use the libc function. */
   __riscv_flush_icache((void*)function_x,(void*)(function_x+TRAMP_CODE_LENGTH),0);

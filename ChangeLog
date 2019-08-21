@@ -1,3 +1,78 @@
+2019-08-20  Bruno Haible  <bruno@clisp.org>
+
+	riscv32: Add support for riscv32-ilp32d ABI.
+	* cross-tools/cross.conf: Add configuration for riscv32 cross tools.
+	* porting-tools/emulation/buildroot-riscv-2018-10-20-riscv32.config: New
+	file.
+	* porting-tools/emulation/tinyemu-riscv32.txt: New file.
+	* porting-tools/emulation/README: Refer to it.
+	* porting-tools/abis/README: Tweaks.
+	* porting-tools/abis/call-used-registers.txt: Add info about riscv32.
+	* porting-tools/abis/reg-struct-return.txt: Likewise.
+	* porting-tools/abis/stack-frame.txt: Likewise.
+	* porting-tools/execstack/voidfunc.c: Add command for riscv32.
+	* porting-tools/execstack/voidfunc-riscv32.o: New generated file.
+	* porting-tools/execstack/README: Add info about riscv32.
+	* ffcall-abi.h: Add support for riscv32-lp64.
+	* configure.ac: Check for <sys/cachectl.h> also on riscv32.
+	* avcall/avcall.h (__AV_STRUCT_RETURN): Add code for __riscv32__.
+	* avcall/avcall-alist.h (__av_alist): Likewise.
+	* avcall/avcall-internal.h: Add code for __riscv32__, especially
+	__av_start1, __av_reg_struct_return, __av_start_struct4, __av_word,
+	__av_longlong, __av_ulonglong, __av_arg_longlong, _av_float, _av_double,
+	__av_struct.
+	* avcall/avcall-riscv32.c: New file.
+	* avcall/Makefile.devel (avcall-riscv32-ilp32d-linux.s,
+	avcall-riscv32-ilp32d-macro.S): New targets.
+	* avcall/Makefile.in (avcall-riscv32-ilp32d.lo,
+	avcall-riscv32-ilp32d.s): New targets.
+	(clean): Remove avcall-riscv32-ilp32d.s.
+	(SOURCE_FILES): Add avcall-riscv32.c, avcall-riscv32-ilp32d-linux.s,
+	avcall-riscv32-ilp32d-macro.S.
+	* vacall/vacall.h (__VA_STRUCT_RETURN): Add code for __riscv32__.
+	* vacall/vacall-internal.h: Add code for __riscv32__, especially
+	__va_alist, __va_reg_struct_return, __va_start_struct2,
+	__va_arg_leftadjusted, __va_arg_adjusted, _va_arg_longlong,
+	_va_arg_ulonglong, __va_arg_longlong, __va_align_double, _va_arg_float,
+	_va_arg_double, __va_arg_struct.
+	* vacall/vacall-riscv32.c: New file.
+	* vacall/Makefile.devel (vacall-riscv32-ilp32d-linux.s,
+	vacall-riscv32-ilp32d-macro.S): New targets.
+	* vacall/Makefile.in (vacall-riscv32-ilp32d.@OBJEXT@,
+	vacall-riscv32-ilp32d.s): New targets.
+	(clean): Remove vacall-riscv32-ilp32d.s.
+	(SOURCE_FILES): Add vacall-riscv32.c, vacall-riscv32-ilp32d-linux.s,
+	vacall-riscv32-ilp32d-macro.S.
+	* callback/vacall_r/vacall_r.h (__VA_STRUCT_RETURN): Add code for
+	__riscv32__.
+	* callback/vacall_r/Makefile.devel (vacall-riscv32-ilp32d-linux.s,
+	vacall-riscv32-ilp32d-macro.S): New targets.
+	* callback/vacall_r/Makefile.in (vacall-riscv32-ilp32d.lo,
+	vacall-riscv32-ilp32d.s): New targets.
+	(clean): Remove vacall-riscv32-ilp32d.s.
+	(SOURCE_FILES): Add vacall-riscv32-ilp32d-linux.s,
+	vacall-riscv32-ilp32d-macro.S.
+	* trampoline/Makefile.devel (proto-riscv32.s, tramp-riscv32.o): New
+	targets.
+	* trampoline/proto-riscv32.s: New generated file.
+	* trampoline/tramp-riscv32.old.s: New file.
+	* trampoline/tramp-riscv32.old.o: New generated file.
+	* trampoline/tramp-riscv32.s: New file.
+	* trampoline/tramp-riscv32.o: New generated file.
+	* trampoline/trampoline.c: Implement for __riscv32__.
+	* callback/trampoline_r/Makefile.devel (proto-riscv32.s,
+	tramp-riscv32.o): New targets.
+	* callback/trampoline_r/proto.c: Add code for __riscv32__.
+	* callback/trampoline_r/proto-riscv32.s: New generated file.
+	* callback/trampoline_r/tramp-riscv32.old.s: New file.
+	* callback/trampoline_r/tramp-riscv32.old.o: New generated file.
+	* callback/trampoline_r/tramp-riscv32.s: New file.
+	* callback/trampoline_r/tramp-riscv32.o: New generated file.
+	* callback/trampoline_r/trampoline.c: Implement for __riscv32__.
+	* callback/trampoline_r/test1.c: Add support for __riscv32__.
+	* PLATFORMS, */PLATFORMS: List the 32-bit RISC-V ABI.
+	* NEWS: Mention the new port.
+
 2019-08-19  Bruno Haible  <bruno@clisp.org>
 
 	Add some more general-purpose args boundary tests.

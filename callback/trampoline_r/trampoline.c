@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2018 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -200,7 +200,7 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #include <windows.h>
 #endif
 #endif
-#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__riscv64__)
+#if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__riscv32__) || defined(__riscv64__)
 #ifdef HAVE_SYS_CACHECTL_H /* IRIX, Linux */
 #include <sys/cachectl.h>
 #else
@@ -337,6 +337,10 @@ static int open_noinherit (const char *filename, int flags, int mode)
 #ifdef __s390x__
 #define TRAMP_LENGTH 32
 #define TRAMP_ALIGN 8
+#endif
+#ifdef __riscv32__
+#define TRAMP_LENGTH 24
+#define TRAMP_ALIGN 4
 #endif
 #ifdef __riscv64__
 #define TRAMP_LENGTH 32
@@ -1239,6 +1243,32 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   (*(unsigned long *) (function +16))
 #endif
+#ifdef __riscv32__
+  /* function:
+   *    auipc t0,0			00000297
+   *    lw t1,20(t0)			0142A303
+   *    lw t2,16(t0)			0102A383
+   *    jr t1				00030067
+   * data:    .quad <data>
+   * address: .quad <address>
+   */
+  *(int *)   (function + 0) = 0x00000297;
+  *(int *)   (function + 4) = 0x0142A303;
+  *(int *)   (function + 8) = 0x0102A383;
+  *(int *)   (function +12) = 0x00030067;
+  *(int *)   (function +16) = (unsigned int) data;
+  *(int *)   (function +24) = (unsigned int) address;
+#define TRAMP_CODE_LENGTH  16
+#define is_tramp(function)  \
+  *(unsigned int *) (function + 0) == 0x00000297 && \
+  *(unsigned int *) (function + 4) == 0x0142A303 && \
+  *(unsigned int *) (function + 8) == 0x0102A383 && \
+  *(unsigned int *) (function +12) == 0x00030067
+#define tramp_address(function)  \
+  (*(unsigned int *) (function +20))
+#define tramp_data(function)  \
+  (*(unsigned int *) (function +16))
+#endif
 #ifdef __riscv64__
   /* function:
    *    auipc t0,0			00000297
@@ -1388,7 +1418,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #if defined(__powerpc__) || defined(__powerpc64__)
   __TR_clear_cache(function_x);
 #endif
-#if defined(__riscv64__)
+#if defined(__riscv32__) || defined(__riscv64__)
 #if defined(__linux__)
   /* Use the libc function. */
   __riscv_flush_icache((void*)function_x,(void*)(function_x+TRAMP_CODE_LENGTH),0);
