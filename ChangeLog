@@ -1,3 +1,33 @@
+2019-08-21  Bruno Haible  <bruno@clisp.org>
+
+	mips: Change the default 32-bit ABI from fp32 to fpxx.
+	Reported by Sébastien Villemot <sebastien@debian.org>
+	at <https://savannah.gnu.org/bugs/?52510>.
+	He also found the trick with -fno-tree-dce.
+	* porting-tools/abis/mips-abis.txt: New file.
+	* cross-tools/cross.conf (mips): Use gcc 5 and binutils 2.27.
+	* common/asm-mips.sh: Eliminate .nan and .module lines.
+	* avcall/avcall-mipsn32.c (avcall_call): Use return value of
+	__builtin_alloca instead of accessing the stack pointer directly.
+	* avcall/Makefile.devel (avcall-mipseb-linux.s, avcall-mipsel-linux.s):
+	Build with gcc 5, with option -mfpxx (for compatibility with current
+	Debian), with -march=mips2 (required by -mfpxx), and -fno-tree-dce
+	(required to avoid that gcc eliminates the __builtin_alloca call).
+	(avcall-mipsn32eb-linux.s, avcall-mipsn32el-linux.s,
+	avcall-mips64eb-linux.s, avcall-mips64el-linux.s): Build with gcc 5.
+	* vacall/Makefile.devel (vacall-mipseb-linux.s, vacall-mipsel-linux.s):
+	Build with gcc 5, with option -mfpxx (for compatibility with current
+	Debian) and -march=mips2 (required by -mfpxx).
+	(vacall-mipsn32eb-linux.s, vacall-mipsn32el-linux.s,
+	vacall-mips64eb-linux.s, vacall-mips64el-linux.s): Build with gcc 5.
+	* callback/vacall_r/Makefile.devel (vacall-mipseb-linux.s,
+	vacall-mipsel-linux.s): Build with gcc 5, with option -mfpxx (for
+	compatibility with current Debian) and -march=mips2 (required by
+	-mfpxx).
+	(vacall-mipsn32eb-linux.s, vacall-mipsn32el-linux.s,
+	vacall-mips64eb-linux.s, vacall-mips64el-linux.s): Build with gcc 5.
+	* NEWS: Mention the change.
+
 2019-08-20  Bruno Haible  <bruno@clisp.org>
 
 	riscv32: Add support for riscv32-ilp32d ABI.

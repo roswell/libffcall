@@ -6,6 +6,10 @@ New in 2.2:
   - riscv32: Linux with ilp32d ABI.
   - riscv64: Linux with lp64d ABI.
 
+* The build for the mips 32-bit ABI is now compatible with toolchains for
+  the 'fpxx' ABI variant.  The downside is that the mips1 architecture is
+  no longer supported.
+
 * Fixed a bug regarding passing of more than 8 arguments on the following
   platforms:
   - arm64: Linux 64-bit.

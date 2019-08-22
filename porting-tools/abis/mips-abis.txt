@@ -1,0 +1,104 @@
+MIPS ABIs
+=========
+
+Main ABI
+--------
+
+For the MIPS CPU, there are three ABIs:
+  - 32 (a.k.a. o32): 32-bit registers and 32-bit pointers.
+  - n32: 64-bit registers but only 32-bit pointers (like x86_64-x32).
+  - 64: 64-bit registers and 64-bit pointers.
+
+Endianness
+----------
+
+Each of them in little-endian (mipsel) and big-endian (mipseb) variations.
+
+Floating-point ABI
+------------------
+
+Additionally, in the 32-bit (o32) ABI, there are three floating-point ABIs [2],
+supported by GCC 5 or newer:
+  - fp32: All floating-point registers are assumed to have 32 bits.
+  - fpxx: The floating-point registers may have 32 bits or 64 bits; unknown
+    until runtime.
+  - fp64: All floating-point registers are assumed to have 64 bits.
+
+The GCC options for each are:
+  - '-mfp32'
+  - '-mfpxx'
+  - '-mfp64'
+GCC versions < 5 supported only the fp32 ABI, and had no option for it.
+
+How to recognize the ABI of the compiler through compiler predefines:
+  * With GCC only:
+    Test the value of the predefined macro __mips_fpr. It is, respectively:
+    - __mips_fpr = 32
+    - __mips_fpr = 0
+    - __mips_fpr = 64
+  * With clang: unknown (cf. https://reviews.llvm.org/D50557).
+  * With IRIX compiler: fp32.
+
+How to recognize the ABI through tools:
+  1. Compile a source file to object file.
+  2. Look at
+       $ readelf -A object.o | head -n 3
+     Here are the possible results:
+     - fp32:
+       Attribute Section: gnu
+       File Attributes
+         Tag_GNU_MIPS_ABI_FP: Hard float (double precision)
+     - fpxx:
+       Attribute Section: gnu
+       File Attributes
+         Tag_GNU_MIPS_ABI_FP: Hard float (32-bit CPU, Any FPU)
+     - fp64:
+       Attribute Section: gnu
+       File Attributes
+         Tag_GNU_MIPS_ABI_FP: Hard float (32-bit CPU, 64-bit FPU)
+
+This has no effect on argument passing conventions:
+  - The first two floating-point arguments are in $f12 and $f14,
+    respectively.
+  - A floating-point result is returned in $f0.
+
+What does mean at the assembly-language level?
+
+  * If the FPU has 32-bit registers, instructions that operate on a
+    64-bit 'double' in $fi actually operates on two registers
+    $fi and $f(i+1), and i must be even.
+    For example, the instruction 'ldc1 $f0' that loads $f0 from memory
+    is equivalent to a 'lwc1 $f0' and 'lwc1 $f1'; which of the two
+    adds a memory offset of 4 depends on the endianness.
+  * If the FPU has 64-bit registers, instructions that operate on a
+    64-bit 'double' in $fi operates on $fi only.
+  * In the fpxx ABI, both kinds of CPUs are supported.
+    The assembler adds a constraint: "Error: float register should be even"
+    if a $fi with an odd i occurs in some instruction (even with a 32-bit
+    instruction).
+
+  - fp32:
+    Registers available for storing a 32-bit 'float': all ($f0 $f1 ... $f30).
+    Registers available for storing a 64-bit 'double': even ($f0 $f2 ... $f30).
+    GCC versions < 5 use only 32-bit move instructions (lwc1 etc.), whereas
+    GCC version 5 uses 64-bit move instructions (ldc1 etc.) when dealing with
+    'double's.
+
+  - fpxx:
+    Registers available for storing a 32-bit 'float': even ($f0 $f2 ... $f30).
+    Registers available for storing a 64-bit 'double': even ($f0 $f2 ... $f30).
+
+  - fp64:
+    Registers available for storing a 32-bit 'float': all ($f0 $f1 ... $f30).
+    Registers available for storing a 64-bit 'double': all ($f0 $f1 ... $f30).
+
+What does this mean for libffcall?
+
+  - It is not necessary to provide precompiled code for all three ABIs; it is
+    sufficient to use the fpxx ABI, because it can be linked into an fp32
+    executable as well as into an fp64 executable.
+
+References:
+[1] https://en.wikipedia.org/wiki/MIPS_architecture
+[2] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=825342
+[3] https://gcc.gnu.org/onlinedocs/gcc-5.5.0/gcc/MIPS-Options.html
