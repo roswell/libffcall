@@ -510,7 +510,7 @@ func_build_gcc ()
   # Build the prerequisites.
   configure_options=
   case "$version" in
-    4.[3-9]* | [5-7]*)
+    4.[3-9]* | [5-9]*)
       func_build_gmp 4.3.2 || func_exit 1
       configure_options="$configure_options --with-gmp=$HOST_CROSS_DIR/${target}-tools"
       func_build_mpfr 2.4.2 || func_exit 1
@@ -518,7 +518,7 @@ func_build_gcc ()
       ;;
   esac
   case "$version" in
-    4.[5-9]* | [5-7]*)
+    4.[5-9]* | [5-9]*)
       func_build_mpc 0.8.1 || func_exit 1
       configure_options="$configure_options --with-mpc=$HOST_CROSS_DIR/${target}-tools"
       ;;
@@ -534,7 +534,7 @@ func_build_gcc ()
       func_build_isl 0.14 || func_exit 1
       configure_options="$configure_options --with-isl=$HOST_CROSS_DIR/${target}-tools"
       ;;
-    7*)
+    [7-9]*)
       func_build_isl 0.16.1 || func_exit 1
       configure_options="$configure_options --with-isl=$HOST_CROSS_DIR/${target}-tools"
       ;;

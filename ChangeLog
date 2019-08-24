@@ -1,3 +1,8 @@
+2019-08-24  Bruno Haible  <bruno@clisp.org>
+
+	cross-tools: Add support for GCC 8 and 9.
+	* cross-tools/cross-build.sh (func_build_gcc): Handle also GCC 8 and 9.
+
 2019-08-21  Bruno Haible  <bruno@clisp.org>
 
 	mips: Change the default 32-bit ABI from fp32 to fpxx.
