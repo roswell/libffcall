@@ -1,5 +1,15 @@
 2019-08-24  Bruno Haible  <bruno@clisp.org>
 
+	Add another integer test.
+	* testcases.c (i17, ..., i32): New variables.
+	(i_i32): New function.
+	* avcall/tests.c (int_tests): Test it.
+	* vacall/tests.c (simulator, main): Likewise.
+	* callback/tests.c (i_i32_simulator): New function.
+	(main): Test it.
+
+2019-08-24  Bruno Haible  <bruno@clisp.org>
+
 	cross-tools: Add support for GCC 8 and 9.
 	* cross-tools/cross-build.sh (func_build_gcc): Handle also GCC 8 and 9.
 

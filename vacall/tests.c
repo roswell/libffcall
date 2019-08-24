@@ -142,6 +142,47 @@ void simulator (va_alist alist)
       fflush(out);
       va_return_int(alist, r);
     }}
+  else if (current_function == (void*)&i_i32)
+    {
+      va_start_int(alist);
+     {int a = va_arg_int(alist);
+      int b = va_arg_int(alist);
+      int c = va_arg_int(alist);
+      int d = va_arg_int(alist);
+      int e = va_arg_int(alist);
+      int f = va_arg_int(alist);
+      int g = va_arg_int(alist);
+      int h = va_arg_int(alist);
+      int i = va_arg_int(alist);
+      int j = va_arg_int(alist);
+      int k = va_arg_int(alist);
+      int l = va_arg_int(alist);
+      int m = va_arg_int(alist);
+      int n = va_arg_int(alist);
+      int o = va_arg_int(alist);
+      int p = va_arg_int(alist);
+      int aa = va_arg_int(alist);
+      int ab = va_arg_int(alist);
+      int ac = va_arg_int(alist);
+      int ad = va_arg_int(alist);
+      int ae = va_arg_int(alist);
+      int af = va_arg_int(alist);
+      int ag = va_arg_int(alist);
+      int ah = va_arg_int(alist);
+      int ai = va_arg_int(alist);
+      int aj = va_arg_int(alist);
+      int ak = va_arg_int(alist);
+      int al = va_arg_int(alist);
+      int am = va_arg_int(alist);
+      int an = va_arg_int(alist);
+      int ao = va_arg_int(alist);
+      int ap = va_arg_int(alist);
+      int r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+aa+ab+ac+ad+ae+af+ag+ah+ai+aj+ak+al+am+an+ao+ap;
+      fprintf(out,"int f(32*int):(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
+              a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,aa,ab,ac,ad,ae,af,ag,ah,ai,aj,ak,al,am,an,ao,ap);
+      fflush(out);
+      va_return_int(alist, r);
+    }}
 
   /* float tests */
   else if (current_function == (void*)&f_f)
@@ -1418,6 +1459,14 @@ int main (void)
     fflush(out);
     ir = 0; clear_traces();
     current_function = (void*) &i_i16; ir = ((int (*) (int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int)) vacall) (i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16);
+    fprintf(out,"->%d\n",ir);
+    fflush(out);
+
+    ir = i_i32(i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19,i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32);
+    fprintf(out,"->%d\n",ir);
+    fflush(out);
+    ir = 0; clear_traces();
+    current_function = (void*) &i_i32; ir = ((int (*) (int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int)) vacall) (i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19,i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32);
     fprintf(out,"->%d\n",ir);
     fflush(out);
   }

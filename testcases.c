@@ -66,8 +66,10 @@ typedef struct { char c[33],c1; } X;
 
 char c1='a', c2=127, c3=(char)128, c4=(char)255, c5=-1;
 short s1=32767, s2=(short)32768, s3=3, s4=4, s5=5, s6=6, s7=7, s8=8, s9=9;
-int i1=1, i2=2, i3=3, i4=4, i5=5, i6=6, i7=7, i8=8, i9=9,
-    i10=11, i11=12, i12=13, i13=14, i14=15, i15=16, i16=17;
+int i1=1, i2=2, i3=3, i4=4, i5=5, i6=6, i7=7, i8=8, i9=9, i10=11, i11=12,
+    i12=13, i13=14, i14=15, i15=16, i16=17, i17=18, i18=19, i19=20, i20=21,
+    i21=22, i22=23, i23=24, i24=25, i25=26, i26=27, i27=28, i28=29, i29=30,
+    i30=31, i31=32, i32=33;
 long l1=1, l2=2, l3=3, l4=4, l5=5, l6=6, l7=7, l8=8, l9=9;
 long long ll1 = 3875056143130689530LL;
 float f1=0.1, f2=0.2, f3=0.3, f4=0.4, f5=0.5, f6=0.6, f7=0.7, f8=0.8, f9=0.9,
@@ -154,6 +156,17 @@ int i_i16 (int a, int b, int c, int d, int e, int f, int g, int h,
   int r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p;
   fprintf(out,"int f(16*int):(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
           a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p);
+  fflush(out);
+  return r;
+}
+int i_i32 (int a, int b, int c, int d, int e, int f, int g, int h,
+           int i, int j, int k, int l, int m, int n, int o, int p,
+           int aa, int ab, int ac, int ad, int ae, int af, int ag, int ah,
+           int ai, int aj, int ak, int al, int am, int an, int ao, int ap)
+{
+  int r=a+b+c+d+e+f+g+h+i+j+k+l+m+n+o+p+aa+ab+ac+ad+ae+af+ag+ah+ai+aj+ak+al+am+an+ao+ap;
+  fprintf(out,"int f(32*int):(%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d)",
+          a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,aa,ab,ac,ad,ae,af,ag,ah,ai,aj,ak,al,am,an,ao,ap);
   fflush(out);
   return r;
 }

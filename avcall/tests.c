@@ -176,6 +176,47 @@ void
   fprintf(out,"->%d\n",ir);
   fflush(out);
 
+  ir = i_i32(i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19,i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32);
+  fprintf(out,"->%d\n",ir);
+  fflush(out);
+  ir = 0; clear_traces();
+  av_start_int(a,i_i32,&ir);
+  av_int(a,i1);
+  av_int(a,i2);
+  av_int(a,i3);
+  av_int(a,i4);
+  av_int(a,i5);
+  av_int(a,i6);
+  av_int(a,i7);
+  av_int(a,i8);
+  av_int(a,i9);
+  av_int(a,i10);
+  av_int(a,i11);
+  av_int(a,i12);
+  av_int(a,i13);
+  av_int(a,i14);
+  av_int(a,i15);
+  av_int(a,i16);
+  av_int(a,i17);
+  av_int(a,i18);
+  av_int(a,i19);
+  av_int(a,i20);
+  av_int(a,i21);
+  av_int(a,i22);
+  av_int(a,i23);
+  av_int(a,i24);
+  av_int(a,i25);
+  av_int(a,i26);
+  av_int(a,i27);
+  av_int(a,i28);
+  av_int(a,i29);
+  av_int(a,i30);
+  av_int(a,i31);
+  av_int(a,i32);
+  av_call(a);
+  fprintf(out,"->%d\n",ir);
+  fflush(out);
+
   return;
 }
 void
