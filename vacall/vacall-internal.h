@@ -752,17 +752,18 @@ typedef struct vacall_alist
   )
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
-/* The first 4 float registers and the first 2 double registers are stored
- * elsewhere.
+/* The floats and doubles among the first 4 argument words are passed
+ * - in both general registers and floating-point registers when the
+ *   function call is a variadic one, which means:
+ *     - for HP cc: the call is done through a function pointer or
+ *       directly to a function declared with a varargs prototype,
+ *     - for GCC: the function's type is a varargs function.
+ * - in floating-point registers otherwise.
+ * Since the code in tests.c uses a function pointer, casted to a non-varargs
+ * function type, we are in the first case for HP cc, but in the second case
+ * for GCC.
+ * Therefore we need to take the values from the floating-point registers.
  */
-#if 1 /* gcc-2.5.2 passes these args in general registers! A bug, I think. */
-#define _va_arg_float(LIST)  \
-  (*(float*)((LIST)->aptr -= sizeof(float)))
-#define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   *(double*)((LIST)->aptr -= sizeof(double))				\
-  )
-#else /* this would be correct if the args were passed in float registers. */
 #define _va_arg_float(LIST)  \
   (((LIST)->aptr -= sizeof(float)) >= (LIST)->memargptr			\
    ? /* The first 4 float args are stored separately. */		\
@@ -776,7 +777,6 @@ typedef struct vacall_alist
       *(double*)((LIST)->aptr + (LIST)->darg_offset)			\
     : *(double*)((LIST)->aptr)						\
   ))
-#endif
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
 /* The first 0,1,2 registers are stored elsewhere if they are floating-point

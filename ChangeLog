@@ -1,3 +1,21 @@
+2019-08-23  Bruno Haible  <bruno@clisp.org>
+
+	hppa: Implement correct floating-point argument passing on Linux.
+	* avcall/avcall.h (__AV_ALIST_WORDS): Add comment.
+	* avcall/avcall-alist.h (__av_alist) [__hppa__]: Add farg_mask,
+	darg_mask.
+	* avcall/avcall-internal.h (__av_start1) [__hppa__]: Initialize
+	farg_mask, darg_mask.
+	(_av_float) [__hppa__]: Set a bit in farg_mask.
+	(_av_double) [__hppa__]: Set a bit in darg_mask.
+	* avcall/avcall-hppa.c (avcall_call): Copy floating-point arguments
+	among the first 4 words to %fr4L...%fr7L and %fr5,%fr7.
+	* vacall/vacall-internal.h (_va_arg_float, _va_arg_double) [__hppa__]:
+	For floating-point arguments among the first 4 words, use the value
+	passed in floating-point registers.
+	* PLATFORMS, */PLATFORMS: List the Linux/hppa ABI.
+	* NEWS: Mention the new port.
+
 2019-08-24  Bruno Haible  <bruno@clisp.org>
 
 	hppa: Fix stack corruption in avcall.

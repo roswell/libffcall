@@ -85,6 +85,8 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
 #define __av_start1(LIST,LIST_ARGS_END)					\
+   (LIST).farg_mask = 0,						\
+   (LIST).darg_mask = 0,						\
    (LIST).aptr = (LIST).args_end = (LIST_ARGS_END),
 #endif
 #if defined(__hppa64__)
@@ -687,15 +689,21 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
   ((LIST).aptr <= (LIST).eptr						\
    ? -1 :								\
    ((LIST).aptr--,							\
+    ((LIST).aptr >= &(LIST).args_end[-4]				\
+     ? ((LIST).farg_mask |= (unsigned int)1 << ((LIST).args_end - (LIST).aptr - 1), 0) \
+     : 0),								\
     *(float*)(LIST).aptr = (float)(VAL),				\
     0))
 
 #define _av_double(LIST,VAL)						\
   ((__avword*)(((uintptr_t)(LIST).aptr-sizeof(double)) & -(intptr_t)sizeof(double)) < (LIST).eptr \
-    ? -1 :								\
-    ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr-sizeof(double)) & -(intptr_t)sizeof(double)), \
-     *(double*)(LIST).aptr = (double)(VAL),				\
-     0))
+   ? -1 :								\
+   ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr-sizeof(double)) & -(intptr_t)sizeof(double)), \
+    ((LIST).aptr >= &(LIST).args_end[-4]				\
+     ? ((LIST).darg_mask |= (unsigned int)1 << ((LIST).args_end - (LIST).aptr - 1), 0) \
+     : 0),								\
+    *(double*)(LIST).aptr = (double)(VAL),				\
+    0))
 
 #endif
 

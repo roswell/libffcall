@@ -113,7 +113,7 @@ typedef struct
   int			anum;		/* redundant: (LIST).aptr = &(LIST).args[(LIST).anum] */
   unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a float or double value */
 #endif
-#if defined(__hppa64__)
+#if defined(__hppa__) || defined(__hppa64__)
   unsigned int		farg_mask;	/* bitmask of those entries in args[] which have a float value */
   unsigned int		darg_mask;	/* bitmask of those entries in args[] which have a double value */
 #endif

@@ -32,6 +32,7 @@
 
 
 /* Max # words in argument-list and temporary structure storage.
+ * If defined(__hppa__) && !defined(__hppa64__), this must be a multiple of 2.
  */
 #ifndef __AV_ALIST_WORDS
 #define __AV_ALIST_WORDS  256

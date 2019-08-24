@@ -54,6 +54,13 @@
 /* This declaration tells gcc not to modify %r28. */
 register __avword*	sret	__asm__("%r28");  /* structure return pointer */
 
+register float  farg1	__asm__("%fr4"); /* fr4L */
+register float  farg2	__asm__("%fr5"); /* fr5L */
+register float  farg3	__asm__("%fr6"); /* fr6L */
+register float  farg4	__asm__("%fr7"); /* fr7L */
+register double darg1	__asm__("%fr5");
+register double darg2	__asm__("%fr7");
+
 int
 avcall_call(av_alist* list)
 {
@@ -79,7 +86,37 @@ avcall_call(av_alist* list)
   if (l->rtype == __AVstruct)		/* push struct return address */
     sret = l->raddr;
 
-				/* call function, pass 4 args in registers */
+  /* The floats and doubles among the first 4 argument words are passed
+   * - in both general registers and floating-point registers when the
+   *   function call is a variadic one, which means:
+   *     - for HP cc: the call is done through a function pointer or
+   *       directly to a function declared with a varargs prototype,
+   *     - for GCC: the function's type is a varargs function.
+   * - in floating-point registers otherwise.
+   * To cover both cases, put these floating-point values into the general
+   * registers and the floating-point registers always.
+   */
+  if (arglen >= 1) {
+    if (l->farg_mask & (1 << 0))
+      /*__asm__ __volatile__ ("fldw %0,%%fr4R" : : "m" (*(float*)&l->args_end[-1]));*/ farg1 = *((float*)&l->args_end[-1]);
+    if (arglen >= 2) {
+      if (l->farg_mask & (1 << 1))
+        /* __asm__ __volatile__ ("fldw %0,%%fr5R" : : "m" (*(float*)&l->args_end[-2])); */ farg2 = *((float*)&l->args_end[-2]);
+      if (l->darg_mask & (1 << 1))
+        darg1 = *((double*)&l->args_end[-2]);
+      if (arglen >= 3) {
+        if (l->farg_mask & (1 << 2))
+          /* __asm__ __volatile__ ("fldw %0,%%fr6R" : : "m" (*(float*)&l->args_end[-3])); */ farg3 = *((float*)&l->args_end[-3]);
+        if (arglen >= 4) {
+          if (l->farg_mask & (1 << 3))
+            /* __asm__ __volatile__ ("fldw %0,%%fr7R" : : "m" (*(float*)&l->args_end[-4])); */ farg4 = *((float*)&l->args_end[-4]);
+          if (l->darg_mask & (1 << 3))
+            darg2 = *((double*)&l->args_end[-4]);
+        }
+      }
+    }
+  }
+  /* call function, pass first 4 arg words in general registers */
   iret = (*l->func)(l->args_end[-1], l->args_end[-2],
 		    l->args_end[-3], l->args_end[-4]);
 
