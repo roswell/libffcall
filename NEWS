@@ -14,6 +14,9 @@ New in 2.2:
   platforms:
   - arm64: Linux 64-bit.
 
+* Fixed a stack corruption bug on the following platforms:
+  - hppa: HP-UX 32-bit.
+
 New in 2.1:
 
 * Added support for the following platforms:

@@ -1,5 +1,12 @@
 2019-08-24  Bruno Haible  <bruno@clisp.org>
 
+	hppa: Fix stack corruption in avcall.
+	* avcall/avcall-hppa.c (avcall_call): Don't let GCC optimize away the
+	stack-allocated array.
+	* NEWS: Mention the fix.
+
+2019-08-24  Bruno Haible  <bruno@clisp.org>
+
 	Add another integer test.
 	* testcases.c (i17, ..., i32): New variables.
 	(i_i32): New function.
