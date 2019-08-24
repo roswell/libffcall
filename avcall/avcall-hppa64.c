@@ -129,49 +129,49 @@ avcall_call(av_alist* list)
       if (l->darg_mask & (1 << 1))
         darg2 = ((double*)&l->args[2])[-1];
       else if (l->farg_mask & (1 << 1))
-        __asm__ __volatile__ ("fldw %0,%%fr5R" : : "m" (((float*)&l->args[2])[-1])); /* farg2 = ((float*)&l->args[2])[-1];; */
+        __asm__ __volatile__ ("fldw %0,%%fr5R" : : "m" (((float*)&l->args[2])[-1])); /* farg2 = ((float*)&l->args[2])[-1]; */
       else
         arg2 = l->args[1];
       if (arglen >= 3) {
         if (l->darg_mask & (1 << 2))
           darg3 = ((double*)&l->args[3])[-1];
         else if (l->farg_mask & (1 << 2))
-          __asm__ __volatile__ ("fldw %0,%%fr6R" : : "m" (((float*)&l->args[3])[-1])); /* farg3 = ((float*)&l->args[3])[-1];; */
+          __asm__ __volatile__ ("fldw %0,%%fr6R" : : "m" (((float*)&l->args[3])[-1])); /* farg3 = ((float*)&l->args[3])[-1]; */
         else
           arg3 = l->args[2];
         if (arglen >= 4) {
           if (l->darg_mask & (1 << 3))
             darg4 = ((double*)&l->args[4])[-1];
           else if (l->farg_mask & (1 << 3))
-            __asm__ __volatile__ ("fldw %0,%%fr7R" : : "m" (((float*)&l->args[4])[-1])); /* farg4 = ((float*)&l->args[4])[-1];; */
+            __asm__ __volatile__ ("fldw %0,%%fr7R" : : "m" (((float*)&l->args[4])[-1])); /* farg4 = ((float*)&l->args[4])[-1]; */
           else
             arg4 = l->args[3];
           if (arglen >= 5) {
             if (l->darg_mask & (1 << 4))
               darg5 = ((double*)&l->args[5])[-1];
             else if (l->farg_mask & (1 << 4))
-              __asm__ __volatile__ ("fldw %0,%%fr8R" : : "m" (((float*)&l->args[5])[-1])); /* farg5 = ((float*)&l->args[5])[-1];; */
+              __asm__ __volatile__ ("fldw %0,%%fr8R" : : "m" (((float*)&l->args[5])[-1])); /* farg5 = ((float*)&l->args[5])[-1]; */
             else
               arg5 = l->args[4];
             if (arglen >= 6) {
               if (l->darg_mask & (1 << 5))
                 darg6 = ((double*)&l->args[6])[-1];
               else if (l->farg_mask & (1 << 5))
-                __asm__ __volatile__ ("fldw %0,%%fr9R" : : "m" (((float*)&l->args[6])[-1])); /* farg6 = ((float*)&l->args[6])[-1];; */
+                __asm__ __volatile__ ("fldw %0,%%fr9R" : : "m" (((float*)&l->args[6])[-1])); /* farg6 = ((float*)&l->args[6])[-1]; */
               else
                 arg6 = l->args[5];
               if (arglen >= 7) {
                 if (l->darg_mask & (1 << 6))
                   darg7 = ((double*)&l->args[7])[-1];
                 else if (l->farg_mask & (1 << 6))
-                  __asm__ __volatile__ ("fldw %0,%%fr10R" : : "m" (((float*)&l->args[7])[-1])); /* farg7 = ((float*)&l->args[7])[-1];; */
+                  __asm__ __volatile__ ("fldw %0,%%fr10R" : : "m" (((float*)&l->args[7])[-1])); /* farg7 = ((float*)&l->args[7])[-1]; */
                 else
                   arg7 = l->args[6];
                 if (arglen >= 8) {
                   if (l->darg_mask & (1 << 7))
                     darg8 = ((double*)&l->args[8])[-1];
                   else if (l->farg_mask & (1 << 7))
-                    __asm__ __volatile__ ("fldw %0,%%fr11R" : : "m" (((float*)&l->args[8])[-1])); /* farg8 = ((float*)&l->args[8])[-1];; */
+                    __asm__ __volatile__ ("fldw %0,%%fr11R" : : "m" (((float*)&l->args[8])[-1])); /* farg8 = ((float*)&l->args[8])[-1]; */
                   else
                     arg8 = l->args[7];
                   if (arglen > 8) {
