@@ -795,3 +795,13 @@ double d_l7d (long a1, long a2, long a3, long a4, long a5, long a6, long a7, dou
   fflush(out);
   return r;
 }
+
+/* This function is used to verify that structs larger than 2 words are really
+   passed by value, not accidentally by reference.  */
+void v_clobber_K (K k)
+{
+  k.l1 += 1;
+  k.l2 += 10;
+  k.l3 += 100;
+  k.l4 += 1000;
+}

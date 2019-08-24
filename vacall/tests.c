@@ -1365,6 +1365,18 @@ void simulator (va_alist alist)
       va_return_double(alist, r);
     }}
 
+  /* by-value tests */
+  else if (current_function == (void*)&v_clobber_K)
+    {
+      va_start_void(alist);
+     {K k = va_arg_struct(alist, K);
+      k.l1 += 1;
+      k.l2 += 10;
+      k.l3 += 100;
+      k.l4 += 1000;
+      va_return_void(alist);
+    }}
+
   else
     {
       fprintf(out,"simulate: unknown function\n");
@@ -2180,6 +2192,23 @@ int main (void)
     dr = 0.0; clear_traces();
     current_function = (void*) &d_l7d; dr = ((double (*) (long,long,long,long,long,long,long,double,long)) vacall) (l1,l2,l3,l4,l5,l6,l7,ll1,l9);
     fprintf(out,"->%g\n",dr);
+    fflush(out);
+  }
+
+  /* by-value tests */
+  /* This test is trivial, since a copy of k is allocated on the callee's stack.
+     But anyway... */
+  { K k;
+
+    k.l1 = l1;
+    k.l2 = l2;
+    k.l3 = l3;
+    k.l4 = l4;
+    fprintf(out,"by_value:%ld,%ld,%ld,%ld\n",k.l1,k.l2,k.l3,k.l4);
+    fflush(out);
+    clear_traces();
+    current_function = (void*) &v_clobber_K; ((void (*) (K)) vacall) (k);
+    fprintf(out,"by_value:%ld,%ld,%ld,%ld\n",k.l1,k.l2,k.l3,k.l4);
     fflush(out);
   }
 

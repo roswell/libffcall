@@ -1451,6 +1451,17 @@ void d_l7d_simulator (void* data, va_alist alist)
   fflush(out);
   va_return_double(alist, r);
 }}
+void v_clobber_K_simulator (void* data, va_alist alist)
+{
+  if (data != (void*)&v_clobber_K) { fprintf(out,"wrong data for v_clobber_K\n"); exit(1); }
+  va_start_void(alist);
+ {K k = va_arg_struct(alist, K);
+  k.l1 += 1;
+  k.l2 += 10;
+  k.l3 += 100;
+  k.l4 += 1000;
+  va_return_void(alist);
+}}
 
 
 /*
@@ -2350,6 +2361,24 @@ int main (void)
     callback = alloc_callback(&d_l7d_simulator,(void*)d_l7d);
     dr = ((double (*) (long,long,long,long,long,long,long,double,long)) callback) (l1,l2,l3,l4,l5,l6,l7,ll1,l9);
     fprintf(out,"->%g\n",dr);
+    fflush(out);
+  }
+
+  /* by-value tests */
+  /* This test is trivial, since a copy of k is allocated on the callee's stack.
+     But anyway... */
+  { K k;
+
+    k.l1 = l1;
+    k.l2 = l2;
+    k.l3 = l3;
+    k.l4 = l4;
+    fprintf(out,"by_value:%ld,%ld,%ld,%ld\n",k.l1,k.l2,k.l3,k.l4);
+    fflush(out);
+    clear_traces();
+    callback = alloc_callback(&v_clobber_K_simulator,(void*)v_clobber_K);
+    ((void (*) (K)) callback) (k);
+    fprintf(out,"by_value:%ld,%ld,%ld,%ld\n",k.l1,k.l2,k.l3,k.l4);
     fflush(out);
   }
 

@@ -1,4 +1,14 @@
-2019-08-23  Bruno Haible  <bruno@clisp.org>
+2019-08-24  Bruno Haible  <bruno@clisp.org>
+
+	Add a test for by-value passing.
+	* testcases.c (v_clobber_K): New function.
+	* avcall/tests.c (by_value_tests): New function.
+	(main): Invoke it.
+	* vacall/tests.c (simulator, main): Test v_clobber_K.
+	* callback/tests.c (v_clobber_K_simulator): New function.
+	(main): Test it.
+
+2019-08-24  Bruno Haible  <bruno@clisp.org>
 
 	hppa: Implement correct floating-point argument passing on Linux.
 	* avcall/avcall.h (__AV_ALIST_WORDS): Add comment.

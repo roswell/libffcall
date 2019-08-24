@@ -1507,6 +1507,28 @@ void
   return;
 }
 
+/* Verify that structs larger than 2 words are really
+   passed by value, not accidentally by reference.  */
+void
+  by_value_tests (void)
+{
+  av_alist a;
+  K k;
+
+  k.l1 = l1;
+  k.l2 = l2;
+  k.l3 = l3;
+  k.l4 = l4;
+  fprintf(out,"by_value:%ld,%ld,%ld,%ld\n",k.l1,k.l2,k.l3,k.l4);
+  fflush(out);
+  clear_traces();
+  av_start_void(a,v_clobber_K);
+  av_struct(a,K,k);
+  av_call(a);
+  fprintf(out,"by_value:%ld,%ld,%ld,%ld\n",k.l1,k.l2,k.l3,k.l4);
+  fflush(out);
+}
+
 int
   main (void)
 {
@@ -1520,6 +1542,7 @@ int
   small_structure_return_tests();
   structure_tests();
   gpargs_boundary_tests();
+  by_value_tests();
 
   exit(0);
 }
