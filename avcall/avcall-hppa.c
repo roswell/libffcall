@@ -37,6 +37,11 @@
   Note that other calling conventions would be in effect if we would call
   an explicitly named function!
 
+  Structures larger than 8 bytes are passed as a pointer.  In GCC >= 8
+  it's a caller-made copy; with GCC < 8 and with HP cc it's the callee's
+  responsibility to make a copy of the structure, so that side effects
+  made by the callee are not visible to the caller.
+
   To return a structure of more than 8 bytes, the called function copies
   the return value to the address supplied in register "%r28". Smaller
   structures are returned in the registers %r28 (first 4 bytes) and %r29

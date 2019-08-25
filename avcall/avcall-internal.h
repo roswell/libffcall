@@ -1345,7 +1345,8 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
 /* Structures <= 8 bytes are passed as embedded copies on the arg stack.
- * Big structures are passed as pointers to caller-made local copies.
+ * Big structures are passed as pointers (to caller-made local copies
+ * with GCC >= 8, without copy otherwise).
  */
 #define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
   ((TYPE_SIZE) > 8							\
