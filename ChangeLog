@@ -1,5 +1,13 @@
 2019-08-24  Bruno Haible  <bruno@clisp.org>
 
+	Bump shared library version numbers.
+	* Makefile.in (LIBFFCALL_VERSION_INFO): Bump to 0:2:0.
+	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): Bump to 1:2:0.
+	* trampoline/Makefile.in (LIBTRAMPOLINE_VERSION_INFO): Likewise.
+	* callback/Makefile.in (LIBCALLBACK_VERSION_INFO): Likewise.
+
+2019-08-24  Bruno Haible  <bruno@clisp.org>
+
 	hppa: Add comments about structure arguments.
 	* avcall/avcall-hppa.c: Add comment.
 	* avcall/avcall-internal.h (__av_struct): Likewise.
