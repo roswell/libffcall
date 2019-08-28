@@ -1,3 +1,8 @@
+2019-08-28  Helmut Grohne  <helmut@subdivi.de>  (tiny change)
+
+	Fix configure failure during a cross build.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): Fix AC_TRY_RUN invocations.
+
 2019-08-24  Bruno Haible  <bruno@clisp.org>
 
 	Bump shared library version numbers.

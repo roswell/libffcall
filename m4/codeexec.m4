@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2017 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2019 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -177,6 +177,7 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                   }
                  ],
                  [ffcall_cv_malloc_mprotect_can_exec=yes],
+                 [ffcall_cv_malloc_mprotect_can_exec=no],
                  [dnl When cross-compiling, assume SELinux on Linux.
                   dnl If we don't know, assume the worst.
                   case "$host_os" in
@@ -267,6 +268,7 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                       }
                      ],
                      [ffcall_cv_mmap_mprotect_can_exec=yes],
+                     [ffcall_cv_mmap_mprotect_can_exec=no],
                      [dnl When cross-compiling, assume SELinux on Linux.
                       dnl If we don't know, assume the worst.
                       case "$host_os" in
@@ -339,6 +341,7 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                         }
                        ],
                        [ffcall_cv_mmap_shared_can_exec=yes],
+                       [ffcall_cv_mmap_shared_can_exec=no],
                        [dnl When cross-compiling, assume yes, since this is the result
                         dnl on all the platforms where we have tested it.
                         ffcall_cv_mmap_shared_can_exec="guessing yes"
