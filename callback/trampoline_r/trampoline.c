@@ -582,14 +582,14 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   /* function:
    *    lw $2,16($25)			8F 22 00 10
    *    lw $25,20($25)			8F 39 00 14
-   *    j $25				03 20 00 08
+   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
    *    nop				00 00 00 00
    *    .word <data>			<data>
    *    .word <address>			<address>
    */
   *(unsigned int *) (function + 0) = 0x8F220010;
   *(unsigned int *) (function + 4) = 0x8F390014;
-  *(unsigned int *) (function + 8) = 0x03200008;
+  *(unsigned int *) (function + 8) = 0x03200009;
   *(unsigned int *) (function +12) = 0x00000000;
   *(unsigned int *) (function +16) = (unsigned int) data;
   *(unsigned int *) (function +20) = (unsigned int) address;
@@ -597,7 +597,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define is_tramp(function)  \
   *(unsigned int *) (function + 0) == 0x8F220010 && \
   *(unsigned int *) (function + 4) == 0x8F390014 && \
-  *(unsigned int *) (function + 8) == 0x03200008 && \
+  *(unsigned int *) (function + 8) == 0x03200009 && \
   *(unsigned int *) (function +12) == 0x00000000
 #define tramp_address(function)  \
   *(unsigned int *) (function +20)
@@ -618,7 +618,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    *					37 39 hi16(lo32(<address>))
    *					00 19 CC 38
    *					37 39 lo16(lo32(<address>))
-   *    j $25				03 20 00 08
+   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
    *    nop				00 00 00 00
    */
   /* What about big endian / little endian ?? */
@@ -642,7 +642,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(int *)   (function +40) = 0x0019CC38;
   *(short *) (function +44) = 0x3739;
   *(short *) (function +46) = (unsigned long) address & 0xffff;
-  *(int *)   (function +48) = 0x03200008;
+  *(int *)   (function +48) = 0x03200009;
   *(int *)   (function +52) = 0x00000000;
 #define is_tramp(function)  \
   *(unsigned short *) (function + 0) == 0x3C02 && \
@@ -657,7 +657,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned short *) (function +36) == 0x3739 && \
   *(unsigned int *)   (function +40) == 0x0019CC38 && \
   *(unsigned short *) (function +44) == 0x3739 && \
-  *(unsigned int *)   (function +48) == 0x03200008 && \
+  *(unsigned int *)   (function +48) == 0x03200009 && \
   *(unsigned int *)   (function +52) == 0x00000000
 #define hilo(word3,word2,word1,word0)  \
   (((unsigned long) (word3) << 48) | ((unsigned long) (word2) << 32) | \
@@ -677,14 +677,14 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   /* function:
    *    ld $2,16($25)			DF 22 00 10
    *    ld $25,24($25)			DF 39 00 18
-   *    j $25				03 20 00 08
+   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
    *    nop				00 00 00 00
    *    .dword <data>			<data>
    *    .dword <address>		<address>
    */
   *(unsigned int *)  (function + 0) = 0xDF220010;
   *(unsigned int *)  (function + 4) = 0xDF390018;
-  *(unsigned int *)  (function + 8) = 0x03200008;
+  *(unsigned int *)  (function + 8) = 0x03200009;
   *(unsigned int *)  (function +12) = 0x00000000;
   *(unsigned long *) (function +16) = (unsigned long) data;
   *(unsigned long *) (function +24) = (unsigned long) address;
@@ -692,7 +692,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define is_tramp(function)  \
   *(unsigned int *)  (function + 0) == 0xDF220010 && \
   *(unsigned int *)  (function + 4) == 0xDF390018 && \
-  *(unsigned int *)  (function + 8) == 0x03200008 && \
+  *(unsigned int *)  (function + 8) == 0x03200009 && \
   *(unsigned int *)  (function +12) == 0x00000000
 #define tramp_address(function)  \
   *(unsigned long *) (function +24)

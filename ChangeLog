@@ -1,3 +1,18 @@
+2019-08-29  Bruno Haible  <bruno@clisp.org>
+
+	trampoline: Fix "illegal instruction" on mips32r6.
+	Reported by Luyou Peng <lpeng@wavecomp.com>
+	at <https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=925129>.
+	The instruction that, before mips32r6, encoded 'j $25' produces an
+	"illegal instruction" on mips32r6.
+	That instruction had the same effects as 'jal $0,$25'; this one works
+	on mips32r6 and on all other MIPS ISAs.
+	The assemblers and disassemblers were changed to map 'j $25' to
+	'jal $0,$25' and back automatically.
+	* trampoline/trampoline.c (alloc_trampoline): On MIPS, use instruction
+	'jal $0,$25' instead of 'j $25'.
+	* callback/trampoline_r/trampoline.c (alloc_trampoline_r): Likewise.
+
 2019-08-28  Helmut Grohne  <helmut@subdivi.de>  (tiny change)
 
 	Fix configure failure during a cross build.
