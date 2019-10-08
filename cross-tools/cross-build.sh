@@ -311,7 +311,7 @@ func_ensure_tarball ()
     pkg_url="$pkg_urldirname/$pkg_package-$pkg_version.tar.$pkg_suffix"
     mkdir -p "$GNU_RELEASES_DIR" || func_exit 1
     echo "Fetching $pkg_url ..."
-    wget -O "$GNU_RELEASES_DIR/$pkg_package-$pkg_version.tar.$pkg_suffix" "$pkg_url" || func_exit 1
+    wget -nv -O "$GNU_RELEASES_DIR/$pkg_package-$pkg_version.tar.$pkg_suffix" "$pkg_url" || func_exit 1
   fi
 }
 

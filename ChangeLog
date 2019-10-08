@@ -1,3 +1,9 @@
+2019-10-08  Bruno Haible  <bruno@clisp.org>
+
+	cross-tools: Reduce verbosity.
+	* cross-tools/cross-build.sh (func_ensure_tarball): Use wget option
+	'-nv'.
+
 2019-09-01  Bruno Haible  <bruno@clisp.org>
 
 	build: Add support for shallow-cloning of subdirectories.
