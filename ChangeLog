@@ -1,5 +1,11 @@
 2019-10-08  Bruno Haible  <bruno@clisp.org>
 
+	cross-tools: Work around error 500 on www.multiprecision.org.
+	* cross-tools/cross-build.sh (func_build_mpc): Use alternate download
+	location.
+
+2019-10-08  Bruno Haible  <bruno@clisp.org>
+
 	cross-tools: Reduce verbosity.
 	* cross-tools/cross-build.sh (func_ensure_tarball): Use wget option
 	'-nv'.

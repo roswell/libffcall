@@ -410,7 +410,8 @@ func_build_mpfr ()
 func_build_mpc ()
 {
   pkg_version="$1"
-  func_ensure_unpacked_source mpc "$pkg_version" gz "http://www.multiprecision.org/mpc/download" || func_exit 1
+  # was: func_ensure_unpacked_source mpc "$pkg_version" gz "http://www.multiprecision.org/mpc/download" || func_exit 1
+  func_ensure_unpacked_source mpc "$pkg_version" gz "https://gcc.gnu.org/pub/gcc/infrastructure" || func_exit 1
   mkdir -p "$cross_tools_dir/build/build-$target"
   rm -rf "$cross_tools_dir/build/build-$target/mpc-$pkg_version"
   mkdir "$cross_tools_dir/build/build-$target/mpc-$pkg_version"
