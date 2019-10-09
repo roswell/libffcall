@@ -1,3 +1,11 @@
+2019-10-09  Bruno Haible  <bruno@clisp.org>
+
+	cross-tools: Fix compilation error for armhf CPU.
+	* cross-tools/cross.conf (armhf): Use GCC version 6.5.0 instead of
+	6.3.0.
+	* cross-tools/cross-build.sh (func_build_gcc): Expect GCC 6.x tarball
+	in .xz format.
+
 2019-10-08  Bruno Haible  <bruno@clisp.org>
 
 	cross-tools: Work around error 500 on www.multiprecision.org.

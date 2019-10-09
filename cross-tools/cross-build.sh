@@ -543,7 +543,7 @@ func_build_gcc ()
   # Build gcc itself.
   case "$version" in
     3.[0-2]*) pkg_suffix=gz ;;
-    [3-6]*)   pkg_suffix=bz2 ;;
+    [3-5]*)   pkg_suffix=bz2 ;;
     *)        pkg_suffix=xz ;;
   esac
   func_ensure_unpacked_source gcc "$version" "$pkg_suffix" "https://ftp.gnu.org/pub/gnu/gcc/gcc-$version" || func_exit 1
