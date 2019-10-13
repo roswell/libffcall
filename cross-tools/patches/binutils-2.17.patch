@@ -1,6 +1,6 @@
 diff -r -u binutils-2.17.orig/bfd/doc/bfd.texinfo binutils-2.17/bfd/doc/bfd.texinfo
 --- binutils-2.17.orig/bfd/doc/bfd.texinfo	2006-06-12 15:05:03.000000000 +0200
-+++ binutils-2.17/bfd/doc/bfd.texinfo	2019-10-13 14:37:01.021181144 +0200
++++ binutils-2.17/bfd/doc/bfd.texinfo	2019-10-13 18:34:22.459943838 +0200
 @@ -318,7 +318,7 @@
  @printindex cp
  
@@ -19,9 +19,21 @@ diff -r -u binutils-2.17.orig/bfd/doc/bfd.texinfo binutils-2.17/bfd/doc/bfd.texi
  @end tex
  
  @contents
+diff -r -u binutils-2.17.orig/bfd/doc/elf.texi binutils-2.17/bfd/doc/elf.texi
+--- binutils-2.17.orig/bfd/doc/elf.texi	2006-04-16 20:36:40.000000000 +0200
++++ binutils-2.17/bfd/doc/elf.texi	2019-10-13 18:33:50.031670869 +0200
+@@ -8,7 +8,7 @@
+ haven't bothered yet.
+ 
+ @findex bfd_elf_find_section
+-@subsubsection @code{bfd_elf_find_section}
++@subsection @code{bfd_elf_find_section}
+ @strong{Synopsis}
+ @example
+ struct elf_internal_shdr *bfd_elf_find_section (bfd *abfd, char *name);
 diff -r -u binutils-2.17.orig/ld/ld.texinfo binutils-2.17/ld/ld.texinfo
 --- binutils-2.17.orig/ld/ld.texinfo	2006-05-10 15:43:47.000000000 +0200
-+++ binutils-2.17/ld/ld.texinfo	2019-10-13 14:37:16.585300640 +0200
++++ binutils-2.17/ld/ld.texinfo	2019-10-13 18:34:22.463943873 +0200
 @@ -6635,7 +6635,7 @@
  @printindex cp
  
