@@ -1,3 +1,13 @@
+2019-10-13  Bruno Haible  <bruno@clisp.org>
+
+	cross-tools: Fix compilation error of binutils < 2.24 with makeinfo-6.1.
+	This backports the fix from
+	<https://sourceware.org/bugzilla/show_bug.cgi?id=15183>.
+	* cross-tools/patches/binutils-2.12.90.0.7.patch: Escape @ characters
+	inside @tex.
+	* cross-tools/patches/binutils-2.16.1.patch: Likewise.
+	* cross-tools/patches/binutils-2.17.patch: New file.
+
 2019-10-09  Bruno Haible  <bruno@clisp.org>
 
 	cross-tools: Fix compilation error for armhf CPU.

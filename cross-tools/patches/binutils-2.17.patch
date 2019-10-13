@@ -1,0 +1,42 @@
+diff -r -u binutils-2.17.orig/bfd/doc/bfd.texinfo binutils-2.17/bfd/doc/bfd.texinfo
+--- binutils-2.17.orig/bfd/doc/bfd.texinfo	2006-06-12 15:05:03.000000000 +0200
++++ binutils-2.17/bfd/doc/bfd.texinfo	2019-10-13 14:37:01.021181144 +0200
+@@ -318,7 +318,7 @@
+ @printindex cp
+ 
+ @tex
+-% I think something like @colophon should be in texinfo.  In the
++% I think something like @@colophon should be in texinfo.  In the
+ % meantime:
+ \long\def\colophon{\hbox to0pt{}\vfill
+ \centerline{The body of this manual is set in}
+@@ -329,7 +329,7 @@
+ \centerline{{\sl\fontname\tensl\/}}
+ \centerline{are used for emphasis.}\vfill}
+ \page\colophon
+-% Blame: doc@cygnus.com, 28mar91.
++% Blame: doc@@cygnus.com, 28mar91.
+ @end tex
+ 
+ @contents
+diff -r -u binutils-2.17.orig/ld/ld.texinfo binutils-2.17/ld/ld.texinfo
+--- binutils-2.17.orig/ld/ld.texinfo	2006-05-10 15:43:47.000000000 +0200
++++ binutils-2.17/ld/ld.texinfo	2019-10-13 14:37:16.585300640 +0200
+@@ -6635,7 +6635,7 @@
+ @printindex cp
+ 
+ @tex
+-% I think something like @colophon should be in texinfo.  In the
++% I think something like @@colophon should be in texinfo.  In the
+ % meantime:
+ \long\def\colophon{\hbox to0pt{}\vfill
+ \centerline{The body of this manual is set in}
+@@ -6646,7 +6646,7 @@
+ \centerline{{\sl\fontname\tensl\/}}
+ \centerline{are used for emphasis.}\vfill}
+ \page\colophon
+-% Blame: doc@cygnus.com, 28mar91.
++% Blame: doc@@cygnus.com, 28mar91.
+ @end tex
+ 
+ 
