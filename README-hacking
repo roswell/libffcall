@@ -54,6 +54,10 @@ See the comments at the top of cross-tools/cross-build.sh for how to use it.
 When done, copy the generated 'cross' script into your $PATH so that
 Makefile.devel will find it.
 
+Alternatively, if you are running Linux/x86_64, you can use a premade Docker
+image that contains these cross-compilers. The command to fetch and use it is:
+docker run --rm -t -i registry.gitlab.com/gnu-libffcall/ci-buildtools:ubuntu1604
+
 
 Building off the git repository
 ===============================
@@ -79,4 +83,13 @@ After fetching the sources from the repository:
 Each time you want to update the source, do not only "git pull".  Instead do
   git pull && ./gitsub.sh pull
   ./autogen.sh
+
+
+Continuous integration
+======================
+
+The package is built automatically, at regular intervals.  You find the latest
+build results here:
+  https://gitlab.com/gnu-libffcall/ci-distcheck/pipelines
+  https://gitlab.com/gnu-libffcall/ci-distcheck/-/jobs?scope=finished
 
