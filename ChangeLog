@@ -1,5 +1,13 @@
 2019-10-13  Bruno Haible  <bruno@clisp.org>
 
+	build: Update after armv7l-linux-gnueabihf gcc version changed.
+	* avcall/Makefile.devel (avcall-armhf-macro.S): Update.
+	* vacall/Makefile.devel (vacall-armhf-linux.s,
+	vacall-armhf-linux-pic.s): Likewise.
+	* callback/vacall_r/Makefile.devel (vacall-armhf-macro.S): Likewise.
+
+2019-10-13  Bruno Haible  <bruno@clisp.org>
+
 	cross-tools: Fix compilation error of binutils 2.17 with makeinfo-6.x.
 	* cross-tools/patches/binutils-2.17.patch: Fix sectioning in elf.texi.
 
