@@ -33,7 +33,16 @@ diff -r -u binutils-2.17.orig/bfd/doc/elf.texi binutils-2.17/bfd/doc/elf.texi
  struct elf_internal_shdr *bfd_elf_find_section (bfd *abfd, char *name);
 diff -r -u binutils-2.17.orig/ld/ld.texinfo binutils-2.17/ld/ld.texinfo
 --- binutils-2.17.orig/ld/ld.texinfo	2006-05-10 15:43:47.000000000 +0200
-+++ binutils-2.17/ld/ld.texinfo	2019-10-13 18:34:22.463943873 +0200
++++ binutils-2.17/ld/ld.texinfo	2019-10-13 18:55:02.662180504 +0200
+@@ -1653,7 +1653,7 @@
+ 
+ @kindex --version-script=@var{version-scriptfile}
+ @cindex version script, symbol versions
+-@itemx --version-script=@var{version-scriptfile}
++@item --version-script=@var{version-scriptfile}
+ Specify the name of a version script to the linker.  This is typically
+ used when creating shared libraries to specify additional information
+ about the version hierarchy for the library being created.  This option
 @@ -6635,7 +6635,7 @@
  @printindex cp
  
