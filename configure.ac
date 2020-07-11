@@ -1,5 +1,5 @@
 dnl AUTOCONF configuration for LIBFFCALL
-dnl Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
+dnl Copyright 1995-2020 Bruno Haible <bruno@clisp.org>
 dnl Copyright 2003-2010 Sam Steingold <sds@gnu.org>
 dnl
 dnl This program is free software: you can redistribute it and/or modify
@@ -110,8 +110,6 @@ CL_GETPAGESIZE
 CL_MACH_VM
 FFCALL_MMAP
 FFCALL_MPROTECT
-CL_SHM_H
-CL_SHM
 FFCALL_CODEEXEC
 FFCALL_CODEEXEC_PAX
 

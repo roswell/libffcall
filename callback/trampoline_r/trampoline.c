@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2020 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,15 +91,10 @@ extern void (*tramp_r) (); /* trampoline prototype */
       /* Use an mmap'ed page. */
       #define EXECUTABLE_VIA_MMAP
     #else
-      #ifdef HAVE_SHM
-        /* Use an shmat'ed page. */
-        #define EXECUTABLE_VIA_SHM
+      #if defined(_WIN32) && ! defined(__CYGWIN__) /* native Windows */
+        #define EXECUTABLE_VIA_VIRTUALALLOC
       #else
-        #if defined(_WIN32) && ! defined(__CYGWIN__) /* native Windows */
-          #define EXECUTABLE_VIA_VIRTUALALLOC
-        #else
-          ??
-        #endif
+        ??
       #endif
     #endif
   #endif
@@ -162,16 +157,6 @@ extern RETGETPAGESIZETYPE getpagesize (void);
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
-#endif
-
-/* Declare shmget(), shmat(), shmctl(). */
-#ifdef EXECUTABLE_VIA_SHM
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#ifdef HAVE_SYS_SYSMACROS_H
-#include <sys/sysmacros.h>
-#endif
 #endif
 
 /* Declare VirtualAlloc(), GetSystemInfo. */
@@ -490,13 +475,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
       /* Use mmap on /dev/zero. */
       page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
 #endif
-#endif
-#ifdef EXECUTABLE_VIA_SHM
-      int shmid = shmget(IPC_PRIVATE, pagesize, 0700|IPC_CREAT);
-      if (shmid<0)
-        { page = (char*)(-1); }
-      else
-        { page = shmat(shmid, 0, 0); shmctl(shmid, IPC_RMID, 0); }
 #endif
       if (page == (char*)(-1))
         { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }

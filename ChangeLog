@@ -1,3 +1,12 @@
+2020-07-11  Bruno Haible  <bruno@clisp.org>
+
+	trampoline: Remove option to allocate memory through shared memory.
+	* trampoline/trampoline.c: Remove EXECUTABLE_VIA_SHM and its uses.
+	* callback/trampoline_r/trampoline.c: Likewise.
+	* configure.ac: Don't invoke CL_SHM_H, CL_SHM.
+	* m4/shm.m4: Remove file.
+	* Makefile.in (SOURCE_FILES): Remove it.
+
 2019-10-13  Bruno Haible  <bruno@clisp.org>
 
 	build: Update after armv7l-linux-gnueabihf gcc version changed.
