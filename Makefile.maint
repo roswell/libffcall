@@ -79,7 +79,6 @@ GNULIB_MODULES = \
   ansi-c++-opt \
   host-cpu-c-abi \
   lock \
-  longlong \
   nocrash \
   stdint \
   stdnoreturn
