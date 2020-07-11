@@ -1,6 +1,12 @@
 2020-07-11  Bruno Haible  <bruno@clisp.org>
 
 	build: Simplify autoconf macros.
+	* m4/codeexec.m4 (CE_DOC): Remove macro.
+	(FFCALL_CODEEXEC): Inline it.
+
+2020-07-11  Bruno Haible  <bruno@clisp.org>
+
+	build: Simplify autoconf macros.
 	* m4/getpagesize.m4 (CL_GETPAGESIZE): Inline CL_LINK_CHECK invocation.
 	* m4/mach-vm.m4 (CL_MACH_VM): Likewise.
 	* m4/general.m4 (CL_CHECK, CL_LINK_CHECK): Remove macros.

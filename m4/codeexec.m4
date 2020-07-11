@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2019 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2020 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -12,12 +12,12 @@ dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
 AC_PREREQ([2.13])
 
-AC_DEFUN([CE_DOC],[whether code in malloc()ed memory is executable])
 AC_DEFUN([FFCALL_CODEEXEC],
 [
   AC_REQUIRE([AC_CANONICAL_HOST])
   AC_REQUIRE([gl_HOST_CPU_C_ABI])
-  AC_CACHE_CHECK([CE_DOC], [ffcall_cv_codeexec],
+  AC_CACHE_CHECK([whether code in malloc()ed memory is executable],
+    [ffcall_cv_codeexec],
     [dnl The test below does not work on platforms with the following ABIs:
      dnl - hppa, because function pointers are actually pointers into(!)
      dnl   a two-pointer struct.
@@ -109,8 +109,10 @@ AC_DEFUN([FFCALL_CODEEXEC],
      esac
     ])
   case "$ffcall_cv_codeexec" in
-    *yes | irrelevant) AC_DEFINE([CODE_EXECUTABLE], [], CE_DOC) ;;
-    *no)  ;;
+    *yes | irrelevant)
+     AC_DEFINE([CODE_EXECUTABLE], [], [whether code in malloc()ed memory is executable])
+     ;;
+    *no) ;;
   esac
 ])
 
