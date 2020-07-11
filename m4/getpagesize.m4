@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2017 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2020 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -14,17 +14,23 @@ AC_PREREQ([2.57])
 
 AC_DEFUN([CL_GETPAGESIZE],
 [
-  CL_LINK_CHECK([getpagesize], [cl_cv_func_getpagesize],
-    [#ifdef HAVE_UNISTD_H
-      #include <sys/types.h>
-      #include <unistd.h>
-     #endif
-    ],
-    [getpagesize();],
-    [
-      AC_DEFINE([HAVE_GETPAGESIZE], [], [have getpagesize()])
-      have_getpagesize=1
+  AC_CACHE_CHECK([for getpagesize],[cl_cv_func_getpagesize],
+    [AC_LINK_IFELSE(
+       [AC_LANG_PROGRAM(
+          [[#ifdef HAVE_UNISTD_H
+              #include <sys/types.h>
+              #include <unistd.h>
+            #endif
+          ]],
+          [[getpagesize();]])
+       ],
+       [cl_cv_func_getpagesize=yes],
+       [cl_cv_func_getpagesize=no])
     ])
+  if test $cl_cv_func_getpagesize = yes; then
+    AC_DEFINE([HAVE_GETPAGESIZE], [], [have getpagesize()])
+    have_getpagesize=1
+  fi
   if test -n "$have_getpagesize"; then
     CL_PROTO([getpagesize],
       [CL_PROTO_RET(

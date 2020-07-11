@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2017 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2020 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -14,9 +14,14 @@ AC_PREREQ([2.57])
 
 AC_DEFUN([CL_MACH_VM],
 [
-  CL_LINK_CHECK([vm_allocate],
+  AC_CACHE_CHECK([for vm_allocate],
     [cl_cv_func_vm],
-    [],
-    [vm_allocate(); task_self();],
-    [AC_DEFINE([HAVE_MACH_VM],[],[have vm_allocate() and task_self() functions])])
+    [AC_LINK_IFELSE(
+      [AC_LANG_PROGRAM([[]],[[vm_allocate(); task_self();]])],
+      [cl_cv_func_vm=yes],
+      [cl_cv_func_vm=no])
+    ])
+  if test $cl_cv_func_vm = yes; then
+    AC_DEFINE([HAVE_MACH_VM],[],[have vm_allocate() and task_self() functions])
+  fi
 ])
