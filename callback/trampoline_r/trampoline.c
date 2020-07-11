@@ -105,27 +105,21 @@ extern void (*tramp_r) (); /* trampoline prototype */
 #include <sys/types.h>
 #include <stdlib.h> /* declares abort(), malloc(), free() */
 #ifdef HAVE_UNISTD_H
-#include <unistd.h>
+#include <unistd.h> /* declares getpagesize() */
 #endif
 
 /* Define intptr_t, uintptr_t. */
 #include <stdint.h>
 
 /* Declare getpagesize(). */
-#ifdef HAVE_GETPAGESIZE
+/* On HP-UX, getpagesize exists, but it is not declared in <unistd.h> even if
+   the compiler options -D_HPUX_SOURCE -D_XOPEN_SOURCE=600 are used.  */
+#ifdef __hpux
+extern
 #ifdef __cplusplus
-extern "C" RETGETPAGESIZETYPE getpagesize (void);
-#else
-extern RETGETPAGESIZETYPE getpagesize (void);
+       "C"
 #endif
-#else
-#ifdef HAVE_SYS_PARAM_H
-#include <sys/param.h>
-#else
-/* Not Unix, e.g. mingw32 */
-#define PAGESIZE 4096
-#endif
-#define getpagesize() PAGESIZE
+       int getpagesize (void);
 #endif
 
 /* Declare mprotect() or equivalent. */

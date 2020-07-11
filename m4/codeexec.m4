@@ -143,19 +143,20 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                AC_TRY_RUN(
                  [#include <errno.h>
                   #include <stdlib.h>
+                  /* Declare getpagesize().  */
                   #ifdef HAVE_UNISTD_H
                    #include <unistd.h>
                   #endif
-                  #include <fcntl.h>
-                  /* declare getpagesize() and mprotect() */
-                  #include <sys/mman.h>
-                  #ifndef HAVE_GETPAGESIZE
-                   #include <sys/param.h>
-                   #define getpagesize() PAGESIZE
-                  #else
-                   ]AC_LANG_EXTERN[
-                   RETGETPAGESIZETYPE getpagesize (void);
+                  #ifdef __hpux
+                   extern
+                   #ifdef __cplusplus
+                   "C"
+                   #endif
+                   int getpagesize (void);
                   #endif
+                  #include <fcntl.h>
+                  /* Declare mprotect().  */
+                  #include <sys/mman.h>
                   int
                   main ()
                   {
@@ -216,19 +217,20 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                    AC_TRY_RUN(
                      [#include <errno.h>
                       #include <stdlib.h>
+                      /* Declare getpagesize().  */
                       #ifdef HAVE_UNISTD_H
                        #include <unistd.h>
                       #endif
-                      #include <fcntl.h>
-                      /* declare getpagesize() and mprotect() */
-                      #include <sys/mman.h>
-                      #ifndef HAVE_GETPAGESIZE
-                       #include <sys/param.h>
-                       #define getpagesize() PAGESIZE
-                      #else
-                       ]AC_LANG_EXTERN[
-                       RETGETPAGESIZETYPE getpagesize (void);
+                      #ifdef __hpux
+                       extern
+                       #ifdef __cplusplus
+                       "C"
+                       #endif
+                       int getpagesize (void);
                       #endif
+                      #include <fcntl.h>
+                      /* Declare mmap(), mprotect().  */
+                      #include <sys/mman.h>
                       #ifndef MAP_FILE
                        #define MAP_FILE 0
                       #endif
@@ -296,18 +298,19 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                      AC_TRY_RUN(
                        [#include <fcntl.h>
                         #include <stdlib.h>
+                        /* Declare getpagesize().  */
                         #ifdef HAVE_UNISTD_H
                          #include <unistd.h>
                         #endif
-                        /* declare getpagesize() and mmap() */
-                        #include <sys/mman.h>
-                        #ifndef HAVE_GETPAGESIZE
-                         #include <sys/param.h>
-                         #define getpagesize() PAGESIZE
-                        #else
-                         ]AC_LANG_EXTERN[
-                         RETGETPAGESIZETYPE getpagesize (void);
+                        #ifdef __hpux
+                         extern
+                         #ifdef __cplusplus
+                         "C"
+                         #endif
+                         int getpagesize (void);
                         #endif
+                        /* Declare mmap().  */
+                        #include <sys/mman.h>
                         #ifndef MAP_FILE
                          #define MAP_FILE 0
                         #endif
