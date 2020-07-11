@@ -102,7 +102,6 @@ LT_INIT([win32-dll])
 dnl Checks for trampoline, trampoline_r.
 AC_CHECK_HEADERS([unistd_h])
 AC_HEADER_STDC
-CL_MACH_VM
 FFCALL_MMAP
 FFCALL_MPROTECT
 FFCALL_CODEEXEC

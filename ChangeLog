@@ -1,5 +1,14 @@
 2020-07-11  Bruno Haible  <bruno@clisp.org>
 
+	Drop portability to OSF/1.
+	* trampoline/trampoline.c: Assume HAVE_MACH_VM is not defined.
+	* callback/trampoline_r/trampoline.c: Likewise.
+	* configure.ac: Don't invoke CL_MACH_VM.
+	* m4/mach-vm.m4: Remove file.
+	* Makefile.in (SOURCE_FILES): Remove it.
+
+2020-07-11  Bruno Haible  <bruno@clisp.org>
+
 	build: Simplify autoconf macros.
 	* trampoline/trampoline.c (getpagesize): Declare only on HP-UX. Remove
 	fallback definition.

@@ -74,7 +74,7 @@ extern void (*tramp_r) (); /* trampoline prototype */
 
 #ifndef CODE_EXECUTABLE
   /* How do we make the trampoline's code executable? */
-  #if defined(HAVE_MACH_VM) || defined(HAVE_WORKING_MPROTECT)
+  #ifdef HAVE_WORKING_MPROTECT
     #if HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC > 0
       /* mprotect() [or equivalent] the malloc'ed area. */
       #define EXECUTABLE_VIA_MALLOC_THEN_MPROTECT
@@ -122,19 +122,10 @@ extern
        int getpagesize (void);
 #endif
 
-/* Declare mprotect() or equivalent. */
+/* Declare mprotect(). */
 #if defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_THEN_MPROTECT)
-#ifdef HAVE_MACH_VM
-#include <sys/resource.h>
-#include <mach/mach_interface.h>
-#ifdef __osf__
-#include <mach_init.h>
-#endif
-#include <mach/machine/vm_param.h>
-#else
 #include <sys/types.h>
 #include <sys/mman.h>
-#endif
 #endif
 
 /* Declare mmap(). */
@@ -405,8 +396,6 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
       SYSTEM_INFO info;
       GetSystemInfo(&info);
       pagesize = info.dwPageSize;
-#elif defined(HAVE_MACH_VM)
-      pagesize = vm_page_size;
 #else
       pagesize = getpagesize();
 #endif
@@ -1285,11 +1274,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
     start_addr = start_addr & -pagesize;
     end_addr = (end_addr + pagesize-1) & -pagesize;
    {uintptr_t len = end_addr - start_addr;
-#if defined(HAVE_MACH_VM)
-    if (vm_protect(task_self(),start_addr,len,0,VM_PROT_READ|VM_PROT_WRITE|VM_PROT_EXECUTE) != KERN_SUCCESS)
-#else
     if (mprotect((void*)start_addr, len, PROT_READ|PROT_WRITE|PROT_EXEC) < 0)
-#endif
       { fprintf(stderr,"trampoline: cannot make memory executable\n"); abort(); }
   }}
 #endif
