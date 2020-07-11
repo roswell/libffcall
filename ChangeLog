@@ -1,5 +1,14 @@
 2020-07-11  Bruno Haible  <bruno@clisp.org>
 
+	build: Simplify autoconf macros.
+	* configure.ac: Don't invoke FFCALL_SMALL_STRUCT_RETURN,
+	FFCALL_IREG_FLOAT_RETURN.
+	* m4/ireg.m4: Remove file.
+	* m4/smallstruct.m4: Remove file.
+	* Makefile.in (SOURCE_FILES): Remove them.
+
+2020-07-11  Bruno Haible  <bruno@clisp.org>
+
 	build: Simplify.
 	* Makefile.maint (GNULIB_MODULES): Remove 'longlong'.
 

@@ -99,10 +99,6 @@ FFCALL_ENDIANNESS
 PACKAGE=libffcall
 LT_INIT([win32-dll])
 
-dnl Checks for avcall, vacall, vacall_r.
-FFCALL_SMALL_STRUCT_RETURN
-FFCALL_IREG_FLOAT_RETURN
-
 dnl Checks for trampoline, trampoline_r.
 AC_CHECK_HEADERS([unistd_h])
 AC_HEADER_STDC

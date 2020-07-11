@@ -146,13 +146,11 @@ SOURCE_FILES = \
   m4/endianness.m4 \
   m4/general.m4 \
   m4/getpagesize.m4 \
-  m4/ireg.m4 \
   m4/ln.m4 \
   m4/mach-vm.m4 \
   m4/mmap.m4 \
   m4/mprotect.m4 \
   m4/proto.m4 \
-  m4/smallstruct.m4 \
   common/asm-alpha.sh \
   common/asm-arm.sh common/asm-arm.h \
   common/asm-hppa.sh common/asm-hppa.h \
