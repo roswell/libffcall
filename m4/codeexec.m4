@@ -249,11 +249,11 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                           unsigned int pagesize = getpagesize ();
                           char *p;
                           int ret;
-                        #if defined HAVE_MMAP_ANON
+                        #if HAVE_MMAP_ANON
                           p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON | MAP_VARIABLE, -1, 0);
-                        #elif defined HAVE_MMAP_ANONYMOUS
+                        #elif HAVE_MMAP_ANONYMOUS
                           p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
-                        #elif defined HAVE_MMAP_DEVZERO
+                        #elif HAVE_MMAP_DEVZERO
                           int zero_fd = open("/dev/zero", O_RDONLY, 0666);
                           if (zero_fd < 0)
                             return 1;
@@ -364,7 +364,7 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                     ])
                   case "$ffcall_cv_mmap_shared_can_exec" in
                     *yes)
-                      AC_DEFINE([HAVE_MMAP_SHARED_CAN_EXEC], [],
+                      AC_DEFINE([HAVE_MMAP_SHARED_CAN_EXEC], [1],
                         [have an mmap() function that, with MAP_SHARED, can make memory pages executable])
                       ;;
                   esac

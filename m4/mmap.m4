@@ -19,7 +19,7 @@ AC_DEFUN([FFCALL_MMAP],
   if test -z "$no_mmap"; then
     AC_CHECK_FUNC([mmap], [], [no_mmap=1])
     if test -z "$no_mmap"; then
-      AC_DEFINE([HAVE_MMAP], [], [have <sys/mmap.h> and the mmap() function])
+      AC_DEFINE([HAVE_MMAP], [1], [have <sys/mmap.h> and the mmap() function])
       AC_CACHE_CHECK([for working mmap], [ffcall_cv_func_mmap_works],
         [if test $cross_compiling = no; then
            mmap_prog_1='
@@ -128,19 +128,19 @@ AC_DEFUN([FFCALL_MMAP],
         ])
       case "$ffcall_cv_func_mmap_anon" in
         *yes)
-          AC_DEFINE([HAVE_MMAP_ANON], [],
+          AC_DEFINE([HAVE_MMAP_ANON], [1],
             [<sys/mman.h> defines MAP_ANON and mmaping with MAP_ANON works])
           ;;
       esac
       case "$ffcall_cv_func_mmap_anonymous" in
         *yes)
-          AC_DEFINE([HAVE_MMAP_ANONYMOUS], [],
+          AC_DEFINE([HAVE_MMAP_ANONYMOUS], [1],
             [<sys/mman.h> defines MAP_ANONYMOUS and mmaping with MAP_ANONYMOUS works])
           ;;
       esac
       case "$ffcall_cv_func_mmap_devzero" in
         *yes)
-          AC_DEFINE([HAVE_MMAP_DEVZERO], [],
+          AC_DEFINE([HAVE_MMAP_DEVZERO], [1],
             [mmaping of the special device /dev/zero works])
           ;;
       esac

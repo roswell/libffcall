@@ -74,20 +74,20 @@ extern void (*tramp) (); /* trampoline prototype */
 
 #ifndef CODE_EXECUTABLE
   /* How do we make the trampoline's code executable? */
-  #ifdef HAVE_WORKING_MPROTECT
+  #if HAVE_WORKING_MPROTECT
     #if HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC > 0
       /* mprotect() [or equivalent] the malloc'ed area. */
       #define EXECUTABLE_VIA_MALLOC_THEN_MPROTECT
     #elif HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC > 0
       /* mprotect() [or equivalent] the mmap'ed area. */
       #define EXECUTABLE_VIA_MMAP_THEN_MPROTECT
-    #elif defined(HAVE_MMAP_SHARED_CAN_EXEC)
+    #elif HAVE_MMAP_SHARED_CAN_EXEC
       #define EXECUTABLE_VIA_MMAP_FILE_SHARED
     #else
       #error "Don't know how to make memory pages executable."
     #endif
   #else
-    #ifdef HAVE_MMAP
+    #if HAVE_MMAP
       /* Use an mmap'ed page. */
       #define EXECUTABLE_VIA_MMAP
     #else
@@ -443,7 +443,7 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
       page = (char*)(((uintptr_t)page + sizeof(intptr_t) + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
 #else
 #ifdef EXECUTABLE_VIA_MMAP_THEN_MPROTECT
-#ifdef HAVE_MMAP_ANONYMOUS
+#if HAVE_MMAP_ANONYMOUS
       /* Use mmap with the MAP_ANONYMOUS or MAP_ANON flag. */
       page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
 #else
@@ -452,7 +452,7 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #endif
 #ifdef EXECUTABLE_VIA_MMAP
-#ifdef HAVE_MMAP_ANONYMOUS
+#if HAVE_MMAP_ANONYMOUS
       /* Use mmap with the MAP_ANONYMOUS or MAP_ANON flag. */
       page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
 #else

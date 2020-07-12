@@ -158,7 +158,7 @@ AC_DEFUN([FFCALL_MPROTECT],
       ])
     case "$cl_cv_func_mprotect_works" in
       *yes)
-        AC_DEFINE([HAVE_WORKING_MPROTECT], [],
+        AC_DEFINE([HAVE_WORKING_MPROTECT], [1],
           [have a working mprotect() function])
         ;;
     esac
