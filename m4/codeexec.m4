@@ -124,100 +124,91 @@ AC_DEFUN([FFCALL_CODEEXEC],
   if test -z "$no_mmap"; then
     AC_CHECK_FUNC([mmap], [], [no_mmap=1])
     if test -z "$no_mmap"; then
-      AC_CACHE_CHECK([for working mmap], [ffcall_cv_func_mmap_works],
-        [if test $cross_compiling = no; then
-           mmap_prog_1='
-             #include <stdlib.h>
-             #ifdef HAVE_UNISTD_H
-              #include <unistd.h>
-             #endif
-             #include <fcntl.h>
-             #include <sys/types.h>
-             #include <sys/mman.h>
-             int main ()
-             {
-           '
-           mmap_prog_2='
-               if (mmap(NULL,0x100000,PROT_READ|PROT_WRITE,flags,fd,0) == (void*)-1)
-                 exit(1);
-               exit(0);
-             }
-           '
-           AC_RUN_IFELSE(
-             [AC_LANG_SOURCE([
-                GL_NOCRASH
-                [$mmap_prog_1
-                 int flags = MAP_ANONYMOUS | MAP_PRIVATE;
-                 int fd = -1;
-                 nocrash_init();
-                 $mmap_prog_2
-                ]])
-             ],
-             [have_mmap_anon=1
-              ffcall_cv_func_mmap_anonymous=yes],
-             [],
-             [dnl When cross-compiling, don't assume anything.
-              :
-             ])
-           AC_RUN_IFELSE(
-             [AC_LANG_SOURCE([
-                GL_NOCRASH
-                [$mmap_prog_1
-                 #ifndef MAP_FILE
-                  #define MAP_FILE 0
-                 #endif
-                 int flags = MAP_FILE | MAP_PRIVATE;
-                 int fd = open("/dev/zero",O_RDONLY,0666);
-                 if (fd<0)
-                   exit(1);
-                 nocrash_init();
-                 $mmap_prog_2
-                ]])
-             ],
-             [have_mmap_devzero=1
-              ffcall_cv_func_mmap_devzero=yes],
-             [],
-             [dnl When cross-compiling, don't assume anything.
-              :
-             ])
-           if test -n "$have_mmap_anon" -o -n "$have_mmap_devzero"; then
-             ffcall_cv_func_mmap_works=yes
-           else
-             ffcall_cv_func_mmap_works=no
-           fi
-         else
-           dnl When cross-compiling, assume the known behaviour.
-           dnl If we don't know, don't assume anything.
-           case "$host_os" in
-             aix* | cygwin* | darwin* | hpux* | irix* | linux* | solaris*)
-               ffcall_cv_func_mmap_works="guessing yes" ;;
-             *)
-               ffcall_cv_func_mmap_works="guessing no" ;;
-           esac
-           case "$host_os" in
-             aix* | cygwin* | hpux* | linux* | solaris*)
-               ffcall_cv_func_mmap_anonymous="guessing yes" ;;
-             *)
-               ffcall_cv_func_mmap_anonymous="guessing no" ;;
-           esac
-           case "$host_os" in
-             aix* | cygwin* | hpux* | irix* | linux* | solaris*)
-               ffcall_cv_func_mmap_devzero="guessing yes" ;;
-             *)
-               ffcall_cv_func_mmap_devzero="guessing no" ;;
-           esac
-         fi
+      mmap_prog_1='
+        #include <stdlib.h>
+        #ifdef HAVE_UNISTD_H
+         #include <unistd.h>
+        #endif
+        #include <fcntl.h>
+        #include <sys/types.h>
+        #include <sys/mman.h>
+        int main ()
+        {
+      '
+      mmap_prog_2='
+          if (mmap(NULL,0x100000,PROT_READ|PROT_WRITE,flags,fd,0) == (void*)-1)
+            exit(1);
+          exit(0);
+        }
+      '
+      AC_CACHE_CHECK([for working mmap with MAP_ANONYMOUS],
+        [ffcall_cv_func_mmap_anonymous],
+        [AC_RUN_IFELSE(
+           [AC_LANG_SOURCE([
+              GL_NOCRASH
+              [$mmap_prog_1
+               int flags = MAP_ANONYMOUS | MAP_PRIVATE;
+               int fd = -1;
+               nocrash_init();
+               $mmap_prog_2
+              ]])
+           ],
+           [have_mmap_anon=1
+            ffcall_cv_func_mmap_anonymous=yes],
+           [ffcall_cv_func_mmap_anonymous=no],
+           [dnl When cross-compiling, assume the known behaviour.
+            dnl If we don't know, don't assume anything.
+            case "$host_os" in
+              aix* | cygwin* | darwin* | hpux* | linux* | solaris*)
+                ffcall_cv_func_mmap_anonymous="guessing yes" ;;
+              *)
+                ffcall_cv_func_mmap_anonymous="guessing no" ;;
+            esac
+           ])
         ])
       case "$ffcall_cv_func_mmap_anonymous" in
         *yes)
           AC_DEFINE([HAVE_MMAP_ANONYMOUS], [1],
             [<sys/mman.h> defines MAP_ANONYMOUS and mmaping with MAP_ANONYMOUS works])
           ;;
-      esac
-      case "$ffcall_cv_func_mmap_devzero" in
-        *yes)
-          AC_DEFINE([HAVE_MMAP_DEVZERO], [1],
-            [mmaping of the special device /dev/zero works])
+        *)
+          dnl This is needed for IRIX.
+          AC_CACHE_CHECK([for working mmap of /dev/zero],
+            [ffcall_cv_func_mmap_devzero],
+            [AC_RUN_IFELSE(
+               [AC_LANG_SOURCE([
+                  GL_NOCRASH
+                  [$mmap_prog_1
+                   #ifndef MAP_FILE
+                    #define MAP_FILE 0
+                   #endif
+                   int flags = MAP_FILE | MAP_PRIVATE;
+                   int fd = open("/dev/zero",O_RDONLY,0666);
+                   if (fd<0)
+                     exit(1);
+                   nocrash_init();
+                   $mmap_prog_2
+                  ]])
+               ],
+               [have_mmap_devzero=1
+                ffcall_cv_func_mmap_devzero=yes],
+               [ffcall_cv_func_mmap_devzero=no],
+               [dnl When cross-compiling, assume the known behaviour.
+                dnl If we don't know, don't assume anything.
+                case "$host_os" in
+                  aix* | cygwin* | hpux* | irix* | linux* | solaris*)
+                    ffcall_cv_func_mmap_devzero="guessing yes" ;;
+                  *)
+                    ffcall_cv_func_mmap_devzero="guessing no" ;;
+                esac
+               ])
+            ])
+          case "$ffcall_cv_func_mmap_devzero" in
+            *yes)
+              AC_DEFINE([HAVE_MMAP_DEVZERO], [1],
+                [mmaping of the special device /dev/zero works])
+              ;;
+          esac
           ;;
       esac
     fi

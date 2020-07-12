@@ -1,5 +1,11 @@
 2020-07-12  Bruno Haible  <bruno@clisp.org>
 
+	build: Fix misuse of AC_CACHE_CHECK.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Use two AC_CACHE_CHECK invocations
+	instead of one. Don't set ffcall_cv_func_mmap_works.
+
+2020-07-12  Bruno Haible  <bruno@clisp.org>
+
 	build: Avoid possible conflict with the broken AC_FUNC_MMAP.
 	* trampoline/trampoline.c: Don't test HAVE_MMAP.
 	* callback/trampoline_r/trampoline.c: Likewise.
