@@ -1,5 +1,11 @@
 2020-07-12  Bruno Haible  <bruno@clisp.org>
 
+	Drop portability to IRIX 4.
+	* trampoline/trampoline.c (PROT_EXEC): Remove fallback definition.
+	* callback/trampoline_r/trampoline.c (PROT_EXEC): Likewise.
+
+2020-07-12  Bruno Haible  <bruno@clisp.org>
+
 	build: Simplify autoconf macros.
 	* m4/codeexec.m4: Include the code from m4/mmap.m4 and m4/mprotect.m4.
 	* m4/mmap.m4: Remove file.

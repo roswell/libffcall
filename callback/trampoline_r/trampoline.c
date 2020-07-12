@@ -132,9 +132,6 @@ extern
 #if defined(EXECUTABLE_VIA_MMAP) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
 #include <sys/types.h>
 #include <sys/mman.h>
-#if !defined(PROT_EXEC) && defined(PROT_EXECUTE) /* Irix 4.0.5 needs this */
-#define PROT_EXEC PROT_EXECUTE
-#endif
 #endif
 
 /* Declare open(). */
