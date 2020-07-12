@@ -124,7 +124,6 @@ AC_DEFUN([FFCALL_CODEEXEC],
   if test -z "$no_mmap"; then
     AC_CHECK_FUNC([mmap], [], [no_mmap=1])
     if test -z "$no_mmap"; then
-      AC_DEFINE([HAVE_MMAP], [1], [have <sys/mmap.h> and the mmap() function])
       AC_CACHE_CHECK([for working mmap], [ffcall_cv_func_mmap_works],
         [if test $cross_compiling = no; then
            mmap_prog_1='

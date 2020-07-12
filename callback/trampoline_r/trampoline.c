@@ -87,7 +87,7 @@ extern void (*tramp_r) (); /* trampoline prototype */
       #error "Don't know how to make memory pages executable."
     #endif
   #else
-    #if HAVE_MMAP
+    #if HAVE_MMAP_ANONYMOUS || HAVE_MMAP_DEVZERO
       /* Use an mmap'ed page. */
       #define EXECUTABLE_VIA_MMAP
     #else

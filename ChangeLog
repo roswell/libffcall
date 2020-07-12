@@ -1,5 +1,12 @@
 2020-07-12  Bruno Haible  <bruno@clisp.org>
 
+	build: Avoid possible conflict with the broken AC_FUNC_MMAP.
+	* trampoline/trampoline.c: Don't test HAVE_MMAP.
+	* callback/trampoline_r/trampoline.c: Likewise.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Don't define HAVE_MMAP.
+
+2020-07-12  Bruno Haible  <bruno@clisp.org>
+
 	Drop portability to IRIX 4.
 	* trampoline/trampoline.c (PROT_EXEC): Remove fallback definition.
 	* callback/trampoline_r/trampoline.c (PROT_EXEC): Likewise.
