@@ -103,10 +103,7 @@ dnl Checks for trampoline, trampoline_r.
 AC_CHECK_HEADERS([unistd_h])
 AC_HEADER_STDC
 gl_FUNC_MMAP_ANON
-FFCALL_MMAP
-FFCALL_MPROTECT
 FFCALL_CODEEXEC
-FFCALL_CODEEXEC_PAX
 
 dnl List of object files for trampoline, trampoline_r.
 CPU_OBJECTS=''

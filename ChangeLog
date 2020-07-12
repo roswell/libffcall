@@ -1,5 +1,15 @@
 2020-07-12  Bruno Haible  <bruno@clisp.org>
 
+	build: Simplify autoconf macros.
+	* m4/codeexec.m4: Include the code from m4/mmap.m4 and m4/mprotect.m4.
+	* m4/mmap.m4: Remove file.
+	* m4/mprotect.m4: Remove file.
+	* Makefile.in (SOURCE_FILES): Remove them.
+	* configure.ac: Invoke just FFCALL_CODEEXEC, instead of FFCALL_MMAP,
+	FFCALL_MPROTECT, FFCALL_CODEEXEC, FFCALL_CODEEXEC_PAX.
+
+2020-07-12  Bruno Haible  <bruno@clisp.org>
+
 	build: Use autoconf macros from gnulib.
 	* Makefile.maint (GNULIB_FILES): New variable.
 	(gnulib-imported-files): Import the $(GNULIB_FILES) from gnulib.

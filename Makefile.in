@@ -145,8 +145,6 @@ SOURCE_FILES = \
   m4/codeexec.m4 \
   m4/endianness.m4 \
   m4/ln.m4 \
-  m4/mmap.m4 \
-  m4/mprotect.m4 \
   common/asm-alpha.sh \
   common/asm-arm.sh common/asm-arm.h \
   common/asm-hppa.sh common/asm-hppa.h \

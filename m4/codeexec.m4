@@ -16,6 +16,8 @@ AC_DEFUN([FFCALL_CODEEXEC],
 [
   AC_REQUIRE([AC_CANONICAL_HOST])
   AC_REQUIRE([gl_HOST_CPU_C_ABI])
+  AC_REQUIRE([gl_FUNC_MMAP_ANON])
+
   AC_CACHE_CHECK([whether code in malloc()ed memory is executable],
     [ffcall_cv_codeexec],
     [dnl The test below does not work on platforms with the following ABIs:
@@ -117,18 +119,262 @@ AC_DEFUN([FFCALL_CODEEXEC],
      ;;
     *no) ;;
   esac
-])
 
-dnl Test how to use the mprotect function to make memory executable.
-dnl Test against the mprotect limitations found in PaX enabled Linux kernels
-dnl and HardenedBSD.
-AC_DEFUN([FFCALL_CODEEXEC_PAX],
-[
-  AC_REQUIRE([gl_FUNC_MMAP_ANON])
-  AC_REQUIRE([FFCALL_MMAP])
-  AC_REQUIRE([FFCALL_MPROTECT])
-  AC_REQUIRE([FFCALL_CODEEXEC])
-  AC_REQUIRE([AC_CANONICAL_HOST])
+  AC_CHECK_HEADER([sys/mman.h], [], [no_mmap=1])
+  if test -z "$no_mmap"; then
+    AC_CHECK_FUNC([mmap], [], [no_mmap=1])
+    if test -z "$no_mmap"; then
+      AC_DEFINE([HAVE_MMAP], [1], [have <sys/mmap.h> and the mmap() function])
+      AC_CACHE_CHECK([for working mmap], [ffcall_cv_func_mmap_works],
+        [if test $cross_compiling = no; then
+           mmap_prog_1='
+             #include <stdlib.h>
+             #ifdef HAVE_UNISTD_H
+              #include <unistd.h>
+             #endif
+             #include <fcntl.h>
+             #include <sys/types.h>
+             #include <sys/mman.h>
+             int main ()
+             {
+           '
+           mmap_prog_2='
+               if (mmap(NULL,0x100000,PROT_READ|PROT_WRITE,flags,fd,0) == (void*)-1)
+                 exit(1);
+               exit(0);
+             }
+           '
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mmap_prog_1
+                 int flags = MAP_ANONYMOUS | MAP_PRIVATE;
+                 int fd = -1;
+                 nocrash_init();
+                 $mmap_prog_2
+                ]])
+             ],
+             [have_mmap_anon=1
+              ffcall_cv_func_mmap_anonymous=yes],
+             [],
+             [dnl When cross-compiling, don't assume anything.
+              :
+             ])
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mmap_prog_1
+                 #ifndef MAP_FILE
+                  #define MAP_FILE 0
+                 #endif
+                 int flags = MAP_FILE | MAP_PRIVATE;
+                 int fd = open("/dev/zero",O_RDONLY,0666);
+                 if (fd<0)
+                   exit(1);
+                 nocrash_init();
+                 $mmap_prog_2
+                ]])
+             ],
+             [have_mmap_devzero=1
+              ffcall_cv_func_mmap_devzero=yes],
+             [],
+             [dnl When cross-compiling, don't assume anything.
+              :
+             ])
+           if test -n "$have_mmap_anon" -o -n "$have_mmap_devzero"; then
+             ffcall_cv_func_mmap_works=yes
+           else
+             ffcall_cv_func_mmap_works=no
+           fi
+         else
+           dnl When cross-compiling, assume the known behaviour.
+           dnl If we don't know, don't assume anything.
+           case "$host_os" in
+             aix* | cygwin* | darwin* | hpux* | irix* | linux* | solaris*)
+               ffcall_cv_func_mmap_works="guessing yes" ;;
+             *)
+               ffcall_cv_func_mmap_works="guessing no" ;;
+           esac
+           case "$host_os" in
+             aix* | cygwin* | hpux* | linux* | solaris*)
+               ffcall_cv_func_mmap_anonymous="guessing yes" ;;
+             *)
+               ffcall_cv_func_mmap_anonymous="guessing no" ;;
+           esac
+           case "$host_os" in
+             aix* | cygwin* | hpux* | irix* | linux* | solaris*)
+               ffcall_cv_func_mmap_devzero="guessing yes" ;;
+             *)
+               ffcall_cv_func_mmap_devzero="guessing no" ;;
+           esac
+         fi
+        ])
+      case "$ffcall_cv_func_mmap_anonymous" in
+        *yes)
+          AC_DEFINE([HAVE_MMAP_ANONYMOUS], [1],
+            [<sys/mman.h> defines MAP_ANONYMOUS and mmaping with MAP_ANONYMOUS works])
+          ;;
+      esac
+      case "$ffcall_cv_func_mmap_devzero" in
+        *yes)
+          AC_DEFINE([HAVE_MMAP_DEVZERO], [1],
+            [mmaping of the special device /dev/zero works])
+          ;;
+      esac
+    fi
+  fi
+
+  AC_CHECK_FUNCS([mprotect])
+  if test $ac_cv_func_mprotect = yes; then
+    AC_CACHE_CHECK([for working mprotect], [cl_cv_func_mprotect_works],
+      [if test $cross_compiling = no; then
+         mprotect_prog='
+           #include <sys/types.h>
+           /* Declare malloc().  */
+           #include <stdlib.h>
+           /* Declare getpagesize().  */
+           #ifdef HAVE_UNISTD_H
+            #include <unistd.h>
+           #endif
+           #ifdef __hpux
+            extern
+            #ifdef __cplusplus
+            "C"
+            #endif
+            int getpagesize (void);
+           #endif
+           /* Declare mprotect().  */
+           #include <sys/mman.h>
+           char foo;
+           int main ()
+           {
+             unsigned long pagesize = getpagesize();
+           #define page_align(address)  (char*)((unsigned long)(address) & -pagesize)
+         '
+         AC_RUN_IFELSE(
+           [AC_LANG_SOURCE([
+              [$mprotect_prog
+                 if ((pagesize-1) & pagesize) exit(1);
+                 exit(0);
+               }
+              ]])
+           ],
+           [],
+           [no_mprotect=1],
+           [dnl When cross-compiling, don't assume anything.
+            no_mprotect=1
+           ])
+         mprotect_prog="$mprotect_prog"'
+           char* area = (char*) malloc(6*pagesize);
+           char* fault_address = area + pagesize*7/2;
+         '
+         if test -z "$no_mprotect"; then
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mprotect_prog
+                   nocrash_init();
+                   if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0)
+                     exit(0);
+                   foo = *fault_address; /* this should cause an exception or signal */
+                   exit(0);
+                 }
+                ]])
+             ],
+             [no_mprotect=1],
+             [],
+             [dnl When cross-compiling, don't assume anything.
+              :
+             ])
+         fi
+         if test -z "$no_mprotect"; then
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mprotect_prog
+                   nocrash_init();
+                   if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0)
+                     exit(0);
+                   *fault_address = 'z'; /* this should cause an exception or signal */
+                   exit(0);
+                 }
+                ]])
+             ],
+             [no_mprotect=1],
+             [],
+             [dnl When cross-compiling, don't assume anything.
+              :
+             ])
+         fi
+         if test -z "$no_mprotect"; then
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mprotect_prog
+                   nocrash_init();
+                   if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0)
+                     exit(0);
+                   *fault_address = 'z'; /* this should cause an exception or signal */
+                   exit(0);
+                 }
+                ]])
+             ],
+             [no_mprotect=1],
+             [],
+             [dnl When cross-compiling, don't assume anything.
+              :
+             ])
+         fi
+         if test -z "$no_mprotect"; then
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mprotect_prog
+                   nocrash_init();
+                   if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0)
+                     exit(1);
+                   if (mprotect(page_align(fault_address),pagesize,PROT_READ|PROT_WRITE) < 0)
+                     exit(1);
+                   *fault_address = 'z'; /* this should not cause an exception or signal */
+                   exit(0);
+                 }
+                ]])
+             ],
+             [],
+             [no_mprotect=1],
+             [dnl When cross-compiling, don't assume anything.
+              :
+             ])
+         fi
+         if test -z "$no_mprotect"; then
+           cl_cv_func_mprotect_works=yes
+         else
+           cl_cv_func_mprotect_works=no
+         fi
+       else
+         dnl When cross-compiling, assume the known behaviour.
+         dnl If we don't know, don't assume anything.
+         case "$host_os" in
+           aix* | cygwin* | darwin* | hpux* | irix* | linux* | solaris*)
+             cl_cv_func_mprotect_works="guessing yes" ;;
+           mingw*)
+             cl_cv_func_mprotect_works="guessing no" ;;
+           *)
+             cl_cv_func_mprotect_works="guessing no" ;;
+         esac
+       fi
+      ])
+    case "$cl_cv_func_mprotect_works" in
+      *yes)
+        AC_DEFINE([HAVE_WORKING_MPROTECT], [1],
+          [have a working mprotect() function])
+        ;;
+    esac
+  fi
+
+  dnl Test how to use the mprotect function to make memory executable.
+  dnl Test against the mprotect limitations found in PaX enabled Linux kernels
+  dnl and HardenedBSD.
   case "$ffcall_cv_codeexec" in
     *yes | irrelevant) ;;
     *)
