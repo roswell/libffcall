@@ -10,7 +10,7 @@ dnl the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ([2.57])
+AC_PREREQ([2.63])
 
 AC_DEFUN([FFCALL_MPROTECT],
 [
@@ -43,11 +43,13 @@ AC_DEFUN([FFCALL_MPROTECT],
              unsigned long pagesize = getpagesize();
            #define page_align(address)  (char*)((unsigned long)(address) & -pagesize)
          '
-         AC_TRY_RUN(
-           [$mprotect_prog
-              if ((pagesize-1) & pagesize) exit(1);
-              exit(0);
-            }
+         AC_RUN_IFELSE(
+           [AC_LANG_SOURCE([
+              [$mprotect_prog
+                 if ((pagesize-1) & pagesize) exit(1);
+                 exit(0);
+               }
+              ]])
            ],
            [],
            [no_mprotect=1],
@@ -59,14 +61,17 @@ AC_DEFUN([FFCALL_MPROTECT],
            char* fault_address = area + pagesize*7/2;
          '
          if test -z "$no_mprotect"; then
-           AC_TRY_RUN(GL_NOCRASH
-             [$mprotect_prog
-                nocrash_init();
-                if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0)
-                  exit(0);
-                foo = *fault_address; /* this should cause an exception or signal */
-                exit(0);
-              }
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mprotect_prog
+                   nocrash_init();
+                   if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0)
+                     exit(0);
+                   foo = *fault_address; /* this should cause an exception or signal */
+                   exit(0);
+                 }
+                ]])
              ],
              [no_mprotect=1],
              [],
@@ -75,14 +80,17 @@ AC_DEFUN([FFCALL_MPROTECT],
              ])
          fi
          if test -z "$no_mprotect"; then
-           AC_TRY_RUN(GL_NOCRASH
-             [$mprotect_prog
-                nocrash_init();
-                if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0)
-                  exit(0);
-                *fault_address = 'z'; /* this should cause an exception or signal */
-                exit(0);
-              }
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mprotect_prog
+                   nocrash_init();
+                   if (mprotect(page_align(fault_address),pagesize,PROT_NONE) < 0)
+                     exit(0);
+                   *fault_address = 'z'; /* this should cause an exception or signal */
+                   exit(0);
+                 }
+                ]])
              ],
              [no_mprotect=1],
              [],
@@ -91,14 +99,17 @@ AC_DEFUN([FFCALL_MPROTECT],
              ])
          fi
          if test -z "$no_mprotect"; then
-           AC_TRY_RUN(GL_NOCRASH
-             [$mprotect_prog
-                nocrash_init();
-                if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0)
-                  exit(0);
-                *fault_address = 'z'; /* this should cause an exception or signal */
-                exit(0);
-              }
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mprotect_prog
+                   nocrash_init();
+                   if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0)
+                     exit(0);
+                   *fault_address = 'z'; /* this should cause an exception or signal */
+                   exit(0);
+                 }
+                ]])
              ],
              [no_mprotect=1],
              [],
@@ -107,16 +118,19 @@ AC_DEFUN([FFCALL_MPROTECT],
              ])
          fi
          if test -z "$no_mprotect"; then
-           AC_TRY_RUN(GL_NOCRASH
-             [$mprotect_prog
-                nocrash_init();
-                if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0)
-                  exit(1);
-                if (mprotect(page_align(fault_address),pagesize,PROT_READ|PROT_WRITE) < 0)
-                  exit(1);
-                *fault_address = 'z'; /* this should not cause an exception or signal */
-                exit(0);
-              }
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mprotect_prog
+                   nocrash_init();
+                   if (mprotect(page_align(fault_address),pagesize,PROT_READ) < 0)
+                     exit(1);
+                   if (mprotect(page_align(fault_address),pagesize,PROT_READ|PROT_WRITE) < 0)
+                     exit(1);
+                   *fault_address = 'z'; /* this should not cause an exception or signal */
+                   exit(0);
+                 }
+                ]])
              ],
              [],
              [no_mprotect=1],

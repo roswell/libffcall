@@ -10,7 +10,7 @@ dnl the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ([2.13])
+AC_PREREQ([2.63])
 
 AC_DEFUN([FFCALL_CODEEXEC],
 [
@@ -40,19 +40,22 @@ AC_DEFUN([FFCALL_CODEEXEC],
          ffcall_cv_codeexec=no
          ;;
        *)
-         AC_TRY_RUN(GL_NOCRASH
-           [#include <sys/types.h>
-            /* declare malloc() */
-            #include <stdlib.h>
-            int fun () { return 31415926; }
-            int main ()
-            { nocrash_init();
-             {long size = (char*)&main - (char*)&fun;
-              char* funcopy = (char*) malloc(size);
-              int i;
-              for (i = 0; i < size; i++) { funcopy[i] = ((char*)&fun)[i]; }
-              return !((*(int(*)())funcopy)() == 31415926);
-            }}
+         AC_RUN_IFELSE(
+           [AC_LANG_SOURCE([
+              GL_NOCRASH
+              [#include <sys/types.h>
+               /* declare malloc() */
+               #include <stdlib.h>
+               int fun () { return 31415926; }
+               int main ()
+               { nocrash_init();
+                {long size = (char*)&main - (char*)&fun;
+                 char* funcopy = (char*) malloc(size);
+                 int i;
+                 for (i = 0; i < size; i++) { funcopy[i] = ((char*)&fun)[i]; }
+                 return !((*(int(*)())funcopy)() == 31415926);
+               }}
+              ]])
            ],
            [ffcall_cv_codeexec=yes],
            [ffcall_cv_codeexec=no],
@@ -140,44 +143,46 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
              if test "$cross_compiling" != yes -a -d /etc/selinux; then
                ffcall_cv_malloc_mprotect_can_exec='determined by SELinux at runtime'
              else
-               AC_TRY_RUN(
-                 [#include <errno.h>
-                  #include <stdlib.h>
-                  /* Declare getpagesize().  */
-                  #ifdef HAVE_UNISTD_H
-                   #include <unistd.h>
-                  #endif
-                  #ifdef __hpux
-                   extern
-                   #ifdef __cplusplus
-                   "C"
-                   #endif
-                   int getpagesize (void);
-                  #endif
-                  #include <fcntl.h>
-                  /* Declare mprotect().  */
-                  #include <sys/mman.h>
-                  int
-                  main ()
-                  {
-                    unsigned int pagesize = getpagesize ();
-                    char *p = (char *) malloc (50);
-                    int ret;
-                    if (p == (char*) -1)
-                      /* malloc is not working as expected. */
-                      return 1;
-                    p[5] = 0x77;
-                    ret = mprotect (p - ((unsigned int) p & (pagesize - 1)), pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
-                    if (ret < 0
-                        && (errno == EACCES || errno == ENOMEM
-                            #ifdef ENOTSUP
-                            || errno == ENOTSUP
-                            #endif
-                       )   )
-                      /* mprotect is forbidden to make malloc()ed pages executable that were writable earlier. */
-                      return 2;
-                    return 0;
-                  }
+               AC_RUN_IFELSE(
+                 [AC_LANG_SOURCE([[
+                    #include <errno.h>
+                    #include <stdlib.h>
+                    /* Declare getpagesize().  */
+                    #ifdef HAVE_UNISTD_H
+                     #include <unistd.h>
+                    #endif
+                    #ifdef __hpux
+                     extern
+                     #ifdef __cplusplus
+                     "C"
+                     #endif
+                     int getpagesize (void);
+                    #endif
+                    #include <fcntl.h>
+                    /* Declare mprotect().  */
+                    #include <sys/mman.h>
+                    int
+                    main ()
+                    {
+                      unsigned int pagesize = getpagesize ();
+                      char *p = (char *) malloc (50);
+                      int ret;
+                      if (p == (char*) -1)
+                        /* malloc is not working as expected. */
+                        return 1;
+                      p[5] = 0x77;
+                      ret = mprotect (p - ((unsigned int) p & (pagesize - 1)), pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
+                      if (ret < 0
+                          && (errno == EACCES || errno == ENOMEM
+                              #ifdef ENOTSUP
+                              || errno == ENOTSUP
+                              #endif
+                         )   )
+                        /* mprotect is forbidden to make malloc()ed pages executable that were writable earlier. */
+                        return 2;
+                      return 0;
+                    }
+                    ]])
                  ],
                  [ffcall_cv_malloc_mprotect_can_exec=yes],
                  [ffcall_cv_malloc_mprotect_can_exec=no],
@@ -214,62 +219,64 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                  if test "$cross_compiling" != yes -a -d /etc/selinux; then
                    ffcall_cv_mmap_mprotect_can_exec='determined by SELinux at runtime'
                  else
-                   AC_TRY_RUN(
-                     [#include <errno.h>
-                      #include <stdlib.h>
-                      /* Declare getpagesize().  */
-                      #ifdef HAVE_UNISTD_H
-                       #include <unistd.h>
-                      #endif
-                      #ifdef __hpux
-                       extern
-                       #ifdef __cplusplus
-                       "C"
-                       #endif
-                       int getpagesize (void);
-                      #endif
-                      #include <fcntl.h>
-                      /* Declare mmap(), mprotect().  */
-                      #include <sys/mman.h>
-                      #ifndef MAP_FILE
-                       #define MAP_FILE 0
-                      #endif
-                      #ifndef MAP_VARIABLE
-                       #define MAP_VARIABLE 0
-                      #endif
-                      int
-                      main ()
-                      {
-                        unsigned int pagesize = getpagesize ();
-                        char *p;
-                        int ret;
-                      #if defined HAVE_MMAP_ANON
-                        p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON | MAP_VARIABLE, -1, 0);
-                      #elif defined HAVE_MMAP_ANONYMOUS
-                        p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
-                      #elif defined HAVE_MMAP_DEVZERO
-                        int zero_fd = open("/dev/zero", O_RDONLY, 0666);
-                        if (zero_fd < 0)
-                          return 1;
-                        p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
-                      #else
-                        ??
-                      #endif
-                        if (p == (char*) -1)
-                          /* mmap is not working as expected. */
-                          return 1;
-                        p[5] = 0x77;
-                        ret = mprotect (p, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
-                        if (ret < 0
-                            && (errno == EACCES || errno == ENOMEM
-                                #ifdef ENOTSUP
-                                || errno == ENOTSUP
-                                #endif
-                           )   )
-                          /* mprotect is forbidden to make mmap()ed pages executable that were writable earlier. */
-                          return 2;
-                        return 0;
-                      }
+                   AC_RUN_IFELSE(
+                     [AC_LANG_SOURCE([[
+                        #include <errno.h>
+                        #include <stdlib.h>
+                        /* Declare getpagesize().  */
+                        #ifdef HAVE_UNISTD_H
+                         #include <unistd.h>
+                        #endif
+                        #ifdef __hpux
+                         extern
+                         #ifdef __cplusplus
+                         "C"
+                         #endif
+                         int getpagesize (void);
+                        #endif
+                        #include <fcntl.h>
+                        /* Declare mmap(), mprotect().  */
+                        #include <sys/mman.h>
+                        #ifndef MAP_FILE
+                         #define MAP_FILE 0
+                        #endif
+                        #ifndef MAP_VARIABLE
+                         #define MAP_VARIABLE 0
+                        #endif
+                        int
+                        main ()
+                        {
+                          unsigned int pagesize = getpagesize ();
+                          char *p;
+                          int ret;
+                        #if defined HAVE_MMAP_ANON
+                          p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON | MAP_VARIABLE, -1, 0);
+                        #elif defined HAVE_MMAP_ANONYMOUS
+                          p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
+                        #elif defined HAVE_MMAP_DEVZERO
+                          int zero_fd = open("/dev/zero", O_RDONLY, 0666);
+                          if (zero_fd < 0)
+                            return 1;
+                          p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
+                        #else
+                          ??
+                        #endif
+                          if (p == (char*) -1)
+                            /* mmap is not working as expected. */
+                            return 1;
+                          p[5] = 0x77;
+                          ret = mprotect (p, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC);
+                          if (ret < 0
+                              && (errno == EACCES || errno == ENOMEM
+                                  #ifdef ENOTSUP
+                                  || errno == ENOTSUP
+                                  #endif
+                             )   )
+                            /* mprotect is forbidden to make mmap()ed pages executable that were writable earlier. */
+                            return 2;
+                          return 0;
+                        }
+                        ]])
                      ],
                      [ffcall_cv_mmap_mprotect_can_exec=yes],
                      [ffcall_cv_mmap_mprotect_can_exec=no],
@@ -295,55 +302,57 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                   AC_CACHE_CHECK([whether a shared mmap can make memory pages executable],
                     [ffcall_cv_mmap_shared_can_exec],
                     [filename="/tmp/trampdata$$.data"
-                     AC_TRY_RUN(
-                       [#include <fcntl.h>
-                        #include <stdlib.h>
-                        /* Declare getpagesize().  */
-                        #ifdef HAVE_UNISTD_H
-                         #include <unistd.h>
-                        #endif
-                        #ifdef __hpux
-                         extern
-                         #ifdef __cplusplus
-                         "C"
-                         #endif
-                         int getpagesize (void);
-                        #endif
-                        /* Declare mmap().  */
-                        #include <sys/mman.h>
-                        #ifndef MAP_FILE
-                         #define MAP_FILE 0
-                        #endif
-                        #ifndef MAP_VARIABLE
-                         #define MAP_VARIABLE 0
-                        #endif
-                        int
-                        main ()
-                        {
-                          unsigned int pagesize = getpagesize ();
-                          int fd;
-                          char *pw;
-                          char *px;
-                          fd = open ("$filename", O_CREAT | O_RDWR | O_TRUNC, 0700);
-                          if (fd < 0)
-                            return 1;
-                          if (ftruncate (fd, pagesize) < 0)
-                            return 2;
-                          pw = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FILE | MAP_VARIABLE, fd, 0);
-                          if (pw == (char*) -1)
-                            return 3;
-                          pw[5] = 0xc3;
-                          px = (char *) mmap (NULL, pagesize, PROT_READ | PROT_EXEC, MAP_SHARED | MAP_FILE | MAP_VARIABLE, fd, 0);
-                          if (px == (char*) -1)
-                            return 4;
-                          if ((char)px[5] != (char)0xc3)
-                            return 5;
-                          /* On i386 and x86_64 this is a 'ret' instruction that we can invoke. */
-                        #if (defined __i386 || defined __i386__ || defined _I386 || defined _M_IX86 || defined _X86_) || (defined __x86_64__ || defined __amd64__)
-                          ((void (*) (void)) (px + 5)) ();
-                        #endif
-                          return 0;
-                        }
+                     AC_RUN_IFELSE(
+                       [AC_LANG_SOURCE([[
+                          #include <fcntl.h>
+                          #include <stdlib.h>
+                          /* Declare getpagesize().  */
+                          #ifdef HAVE_UNISTD_H
+                           #include <unistd.h>
+                          #endif
+                          #ifdef __hpux
+                           extern
+                           #ifdef __cplusplus
+                           "C"
+                           #endif
+                           int getpagesize (void);
+                          #endif
+                          /* Declare mmap().  */
+                          #include <sys/mman.h>
+                          #ifndef MAP_FILE
+                           #define MAP_FILE 0
+                          #endif
+                          #ifndef MAP_VARIABLE
+                           #define MAP_VARIABLE 0
+                          #endif
+                          int
+                          main ()
+                          {
+                            unsigned int pagesize = getpagesize ();
+                            int fd;
+                            char *pw;
+                            char *px;
+                            fd = open ("$filename", O_CREAT | O_RDWR | O_TRUNC, 0700);
+                            if (fd < 0)
+                              return 1;
+                            if (ftruncate (fd, pagesize) < 0)
+                              return 2;
+                            pw = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FILE | MAP_VARIABLE, fd, 0);
+                            if (pw == (char*) -1)
+                              return 3;
+                            pw[5] = 0xc3;
+                            px = (char *) mmap (NULL, pagesize, PROT_READ | PROT_EXEC, MAP_SHARED | MAP_FILE | MAP_VARIABLE, fd, 0);
+                            if (px == (char*) -1)
+                              return 4;
+                            if ((char)px[5] != (char)0xc3)
+                              return 5;
+                            /* On i386 and x86_64 this is a 'ret' instruction that we can invoke. */
+                          #if (defined __i386 || defined __i386__ || defined _I386 || defined _M_IX86 || defined _X86_) || (defined __x86_64__ || defined __amd64__)
+                            ((void (*) (void)) (px + 5)) ();
+                          #endif
+                            return 0;
+                          }
+                          ]])
                        ],
                        [ffcall_cv_mmap_shared_can_exec=yes],
                        [ffcall_cv_mmap_shared_can_exec=no],

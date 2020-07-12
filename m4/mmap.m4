@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2017 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2020 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -10,7 +10,7 @@ dnl the rest of that program.
 
 dnl From Bruno Haible, Marcus Daniels, Sam Steingold.
 
-AC_PREREQ([2.57])
+AC_PREREQ([2.63])
 
 AC_DEFUN([FFCALL_MMAP],
 [
@@ -39,12 +39,15 @@ AC_DEFUN([FFCALL_MMAP],
                exit(0);
              }
            '
-           AC_TRY_RUN(GL_NOCRASH
-             [$mmap_prog_1
-              int flags = MAP_ANON | MAP_PRIVATE;
-              int fd = -1;
-              nocrash_init();
-              $mmap_prog_2
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mmap_prog_1
+                 int flags = MAP_ANON | MAP_PRIVATE;
+                 int fd = -1;
+                 nocrash_init();
+                 $mmap_prog_2
+                ]])
              ],
              [have_mmap_anon=1
               ffcall_cv_func_mmap_anon=yes],
@@ -52,12 +55,15 @@ AC_DEFUN([FFCALL_MMAP],
              [dnl When cross-compiling, don't assume anything.
               :
              ])
-           AC_TRY_RUN(GL_NOCRASH
-             [$mmap_prog_1
-              int flags = MAP_ANONYMOUS | MAP_PRIVATE;
-              int fd = -1;
-              nocrash_init();
-              $mmap_prog_2
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mmap_prog_1
+                 int flags = MAP_ANONYMOUS | MAP_PRIVATE;
+                 int fd = -1;
+                 nocrash_init();
+                 $mmap_prog_2
+                ]])
              ],
              [have_mmap_anon=1
               ffcall_cv_func_mmap_anonymous=yes],
@@ -65,17 +71,20 @@ AC_DEFUN([FFCALL_MMAP],
              [dnl When cross-compiling, don't assume anything.
               :
              ])
-           AC_TRY_RUN(GL_NOCRASH
-             [$mmap_prog_1
-              #ifndef MAP_FILE
-               #define MAP_FILE 0
-              #endif
-              int flags = MAP_FILE | MAP_PRIVATE;
-              int fd = open("/dev/zero",O_RDONLY,0666);
-              if (fd<0)
-                exit(1);
-              nocrash_init();
-              $mmap_prog_2
+           AC_RUN_IFELSE(
+             [AC_LANG_SOURCE([
+                GL_NOCRASH
+                [$mmap_prog_1
+                 #ifndef MAP_FILE
+                  #define MAP_FILE 0
+                 #endif
+                 int flags = MAP_FILE | MAP_PRIVATE;
+                 int fd = open("/dev/zero",O_RDONLY,0666);
+                 if (fd<0)
+                   exit(1);
+                 nocrash_init();
+                 $mmap_prog_2
+                ]])
              ],
              [have_mmap_devzero=1
               ffcall_cv_func_mmap_devzero=yes],

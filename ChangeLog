@@ -1,5 +1,12 @@
 2020-07-11  Bruno Haible  <bruno@clisp.org>
 
+	build: Modernize autoconf macros.
+	* m4/mmap.m4 (FFCALL_MMAP): Use AC_RUN_IFELSE instead of AC_TRY_RUN.
+	* m4/mprotect.m4 (FFCALL_MPROTECT): Likewise.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC, FFCALL_CODEEXEC_PAX): Likewise.
+
+2020-07-11  Bruno Haible  <bruno@clisp.org>
+
 	Drop portability to OSF/1.
 	* trampoline/trampoline.c: Assume HAVE_MACH_VM is not defined.
 	* callback/trampoline_r/trampoline.c: Likewise.
