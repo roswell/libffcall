@@ -89,8 +89,16 @@ gnulib-m4/gnulib-cache.m4 :
 	    --import $(GNULIB_MODULES); \
 	fi
 
+GNULIB_FILES = \
+  m4/mmap-anon.m4
+
 .PHONY : gnulib-imported-files
 gnulib-imported-files : force
+	if test -n "$$GNULIB_TOOL"; then \
+	  for file in $(GNULIB_FILES); do \
+	    $$GNULIB_TOOL --copy-file $$file || exit $$?; \
+	  done; \
+	fi
 # Get up-to-date versions of files imported from https://git.savannah.gnu.org/gitweb/?p=automake.git;a=tree;f=lib via gnulib.
 	if test -n "$$GNULIB_TOOL"; then \
 	  for file in ar-lib compile install-sh; do \

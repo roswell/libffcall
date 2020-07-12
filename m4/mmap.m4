@@ -15,6 +15,7 @@ AC_PREREQ([2.63])
 AC_DEFUN([FFCALL_MMAP],
 [
   AC_REQUIRE([AC_CANONICAL_HOST])
+  AC_REQUIRE([gl_FUNC_MMAP_ANON])
   AC_CHECK_HEADER([sys/mman.h], [], [no_mmap=1])
   if test -z "$no_mmap"; then
     AC_CHECK_FUNC([mmap], [], [no_mmap=1])
@@ -39,22 +40,6 @@ AC_DEFUN([FFCALL_MMAP],
                exit(0);
              }
            '
-           AC_RUN_IFELSE(
-             [AC_LANG_SOURCE([
-                GL_NOCRASH
-                [$mmap_prog_1
-                 int flags = MAP_ANON | MAP_PRIVATE;
-                 int fd = -1;
-                 nocrash_init();
-                 $mmap_prog_2
-                ]])
-             ],
-             [have_mmap_anon=1
-              ffcall_cv_func_mmap_anon=yes],
-             [],
-             [dnl When cross-compiling, don't assume anything.
-              :
-             ])
            AC_RUN_IFELSE(
              [AC_LANG_SOURCE([
                 GL_NOCRASH
@@ -107,12 +92,6 @@ AC_DEFUN([FFCALL_MMAP],
                ffcall_cv_func_mmap_works="guessing no" ;;
            esac
            case "$host_os" in
-             aix* | cygwin* | darwin* | linux* | solaris*)
-               ffcall_cv_func_mmap_anon="guessing yes" ;;
-             *)
-               ffcall_cv_func_mmap_anon="guessing no" ;;
-           esac
-           case "$host_os" in
              aix* | cygwin* | hpux* | linux* | solaris*)
                ffcall_cv_func_mmap_anonymous="guessing yes" ;;
              *)
@@ -126,12 +105,6 @@ AC_DEFUN([FFCALL_MMAP],
            esac
          fi
         ])
-      case "$ffcall_cv_func_mmap_anon" in
-        *yes)
-          AC_DEFINE([HAVE_MMAP_ANON], [1],
-            [<sys/mman.h> defines MAP_ANON and mmaping with MAP_ANON works])
-          ;;
-      esac
       case "$ffcall_cv_func_mmap_anonymous" in
         *yes)
           AC_DEFINE([HAVE_MMAP_ANONYMOUS], [1],

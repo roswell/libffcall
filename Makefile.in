@@ -181,7 +181,8 @@ GNULIB_IMPORTED_FILES = \
   build-aux/config.guess \
   build-aux/config.sub \
   build-aux/install-sh \
-  gnulib-m4/*.m4
+  gnulib-m4/*.m4 \
+  m4/mmap-anon.m4
 AUTOMAKE_IMPORTED_FILES = \
   build-aux/missing
 IMPORTED_FILES = \

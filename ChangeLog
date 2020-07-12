@@ -1,5 +1,17 @@
 2020-07-12  Bruno Haible  <bruno@clisp.org>
 
+	build: Use autoconf macros from gnulib.
+	* Makefile.maint (GNULIB_FILES): New variable.
+	(gnulib-imported-files): Import the $(GNULIB_FILES) from gnulib.
+	* Makefile.in (GNULIB_IMPORTED_FILES): Add m4/mmap-anon.m4.
+	* configure.ac: Invoke gl_FUNC_MMAP_ANON.
+	* m4/mmap.m4 (FFCALL_MMAP): Require gl_FUNC_MMAP_ANON. Don't test
+	MAP_ANON. Don't set HAVE_MMAP_ANON.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): Require gl_FUNC_MMAP_ANON. Don't
+	test HAVE_MMAP_ANON.
+
+2020-07-12  Bruno Haible  <bruno@clisp.org>
+
 	build: Simplify autoconf macros.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC_PAX): Assume that all platforms that
 	have mprotect also have ENOTSUP.

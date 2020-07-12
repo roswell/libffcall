@@ -124,6 +124,7 @@ dnl Test against the mprotect limitations found in PaX enabled Linux kernels
 dnl and HardenedBSD.
 AC_DEFUN([FFCALL_CODEEXEC_PAX],
 [
+  AC_REQUIRE([gl_FUNC_MMAP_ANON])
   AC_REQUIRE([FFCALL_MMAP])
   AC_REQUIRE([FFCALL_MPROTECT])
   AC_REQUIRE([FFCALL_CODEEXEC])
@@ -245,9 +246,7 @@ AC_DEFUN([FFCALL_CODEEXEC_PAX],
                           unsigned int pagesize = getpagesize ();
                           char *p;
                           int ret;
-                        #if HAVE_MMAP_ANON
-                          p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON | MAP_VARIABLE, -1, 0);
-                        #elif HAVE_MMAP_ANONYMOUS
+                        #if HAVE_MMAP_ANONYMOUS
                           p = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
                         #elif HAVE_MMAP_DEVZERO
                           int zero_fd = open("/dev/zero", O_RDONLY, 0666);

@@ -28,6 +28,7 @@
 /build-aux/install-sh
 /gnulib-lib/
 /gnulib-m4/
+/m4/mmap-anon.m4
 
 # Files brought in by automake:
 /build-aux/depcomp
