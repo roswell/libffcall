@@ -72,22 +72,22 @@ extern void (*tramp_r) (); /* trampoline prototype */
 #endif
 #endif
 
-#ifndef CODE_EXECUTABLE
+#ifndef CODE_EXECUTABLE                 /* Linux, Hurd, macOS, *BSD, IRIX, Solaris, Cygwin, native Windows */
   /* How do we make the trampoline's code executable? */
-  #if HAVE_WORKING_MPROTECT
-    #if HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC > 0
+  #if HAVE_WORKING_MPROTECT             /* Linux, Hurd, macOS, *BSD, IRIX, Solaris, Cygwin */
+    #if HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC > 0    /* Hurd, macOS, *BSD except HardenedBSD, IRIX, Solaris, Cygwin */
       /* mprotect() [or equivalent] the malloc'ed area. */
       #define EXECUTABLE_VIA_MALLOC_THEN_MPROTECT
     #elif HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC > 0
       /* mprotect() [or equivalent] the mmap'ed area. */
       #define EXECUTABLE_VIA_MMAP_THEN_MPROTECT
-    #elif HAVE_MMAP_SHARED_CAN_EXEC
+    #elif HAVE_MMAP_SHARED_CAN_EXEC                /* Linux, HardenedBSD */
       #define EXECUTABLE_VIA_MMAP_FILE_SHARED
     #else
       #error "Don't know how to make memory pages executable."
     #endif
-  #else
-    #if HAVE_MMAP_ANONYMOUS || HAVE_MMAP_DEVZERO
+  #else                                            /* native Windows, very old Linux */
+    #if HAVE_MMAP_ANONYMOUS                        /* very old Linux */
       /* Use an mmap'ed page. */
       #define EXECUTABLE_VIA_MMAP
     #else
@@ -135,7 +135,7 @@ extern
 #endif
 
 /* Declare open(). */
-#if defined(EXECUTABLE_VIA_MMAP_DEVZERO) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -148,11 +148,6 @@ extern
 #include <windows.h>
 #endif
 
-/* Some old mmap() implementations require the flag MAP_FILE whenever you pass
-   an fd >= 0. */
-#ifndef MAP_FILE
-#define MAP_FILE 0
-#endif
 /* Some old mmap() implementations require the flag MAP_VARIABLE whenever you
    pass an addr == NULL. */
 #ifndef MAP_VARIABLE
@@ -324,26 +319,15 @@ static int open_noinherit (const char *filename, int flags, int mode)
 static long pagesize = 0;
 #endif
 
-#if !defined(CODE_EXECUTABLE) && (defined(EXECUTABLE_VIA_MMAP_DEVZERO) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED))
+#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
 
 /* Variables needed for obtaining memory pages via mmap(). */
-#if defined(EXECUTABLE_VIA_MMAP_DEVZERO)
-static int zero_fd;
-#endif
-#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
 static int file_fd;
 static long file_length;
-#endif
 
 /* Initialization of these variables. */
 static void for_mmap_init (void)
 {
-#if defined(EXECUTABLE_VIA_MMAP_DEVZERO)
-  zero_fd = open("/dev/zero",O_RDONLY,0644);
-  if (zero_fd < 0)
-    { fprintf(stderr,"trampoline: Cannot open /dev/zero!\n"); abort(); }
-#endif
-#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
   {
     char filename[100];
     sprintf(filename, "%s/trampdata-%d-%ld", "/tmp", getpid (), random ());
@@ -355,7 +339,6 @@ static void for_mmap_init (void)
     unlink(filename);
   }
   file_length = 0;
-#endif
 }
 
 /* Once-only initializer for these variables. */
@@ -396,7 +379,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #else
       pagesize = getpagesize();
 #endif
-#if defined(EXECUTABLE_VIA_MMAP_DEVZERO) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
       /* Use a once-only initializer here, since simultaneous execution of
          for_mmap_init() in multiple threads must be avoided. */
       gl_once (for_mmap_once, for_mmap_init);
@@ -439,22 +422,12 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
       page = (char*)(((uintptr_t)page + sizeof(intptr_t) + TRAMP_ALIGN-1) & -TRAMP_ALIGN);
 #else
 #ifdef EXECUTABLE_VIA_MMAP_THEN_MPROTECT
-#if HAVE_MMAP_ANONYMOUS
       /* Use mmap with the MAP_ANONYMOUS or MAP_ANON flag. */
       page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
-#else
-      /* Use mmap on /dev/zero. */
-      page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
-#endif
 #endif
 #ifdef EXECUTABLE_VIA_MMAP
-#if HAVE_MMAP_ANONYMOUS
       /* Use mmap with the MAP_ANONYMOUS or MAP_ANON flag. */
       page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS | MAP_VARIABLE, -1, 0);
-#else
-      /* Use mmap on /dev/zero. */
-      page = mmap(NULL, pagesize, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_FILE | MAP_VARIABLE, zero_fd, 0);
-#endif
 #endif
       if (page == (char*)(-1))
         { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
