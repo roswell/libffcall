@@ -380,6 +380,11 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
   /* First, get the page size once and for all. */
   if (!pagesize)
     {
+#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+      /* Use a once-only initializer here, since simultaneous execution of
+         for_mmap_init() in multiple threads must be avoided. */
+      gl_once (for_mmap_once, for_mmap_init);
+#endif
       /* Simultaneous execution of this initialization in multiple threads
          is OK. */
 #if defined(EXECUTABLE_VIA_VIRTUALALLOC)
@@ -391,11 +396,6 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
       pagesize = info.dwPageSize;
 #else
       pagesize = getpagesize();
-#endif
-#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
-      /* Use a once-only initializer here, since simultaneous execution of
-         for_mmap_init() in multiple threads must be avoided. */
-      gl_once (for_mmap_once, for_mmap_init);
 #endif
     }
 #endif
