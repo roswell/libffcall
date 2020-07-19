@@ -155,6 +155,17 @@ extern
 #endif
 
 /* Support for instruction cache flush. */
+#if defined _WIN32 && !defined __CYGWIN__
+# define WIN32_LEAN_AND_MEAN
+# define WIN32_EXTRA_LEAN
+# include <windows.h>
+#elif defined __APPLE__ && defined __MACH__
+# include <libkern/OSCacheControl.h>
+#elif defined _AIX
+# include <sys/cache.h>
+#elif defined __sgi
+# include <sys/cachectl.h>
+#else
 #ifdef __i386__
 #if defined(_WIN32) && ! defined(__CYGWIN__) /* native Windows */
 #define WIN32_LEAN_AND_MEAN
@@ -177,6 +188,7 @@ extern
 extern void __TR_clear_cache_2();
 #else
 extern void __TR_clear_cache();
+#endif
 #endif
 #endif
 
@@ -1261,6 +1273,29 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #if !(defined(__hppanew__) || defined(__hppa64new__) || defined(__powerpcaix__) || defined(__powerpc64aix__) || defined(__ia64__))
   /* Only needed if we really set up machine instructions. */
+  /* Use the operating system provided function, when available. */
+#if defined _WIN32 && !defined __CYGWIN__
+  /* Native Windows.
+     FlushInstructionCache
+     <https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-flushinstructioncache>  */
+  HANDLE process = GetCurrentProcess ();
+  while (!FlushInstructionCache (process, function_x, TRAMP_CODE_LENGTH))
+    ;
+#elif defined __APPLE__ && defined __MACH__
+  /* macOS  */
+  sys_icache_invalidate (function_x, TRAMP_CODE_LENGTH);
+#elif defined _AIX
+  /* AIX.  */
+  _sync_cache_range (function_x, TRAMP_CODE_LENGTH);
+#elif defined __sgi
+  /* IRIX.  */
+  cacheflush (function_x, TRAMP_CODE_LENGTH, ICACHE);
+#elif defined __sun
+  /* Solaris.  */
+  extern void sync_instruction_memory (char *, size_t);
+  sync_instruction_memory (function_x, TRAMP_CODE_LENGTH);
+#else
+  /* No operating system provided function. Dispatch according to the CPU. */
 #ifdef __i386__
 #if defined(_WIN32)
   while (!FlushInstructionCache(GetCurrentProcess(),function_x,TRAMP_CODE_LENGTH))
@@ -1351,6 +1386,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   __riscv_flush_icache((void*)function_x,(void*)(function_x+TRAMP_CODE_LENGTH),0);
 #elif defined(__GNUC__)
   __asm__ __volatile__ ("fence.i");
+#endif
 #endif
 #endif
 #endif

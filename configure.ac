@@ -116,8 +116,14 @@ if test ${HOST_CPU_C_ABI} = powerpc; then
     *) ;;
   esac
 fi
-if test ${HOST_CPU_C_ABI} = sparc -o ${HOST_CPU_C_ABI} = sparc64 -o ${HOST_CPU_C_ABI} = alpha -o ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = hppa64 -o ${HOST_CPU_C_ABI} = powerpc64-elfv2; then
+if ${HOST_CPU_C_ABI} = alpha -o ${HOST_CPU_C_ABI} = hppa -o ${HOST_CPU_C_ABI} = hppa64 -o ${HOST_CPU_C_ABI} = powerpc64-elfv2; then
   CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).lo'
+fi
+if test ${HOST_CPU_C_ABI} = sparc -o ${HOST_CPU_C_ABI} = sparc64; then
+  case "${host_os}" in
+    solaris*) ;;
+    *) CPU_OBJECTS="$CPU_OBJECTS "'cache-$(CPU).lo' ;;
+  esac
 fi
 if test ${HOST_CPU_C_ABI} = powerpc; then
   case "${host_os}" in
