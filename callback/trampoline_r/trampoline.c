@@ -1407,7 +1407,9 @@ void free_trampoline_r (__TR_function function)
     function -= ((intptr_t*)page_x)[0];
   }
 #endif
+  gl_lock_lock(freelist_lock);
   *(char**)function = freelist; freelist = (char*)function;
+  gl_lock_unlock(freelist_lock);
   /* It is probably not worth calling munmap() for entirely freed pages. */
 #else
   free(((char**)function)[-1]);
