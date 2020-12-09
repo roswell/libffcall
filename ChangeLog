@@ -1,3 +1,26 @@
+2020-07-19  Bruno Haible  <bruno@clisp.org>
+
+	trampoline, callback: Fix another multithread-safety bug.
+	* trampoline/trampoline.c (alloc_trampoline): Invoke for_mmap_init
+	before assigning pagesize, not after.
+	* callback/trampoline_r/trampoline.c (alloc_trampoline_r): Likewise.
+
+2020-07-19  Bruno Haible  <bruno@clisp.org>
+
+	trampoline, callback: Fix a multithread-safety bug.
+	* trampoline/trampoline.c (free_trampoline): Take the freelist_lock.
+	* callback/trampoline_r/trampoline.c (free_trampoline_r): Likewise.
+
+2020-07-19  Bruno Haible  <bruno@clisp.org>
+
+	Use OS-provided functions for flushing the instruction cache.
+	* trampoline/trampoline.c (alloc_trampoline): For flushing the
+	instruction cache, use the OS-provided functions on Windows, macOS, AIX,
+	IRIX, Solaris.
+	* callback/trampoline_r/trampoline.c: Likewise.
+	* configure.ac: Arrange to not build cache-sparc.o or cache-sparc64.o on
+	Solaris.
+
 2020-07-12  Bruno Haible  <bruno@clisp.org>
 
 	build: Fix misuse of AC_CACHE_CHECK.
