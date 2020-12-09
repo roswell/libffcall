@@ -11,17 +11,13 @@ You will need reasonably recent versions of the build tools:
     + Homepage:
       https://gcc.gnu.org/
 
-  * GNU automake
+  * GNU automake 1.15 or newer
     + Homepage:
       https://www.gnu.org/software/automake/
-    You need a particular version of GNU automake.
-    See the comments at the top of Makefile.maint for details.
 
-  * GNU autoconf
+  * GNU autoconf 2.69 or newer
     + Homepage:
       https://www.gnu.org/software/autoconf/
-    You need a particular version of GNU autoconf and set a couple of symbolic
-    links. See the comments at the top of Makefile.maint for details.
 
   * GNU m4
     + Homepage:

@@ -1,5 +1,16 @@
 2020-12-09  Bruno Haible  <bruno@clisp.org>
 
+	Switch to autoconf 2.70.
+	* configure.ac: Fix AC_CHECK_HEADERS invocation. Don't invoke
+	AC_HEADER_STDC.
+	* Makefile.maint (ACLOCAL, AUTOMAKE, AUTOCONF, AUTOHEADER): Remove the
+	fixed version suffix.
+	* autogen.sh: Update comments.
+	* README-hacking: Indicate which versions of autoconf and automake are
+	supported.
+
+2020-12-09  Bruno Haible  <bruno@clisp.org>
+
 	build: Fix syntax error in configure.ac (regression from 2020-07-19).
 	* configure.ac: Fix syntax error.
 

@@ -4,7 +4,7 @@
 # also regenerates all aclocal.m4, config.h.in, configure files with new
 # versions of autoconf, automake, or libtool.
 #
-# This script requires autoconf-2.65..2.69 and automake-1.11..1.15 in the PATH.
+# This script requires autoconf-2.65..2.70 and automake-1.11..1.16 in the PATH.
 # If not used from a released tarball, it also requires either
 #   - the GNULIB_SRCDIR environment variable pointing to a gnulib checkout, or
 #   - a preceding invocation of './gitsub.sh pull'.
@@ -14,7 +14,7 @@
 #   - a copy of the newest libtool-x.y.z.tar.gz in the current directory, or
 #   - the wget program in the PATH and an internet connection.
 
-# Copyright (C) 2016-2019 Bruno Haible.
+# Copyright (C) 2016-2020 Bruno Haible.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
