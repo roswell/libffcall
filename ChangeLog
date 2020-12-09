@@ -1,3 +1,8 @@
+2020-12-09  Bruno Haible  <bruno@clisp.org>
+
+	build: Fix syntax error in configure.ac (regression from 2020-07-19).
+	* configure.ac: Fix syntax error.
+
 2020-07-19  Bruno Haible  <bruno@clisp.org>
 
 	trampoline, callback: Fix another multithread-safety bug.
