@@ -1,5 +1,11 @@
 2021-02-20  Bruno Haible  <bruno@clisp.org>
 
+	build: Support creating shared libraries on MidnightBSD.
+	* Makefile.maint (libtool-imported-files): Apply the patch from
+	<https://savannah.gnu.org/patch/?10007>.
+
+2021-02-20  Bruno Haible  <bruno@clisp.org>
+
 	Switch to autoconf 2.71.
 	* autogen.sh: Update comments.
 

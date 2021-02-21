@@ -58,6 +58,12 @@ libtool-imported-files : force
 	chmod u+w m4/libtool.m4
 	patch -p1 < libtool-solaris11-fix.diff
 	rm -f libtool-solaris11-fix.diff
+	: "Support creating shared libraries on MidnightBSD"
+	wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-midnightbsd-fix.diff 'https://savannah.gnu.org/patch/download.php?file_id=50595'
+	chmod u+w build-aux/ltmain.sh m4/libtool.m4
+	head -n 60 < libtool-midnightbsd-fix.diff | patch -p0 build-aux/ltmain.sh
+	tail -n +227 < libtool-midnightbsd-fix.diff | head -n 56 | patch -p0 m4/libtool.m4
+	rm -f libtool-midnightbsd-fix.diff
 
 .PHONY : libtool-clean
 libtool-clean : force
