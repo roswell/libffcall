@@ -1,3 +1,8 @@
+2021-02-28  Bruno Haible  <bruno@clisp.org>
+
+	Update DEPENDENCIES.
+	* DEPENDENCIES: Update some details.
+
 2021-02-20  Bruno Haible  <bruno@clisp.org>
 
 	build: Support creating shared libraries on MidnightBSD.
