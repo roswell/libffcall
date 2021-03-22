@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2020 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -195,6 +195,12 @@ extern void __TR_clear_cache();
 /* Support for multithread-safe coding. */
 #include "glthread/lock.h"
 
+#if defined(__APPLE__) && defined(__MACH__) /* only needed on macOS */
+#define KEEP_TEMP_FILE_VISIBLE
+/* Support for temporary files that are cleaned up automatically. */
+#include "clean-temp-simple.h"
+#endif
+
 #if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
 /* Opens a file descriptor and attempts to make it non-inheritable. */
 static int open_noinherit (const char *filename, int flags, int mode)
@@ -345,12 +351,26 @@ static void for_mmap_init (void)
   {
     char filename[100];
     sprintf(filename, "%s/trampdata-%d-%ld", "/tmp", getpid (), random ());
+#if defined(KEEP_TEMP_FILE_VISIBLE)
+    if (register_temporary_file(filename) < 0)
+      { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
+#endif
     file_fd = open_noinherit (filename, O_CREAT | O_RDWR | O_TRUNC, 0700);
     if (file_fd < 0)
-      { fprintf(stderr,"trampoline: Cannot open %s!\n",filename); abort(); }
+      {
+#if defined(KEEP_TEMP_FILE_VISIBLE)
+        unregister_temporary_file(filename);
+#endif
+        fprintf(stderr,"trampoline: Cannot open %s!\n",filename);
+        abort();
+      }
+#if !defined(KEEP_TEMP_FILE_VISIBLE)
     /* Remove the file from the file system as soon as possible, to make
-       sure there is no leftover after this process terminates or crashes. */
+       sure there is no leftover after this process terminates or crashes.
+       On macOS 11.2, this does not work: It would make the mmap call below,
+       with arguments PROT_READ|PROT_EXEC and MAP_SHARED, fail. */
     unlink(filename);
+#endif
   }
   file_length = 0;
 }

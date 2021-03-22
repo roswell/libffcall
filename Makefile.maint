@@ -74,6 +74,7 @@ libtool-clean : force
 
 GNULIB_MODULES = \
   ansi-c++-opt \
+  clean-temp-simple \
   host-cpu-c-abi \
   lock \
   nocrash \

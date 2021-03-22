@@ -1,3 +1,12 @@
+2021-03-21  Bruno Haible  <bruno@clisp.org>
+
+	trampoline: Work around failing mmap call on macOS 11.
+	* Makefile.maint (GNULIB_MODULES): Add clean-temp-simple.
+	* trampoline/trampoline.c: On macOS, define KEEP_TEMP_FILE_VISIBLE.
+	(for_mmap_init): If KEEP_TEMP_FILE_VISIBLE, don't delete the file here,
+	but instead register it for deletion when the process terminates.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
 2021-02-28  Bruno Haible  <bruno@clisp.org>
 
 	Update DEPENDENCIES.
