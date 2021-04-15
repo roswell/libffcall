@@ -1,3 +1,9 @@
+2021-04-14  Bruno Haible  <bruno@clisp.org>
+
+	build: Fix compilation error on FreeBSD 13.0/x86_64.
+	* common/asm-x86_64.h (EH_FRAME_SECTION): On FreeBSD, use flags "a"
+	instead of "aw".
+
 2021-03-21  Bruno Haible  <bruno@clisp.org>
 
 	trampoline: Work around failing mmap call on macOS 11.

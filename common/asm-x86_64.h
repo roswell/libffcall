@@ -1,7 +1,7 @@
 // Assembly language support for x86_64 CPU.
 // Bruno Haible 2016-12-28
 
-// Copyright (C) 1997-2018 Bruno Haible <bruno@clisp.org>
+// Copyright (C) 1997-2021 Bruno Haible <bruno@clisp.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -279,7 +279,12 @@
 // Solaris/ELF
 #define EH_FRAME_SECTION .eh_frame,"aL",link=.text,@unwind
 #else
+#if defined __FreeBSD__
+// FreeBSD/ELF
+#define EH_FRAME_SECTION .eh_frame,"a",@progbits
+#else
 // Linux/ELF
 #define EH_FRAME_SECTION .eh_frame,"aw",@progbits
+#endif
 #endif
 #endif
