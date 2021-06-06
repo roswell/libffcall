@@ -71,7 +71,7 @@ Files in this package:
 Copyright notice:
 
 Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>        (original avcall)
-Copyright 1995-2017 Bruno Haible <bruno@clisp.org>                (everything)
+Copyright 1995-2021 Bruno Haible <bruno@clisp.org>                (everything)
 Copyright 1997      Jörg Höhle <Joerg.Hoehle@gmd.de>              (m68k AmigaOS support)
 Copyright 2000      Adam Fedor <fedor@gnu.org>                    (PowerPC MacOS support)
 Copyright 2001-2012 Sam Steingold <sds@gnu.org>                   (build infrastructure)
