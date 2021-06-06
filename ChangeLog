@@ -1,5 +1,14 @@
 2021-06-06  Bruno Haible  <bruno@clisp.org>
 
+	Add support for xlclang compiler in 64-bit mode on AIX.
+	* avcall/avcall.h (__AV_FLOAT_ARGS): Add __AV_AIXCC_FLOAT_ARGS on 64-bit
+	xlclang.
+	* vacall/vacall.h (__VA_FLOAT_ARGS): Add __VA_AIXCC_FLOAT_ARGS on 64-bit
+	xlclang.
+	* callback/vacall_r/vacall_r.h: Likewise.
+
+2021-06-06  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Fix minitests crash on OpenBSD 6.5 and newer (x86_64).
 	* vacall/Makefile.devel (vacall-x86_64-linux-pic.s): New target.
 	(vacall-x86_64-macro.S): On OpenBSD, use the variant compiled with

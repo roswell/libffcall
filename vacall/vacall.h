@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -224,7 +224,7 @@ enum __VA_alist_flags
    * before or after #including <vacall.h>.
    */
 #ifndef __VA_FLOAT_ARGS
-#if defined(__powerpc64__) && defined(_AIX) && !defined(__GNUC__) /* AIX 64-bit xlc */
+#if defined(__powerpc64__) && defined(_AIX) && (defined(__ibmxl__) || !defined(__GNUC__)) /* AIX 64-bit xlc, xlclang */
   __VA_FLOAT_ARGS		= __VA_AIXCC_FLOAT_ARGS,
 #else
   __VA_FLOAT_ARGS		= 0,
