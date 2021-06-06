@@ -206,7 +206,7 @@ enum __AV_alist_flags
 #if defined(__powerpc__) && !defined(__powerpc64__) && defined(_AIX) && !defined(__GNUC__) /* AIX 32-bit cc, xlc */
   __AV_STRUCT_ARGS		= __AV_AIXCC_STRUCT_ARGS,
 #else
-#if defined(__powerpc64__) && defined(_AIX) /* AIX 64-bit cc, xlc, gcc */
+#if defined(__powerpc64__) && defined(_AIX) /* AIX 64-bit cc, xlc, gcc, xlclang */
   __AV_STRUCT_ARGS		= __AV_AIXCC_STRUCT_ARGS,
 #else
 #if defined(__ia64__) && !(defined(__GNUC__) && (__GNUC__ >= 3))
