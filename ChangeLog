@@ -1,3 +1,11 @@
+2021-06-06  Bruno Haible  <bruno@clisp.org>
+
+	vacall: Fix minitests crash on OpenBSD 6.5 and newer (x86_64).
+	* vacall/Makefile.devel (vacall-x86_64-linux-pic.s): New target.
+	(vacall-x86_64-macro.S): On OpenBSD, use the variant compiled with
+	-fPIC. Needed because without -fPIC, the .eh_frame section has
+	relocations.
+
 2021-04-14  Bruno Haible  <bruno@clisp.org>
 
 	build: Fix compilation error on FreeBSD 13.0/x86_64.
