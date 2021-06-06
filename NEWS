@@ -1,3 +1,14 @@
+New in 2.3:
+
+* Added support for the following platforms:
+  (Previously, a build on these platforms failed.)
+  - arm64: macOS 11.
+  - x86_64: FreeBSD 13, OpenBSD 6.5 and newer.
+  - powerpc64: AIX 7 with xlclang compiler.
+
+* Fixed a couple of multithread-safety bugs in the trampoline and callback
+  packages.
+
 New in 2.2:
 
 * Added support for the following platforms:
