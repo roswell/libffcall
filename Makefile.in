@@ -56,7 +56,7 @@ LIBFFCALL_EXPORTED_SYMBOLS_REGEX = '^ffcall_|^avcall_|^callback_|_callback$$'
 
 # Before making a release, change this according to the libtool documentation,
 # section "Library interface versions".
-LIBFFCALL_VERSION_INFO = 0:2:0
+LIBFFCALL_VERSION_INFO = 0:3:0
 
 all : all-subdirs libffcall.la
 
