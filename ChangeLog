@@ -1,5 +1,11 @@
 2021-06-06  Bruno Haible  <bruno@clisp.org>
 
+	Fix test crash with CC="gcc -ftrapv".
+	* callback/trampoline_r/test1.c (f): Reorder summands, to avoid signed
+	integer overflow.
+
+2021-06-06  Bruno Haible  <bruno@clisp.org>
+
 	Bump shared library version numbers.
 	* Makefile.in (LIBFFCALL_VERSION_INFO): Bump to 0:3:0.
 	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): Bump to 1:3:0.
