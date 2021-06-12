@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 2017-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,16 @@ void avcall_start (av_alist* list, __avword* list_args, __avword* list_args_end,
 void avcall_start_struct (av_alist* list, __avword* list_args, __avword* list_args_end, __avword(*func)(), size_t type_size, int type_splittable, void* raddr, int flags)
 {
   __av_start_struct(AV_LIST_INNER(list),list_args,list_args_end,func,type_size,type_splittable,raddr,flags);
+}
+
+int avcall_arg_int (av_alist* list, int val)
+{
+  return __av_int(AV_LIST_INNER(list),val);
+}
+
+int avcall_arg_uint (av_alist* list, unsigned int val)
+{
+  return __av_uint(AV_LIST_INNER(list),val);
 }
 
 int avcall_arg_long (av_alist* list, long val)

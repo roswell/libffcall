@@ -1,5 +1,15 @@
 2021-06-12  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Support calling conventions that pass 'int', 'long' differently.
+	* avcall/avcall-internal.h (__av_int, __av_uint): New macros.
+	* avcall/avcall-libapi.c (avcall_arg_int, avcall_arg_uint): New
+	functions.
+	* avcall/avcall.h (avcall_arg_int, avcall_arg_uint): New declarations.
+	(av_char, av_schar, av_short, av_int, av_uchar, av_ushort, av_uint): Use
+	them.
+
+2021-06-12  Bruno Haible  <bruno@clisp.org>
+
 	Support assembly language syntax expected by macOS 11/arm64.
 	* common/asm-arm64.sh: New file, based on common/asm-arm.sh.
 	* common/asm-arm64.h: New file, based on common/asm-arm.h.

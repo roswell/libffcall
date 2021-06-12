@@ -1,6 +1,6 @@
 /*
  * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -375,6 +375,26 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #endif
 
 /* integer argument types */
+
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+/* The first __AV_IARG_NUM integer arguments are passed in registers. */
+#define __av_int(LIST,VAL)						\
+  ((LIST).ianum < __AV_IARG_NUM						\
+   ? ((LIST).iargs[(LIST).ianum++] = (int)(VAL), 0)			\
+   : __av_word(LIST,(int)(VAL)))
+#else
+#define __av_int(LIST,VAL)	__av_word(LIST,(int)(VAL))
+#endif
+
+#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+/* The first __AV_IARG_NUM integer arguments are passed in registers. */
+#define __av_uint(LIST,VAL)						\
+  ((LIST).ianum < __AV_IARG_NUM						\
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned int)(VAL), 0)		\
+   : __av_word(LIST,(unsigned int)(VAL)))
+#else
+#define __av_uint(LIST,VAL)	__av_word(LIST,(unsigned int)(VAL))
+#endif
 
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */

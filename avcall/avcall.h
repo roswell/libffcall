@@ -372,17 +372,21 @@ extern void avcall_start_struct (av_alist* /* LIST */, __avword* /* LIST_ARGS */
 
 /* integer argument types */
 
+extern int avcall_arg_int (av_alist* /* LIST */, int /* VAL */);
+extern int avcall_arg_uint (av_alist* /* LIST */, unsigned int /* VAL */);
+
+#define av_char(LIST,VAL)	avcall_arg_int(&(LIST),(char)(VAL))
+#define av_schar(LIST,VAL)	avcall_arg_int(&(LIST),(signed char)(VAL))
+#define av_short(LIST,VAL)	avcall_arg_int(&(LIST),(short)(VAL))
+#define av_int(LIST,VAL)	avcall_arg_int(&(LIST),(int)(VAL))
+#define av_uchar(LIST,VAL)	avcall_arg_uint(&(LIST),(unsigned char)(VAL))
+#define av_ushort(LIST,VAL)	avcall_arg_uint(&(LIST),(unsigned short)(VAL))
+#define av_uint(LIST,VAL)	avcall_arg_uint(&(LIST),(unsigned int)(VAL))
+
 extern int avcall_arg_long (av_alist* /* LIST */, long /* VAL */);
 extern int avcall_arg_ulong (av_alist* /* LIST */, unsigned long /* VAL */);
 
-#define av_char(LIST,VAL)	avcall_arg_long(&(LIST),(char)(VAL))
-#define av_schar(LIST,VAL)	avcall_arg_long(&(LIST),(signed char)(VAL))
-#define av_short(LIST,VAL)	avcall_arg_long(&(LIST),(short)(VAL))
-#define av_int(LIST,VAL)	avcall_arg_long(&(LIST),(int)(VAL))
 #define av_long(LIST,VAL)	avcall_arg_long(&(LIST),(long)(VAL))
-#define av_uchar(LIST,VAL)	avcall_arg_ulong(&(LIST),(unsigned char)(VAL))
-#define av_ushort(LIST,VAL)	avcall_arg_ulong(&(LIST),(unsigned short)(VAL))
-#define av_uint(LIST,VAL)	avcall_arg_ulong(&(LIST),(unsigned int)(VAL))
 #define av_ulong(LIST,VAL)	avcall_arg_ulong(&(LIST),(unsigned long)(VAL))
 
 extern int avcall_arg_ptr (av_alist* /* LIST */, void* /* VAL */);
