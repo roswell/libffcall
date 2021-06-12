@@ -51,7 +51,10 @@ extern "C" {
 /* __vaword represents a single word that can be pushed on the stack.
  * __varword represents a general-purpose register.
  */
-#if defined(__mipsn32__) || defined(__x86_64_x32__) || defined(__VA_LLP64)
+#if defined(__arm64__) && defined(__APPLE__) && defined(__MACH__)
+typedef int __vaword;
+typedef long __varword;
+#elif defined(__mipsn32__) || defined(__x86_64_x32__) || defined(__VA_LLP64)
 typedef long long __vaword;
 typedef long long __varword;
 #else

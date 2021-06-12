@@ -141,8 +141,12 @@ vacall-armhf.s : $(srcdir)/vacall-armhf-macro.S
 vacall-arm64.lo : vacall-arm64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-arm64.s
 
-vacall-arm64.s : $(srcdir)/vacall-arm64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-arm64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-arm64.s
+vacall-arm64.s : $(srcdir)/vacall-arm64-macro.S $(srcdir)/vacall-arm64-macos-macro.S
+	case "$(OS)" in \
+	  macos* | darwin*) input=vacall-arm64-macos-macro.S ;; \
+	  *) input=vacall-arm64-macro.S ;; \
+	esac; \
+	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/$${input} | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-arm64.s
 
 vacall-powerpc.lo : vacall-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-powerpc.s
@@ -311,7 +315,7 @@ SOURCE_FILES = \
   vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm-macro.S \
   vacall-armhf-macro.S \
-  vacall-arm64-macro.S \
+  vacall-arm64-macro.S vacall-arm64-macos-macro.S \
   vacall-hppa-linux.s vacall-hppa-macro.S \
   vacall-hppa64-linux.s vacall-hppa64-macro.S \
   vacall-i386-linux.s vacall-i386-macro.S \

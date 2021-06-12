@@ -1,5 +1,22 @@
 2021-06-12  Bruno Haible  <bruno@clisp.org>
 
+	vacall, callback: Add support for macOS 11/arm64.
+	* vacall/vacall.h (__varword): Define differently on macOS 11/arm64.
+	* callback/vacall_r/vacall_r.h (__varword): Likewise.
+	* vacall/vacall-internal.h (_va_arg_double): Update to allow for
+	sizeof(__vaword) < sizeof(double).
+	(__va_arg_struct): Compare type size with 2*sizeof(__varword).
+	* vacall/Makefile.devel (vacall-arm64-macos-macro.S): New rule.
+	* vacall/Makefile.in (SOURCE_FILES): Add vacall-arm64-macos-macro.S.
+	(vacall-arm64.s): Use a different input file on macOS.
+	* callback/vacall_r/Makefile.devel (vacall-arm64-macos-macro.S): New
+	rule.
+	* callback/vacall_r/Makefile.in (SOURCE_FILES): Add
+	vacall-arm64-macos-macro.S.
+	(vacall-arm64.s): Use a different input file on macOS.
+
+2021-06-12  Bruno Haible  <bruno@clisp.org>
+
 	vacall, callback: Distinguish a register word from a stack word.
 	* vacall/vacall.h (__varword): New type.
 	* callback/vacall_r/vacall_r.h (__varword): Likewise.

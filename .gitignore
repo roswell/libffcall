@@ -113,6 +113,7 @@
 /vacall/vacall-armhf-linux-pic.s
 /vacall/vacall-armhf-macro.S
 /vacall/vacall-arm64-macro.S
+/vacall/vacall-arm64-macos-macro.S
 /vacall/vacall-hppa-linux.s
 /vacall/vacall-hppa-macro.S
 /vacall/vacall-hppa64-linux.s
@@ -186,6 +187,7 @@
 /callback/vacall_r/vacall-arm-macro.S
 /callback/vacall_r/vacall-armhf-macro.S
 /callback/vacall_r/vacall-arm64-macro.S
+/callback/vacall_r/vacall-arm64-macos-macro.S
 /callback/vacall_r/vacall-hppa-linux.s
 /callback/vacall_r/vacall-hppa-macro.S
 /callback/vacall_r/vacall-hppa64-linux.s

@@ -891,8 +891,8 @@ typedef struct vacall_alist
 #define _va_arg_double(LIST)  \
   ((LIST)->fanum < __VA_FARG_NUM					\
    ? (LIST)->darg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(__vaword),					\
-      *(double*)((LIST)->aptr - sizeof(__vaword))			\
+   : ((LIST)->aptr += sizeof(double),					\
+      *(double*)((LIST)->aptr - sizeof(double))				\
   )  )
 #endif
 #if defined(__powerpc_aix__)
@@ -1119,7 +1119,7 @@ typedef struct vacall_alist
 /* Small structures are passed in registers or on the stack. */
 /* Big structures are passed as pointers to caller-made local copies. */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((TYPE_SIZE) <= 2*sizeof(__vaword)					\
+  ((TYPE_SIZE) <= 2*sizeof(__varword)					\
    ? (void*)__va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
    : va_arg_ptr(LIST,void*)						\
   )
