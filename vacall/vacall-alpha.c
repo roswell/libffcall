@@ -1,7 +1,7 @@
 /* vacall function for alpha CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,20 +24,20 @@
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("$1");
 #endif
-register long		arg1	__asm__("$16");
-register long		arg2	__asm__("$17");
-register long		arg3	__asm__("$18");
-register long		arg4	__asm__("$19");
-register long		arg5	__asm__("$20");
-register long		arg6	__asm__("$21");
+register __varword	arg1	__asm__("$16");
+register __varword	arg2	__asm__("$17");
+register __varword	arg3	__asm__("$18");
+register __varword	arg4	__asm__("$19");
+register __varword	arg5	__asm__("$20");
+register __varword	arg6	__asm__("$21");
 register double		farg1	__asm__("$f16");
 register double		farg2	__asm__("$f17");
 register double		farg3	__asm__("$f18");
 register double		farg4	__asm__("$f19");
 register double		farg5	__asm__("$f20");
 register double		farg6	__asm__("$f21");
-register __vaword	iret	__asm__("$0");
-register __vaword	iret2	__asm__("$1");
+register __varword	iret	__asm__("$0");
+register __varword	iret2	__asm__("$1");
 register float		fret	__asm__("$f0");
 register double		dret	__asm__("$f0");
 
@@ -144,9 +144,9 @@ vacall_receiver (struct gpargsequence gpargs)
       if (list.rsize == sizeof(long)) {
         iret = *(unsigned long *) list.raddr;
       } else
-      if (list.rsize == 2*sizeof(__vaword)) {
-        iret  = ((__vaword *) list.raddr)[0];
-        iret2 = ((__vaword *) list.raddr)[1];
+      if (list.rsize == 2*sizeof(__varword)) {
+        iret  = ((__varword *) list.raddr)[0];
+        iret2 = ((__varword *) list.raddr)[1];
       }
     }
   }

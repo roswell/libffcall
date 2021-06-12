@@ -1,7 +1,7 @@
 /* vacall function for x86_64 CPU with the Windows ABI ('gcc -mabi=ms') */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,10 +25,10 @@ register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("r10");
 #endif
 
-/*register __vaword iarg1 __asm__("rcx");*/
-/*register __vaword iarg2 __asm__("rdx");*/
-/*register __vaword iarg3 __asm__("r8");*/
-/*register __vaword iarg4 __asm__("r9");*/
+/*register __varword iarg1 __asm__("rcx");*/
+/*register __varword iarg2 __asm__("rdx");*/
+/*register __varword iarg3 __asm__("r8");*/
+/*register __varword iarg4 __asm__("r9");*/
 
 register float farg1 __asm__("xmm0");
 register float farg2 __asm__("xmm1");
@@ -40,7 +40,7 @@ register double darg2 __asm__("xmm1");
 register double darg3 __asm__("xmm2");
 register double darg4 __asm__("xmm3");
 
-register __vaword iret  __asm__("rax");
+register __varword iret  __asm__("rax");
 register float  fret __asm__("xmm0");
 register double dret __asm__("xmm0");
 
@@ -137,42 +137,42 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
       /* Return structs of size 1, 2, 4, 8 in registers. */
       #if 0 /* Unoptimized */
       if (list.rsize == 1) {
-        iret =    (__vaword)((unsigned char *) list.raddr)[0];
+        iret =    (__varword)((unsigned char *) list.raddr)[0];
       } else
       if (list.rsize == 2) {
-        iret =    (__vaword)((unsigned char *) list.raddr)[0]
-               | ((__vaword)((unsigned char *) list.raddr)[1] << 8);
+        iret =    (__varword)((unsigned char *) list.raddr)[0]
+               | ((__varword)((unsigned char *) list.raddr)[1] << 8);
       } else
       if (list.rsize == 4) {
-        iret =    (__vaword)((unsigned char *) list.raddr)[0]
-               | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
-               | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
-               | ((__vaword)((unsigned char *) list.raddr)[3] << 24);
+        iret =    (__varword)((unsigned char *) list.raddr)[0]
+               | ((__varword)((unsigned char *) list.raddr)[1] << 8)
+               | ((__varword)((unsigned char *) list.raddr)[2] << 16)
+               | ((__varword)((unsigned char *) list.raddr)[3] << 24);
       } else
       if (list.rsize == 8) {
-        iret =    (__vaword)((unsigned char *) list.raddr)[0]
-               | ((__vaword)((unsigned char *) list.raddr)[1] << 8)
-               | ((__vaword)((unsigned char *) list.raddr)[2] << 16)
-               | ((__vaword)((unsigned char *) list.raddr)[3] << 24)
-               | ((__vaword)((unsigned char *) list.raddr)[4] << 32)
-               | ((__vaword)((unsigned char *) list.raddr)[5] << 40)
-               | ((__vaword)((unsigned char *) list.raddr)[6] << 48)
-               | ((__vaword)((unsigned char *) list.raddr)[7] << 56);
+        iret =    (__varword)((unsigned char *) list.raddr)[0]
+               | ((__varword)((unsigned char *) list.raddr)[1] << 8)
+               | ((__varword)((unsigned char *) list.raddr)[2] << 16)
+               | ((__varword)((unsigned char *) list.raddr)[3] << 24)
+               | ((__varword)((unsigned char *) list.raddr)[4] << 32)
+               | ((__varword)((unsigned char *) list.raddr)[5] << 40)
+               | ((__varword)((unsigned char *) list.raddr)[6] << 48)
+               | ((__varword)((unsigned char *) list.raddr)[7] << 56);
       }
       #else /* Optimized: fewer conditional jumps, fewer memory accesses */
-      uintptr_t count = list.rsize; /* > 0, ≤ sizeof(__vaword) */
+      uintptr_t count = list.rsize; /* > 0, ≤ sizeof(__varword) */
       if (count == 1 || count == 2 || count == 4 || count == 8) {
-        __vaword* wordaddr = (__vaword*)((uintptr_t)list.raddr & ~(uintptr_t)(sizeof(__vaword)-1));
-        uintptr_t start_offset = (uintptr_t)list.raddr & (uintptr_t)(sizeof(__vaword)-1); /* ≥ 0, < sizeof(__vaword) */
-        uintptr_t end_offset = start_offset + count; /* > 0, < 2*sizeof(__vaword) */
-        if (end_offset <= sizeof(__vaword)) {
-          /* 0 < end_offset ≤ sizeof(__vaword) */
-          __vaword mask0 = ((__vaword)2 << (end_offset*8-1)) - 1;
+        __varword* wordaddr = (__varword*)((uintptr_t)list.raddr & ~(uintptr_t)(sizeof(__varword)-1));
+        uintptr_t start_offset = (uintptr_t)list.raddr & (uintptr_t)(sizeof(__varword)-1); /* ≥ 0, < sizeof(__varword) */
+        uintptr_t end_offset = start_offset + count; /* > 0, < 2*sizeof(__varword) */
+        if (end_offset <= sizeof(__varword)) {
+          /* 0 < end_offset ≤ sizeof(__varword) */
+          __varword mask0 = ((__varword)2 << (end_offset*8-1)) - 1;
           iret = (wordaddr[0] & mask0) >> (start_offset*8);
         } else {
-          /* sizeof(__vaword) < end_offset < 2*sizeof(__vaword), start_offset > 0 */
-          __vaword mask1 = ((__vaword)2 << (end_offset*8-sizeof(__vaword)*8-1)) - 1;
-          iret = (wordaddr[0] >> (start_offset*8)) | ((wordaddr[1] & mask1) << (sizeof(__vaword)*8-start_offset*8));
+          /* sizeof(__varword) < end_offset < 2*sizeof(__varword), start_offset > 0 */
+          __varword mask1 = ((__varword)2 << (end_offset*8-sizeof(__varword)*8-1)) - 1;
+          iret = (wordaddr[0] >> (start_offset*8)) | ((wordaddr[1] & mask1) << (sizeof(__varword)*8-start_offset*8));
         }
       }
       #endif

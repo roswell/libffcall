@@ -1,7 +1,7 @@
 /* vacall function for sparc CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,12 +24,12 @@
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *	env	__asm__("%g2");
 #endif
-register __vaword* fp	__asm__("%fp");	/* our %fp, caller's %sp */
-register __vaword* ret	__asm__("%i7");	/* %i7+8 = return address */
-register int	iret	__asm__("%i0");
-register int	iret2	__asm__("%i1");
-register float	fret	__asm__("%f0");	/* %f0 */
-register double	dret	__asm__("%f0");	/* %f0,%f1 */
+register __vaword*	 fp	__asm__("%fp");	/* our %fp, caller's %sp */
+register __vaword* 	ret	__asm__("%i7");	/* %i7+8 = return address */
+register __varword	iret	__asm__("%i0");
+register __varword	iret2	__asm__("%i1");
+register float		fret	__asm__("%f0");	/* %f0 */
+register double		dret	__asm__("%f0");	/* %f0,%f1 */
 
 void /* the return type is variable, not void! */
 vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
@@ -90,8 +90,8 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = list.tmp._ulong;
   } else
   if (list.rtype == __VAlonglong || list.rtype == __VAulonglong) {
-    iret  = ((__vaword *) &list.tmp._longlong)[0];
-    iret2 = ((__vaword *) &list.tmp._longlong)[1];
+    iret  = ((__varword *) &list.tmp._longlong)[0];
+    iret2 = ((__varword *) &list.tmp._longlong)[1];
   } else
   if (list.rtype == __VAfloat) {
     if (list.flags & __VA_SUNCC_FLOAT_RETURN) {

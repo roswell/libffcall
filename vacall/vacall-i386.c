@@ -1,7 +1,7 @@
 /* vacall function for i386 CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -80,8 +80,8 @@ vacall_receiver (__vaword firstword)
   if (list.rtype == __VAlonglong || list.rtype == __VAulonglong) {
     /* This code is EXTREMELY fragile!!                     */
     /* It depends on the register allocation chosen by gcc. */
-    iret = ((__vaword *) &list.tmp._longlong)[0];
-    asm volatile ("movl %0,%%edx" : : "g"(((__vaword *) &list.tmp._longlong)[1]));
+    iret = ((__varword *) &list.tmp._longlong)[0];
+    asm volatile ("movl %0,%%edx" : : "g"(((__varword *) &list.tmp._longlong)[1]));
   } else
   if (list.rtype == __VAfloat) {
     asm volatile ("flds %0": : "m"(list.tmp._float));
@@ -106,11 +106,11 @@ vacall_receiver (__vaword firstword)
         iret = *(unsigned int *) list.raddr;
         goto done;
       } else
-      if (list.rsize == 2*sizeof(__vaword)) {
+      if (list.rsize == 2*sizeof(__varword)) {
         /* This code is EXTREMELY fragile!!                     */
         /* It depends on the register allocation chosen by gcc. */
-        iret = ((__vaword *) list.raddr)[0];
-        asm volatile ("movl %0,%%edx" : : "g"(((__vaword *) list.raddr)[1]));
+        iret = ((__varword *) list.raddr)[0];
+        asm volatile ("movl %0,%%edx" : : "g"(((__varword *) list.raddr)[1]));
         goto done;
       }
     }

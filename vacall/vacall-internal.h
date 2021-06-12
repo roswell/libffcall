@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -159,7 +159,7 @@ typedef struct vacall_alist
 #if defined(__arm64__)
 #define __VA_IARG_NUM 8
   unsigned int   ianum;
-  __vaword       iarg[__VA_IARG_NUM];
+  __varword      iarg[__VA_IARG_NUM];
 #define __VA_FARG_NUM 8
   unsigned int   fanum;
   float          farg[__VA_FARG_NUM];
@@ -169,7 +169,7 @@ typedef struct vacall_alist
 #if defined(__powerpc_sysv4__)
 #define __VA_IARG_NUM 8
   unsigned int   ianum;
-  __vaword       iarg[__VA_IARG_NUM];
+  __varword      iarg[__VA_IARG_NUM];
 #define __VA_FARG_NUM 8
 #else
 #define __VA_FARG_NUM 13
@@ -189,7 +189,7 @@ typedef struct vacall_alist
   double         farg[__VA_FARG_NUM];
 #define __VA_IARG_NUM 6
   unsigned int   ianum;
-  __vaword       iarg[__VA_IARG_NUM];
+  __varword      iarg[__VA_IARG_NUM];
 #endif
 #if defined(__x86_64_ms__)
   int            anum;
@@ -200,7 +200,7 @@ typedef struct vacall_alist
 #if defined(__s390__) && !defined(__s390x__)
 #define __VA_IARG_NUM 5
   unsigned int   ianum;
-  __vaword       iarg[5];
+  __varword      iarg[5];
 #define __VA_FARG_NUM 2
   unsigned int   fanum;
   float          farg[__VA_FARG_NUM];
@@ -209,7 +209,7 @@ typedef struct vacall_alist
 #if defined(__s390x__)
 #define __VA_IARG_NUM 5
   unsigned int   ianum;
-  __vaword       iarg[__VA_IARG_NUM];
+  __varword      iarg[__VA_IARG_NUM];
 #define __VA_FARG_NUM 4
   unsigned int   fanum;
   float          farg[__VA_FARG_NUM];
@@ -218,7 +218,7 @@ typedef struct vacall_alist
 #if defined(__riscv32__) || defined(__riscv64__)
 #define __VA_IARG_NUM 8
   unsigned int   ianum;
-  __vaword       iarg[__VA_IARG_NUM];
+  __varword      iarg[__VA_IARG_NUM];
   /* Note: iarg[7] == ((__vaword *) (initial aptr))[-1]. */
 #define __VA_FARG_NUM 8
   unsigned int   fanum;
@@ -500,8 +500,8 @@ typedef struct vacall_alist
 /* small structures < 1 word are adjusted depending on compiler */
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (((LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM \
-    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__vaword),	\
+  (((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
+    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__varword),	\
        (char*)&(LIST)->iarg[(LIST)->ianum]				\
       )									\
     : ((LIST)->aptr += __va_argsize(TYPE_SIZE),				\
@@ -510,8 +510,8 @@ typedef struct vacall_alist
    - __va_argsize(TYPE_SIZE)						\
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (((LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM \
-    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__vaword),	\
+  (((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
+    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__varword),	\
        (char*)&(LIST)->iarg[(LIST)->ianum]				\
       )									\
     : ((LIST)->aptr += __va_argsize(TYPE_SIZE),				\
@@ -595,9 +595,9 @@ typedef struct vacall_alist
 #if defined(__arm64__)
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM \
-   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
-      &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword)] \
+  ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
+   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword), \
+      &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword)] \
      )									\
    : ((LIST)->ianum = __VA_IARG_NUM,					\
       (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
@@ -606,10 +606,10 @@ typedef struct vacall_alist
 #if defined(__x86_64_sysv__)
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (((TYPE_SIZE) <= 2*sizeof(__vaword)					\
-    && (LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM) \
-   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
-      &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword)] \
+  (((TYPE_SIZE) <= 2*sizeof(__varword)					\
+    && (LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM) \
+   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword), \
+      &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword)] \
      )									\
    : (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
   )
@@ -617,8 +617,8 @@ typedef struct vacall_alist
 #if defined(__s390__) || defined(__s390x__)
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM \
-   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
+  ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
+   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword), \
       (void*)((uintptr_t)&(LIST)->iarg[(LIST)->ianum] - (TYPE_SIZE))	\
      )									\
    : ((LIST)->ianum = __VA_IARG_NUM,					\
@@ -628,9 +628,9 @@ typedef struct vacall_alist
 #if defined(__riscv32__) || defined(__riscv64__)
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM \
-   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword), \
-      &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword)] \
+  ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
+   ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword), \
+      &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword)] \
      )									\
    : (((LIST)->ianum < __VA_IARG_NUM					\
        ? ((LIST)->aptr -= (__VA_IARG_NUM - (LIST)->ianum) * sizeof(__vaword), \
@@ -677,11 +677,20 @@ typedef struct vacall_alist
   ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(intptr_t)__VA_alignof(TYPE)), \
    __va_arg(LIST,TYPE))
 #endif
-#if defined(__armhf__) || defined(__powerpc_sysv4__)
+#if defined(__armhf__)
 /* ‘long long’s have alignment 8. */
 #define __va_arg_longlong(LIST,TYPE)					\
   (((LIST)->ianum < __VA_IARG_NUM					\
     ? ((LIST)->ianum = (((LIST)->ianum+__VA_alignof(TYPE)/sizeof(__vaword)-1) & -(intptr_t)(__VA_alignof(TYPE)/sizeof(__vaword))), 0) \
+    : ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(intptr_t)__VA_alignof(TYPE)), 0) \
+   ),									\
+   __va_arg(LIST,TYPE))
+#endif
+#if defined(__powerpc_sysv4__)
+/* ‘long long’s have alignment 8. */
+#define __va_arg_longlong(LIST,TYPE)					\
+  (((LIST)->ianum < __VA_IARG_NUM					\
+    ? ((LIST)->ianum = (((LIST)->ianum+__VA_alignof(TYPE)/sizeof(__varword)-1) & -(intptr_t)(__VA_alignof(TYPE)/sizeof(__varword))), 0) \
     : ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(intptr_t)__VA_alignof(TYPE)), 0) \
    ),									\
    __va_arg(LIST,TYPE))

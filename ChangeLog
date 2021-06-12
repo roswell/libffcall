@@ -1,5 +1,14 @@
 2021-06-12  Bruno Haible  <bruno@clisp.org>
 
+	vacall, callback: Distinguish a register word from a stack word.
+	* vacall/vacall.h (__varword): New type.
+	* callback/vacall_r/vacall_r.h (__varword): Likewise.
+	* vacall/vacall-alist.h: Use it as as element type of iarg[].
+	* vacall/vacall-internal.h: Use it when assigning to an iargs[] element.
+	* vacall/vacall-*.c: Use it for integer register variables.
+
+2021-06-12  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Add support for macOS 11/arm64.
 	* avcall/avcall-arm64.c: Update comment regarding stack words.
 	* avcall/avcall.h (__avword): Define differently on macOS 11/arm64.

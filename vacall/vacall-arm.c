@@ -1,7 +1,7 @@
 /* vacall function for arm CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,11 @@ typedef struct { void (*vacall_function) (void*,va_alist); void* arg; } env_t;
 #endif
 
 /* armel have only softvfp which uses generic registers */
-register __vaword	iret	__asm__("r0");
-register __vaword	iret2	__asm__("r1");
+register __varword	iret	__asm__("r0");
+register __varword	iret2	__asm__("r1");
 register float		fret	__asm__("r0");
-register __vaword	dret1	__asm__("r0");
-register __vaword	dret2	__asm__("r1");
+register __varword	dret1	__asm__("r0");
+register __varword	dret2	__asm__("r1");
 
 #ifndef REENTRANT
 /* The ARM ABI requires that the first 4 general-purpose argument words are
@@ -113,15 +113,15 @@ vacall_receiver (__vaword ignored1, __vaword ignored2, __vaword ignored3, __vawo
     iret = list.tmp._ulong;
   } else
   if (list.rtype == __VAlonglong || list.rtype == __VAulonglong) {
-    iret  = ((__vaword *) &list.tmp._longlong)[0];
-    iret2 = ((__vaword *) &list.tmp._longlong)[1];
+    iret  = ((__varword *) &list.tmp._longlong)[0];
+    iret2 = ((__varword *) &list.tmp._longlong)[1];
   } else
   if (list.rtype == __VAfloat) {
     fret = list.tmp._float;
   } else
   if (list.rtype == __VAdouble) {
-    dret1 = ((__vaword *) &list.tmp._double)[0];
-    dret2 = ((__vaword *) &list.tmp._double)[1];
+    dret1 = ((__varword *) &list.tmp._double)[0];
+    dret2 = ((__varword *) &list.tmp._double)[1];
   } else
   if (list.rtype == __VAvoidp) {
     iret = (long)list.tmp._ptr;

@@ -1,7 +1,7 @@
 /* vacall function for m68k CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,14 +24,14 @@
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *	env	__asm__("a0");
 #endif
-register void*	sret	__asm__("a1");
-register int	iret	__asm__("d0");
-register int	iret2	__asm__("d1");
-register int	pret	__asm__("a0");	/* some compilers return pointers in a0 */
-register float	fret	__asm__("d0");	/* d0 */
-register double	dret	__asm__("d0");	/* d0,d1 */
-register float	fp_fret	__asm__("fp0");
-register double	fp_dret	__asm__("fp0");
+register void*		sret	__asm__("a1");
+register __varword	iret	__asm__("d0");
+register __varword	iret2	__asm__("d1");
+register __varword	pret	__asm__("a0");	/* some compilers return pointers in a0 */
+register float		fret	__asm__("d0");	/* d0 */
+register double		dret	__asm__("d0");	/* d0,d1 */
+register float		fp_fret	__asm__("fp0");
+register double		fp_dret	__asm__("fp0");
 
 #ifdef REENTRANT
 static
@@ -83,8 +83,8 @@ vacall_receiver (__vaword firstword)
     iret = list.tmp._ulong;
   } else
   if (list.rtype == __VAlonglong || list.rtype == __VAulonglong) {
-    iret  = ((__vaword *) &list.tmp._longlong)[0];
-    iret2 = ((__vaword *) &list.tmp._longlong)[1];
+    iret  = ((__varword *) &list.tmp._longlong)[0];
+    iret2 = ((__varword *) &list.tmp._longlong)[1];
   } else
   if (list.rtype == __VAfloat) {
     if (list.flags & __VA_FREG_FLOAT_RETURN) {
@@ -119,9 +119,9 @@ vacall_receiver (__vaword firstword)
       if (list.rsize == sizeof(int)) {
         iret = *(unsigned int *) list.raddr;
       } else
-      if (list.rsize == 2*sizeof(__vaword)) {
-        iret  = ((__vaword *) list.raddr)[0];
-        iret2 = ((__vaword *) list.raddr)[1];
+      if (list.rsize == 2*sizeof(__varword)) {
+        iret  = ((__varword *) list.raddr)[0];
+        iret2 = ((__varword *) list.raddr)[1];
       }
     }
   }

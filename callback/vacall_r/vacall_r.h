@@ -87,14 +87,19 @@ template <class type> struct __VA_alignof_helper { char __slot1; type __slot2; }
 extern "C" {
 #endif
 
-/* C builtin types.
+/* __vaword represents a single word that can be pushed on the stack.
+ * __varword represents a general-purpose register.
  */
 #if defined(__mipsn32__) || defined(__x86_64_x32__) || defined(__VA_LLP64)
 typedef long long __vaword;
+typedef long long __varword;
 #else
 typedef long __vaword;
+typedef long __varword;
 #endif
 
+/* C builtin types.
+ */
 enum __VAtype
 {
   __VAvoid,

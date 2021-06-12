@@ -1,7 +1,7 @@
 /* vacall function for s390x (S/390 64-bit) CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,11 +25,11 @@ register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *		env	__asm__("r0");
 #endif
 
-register __vaword iarg1 __asm__("r2");
-register __vaword iarg2 __asm__("r3");
-register __vaword iarg3 __asm__("r4");
-register __vaword iarg4 __asm__("r5");
-register __vaword iarg5 __asm__("r6");
+register __varword iarg1 __asm__("r2");
+register __varword iarg2 __asm__("r3");
+register __varword iarg3 __asm__("r4");
+register __varword iarg4 __asm__("r5");
+register __varword iarg5 __asm__("r6");
 
 register float farg1 __asm__("f0");
 register float farg2 __asm__("f2");
@@ -41,7 +41,7 @@ register double darg2 __asm__("f2");
 register double darg3 __asm__("f4");
 register double darg4 __asm__("f6");
 
-register __vaword iret  __asm__("r2");
+register __varword iret  __asm__("r2");
 register float  fret __asm__("f0");
 register double dret __asm__("f0");
 

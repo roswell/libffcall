@@ -1,7 +1,7 @@
 /* vacall function for S/390 32-bit CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  * Copyright 2000 Adam Fedor <fedor@gnu.org>
  * Copyright 2001 Gerhard Tonn <gt@debian.org>
  *
@@ -30,8 +30,8 @@ register float 		farg1	__asm__("f0");
 register float		farg2	__asm__("f2");
 register double		darg1	__asm__("f0");
 register double		darg2	__asm__("f2");
-register __vaword	iret	__asm__("%r2");
-register __vaword	iret2	__asm__("%r3");
+register __varword	iret	__asm__("%r2");
+register __varword	iret2	__asm__("%r3");
 register float		fret	__asm__("%f0");
 register double		dret	__asm__("%f0");
 
@@ -102,8 +102,8 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = list.tmp._ulong;
   } else
   if (list.rtype == __VAlonglong || list.rtype == __VAulonglong) {
-    iret  = ((__vaword *) &list.tmp._longlong)[0];
-    iret2 = ((__vaword *) &list.tmp._longlong)[1];
+    iret  = ((__varword *) &list.tmp._longlong)[0];
+    iret2 = ((__varword *) &list.tmp._longlong)[1];
   } else
   if (list.rtype == __VAfloat) {
     fret = list.tmp._float;
@@ -125,9 +125,9 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
       if (list.rsize == sizeof(int)) {
         iret = *(unsigned int *) list.raddr;
       } else
-      if (list.rsize == 2*sizeof(__vaword)) {
-        iret  = ((__vaword *) list.raddr)[0];
-        iret2 = ((__vaword *) list.raddr)[1];
+      if (list.rsize == 2*sizeof(__varword)) {
+        iret  = ((__varword *) list.raddr)[0];
+        iret2 = ((__varword *) list.raddr)[1];
       }
     }
   }

@@ -1,7 +1,7 @@
 /* vacall function for hppa CPU */
 
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,22 +48,22 @@
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
          *	env	__asm__("%r29");
 #endif
-register void*	sret	__asm__("%r28");
-register long   arg1	__asm__("%r26");
-register long   arg2	__asm__("%r25");
-register long   arg3	__asm__("%r24");
-register long   arg4	__asm__("%r23");
-register float  farg1	__asm__("%fr4"); /* fr4L */
-register float  farg2	__asm__("%fr5"); /* fr5L */
-register float  farg3	__asm__("%fr6"); /* fr6L */
-register float  farg4	__asm__("%fr7"); /* fr7L */
-register double darg1	__asm__("%fr5");
-register double darg2	__asm__("%fr7");
-register int	iret	__asm__("%r28");
-register float	fret	__asm__("%fr4"); /* fr4L */
-register double	dret	__asm__("%fr4");
-register __vaword iret1	__asm__("%r28");
-register __vaword iret2	__asm__("%r29");
+register void*		sret	__asm__("%r28");
+register __varword	arg1	__asm__("%r26");
+register __varword	arg2	__asm__("%r25");
+register __varword	arg3	__asm__("%r24");
+register __varword	arg4	__asm__("%r23");
+register float		farg1	__asm__("%fr4"); /* fr4L */
+register float		farg2	__asm__("%fr5"); /* fr5L */
+register float		farg3	__asm__("%fr6"); /* fr6L */
+register float		farg4	__asm__("%fr7"); /* fr7L */
+register double		darg1	__asm__("%fr5");
+register double		darg2	__asm__("%fr7");
+register int		iret	__asm__("%r28");
+register float		fret	__asm__("%fr4"); /* fr4L */
+register double		dret	__asm__("%fr4");
+register __varword	iret1	__asm__("%r28");
+register __varword	iret2	__asm__("%r29");
 
 #ifdef REENTRANT
 static
@@ -136,8 +136,8 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
     iret = list.tmp._ulong;
   } else
   if (list.rtype == __VAlonglong || list.rtype == __VAulonglong) {
-    iret1 = ((__vaword *) &list.tmp._longlong)[0];
-    iret2 = ((__vaword *) &list.tmp._longlong)[1];
+    iret1 = ((__varword *) &list.tmp._longlong)[0];
+    iret2 = ((__varword *) &list.tmp._longlong)[1];
   } else
   if (list.rtype == __VAfloat) {
     fret = list.tmp._float;
@@ -210,35 +210,35 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
                  |  ((unsigned char *) list.raddr)[7];
         }
         #else /* Optimized: fewer conditional jumps, fewer memory accesses */
-        uintptr_t count = list.rsize; /* > 0, ≤ 2*sizeof(__vaword) */
-        __vaword* wordaddr = (__vaword*)((uintptr_t)list.raddr & ~(uintptr_t)(sizeof(__vaword)-1));
-        uintptr_t start_offset = (uintptr_t)list.raddr & (uintptr_t)(sizeof(__vaword)-1); /* ≥ 0, < sizeof(__vaword) */
-        uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__vaword) */
-        if (count <= sizeof(__vaword)) {
+        uintptr_t count = list.rsize; /* > 0, ≤ 2*sizeof(__varword) */
+        __varword* wordaddr = (__varword*)((uintptr_t)list.raddr & ~(uintptr_t)(sizeof(__varword)-1));
+        uintptr_t start_offset = (uintptr_t)list.raddr & (uintptr_t)(sizeof(__varword)-1); /* ≥ 0, < sizeof(__varword) */
+        uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__varword) */
+        if (count <= sizeof(__varword)) {
           /* Assign iret. */
-          __vaword mask0 = ((__vaword)2 << (sizeof(__vaword)*8-start_offset*8-1)) - 1;
-          if (end_offset <= sizeof(__vaword)) {
-            /* 0 < end_offset ≤ sizeof(__vaword) */
-            iret = (wordaddr[0] & mask0) >> (sizeof(__vaword)*8-end_offset*8);
+          __varword mask0 = ((__varword)2 << (sizeof(__varword)*8-start_offset*8-1)) - 1;
+          if (end_offset <= sizeof(__varword)) {
+            /* 0 < end_offset ≤ sizeof(__varword) */
+            iret = (wordaddr[0] & mask0) >> (sizeof(__varword)*8-end_offset*8);
           } else {
-            /* sizeof(__vaword) < end_offset < 2*sizeof(__vaword), start_offset > 0 */
-            iret = ((wordaddr[0] & mask0) << (end_offset*8-sizeof(__vaword)*8))
-                   | (wordaddr[1] >> (2*sizeof(__vaword)*8-end_offset*8));
+            /* sizeof(__varword) < end_offset < 2*sizeof(__varword), start_offset > 0 */
+            iret = ((wordaddr[0] & mask0) << (end_offset*8-sizeof(__varword)*8))
+                   | (wordaddr[1] >> (2*sizeof(__varword)*8-end_offset*8));
           }
         } else {
           /* Assign iret, iret2. */
-          __vaword mask0 = ((__vaword)2 << (sizeof(__vaword)*8-start_offset*8-1)) - 1;
-          if (end_offset <= 2*sizeof(__vaword)) {
-            /* sizeof(__vaword) < end_offset ≤ 2*sizeof(__vaword) */
-            iret = (wordaddr[0] & mask0) >> (2*sizeof(__vaword)*8-end_offset*8);
-            iret2 = ((wordaddr[0] & mask0) << (end_offset*4-sizeof(__vaword)*4) << (end_offset*4-sizeof(__vaword)*4))
-                    | (wordaddr[1] >> (2*sizeof(__vaword)*8-end_offset*8));
+          __varword mask0 = ((__varword)2 << (sizeof(__varword)*8-start_offset*8-1)) - 1;
+          if (end_offset <= 2*sizeof(__varword)) {
+            /* sizeof(__varword) < end_offset ≤ 2*sizeof(__varword) */
+            iret = (wordaddr[0] & mask0) >> (2*sizeof(__varword)*8-end_offset*8);
+            iret2 = ((wordaddr[0] & mask0) << (end_offset*4-sizeof(__varword)*4) << (end_offset*4-sizeof(__varword)*4))
+                    | (wordaddr[1] >> (2*sizeof(__varword)*8-end_offset*8));
           } else {
-            /* 2*sizeof(__vaword) < end_offset < 3*sizeof(__vaword), start_offset > 0 */
-            iret = ((wordaddr[0] & mask0) << (end_offset*8-2*sizeof(__vaword)*8))
-                   | (wordaddr[1] >> (3*sizeof(__vaword)*8-end_offset*8));
-            iret2 = (wordaddr[1] << (end_offset*8-2*sizeof(__vaword)*8))
-                    | (wordaddr[2] >> (3*sizeof(__vaword)*8-end_offset*8));
+            /* 2*sizeof(__varword) < end_offset < 3*sizeof(__varword), start_offset > 0 */
+            iret = ((wordaddr[0] & mask0) << (end_offset*8-2*sizeof(__varword)*8))
+                   | (wordaddr[1] >> (3*sizeof(__varword)*8-end_offset*8));
+            iret2 = (wordaddr[1] << (end_offset*8-2*sizeof(__varword)*8))
+                    | (wordaddr[2] >> (3*sizeof(__varword)*8-end_offset*8));
           }
         }
         #endif
