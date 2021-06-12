@@ -1,3 +1,12 @@
+2021-06-11  Bruno Haible  <bruno@clisp.org>
+
+	Fix undefined behaviour in the tests.
+	* testcases.c (us_cdcd): Cast from double (-30.4) to int to ushort, not
+	directly to ushort. This avoids undefined behaviour (see ISO C 11
+	§ 6.3.1.4.(2)).
+	* vacall/tests.c (simulator): Update accordingly.
+	* callback/tests.c (us_cdcd_simulator): Likewise.
+
 2021-06-06  Bruno Haible  <bruno@clisp.org>
 
 	Fix test crash with CC="gcc -ftrapv".

@@ -1,6 +1,6 @@
 /*
  * Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -306,7 +306,7 @@ double d_fdi (float a, double b, int c)
 }
 ushort us_cdcd (char a, double b, char c, double d)
 {
-  ushort r = (ushort)(a + b + c + d);
+  ushort r = (ushort)(int)(a + b + c + d);
   fprintf(out,"ushort f(char,double,char,double):('%c',%g,'%c',%g)",a,b,c,d);
   fflush(out);
   return r;

@@ -2,7 +2,7 @@
 
 /*
  * Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -444,7 +444,7 @@ void simulator (va_alist alist)
       double b = va_arg_double(alist);
       char c = va_arg_char(alist);
       double d = va_arg_double(alist);
-      ushort r = (ushort)(a + b + c + d);
+      ushort r = (ushort)(int)(a + b + c + d);
       fprintf(out,"ushort f(char,double,char,double):('%c',%g,'%c',%g)",a,b,c,d);
       fflush(out);
       va_return_ushort(alist, r);
