@@ -29,7 +29,8 @@
   Up to 8 words are passed in integer registers (x0, ..., x7).
   Up to 8 float/double arguments are passed in floating point / SIMD
   registers (v0/q0/d0/s0, ..., v7/q7/d7/s7).
-  Arguments passed on the stack have word alignment.
+  Arguments passed on the stack have 8-bytes alignment (but on macOS only
+  4-bytes alignment).
   Structure args larger than 16 bytes are passed as pointers to caller-made
   local copies. (§ 5.4.2 rule B.3)
   Structure args <= 16 bytes are passed as up to two words in registers

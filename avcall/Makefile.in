@@ -153,8 +153,12 @@ avcall-armhf.s : $(srcdir)/avcall-armhf-macro.S
 avcall-arm64.lo : avcall-arm64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm64.s
 
-avcall-arm64.s : $(srcdir)/avcall-arm64-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-arm64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-arm64.s
+avcall-arm64.s : $(srcdir)/avcall-arm64-macro.S $(srcdir)/avcall-arm64-macos-macro.S
+	case "$(OS)" in \
+	  macos* | darwin*) input=avcall-arm64-macos-macro.S ;; \
+	  *) input=avcall-arm64-macro.S ;; \
+	esac; \
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/$${input} | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-arm64.s
 
 avcall-powerpc.lo : avcall-powerpc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-powerpc.s
@@ -367,7 +371,7 @@ SOURCE_FILES = \
   avcall-alpha.c avcall-alpha-linux.s avcall-alpha-macro.S \
   avcall-arm.c avcall-arm-macro.S \
   avcall-armhf.c avcall-armhf-macro.S \
-  avcall-arm64.c avcall-arm64-macro.S \
+  avcall-arm64.c avcall-arm64-macro.S avcall-arm64-macos-macro.S \
   avcall-hppa.c avcall-hppa-linux.s avcall-hppa-macro.S \
   avcall-hppa64.c avcall-hppa64-linux.s avcall-hppa64-macro.S \
   avcall-i386.c avcall-i386-linux.s avcall-i386-macro.S \

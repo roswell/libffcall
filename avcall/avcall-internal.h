@@ -396,27 +396,47 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_uint(LIST,VAL)	__av_word(LIST,(unsigned int)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define __av_long(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)			\
    : __av_word(LIST,(long)(VAL)))
+#elif defined(__arm64__) && defined(__APPLE__) && defined(__MACH__)
+#define __av_long(LIST,VAL)						\
+  ((LIST).ianum < __AV_IARG_NUM						\
+   ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)			\
+   : ((LIST).aptr + 2 > (LIST).eptr					\
+      ? -1 :								\
+      ((LIST).aptr += 2,						\
+       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(long)(VAL),	\
+       ((LIST).aptr)[-1] = (unsigned int)((unsigned long)(long)(VAL) >> 32), \
+       0)))
 #else
 #define __av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define __av_ulong(LIST,VAL)						\
   ((LIST).ianum < __AV_IARG_NUM						\
    ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
    : __av_word(LIST,(unsigned long)(VAL)))
+#elif defined(__arm64__) && defined(__APPLE__) && defined(__MACH__)
+#define __av_ulong(LIST,VAL)						\
+  ((LIST).ianum < __AV_IARG_NUM						\
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
+   : ((LIST).aptr + 2 > (LIST).eptr					\
+      ? -1 :								\
+      ((LIST).aptr += 2,						\
+       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(VAL),		\
+       ((LIST).aptr)[-1] = (unsigned int)((unsigned long)(VAL) >> 32),	\
+       0)))
 #else
 #define __av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #if defined(__x86_64_x32__)
 /* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
@@ -431,6 +451,16 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
    ? ((LIST).iargs[(LIST).ianum++] = (__avrword)(VAL), 0)		\
    : __av_word(LIST,VAL))
 #endif
+#elif defined(__arm64__) && defined(__APPLE__) && defined(__MACH__)
+#define __av_ptr(LIST,VAL)						\
+  ((LIST).ianum < __AV_IARG_NUM						\
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
+   : ((LIST).aptr + 2 > (LIST).eptr					\
+      ? -1 :								\
+      ((LIST).aptr += 2,						\
+       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(VAL),		\
+       ((LIST).aptr)[-1] = (unsigned int)((unsigned long)(VAL) >> 32),	\
+       0)))
 #else
 #define __av_ptr(LIST,VAL)	__av_word(LIST,VAL)
 #endif
@@ -829,7 +859,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
    : ((LIST).aptr >= (LIST).eptr					\
       ? -1 :								\
       ((*(double*)(LIST).aptr = (double)(VAL)),				\
-       (LIST).aptr++,							\
+       (LIST).aptr += sizeof(double)/sizeof(__avword),			\
        0)))
 
 #endif
@@ -1412,11 +1442,11 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL), \
           (LIST).iargs[(LIST).ianum++] = (__avrword)(LIST).eptr,	\
           0))								\
-      : (++(LIST).aptr							\
+      : (((LIST).aptr += sizeof(void*)/sizeof(__avword))		\
          > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
          ? -1 :								\
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL), \
-          (LIST).aptr[-1] = (__avword)(LIST).eptr,			\
+          ((void**)(LIST).aptr)[-1] = (LIST).eptr,			\
           0))))
 #endif
 #if defined(__powerpc_sysv4__)

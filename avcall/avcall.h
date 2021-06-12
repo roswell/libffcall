@@ -65,7 +65,10 @@ extern "C" {
 /* __avword represents a single word that can be pushed on the stack.
  * __avrword represents a general-purpose register.
  */
-#if defined(__mipsn32__) || defined(__x86_64_x32__) || defined(__AV_LLP64)
+#if defined(__arm64__) && defined(__APPLE__) && defined(__MACH__)
+typedef int __avword;
+typedef long __avrword;
+#elif defined(__mipsn32__) || defined(__x86_64_x32__) || defined(__AV_LLP64)
 typedef long long __avword;
 typedef long long __avrword;
 #else

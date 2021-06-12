@@ -54,6 +54,7 @@
 /avcall/avcall-arm-macro.S
 /avcall/avcall-armhf-macro.S
 /avcall/avcall-arm64-macro.S
+/avcall/avcall-arm64-macos-macro.S
 /avcall/avcall-hppa-linux.s
 /avcall/avcall-hppa-macro.S
 /avcall/avcall-hppa64-linux.s

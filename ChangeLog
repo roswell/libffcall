@@ -1,5 +1,18 @@
 2021-06-12  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Add support for macOS 11/arm64.
+	* avcall/avcall-arm64.c: Update comment regarding stack words.
+	* avcall/avcall.h (__avword): Define differently on macOS 11/arm64.
+	* avcall/avcall-internal.h (__av_long, __av_ulong, __av_ptr): Define
+	differently on macOS 11/arm64.
+	(_av_double): Update to allow for sizeof(__avword) < sizeof(double).
+	(__av_struct): Update to allow for sizeof(__avword) < sizeof(void*).
+	* avcall/Makefile.devel (avcall-arm64-macos-macro.S): New rule.
+	* avcall/Makefile.in (SOURCE_FILES): Add avcall-arm64-macos-macro.S.
+	(avcall-arm64.s): Use a different input file on macOS.
+
+2021-06-12  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Distinguish a register word from a stack word.
 	* avcall/avcall.h (__avrword): New type.
 	(avcall_start, av_start_struct): Use it as return type of func.

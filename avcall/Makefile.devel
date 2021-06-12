@@ -20,7 +20,7 @@ precompiled : \
   avcall-alpha-macro.S \
   avcall-hppa-macro.S avcall-hppa64-macro.S \
   avcall-arm-macro.S avcall-armhf-macro.S \
-  avcall-arm64-macro.S \
+  avcall-arm64-macro.S avcall-arm64-macos-macro.S \
   avcall-powerpc-aix.s avcall-powerpc-linux-macro.S avcall-powerpc-sysv4-macro.S avcall-powerpc-macos.s avcall-powerpc64-aix.s avcall-powerpc64-linux.S avcall-powerpc64-elfv2-linux.S \
   avcall-ia64-macro.S \
   avcall-x86_64-macro.S avcall-x86_64-x32-linux.s avcall-x86_64-windows-macro.S \
@@ -142,6 +142,12 @@ avcall-arm64-macro.S : avcall-arm64.c avcall-internal.h avcall.h avcall-alist.h 
 	cmp avcall-arm64el.s avcall-arm64eb.s > /dev/null
 	(echo '#include "asm-arm64.h"' ; ../common/asm-arm64.sh < avcall-arm64el.s ; cat ../common/noexecstack-arm.h) > avcall-arm64-macro.S
 	$(RM) avcall-arm64el.s avcall-arm64eb.s
+
+
+avcall-arm64-macos-macro.S : avcall-arm64.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm64.sh ../common/noexecstack-arm.h $(THISFILE)
+	$(CROSS_TOOL) aarch64-linux gcc-5.4.0 -mlittle-endian $(GCCFLAGS) -D__arm64__ -D__APPLE__ -D__MACH__ -S avcall-arm64.c -o avcall-arm64-macos.s
+	(echo '#include "asm-arm64.h"' ; ../common/asm-arm64.sh < avcall-arm64-macos.s ; cat ../common/noexecstack-arm.h) > avcall-arm64-macos-macro.S
+	$(RM) avcall-arm64-macos.s
 
 
 avcall-powerpc-aix.s : avcall-powerpc.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
