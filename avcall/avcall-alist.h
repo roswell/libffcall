@@ -1,6 +1,6 @@
 /*
  * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2019 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ typedef struct
   /* some av_... macros need these flags */
   int			flags;
   /* function to be called */
-  __avword		(*func)();
+  __avrword		(*func)();
   /* return type, address for the result */
   void*			raddr;
   enum __AVtype		rtype;
@@ -89,7 +89,7 @@ typedef struct
 #define __AV_IARG_NUM 6
   /* store the integer arguments in an extra array */
   unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
+  __avrword		iargs[__AV_IARG_NUM];
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
 #define __AV_FARG_NUM 2
@@ -133,7 +133,7 @@ typedef struct
 #define __AV_IARG_NUM 8
   /* store the integer arguments in an extra array */
   unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
+  __avrword		iargs[__AV_IARG_NUM];
 #define __AV_FARG_NUM 8
   /* store the floating-point arguments in an extra array */
   unsigned int		fanum;		/* number of fargs[] words that are occupied so far */
@@ -153,7 +153,7 @@ typedef struct
 #define __AV_IARG_NUM 8
   /* store the integer arguments in an extra array */
   unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
+  __avrword		iargs[__AV_IARG_NUM];
 #define __AV_FARG_NUM 8
 #else
 #define __AV_FARG_NUM 13
@@ -175,7 +175,7 @@ typedef struct
 #define __AV_IARG_NUM 5
   /* store the integer arguments in an extra array */
   unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
+  __avrword		iargs[__AV_IARG_NUM];
   /* store the floating-point arguments in an extra array */
 #define __AV_FARG_NUM 2
   unsigned int		fanum;		/* number of fargs[] words that are occupied so far */
@@ -188,7 +188,7 @@ typedef struct
 #define __AV_IARG_NUM 5
   /* store the integer arguments in an extra array */
   unsigned int		ianum;
-  __avword		iargs[__AV_IARG_NUM];
+  __avrword		iargs[__AV_IARG_NUM];
 #define __AV_FARG_NUM 4
   /* store the floating-point arguments in an extra array */
   unsigned int		fanum;		/* number of fargs[] words that are occupied so far */

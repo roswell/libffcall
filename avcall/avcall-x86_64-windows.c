@@ -59,10 +59,10 @@
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
-/*register __avword iarg1 __asm__("rcx");*/
-/*register __avword iarg2 __asm__("rdx");*/
-/*register __avword iarg3 __asm__("r8");*/
-/*register __avword iarg4 __asm__("r9");*/
+/*register __avrword iarg1 __asm__("rcx");*/
+/*register __avrword iarg2 __asm__("rdx");*/
+/*register __avrword iarg3 __asm__("r8");*/
+/*register __avrword iarg4 __asm__("r9");*/
 
 register float farg1 __asm__("xmm0");
 register float farg2 __asm__("xmm1");
@@ -78,7 +78,7 @@ int
 avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("rsp");	/* C names for registers */
-  register __avword	iret	__asm__("rax");
+  register __avrword	iret	__asm__("rax");
   register float	fret	__asm__("xmm0");
   register double	dret	__asm__("xmm0");
 
@@ -122,7 +122,7 @@ avcall_call(av_alist* list)
   if (l->rtype == __AVdouble) {
     *(double*)l->raddr = (*(double(*)())l->func)(l->args[0], l->args[1], l->args[2], l->args[3]);
   } else {
-    __avword iret;
+    __avrword iret;
     iret = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3]);
 
     /* save return value */
@@ -201,20 +201,20 @@ avcall_call(av_alist* list)
         #else /* Optimized: fewer conditional jumps, fewer memory accesses */
         uintptr_t count = l->rsize;
         if (count == 1 || count == 2 || count == 4 || count == 8) {
-          /* 0 < count ≤ sizeof(__avword) */
-          __avword* wordaddr = (__avword*)((uintptr_t)raddr & ~(uintptr_t)(sizeof(__avword)-1));
-          uintptr_t start_offset = (uintptr_t)raddr & (uintptr_t)(sizeof(__avword)-1); /* ≥ 0, < sizeof(__avword) */
-          uintptr_t end_offset = start_offset + count; /* > 0, < 2*sizeof(__avword) */
-          if (end_offset <= sizeof(__avword)) {
-            /* 0 < end_offset ≤ sizeof(__avword) */
-            __avword mask0 = ((__avword)2 << (end_offset*8-1)) - ((__avword)1 << (start_offset*8));
+          /* 0 < count ≤ sizeof(__avrword) */
+          __avrword* wordaddr = (__avrword*)((uintptr_t)raddr & ~(uintptr_t)(sizeof(__avrword)-1));
+          uintptr_t start_offset = (uintptr_t)raddr & (uintptr_t)(sizeof(__avrword)-1); /* ≥ 0, < sizeof(__avrword) */
+          uintptr_t end_offset = start_offset + count; /* > 0, < 2*sizeof(__avrword) */
+          if (end_offset <= sizeof(__avrword)) {
+            /* 0 < end_offset ≤ sizeof(__avrword) */
+            __avrword mask0 = ((__avrword)2 << (end_offset*8-1)) - ((__avrword)1 << (start_offset*8));
             wordaddr[0] ^= (wordaddr[0] ^ (iret << (start_offset*8))) & mask0;
           } else {
-            /* sizeof(__avword) < end_offset < 2*sizeof(__avword), start_offset > 0 */
-            __avword mask0 = - ((__avword)1 << (start_offset*8));
-            __avword mask1 = ((__avword)2 << (end_offset*8-sizeof(__avword)*8-1)) - 1;
+            /* sizeof(__avrword) < end_offset < 2*sizeof(__avrword), start_offset > 0 */
+            __avrword mask0 = - ((__avrword)1 << (start_offset*8));
+            __avrword mask1 = ((__avrword)2 << (end_offset*8-sizeof(__avrword)*8-1)) - 1;
             wordaddr[0] ^= (wordaddr[0] ^ (iret << (start_offset*8))) & mask0;
-            wordaddr[1] ^= (wordaddr[1] ^ (iret >> (sizeof(__avword)*8-start_offset*8))) & mask1;
+            wordaddr[1] ^= (wordaddr[1] ^ (iret >> (sizeof(__avrword)*8-start_offset*8))) & mask1;
           }
         }
         #endif

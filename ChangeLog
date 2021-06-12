@@ -1,5 +1,16 @@
 2021-06-12  Bruno Haible  <bruno@clisp.org>
 
+	avcall: Distinguish a register word from a stack word.
+	* avcall/avcall.h (__avrword): New type.
+	(avcall_start, av_start_struct): Use it as return type of func.
+	* avcall/avcall-libapi.c (avcall_start, av_start_struct): Likewise.
+	* avcall/avcall-alist.h: Use it as return type of func and as element
+	type of iargs[].
+	* avcall/avcall-internal.h: Use it when assigning to an iargs[] element.
+	* avcall/avcall-*.c: Use it for integer register variables.
+
+2021-06-12  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Support calling conventions that pass 'int', 'long' differently.
 	* avcall/avcall-internal.h (__av_int, __av_uint): New macros.
 	* avcall/avcall-libapi.c (avcall_arg_int, avcall_arg_uint): New

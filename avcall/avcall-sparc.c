@@ -61,12 +61,12 @@
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
 register void* callee	__asm__("%g2");  /* any global or local register */
-register __avword o0	__asm__("%o0");
-register __avword o1	__asm__("%o1");
-register __avword o2	__asm__("%o2");
-register __avword o3	__asm__("%o3");
-register __avword o4	__asm__("%o4");
-register __avword o5	__asm__("%o5");
+register __avrword o0	__asm__("%o0");
+register __avrword o1	__asm__("%o1");
+register __avrword o2	__asm__("%o2");
+register __avrword o3	__asm__("%o3");
+register __avrword o4	__asm__("%o4");
+register __avrword o5	__asm__("%o5");
 
 int
 avcall_call(av_alist* list)
@@ -83,7 +83,7 @@ avcall_call(av_alist* list)
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
   __avword *argframe = sp + 17;		/* stack offset for argument list */
   int arglen = l->aptr - l->args;
-  __avword i;
+  __avrword i;
 
   if (l->rtype == __AVstruct)
     argframe[-1] = (__avword)l->raddr;	/* push struct return address */
@@ -116,7 +116,7 @@ avcall_call(av_alist* list)
     }
 
 					/* call function with 1st 6 args */
-  i = ({ register __avword iret __asm__("%o0");
+  i = ({ register __avrword iret __asm__("%o0");
          iret = (*l->func)(l->args[0], l->args[1], l->args[2],
 			   l->args[3], l->args[4], l->args[5]);
          asm ("nop");	/* struct returning functions skip this instruction */
@@ -155,8 +155,8 @@ avcall_call(av_alist* list)
   } else
   if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
     void* raddr = l->raddr;
-    ((__avword*)raddr)[0] = i;
-    ((__avword*)raddr)[1] = o1;
+    ((__avrword*)raddr)[0] = i;
+    ((__avrword*)raddr)[1] = o1;
   } else
   if (l->rtype == __AVfloat) {
     /* old Sun cc returns floats as doubles */

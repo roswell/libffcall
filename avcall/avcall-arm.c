@@ -52,8 +52,8 @@ int
 avcall_call(av_alist* list)
 {
   register unsigned long sp	__asm__("r13");  /* C names for registers */
-/*register __avword	iret	__asm__("r0"); */
-  register __avword	iret2	__asm__("r1");
+/*register __avrword	iret	__asm__("r0"); */
+  register __avrword	iret2	__asm__("r1");
   register float	fret	__asm__("r0");	/* r0 */
   register double	dret	__asm__("r0");	/* r0,r1 */
 
@@ -68,7 +68,7 @@ avcall_call(av_alist* list)
 
   __avword* argframe = (__avword*) sp;	/* stack offset for argument list */
   int arglen = l->aptr - l->args;
-  __avword i;
+  __avrword i;
 
   for (i = 4; i < arglen; i++)		/* push function args onto stack */
     argframe[i-4] = l->args[i];
@@ -108,8 +108,8 @@ avcall_call(av_alist* list)
   } else
   if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
     void* raddr = l->raddr;
-    ((__avword*)raddr)[0] = i;
-    ((__avword*)raddr)[1] = iret2;
+    ((__avrword*)raddr)[0] = i;
+    ((__avrword*)raddr)[1] = iret2;
   } else
   if (l->rtype == __AVfloat) {
     RETURN(float, fret);
@@ -134,10 +134,10 @@ avcall_call(av_alist* list)
       if (l->rsize <= sizeof(int)) {
         RETURN(int, i);
       } else
-      if (l->rsize == 2*sizeof(__avword)) {
+      if (l->rsize == 2*sizeof(__avrword)) {
         void* raddr = l->raddr;
-        ((__avword*)raddr)[0] = i;
-        ((__avword*)raddr)[1] = iret2;
+        ((__avrword*)raddr)[0] = i;
+        ((__avrword*)raddr)[1] = iret2;
       }
     }
   }

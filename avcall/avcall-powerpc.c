@@ -80,8 +80,8 @@ int
 avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("r1");  /* C names for registers */
-/*register __avword	iret	__asm__("r3"); */
-  register __avword	iret2	__asm__("r4");
+/*register __avrword	iret	__asm__("r3"); */
+  register __avrword	iret2	__asm__("r4");
   register float	fret	__asm__("fr1");
   register double	dret	__asm__("fr1");
 
@@ -94,7 +94,7 @@ avcall_call(av_alist* list)
   __avword* argframe = sp + STACK_OFFSET;/* stack offset for argument list */
 #endif
   int arglen = l->aptr - l->args;
-  __avword i;
+  __avrword i;
 #if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
   int farglen = 0;
 
@@ -179,8 +179,8 @@ avcall_call(av_alist* list)
   } else
   if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
     void* raddr = l->raddr;
-    ((__avword*)raddr)[0] = i;
-    ((__avword*)raddr)[1] = iret2;
+    ((__avrword*)raddr)[0] = i;
+    ((__avrword*)raddr)[1] = iret2;
   } else
   if (l->rtype == __AVfloat) {
     RETURN(float, fret);
@@ -202,10 +202,10 @@ avcall_call(av_alist* list)
       if (l->rsize == sizeof(int)) {
         RETURN(int, i);
       } else
-      if (l->rsize == 2*sizeof(__avword)) {
+      if (l->rsize == 2*sizeof(__avrword)) {
         void* raddr = l->raddr;
-        ((__avword*)raddr)[0] = i;
-        ((__avword*)raddr)[1] = iret2;
+        ((__avrword*)raddr)[0] = i;
+        ((__avrword*)raddr)[1] = iret2;
       }
     }
   }

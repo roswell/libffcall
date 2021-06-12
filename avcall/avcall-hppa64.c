@@ -67,14 +67,14 @@
 /* This declaration tells gcc not to modify %r28. */
 register __avword*	sret	__asm__("%r28");  /* structure return pointer */
 
-register __avword arg1 __asm__("r26");
-register __avword arg2 __asm__("r25");
-register __avword arg3 __asm__("r24");
-register __avword arg4 __asm__("r23");
-register __avword arg5 __asm__("r22");
-register __avword arg6 __asm__("r21");
-register __avword arg7 __asm__("r20");
-register __avword arg8 __asm__("r19");
+register __avrword arg1 __asm__("r26");
+register __avrword arg2 __asm__("r25");
+register __avrword arg3 __asm__("r24");
+register __avrword arg4 __asm__("r23");
+register __avrword arg5 __asm__("r22");
+register __avrword arg6 __asm__("r21");
+register __avrword arg7 __asm__("r20");
+register __avrword arg8 __asm__("r19");
 
 /*register float farg1 __asm__("fr4R");*/
 /*register float farg2 __asm__("fr5R");*/
@@ -98,15 +98,15 @@ int
 avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("%r30");  /* C names for registers */
-/*register __avword	iret1	__asm__("%r28"); */
-  register __avword	iret2	__asm__("%r29");
+/*register __avrword	iret1	__asm__("%r28"); */
+  register __avrword	iret2	__asm__("%r29");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   __avword* memargptr;
   int arglen = l->aptr - l->args;
-  __avword iret;
+  __avrword iret;
 
   {
     int i;
@@ -358,36 +358,36 @@ avcall_call(av_alist* list)
             }
           }
           #else /* Optimized: fewer conditional jumps, fewer memory accesses */
-          uintptr_t count = l->rsize; /* > 0, ≤ 2*sizeof(__avword) */
-          __avword* wordaddr = (__avword*)((uintptr_t)raddr & ~(uintptr_t)(sizeof(__avword)-1));
-          uintptr_t start_offset = (uintptr_t)raddr & (uintptr_t)(sizeof(__avword)-1); /* ≥ 0, < sizeof(__avword) */
-          uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__avword) */
-          if (count <= sizeof(__avword)) {
+          uintptr_t count = l->rsize; /* > 0, ≤ 2*sizeof(__avrword) */
+          __avrword* wordaddr = (__avrword*)((uintptr_t)raddr & ~(uintptr_t)(sizeof(__avrword)-1));
+          uintptr_t start_offset = (uintptr_t)raddr & (uintptr_t)(sizeof(__avrword)-1); /* ≥ 0, < sizeof(__avrword) */
+          uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__avrword) */
+          if (count <= sizeof(__avrword)) {
             /* Use iret. */
-            if (end_offset <= sizeof(__avword)) {
-              /* 0 < end_offset ≤ sizeof(__avword) */
-              __avword mask0 = ((__avword)2 << (sizeof(__avword)*8-start_offset*8-1)) - ((__avword)1 << (sizeof(__avword)*8-end_offset*8));
+            if (end_offset <= sizeof(__avrword)) {
+              /* 0 < end_offset ≤ sizeof(__avrword) */
+              __avrword mask0 = ((__avrword)2 << (sizeof(__avrword)*8-start_offset*8-1)) - ((__avrword)1 << (sizeof(__avrword)*8-end_offset*8));
               wordaddr[0] ^= (wordaddr[0] ^ (iret >> (start_offset*8))) & mask0;
             } else {
-              /* sizeof(__avword) < end_offset < 2*sizeof(__avword), start_offset > 0 */
-              __avword mask0 = ((__avword)2 << (sizeof(__avword)*8-start_offset*8-1)) - 1;
-              __avword mask1 = - ((__avword)1 << (2*sizeof(__avword)*8-end_offset*8));
+              /* sizeof(__avrword) < end_offset < 2*sizeof(__avrword), start_offset > 0 */
+              __avrword mask0 = ((__avrword)2 << (sizeof(__avrword)*8-start_offset*8-1)) - 1;
+              __avrword mask1 = - ((__avrword)1 << (2*sizeof(__avrword)*8-end_offset*8));
               wordaddr[0] ^= (wordaddr[0] ^ (iret >> (start_offset*8))) & mask0;
-              wordaddr[1] ^= (wordaddr[1] ^ (iret << (sizeof(__avword)*8-start_offset*8))) & mask1;
+              wordaddr[1] ^= (wordaddr[1] ^ (iret << (sizeof(__avrword)*8-start_offset*8))) & mask1;
             }
           } else {
             /* Use iret, iret2. */
-            __avword mask0 = ((__avword)2 << (sizeof(__avword)*8-start_offset*8-1)) - 1;
+            __avrword mask0 = ((__avrword)2 << (sizeof(__avrword)*8-start_offset*8-1)) - 1;
             wordaddr[0] ^= (wordaddr[0] ^ (iret >> (start_offset*8))) & mask0;
-            if (end_offset <= 2*sizeof(__avword)) {
-              /* sizeof(__avword) < end_offset ≤ 2*sizeof(__avword) */
-              __avword mask1 = - ((__avword)1 << (2*sizeof(__avword)*8-end_offset*8));
-              wordaddr[1] ^= (wordaddr[1] ^ ((iret << (sizeof(__avword)*4-start_offset*4) << (sizeof(__avword)*4-start_offset*4)) | (iret2 >> (start_offset*8)))) & mask1;
+            if (end_offset <= 2*sizeof(__avrword)) {
+              /* sizeof(__avrword) < end_offset ≤ 2*sizeof(__avrword) */
+              __avrword mask1 = - ((__avrword)1 << (2*sizeof(__avrword)*8-end_offset*8));
+              wordaddr[1] ^= (wordaddr[1] ^ ((iret << (sizeof(__avrword)*4-start_offset*4) << (sizeof(__avrword)*4-start_offset*4)) | (iret2 >> (start_offset*8)))) & mask1;
             } else {
-              /* 2*sizeof(__avword) < end_offset < 3*sizeof(__avword), start_offset > 0 */
-              __avword mask2 = - ((__avword)1 << (3*sizeof(__avword)*8-end_offset*8));
-              wordaddr[1] = (iret << (sizeof(__avword)*8-start_offset*8)) | (iret2 >> (start_offset*8));
-              wordaddr[2] ^= (wordaddr[2] ^ (iret2 << (sizeof(__avword)*8-start_offset*8))) & mask2;
+              /* 2*sizeof(__avrword) < end_offset < 3*sizeof(__avrword), start_offset > 0 */
+              __avrword mask2 = - ((__avrword)1 << (3*sizeof(__avrword)*8-end_offset*8));
+              wordaddr[1] = (iret << (sizeof(__avrword)*8-start_offset*8)) | (iret2 >> (start_offset*8));
+              wordaddr[2] ^= (wordaddr[2] ^ (iret2 << (sizeof(__avrword)*8-start_offset*8))) & mask2;
             }
           }
           #endif

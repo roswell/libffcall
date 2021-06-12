@@ -28,12 +28,12 @@ int avcall_overflown (av_alist* list)
   return _av_overflown(AV_LIST_INNER(list));
 }
 
-void avcall_start (av_alist* list, __avword* list_args, __avword* list_args_end, __avword(*func)(), void* raddr, int rettype, int flags)
+void avcall_start (av_alist* list, __avword* list_args, __avword* list_args_end, __avrword(*func)(), void* raddr, int rettype, int flags)
 {
   __av_start(AV_LIST_INNER(list),list_args,list_args_end,func,raddr,rettype,flags);
 }
 
-void avcall_start_struct (av_alist* list, __avword* list_args, __avword* list_args_end, __avword(*func)(), size_t type_size, int type_splittable, void* raddr, int flags)
+void avcall_start_struct (av_alist* list, __avword* list_args, __avword* list_args_end, __avrword(*func)(), size_t type_size, int type_splittable, void* raddr, int flags)
 {
   __av_start_struct(AV_LIST_INNER(list),list_args,list_args_end,func,type_size,type_splittable,raddr,flags);
 }

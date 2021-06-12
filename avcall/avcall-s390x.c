@@ -59,11 +59,11 @@
 
 #define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
 
-register __avword iarg1 __asm__("r2");
-register __avword iarg2 __asm__("r3");
-register __avword iarg3 __asm__("r4");
-register __avword iarg4 __asm__("r5");
-register __avword iarg5 __asm__("r6");
+register __avrword iarg1 __asm__("r2");
+register __avrword iarg2 __asm__("r3");
+register __avrword iarg3 __asm__("r4");
+register __avrword iarg4 __asm__("r5");
+register __avrword iarg5 __asm__("r6");
 
 register float farg1 __asm__("f0");
 register float farg2 __asm__("f2");
@@ -79,11 +79,11 @@ int
 avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("r15");	/* C names for registers */
-  register __avword	iretreg	__asm__("r2");
+  register __avrword	iretreg	__asm__("r2");
   register double	dret	__asm__("f0");
 
   /* We need to put a value in r6, but it's a call-saved register. */
-  __avword saved_iarg5 = iarg5;
+  __avrword saved_iarg5 = iarg5;
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -140,7 +140,7 @@ avcall_call(av_alist* list)
   if (l->rtype == __AVdouble) {
     *(double*)l->raddr = (*(double(*)())l->func)();
   } else {
-    __avword iret = (*l->func)();
+    __avrword iret = (*l->func)();
 
     /* save return value */
     if (l->rtype == __AVvoid) {

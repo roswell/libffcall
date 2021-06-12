@@ -43,8 +43,8 @@ avcall_call(av_alist* list)
 {
   register __avword*	sp	__asm__("sp");  /* C names for registers */
   register __avword*	sret	__asm__("a1");	/* structure return pointer */
-/*register __avword	iret	__asm__("d0"); */
-  register __avword	iret2	__asm__("d1");
+/*register __avrword	iret	__asm__("d0"); */
+  register __avrword	iret2	__asm__("d1");
   register float	fret	__asm__("d0");	/* d0 */
   register double	dret	__asm__("d0");	/* d0,d1 */
   register float	fp_fret	__asm__("fp0");
@@ -54,8 +54,8 @@ avcall_call(av_alist* list)
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = l->aptr - l->args;
-  __avword i;
-  __avword i2;
+  __avrword i;
+  __avrword i2;
 
   for (i = 0; i < arglen; i++)		/* push function args onto stack */
     argframe[i] = l->args[i];
@@ -98,8 +98,8 @@ avcall_call(av_alist* list)
   } else
   if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
     void* raddr = l->raddr;
-    ((__avword*)raddr)[0] = i;
-    ((__avword*)raddr)[1] = i2;
+    ((__avrword*)raddr)[0] = i;
+    ((__avrword*)raddr)[1] = i2;
   } else
   if (l->rtype == __AVfloat) {
     if (l->flags & __AV_FREG_FLOAT_RETURN) {
@@ -134,10 +134,10 @@ avcall_call(av_alist* list)
       if (l->rsize == sizeof(int)) {
         RETURN(int, i);
       } else
-      if (l->rsize == 2*sizeof(__avword)) {
+      if (l->rsize == 2*sizeof(__avrword)) {
         void* raddr = l->raddr;
-        ((__avword*)raddr)[0] = i;
-        ((__avword*)raddr)[1] = i2;
+        ((__avrword*)raddr)[0] = i;
+        ((__avrword*)raddr)[1] = i2;
       }
     }
   }

@@ -61,14 +61,14 @@ avcall_call(av_alist* list)
   register double	farg4	__asm__("$f19");
   register double	farg5	__asm__("$f20");
   register double	farg6	__asm__("$f21");
-/*register __avword	iret	__asm__("$0"); */
-  register __avword	iret2	__asm__("$1");
+/*register __avrword	iret	__asm__("$0"); */
+  register __avrword	iret2	__asm__("$1");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
   int arglen = ((unsigned long) l->aptr - (unsigned long) l->args) / sizeof (__avword);
-  __avword i, i2;
+  __avrword i, i2;
 
   for (i = 6; i < arglen; i++)		/* push excess function args */
     argframe[i-6] = l->args[i];
@@ -154,10 +154,10 @@ avcall_call(av_alist* list)
       if (l->rsize == sizeof(long)) {
         RETURN(long, i);
       } else
-      if (l->rsize == 2*sizeof(__avword)) {
+      if (l->rsize == 2*sizeof(__avrword)) {
         void* raddr = l->raddr;
-        ((__avword*)raddr)[0] = i;
-        ((__avword*)raddr)[1] = i2;
+        ((__avrword*)raddr)[0] = i;
+        ((__avrword*)raddr)[1] = i2;
       }
     }
   }

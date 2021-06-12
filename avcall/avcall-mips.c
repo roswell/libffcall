@@ -57,7 +57,7 @@ int
 avcall_call(av_alist* list)
 {
   register __avword*	sp __asm__("$sp");  /* C names for registers */
-  register __avword	iret2 __asm__("$3");
+  register __avrword	iret2 __asm__("$3");
   register float	fret_tmp __asm__("$f0");
   register double	dret_tmp __asm__("$f0");
 
@@ -67,7 +67,7 @@ avcall_call(av_alist* list)
   __avword *argframe = sp;	/* stack offset for argument list is 0 */
   int arglen = l->aptr - l->args;
   int i;
-  __avword iret;
+  __avrword iret;
   float fret;
   double dret;
 
@@ -123,8 +123,8 @@ avcall_call(av_alist* list)
   } else
   if (l->rtype == __AVlonglong || l->rtype == __AVulonglong) {
     void* raddr = l->raddr;
-    ((__avword*)raddr)[0] = iret;
-    ((__avword*)raddr)[1] = iret2;
+    ((__avrword*)raddr)[0] = iret;
+    ((__avrword*)raddr)[1] = iret2;
   } else
   if (l->rtype == __AVfloat) {
     RETURN(float, fret);

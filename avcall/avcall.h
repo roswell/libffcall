@@ -62,14 +62,19 @@ template <class type> struct __AV_alignof_helper { char __slot1; type __slot2; }
 extern "C" {
 #endif
 
-/* C builtin types.
+/* __avword represents a single word that can be pushed on the stack.
+ * __avrword represents a general-purpose register.
  */
 #if defined(__mipsn32__) || defined(__x86_64_x32__) || defined(__AV_LLP64)
 typedef long long __avword;
+typedef long long __avrword;
 #else
 typedef long __avword;
+typedef long __avrword;
 #endif
 
+/* C builtin types.
+ */
 enum __AVtype
 {
   __AVword, /* just a dummy, for binary backward compatibility */
@@ -324,46 +329,46 @@ extern int avcall_overflown (av_alist* /* LIST */);
 #define __AV_START_FLAGS  \
   __AV_STRUCT_RETURN | __AV_FLOAT_RETURN | __AV_STRUCT_ARGS | __AV_FLOAT_ARGS | __AV_CLEANUP
 
-extern void avcall_start (av_alist* /* LIST */, __avword* /* LIST_ARGS */, __avword* /* LIST_ARGS_END */, __avword(* /* FUNC */)(), void* /* RADDR */, int /* RETTYPE */, int /* FLAGS */);
+extern void avcall_start (av_alist* /* LIST */, __avword* /* LIST_ARGS */, __avword* /* LIST_ARGS_END */, __avrword(* /* FUNC */)(), void* /* RADDR */, int /* RETTYPE */, int /* FLAGS */);
 
 #define av_start_void(LIST,FUNC)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),0,    __AVvoid,     __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),0,    __AVvoid,     __AV_START_FLAGS)
 #define av_start_char(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVchar,     __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVchar,     __AV_START_FLAGS)
 #define av_start_schar(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVschar,    __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVschar,    __AV_START_FLAGS)
 #define av_start_uchar(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVuchar,    __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVuchar,    __AV_START_FLAGS)
 #define av_start_short(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVshort,    __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVshort,    __AV_START_FLAGS)
 #define av_start_ushort(LIST,FUNC,RADDR)				\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVushort,   __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVushort,   __AV_START_FLAGS)
 #define av_start_int(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVint,      __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVint,      __AV_START_FLAGS)
 #define av_start_uint(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVuint,     __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVuint,     __AV_START_FLAGS)
 #define av_start_long(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVlong,     __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVlong,     __AV_START_FLAGS)
 #define av_start_ulong(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVulong,    __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVulong,    __AV_START_FLAGS)
 #define av_start_longlong(LIST,FUNC,RADDR)				\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVlonglong, __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVlonglong, __AV_START_FLAGS)
 #define av_start_ulonglong(LIST,FUNC,RADDR)				\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVulonglong,__AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVulonglong,__AV_START_FLAGS)
 #define av_start_float(LIST,FUNC,RADDR)					\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVfloat,    __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVfloat,    __AV_START_FLAGS)
 #define av_start_double(LIST,FUNC,RADDR)				\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVdouble,   __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVdouble,   __AV_START_FLAGS)
 #define av_start_ptr(LIST,FUNC,TYPE,RADDR)				\
-  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),RADDR,__AVvoidp,    __AV_START_FLAGS)
+  avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVvoidp,    __AV_START_FLAGS)
 
-extern void avcall_start_struct (av_alist* /* LIST */, __avword* /* LIST_ARGS */, __avword* /* LIST_ARGS_END */, __avword(* /* FUNC */)(), size_t /* TYPE_SIZE */, int /* TYPE_SPLITTABLE */, void* /* RADDR */, int /* FLAGS */);
+extern void avcall_start_struct (av_alist* /* LIST */, __avword* /* LIST_ARGS */, __avword* /* LIST_ARGS_END */, __avrword(* /* FUNC */)(), size_t /* TYPE_SIZE */, int /* TYPE_SPLITTABLE */, void* /* RADDR */, int /* FLAGS */);
 
 #define av_start_struct(LIST,FUNC,TYPE,TYPE_SPLITTABLE,RADDR)		\
   _av_start_struct(LIST,FUNC,sizeof(TYPE),TYPE_SPLITTABLE,RADDR)
 /* Undocumented, but used by GNU clisp. */
 #define _av_start_struct(LIST,FUNC,TYPE_SIZE,TYPE_SPLITTABLE,RADDR)	\
-  avcall_start_struct(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avword(*)())(FUNC),TYPE_SIZE,TYPE_SPLITTABLE,RADDR,__AV_START_FLAGS)
+  avcall_start_struct(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),TYPE_SIZE,TYPE_SPLITTABLE,RADDR,__AV_START_FLAGS)
 
 
 /*
