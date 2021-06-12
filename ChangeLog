@@ -1,5 +1,11 @@
 2021-06-12  Bruno Haible  <bruno@clisp.org>
 
+	Finish port to macOS 11/arm64.
+	* PLATFORMS, */PLATFORMS: Mention the macOS 11/arm64 port.
+	* NEWS: Mention it as attained in release 2.4, not 2.3.
+
+2021-06-12  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Fix regression on Linux/arm64.
 	* common/asm-arm64.h: Fix mistake.
 
