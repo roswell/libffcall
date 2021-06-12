@@ -135,11 +135,11 @@ vacall-armhf-macro.S : ../../vacall/vacall-armhf.c ../../vacall/vacall-internal.
 	$(RM) vacall-armhfel.s vacall-armhfeb.s
 
 
-vacall-arm64-macro.S : ../../vacall/vacall-arm64.c ../../vacall/vacall-internal.h vacall_r.h ../../common/asm-arm.sh ../../common/noexecstack-arm.h $(THISFILE)
+vacall-arm64-macro.S : ../../vacall/vacall-arm64.c ../../vacall/vacall-internal.h vacall_r.h ../../common/asm-arm64.sh ../../common/noexecstack-arm.h $(THISFILE)
 	$(CROSS_TOOL) aarch64-linux gcc-5.4.0 -mlittle-endian $(GCCFLAGS) -D__arm64__ -S ../../vacall/vacall-arm64.c -I../../vacall -I. -o vacall-arm64el.s
 	$(CROSS_TOOL) aarch64-linux gcc-5.4.0 -mbig-endian $(GCCFLAGS) -D__arm64__ -S ../../vacall/vacall-arm64.c -I../../vacall -I. -o vacall-arm64eb.s
 	cmp vacall-arm64el.s vacall-arm64eb.s > /dev/null
-	(echo '#include "asm-arm.h"' ; ../../common/asm-arm.sh < vacall-arm64el.s ; cat ../../common/noexecstack-arm.h) > vacall-arm64-macro.S
+	(echo '#include "asm-arm64.h"' ; ../../common/asm-arm64.sh < vacall-arm64el.s ; cat ../../common/noexecstack-arm.h) > vacall-arm64-macro.S
 	$(RM) vacall-arm64el.s vacall-arm64eb.s
 
 

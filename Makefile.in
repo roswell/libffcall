@@ -147,6 +147,7 @@ SOURCE_FILES = \
   m4/ln.m4 \
   common/asm-alpha.sh \
   common/asm-arm.sh common/asm-arm.h \
+  common/asm-arm64.sh common/asm-arm64.h \
   common/asm-hppa.sh common/asm-hppa.h \
   common/asm-hppa64.sh common/asm-hppa64.h \
   common/asm-i386.sh common/asm-i386.h \

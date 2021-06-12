@@ -136,11 +136,11 @@ avcall-armhf-macro.S : avcall-armhf.c avcall-internal.h avcall.h avcall-alist.h 
 	$(RM) avcall-armhfel.s avcall-armhfeb.s
 
 
-avcall-arm64-macro.S : avcall-arm64.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
+avcall-arm64-macro.S : avcall-arm64.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm64.sh ../common/noexecstack-arm.h $(THISFILE)
 	$(CROSS_TOOL) aarch64-linux gcc-5.4.0 -mlittle-endian $(GCCFLAGS) -D__arm64__ -S avcall-arm64.c -o avcall-arm64el.s
 	$(CROSS_TOOL) aarch64-linux gcc-5.4.0 -mbig-endian $(GCCFLAGS) -D__arm64__ -S avcall-arm64.c -o avcall-arm64eb.s
 	cmp avcall-arm64el.s avcall-arm64eb.s > /dev/null
-	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < avcall-arm64el.s ; cat ../common/noexecstack-arm.h) > avcall-arm64-macro.S
+	(echo '#include "asm-arm64.h"' ; ../common/asm-arm64.sh < avcall-arm64el.s ; cat ../common/noexecstack-arm.h) > avcall-arm64-macro.S
 	$(RM) avcall-arm64el.s avcall-arm64eb.s
 
 

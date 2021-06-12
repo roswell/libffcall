@@ -1,3 +1,16 @@
+2021-06-12  Bruno Haible  <bruno@clisp.org>
+
+	Support assembly language syntax expected by macOS 11/arm64.
+	* common/asm-arm64.sh: New file, based on common/asm-arm.sh.
+	* common/asm-arm64.h: New file, based on common/asm-arm.h.
+	* Makefile.in (SOURCE_FILES): Add them.
+	* avcall/Makefile.devel (avcall-arm64-macro.S): Use asm-arm64.sh,
+	asm-arm64.h instead of asm-arm.sh, asm-arm.h.
+	* vacall/Makefile.devel (vacall-arm64-macro.S): Use asm-arm64.sh,
+	asm-arm64.h instead of asm-arm.sh, asm-arm.h.
+	* callback/vacall_r/Makefile.devel (vacall-arm64-macro.S): Use
+	asm-arm64.sh, asm-arm64.h instead of asm-arm.sh, asm-arm.h.
+
 2021-06-11  Bruno Haible  <bruno@clisp.org>
 
 	avcall: Remove handling of obsolete enum item '__AVword'.
