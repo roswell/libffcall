@@ -72,7 +72,7 @@ typedef long __avword;
 
 enum __AVtype
 {
-  __AVword,
+  __AVword, /* just a dummy, for binary backward compatibility */
   __AVvoid,
   __AVchar,
   __AVschar,

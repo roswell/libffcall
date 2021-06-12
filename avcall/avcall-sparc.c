@@ -1,6 +1,6 @@
 /**
   Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+  Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -125,9 +125,6 @@ avcall_call(av_alist* list)
 
   /* save return value */
   if (l->rtype == __AVvoid) {
-  } else
-  if (l->rtype == __AVword) {
-    RETURN(__avword, i);
   } else
   if (l->rtype == __AVchar) {
     RETURN(char, i);
