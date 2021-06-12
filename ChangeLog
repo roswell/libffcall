@@ -1,5 +1,10 @@
 2021-06-12  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Fix regression on Linux/arm64.
+	* common/asm-arm64.h: Fix mistake.
+
+2021-06-12  Bruno Haible  <bruno@clisp.org>
+
 	vacall, callback: Add support for macOS 11/arm64.
 	* vacall/vacall.h (__varword): Define differently on macOS 11/arm64.
 	* callback/vacall_r/vacall_r.h (__varword): Likewise.

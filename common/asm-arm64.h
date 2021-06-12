@@ -73,7 +73,6 @@
 #endif
 
 // When assembly language code is compiled into a shared library, ELF linkers
-#define GOTINDIR(register) ldr register,[register]
 // need to know which symbols are functions.
 #if defined(__ELF__) || !(defined(ASM_UNDERSCORE) || (defined __APPLE__ && defined __MACH__))
 #define DECLARE_FUNCTION(name) .type C(name),%function
