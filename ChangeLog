@@ -1,5 +1,18 @@
 2021-06-13  Bruno Haible  <bruno@clisp.org>
 
+	Port to Solaris 11/SPARC 32-bit.
+	* avcall/avcall-sparc.c (avcall_call): Use preallocated trampolines
+	instead of generating a trampoline on the stack, because the stack is
+	not executable on Solaris 11.
+	* avcall/Makefile.devel (avcall-sparc-solaris.s,
+	avcall-sparc-solaris-macro.S): New rules.
+	* avcall/Makefile.in (SOURCE_FILES): Add avcall-sparc-solaris.s,
+	avcall-sparc-solaris-macro.S.
+	(avcall-sparc.s): Use a different input file on Solaris.
+	* NEWS: Mention the new port.
+
+2021-06-13  Bruno Haible  <bruno@clisp.org>
+
 	Fix build error on FreeBSD 12/arm.
 	* common/asm-arm.sh: Eliminate '.syntax divided' pseudo-ops.
 	* NEWS: Mention the new port.

@@ -16,7 +16,7 @@ precompiled : \
   avcall-i386-macro.S \
   avcall-m68k.mit.S avcall-m68k.motorola.S \
   avcall-mipseb-macro.S avcall-mipsel-macro.S avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S avcall-mips64eb-macro.S avcall-mips64el-macro.S \
-  avcall-sparc-macro.S avcall-sparc64-macro.S \
+  avcall-sparc-macro.S avcall-sparc-solaris-macro.S avcall-sparc64-macro.S \
   avcall-alpha-macro.S \
   avcall-hppa-macro.S avcall-hppa64-macro.S \
   avcall-arm-macro.S avcall-armhf-macro.S \
@@ -90,6 +90,12 @@ avcall-sparc-linux.s : avcall-sparc.c avcall-internal.h avcall.h avcall-alist.h 
 
 avcall-sparc-macro.S : avcall-sparc-linux.s ../common/asm-sparc.sh ../common/noexecstack.h $(THISFILE)
 	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < avcall-sparc-linux.s ; cat ../common/noexecstack.h) > avcall-sparc-macro.S
+
+avcall-sparc-solaris.s : avcall-sparc.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
+	$(CROSS_TOOL) sparc-linux gcc -V 3.1 $(GCCFLAGS) -O1 -D__sparc__ -D__sun -S avcall-sparc.c -o avcall-sparc-solaris.s
+
+avcall-sparc-solaris-macro.S : avcall-sparc-solaris.s ../common/asm-sparc.sh ../common/noexecstack.h $(THISFILE)
+	(echo '#include "asm-sparc.h"' ; ../common/asm-sparc.sh < avcall-sparc-solaris.s ; cat ../common/noexecstack.h) > avcall-sparc-solaris-macro.S
 
 avcall-sparc64-linux.s : avcall-sparc64.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
 # This compiler produces useless instructions with -fPIC. The result is PIC even without -fPIC.

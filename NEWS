@@ -4,6 +4,7 @@ New in 2.4:
   (Previously, a build on these platforms failed.)
   - arm64: macOS 11.
   - arm: FreeBSD 12.
+  - sparc: Solaris 11 32-bit.
 
 New in 2.3:
 

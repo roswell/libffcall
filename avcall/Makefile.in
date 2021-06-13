@@ -87,8 +87,12 @@ avcall.lo : avcall-$(CPU).lo
 avcall-sparc.lo : avcall-sparc.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc.s
 
-avcall-sparc.s : $(srcdir)/avcall-sparc-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/avcall-sparc-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > avcall-sparc.s
+avcall-sparc.s : $(srcdir)/avcall-sparc-macro.S $(srcdir)/avcall-sparc-solaris-macro.S
+	case "$(OS)" in \
+	  solaris*) input=avcall-sparc-solaris-macro.S ;; \
+	  *) input=avcall-sparc-macro.S ;; \
+	esac; \
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common - < $(srcdir)/$${input} | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,//.*$$,,' -e 's,\$$,#,g' -e 's,# ,#,g' > avcall-sparc.s
 
 avcall-sparc64.lo : avcall-sparc64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-sparc64.s
@@ -389,7 +393,7 @@ SOURCE_FILES = \
   avcall-riscv64.c avcall-riscv64-lp64d-linux.s avcall-riscv64-lp64d-macro.S \
   avcall-s390.c avcall-s390-linux.s avcall-s390-macro.S \
   avcall-s390x.c avcall-s390x-linux.s avcall-s390x-macro.S \
-  avcall-sparc.c avcall-sparc-linux.s avcall-sparc-macro.S \
+  avcall-sparc.c avcall-sparc-linux.s avcall-sparc-macro.S avcall-sparc-solaris.s avcall-sparc-solaris-macro.S \
   avcall-sparc64.c avcall-sparc64-linux.s avcall-sparc64-macro.S \
   avcall-x86_64.c avcall-x86_64-linux.s avcall-x86_64-macro.S avcall-x86_64-x32-linux.s \
   avcall-x86_64-windows.c avcall-x86_64-windows.s avcall-x86_64-windows-macro.S \

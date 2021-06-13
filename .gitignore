@@ -97,6 +97,8 @@
 /avcall/avcall-s390x-macro.S
 /avcall/avcall-sparc-linux.s
 /avcall/avcall-sparc-macro.S
+/avcall/avcall-sparc-solaris.s
+/avcall/avcall-sparc-solaris-macro.S
 /avcall/avcall-sparc64-linux.s
 /avcall/avcall-sparc64-macro.S
 /avcall/avcall-x86_64-linux.s
