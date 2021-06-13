@@ -3,6 +3,7 @@ New in 2.4:
 * Added support for the following platforms:
   (Previously, a build on these platforms failed.)
   - arm64: macOS 11.
+  - arm: FreeBSD 12.
 
 New in 2.3:
 

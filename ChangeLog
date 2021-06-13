@@ -1,5 +1,11 @@
 2021-06-13  Bruno Haible  <bruno@clisp.org>
 
+	Fix build error on FreeBSD 12/arm.
+	* common/asm-arm.sh: Eliminate '.syntax divided' pseudo-ops.
+	* NEWS: Mention the new port.
+
+2021-06-13  Bruno Haible  <bruno@clisp.org>
+
 	Fix build error on 64-bit MSVC, due to newer libtool.
 	* avcall/Makefile.in (avcall-x86_64.lo) [IF_MSVC]: Use ml64 directly,
 	without invoking libtool.
