@@ -1,5 +1,12 @@
 2021-06-13  Bruno Haible  <bruno@clisp.org>
 
+	maint: Don't require an internet connection for running autogen.sh.
+	* libtool-patches: New directory.
+	* Makefile.maint (libtool-imported-files): Don't call wget. Take the
+	patches from libtool-patches/ instead.
+
+2021-06-13  Bruno Haible  <bruno@clisp.org>
+
 	Prepare for 2.4 release.
 	* VERSION: Set to 2.4.
 

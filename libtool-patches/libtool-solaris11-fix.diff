@@ -1,0 +1,31 @@
+From 506ce53a03ce4a7f9da9be3dff6af0761f468422 Mon Sep 17 00:00:00 2001
+From: Bruno Haible <bruno@clisp.org>
+Date: Sat, 21 Oct 2017 14:21:15 +0200
+Subject: [PATCH] Fix -export-symbols and -export-symbols-regex support on
+ Solaris 11.3.
+
+On Solaris 11.3 (as opposed to Solaris 11.0), the output of /usr/bin/nm -p
+ob object files contains, for global variables without initializer, the
+letter 'C' (it was 'D' in Solaris 11.0).
+
+m4/libtool.m4 (_LT_CMD_GLOBAL_SYMBOLS): Adjust symcode for Solaris.
+---
+ m4/libtool.m4 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/m4/libtool.m4 b/m4/libtool.m4
+index 597c604..0fa0c3d 100644
+--- a/m4/libtool.m4
++++ b/m4/libtool.m4
+@@ -3953,7 +3953,7 @@ osf*)
+   symcode='[[BCDEGQRST]]'
+   ;;
+ solaris*)
+-  symcode='[[BDRT]]'
++  symcode='[[BCDRT]]'
+   ;;
+ sco3.2v5*)
+   symcode='[[DT]]'
+-- 
+2.7.4
+

@@ -48,22 +48,13 @@ libtool-imported-files : force
 	  fi; \
 	done
 	rm -rf libtool.tmp
-	: "Allow building statically linked binaries, through LDFLAGS=-static ."
-	wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-allow-static.diff https://lists.gnu.org/archive/html/bug-libtool/2017-07/txt7Q9LRXv6HS.txt
 	chmod u+w build-aux/ltmain.sh
-	patch build-aux/ltmain.sh < libtool-allow-static.diff
-	rm -f libtool-allow-static.diff
-	: "Fix -export-symbols and -export-symbols-regex support on Solaris 11.3"
-	wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-solaris11-fix.diff 'https://savannah.gnu.org/patch/download.php?file_id=42205'
+	patch build-aux/ltmain.sh < libtool-patches/libtool-allow-static.diff
 	chmod u+w m4/libtool.m4
-	patch -p1 < libtool-solaris11-fix.diff
-	rm -f libtool-solaris11-fix.diff
-	: "Support creating shared libraries on MidnightBSD"
-	wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-midnightbsd-fix.diff 'https://savannah.gnu.org/patch/download.php?file_id=50595'
+	patch -p1 < libtool-patches/libtool-solaris11-fix.diff
 	chmod u+w build-aux/ltmain.sh m4/libtool.m4
-	head -n 60 < libtool-midnightbsd-fix.diff | patch -p0 build-aux/ltmain.sh
-	tail -n +227 < libtool-midnightbsd-fix.diff | head -n 56 | patch -p0 m4/libtool.m4
-	rm -f libtool-midnightbsd-fix.diff
+	head -n 60 < libtool-patches/libtool-midnightbsd-fix.diff | patch -p0 build-aux/ltmain.sh
+	tail -n +227 < libtool-patches/libtool-midnightbsd-fix.diff | head -n 56 | patch -p0 m4/libtool.m4
 
 .PHONY : libtool-clean
 libtool-clean : force

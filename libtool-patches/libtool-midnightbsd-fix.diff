@@ -1,0 +1,293 @@
+--- build-aux/ltmain.sh.orig	2015-02-15 11:15:12.000000000 -0500
++++ build-aux/ltmain.sh	2018-03-07 23:37:11.000000000 -0500
+@@ -7019,7 +7019,7 @@
+ 	    # These systems don't actually have a C library (as such)
+ 	    test X-lc = "X$arg" && continue
+ 	    ;;
+-	  *-*-openbsd* | *-*-freebsd* | *-*-dragonfly* | *-*-bitrig*)
++	  *-*-openbsd* | *-*-freebsd* | *-*-dragonfly* | *-*-bitrig* | *-*-midnightbsd*)
+ 	    # Do not include libc due to us having libc/libc_r.
+ 	    test X-lc = "X$arg" && continue
+ 	    ;;
+@@ -7039,7 +7039,7 @@
+ 	  esac
+ 	elif test X-lc_r = "X$arg"; then
+ 	 case $host in
+-	 *-*-openbsd* | *-*-freebsd* | *-*-dragonfly* | *-*-bitrig*)
++	 *-*-openbsd* | *-*-freebsd* | *-*-dragonfly* | *-*-bitrig* | *-*-midnightbsd*)
+ 	   # Do not include libc_r directly, use -pthread flag.
+ 	   continue
+ 	   ;;
+@@ -8805,13 +8805,13 @@
+ 	  #
+ 	  case $version_type in
+ 	  # correct linux to gnu/linux during the next big refactor
+-	  darwin|freebsd-elf|linux|osf|windows|none)
++	  darwin|freebsd-elf|midnightbsd-elf|linux|osf|windows|none)
+ 	    func_arith $number_major + $number_minor
+ 	    current=$func_arith_result
+ 	    age=$number_minor
+ 	    revision=$number_revision
+ 	    ;;
+-	  freebsd-aout|qnx|sunos)
++	  freebsd-aout|midnightbsd-aout|qnx|sunos)
+ 	    current=$number_major
+ 	    revision=$number_minor
+ 	    age=0
+@@ -8891,12 +8891,12 @@
+           esac
+ 	  ;;
+ 
+-	freebsd-aout)
++	freebsd-aout | midnightbsd-aout)
+ 	  major=.$current
+ 	  versuffix=.$current.$revision
+ 	  ;;
+ 
+-	freebsd-elf)
++	freebsd-elf | midnightbsd-elf | midnightbsd)
+ 	  func_arith $current - $age
+ 	  major=.$func_arith_result
+ 	  versuffix=$major.$age.$revision
+@@ -9122,7 +9122,7 @@
+ 	  *-*-netbsd*)
+ 	    # Don't link with libc until the a.out ld.so is fixed.
+ 	    ;;
+-	  *-*-openbsd* | *-*-freebsd* | *-*-dragonfly*)
++	  *-*-openbsd* | *-*-freebsd* | *-*-dragonfly* | *-*-midnightbsd*)
+ 	    # Do not include libc due to us having libc/libc_r.
+ 	    ;;
+ 	  *-*-sco3.2v5* | *-*-sco5v6*)
+--- configure.orig	2015-02-15 11:14:34.000000000 -0500
++++ configure	2018-03-07 23:37:48.000000000 -0500
+@@ -5903,7 +5903,7 @@
+     lt_cv_sys_max_cmd_len=8192;
+     ;;
+ 
+-  bitrig* | darwin* | dragonfly* | freebsd* | netbsd* | openbsd*)
++  bitrig* | darwin* | dragonfly* | freebsd* | midnightbsd* | netbsd* | openbsd*)
+     # This has been around since 386BSD, at least.  Likely further.
+     if test -x /sbin/sysctl; then
+       lt_cv_sys_max_cmd_len=`/sbin/sysctl -n kern.argmax`
+@@ -6311,7 +6311,7 @@
+   lt_cv_deplibs_check_method=pass_all
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   if echo __ELF__ | $CC -E - | $GREP __ELF__ > /dev/null; then
+     case $host_cpu in
+     i*86 )
+@@ -10981,7 +10981,7 @@
+       ;;
+ 
+     # FreeBSD 3 and greater uses gcc -shared to do shared libraries.
+-    freebsd* | dragonfly*)
++    freebsd* | dragonfly* | midnightbsd*)
+       archive_cmds='$CC -shared $pic_flag -o $lib $libobjs $deplibs $compiler_flags'
+       hardcode_libdir_flag_spec='-R$libdir'
+       hardcode_direct=yes
+@@ -12026,7 +12026,7 @@
+   shlibpath_var=LD_LIBRARY_PATH
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   # DragonFly does not have aout.  When/if they implement a new
+   # versioning mechanism, adjust this.
+   if test -x /usr/bin/objformat; then
+@@ -13877,7 +13877,7 @@
+     # If you are looking for one http://www.opendarwin.org/projects/dlcompat
+     lt_cv_sys_dlopen_deplibs=yes
+     ;;
+-  freebsd* | dragonfly*)
++  freebsd* | dragonfly* | midnightbsd*)
+     lt_cv_sys_dlopen_deplibs=yes
+     ;;
+   gnu* | linux* | k*bsd*-gnu | kopensolaris*-gnu)
+@@ -15451,7 +15451,7 @@
+         archive_cmds_need_lc_CXX=no
+         ;;
+ 
+-      freebsd* | dragonfly*)
++      freebsd* | dragonfly* | midnightbsd*)
+         # FreeBSD 3 and later use GNU C++ and GNU ld with standard ELF
+         # conventions
+         ld_shlibs_CXX=yes
+@@ -16391,7 +16391,7 @@
+ 	    ;;
+ 	esac
+ 	;;
+-      freebsd* | dragonfly*)
++      freebsd* | dragonfly* | midnightbsd*)
+ 	# FreeBSD uses GNU C++
+ 	;;
+       hpux9* | hpux10* | hpux11*)
+@@ -17315,7 +17315,7 @@
+   shlibpath_var=LD_LIBRARY_PATH
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   # DragonFly does not have aout.  When/if they implement a new
+   # versioning mechanism, adjust this.
+   if test -x /usr/bin/objformat; then
+@@ -19646,7 +19646,7 @@
+       ;;
+ 
+     # FreeBSD 3 and greater uses gcc -shared to do shared libraries.
+-    freebsd* | dragonfly*)
++    freebsd* | dragonfly* | midnightbsd*)
+       archive_cmds_F77='$CC -shared $pic_flag -o $lib $libobjs $deplibs $compiler_flags'
+       hardcode_libdir_flag_spec_F77='-R$libdir'
+       hardcode_direct_F77=yes
+@@ -20481,7 +20481,7 @@
+   shlibpath_var=LD_LIBRARY_PATH
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   # DragonFly does not have aout.  When/if they implement a new
+   # versioning mechanism, adjust this.
+   if test -x /usr/bin/objformat; then
+@@ -22947,7 +22947,7 @@
+       ;;
+ 
+     # FreeBSD 3 and greater uses gcc -shared to do shared libraries.
+-    freebsd* | dragonfly*)
++    freebsd* | dragonfly* | midnightbsd*)
+       archive_cmds_FC='$CC -shared $pic_flag -o $lib $libobjs $deplibs $compiler_flags'
+       hardcode_libdir_flag_spec_FC='-R$libdir'
+       hardcode_direct_FC=yes
+@@ -23782,7 +23782,7 @@
+   shlibpath_var=LD_LIBRARY_PATH
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   # DragonFly does not have aout.  When/if they implement a new
+   # versioning mechanism, adjust this.
+   if test -x /usr/bin/objformat; then
+--- libltdl/configure.orig	2018-08-17 13:30:38.401401000 -0400
++++ libltdl/configure	2018-08-17 13:34:08.556815000 -0400
+@@ -4788,7 +4788,7 @@
+     lt_cv_sys_max_cmd_len=8192;
+     ;;
+ 
+-  bitrig* | darwin* | dragonfly* | freebsd* | netbsd* | openbsd*)
++  bitrig* | darwin* | dragonfly* | freebsd* | netbsd* | openbsd* | midnightbsd*)
+     # This has been around since 386BSD, at least.  Likely further.
+     if test -x /sbin/sysctl; then
+       lt_cv_sys_max_cmd_len=`/sbin/sysctl -n kern.argmax`
+@@ -5196,7 +5196,7 @@
+   lt_cv_deplibs_check_method=pass_all
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   if echo __ELF__ | $CC -E - | $GREP __ELF__ > /dev/null; then
+     case $host_cpu in
+     i*86 )
+@@ -10005,7 +10005,7 @@
+       ;;
+ 
+     # FreeBSD 3 and greater uses gcc -shared to do shared libraries.
+-    freebsd* | dragonfly*)
++    freebsd* | dragonfly* | midnightbsd*)
+       archive_cmds='$CC -shared $pic_flag -o $lib $libobjs $deplibs $compiler_flags'
+       hardcode_libdir_flag_spec='-R$libdir'
+       hardcode_direct=yes
+@@ -11050,7 +11050,7 @@
+   shlibpath_var=LD_LIBRARY_PATH
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   # DragonFly does not have aout.  When/if they implement a new
+   # versioning mechanism, adjust this.
+   if test -x /usr/bin/objformat; then
+@@ -11069,7 +11069,7 @@
+       need_version=no
+       need_lib_prefix=no
+       ;;
+-    freebsd-*)
++    freebsd-* | midnightbsd*)
+       library_names_spec='$libname$release$shared_ext$versuffix $libname$shared_ext$versuffix'
+       need_version=yes
+       ;;
+@@ -12900,7 +12900,7 @@
+     # If you are looking for one http://www.opendarwin.org/projects/dlcompat
+     lt_cv_sys_dlopen_deplibs=yes
+     ;;
+-  freebsd* | dragonfly*)
++  freebsd* | dragonfly* | midnightbsd*)
+     lt_cv_sys_dlopen_deplibs=yes
+     ;;
+   gnu* | linux* | k*bsd*-gnu | kopensolaris*-gnu)
+--- m4/libtool.m4.orig	2015-01-20 11:15:19.000000000 -0500
++++ m4/libtool.m4	2018-03-07 23:40:12.000000000 -0500
+@@ -1714,7 +1714,7 @@
+     lt_cv_sys_max_cmd_len=8192;
+     ;;
+ 
+-  bitrig* | darwin* | dragonfly* | freebsd* | netbsd* | openbsd*)
++  bitrig* | darwin* | dragonfly* | freebsd* | midnightbsd* | netbsd* | openbsd*)
+     # This has been around since 386BSD, at least.  Likely further.
+     if test -x /sbin/sysctl; then
+       lt_cv_sys_max_cmd_len=`/sbin/sysctl -n kern.argmax`
+@@ -2655,7 +2655,7 @@
+   shlibpath_var=LD_LIBRARY_PATH
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   # DragonFly does not have aout.  When/if they implement a new
+   # versioning mechanism, adjust this.
+   if test -x /usr/bin/objformat; then
+@@ -3488,7 +3488,7 @@
+   lt_cv_deplibs_check_method=pass_all
+   ;;
+ 
+-freebsd* | dragonfly*)
++freebsd* | dragonfly* | midnightbsd*)
+   if echo __ELF__ | $CC -E - | $GREP __ELF__ > /dev/null; then
+     case $host_cpu in
+     i*86 )
+@@ -4317,7 +4317,7 @@
+ 	    ;;
+ 	esac
+ 	;;
+-      freebsd* | dragonfly*)
++      freebsd* | dragonfly* | midnightbsd*)
+ 	# FreeBSD uses GNU C++
+ 	;;
+       hpux9* | hpux10* | hpux11*)
+@@ -5650,7 +5650,7 @@
+       ;;
+ 
+     # FreeBSD 3 and greater uses gcc -shared to do shared libraries.
+-    freebsd* | dragonfly*)
++    freebsd* | dragonfly* | midnightbsd*)
+       _LT_TAGVAR(archive_cmds, $1)='$CC -shared $pic_flag -o $lib $libobjs $deplibs $compiler_flags'
+       _LT_TAGVAR(hardcode_libdir_flag_spec, $1)='-R$libdir'
+       _LT_TAGVAR(hardcode_direct, $1)=yes
+@@ -6760,7 +6760,7 @@
+         _LT_TAGVAR(archive_cmds_need_lc, $1)=no
+         ;;
+ 
+-      freebsd* | dragonfly*)
++      freebsd* | dragonfly* | midnightbsd*)
+         # FreeBSD 3 and later use GNU C++ and GNU ld with standard ELF
+         # conventions
+         _LT_TAGVAR(ld_shlibs, $1)=yes
+--- m4/ltdl.m4.orig	2018-08-17 13:23:36.306529000 -0400
++++ m4/ltdl.m4	2018-08-17 13:23:48.981944000 -0400
+@@ -473,7 +473,7 @@
+     # If you are looking for one http://www.opendarwin.org/projects/dlcompat
+     lt_cv_sys_dlopen_deplibs=yes
+     ;;
+-  freebsd* | dragonfly*)
++  freebsd* | dragonfly* | midnightbsd*)
+     lt_cv_sys_dlopen_deplibs=yes
+     ;;
+   gnu* | linux* | k*bsd*-gnu | kopensolaris*-gnu)
