@@ -1,3 +1,10 @@
+2021-06-13  Bruno Haible  <bruno@clisp.org>
+
+	Fix build error on 64-bit MSVC, due to newer libtool.
+	* avcall/Makefile.in (avcall-x86_64.lo) [IF_MSVC]: Use ml64 directly,
+	without invoking libtool.
+	* callback/vacall_r/Makefile.in (vacall-x86_64.lo) [IF_MSVC]: Likewise.
+
 2021-06-12  Bruno Haible  <bruno@clisp.org>
 
 	Finish port to macOS 11/arm64.
