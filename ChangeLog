@@ -1,5 +1,12 @@
 2021-06-13  Bruno Haible  <bruno@clisp.org>
 
+	Bump shared library version numbers.
+	* Makefile.in (LIBFFCALL_VERSION_INFO): Bump to 1:0:1.
+	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): Bump to 2:0:1.
+	* callback/Makefile.in (LIBCALLBACK_VERSION_INFO): Bump to 1:4:0.
+
+2021-06-13  Bruno Haible  <bruno@clisp.org>
+
 	Port to Solaris 11/SPARC 32-bit.
 	* avcall/avcall-sparc.c (avcall_call): Use preallocated trampolines
 	instead of generating a trampoline on the stack, because the stack is
