@@ -1,3 +1,11 @@
+2021-06-26  Bruno Haible  <bruno@clisp.org>
+
+	x86_64: Create a read-only .eh_frame section on all platforms.
+	Reported by Thomas Klausner <tk@giga.or.at> at
+	<https://savannah.gnu.org/bugs/?60815>.
+	* common/asm-x86_64.h (EH_FRAME_SECTION): Use flags "a" (instead of
+	"aw") on all platforms.
+
 2021-06-13  Bruno Haible  <bruno@clisp.org>
 
 	maint: Don't require an internet connection for running autogen.sh.

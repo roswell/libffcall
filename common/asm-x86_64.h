@@ -279,11 +279,24 @@
 // Solaris/ELF
 #define EH_FRAME_SECTION .eh_frame,"aL",link=.text,@unwind
 #else
-#if defined __FreeBSD__
-// FreeBSD/ELF
+// The eh_frame section was usually writable (flags "aw") in older OS versions,
+// but can be made read-only (flags "a") under specific conditions, depending
+// on the assembler's behaviour (look for EH_TABLES_CAN_BE_READ_ONLY in
+// gcc-11.1.0/gcc/defaults.h).
+// To determine whether the eh_frame section is writable or read-only by
+// default, compile a simple program:
+//   gcc -S -fno-dwarf2-cfi-asm hello.c  (GCC >= 4.4)
+// or
+//   gcc -S hello.c                      (GCC < 4.4)
+// The result is that all modern systems (at least Ubuntu >= 16.04,
+// Red Hat Enterprise Linux >= 5, Fedora >= 13, Alpine Linux >= 3.7,
+// FreeBSD >= 11, DragonFly BSD >= 6, NetBSD >= 7, OpenBSD >= 6)
+// use a read-only eh_frame section.
+#if 1
+// all modern systems
 #define EH_FRAME_SECTION .eh_frame,"a",@progbits
 #else
-// Linux/ELF
+// only very old systems
 #define EH_FRAME_SECTION .eh_frame,"aw",@progbits
 #endif
 #endif
