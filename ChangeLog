@@ -1,3 +1,10 @@
+2022-01-16  Bruno Haible  <bruno@clisp.org>
+
+	Simplify.
+	* callback/vacall_r/Makefile.in (vacall-alpha.s, vacall-powerpc.s,
+	vacall-s390.lo, vacall-s390x.s, vacall-riscv32-ilp32d.s,
+	vacall-riscv64-lp64d.s): Don't use -I options during preprocessing.
+
 2021-06-26  Bruno Haible  <bruno@clisp.org>
 
 	x86_64: Create a read-only .eh_frame section on all platforms.

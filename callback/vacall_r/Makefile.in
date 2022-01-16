@@ -112,7 +112,7 @@ vacall-alpha.lo : vacall-alpha.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-alpha.s
 
 vacall-alpha.s : $(srcdir)/vacall-alpha-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-alpha-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-alpha.s
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-alpha-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-alpha.s
 
 vacall-hppa.lo : vacall-hppa.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-hppa.s
@@ -160,7 +160,7 @@ vacall-powerpc.s : $(srcdir)/vacall-powerpc-aix.s $(srcdir)/vacall-powerpc-linux
 	esac; \
 	case $${syntax} in \
 	  linux | netbsd | sysv4) \
-	    $(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-powerpc-$${syntax}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-powerpc.s || exit 1 ;; \
+	    $(CPP) $(ASPFLAGS) $(srcdir)/vacall-powerpc-$${syntax}-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-powerpc.s || exit 1 ;; \
 	  macos) \
 	    grep -v '\.machine' $(srcdir)/vacall-powerpc-$${syntax}.s > vacall-powerpc.s || exit 1 ;; \
 	  *) \
@@ -222,25 +222,25 @@ vacall-s390.lo : vacall-s390.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-s390.s
 
 vacall-s390.s : $(srcdir)/vacall-s390-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-s390-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390.s
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-s390-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390.s
 
 vacall-s390x.lo : vacall-s390x.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-s390x.s
 
 vacall-s390x.s : $(srcdir)/vacall-s390x-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-s390x-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-s390x.s
 
 vacall-riscv32-ilp32d.lo : vacall-riscv32-ilp32d.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-riscv32-ilp32d.s
 
 vacall-riscv32-ilp32d.s : $(srcdir)/vacall-riscv32-ilp32d-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-riscv32-ilp32d-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-riscv32-ilp32d.s
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-riscv32-ilp32d-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-riscv32-ilp32d.s
 
 vacall-riscv64-lp64d.lo : vacall-riscv64-lp64d.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-riscv64-lp64d.s
 
 vacall-riscv64-lp64d.s : $(srcdir)/vacall-riscv64-lp64d-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir) $(srcdir)/vacall-riscv64-lp64d-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-riscv64-lp64d.s
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-riscv64-lp64d-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-riscv64-lp64d.s
 
 vacall-libapi.lo : $(srcdir)/vacall-libapi.c $(srcdir)/../../vacall/vacall-internal.h $(srcdir)/vacall_r.h ../../config.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES_WITH_GNULIB) $(CPPFLAGS) $(CFLAGS) @DISABLE_TYPE_BASED_ALIASING@ -DREENTRANT -c $(srcdir)/vacall-libapi.c
