@@ -110,6 +110,8 @@ Linux s390x 64-bit              3.16.0   2.25        OK       OK        OK      
 --- riscv32 / riscv64
 Linux riscv32                   4.15.0   2.30        crash    crash     crash      OK         crash
 Linux riscv64                   4.16.0   2.30        crash    crash     crash      OK         crash
+--- loongarch64
+Linux loongarch64               5.15.0+  2.37.50+    crash    OK        crash      OK         crash
 
 Notes:
 * The Linux CentOS 6 64-bit result is independent of how the SELinux flags

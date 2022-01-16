@@ -258,6 +258,12 @@ avcall-riscv64-lp64d.lo : avcall-riscv64-lp64d.s
 avcall-riscv64-lp64d.s : $(srcdir)/avcall-riscv64-lp64d-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-riscv64-lp64d-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-riscv64-lp64d.s
 
+avcall-loongarch64.lo : avcall-loongarch64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-loongarch64.s
+
+avcall-loongarch64.s : $(srcdir)/avcall-loongarch64-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/avcall-loongarch64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > avcall-loongarch64.s
+
 avcall-libapi.lo : $(srcdir)/avcall-libapi.c ../config.h $(srcdir)/avcall-internal.h $(srcdir)/avcall.h $(srcdir)/avcall-alist.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) @DISABLE_TYPE_BASED_ALIASING@ -c $(srcdir)/avcall-libapi.c
 
@@ -353,7 +359,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.@OBJEXT@ *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-hppa64.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64.asm avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s avcall-riscv32-ilp32d.s avcall-riscv64-lp64d.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-hppa64.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64.asm avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s avcall-riscv32-ilp32d.s avcall-riscv64-lp64d.s avcall-loongarch64.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.@OBJEXT@ minitests.s minitests minitests.out
 	$(RM) minitests-c++.@OBJEXT@ minitests-c++ minitests-c++.out
@@ -381,6 +387,7 @@ SOURCE_FILES = \
   avcall-hppa64.c avcall-hppa64-linux.s avcall-hppa64-macro.S \
   avcall-i386.c avcall-i386-linux.s avcall-i386-macro.S \
   avcall-ia64.c avcall-ia64-linux.s avcall-ia64-macro.S \
+  avcall-loongarch64.c avcall-loongarch64-linux.s avcall-loongarch64-macro.S \
   avcall-m68k.c avcall-m68k-linux.s avcall-m68k-sun.s avcall-m68k.mit.S avcall-m68k.motorola.S \
   avcall-mips.c avcall-mipseb-linux.s avcall-mipsel-linux.s avcall-mipseb-macro.S avcall-mipsel-macro.S \
   avcall-mipsn32.c avcall-mipsn32eb-linux.s avcall-mipsn32el-linux.s avcall-mipsn32eb-macro.S avcall-mipsn32el-macro.S \

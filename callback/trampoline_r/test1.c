@@ -1,7 +1,7 @@
 /* Trampoline test */
 
 /*
- * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2022 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,6 +83,9 @@ register void* env __asm__("r0");
 #endif
 #if defined(__riscv32__) || defined(__riscv64__)
 register void* env __asm__("t2");
+#endif
+#ifdef __loongarch64__
+register void* env __asm__("r20");
 #endif
 
   return x + (int)(long)((void**)env)[1] + (int)(long)((void**)env)[0] + MAGIC3;

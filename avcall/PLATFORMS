@@ -78,4 +78,5 @@ Supported CPUs:  (Put the GNU config.guess values here.)
    s390x      s390x-ibm-linux (gcc)                  emulated      Linux
    riscv32    riscv32-unknown-linux (gcc -mabi=ilp32d)  emulated   Linux
    riscv64    riscv64-unknown-linux (gcc -mabi=lp64d)   emulated   Linux
+   loongarch64  loongarch64-unknown-linux (gcc)      Loongson      Linux
 

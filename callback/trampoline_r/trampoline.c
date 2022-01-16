@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2022 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -323,6 +323,10 @@ static int open_noinherit (const char *filename, int flags, int mode)
 #define TRAMP_ALIGN 4
 #endif
 #ifdef __riscv64__
+#define TRAMP_LENGTH 32
+#define TRAMP_ALIGN 8
+#endif
+#ifdef __loongarch64__
 #define TRAMP_LENGTH 32
 #define TRAMP_ALIGN 8
 #endif
@@ -1258,6 +1262,32 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #define tramp_data(function)  \
   (*(unsigned long *) (function +16))
 #endif
+#ifdef __loongarch64__
+  /* function:
+   *    pcaddu12i $r12,0		1C00000C
+   *    ld.d $r20,$r12,16		28C04194
+   *    ld.d $r12,$r12,24		28C0618C
+   *    jirl $r0,$r12,0			4C000180
+   *    .dword <data>			<data>
+   *    .dword <address>		<address>
+   */
+  *(unsigned int *)  (function + 0) = 0x1C00000C;
+  *(unsigned int *)  (function + 4) = 0x28C04194;
+  *(unsigned int *)  (function + 8) = 0x28C0618C;
+  *(unsigned int *)  (function +12) = 0x4C000180;
+  *(unsigned long *) (function +16) = (unsigned long) data;
+  *(unsigned long *) (function +24) = (unsigned long) address;
+#define TRAMP_CODE_LENGTH  16
+#define is_tramp(function)  \
+  *(unsigned int *)  (function + 0) == 0x1C00000C && \
+  *(unsigned int *)  (function + 4) == 0x28C04194 && \
+  *(unsigned int *)  (function + 8) == 0x28C0618C && \
+  *(unsigned int *)  (function +12) == 0x4C000180
+#define tramp_address(function)  \
+  *(unsigned long *) (function +24)
+#define tramp_data(function)  \
+  *(unsigned long *) (function +16)
+#endif
   /*
    * data:
    *    <data0>				<data0>
@@ -1407,6 +1437,10 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #elif defined(__GNUC__)
   __asm__ __volatile__ ("fence.i");
 #endif
+#endif
+#if defined(__loongarch64__)
+  /* Use the GCC built-in. It expands to 'ibar 0'. */
+  __clear_cache((void*)function_x,(void*)(function_x+TRAMP_CODE_LENGTH));
 #endif
 #endif
 #endif

@@ -242,6 +242,12 @@ vacall-riscv64-lp64d.lo : vacall-riscv64-lp64d.s
 vacall-riscv64-lp64d.s : $(srcdir)/vacall-riscv64-lp64d-macro.S
 	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-riscv64-lp64d-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-riscv64-lp64d.s
 
+vacall-loongarch64.lo : vacall-loongarch64.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-loongarch64.s
+
+vacall-loongarch64.s : $(srcdir)/vacall-loongarch64-macro.S
+	$(CPP) $(ASPFLAGS) $(srcdir)/vacall-loongarch64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//.*$$,,' > vacall-loongarch64.s
+
 vacall-libapi.lo : $(srcdir)/vacall-libapi.c $(srcdir)/../../vacall/vacall-internal.h $(srcdir)/vacall_r.h ../../config.h
 	$(LIBTOOL_COMPILE) $(CC) $(INCLUDES_WITH_GNULIB) $(CPPFLAGS) $(CFLAGS) @DISABLE_TYPE_BASED_ALIASING@ -DREENTRANT -c $(srcdir)/vacall-libapi.c
 
@@ -295,7 +301,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.@OBJEXT@ *.lo *.a libvacall.* core
-	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-hppa64.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64.asm vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s vacall-riscv32-ilp32d.s vacall-riscv64-lp64d.s
+	$(RM) vacall-i386.s vacall-sparc.s vacall-sparc64.s vacall-m68k.s vacall-mips.s vacall-mipsn32.s vacall-mips64.s vacall-alpha.s vacall-hppa.s vacall-hppa64.s vacall-arm.s vacall-armhf.s vacall-arm64.s vacall-powerpc.s vacall-powerpc64.s vacall-powerpc64-elfv2.s vacall-ia64.s vacall-x86_64.s vacall-x86_64.asm vacall-x86_64-x32.s vacall-s390.s vacall-s390x.s vacall-riscv32-ilp32d.s vacall-riscv64-lp64d.s vacall-loongarch64.s
 	$(RM) -r .libs _libs
 
 distclean : clean
@@ -321,6 +327,7 @@ SOURCE_FILES = \
   vacall-hppa64-linux.s vacall-hppa64-macro.S \
   vacall-i386-linux.s vacall-i386-macro.S \
   vacall-ia64-linux.s vacall-ia64-macro.S \
+  vacall-loongarch64-linux.s vacall-loongarch64-macro.S \
   vacall-m68k-linux.s vacall-m68k-sun.s vacall-m68k.mit.S vacall-m68k.motorola.S \
   vacall-mipseb-linux.s vacall-mipsel-linux.s vacall-mipseb-macro.S vacall-mipsel-macro.S \
   vacall-mipsn32eb-linux.s vacall-mipsn32el-linux.s vacall-mipsn32eb-macro.S vacall-mipsn32el-macro.S \

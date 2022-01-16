@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2022 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -327,6 +327,10 @@ static int open_noinherit (const char *filename, int flags, int mode)
 #define TRAMP_ALIGN 4
 #endif
 #if defined(__riscv64__)
+#define TRAMP_LENGTH 48
+#define TRAMP_ALIGN 8
+#endif
+#if defined(__loongarch64__)
 #define TRAMP_LENGTH 48
 #define TRAMP_ALIGN 8
 #endif
@@ -1514,6 +1518,42 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #define tramp_data(function)  \
   (*(unsigned long *) (function +24))
 #endif
+#ifdef __loongarch64__
+  /* function:
+   *    pcaddu12i $r12,0		1C00000C
+   *    ld.d $r13,$r12,24		28C0618D
+   *    ld.d $r14,$r12,32		28C0818E
+   *    st.d $r14,$r13,0		29C001AE
+   *    ld.d $r12,$r12,40		28C0A18C
+   *    jirl $r0,$r12,0			4C000180
+   *    .dword <variable>		<variable>
+   *    .dword <data>			<data>
+   *    .dword <address>		<address>
+   */
+  *(unsigned int *)  (function + 0) = 0x1C00000C;
+  *(unsigned int *)  (function + 4) = 0x28C0618D;
+  *(unsigned int *)  (function + 8) = 0x28C0818E;
+  *(unsigned int *)  (function +12) = 0x29C001AE;
+  *(unsigned int *)  (function +16) = 0x28C0A18C;
+  *(unsigned int *)  (function +20) = 0x4C000180;
+  *(unsigned long *) (function +24) = (unsigned long) variable;
+  *(unsigned long *) (function +32) = (unsigned long) data;
+  *(unsigned long *) (function +40) = (unsigned long) address;
+#define TRAMP_CODE_LENGTH  24
+#define is_tramp(function)  \
+  *(unsigned int *)  (function + 0) == 0x1C00000C && \
+  *(unsigned int *)  (function + 4) == 0x28C0618D && \
+  *(unsigned int *)  (function + 8) == 0x28C0818E && \
+  *(unsigned int *)  (function +12) == 0x29C001AE && \
+  *(unsigned int *)  (function +16) == 0x28C0A18C && \
+  *(unsigned int *)  (function +20) == 0x4C000180
+#define tramp_address(function)  \
+  *(unsigned long *) (function +40)
+#define tramp_variable(function)  \
+  *(unsigned long *) (function +24)
+#define tramp_data(function)  \
+  *(unsigned long *) (function +32)
+#endif
 
   /* 3. Set memory protection to "executable" */
 
@@ -1656,6 +1696,10 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #elif defined(__GNUC__)
   __asm__ __volatile__ ("fence.i");
 #endif
+#endif
+#if defined(__loongarch64__)
+  /* Use the GCC built-in. It expands to 'ibar 0'. */
+  __clear_cache((void*)function_x,(void*)(function_x+TRAMP_CODE_LENGTH));
 #endif
 #endif
 #endif

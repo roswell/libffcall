@@ -25,7 +25,8 @@ precompiled : \
   vacall-ia64-macro.S \
   vacall-x86_64-macro.S vacall-x86_64-x32-linux.s vacall-x86_64-windows-macro.S \
   vacall-s390-macro.S vacall-s390x-macro.S \
-  vacall-riscv32-ilp32d-macro.S vacall-riscv64-lp64d-macro.S
+  vacall-riscv32-ilp32d-macro.S vacall-riscv64-lp64d-macro.S \
+  vacall-loongarch64-macro.S
 
 
 vacall-i386-linux.s : ../../vacall/vacall-i386.c ../../vacall/vacall-internal.h vacall_r.h $(THISFILE)
@@ -233,3 +234,10 @@ vacall-riscv64-lp64d-linux.s : ../../vacall/vacall-riscv64.c ../../vacall/vacall
 
 vacall-riscv64-lp64d-macro.S : vacall-riscv64-lp64d-linux.s ../../common/asm-riscv.sh ../../common/noexecstack.h $(THISFILE)
 	(../../common/asm-riscv.sh < vacall-riscv64-lp64d-linux.s ; cat ../../common/noexecstack.h) > vacall-riscv64-lp64d-macro.S
+
+
+vacall-loongarch64-linux.s : ../../vacall/vacall-loongarch64.c ../../vacall/vacall-internal.h vacall_r.h $(THISFILE)
+	$(CROSS_TOOL) loongarch64-linux gcc $(GCCFLAGS) -D__loongarch64__ -S ../../vacall/vacall-loongarch64.c -I../../vacall -I. -o vacall-loongarch64-linux.s
+
+vacall-loongarch64-macro.S : vacall-loongarch64-linux.s ../../common/asm-loongarch.sh ../../common/noexecstack.h $(THISFILE)
+	(../../common/asm-loongarch.sh < vacall-loongarch64-linux.s ; cat ../../common/noexecstack.h) > vacall-loongarch64-macro.S

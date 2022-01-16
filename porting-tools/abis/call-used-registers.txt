@@ -25,6 +25,7 @@ x86_64       rax,rdx,rcx,rsi,rdi,r8-r11  rdi,rsi,rdx,rcx,r8,r9 -                
 x86_64-ms    rax,rdx,rcx,r8-r11          rdx,rcx,r8,r9         -                 rax,r10,r11
 s390,s390x   r0-r5                       r2-r6                 -                 r0-r1
 riscv{32,64} t0-t2,a0-a7,t3-t6           a0-a7                 -                 t0-t2,t3-t6
+loongarch64  r4-r20                      r4-r11                -                 r12-r20
 
 To find which among these are the most frequently used ones,
 compile the small program:
@@ -61,6 +62,7 @@ ia64         r14-r31,r9-r11,r2-r3        r8,r14,r15...r19        r15
 x86_64{,-ms} rax,r10,r11                 rax,r10                 r10
 s390,s390x   r0-r1                       r1,r0,r12,r11           r0
 riscv{32,64} t0-t2,t3-t6                 t1,t3...t6              t2
+loongarch64  r12-r20                     r12,r13                 r20
 
 We don't follow the special choices of NetBSD here. The generic choice for
 each CPU is good enough. We could actually use any of the registers in the

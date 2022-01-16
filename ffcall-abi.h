@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 Bruno Haible <bruno@clisp.org>
+ * Copyright 2017-2022 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -247,5 +247,11 @@
 #ifndef __riscv64__
 #if defined(__riscv) && __riscv_xlen == 64 && defined(__LP64__) /* GCC */
 #define __riscv64__ 1
+#endif
+#endif
+
+#ifndef __loongarch64__
+#if defined(__loongarch64) && defined(__LP64__)
+#define __loongarch64__ 1
 #endif
 #endif

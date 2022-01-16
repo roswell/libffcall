@@ -79,7 +79,7 @@ cache-powerpc64-elfv2-macro.S : cache-powerpc64-elfv2-linux.s ../../common/asm-p
 OLDGCCFLAGS = -O2 -fomit-frame-pointer
 ASPREFIX = /usr1/gnu/lib
 
-proto-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-hppa64.s proto-arm.s proto-arm64.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.c proto-x86_64.c proto-x86_64-x32.s proto-s390.s proto-s390x.s proto-riscv32.s proto-riscv64.s
+proto-precompiled : proto-i386.s proto-m68k.s proto-mips.s proto-mipsn32.s proto-mips64.s proto-sparc.s proto-sparc64.s proto-alpha.s proto-hppa.s proto-hppa64.s proto-arm.s proto-arm64.s proto-powerpc-aix.s proto-powerpc-sysv4.s proto-powerpc-macos.s proto-powerpc64-aix.s proto-powerpc64-elfv2.s proto-ia64.c proto-x86_64.c proto-x86_64-x32.s proto-s390.s proto-s390x.s proto-riscv32.s proto-riscv64.s proto-loongarch64.s
 
 proto-i386.s : proto.c
 	$(GCC) -V 2.7.2 -b i486-linuxaout $(OLDGCCFLAGS) -D__i386__ -S proto.c -o $@
@@ -153,6 +153,9 @@ proto-riscv32.s : proto.c
 proto-riscv64.s : proto64.c
 	$(CROSS_TOOL) riscv64-linux gcc-7.3.0 $(OLDGCCFLAGS) -D__riscv64__ -S proto64.c -o $@
 
+proto-loongarch64.s : proto64.c
+	$(CROSS_TOOL) loongarch64-linux gcc $(OLDGCCFLAGS) -D__loongarch64__ -S proto64.c -o $@
+
 tramp-i386.o : tramp-i386.s
 	$(ASPREFIX)/i486-linux/bin/as tramp-i386.s -o $@
 
@@ -215,3 +218,6 @@ tramp-riscv32.o : tramp-riscv32.s
 
 tramp-riscv64.o : tramp-riscv64.s
 	$(CROSS_TOOL) riscv64-linux as tramp-riscv64.s -o $@
+
+tramp-loongarch64.o : tramp-loongarch64.s
+	$(CROSS_TOOL) loongarch64-linux as tramp-loongarch64.s -o $@

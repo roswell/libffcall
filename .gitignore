@@ -63,6 +63,8 @@
 /avcall/avcall-i386-macro.S
 /avcall/avcall-ia64-linux.s
 /avcall/avcall-ia64-macro.S
+/avcall/avcall-loongarch64-linux.s
+/avcall/avcall-loongarch64-macro.S
 /avcall/avcall-m68k-linux.s
 /avcall/avcall-m68k-sun.s
 /avcall/avcall-m68k.mit.S
@@ -125,6 +127,8 @@
 /vacall/vacall-i386-macro.S
 /vacall/vacall-ia64-linux.s
 /vacall/vacall-ia64-macro.S
+/vacall/vacall-loongarch64-linux.s
+/vacall/vacall-loongarch64-macro.S
 /vacall/vacall-m68k-linux.s
 /vacall/vacall-m68k-sun.s
 /vacall/vacall-m68k.mit.S
@@ -198,6 +202,8 @@
 /callback/vacall_r/vacall-i386-macro.S
 /callback/vacall_r/vacall-ia64-linux.s
 /callback/vacall_r/vacall-ia64-macro.S
+/callback/vacall_r/vacall-loongarch64-linux.s
+/callback/vacall_r/vacall-loongarch64-macro.S
 /callback/vacall_r/vacall-m68k-linux.s
 /callback/vacall_r/vacall-m68k-sun.s
 /callback/vacall_r/vacall-m68k.mit.S
@@ -392,6 +398,9 @@ autom4te.cache/
 /avcall/avcall-x86_64-x32.s
 /avcall/avcall-s390.s
 /avcall/avcall-s390x.s
+/avcall/avcall-riscv32-ilp32d.s
+/avcall/avcall-riscv64-lp64d.s
+/avcall/avcall-loongarch64.s
 /avcall/minitests.o
 /avcall/minitests.s
 /avcall/minitests
@@ -432,6 +441,9 @@ autom4te.cache/
 /vacall/vacall-x86_64-x32.s
 /vacall/vacall-s390.s
 /vacall/vacall-s390x.s
+/vacall/vacall-riscv32-ilp32d.s
+/vacall/vacall-riscv64-lp64d.s
+/vacall/vacall-loongarch64.s
 /vacall/minitests.o
 /vacall/minitests.s
 /vacall/minitests
@@ -546,6 +558,9 @@ autom4te.cache/
 /callback/vacall_r/vacall-x86_64-x32.s
 /callback/vacall_r/vacall-s390.s
 /callback/vacall_r/vacall-s390x.s
+/callback/vacall_r/vacall-riscv32-ilp32d.s
+/callback/vacall_r/vacall-riscv64-lp64d.s
+/callback/vacall_r/vacall-loongarch64.s
 # Erased by callback/trampoline_r/Makefile.
 /callback/trampoline_r/trampoline.lo
 /callback/trampoline_r/trampoline.o

@@ -25,7 +25,8 @@ precompiled : \
   avcall-ia64-macro.S \
   avcall-x86_64-macro.S avcall-x86_64-x32-linux.s avcall-x86_64-windows-macro.S \
   avcall-s390-macro.S avcall-s390x-macro.S \
-  avcall-riscv32-ilp32d-macro.S avcall-riscv64-lp64d-macro.S
+  avcall-riscv32-ilp32d-macro.S avcall-riscv64-lp64d-macro.S \
+  avcall-loongarch64-macro.S
 
 
 avcall-i386-linux.s : avcall-i386.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
@@ -240,6 +241,13 @@ avcall-riscv64-lp64d-linux.s : avcall-riscv64.c avcall-internal.h avcall.h avcal
 
 avcall-riscv64-lp64d-macro.S : avcall-riscv64-lp64d-linux.s ../common/asm-riscv.sh ../common/noexecstack.h $(THISFILE)
 	(../common/asm-riscv.sh < avcall-riscv64-lp64d-linux.s ; cat ../common/noexecstack.h) > avcall-riscv64-lp64d-macro.S
+
+
+avcall-loongarch64-linux.s : avcall-loongarch64.c avcall-internal.h avcall.h avcall-alist.h $(THISFILE)
+	$(CROSS_TOOL) loongarch64-linux gcc $(GCCFLAGS) -D__loongarch64__ -S avcall-loongarch64.c -o avcall-loongarch64-linux.s
+
+avcall-loongarch64-macro.S : avcall-loongarch64-linux.s ../common/asm-loongarch.sh ../common/noexecstack.h $(THISFILE)
+	(../common/asm-loongarch.sh < avcall-loongarch64-linux.s ; cat ../common/noexecstack.h) > avcall-loongarch64-macro.S
 
 
 # --------------- Rules for debugging test failures ---------------

@@ -1,5 +1,81 @@
 2022-01-16  Bruno Haible  <bruno@clisp.org>
 
+	loongarch: Add support for loongarch64 ABI.
+	* cross-tools/cross-build.sh (func_build_binutils): Add support for
+	newer binutils snapshots.
+	(func_build_gcc): Add support for GCC 10 and newer.
+	* cross-tools/cross.conf: Add configuration for loongarch64 cross tools.
+	* porting-tools/abis/call-used-registers.txt: Add info about
+	loongarch64.
+	* porting-tools/abis/reg-struct-return.txt: Likewise.
+	* porting-tools/abis/stack-frame.txt: Likewise. Some more tweaks.
+	* porting-tools/execstack/voidfunc.c: Add command for loongarch64.
+	* porting-tools/execstack/voidfunc-loongarch64.o: New generated file.
+	* porting-tools/execstack/main.c (voidfunc): Define also for loongarch.
+	* porting-tools/execstack/README: Add info about loongarch64.
+	* ffcall-abi.h: Add support for loongarch64-lp64.
+	* common/asm-loongarch.sh: New file.
+	* Makefile.in (SOURCE_FILES): Add it.
+	* avcall/avcall.h (__AV_STRUCT_RETURN, __AV_REGISTER_STRUCT_RETURN): Add
+	code for __loongarch64__.
+	* avcall/avcall-alist.h (__av_alist): Likewise.
+	* avcall/avcall-internal.h: Add code for __loongarch64__, especially
+	__av_start1, __av_reg_struct_return, __av_start_struct4, __av_word,
+	__av_long, __av_ulong, __av_ptr, __av_longlong, __av_ulonglong,
+	_av_float, _av_double, __av_struct.
+	* avcall/avcall-loongarch64.c: New file, based on
+	avcall/avcall-riscv64.c.
+	* avcall/Makefile.devel (avcall-loongarch64-linux.s,
+	avcall-loongarch64-macro.S): New targets.
+	* avcall/Makefile.in (avcall-loongarch64.lo, avcall-loongarch64.s): New
+	targets.
+	(clean): Remove avcall-loongarch64.s.
+	(SOURCE_FILES): Add avcall-loongarch64.c, avcall-loongarch64-linux.s,
+	avcall-loongarch64-macro.S.
+	* vacall/vacall.h (__VA_STRUCT_RETURN, __VA_REGISTER_STRUCT_RETURN): Add
+	code for __loongarch64__.
+	* vacall/vacall-internal.h: Add code for __loongarch64__, especially
+	__va_alist, __va_reg_struct_return, __va_start_struct2,
+	__va_arg_leftadjusted, __va_arg_adjusted, _va_arg_longlong,
+	_va_arg_ulonglong, __va_align_double, _va_arg_float, _va_arg_double,
+	__va_arg_struct, _va_return_longlong.
+	* vacall/vacall-loongarch64.c: New file, based on
+	vacall/vacall-riscv64.c.
+	* vacall/Makefile.devel (vacall-loongarch64-linux.s,
+	vacall-loongarch64-macro.S): New targets.
+	* vacall/Makefile.in (vacall-loongarch64.@OBJEXT@,
+	vacall-loongarch64.s): New targets.
+	(clean): Remove vacall-loongarch64.s.
+	(SOURCE_FILES): Add vacall-loongarch64.c, vacall-loongarch64-linux.s,
+	vacall-loongarch64-macro.S.
+	* callback/vacall_r/vacall_r.h (__VA_STRUCT_RETURN,
+	__VA_REGISTER_STRUCT_RETURN): Add code for __loongarch64__.
+	* callback/vacall_r/Makefile.devel (vacall-loongarch64-linux.s,
+	vacall-loongarch64-macro.S): New targets.
+	* callback/vacall_r/Makefile.in (vacall-loongarch64.lo,
+	vacall-loongarch64.s): New targets.
+	(clean): Remove vacall-loongarch64.s.
+	(SOURCE_FILES): Add vacall-loongarch64-linux.s,
+	vacall-loongarch64-macro.S.
+	* trampoline/Makefile.devel (proto-loongarch64.s, tramp-loongarch64.o):
+	New targets.
+	* trampoline/proto-loongarch64.s: New generated file.
+	* trampoline/tramp-loongarch64.s: New file.
+	* trampoline/tramp-loongarch64.o: New generated file.
+	* trampoline/trampoline.c: Implement for __loongarch64__.
+	* callback/trampoline_r/Makefile.devel (proto-loongarch64.s,
+	tramp-loongarch64.o): New targets.
+	* callback/trampoline_r/proto64.c: Add code for __loongarch64__.
+	* callback/trampoline_r/proto-loongarch64.s: New generated file.
+	* callback/trampoline_r/tramp-loongarch64.s: New file.
+	* callback/trampoline_r/tramp-loongarch64.o: New generated file.
+	* callback/trampoline_r/trampoline.c: Implement for __loongarch64__.
+	* callback/trampoline_r/test1.c: Add support for __loongarch64__.
+	* PLATFORMS, */PLATFORMS: List the 64-bit LoongArch ABI.
+	* NEWS: Mention the new port.
+
+2022-01-16  Bruno Haible  <bruno@clisp.org>
+
 	Simplify.
 	* callback/vacall_r/Makefile.in (vacall-alpha.s, vacall-powerpc.s,
 	vacall-s390.lo, vacall-s390x.s, vacall-riscv32-ilp32d.s,

@@ -47,6 +47,7 @@ x86_64        6  rdi,rsi,rdx,rcx,r8,r9  N
 x86_64-ms     4  rdx,rcx,r8,r9          N
 s390,s390x    5  r2-r6                  N
 riscv{32,64}  8  a0-a7                  Y (split struct)
+loongarch64   8  r4-r11                 Y (split struct)
 
 If "Is needed?" is N, the easiest solution is that the __va_alist contains
 room (iarg[] or regarg[]) for the values of the general-purpose argument
@@ -62,25 +63,26 @@ But we can do this only
 
 Here's the table of architectures and their stack frame structure:
 
-              R  Argument registers     words below saptr             Can concatenate?
-i386          0  -                      ebp, retaddr                  Y (trivial case)
-m68k          0  -                      a6, retaddr                   Y (trivial case)
-mips          4  r4-r7                  fp, retaddr, word1,...,wordN  Y (preallocated room)
-mips{n32,64}  8  r4-r11                 fp, retaddr, others           Y (allocated room through split struct)
-sparc{,64}    6  o0-o5                  ?                             Y (preallocated room)
-alpha         6  $16-$21                retaddr, fp, others           Y (allocated room through split struct)
-hppa          4  r23-r26                                              Y (preallocated room)
-hppa64        8  r19-r26,r29                                          Y (preallocated room)
-arm,armhf     4  r0-r3                  fp, sp, retaddr, dummy(opt)   Y (allocated room through split struct)
-arm64         8  x0-x7                  {fp,lr}, others               N
-powerpc       8  3-10                                                 Y (preallocated room) on AIX and Darwin,
-                                                                      N otherwise
-powerpc64     8  3-10                                                 Y (preallocated room)
-ia64          8  r32-r39                ?                             Y (allocated room through split struct)
-x86_64        6  rdi,rsi,rdx,rcx,r8,r9  rbp(opt), retaddr             N
-x86_64-ms     4  rdx,rcx,r8,r9          rbp(opt), retaddr             N
-s390,s390x    5  r2-r6                                                N
-riscv{32,64}  8  a0-a7                  retaddr                       Y (allocated room through split struct)
+              R  Argument registers     words below saptr                 Can concatenate?
+i386          0  -                      ebp, retaddr                      Y (trivial case)
+m68k          0  -                      a6, retaddr                       Y (trivial case)
+mips          4  r4-r7                  fp, retaddr, word1,...,wordN      Y (preallocated room)
+mips{n32,64}  8  r4-r11                 fp, retaddr, others               Y (allocated room through split struct)
+sparc{,64}    6  o0-o5                  ?                                 Y (preallocated room)
+alpha         6  $16-$21                retaddr, fp, others               Y (allocated room through split struct)
+hppa          4  r23-r26                                                  Y (preallocated room)
+hppa64        8  r19-r26,r29                                              Y (preallocated room)
+arm,armhf     4  r0-r3                  fp, sp(opt), retaddr, dummy(opt)  Y (allocated room through split struct)
+arm64         8  x0-x7                  {fp,lr}, others                   N
+powerpc       8  3-10                                                     Y (preallocated room) on AIX and Darwin,
+                                        fp, sp, retaddr                   N otherwise
+powerpc64     8  3-10                                                     Y (preallocated room)
+ia64          8  r32-r39                ?                                 Y (allocated room through split struct)
+x86_64        6  rdi,rsi,rdx,rcx,r8,r9  rbp(opt), retaddr                 N
+x86_64-ms     4  rdx,rcx,r8,r9          rbp(opt), retaddr                 Y (preallocated room)
+s390,s390x    5  r2-r6                                                    N
+riscv{32,64}  8  a0-a7                  retaddr                           Y (allocated room through split struct)
+loongarch64   8  r4-r11                 fp, retaddr                       Y (allocated room through split struct)
 
 The canonical function prologue, epilogue, and call sequence can be determined
 by looking at the compiled code (with "-O0 -fno-omit-frame-pointer -S") of a
@@ -221,7 +223,22 @@ Epilogue
 ==========================
 
 ========== hppa64 ==========
-Note: %r30 = stack pointer, %r2 = return address, %r27 = pic_base
+Note: %r30 = stack pointer, %r3 = frame pointer, %r29 = caller's frame pointer, %r2 = return address, %r27 = pic_base
+Prologue
+    std %r2,-16(%r30)
+    copy %r3,%r1
+    copy %r30,%r3
+    std,ma %r1,128(%r30)
+Call
+    bl printf,%r2     ; puts retaddr in %r2
+Epilogue
+    ldd -16(%r3),%r2
+    ldo 64(%r3),%r30
+    ldd,mb -64(%r30),%r3
+    bve,n %r0(%r2)
+==========================
+========== hppa64 -fomit-frame-pointer ==========
+Note: %r30 = stack pointer, %r3 = frame pointer, %r29 = caller's frame pointer, %r2 = return address, %r27 = pic_base
 Prologue
     std %r2,-16(%r30)
     ldo 144(%r30),%r30
@@ -231,8 +248,8 @@ Call
 Epilogue
     ldd -144(%r30),%r27
     ldd -160(%r30),%r2
-    BVE (%r2)
-     ldo -144(%r30),%r30
+    ldo -144(%r30),%r30
+    bve,n %r0(%r2)
 ==========================
 
 ========== arm ==========
@@ -255,7 +272,7 @@ Prologue
 Call
     bl printf           ; puts retaddr in lr
 Epilogue
-    sub     sp,fp,#4
+    sub sp,fp,#4
     ldmea fp,{fp,pc}
 ==========================
 
@@ -272,7 +289,7 @@ Epilogue
     ldp fp,lr,[sp,16]
     add sp,sp,nn
     ret
-  or
+  or (optimized)
     add sp,fp,0
     ldp fp,lr,[sp],nn-16
     ret
@@ -294,6 +311,46 @@ Epilogue
     mtlr 0
     lwz 31,-4(11)
     mr 1,11
+    blr
+==========================
+========== powerpc-darwin ==========
+Note: 1 = stack pointer, 31 = frame pointer
+Prologue
+    mflr r0
+    stmw r30,-8(r1)
+    stw r0,8(r1)
+    stwu r1,-96(r1)
+    mr r30,r1
+Call
+    bl printf
+Epilogue
+    lwz r1,0(r1)
+    lwz r0,8(r1)
+    mtlr r0
+    lmw r30,-8(r1)
+    blr
+==========================
+========== powerpc-aix ==========
+Note: 1 = stack pointer, 31 = frame pointer
+Prologue
+    mflr 0
+    st 31,-4(1)
+    st 0,8(1)
+    stu 1,-80(1)
+    mr 31,1
+Call
+    bl printf
+Epilogue
+    l 1,0(1)
+    l 0,8(1)
+    mtlr 0
+    l 31,-4(1)
+    br
+  or
+    addi 1,31,80
+    lwz 0,8(1)
+    mtlr 0
+    lwz 31,-4(1)
     blr
 ==========================
 
@@ -345,39 +402,41 @@ Epilogue
 ==========================
 
 ========== s390 ==========
-Note: %r15 = stack pointer, %r11 = frame pointer
+Note: %r15 = stack pointer, %r11 = frame pointer, %r14 = return address
 Prologue
-    stm %r6,%r15,24(%r15)
+    stm %r6,%r15,24(%r15)    ; stores %r6 in 24(%r15), ..., %r14 in 56(%r15), %r15 in 60(%r15)
+    lr %r14,%r15
     ahi %r15,-nn
+    st %r14,0(%r15)
 Call
     l %r1,<printf>
-    basr %r14,%r1
+    basr %r14,%r1            ; puts retaddr in %r14
 Epilogue
-    l %r4,nn+56(%r15)
-    lm %r6,%r15,nn+24(%r15)
+    l %r4,nn+56(%r15)        ; loads return address into %r4
+    lm %r6,%r15,nn+24(%r15)  ; restores %r6, ..., %r15
     br %r4
 ==========================
 
 ========== s390x ==========
 Prologue
-    stmg %r6,%r15,48(%r15)
+    stmg %r6,%r15,48(%r15)   ; stores %r6 in 48(%r15), ..., %r14 in 112(%r15), %r15 in 120(%r15)
     aghi %r15,-nn
 Call
-    brasl %r14,printf
+    brasl %r14,printf        ; puts retaddr in %r14
 Epilogue
-    lg %r4,nn+112(%r15)
-    lmg %r6,%r15,nn+48(%r15)
+    lg %r4,nn+112(%r15)      ; loads return address into %r4
+    lmg %r6,%r15,nn+48(%r15) ; restores %r6, ..., %r15
     br %r4
 ==========================
 
 ========== riscv32 ==========
 Prologue
     add sp,sp,-64
-    sd ra,60(sp)
+    sw ra,60(sp)
 Call
     call printf
 Epilogue
-    ld ra,60(sp)
+    lw ra,60(sp)
     add sp,sp,64
     jr ra
 ==========================
@@ -392,6 +451,22 @@ Epilogue
     ld ra,56(sp)
     add sp,sp,64
     jr ra
+==========================
+
+========== loongarch64 ==========
+Note: $r1 = return address, $r3 = stack pointer, $r22 = frame pointer
+Prologue
+    addi.d $r3,$r3,-64
+    st.d $r1,$r3,56
+    st.d $r22,$r3,48
+    addi.d $r22,$r3,64
+Call
+    bl printf
+Epilogue
+    ld.d $r1,$r3,56
+    ld.d $r22,$r3,48
+    addi.d $r3,$r3,64
+    jr $r1
 ==========================
 
 If "Can concatenate?" is N, the __va_alist must contain room (iarg[] or regarg[])

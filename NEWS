@@ -1,3 +1,9 @@
+New in 2.5:
+
+* Added support for the following platforms:
+  (Previously, a build on these platforms failed.)
+  - loongarch64: Linux with lp64d ABI.
+
 New in 2.4:
 
 * Added support for the following platforms:

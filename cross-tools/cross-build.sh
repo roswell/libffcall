@@ -16,6 +16,9 @@
 #      for the host architecture. Example:
 #      $ export host_triple="i686-pc-linux-gnu"
 #      $ export CC="gcc -m32" CXX="g++ -m32" LDFLAGS="-m32"
+#      or
+#      $ export host_triple="i686-pc-linux-gnu"
+#      $ export CC="i686-linux-gnu-gcc-10"; CXX="i686-linux-gnu-g++-10"
 #   4. Optionally, set environment variable GNU_RELEASES_DIR pointing to a
 #      directory that contains GNU package releases tarballs.
 #      Make sure the wget program is in the PATH and you have an internet
@@ -471,7 +474,8 @@ func_build_isl ()
 # - binutilstarget  Target argument to pass to configure
 func_build_binutils ()
 {
-  if test `echo "$version" | wc -c` -gt 9; then
+  if case "$version" in 2.12.*) true;; *) false;; esac \
+     && test `echo "$version" | wc -c` -gt 9; then
     # An intermediate release by H.J.Lu
     func_ensure_unpacked_source binutils "$version" gz "https://www.kernel.org/pub/linux/devel/binutils"
   else
@@ -511,16 +515,28 @@ func_build_gcc ()
   # Build the prerequisites.
   configure_options=
   case "$version" in
-    4.[3-9]* | [5-9]*)
+    4.[3-9]* | [5-9]* | 1[0-9]*)
       func_build_gmp 4.3.2 || func_exit 1
       configure_options="$configure_options --with-gmp=$HOST_CROSS_DIR/${target}-tools"
+      ;;
+  esac
+  case "$version" in
+    4.[3-9]* | [5-9]*)
       func_build_mpfr 2.4.2 || func_exit 1
+      configure_options="$configure_options --with-mpfr=$HOST_CROSS_DIR/${target}-tools"
+      ;;
+    1[0-9]*)
+      func_build_mpfr 3.1.0 || func_exit 1
       configure_options="$configure_options --with-mpfr=$HOST_CROSS_DIR/${target}-tools"
       ;;
   esac
   case "$version" in
     4.[5-9]* | [5-9]*)
       func_build_mpc 0.8.1 || func_exit 1
+      configure_options="$configure_options --with-mpc=$HOST_CROSS_DIR/${target}-tools"
+      ;;
+    1[0-9]*)
+      func_build_mpc 1.0.3 || func_exit 1
       configure_options="$configure_options --with-mpc=$HOST_CROSS_DIR/${target}-tools"
       ;;
   esac
@@ -535,7 +551,7 @@ func_build_gcc ()
       func_build_isl 0.14 || func_exit 1
       configure_options="$configure_options --with-isl=$HOST_CROSS_DIR/${target}-tools"
       ;;
-    [7-9]*)
+    [7-9]* | 1[0-9]*)
       func_build_isl 0.16.1 || func_exit 1
       configure_options="$configure_options --with-isl=$HOST_CROSS_DIR/${target}-tools"
       ;;

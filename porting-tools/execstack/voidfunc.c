@@ -7,6 +7,7 @@ cross armv7l-linux-gnueabihf gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidf
 cross hppa-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-hppa.o
 cross i386-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-i386.o
 cross ia64-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-ia64.o
+cross loongarch64-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-loongarch64.o
 cross m68k-linux gcc -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-m68k.o
 cross mips64-linux gcc -mabi=32 -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-mips32.o
 cross mips64-linux gcc -mabi=n32 -O6 -fomit-frame-pointer voidfunc.c -c -o voidfunc-mipsn32.o
