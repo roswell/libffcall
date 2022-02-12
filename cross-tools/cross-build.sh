@@ -562,7 +562,16 @@ func_build_gcc ()
     [3-5]*)   pkg_suffix=bz2 ;;
     *)        pkg_suffix=xz ;;
   esac
-  func_ensure_unpacked_source gcc "$version" "$pkg_suffix" "https://ftp.gnu.org/pub/gnu/gcc/gcc-$version" || func_exit 1
+  case "$version" in
+    *-*)
+      # A fork's snapshot.
+      func_ensure_unpacked_source gcc "$version" "$pkg_suffix" "https://alpha.gnu.org/gnu/libffcall/gcc-$version" || func_exit 1
+      ;;
+    *)
+      # An official GNU release
+      func_ensure_unpacked_source gcc "$version" "$pkg_suffix" "https://ftp.gnu.org/pub/gnu/gcc/gcc-$version" || func_exit 1
+      ;;
+  esac
   if test "$target" = armv7l-linux-gnueabihf; then
     configure_options="$configure_options --with-arch=armv7-a --with-float=hard --with-fpu=vfpv3-d16"
   fi
@@ -588,8 +597,8 @@ func_build_gcc ()
   # gcc < 3.4 uses lib/gcc-lib/${gcctarget}/${version}/ whereas
   # gcc >= 3.4 uses libexec/gcc/${gcctarget}/${version}/.
   if { test -f "$HOST_CROSS_DIR/${target}-tools/bin/${target}-gcc" \
-       && { test -f "$HOST_CROSS_DIR/${target}-tools/libexec/gcc/${gcctarget}/${version}/cc1" \
-            || test -f "$HOST_CROSS_DIR/${target}-tools/lib/gcc-lib/${gcctarget}/${version}/cc1"; }; \
+       && { test -f "$HOST_CROSS_DIR/${target}-tools/libexec/gcc/${gcctarget}/`echo ${version} | sed -e 's/-.*//'`/cc1" \
+            || test -f "$HOST_CROSS_DIR/${target}-tools/lib/gcc-lib/${gcctarget}/`echo ${version} | sed -e 's/-.*//'`/cc1"; }; \
      }; then
     echo "Installation of gcc is complete."
   else

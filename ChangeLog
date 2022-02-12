@@ -1,3 +1,10 @@
+2022-02-12  Bruno Haible  <bruno@clisp.org>
+
+	loongarch: Allow for continuous integration.
+	* cross-tools/cross-build.sh (func_build_gcc): Download fork tarball
+	from alpha.gnu.org. Adjust installation completeness test.
+	* cross-tools/cross.conf (loongarch64): Use binutils 2.38.
+
 2022-01-16  Bruno Haible  <bruno@clisp.org>
 
 	loongarch: Add support for loongarch64 ABI.
