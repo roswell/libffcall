@@ -1,5 +1,11 @@
 2022-02-12  Bruno Haible  <bruno@clisp.org>
 
+	Fix cross-tools build.
+	* cross-tools/cross-build.sh (func_build_gcc): Set LD_LIBRARY_PATH, so
+	that libisl.so.15 gets found during installation.
+
+2022-02-12  Bruno Haible  <bruno@clisp.org>
+
 	loongarch: Allow for continuous integration.
 	* cross-tools/cross-build.sh (func_build_gcc): Download fork tarball
 	from alpha.gnu.org. Adjust installation completeness test.
