@@ -1,5 +1,11 @@
 2022-02-12  Bruno Haible  <bruno@clisp.org>
 
+	loongarch: Fix gcc installation.
+	* cross-tools/cross.conf (loongarch64): Change gcc version to match what
+	it actually reports.
+
+2022-02-12  Bruno Haible  <bruno@clisp.org>
+
 	Fix cross-tools build.
 	* cross-tools/cross-build.sh (func_build_gcc): Set LD_LIBRARY_PATH, so
 	that libisl.so.15 gets found during installation.
