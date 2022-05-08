@@ -362,7 +362,7 @@ SOURCE_FILES = \
   vacall-powerpc-linux.s vacall-powerpc-linux-macro.S vacall-powerpc-macos.s vacall-powerpc-sysv4-macro.S \
   vacall-powerpc64.c vacall-powerpc64-aix.s vacall-powerpc64-linux.S vacall-powerpc64-elfv2-linux.S \
   vacall-riscv32.c vacall-riscv32-ilp32d-linux.s vacall-riscv32-ilp32d-macro.S \
-  vacall-riscv64.c vacall-riscv64-lp64d-linux.s vacall-riscv64-lp64d-macro.S \
+  vacall-riscv64.c vacall-riscv64-lp64d-linux.s vacall-riscv64-lp64d-linux-pic.s vacall-riscv64-lp64d-macro.S \
   vacall-s390.c vacall-s390-linux.s vacall-s390-macro.S \
   vacall-s390x.c vacall-s390x-linux.s vacall-s390x-macro.S \
   vacall-sparc.c vacall-sparc-linux.s vacall-sparc-linux-pic.s vacall-sparc-macro.S \

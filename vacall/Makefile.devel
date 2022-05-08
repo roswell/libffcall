@@ -275,8 +275,11 @@ vacall-riscv32-ilp32d-macro.S : vacall-riscv32-ilp32d-linux.s ../common/asm-risc
 vacall-riscv64-lp64d-linux.s : vacall-riscv64.c vacall-internal.h vacall.h $(THISFILE)
 	$(CROSS_TOOL) riscv64-linux gcc-7.3.0 $(GCCFLAGS) -D__riscv64__ -S vacall-riscv64.c -o vacall-riscv64-lp64d-linux.s
 
-vacall-riscv64-lp64d-macro.S : vacall-riscv64-lp64d-linux.s ../common/asm-riscv.sh ../common/noexecstack.h $(THISFILE)
-	(../common/asm-riscv.sh < vacall-riscv64-lp64d-linux.s ; cat ../common/noexecstack.h) > vacall-riscv64-lp64d-macro.S
+vacall-riscv64-lp64d-linux-pic.s : vacall-riscv64.c vacall-internal.h vacall.h $(THISFILE)
+	$(CROSS_TOOL) riscv64-linux gcc-7.3.0 $(GCCFLAGS) -fPIC -D__riscv64__ -S vacall-riscv64.c -o vacall-riscv64-lp64d-linux-pic.s
+
+vacall-riscv64-lp64d-macro.S : vacall-riscv64-lp64d-linux.s vacall-riscv64-lp64d-linux-pic.s ../common/asm-riscv.sh ../common/noexecstack.h $(THISFILE)
+	(echo '#ifdef __PIC__' ; ../common/asm-riscv.sh < vacall-riscv64-lp64d-linux-pic.s ; echo '#else' ; ../common/asm-riscv.sh < vacall-riscv64-lp64d-linux.s ; echo '#endif' ; cat ../common/noexecstack.h) > vacall-riscv64-lp64d-macro.S
 
 
 vacall-loongarch64-linux.s : vacall-loongarch64.c vacall-internal.h vacall.h $(THISFILE)

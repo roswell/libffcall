@@ -156,6 +156,7 @@
 /vacall/vacall-riscv32-ilp32d-linux.s
 /vacall/vacall-riscv32-ilp32d-macro.S
 /vacall/vacall-riscv64-lp64d-linux.s
+/vacall/vacall-riscv64-lp64d-linux-pic.s
 /vacall/vacall-riscv64-lp64d-macro.S
 /vacall/vacall-s390-linux.s
 /vacall/vacall-s390-macro.S

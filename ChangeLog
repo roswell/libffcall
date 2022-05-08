@@ -1,3 +1,14 @@
+2022-05-08  Bruno Haible  <bruno@clisp.org>
+
+	riscv64: Add support for Linux/riscv64 with PIE-enabled GCC.
+	Reported by Raymond Wong <infiwang@pm.me> at
+	<https://savannah.gnu.org/bugs/?62422>.
+	* vacall/Makefile.devel (vacall-riscv64-lp64d-linux-pic.s): New target.
+	(vacall-riscv64-lp64d-macro.S): Include code for the PIC and the non-PIC
+	case.
+	* vacall/Makefile.in (SOURCE_FILES): Add
+	vacall-riscv64-lp64d-linux-pic.s.
+
 2022-02-12  Bruno Haible  <bruno@clisp.org>
 
 	loongarch: Fix gcc installation.
