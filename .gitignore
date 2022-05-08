@@ -154,6 +154,7 @@
 /vacall/vacall-powerpc64-linux.S
 /vacall/vacall-powerpc64-elfv2-linux.S
 /vacall/vacall-riscv32-ilp32d-linux.s
+/vacall/vacall-riscv32-ilp32d-linux-pic.s
 /vacall/vacall-riscv32-ilp32d-macro.S
 /vacall/vacall-riscv64-lp64d-linux.s
 /vacall/vacall-riscv64-lp64d-linux-pic.s

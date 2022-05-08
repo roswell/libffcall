@@ -1,5 +1,14 @@
 2022-05-08  Bruno Haible  <bruno@clisp.org>
 
+	riscv32: Add support for Linux/riscv64 with PIE-enabled GCC.
+	* vacall/Makefile.devel (vacall-riscv32-ilp32d-linux-pic.s): New target.
+	(vacall-riscv32-ilp32d-macro.S): Include code for the PIC and the
+	non-PIC case.
+	* vacall/Makefile.in (SOURCE_FILES): Add
+	vacall-riscv32-ilp32d-linux-pic.s.
+
+2022-05-08  Bruno Haible  <bruno@clisp.org>
+
 	riscv64: Add support for Linux/riscv64 with PIE-enabled GCC.
 	Reported by Raymond Wong <infiwang@pm.me> at
 	<https://savannah.gnu.org/bugs/?62422>.
