@@ -18,7 +18,7 @@
 #      $ export CC="gcc -m32" CXX="g++ -m32" LDFLAGS="-m32"
 #      or
 #      $ export host_triple="i686-pc-linux-gnu"
-#      $ export CC="i686-linux-gnu-gcc-10"; CXX="i686-linux-gnu-g++-10"
+#      $ export CC="i686-linux-gnu-gcc-10" CXX="i686-linux-gnu-g++-10"
 #   4. Optionally, set environment variable GNU_RELEASES_DIR pointing to a
 #      directory that contains GNU package releases tarballs.
 #      Make sure the wget program is in the PATH and you have an internet
@@ -466,6 +466,25 @@ func_build_isl ()
   ) || func_exit 1
 }
 
+# func_build_zstd version
+# Builds the Facebook zstd library.
+# Input:
+# - target          Directory component indicating the target.
+# - version         zstd version
+func_build_zstd ()
+{
+  pkg_version="$1"
+  func_ensure_unpacked_source zstd "$pkg_version" gz "https://github.com/facebook/zstd/releases/download/v$pkg_version" || func_exit 1
+  mkdir -p "$cross_tools_dir/build/build-$target"
+  rm -rf "$cross_tools_dir/build/build-$target/zstd-$pkg_version"
+  cp -a  "$cross_tools_dir/sources/zstd-$pkg_version" "$cross_tools_dir/build/build-$target/zstd-$pkg_version"
+  echo "Building in $cross_tools_dir/build/build-$target/zstd-$pkg_version ..."
+  (cd "$cross_tools_dir/build/build-$target/zstd-$pkg_version" \
+   && $MAKE         CC="$CC" \
+   && $MAKE install CC="$CC" prefix="$HOST_CROSS_DIR/${target}-tools" \
+  ) || func_exit 1
+}
+
 # func_build_binutils
 # Builds the GNU binutils for a given target.
 # Input:
@@ -554,6 +573,12 @@ func_build_gcc ()
     [7-9]* | 1[0-9]*)
       func_build_isl 0.16.1 || func_exit 1
       configure_options="$configure_options --with-isl=$HOST_CROSS_DIR/${target}-tools"
+      ;;
+  esac
+  case "$version" in
+    1[2-9]*)
+      func_build_zstd 1.5.2 || func_exit 1
+      configure_options="$configure_options --with-zstd=$HOST_CROSS_DIR/${target}-tools"
       ;;
   esac
   # Build gcc itself.

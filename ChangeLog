@@ -1,5 +1,23 @@
 2022-05-08  Bruno Haible  <bruno@clisp.org>
 
+	loongarch: Use the now-released GCC 12.
+	* cross-tools/cross-build.sh: Fix typo in comment.
+	(func_build_zstd): New function.
+	(func_build_gcc): For GCC versions ≥ 12, build also zstd.
+	* cross-tools/patches/gcc-12.1.0.patch: New file.
+	* cross-tools/cross.conf (loongarch64): Use GCC 12.1.0.
+	* avcall/Makefile.devel (avcall-loongarch64-linux.s): Force the use of
+	GCC 12.1.0.
+	* vacall/Makefile.devel (vacall-loongarch64-linux.s): Likewise.
+	* callback/vacall_r/Makefile.devel (vacall-loongarch64-linux.s):
+	Likewise.
+	* trampoline/Makefile.devel (proto-loongarch64.s): Likewise.
+	* callback/trampoline_r/Makefile.devel (proto-loongarch64.s): Likewise.
+	* trampoline/proto-loongarch64.s: Regenerated.
+	* callback/trampoline_r/proto-loongarch64.s: Regenerated.
+
+2022-05-08  Bruno Haible  <bruno@clisp.org>
+
 	riscv32: Add support for Linux/riscv32 with PIE-enabled GCC.
 	* vacall/Makefile.devel (vacall-riscv32-ilp32d-linux-pic.s): New target.
 	(vacall-riscv32-ilp32d-macro.S): Include code for the PIC and the

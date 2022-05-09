@@ -237,7 +237,7 @@ vacall-riscv64-lp64d-macro.S : vacall-riscv64-lp64d-linux.s ../../common/asm-ris
 
 
 vacall-loongarch64-linux.s : ../../vacall/vacall-loongarch64.c ../../vacall/vacall-internal.h vacall_r.h $(THISFILE)
-	$(CROSS_TOOL) loongarch64-linux gcc $(GCCFLAGS) -D__loongarch64__ -S ../../vacall/vacall-loongarch64.c -I../../vacall -I. -o vacall-loongarch64-linux.s
+	$(CROSS_TOOL) loongarch64-linux gcc-12.1.0 $(GCCFLAGS) -D__loongarch64__ -S ../../vacall/vacall-loongarch64.c -I../../vacall -I. -o vacall-loongarch64-linux.s
 
 vacall-loongarch64-macro.S : vacall-loongarch64-linux.s ../../common/asm-loongarch.sh ../../common/noexecstack.h $(THISFILE)
 	(../../common/asm-loongarch.sh < vacall-loongarch64-linux.s ; cat ../../common/noexecstack.h) > vacall-loongarch64-macro.S

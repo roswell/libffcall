@@ -154,7 +154,7 @@ proto-riscv64.s : proto64.c
 	$(CROSS_TOOL) riscv64-linux gcc-7.3.0 $(OLDGCCFLAGS) -D__riscv64__ -S proto64.c -o $@
 
 proto-loongarch64.s : proto64.c
-	$(CROSS_TOOL) loongarch64-linux gcc $(OLDGCCFLAGS) -D__loongarch64__ -S proto64.c -o $@
+	$(CROSS_TOOL) loongarch64-linux gcc-12.1.0 $(OLDGCCFLAGS) -D__loongarch64__ -S proto64.c -o $@
 
 tramp-i386.o : tramp-i386.s
 	$(ASPREFIX)/i486-linux/bin/as tramp-i386.s -o $@
