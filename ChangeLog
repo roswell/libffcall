@@ -1,3 +1,11 @@
+2022-05-15  Bruno Haible  <bruno@clisp.org>
+
+	Switch to libtool 2.4.7.
+	* autogen.sh (LIBTOOL_VERSION): Set to 2.4.7.
+	* libtool-patches/libtool-midnightbsd-fix.diff: Remove file.
+	* libtool-patches/README: Don't mention it.
+	* Makefile.maint (libtool-imported-files): Don't apply it.
+
 2022-05-08  Bruno Haible  <bruno@clisp.org>
 
 	loongarch: Use the now-released GCC 12.

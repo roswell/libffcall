@@ -53,8 +53,6 @@ libtool-imported-files : force
 	chmod u+w m4/libtool.m4
 	patch -p1 < libtool-patches/libtool-solaris11-fix.diff
 	chmod u+w build-aux/ltmain.sh m4/libtool.m4
-	head -n 60 < libtool-patches/libtool-midnightbsd-fix.diff | patch -p0 build-aux/ltmain.sh
-	tail -n +227 < libtool-patches/libtool-midnightbsd-fix.diff | head -n 56 | patch -p0 m4/libtool.m4
 
 .PHONY : libtool-clean
 libtool-clean : force

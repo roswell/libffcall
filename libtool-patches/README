@@ -7,6 +7,3 @@ wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtoo
 
 : "Fix -export-symbols and -export-symbols-regex support on Solaris 11.3"
 wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-solaris11-fix.diff 'https://savannah.gnu.org/patch/download.php?file_id=42205'
-
-: "Support creating shared libraries on MidnightBSD"
-wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-midnightbsd-fix.diff 'https://savannah.gnu.org/patch/download.php?file_id=50595'
