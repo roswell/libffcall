@@ -41,6 +41,10 @@ Files in this package:
         COPYING         free software license
         PLATFORMS       list of supported platforms
 
+    GNU Project:
+
+        JOIN-GNU        invitation to join the GNU project
+
     Source:
 
         avcall/*        the avcall package
