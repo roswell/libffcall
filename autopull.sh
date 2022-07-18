@@ -3,9 +3,6 @@
 # the version control repository of this package.
 #
 # This script requires either
-#   - the GNULIB_SRCDIR environment variable pointing to a gnulib checkout, or
-#   - a preceding invocation of './gitsub.sh pull'.
-# It also requires either
 #   - the LIBTOOL_RELEASES_DIR environment variable pointing to a directory
 #     that contains libtool release tarballs, or
 #   - a copy of the newest libtool-x.y.z.tar.gz in the current directory, or
@@ -28,7 +25,7 @@
 
 # Usage: ./autopull.sh
 
-./gitsub.sh pull
+./gitsub.sh pull || exit 1
 
 # The newest libtool release version.
 LIBTOOL_VERSION=2.4.7
@@ -61,27 +58,5 @@ fi
 make -f Makefile.maint \
      libtool-clean libtool-imported-files \
      LIBTOOL_RELEASE="${LIBTOOL_RELEASES_DIR}/${file}"
-
-if test -n "$GNULIB_SRCDIR"; then
-  test -d "$GNULIB_SRCDIR" || {
-    echo "*** GNULIB_SRCDIR is set but does not point to an existing directory." 1>&2
-    exit 1
-  }
-else
-  GNULIB_SRCDIR=`pwd`/gnulib
-  test -d "$GNULIB_SRCDIR" || {
-    echo "*** Subdirectory 'gnulib' does not yet exist. Use './gitsub.sh pull' to create it, or set the environment variable GNULIB_SRCDIR." 1>&2
-    exit 1
-  }
-fi
-# Now it should contain a gnulib-tool.
-GNULIB_TOOL="$GNULIB_SRCDIR/gnulib-tool"
-test -f "$GNULIB_TOOL" || {
-  echo "*** gnulib-tool not found." 1>&2
-  exit 1
-}
-make -f Makefile.maint \
-     gnulib-clean gnulib-m4/gnulib-cache.m4 gnulib-imported-files \
-     GNULIB_TOOL="$GNULIB_TOOL"
 
 echo "$0: done.  Now you can run './autogen.sh'."
