@@ -23,9 +23,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Usage: ./autopull.sh
+# Usage: ./autopull.sh [--one-time]
+#
+# Options:
+#   --one-time          Optimize, assuming that the current directory will be
+#                       used to build the current version only and will be
+#                       thrown away afterwards.
 
-./gitsub.sh pull || exit 1
+# Parse options.
+
+shallow=
+
+while :; do
+  case "$1" in
+    --one-time) shallow='--depth 1'; shift;;
+    *) break ;;
+  esac
+done
+
+
+./gitsub.sh pull $shallow || exit 1
 
 # The newest libtool release version.
 LIBTOOL_VERSION=2.4.7
