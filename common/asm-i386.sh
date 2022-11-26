@@ -7,7 +7,7 @@
 #   3. sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$,,' -e 's/##//g'
 # Warning! All comments are stripped.
 
-# Copyright (C) 1997-2018 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 1997-2022 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ tmpscript08=sed$$tmp08
 tmpscript09=sed$$tmp09
 tmpscript10=sed$$tmp10
 tmpremove='rm -f $tmpscript01 $tmpscript02 $tmpscript03 $tmpscript04 $tmpscript05 $tmpscript06 $tmpscript07 $tmpscript08 $tmpscript09 $tmpscript10'
-trap "$tmpremove" 1 2 15
+trap "$tmpremove" HUP INT TERM
 
 cat > $tmpscript01 << \EOF
 # ----------- Strip comments

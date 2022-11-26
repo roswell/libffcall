@@ -6,7 +6,7 @@
 #   2. grep -v '^ *#line' | grep -v '^#'
 #   3. sed -e 's,% ,%,g' -e 's,\. ,.,g' -e 's,@ ,@,g' -e 's,//.*$,,' -e 's/##//g'
 
-# Copyright (C) 1997-2018 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 1997-2022 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ tmpscript7=sed$$tmp7
 tmpscript8=sed$$tmp8
 tmpscript9=sed$$tmp9
 tmpremove='rm -f $tmpscript1 $tmpscript2 $tmpscript3 $tmpscript4 $tmpscript5 $tmpscript6 $tmpscript7 $tmpscript8 $tmpscript9'
-trap "$tmpremove" 1 2 15
+trap "$tmpremove" HUP INT TERM
 
 cat > $tmpscript1 << \EOF
 # ----------- Remove #APP/#NO_APP lines and gcc self-identification

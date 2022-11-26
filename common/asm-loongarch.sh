@@ -24,7 +24,7 @@
 tmpscript1=sed$$tmp1
 tmpscript2=sed$$tmp2
 tmpremove='rm -f $tmpscript1 $tmpscript2'
-trap "$tmpremove" 1 2 15
+trap "$tmpremove" HUP INT TERM
 
 cat > $tmpscript1 << \EOF
 # ----------- Remove gcc self-identification

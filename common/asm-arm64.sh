@@ -6,7 +6,7 @@
 #   2. grep -v '^ *#line' | grep -v '^#'
 #   3. sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$,#,g'
 
-# Copyright (C) 1999-2021 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 1999-2022 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ tmpscript1=sed$$tmp1
 tmpscript2=sed$$tmp2
 tmpscript3=sed$$tmp3
 tmpremove='rm -f $tmpscript1 $tmpscript2 $tmpscript3'
-trap "$tmpremove" 1 2 15
+trap "$tmpremove" HUP INT TERM
 
 cat > $tmpscript1 << \EOF
 # ----------- Remove gcc self-identification

@@ -6,7 +6,7 @@
 #   2. grep -v '^ *#line' | grep -v '^#'
 #   3. sed -e 's,% ,%,g' -e 's,//.*$,,'
 
-# Copyright (C) 1999-2017 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 1999-2022 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ esac
 tmpscript1=sed$$tmp1
 tmpscript2=sed$$tmp2
 tmpremove='rm -f $tmpscript1 $tmpscript2'
-trap "$tmpremove" 1 2 15
+trap "$tmpremove" HUP INT TERM
 
 cat > $tmpscript1 << \EOF
 # ----------- Remove #APP/#NO_APP lines
