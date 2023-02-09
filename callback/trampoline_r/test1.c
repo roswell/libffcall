@@ -1,7 +1,7 @@
 /* Trampoline test */
 
 /*
- * Copyright 1995-2022 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2023 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@
 #define MAGIC3  0x7aff3cb4
 #define MAGIC4  0xa2f9d045
 
-#ifdef __cplusplus
+#if defined __cplusplus || __STDC_VERSION__ >= 202300L
 typedef int (*function)(...);
 #else
 typedef int (*function)();

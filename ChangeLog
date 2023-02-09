@@ -1,3 +1,16 @@
+2023-02-09  Bruno Haible  <bruno@clisp.org>
+
+	Fix compilation error with ISO C 23 compliant compilers.
+	Note: The parameter list (...) was introduced in C23, for compatibility
+	with C++. See ISO C 23 § 6.7.6.(1) definition of parameter-type-list and
+	<https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2975.pdf>.
+	* trampoline/trampoline.h (trampoline_function_t): For ISO C23, use the
+	same syntax as for C++.
+	* callback/trampoline_r/trampoline_r.h (__TR_function): Likewise.
+	* callback/trampoline_r/test1.c (function): Likewise.
+	* callback/trampoline_r/test2.c (function): Likewise.
+	* callback/callback.h (callback_t): Likewise.
+
 2022-07-18  Bruno Haible  <bruno@clisp.org>
 
 	Make autopull.sh more suited for continuous integration.

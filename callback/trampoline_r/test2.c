@@ -1,7 +1,7 @@
 /* Trampoline accessor test */
 
 /*
- * Copyright 1995-2005 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2023 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 #include "trampoline_r.h"
 
-#ifdef __cplusplus
+#if defined __cplusplus || __STDC_VERSION__ >= 202300L
 typedef int (*function)(...);
 #else
 typedef int (*function)();

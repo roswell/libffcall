@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2023 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ extern "C" {
 /* This type denotes an opaque function pointer.
    You need to cast it to an actual function pointer type (with correct return
    type) before you can actually invoke it. */
-#ifdef __cplusplus
+#if defined __cplusplus || __STDC_VERSION__ >= 202300L
 typedef int (*trampoline_function_t) (...);
 #else
 typedef int (*trampoline_function_t) ();
