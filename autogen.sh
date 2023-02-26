@@ -4,9 +4,9 @@
 # also regenerates all aclocal.m4, config.h.in, configure files with new
 # versions of autoconf, automake, or libtool.
 #
-# This script requires autoconf-2.65..2.71 and automake-1.11..1.16 in the PATH.
+# This script requires autoconf-2.70..2.71 and automake-1.11..1.16 in the PATH.
 
-# Copyright (C) 2016-2022 Bruno Haible.
+# Copyright (C) 2016-2023 Bruno Haible.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
