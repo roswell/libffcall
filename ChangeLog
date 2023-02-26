@@ -1,3 +1,10 @@
+2023-02-26  Bruno Haible  <bruno@clisp.org>
+
+	Modernize handling of m4 macro dirs.
+	Suggested by Sébastien Villemot <sebastien@debian.org>.
+	* configure.ac (AC_CONFIG_MACRO_DIRS): Specify the m4 macro dirs here.
+	* Makefile.maint (aclocal.m4): ... not here.
+
 2023-02-09  Bruno Haible  <bruno@clisp.org>
 
 	Fix compilation error with ISO C 23 compliant compilers.

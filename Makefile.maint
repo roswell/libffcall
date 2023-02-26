@@ -119,7 +119,7 @@ ALL_CONFIGURE = configure
 ALL_CONFIGURE_AC = configure.ac
 
 aclocal.m4 : $(ALL_CONFIGURE_AC) $(wildcard m4/*.m4) $(wildcard gnulib-m4/*.m4)
-	$(ACLOCAL) --output=aclocal.m4 -I m4 -I gnulib-m4
+	$(ACLOCAL) --output=aclocal.m4
 
 .PHONY : configures
 configures : $(ALL_CONFIGURE)

@@ -1,5 +1,5 @@
 dnl AUTOCONF configuration for LIBFFCALL
-dnl Copyright 1995-2020 Bruno Haible <bruno@clisp.org>
+dnl Copyright 1995-2023 Bruno Haible <bruno@clisp.org>
 dnl Copyright 2003-2010 Sam Steingold <sds@gnu.org>
 dnl
 dnl This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@ dnl
 
 AC_INIT([GNU libffcall],m4_normalize(m4_esyscmd([cat VERSION])),[https://savannah.gnu.org/projects/libffcall],[libffcall])
 AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIRS([m4 gnulib-m4])
 AM_INIT_AUTOMAKE([])
 
 AC_CONFIG_SRCDIR([trampoline/trampoline.h])
