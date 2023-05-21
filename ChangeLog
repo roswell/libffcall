@@ -1,3 +1,11 @@
+2023-05-21  Bruno Haible  <bruno@clisp.org>
+
+	Support creating shared libraries on Hurd/x86_64.
+	* libtool-patches/libtool-hurd-64.diff: New file, from
+	https://lists.gnu.org/archive/html/bug-hurd/2023-05/msg00086.html.
+	* libtool-patches/README: Mention it.
+	* Makefile.maint (libtool-imported-files): Apply it.
+
 2023-02-26  Bruno Haible  <bruno@clisp.org>
 
 	Modernize handling of m4 macro dirs.

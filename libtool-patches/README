@@ -7,3 +7,6 @@ wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtoo
 
 : "Fix -export-symbols and -export-symbols-regex support on Solaris 11.3"
 wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-solaris11-fix.diff 'https://savannah.gnu.org/patch/download.php?file_id=42205'
+
+: "Support creating shared libraries on Hurd/x86_64."
+wget https://lists.gnu.org/archive/html/bug-hurd/2023-05/msg00086.html

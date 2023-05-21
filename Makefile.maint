@@ -52,6 +52,7 @@ libtool-imported-files : force
 	patch build-aux/ltmain.sh < libtool-patches/libtool-allow-static.diff
 	chmod u+w m4/libtool.m4
 	patch -p1 < libtool-patches/libtool-solaris11-fix.diff
+	patch -p1 < libtool-patches/libtool-hurd-64.diff
 	chmod u+w build-aux/ltmain.sh m4/libtool.m4
 
 .PHONY : libtool-clean
