@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2020 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2023 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -347,7 +347,7 @@ AC_DEFUN([FFCALL_CODEEXEC],
          case "$host_os" in
            aix* | cygwin* | darwin* | hpux* | irix* | linux* | solaris*)
              cl_cv_func_mprotect_works="guessing yes" ;;
-           mingw*)
+           mingw* | windows*)
              cl_cv_func_mprotect_works="guessing no" ;;
            *)
              cl_cv_func_mprotect_works="guessing no" ;;
