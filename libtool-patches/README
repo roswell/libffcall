@@ -10,3 +10,6 @@ wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtoo
 
 : "Support creating shared libraries on Hurd/x86_64."
 wget https://lists.gnu.org/archive/html/bug-hurd/2023-05/msg00086.html
+
+: "Fix shared library support on Android"
+wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-android.diff 'https://savannah.gnu.org/patch/download.php?file_id=55144'
