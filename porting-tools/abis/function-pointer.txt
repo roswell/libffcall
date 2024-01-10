@@ -48,3 +48,17 @@ struct {
   void* code_address;
   void* pic_base; /* for PIC code, gets loaded into register r27 */
 }.
+
+On arm, there are two instruction sets:
+  - The "ARM" instruction set, consisting of 4-byte words.
+  - The "Thumb" instruction set, consisting of 2-byte words.
+A pointer to a function in "ARM" instruction set is just a pointer to the
+first instruction.
+A pointer to a function in "Thumb" instruction set is a pointer to the
+first instruction + 1.
+Thus, bit 0 of a function pointer tells which instruction set the function uses:
+0 for "ARM", 1 for "Thumb".
+The instructions 'blx' and 'bx' are used to call a function or return from a
+function, respectively, while possibly changing the current instruction set
+mode. (As opposed to 'bl' and 'mov pc,lr', which don't change the instruction
+set mode.)
