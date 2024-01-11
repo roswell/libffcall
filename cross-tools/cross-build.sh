@@ -382,7 +382,7 @@ func_build_gmp ()
    && ../../../sources/gmp-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" \
    && $MAKE \
    && $MAKE install \
-  ) || func_exit 1
+  ) > "$cross_tools_dir/build/build-$target/gmp-$pkg_version/all.log" 2>&1 || func_exit 1
 }
 
 # func_build_mpfr version
@@ -402,7 +402,7 @@ func_build_mpfr ()
    && ../../../sources/mpfr-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --with-gmp="$HOST_CROSS_DIR/${target}-tools" --enable-shared \
    && $MAKE \
    && $MAKE install \
-  ) || func_exit 1
+  ) > "$cross_tools_dir/build/build-$target/mpfr-$pkg_version/all.log" 2>&1 || func_exit 1
 }
 
 # func_build_mpc version
@@ -423,7 +423,7 @@ func_build_mpc ()
    && ../../../sources/mpc-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --with-gmp="$HOST_CROSS_DIR/${target}-tools" --with-mpfr="$HOST_CROSS_DIR/${target}-tools" --enable-shared \
    && $MAKE \
    && $MAKE install \
-  ) || func_exit 1
+  ) > "$cross_tools_dir/build/build-$target/mpc-$pkg_version/all.log" 2>&1 || func_exit 1
 }
 
 # func_build_libelf version
@@ -443,7 +443,7 @@ func_build_libelf ()
    && ../../../sources/libelf-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --enable-shared \
    && $MAKE \
    && $MAKE install \
-  ) || func_exit 1
+  ) > "$cross_tools_dir/build/build-$target/libelf-$pkg_version/all.log" 2>&1 || func_exit 1
 }
 
 # func_build_isl version
@@ -463,7 +463,7 @@ func_build_isl ()
    && ../../../sources/isl-$pkg_version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --with-gmp-prefix="$HOST_CROSS_DIR/${target}-tools" --enable-shared \
    && $MAKE \
    && $MAKE install \
-  ) || func_exit 1
+  ) > "$cross_tools_dir/build/build-$target/isl-$pkg_version/all.log" 2>&1 || func_exit 1
 }
 
 # func_build_zstd version
@@ -482,7 +482,7 @@ func_build_zstd ()
   (cd "$cross_tools_dir/build/build-$target/zstd-$pkg_version" \
    && $MAKE         CC="$CC" \
    && $MAKE install CC="$CC" prefix="$HOST_CROSS_DIR/${target}-tools" \
-  ) || func_exit 1
+  ) > "$cross_tools_dir/build/build-$target/zstd-$pkg_version/all.log" 2>&1 || func_exit 1
 }
 
 # func_build_binutils
@@ -509,7 +509,7 @@ func_build_binutils ()
    && ../../../sources/binutils-$version/configure --host="$host_triple" --prefix="$HOST_CROSS_DIR/${target}-tools" --target=$binutilstarget --enable-shared --disable-werror \
    && $MAKE \
    && $MAKE install \
-  ) || func_exit 1
+  ) > "$cross_tools_dir/build/build-$target/binutils-$version/all.log" 2>&1 || func_exit 1
   if test "$target" != "$binutilstarget"; then
     # Put symbolic links, so that gcc and the 'cross' script find the installed binaries.
     (cd "$HOST_CROSS_DIR/${target}-tools/bin"
@@ -618,7 +618,7 @@ func_build_gcc ()
         $MAKE LANGUAGES="c" install; \
         true; \
       }
-  ) || func_exit 1
+  ) > "$cross_tools_dir/build/build-$target/gcc-$version/all.log" 2>&1 || func_exit 1
   # Verify that the essential parts of the C compiler were installed.
   # gcc < 3.4 uses lib/gcc-lib/${gcctarget}/${version}/ whereas
   # gcc >= 3.4 uses libexec/gcc/${gcctarget}/${version}/.
