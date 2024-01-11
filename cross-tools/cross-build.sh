@@ -19,6 +19,9 @@
 #      or
 #      $ export host_triple="i686-pc-linux-gnu"
 #      $ export CC="i686-linux-gnu-gcc-10" CXX="i686-linux-gnu-g++-10"
+#      If your C++ compiler is g++ ≥ 6 or clang++ ≥ 6.0, you need to add
+#      the option -std=gnu++98 as part of CXX, because the default with
+#      these compilers (-std=gnu++14 or newer) causes compilation errors.
 #   4. Optionally, set environment variable GNU_RELEASES_DIR pointing to a
 #      directory that contains GNU package releases tarballs.
 #      Make sure the wget program is in the PATH and you have an internet
