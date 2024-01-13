@@ -1,0 +1,54 @@
+--- gcc-4.2.4/gcc/toplev.c.bak	2024-01-11 15:47:40.168060009 +0100
++++ gcc-4.2.4/gcc/toplev.c	2024-01-11 15:49:16.100793142 +0100
+@@ -530,7 +530,7 @@
+    for floor_log2 and exact_log2; see toplev.h.  That construct, however,
+    conflicts with the ISO C++ One Definition Rule.   */
+ 
+-#if GCC_VERSION < 3004 || !defined (__cplusplus)
++#if GCC_VERSION < 3004
+ 
+ /* Given X, an unsigned number, return the largest int Y such that 2**Y <= X.
+    If X is 0, return -1.  */
+@@ -582,7 +582,7 @@
+ #endif
+ }
+ 
+-#endif /*  GCC_VERSION < 3004 || !defined (__cplusplus)  */
++#endif /*  GCC_VERSION < 3004  */
+ 
+ /* Handler for fatal signals, such as SIGSEGV.  These are transformed
+    into ICE messages, which is much more user friendly.  In case the
+--- gcc-4.2.4/gcc/toplev.h.bak	2024-01-11 16:07:55.033485663 +0100
++++ gcc-4.2.4/gcc/toplev.h	2024-01-11 16:08:43.805867211 +0100
+@@ -149,13 +149,13 @@
+ 
+ /* Return true iff flags are set as if -ffast-math.  */
+ extern bool fast_math_flags_set_p	(void);
+-
++#if GCC_VERSION < 3004
+ /* Return log2, or -1 if not exact.  */
+ extern int exact_log2                  (unsigned HOST_WIDE_INT);
+ 
+ /* Return floor of log2, with -1 for zero.  */
+ extern int floor_log2                  (unsigned HOST_WIDE_INT);
+-
++#endif
+ /* Inline versions of the above for speed.  */
+ #if GCC_VERSION >= 3004
+ # if HOST_BITS_PER_WIDE_INT == HOST_BITS_PER_LONG
+@@ -169,13 +169,13 @@
+ #  define CTZ_HWI __builtin_ctz
+ # endif
+ 
+-extern inline int
++static inline int
+ floor_log2 (unsigned HOST_WIDE_INT x)
+ {
+   return x ? HOST_BITS_PER_WIDE_INT - 1 - (int) CLZ_HWI (x) : -1;
+ }
+ 
+-extern inline int
++static inline int
+ exact_log2 (unsigned HOST_WIDE_INT x)
+ {
+   return x == (x & -x) && x ? (int) CTZ_HWI (x) : -1;

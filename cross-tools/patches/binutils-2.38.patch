@@ -1,0 +1,11 @@
+--- binutils-2.38/include/ansidecl.h.bak	2022-01-22 13:14:09.000000000 +0100
++++ binutils-2.38/include/ansidecl.h	2024-01-13 06:02:38.531353387 +0100
+@@ -320,7 +320,7 @@
+ /* Attribute `warn_unused_result' was valid as of gcc 3.3.  */
+ #ifndef ATTRIBUTE_WARN_UNUSED_RESULT
+ # if GCC_VERSION >= 3003
+-#  define ATTRIBUTE_WARN_UNUSED_RESULT __attribute__ ((warn_unused_result))
++#  define ATTRIBUTE_WARN_UNUSED_RESULT __attribute__ ((__warn_unused_result__))
+ # else
+ #  define ATTRIBUTE_WARN_UNUSED_RESULT
+ # endif
