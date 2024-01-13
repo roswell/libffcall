@@ -610,7 +610,7 @@ func_build_gcc ()
   (PATH="$HOST_CROSS_DIR/${target}-tools/bin:$PATH"
    LD_LIBRARY_PATH="$HOST_CROSS_DIR/${target}-tools/lib"${LD_LIBRARY_PATH+":$LD_LIBRARY_PATH"}
    cd "$cross_tools_dir/build/build-$target/gcc-$version" \
-   && ../../../sources/gcc-$version/configure --prefix="$HOST_CROSS_DIR/${target}-tools" --target="$gcctarget" $configure_options --with-as="$HOST_CROSS_DIR/${target}-tools/bin/${target}-as" --with-ld="$HOST_CROSS_DIR/${target}-tools/bin/${target}-ld" --enable-languages=c \
+   && ../../../sources/gcc-$version/configure --prefix="$HOST_CROSS_DIR/${target}-tools" --target="$gcctarget" $configure_options --with-as="$HOST_CROSS_DIR/${target}-tools/bin/${target}-as" --with-ld="$HOST_CROSS_DIR/${target}-tools/bin/${target}-ld" --enable-languages=c --disable-bootstrap \
    && { : "make usually fails during the libgcc phase, either because cc1 does not find its shared libraries, or because no include files are present yet, or because it invokes the wrong assembler"; \
         $MAKE; \
         cd gcc; \
