@@ -1,5 +1,5 @@
 dnl AUTOCONF configuration for LIBFFCALL
-dnl Copyright 1995-2023 Bruno Haible <bruno@clisp.org>
+dnl Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
 dnl Copyright 2003-2010 Sam Steingold <sds@gnu.org>
 dnl
 dnl This program is free software: you can redistribute it and/or modify
@@ -58,7 +58,6 @@ AC_PROG_MAKE_SET
 dnl The libraries are built in C.
 AC_PROG_CC
 AC_PROG_CPP
-AC_PROG_GCC_TRADITIONAL
 CL_CC_GCC
 CL_AS_UNDERSCORE
 dnl But some tests use C++.
