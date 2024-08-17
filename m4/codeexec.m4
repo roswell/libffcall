@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2023 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2024 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -526,8 +526,157 @@ AC_DEFUN([FFCALL_CODEEXEC],
               case "$ffcall_cv_mmap_mprotect_can_exec" in
                 *yes) ;;
                 *)
-                  AC_CACHE_CHECK([whether a shared mmap can make memory pages executable],
-                    [ffcall_cv_mmap_shared_can_exec],
+                  case "$host_os" in
+                    darwin*)
+                      # This is expected to work on macOS only.
+                      # Here we use the approach with Mach primitives that exist
+                      # since macOS 10.4. It was invented by Joelle van Dyne for QEMU.
+                      # It is a lot simpler than the MAP_JIT approach that is
+                      # propagated by Apple but incompletely documented and
+                      # changes behaviour whenever Apple wants to improve "security".
+                      AC_CACHE_CHECK([whether a shared mmap with macOS primitives can make memory pages executable],
+                        [ffcall_cv_mmap_shared_macos_can_exec],
+                        [AC_RUN_IFELSE(
+                           [AC_LANG_SOURCE([[
+                              #include <fcntl.h>
+                              #include <stdlib.h>
+                              /* Declare getpagesize().  */
+                              #include <unistd.h>
+                              /* Declare mmap().  */
+                              #include <sys/mman.h>
+                              /* Declare mach_vm_remap.  */
+                              #include <mach/mach.h>
+                              /* Declaring it ourselves is easier than
+                                 including <mach/mach_vm.h>.  */
+                              extern
+                              #ifdef __cplusplus
+                              "C"
+                              #endif
+                              kern_return_t mach_vm_remap (vm_map_t target_task,
+                                                           mach_vm_address_t *target_address, /* in/out */
+                                                           mach_vm_size_t size,
+                                                           mach_vm_offset_t mask,
+                                                           int flags,
+                                                           vm_map_t src_task,
+                                                           mach_vm_address_t src_address,
+                                                           boolean_t copy,
+                                                           vm_prot_t *cur_protection, /* out */
+                                                           vm_prot_t *max_protection, /* out */
+                                                           vm_inherit_t inheritance);
+                              int
+                              main ()
+                              {
+                                unsigned int pagesize = getpagesize ();
+                                char *pw;
+                                char *px;
+                                pw = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+                                if (pw == (char*) -1)
+                                  return 2;
+                                pw[5] = 0xc3;
+                                {
+                                  vm_map_t self = mach_task_self ();
+                                  mach_vm_address_t target_address = 0;
+                                  vm_prot_t cur_prot;
+                                  vm_prot_t max_prot;
+                                  kern_return_t ret = mach_vm_remap (self, &target_address, pagesize, 0, VM_FLAGS_ANYWHERE, self, (mach_vm_address_t) (unsigned long) pw, FALSE, &cur_prot, &max_prot, VM_INHERIT_NONE);
+                                  if (ret != KERN_SUCCESS)
+                                    return 3;
+                                  px = (char *) (unsigned long) target_address;
+                                }
+                                if (mprotect (px, pagesize, PROT_READ | PROT_EXEC) < 0)
+                                  return 4;
+                                if ((char)px[5] != (char)0xc3)
+                                  return 5;
+                                /* On i386 and x86_64 this is a 'ret' instruction that we can invoke. */
+                              #if (defined __i386 || defined __i386__ || defined _I386 || defined _M_IX86 || defined _X86_) || (defined __x86_64__ || defined __amd64__)
+                                ((void (*) (void)) (px + 5)) ();
+                              #endif
+                                return 0;
+                              }
+                              ]])
+                           ],
+                           [ffcall_cv_mmap_shared_macos_can_exec=yes],
+                           [ffcall_cv_mmap_shared_macos_can_exec=no],
+                           [dnl When cross-compiling, assume yes, since this is the result
+                            dnl on all the platforms where we have tested it.
+                            ffcall_cv_mmap_shared_macos_can_exec="guessing yes"
+                           ])
+                        ])
+                      case "$ffcall_cv_mmap_shared_macos_can_exec" in
+                        *yes)
+                          AC_DEFINE([HAVE_MMAP_SHARED_MACOS_CAN_EXEC], [1],
+                            [have an mmap() function that, together with mach_vm_remap(), can make memory pages executable])
+                          ;;
+                      esac
+                      ;;
+                  esac
+                  AC_CACHE_CHECK([whether a shared mmap of a RAM-only region can make memory pages executable],
+                    [ffcall_cv_mmap_shared_memfd_can_exec],
+                    [filename="trampdata$$"
+                     AC_RUN_IFELSE(
+                       [AC_LANG_SOURCE([[
+                          /* Enable the memfd_create declaration on Linux.  */
+                          #ifndef _GNU_SOURCE
+                           #define _GNU_SOURCE 1
+                          #endif
+                          #include <fcntl.h>
+                          #include <stdlib.h>
+                          /* Declare getpagesize().  */
+                          #ifdef HAVE_UNISTD_H
+                           #include <unistd.h>
+                          #endif
+                          /* Declare mmap() and memfd_create().  */
+                          #include <sys/mman.h>
+                          #ifndef MAP_FILE
+                           #define MAP_FILE 0
+                          #endif
+                          #ifndef MAP_VARIABLE
+                           #define MAP_VARIABLE 0
+                          #endif
+                          int
+                          main ()
+                          {
+                            unsigned int pagesize = getpagesize ();
+                            int fd;
+                            char *pw;
+                            char *px;
+                            fd = memfd_create ("$filename", 0);
+                            if (fd < 0)
+                              return 1;
+                            if (ftruncate (fd, pagesize) < 0)
+                              return 2;
+                            pw = (char *) mmap (NULL, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+                            if (pw == (char*) -1)
+                              return 3;
+                            pw[5] = 0xc3;
+                            px = (char *) mmap (NULL, pagesize, PROT_READ | PROT_EXEC, MAP_SHARED, fd, 0);
+                            if (px == (char*) -1)
+                              return 4;
+                            if ((char)px[5] != (char)0xc3)
+                              return 5;
+                            /* On i386 and x86_64 this is a 'ret' instruction that we can invoke. */
+                          #if (defined __i386 || defined __i386__ || defined _I386 || defined _M_IX86 || defined _X86_) || (defined __x86_64__ || defined __amd64__)
+                            ((void (*) (void)) (px + 5)) ();
+                          #endif
+                            return 0;
+                          }
+                          ]])
+                       ],
+                       [ffcall_cv_mmap_shared_memfd_can_exec=yes],
+                       [ffcall_cv_mmap_shared_memfd_can_exec=no],
+                       [dnl When cross-compiling, assume yes, since this is the result
+                        dnl on all the platforms where we have tested it.
+                        ffcall_cv_mmap_shared_memfd_can_exec="guessing yes"
+                       ])
+                    ])
+                  case "$ffcall_cv_mmap_shared_memfd_can_exec" in
+                    *yes)
+                      AC_DEFINE([HAVE_MMAP_SHARED_MEMFD_CAN_EXEC], [1],
+                        [have an mmap() function that, with MAP_SHARED on a memfd descriptor, can make memory pages executable])
+                      ;;
+                  esac
+                  AC_CACHE_CHECK([whether a shared mmap of a file can make memory pages executable],
+                    [ffcall_cv_mmap_shared_posix_can_exec],
                     [filename="/tmp/trampdata$$.data"
                      AC_RUN_IFELSE(
                        [AC_LANG_SOURCE([[
@@ -581,18 +730,18 @@ AC_DEFUN([FFCALL_CODEEXEC],
                           }
                           ]])
                        ],
-                       [ffcall_cv_mmap_shared_can_exec=yes],
-                       [ffcall_cv_mmap_shared_can_exec=no],
+                       [ffcall_cv_mmap_shared_posix_can_exec=yes],
+                       [ffcall_cv_mmap_shared_posix_can_exec=no],
                        [dnl When cross-compiling, assume yes, since this is the result
                         dnl on all the platforms where we have tested it.
-                        ffcall_cv_mmap_shared_can_exec="guessing yes"
+                        ffcall_cv_mmap_shared_posix_can_exec="guessing yes"
                        ])
                      rm -f "$filename"
                     ])
-                  case "$ffcall_cv_mmap_shared_can_exec" in
+                  case "$ffcall_cv_mmap_shared_posix_can_exec" in
                     *yes)
-                      AC_DEFINE([HAVE_MMAP_SHARED_CAN_EXEC], [1],
-                        [have an mmap() function that, with MAP_SHARED, can make memory pages executable])
+                      AC_DEFINE([HAVE_MMAP_SHARED_POSIX_CAN_EXEC], [1],
+                        [have an mmap() function that, with MAP_SHARED on a file, can make memory pages executable])
                       ;;
                   esac
                   ;;

@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2022 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,8 +81,12 @@ extern void (*tramp_r) (); /* trampoline prototype */
     #elif HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC > 0
       /* mprotect() [or equivalent] the mmap'ed area. */
       #define EXECUTABLE_VIA_MMAP_THEN_MPROTECT
-    #elif HAVE_MMAP_SHARED_CAN_EXEC                /* Linux, HardenedBSD */
-      #define EXECUTABLE_VIA_MMAP_FILE_SHARED
+    #elif HAVE_MMAP_SHARED_MACOS_CAN_EXEC          /* macOS >= 10.4 */
+      #define EXECUTABLE_VIA_MMAP_SHARED_MACOS
+    #elif HAVE_MMAP_SHARED_MEMFD_CAN_EXEC          /* Linux >= 3.17, FreeBSD >= 13.0 */
+      #define EXECUTABLE_VIA_MMAP_SHARED_MEMFD
+    #elif HAVE_MMAP_SHARED_POSIX_CAN_EXEC          /* Linux, HardenedBSD */
+      #define EXECUTABLE_VIA_MMAP_SHARED_POSIX
     #else
       #error "Don't know how to make memory pages executable."
     #endif
@@ -123,19 +127,40 @@ extern
 #endif
 
 /* Declare mprotect(). */
-#if defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_THEN_MPROTECT)
+#if defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS)
 #include <sys/types.h>
 #include <sys/mman.h>
 #endif
 
-/* Declare mmap(). */
-#if defined(EXECUTABLE_VIA_MMAP) || defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+/* Declare mmap() and, if present, memfd_create(). */
+#if defined(EXECUTABLE_VIA_MMAP) || defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS) || defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
 #include <sys/types.h>
 #include <sys/mman.h>
+#endif
+
+/* Declare mach_vm_remap.  */
+#if defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS)
+#include <mach/mach.h>
+/* Declaring it ourselves is easier than including <mach/mach_vm.h>.  */
+extern
+#ifdef __cplusplus
+"C"
+#endif
+kern_return_t mach_vm_remap (vm_map_t target_task,
+                             mach_vm_address_t *target_address, /* in/out */
+                             mach_vm_size_t size,
+                             mach_vm_offset_t mask,
+                             int flags,
+                             vm_map_t src_task,
+                             mach_vm_address_t src_address,
+                             boolean_t copy,
+                             vm_prot_t *cur_protection, /* out */
+                             vm_prot_t *max_protection, /* out */
+                             vm_inherit_t inheritance);
 #endif
 
 /* Declare open(). */
-#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+#if defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
 #include <sys/types.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -201,7 +226,7 @@ extern void __TR_clear_cache();
 #include "clean-temp-simple.h"
 #endif
 
-#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
 /* Opens a file descriptor and attempts to make it non-inheritable. */
 static int open_noinherit (const char *filename, int flags, int mode)
 {
@@ -341,7 +366,7 @@ static int open_noinherit (const char *filename, int flags, int mode)
 static long pagesize = 0;
 #endif
 
-#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+#if !defined(CODE_EXECUTABLE) && (defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX))
 
 /* Variables needed for obtaining memory pages via mmap(). */
 static int file_fd;
@@ -350,30 +375,44 @@ static long file_length;
 /* Initialization of these variables. */
 static void for_mmap_init (void)
 {
+#if defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD)
+  {
+    char filename[100];
+    sprintf(filename, "trampdata-%d-%ld", getpid (), random ());
+    file_fd = memfd_create (filename, MFD_CLOEXEC);
+    if (file_fd < 0)
+      {
+        fprintf(stderr,"trampoline: Cannot allocate RAM at %s!\n",filename);
+        abort();
+      }
+  }
+#endif
+#if defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
   {
     char filename[100];
     sprintf(filename, "%s/trampdata-%d-%ld", "/tmp", getpid (), random ());
-#if defined(KEEP_TEMP_FILE_VISIBLE)
+ #if defined(KEEP_TEMP_FILE_VISIBLE)
     if (register_temporary_file(filename) < 0)
       { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
-#endif
+ #endif
     file_fd = open_noinherit (filename, O_CREAT | O_RDWR | O_TRUNC, 0700);
     if (file_fd < 0)
       {
-#if defined(KEEP_TEMP_FILE_VISIBLE)
+ #if defined(KEEP_TEMP_FILE_VISIBLE)
         unregister_temporary_file(filename);
-#endif
+ #endif
         fprintf(stderr,"trampoline: Cannot open %s!\n",filename);
         abort();
       }
-#if !defined(KEEP_TEMP_FILE_VISIBLE)
+ #if !defined(KEEP_TEMP_FILE_VISIBLE)
     /* Remove the file from the file system as soon as possible, to make
        sure there is no leftover after this process terminates or crashes.
        On macOS 11.2, this does not work: It would make the mmap call below,
        with arguments PROT_READ|PROT_EXEC and MAP_SHARED, fail. */
     unlink(filename);
-#endif
+ #endif
   }
+#endif
   file_length = 0;
 }
 
@@ -403,7 +442,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   /* First, get the page size once and for all. */
   if (!pagesize)
     {
-#if defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+#if defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
       /* Use a once-only initializer here, since simultaneous execution of
          for_mmap_init() in multiple threads must be avoided. */
       gl_once (for_mmap_once, for_mmap_init);
@@ -440,8 +479,27 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
         { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
       page_end = page + pagesize;
 #else
-#ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
+#if defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS) || defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
       char* page_x;
+ #if defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS)
+      /* Allocate one more page. */
+      page = (char*)mmap(NULL,pagesize,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANON,-1,0);
+      if (page == (char*)(-1))
+        { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
+      {
+        vm_map_t self = mach_task_self ();
+        mach_vm_address_t target_address = 0;
+        vm_prot_t cur_prot;
+        vm_prot_t max_prot;
+        kern_return_t ret = mach_vm_remap (self, &target_address, pagesize, 0, VM_FLAGS_ANYWHERE, self, (mach_vm_address_t) (unsigned long) page, FALSE, &cur_prot, &max_prot, VM_INHERIT_NONE);
+        if (ret != KERN_SUCCESS)
+          { fprintf(stderr,"trampoline: mach_vm_remap failed!\n"); abort(); }
+        page_x = (char *) (unsigned long) target_address;
+      }
+      if (mprotect(page_x,pagesize,PROT_READ|PROT_EXEC) < 0)
+        { fprintf(stderr,"trampoline: mprotect after mach_vm_remap failed!\n"); abort(); }
+ #endif
+ #if defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
       /* Extend the file by one page. */
       long new_file_length = file_length + pagesize;
       if (ftruncate(file_fd,new_file_length) < 0)
@@ -452,6 +510,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
       if (page == (char*)(-1) || page_x == (char*)(-1))
         { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
       file_length = new_file_length;
+ #endif
       page_end = page + pagesize;
       /* Link the two pages together. */
       ((intptr_t*)page)[0] = page_x - page;
@@ -489,7 +548,7 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   }
 #endif
 
-#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_FILE_SHARED)
+#if !defined(CODE_EXECUTABLE) && (defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS) || defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX))
   /* Find the executable address corresponding to the writable address. */
   { uintptr_t page = (uintptr_t) function & -(intptr_t)pagesize;
     function_x = function + ((intptr_t*)page)[0];
@@ -1455,7 +1514,7 @@ void free_trampoline_r (__TR_function function)
   function = (__TR_function)((char*)function - TRAMP_BIAS);
 #endif
 #if !defined(CODE_EXECUTABLE) && !defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT)
-#ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
+#if defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS) || defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
   /* Find the writable address corresponding to the executable address. */
   { uintptr_t page_x = (uintptr_t) function & -(intptr_t)pagesize;
     function -= ((intptr_t*)page_x)[0];
@@ -1480,7 +1539,7 @@ int is_trampoline_r (void* function)
   if (is_tramp(((char*)function - TRAMP_BIAS)))
     {
       char* function_w;
-#ifdef EXECUTABLE_VIA_MMAP_FILE_SHARED
+#if defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS) || defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
       /* Find the writable address corresponding to the executable address. */
       { uintptr_t page_x = (uintptr_t) function & -(intptr_t)pagesize;
         function_w = function - ((intptr_t*)page_x)[0];

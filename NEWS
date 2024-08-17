@@ -3,6 +3,11 @@ New in 2.5:
 * Added support for the following platforms:
   (Previously, a build on these platforms failed.)
   - loongarch64: Linux with lp64d ABI.
+* Simplified the environmental requirements (the library no longer allocates
+  a temporary file in /tmp) on the following platforms:
+  - Linux.
+  - macOS.
+  - FreeBSD 13 and newer.
 
 New in 2.4:
 

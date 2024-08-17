@@ -1,3 +1,27 @@
+2024-08-17  Bruno Haible  <bruno@clisp.org>
+
+	trampoline: Work around failing mmap call on macOS 14,
+	and use memfd_create on Linux and FreeBSD.
+	Reported by Lorenzo Daneo <lorenzo.daneo91@gmail.com> at
+	<https://lists.gnu.org/archive/html/libffcall/2024-08/msg00007.html>.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Rename HAVE_MMAP_SHARED_CAN_EXEC to
+	HAVE_MMAP_SHARED_POSIX_CAN_EXEC.
+	Add a test that may define HAVE_MMAP_SHARED_MACOS_CAN_EXEC.
+	Add a test that may define HAVE_MMAP_SHARED_MEMFD_CAN_EXEC.
+	* trampoline/trampoline.c: Test HAVE_MMAP_SHARED_POSIX_CAN_EXEC instead
+	of HAVE_MMAP_SHARED_CAN_EXEC.
+	(EXECUTABLE_VIA_MMAP_SHARED_POSIX): Renamed from
+	EXECUTABLE_VIA_MMAP_FILE_SHARED.
+	(EXECUTABLE_VIA_MMAP_SHARED_MACOS, EXECUTABLE_VIA_MMAP_SHARED_MEMFD):
+	New macros.
+	(mach_vm_remap) [EXECUTABLE_VIA_MMAP_SHARED_MACOS]: New declaration.
+	(for_mmap_init): Add an alternative implementation for
+	EXECUTABLE_VIA_MMAP_SHARED_MEMFD.
+	(alloc_trampoline): Add alternative code for
+	EXECUTABLE_VIA_MMAP_SHARED_MACOS.
+	* callback/trampoline_r/trampoline.c: Likewise.
+	* NEWS: Mention the improvements.
+
 2024-07-12  Bruno Haible  <bruno@clisp.org>
 
 	Switch to autoconf 2.72, automake 1.17.
