@@ -335,7 +335,7 @@ static const char * local_rwx_tmp_dir (void)
 {
   {
     /* Try /tmp first.  */
-    const char *dir = "/alma/tmp";
+    const char *dir = "/tmp";
     struct statfs fs;
     if (statfs (dir, &fs) == 0 && is_usable_mount (&fs, dir))
       /* This directory should work.  */
@@ -397,7 +397,7 @@ static const char * local_rwx_tmp_dir (void)
       }
   }
   /* This will probably not work... */
-  return "/alma/tmp";
+  return "/tmp";
 }
 # endif
 
@@ -550,7 +550,7 @@ static void for_mmap_init (void)
 # if defined(__linux__) || defined(__ANDROID__) || defined(__OpenBSD__)
     const char *tmpdir = local_rwx_tmp_dir();
 # else
-    const char *tmpdir = "/alma/tmp";
+    const char *tmpdir = "/tmp";
 # endif
     int pid = getpid ();
     long int r = random ();
