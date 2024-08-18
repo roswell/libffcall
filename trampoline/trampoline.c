@@ -161,11 +161,22 @@ kern_return_t mach_vm_remap (vm_map_t target_task,
                              vm_inherit_t inheritance);
 #endif
 
+#if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
 /* Declare open(). */
-#if defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
-#include <sys/types.h>
-#include <unistd.h>
-#include <fcntl.h>
+# include <sys/types.h>
+# include <unistd.h>
+# include <fcntl.h>
+/* For finding an appropriate location for the temporary file. */
+# if defined(__linux__) || defined(__ANDROID__)
+#  include <sys/statfs.h>
+#  include <sys/statvfs.h>
+#  include <mntent.h>
+# endif
+# if defined(__OpenBSD__)
+#  include <sys/types.h>
+#  include <sys/mount.h>
+# endif
+# include <string.h>
 #endif
 
 /* Declare VirtualAlloc(), GetSystemInfo. */
@@ -229,6 +240,7 @@ extern void __TR_clear_cache();
 #endif
 
 #if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
+
 /* Opens a file descriptor and attempts to make it non-inheritable. */
 static int open_noinherit (const char *filename, int flags, int mode)
 {
@@ -247,6 +259,148 @@ static int open_noinherit (const char *filename, int flags, int mode)
   return fd;
 # endif
 }
+
+/* Finding an appropriate location for the temporary file. */
+# if defined(__linux__) || defined(__ANDROID__)
+static int is_usable_mount(const struct statfs *fsp, const char *dir)
+{
+  unsigned int fs_type = fsp->f_type;
+  if (fs_type == 0xef53                                 /* ext2, ext3, ext4 */
+      || fs_type == 0x58465342                          /* xfs */
+      || fs_type == 0x3153464a                          /* IBM jfs */
+      || fs_type == 0x9123683e                          /* btrfs */
+      || fs_type == 0x4d44                              /* vfat */
+      || fs_type == 0x2011bab0                          /* exfat */
+      || fs_type == 0x00011954 || fs_type == 0x19540119 /* BSD ufs */
+      || fs_type == 0x858458f6                          /* ramfs */
+      || fs_type == 0x01021994                          /* tmpfs */)
+    /* A local, possibly writable file system. */
+    if ((fsp->f_flags & (ST_RDONLY | ST_NOEXEC)) == 0)
+      /* It is writable and does not use the "noexec" mount option. */
+      if (access (dir, R_OK | W_OK | X_OK) == 0)
+        /* This directory should work.  */
+        return 1;
+  return 0;
+}
+static int is_usable_mntent(const struct mntent *me, const char *dir)
+{
+  const char *me_type = me->mnt_type;
+  if (strcmp (me_type, "ext2") == 0     /* ext2 */
+      || strcmp (me_type, "ext3") == 0  /* ext3 */
+      || strcmp (me_type, "ext4") == 0  /* ext4 */
+      || strcmp (me_type, "xfs") == 0   /* xfs */
+      || strcmp (me_type, "jfs") == 0   /* IBM jfs */
+      || strcmp (me_type, "btrfs") == 0 /* btrfs */
+      || strcmp (me_type, "vfat") == 0  /* vfat */
+      || strcmp (me_type, "exfat") == 0 /* exfat */
+      || strcmp (me_type, "ufs") == 0   /* BSD ufs */
+      || strcmp (me_type, "ramfs") == 0 /* ramfs */
+      || strcmp (me_type, "tmpfs") == 0 /* tmpfs */)       //?
+    /* A local, possibly writable file system. */
+    if (!hasmntopt (me, "ro") && !hasmntopt (me, "noexec"))
+      /* It is writable and does not use the "noexec" mount option. */
+      if (access (dir, R_OK | W_OK | X_OK) == 0)
+        /* This directory should work.  */
+        return 1;
+  return 0;
+}
+# endif
+# if defined(__OpenBSD__)
+static int is_usable_mount(const struct statfs *fsp, const char *dir)
+{
+  const char *fs_type = fsp->f_fstypename;
+  /* For the full list of file systems, look at /usr/share/man/man8/mount_*. */
+  if (strcmp (fs_type, "ffs") == 0
+      || strcmp (fs_type, "tmpfs") == 0
+      || strcmp (fs_type, "ext2fs") == 0
+      || strcmp (fs_type, "ntfs") == 0
+      || strcmp (fs_type, "msdos") == 0)
+    /* This should imply (fsp->f_flags & MNT_LOCAL) != 0. */
+    /* A local, possibly writable file system. */
+    if ((fsp->f_flags & (MNT_RDONLY | MNT_NOEXEC)) == 0)
+      /* It is writable and does not use the "noexec" mount option. */
+      if (access (dir, R_OK | W_OK | X_OK) == 0)
+        /* This directory should work.  */
+        return 1;
+  return 0;
+}
+# endif
+
+# if defined(__linux__) || defined(__ANDROID__) || defined(__OpenBSD__)
+/* Return the name of some directory, hopefully
+    - with rwx permissions for the current user,
+    - on a local (not network-backed) file system,
+    - without mount options that prevent PROT_EXEC mappings. */
+static const char * local_rwx_tmp_dir (void)
+{
+  {
+    /* Try /tmp first.  */
+    const char *dir = "/alma/tmp";
+    struct statfs fs;
+    if (statfs (dir, &fs) == 0 && is_usable_mount (&fs, dir))
+      /* This directory should work.  */
+      return dir;
+  }
+#  if defined(__linux__) || defined(__ANDROID__)
+  {
+    FILE *fp = setmntent (MOUNTED, "r");
+    if (fp != NULL)
+      {
+        struct mntent mntent_buf;
+        char buf[1000];
+        struct mntent *me;
+        while ((me = getmntent_r (fp, &mntent_buf, buf, sizeof (buf))) != NULL)
+          {
+            const char *dir = me->mnt_dir;
+            if (is_usable_mntent (me, dir))
+              {
+                /* This directory should work. */
+                dir = strdup (dir);
+                if (dir != NULL)
+                  {
+                    endmntent (fp);
+                    return dir;
+                  }
+              }
+          }
+        endmntent (fp);
+      }
+  }
+#  endif
+#  if defined(__OpenBSD__)
+  {
+    struct statfs *fsp;
+    int entries = getmntinfo (&fsp, MNT_NOWAIT);
+    if (entries >= 0)
+      for (; entries-- > 0; fsp++)
+        {
+          const char *dir = fsp->f_mntonname;
+          if (is_usable_mount (fsp, dir))
+            {
+              /* This directory should work. */
+              dir = strdup (dir);
+              if (dir != NULL)
+                  return dir;
+            }
+        }
+  }
+#  endif
+  {
+    /* Try $TMPDIR last.  */
+    const char *dir = getenv("TMPDIR");
+    if (dir != NULL && dir[0] == '/')
+      {
+        struct statfs fs;
+        if (statfs (dir, &fs) == 0 && is_usable_mount (&fs, dir))
+          /* This directory should work.  */
+          return dir;
+      }
+  }
+  /* This will probably not work... */
+  return "/alma/tmp";
+}
+# endif
+
 #endif
 
 /* Length and alignment of trampoline */
@@ -393,8 +547,19 @@ static void for_mmap_init (void)
 #endif
 #if defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
   {
-    char filename[100];
-    sprintf(filename, "%s/trampdata-%d-%ld", "/tmp", getpid (), random ());
+# if defined(__linux__) || defined(__ANDROID__) || defined(__OpenBSD__)
+    const char *tmpdir = local_rwx_tmp_dir();
+# else
+    const char *tmpdir = "/alma/tmp";
+# endif
+    int pid = getpid ();
+    long int r = random ();
+    /* The sprintf below may produce up to 11 bytes for %d and up to 21 bytes
+       for %ld. */
+    char *filename = (char *) malloc (strlen(tmpdir)+1+10+11+1+21+1);
+    if (filename == NULL)
+      { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }
+    sprintf(filename, "%s/trampdata-%d-%ld", tmpdir, pid, r);
  #if defined(KEEP_TEMP_FILE_VISIBLE)
     if (register_temporary_file(filename) < 0)
       { fprintf(stderr,"trampoline: Out of virtual memory!\n"); abort(); }

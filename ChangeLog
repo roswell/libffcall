@@ -1,5 +1,16 @@
 2024-08-18  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Try harder to find a temp file location on Linux, OpenBSD.
+	Reported by Simon Dales <simon@getthingsfixed.co.uk> on 2018-02-26.
+	* trampoline/trampoline.c: Include <sys/statfs.h>, <sys/statvfs.h>,
+	<mntent.h> or <sys/mount.h>.
+	(is_usable_mount, is_usable_mntent, local_rwx_tmp_dir): New functions.
+	(for_mmap_init) [EXECUTABLE_VIA_MMAP_SHARED_POSIX]: Use
+	local_rwx_tmp_dir.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
+2024-08-18  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Use anonymous memory also on NetBSD.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC): Add a test that may define
 	HAVE_MMAP_SHARED_NETBSD_CAN_EXEC.
