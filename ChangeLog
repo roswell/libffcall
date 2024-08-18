@@ -1,3 +1,11 @@
+2024-08-18  Bruno Haible  <bruno@clisp.org>
+
+	trampoline: More reliable autoconfiguration on Linux, FreeBSD, NetBSD.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): On Linux, FreeBSD, NetBSD, make the
+	results of HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC and
+	HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC only dependent on the OS, independent
+	of configurable security policies.
+
 2024-08-17  Bruno Haible  <bruno@clisp.org>
 
 	trampoline: Work around failing mmap call on macOS 14,
