@@ -1,5 +1,17 @@
 2024-08-18  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Use anonymous memory also on NetBSD.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Add a test that may define
+	HAVE_MMAP_SHARED_NETBSD_CAN_EXEC.
+	* trampoline/trampoline.c (EXECUTABLE_VIA_MMAP_SHARED_NETBSD): New
+	macro.
+	(alloc_trampoline): Add alternative code for
+	EXECUTABLE_VIA_MMAP_SHARED_NETBSD.
+	* callback/trampoline_r/trampoline.c: Likewise.
+	* NEWS: Mention the improvement.
+
+2024-08-18  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: More reliable autoconfiguration on Linux, FreeBSD, NetBSD.
 	* m4/codeexec.m4 (FFCALL_CODEEXEC): On Linux, FreeBSD, NetBSD, make the
 	results of HAVE_MPROTECT_AFTER_MALLOC_CAN_EXEC and

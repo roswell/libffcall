@@ -573,7 +573,6 @@ AC_DEFUN([FFCALL_CODEEXEC],
                         [ffcall_cv_mmap_shared_macos_can_exec],
                         [AC_RUN_IFELSE(
                            [AC_LANG_SOURCE([[
-                              #include <fcntl.h>
                               #include <stdlib.h>
                               /* Declare getpagesize().  */
                               #include <unistd.h>
@@ -643,6 +642,59 @@ AC_DEFUN([FFCALL_CODEEXEC],
                             [have an mmap() function that, together with mach_vm_remap(), can make memory pages executable])
                           ;;
                       esac
+                      ;;
+                  esac
+                  AC_CACHE_CHECK([whether a shared mmap with NetBSD primitives can make memory pages executable],
+                    [ffcall_cv_mmap_shared_netbsd_can_exec],
+                    [AC_RUN_IFELSE(
+                       [AC_LANG_SOURCE([[
+                          /* Enable the PROT_MPROTECT declaration on NetBSD.  */
+                          #ifndef _NETBSD_SOURCE
+                           #define _NETBSD_SOURCE 1
+                          #endif
+                          #include <stdlib.h>
+                          /* Declare getpagesize().  */
+                          #ifdef HAVE_UNISTD_H
+                           #include <unistd.h>
+                          #endif
+                          /* Declare mmap() and mremap().  */
+                          #include <sys/mman.h>
+                          int
+                          main ()
+                          {
+                            unsigned int pagesize = getpagesize ();
+                            char *pw;
+                            char *px;
+                            pw = (char *) mmap (NULL, pagesize, (PROT_READ | PROT_WRITE) | PROT_MPROTECT (PROT_READ | PROT_WRITE | PROT_EXEC), MAP_PRIVATE | MAP_ANON, -1, 0);
+                            if (pw == (char*) -1)
+                              return 2;
+                            pw[5] = 0xc3;
+                            px = (char *) mremap (pw, pagesize, NULL, pagesize, MAP_REMAPDUP);
+                            if (px == (char*) -1)
+                              return 3;
+                            if (mprotect (px, pagesize, PROT_READ | PROT_EXEC) < 0)
+                              return 4;
+                            if ((char)px[5] != (char)0xc3)
+                              return 5;
+                            /* On i386 and x86_64 this is a 'ret' instruction that we can invoke. */
+                          #if (defined __i386 || defined __i386__ || defined _I386 || defined _M_IX86 || defined _X86_) || (defined __x86_64__ || defined __amd64__)
+                            ((void (*) (void)) (px + 5)) ();
+                          #endif
+                            return 0;
+                          }
+                          ]])
+                       ],
+                       [ffcall_cv_mmap_shared_netbsd_can_exec=yes],
+                       [ffcall_cv_mmap_shared_netbsd_can_exec=no],
+                       [dnl When cross-compiling, assume yes, since this is the result
+                        dnl on all the platforms where we have tested it.
+                        ffcall_cv_mmap_shared_netbsd_can_exec="guessing yes"
+                       ])
+                    ])
+                  case "$ffcall_cv_mmap_shared_netbsd_can_exec" in
+                    *yes)
+                      AC_DEFINE([HAVE_MMAP_SHARED_NETBSD_CAN_EXEC], [1],
+                        [have an mmap() function that, together with mremap(), can make memory pages executable])
                       ;;
                   esac
                   AC_CACHE_CHECK([whether a shared mmap of a RAM-only region can make memory pages executable],
