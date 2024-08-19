@@ -87,6 +87,16 @@ extern void (*tramp_r) (); /* trampoline prototype */
       #define EXECUTABLE_VIA_MMAP_SHARED_NETBSD
     #elif HAVE_MMAP_SHARED_MEMFD_CAN_EXEC          /* Linux >= 3.17, FreeBSD >= 13.0 */
       #define EXECUTABLE_VIA_MMAP_SHARED_MEMFD
+    #elif defined __ANDROID__ && HAVE_MPROTECT_AFTER_MMAP_CAN_EXEC < 0 /* Linux */
+      /* On Android, SELinux is controlling what is allowed, see
+         <https://source.android.com/docs/security/features/selinux>.
+         Using memfd_create() might violate the Android API level.
+         Using malloc()/mmap() then mprotect PROT_WRITE|PROT_EXEC might be
+         blocked by SELinux.
+         Using a temporary file with separate memory mappings would depend
+         on finding an appropriate writable directory.
+         It's a dilemma. Let's hope that mmap() then mprotect works.  */
+      #define EXECUTABLE_VIA_MMAP_THEN_MPROTECT
     #elif HAVE_MMAP_SHARED_POSIX_CAN_EXEC          /* Linux, HardenedBSD */
       #define EXECUTABLE_VIA_MMAP_SHARED_POSIX
     #else

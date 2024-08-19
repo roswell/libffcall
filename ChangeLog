@@ -1,5 +1,16 @@
 2024-08-19  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Fix portability problems to Android API levels < 30.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Test whether mmap()+mprotect works,
+	independently of the result of whether malloc()+mprotect works. Test
+	whether memfd_create exists at the given API level, before trying to use
+	it.
+	* trampoline/trampoline.c: On Android, prefer mmap()+mprotect to the
+	temp file location approach.
+	* callback/trampoline_r/trampoline.c: Likewise.
+
+2024-08-19  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Fix portability problems to Android API levels < 26.
 	* configure.ac: Test for setmntent.
 	* trampoline/trampoline.c: On Android, test HAVE_SETMNTENT, since
