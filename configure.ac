@@ -103,6 +103,10 @@ dnl Checks for trampoline, trampoline_r.
 AC_CHECK_HEADERS([unistd.h])
 gl_FUNC_MMAP_ANON
 FFCALL_CODEEXEC
+gl_CHECK_FUNCS_ANDROID([setmntent],
+  [[#include <stdio.h>
+    #include <mntent.h>
+  ]])
 
 dnl List of object files for trampoline, trampoline_r.
 CPU_OBJECTS=''

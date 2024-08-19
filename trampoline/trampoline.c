@@ -167,7 +167,7 @@ kern_return_t mach_vm_remap (vm_map_t target_task,
 # include <unistd.h>
 # include <fcntl.h>
 /* For finding an appropriate location for the temporary file. */
-# if defined(__linux__) || defined(__ANDROID__)
+# if defined(__linux__) || (defined(__ANDROID__) && HAVE_SETMNTENT)
 #  include <sys/statfs.h>
 #  include <sys/statvfs.h>
 #  include <mntent.h>
@@ -261,7 +261,7 @@ static int open_noinherit (const char *filename, int flags, int mode)
 }
 
 /* Finding an appropriate location for the temporary file. */
-# if defined(__linux__) || defined(__ANDROID__)
+# if defined(__linux__) || (defined(__ANDROID__) && HAVE_SETMNTENT)
 static int is_usable_mount(const struct statfs *fsp, const char *dir)
 {
   unsigned int fs_type = fsp->f_type;
@@ -326,7 +326,7 @@ static int is_usable_mount(const struct statfs *fsp, const char *dir)
 }
 # endif
 
-# if defined(__linux__) || defined(__ANDROID__) || defined(__OpenBSD__)
+# if defined(__linux__) || (defined(__ANDROID__) && HAVE_SETMNTENT) || defined(__OpenBSD__)
 /* Return the name of some directory, hopefully
     - with rwx permissions for the current user,
     - on a local (not network-backed) file system,
@@ -341,7 +341,7 @@ static const char * local_rwx_tmp_dir (void)
       /* This directory should work.  */
       return dir;
   }
-#  if defined(__linux__) || defined(__ANDROID__)
+#  if defined(__linux__) || (defined(__ANDROID__) && HAVE_SETMNTENT)
   {
     FILE *fp = setmntent (MOUNTED, "r");
     if (fp != NULL)
@@ -547,7 +547,7 @@ static void for_mmap_init (void)
 #endif
 #if defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
   {
-# if defined(__linux__) || defined(__ANDROID__) || defined(__OpenBSD__)
+# if defined(__linux__) || (defined(__ANDROID__) && HAVE_SETMNTENT) || defined(__OpenBSD__)
     const char *tmpdir = local_rwx_tmp_dir();
 # else
     const char *tmpdir = "/tmp";
