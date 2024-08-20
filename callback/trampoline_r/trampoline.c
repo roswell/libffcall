@@ -285,7 +285,10 @@ static int is_usable_mount(const struct statfs *fsp, const char *dir)
       || fs_type == 0x858458f6                          /* ramfs */
       || fs_type == 0x01021994                          /* tmpfs */)
     /* A local, possibly writable file system. */
+    /* Older Linux (glibc < 2.13) has no f_flags in 'struct statfs'.  */
+#  if !(__GLIBC__ == 2 && __GLIBC_MINOR__ < 13)
     if ((fsp->f_flags & (ST_RDONLY | ST_NOEXEC)) == 0)
+#  endif
       /* It is writable and does not use the "noexec" mount option. */
       if (access (dir, R_OK | W_OK | X_OK) == 0)
         /* This directory should work.  */
