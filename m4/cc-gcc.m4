@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2024 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2017 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -27,27 +27,6 @@ AC_DEFUN([CL_CC_GCC],
   if test $cl_cv_prog_cc_gcc = yes; then
     CC_GCC=true
     GCC_X_NONE='-x none'
-
-    dnl On arm, there are two slightly different syntaxes for assembly language:
-    dnl The "divided" syntax (standard since ca. 2000) and the "unified" syntax
-    dnl (supported by GNU binutils since 2009).  See
-    dnl https://sourceware.org/binutils/docs/as/ARM_002dInstruction_002dSet.html
-    dnl While GNU as and thus GCC supports both, clang by default uses an
-    dnl "integrated" assembler that supports only the "unified" syntax, leading
-    dnl to errors "error: invalid instruction" on instructions such as stmeqia.
-    dnl We therefore need to tell clang to use the external assembler.
-    AC_CACHE_CHECK([whether using clang], [cl_cv_prog_cc_clang],
-      [AC_EGREP_CPP([yes],
-         [#ifdef __clang__
-          yes
-          #endif
-         ],
-         [cl_cv_prog_cc_clang=yes],
-         [cl_cv_prog_cc_clang=no])
-      ])
-    if test $cl_cv_prog_cc_clang = yes; then
-      GCC_X_NONE="$GCC_X_NONE -no-integrated-as"
-    fi
   else
     CC_GCC=false
     GCC_X_NONE=''

@@ -142,17 +142,23 @@ avcall-hppa64.lo : avcall-hppa64.s
 avcall-hppa64.s : $(srcdir)/avcall-hppa64-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-hppa64-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e "s,!,',g" > avcall-hppa64.s
 
-avcall-arm.lo : avcall-arm.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm.s
+avcall-arm-old.lo : avcall-arm-old.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm-old.s
 
-avcall-arm.s : $(srcdir)/avcall-arm-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-arm-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-arm.s
+avcall-arm-old.s : $(srcdir)/avcall-arm-old-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-arm-old-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-arm-old.s
 
-avcall-armhf.lo : avcall-armhf.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-armhf.s
+avcall-arm-eabi.lo : avcall-arm-eabi.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm-eabi.s
 
-avcall-armhf.s : $(srcdir)/avcall-armhf-macro.S
-	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-armhf-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-armhf.s
+avcall-arm-eabi.s : $(srcdir)/avcall-arm-eabi-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-arm-eabi-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-arm-eabi.s
+
+avcall-armhf-eabi.lo : avcall-armhf-eabi.s
+	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-armhf-eabi.s
+
+avcall-armhf-eabi.s : $(srcdir)/avcall-armhf-eabi-macro.S
+	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-armhf-eabi-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-armhf-eabi.s
 
 avcall-arm64.lo : avcall-arm64.s
 	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm64.s
@@ -359,7 +365,7 @@ mostlyclean : clean
 
 clean : force
 	$(RM) *.@OBJEXT@ *.lo *.a libavcall.* core
-	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-hppa64.s avcall-arm.s avcall-armhf.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64.asm avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s avcall-riscv32-ilp32d.s avcall-riscv64-lp64d.s avcall-loongarch64.s
+	$(RM) avcall-i386.s avcall-sparc.s avcall-sparc64.s avcall-m68k.s avcall-mips.s avcall-mipsn32.s avcall-mips64.s avcall-alpha.s avcall-hppa.s avcall-hppa64.s avcall-arm-old.s avcall-arm-eabi.s avcall-armhf-eabi.s avcall-arm64.s avcall-powerpc.s avcall-powerpc64.s avcall-powerpc64-elfv2.s avcall-ia64.s avcall-x86_64.s avcall-x86_64.asm avcall-x86_64-x32.s avcall-s390.s avcall-s390x.s avcall-riscv32-ilp32d.s avcall-riscv64-lp64d.s avcall-loongarch64.s
 	$(RM) -r .libs _libs
 	$(RM) minitests.@OBJEXT@ minitests.s minitests minitests.out
 	$(RM) minitests-c++.@OBJEXT@ minitests-c++ minitests-c++.out
@@ -380,8 +386,8 @@ SOURCE_FILES = \
   Makefile.in \
   avcall.h avcall-internal.h avcall-alist.h \
   avcall-alpha.c avcall-alpha-linux.s avcall-alpha-macro.S \
-  avcall-arm.c avcall-arm-macro.S \
-  avcall-armhf.c avcall-armhf-macro.S \
+  avcall-arm.c avcall-arm-old-macro.S avcall-arm-eabi-macro.S \
+  avcall-armhf.c avcall-armhf-eabi-macro.S \
   avcall-arm64.c avcall-arm64-macro.S avcall-arm64-macos-macro.S \
   avcall-hppa.c avcall-hppa-linux.s avcall-hppa-macro.S \
   avcall-hppa64.c avcall-hppa64-linux.s avcall-hppa64-macro.S \

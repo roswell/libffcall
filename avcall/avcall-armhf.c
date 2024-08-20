@@ -1,6 +1,6 @@
 /**
   Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
+  Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -71,10 +71,12 @@ avcall_call(av_alist* list)
 
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
 
+#if __GNUC__ < 4
   /* Enforce 8-bytes-alignment of the stack pointer.
      We need to do it this way because the old GCC that we use to compile
      this file does not support the option '-mabi=aapcs'. */
   sp &= -8;
+#endif
 
   int arglen = l->aptr - l->args;
   __avrword i;

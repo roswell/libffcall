@@ -1,6 +1,6 @@
 /**
   Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
+  Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -59,6 +59,9 @@ avcall_call(av_alist* list)
 
   __av_alist* l = &AV_LIST_INNER(list);
 
+#if __GNUC__ >= 4
+  __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
+#else
   __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
 
   /* Enforce 8-bytes-alignment of the stack pointer.
@@ -67,6 +70,8 @@ avcall_call(av_alist* list)
   sp &= -8;
 
   __avword* argframe = (__avword*) sp;	/* stack offset for argument list */
+#endif
+
   int arglen = l->aptr - l->args;
   __avrword i;
 

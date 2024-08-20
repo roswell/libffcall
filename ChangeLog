@@ -1,5 +1,57 @@
 2024-08-20  Bruno Haible  <bruno@clisp.org>
 
+	Fix support for FreeBSD 12/arm, broken by last commit.
+	* m4/cc-gcc.m4 (CL_CC_GCC): Revert last change.
+	* cross-tools/cross.conf (arm): Add cross-compiler for
+	arm-linux-gnueabi.
+	* configure.ac: If HOST_CPU_C_ABI is arm or armhf, add a '-old' or
+	'-eabi' suffix.
+	* avcall/avcall-arm.c (avcall_call): With GCC >= 4, use __builtin_alloca
+	to reserve room for the stack frame.
+	* avcall/avcall-armhf.c (avcall_call): Remove redundant stack pointer
+	alignment.
+	* avcall/Makefile.devel (avcall-arm-old-macro.S): Renamed from
+	avcall-arm-macro.S.
+	(avcall-arm-eabi-macro.S): New rule.
+	(avcall-armhf-eabi-macro.S): Renamed from avcall-armhf-macro.S. Use
+	gcc 6.5 option -masm-syntax-unified.
+	* avcall/Makefile.in (avcall-arm-old.lo): Renamed from avcall-arm.lo.
+	(avcall-arm-old.s): Renamed from avcall-arm.s.
+	(avcall-arm-eabi.lo, avcall-arm-eabi.s): New rules.
+	(avcall-armhf-eabi.lo): Renamed from avcall-armhf.lo.
+	(avcall-armhf-eabi.s): Renamed from avcall-armhf.s.
+	(clean, SOURCE_FILES): Update.
+	* vacall/Makefile.devel (vacall-arm-old-linux.s): Renamed from
+	vacall-arm-linux.s.
+	(vacall-arm-old-linux-pic.s): Renamed from vacall-arm-linux-pic.s.
+	(vacall-arm-old-macro.S): Renamed from vacall-arm-macro.S.
+	(vacall-arm-eabi-linux.s, vacall-arm-eabi-linux-pic.s,
+	vacall-arm-eabi-macro.S): New rules.
+	(vacall-armhf-eabi-linux.s): Renamed from vacall-armhf-linux.s. Use
+	gcc 6.5 option -masm-syntax-unified.
+	(vacall-armhf-eabi-linux-pic.s): Renamed from vacall-armhf-linux-pic.s.
+	Use gcc 6.5 option -masm-syntax-unified.
+	(vacall-armhf-eabi-macro.S): Renamed from vacall-armhf-macro.S.
+	* vacall/Makefile.in (vacall-arm-old.@OBJEXT@): Renamed from
+	vacall-arm.@OBJEXT@.
+	(vacall-arm-old.s): Renamed from vacall-arm.s.
+	(vacall-arm-eabi.@OBJEXT@, vacall-arm-eabi.s): New rules.
+	(vacall-armhf-eabi.@OBJEXT@): Renamed from vacall-armhf.@OBJEXT@.
+	(vacall-armhf-eabi.s): Renamed from vacall-armhf.s.
+	(clean, SOURCE_FILES): Update.
+	* callback/vacall_r/Makefile.devel (vacall-arm-old-macro.S): Renamed
+	from vacall-arm-macro.S.
+	(vacall-arm-eabi-macro.S): New rule.
+	(vacall-armhf-eabi-macro.S): Renamed from vacall-armhf-macro.S. Use
+	gcc 6.5 option -masm-syntax-unified.
+	* callback/vacall_r/Makefile.in (vacall-arm-old.lo): Renamed from
+	vacall-arm.lo.
+	(vacall-arm-old.s): Renamed from vacall-arm.s.
+	(vacall-arm-eabi.lo, vacall-arm-eabi.s): New rules.
+	(vacall-armhf-eabi.lo): Renamed from vacall-armhf.lo.
+	(vacall-armhf-eabi.s): Renamed from vacall-armhf.s.
+	(clean, SOURCE_FILES): Update.
+
 	Add support for Android.
 	* m4/cc-gcc.m4 (CL_CC_GCC): If using clang as compiler, add the option
 	-no-integrated-as to GCC_X_NONE.

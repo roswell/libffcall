@@ -19,7 +19,7 @@ precompiled : \
   avcall-sparc-macro.S avcall-sparc-solaris-macro.S avcall-sparc64-macro.S \
   avcall-alpha-macro.S \
   avcall-hppa-macro.S avcall-hppa64-macro.S \
-  avcall-arm-macro.S avcall-armhf-macro.S \
+  avcall-arm-old-macro.S avcall-arm-eabi-macro.S avcall-armhf-eabi-macro.S \
   avcall-arm64-macro.S avcall-arm64-macos-macro.S \
   avcall-powerpc-aix.s avcall-powerpc-linux-macro.S avcall-powerpc-sysv4-macro.S avcall-powerpc-macos.s avcall-powerpc64-aix.s avcall-powerpc64-linux.S avcall-powerpc64-elfv2-linux.S \
   avcall-ia64-macro.S \
@@ -127,19 +127,27 @@ avcall-hppa64-macro.S : avcall-hppa64-linux.s ../common/asm-hppa64.sh ../common/
 	(echo '#include "asm-hppa64.h"' ; grep -v 'ldo -16(%r30),%r29' < avcall-hppa64-linux.s | ../common/asm-hppa64.sh ; cat ../common/noexecstack.h) > avcall-hppa64-macro.S
 
 
-avcall-arm-macro.S : avcall-arm.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
+avcall-arm-old-macro.S : avcall-arm.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
 	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mlittle-endian $(GCCFLAGS) -D__arm__ -S avcall-arm.c -o avcall-armel.s
 	$(CROSS_TOOL) arm-linux gcc -V 3.1 -mbig-endian $(GCCFLAGS) -D__arm__ -S avcall-arm.c -o avcall-armeb.s
 	cmp avcall-armel.s avcall-armeb.s > /dev/null
-	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < avcall-armel.s ; cat ../common/noexecstack-arm.h) > avcall-arm-macro.S
+	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < avcall-armel.s ; cat ../common/noexecstack-arm.h) > avcall-arm-old-macro.S
 	$(RM) avcall-armel.s avcall-armeb.s
 
-avcall-armhf-macro.S : avcall-armhf.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
+avcall-arm-eabi-macro.S : avcall-arm.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
 # The option -mabi=aapcs ensures an 8-bytes-aligned stack pointer.
-	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.5.0 -march=armv6 -mabi=aapcs -mfloat-abi=hard -mlittle-endian $(GCCFLAGS) -D__armhf__ -S avcall-armhf.c -o avcall-armhfel.s
-	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.5.0 -march=armv6 -mabi=aapcs -mfloat-abi=hard -mbig-endian $(GCCFLAGS) -D__armhf__ -S avcall-armhf.c -o avcall-armhfeb.s
+	$(CROSS_TOOL) arm-linux-gnueabi gcc-6.5.0 -march=armv4t -mabi=aapcs -mfloat-abi=soft -fno-short-enums -masm-syntax-unified -mlittle-endian $(GCCFLAGS) -S avcall-arm.c -o avcall-armel.s
+	$(CROSS_TOOL) arm-linux-gnueabi gcc-6.5.0 -march=armv4t -mabi=aapcs -mfloat-abi=soft -fno-short-enums -masm-syntax-unified -mbig-endian $(GCCFLAGS) -S avcall-arm.c -o avcall-armeb.s
+	cmp avcall-armel.s avcall-armeb.s > /dev/null
+	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < avcall-armel.s ; cat ../common/noexecstack-arm.h) > avcall-arm-eabi-macro.S
+	$(RM) avcall-armel.s avcall-armeb.s
+
+avcall-armhf-eabi-macro.S : avcall-armhf.c avcall-internal.h avcall.h avcall-alist.h ../common/asm-arm.sh ../common/noexecstack-arm.h $(THISFILE)
+# The option -mabi=aapcs ensures an 8-bytes-aligned stack pointer.
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.5.0 -march=armv6 -mabi=aapcs -mfloat-abi=hard -masm-syntax-unified -mlittle-endian $(GCCFLAGS) -D__armhf__ -S avcall-armhf.c -o avcall-armhfel.s
+	$(CROSS_TOOL) armv7l-linux-gnueabihf gcc-6.5.0 -march=armv6 -mabi=aapcs -mfloat-abi=hard -masm-syntax-unified -mbig-endian $(GCCFLAGS) -D__armhf__ -S avcall-armhf.c -o avcall-armhfeb.s
 	cmp avcall-armhfel.s avcall-armhfeb.s > /dev/null
-	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < avcall-armhfel.s ; cat ../common/noexecstack-arm.h) > avcall-armhf-macro.S
+	(echo '#include "asm-arm.h"' ; ../common/asm-arm.sh < avcall-armhfel.s ; cat ../common/noexecstack-arm.h) > avcall-armhf-eabi-macro.S
 	$(RM) avcall-armhfel.s avcall-armhfeb.s
 
 

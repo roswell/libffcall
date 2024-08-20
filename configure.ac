@@ -94,6 +94,25 @@ CL_PROG_LN
 gl_EARLY
 
 gl_HOST_CPU_C_ABI
+if test ${HOST_CPU_C_ABI} = arm -o ${HOST_CPU_C_ABI} = armhf; then
+  dnl On arm, there are two slightly different syntaxes for assembly language:
+  dnl The "divided" syntax (standard since ca. 2000) and the "unified" syntax
+  dnl (supported by GNU binutils since 2009).  See
+  dnl https://sourceware.org/binutils/docs/as/ARM_002dInstruction_002dSet.html .
+  dnl Add a suffix, to distinguish
+  dnl   platforms which expect the pre-2009 "divided" syntax
+  dnl from
+  dnl   platforms which can work with (or even require) the newer "unified"
+  dnl   syntax.
+  dnl For example, FreeBSD 12/arm requires the "unified" syntax, since it
+  dnl comes with clang 10 (which doesn't grok old "divided" syntax) and with
+  dnl an old GNU as (which doesn't grok the '.fpu vfpv3-d16' pseudo-op).
+  case "$host_os" in
+    *eabi*) HOST_CPU_C_ABI="${HOST_CPU_C_ABI}-eabi" ;;
+    *)      HOST_CPU_C_ABI="${HOST_CPU_C_ABI}-old" ;;
+  esac
+fi
+
 FFCALL_ENDIANNESS
 
 PACKAGE=libffcall
