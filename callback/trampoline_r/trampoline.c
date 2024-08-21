@@ -224,6 +224,10 @@ kern_return_t mach_vm_remap (vm_map_t target_task,
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__riscv32__) || defined(__riscv64__)
 #ifdef HAVE_SYS_CACHECTL_H /* IRIX, Linux */
 #include <sys/cachectl.h>
+#if defined(__riscv64__) && !defined(__GLIBC__)
+/* musl libc lacks a declaration of this function. */
+extern int __riscv_flush_icache (void *start, void *end, unsigned long flags);
+#endif
 #else
 #ifdef __OpenBSD__
 #include <machine/sysarch.h>
