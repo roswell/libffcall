@@ -1,5 +1,23 @@
 2024-08-21  Bruno Haible  <bruno@clisp.org>
 
+	Add support for FreeBSD/powerpc and NetBSD/powerpc.
+	* avcall/avcall-powerpc.c (avcall_call): Add support for structs
+	returned in registers, of size 3, 5..7. Code copied from avcall-hppa.c.
+	* avcall/avcall-internal.h (__av_reg_struct_return): Define differently
+	for FreeBSD/powerpc and NetBSD/powerpc.
+	* avcall/avcall.h (__AV_STRUCT_RETURN): Include the
+	__AV_SMALL_STRUCT_RETURN flag on FreeBSD/powerpc and NetBSD/powerpc.
+	* vacall/vacall-powerpc.c (vacall_receiver): Add support for structs
+	returned in registers, of size 3, 5..7. Code copied from vacall-hppa.c.
+	* vacall/vacall-internal.h (__va_reg_struct_return): Define differently
+	for FreeBSD/powerpc and NetBSD/powerpc.
+	* vacall/vacall.h (__VA_STRUCT_RETURN): Include the
+	__VA_SMALL_STRUCT_RETURN flag on FreeBSD/powerpc and NetBSD/powerpc.
+	* callback/vacall_r/vacall_r.h: Likewise.
+	* NEWS: Mention the new ports.
+
+2024-08-21  Bruno Haible  <bruno@clisp.org>
+
 	Add support for Linux/riscv64 with musl libc.
 	* trampoline/trampoline.c (__riscv_flush_icache): New declaration.
 	* callback/trampoline_r/trampoline.c: Likewise.

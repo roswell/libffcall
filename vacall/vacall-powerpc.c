@@ -1,7 +1,7 @@
 /* vacall function for powerpc CPU */
 
 /*
- * Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
  * Copyright 2000 Adam Fedor <fedor@gnu.org>
  * Copyright 2004 Paul Guyot <pguyot@kallisys.net>
  *
@@ -155,18 +155,96 @@ vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,
   } else
   if (list.rtype == __VAstruct) {
     if (list.flags & __VA_REGISTER_STRUCT_RETURN) {
-      if (list.rsize == sizeof(char)) {
-        iret = *(unsigned char *) list.raddr;
-      } else
-      if (list.rsize == sizeof(short)) {
-        iret = *(unsigned short *) list.raddr;
-      } else
-      if (list.rsize == sizeof(int)) {
-        iret = *(unsigned int *) list.raddr;
-      } else
-      if (list.rsize == 2*sizeof(__varword)) {
-        iret  = ((__varword *) list.raddr)[0];
-        iret2 = ((__varword *) list.raddr)[1];
+      /* On Linux, AIX, only structs of sizes 1, 2, 4, 8 can be returned in
+         registers. But on FreeBSD, NetBSD, structs of any size <= 8 are
+         returned in registers. */
+      if (list.rsize > 0 && list.rsize <= 8) {
+        #if 0 /* Unoptimized */
+        if (list.rsize == 1) {
+          iret =   ((unsigned char *) list.raddr)[0];
+        } else
+        if (list.rsize == 2) {
+          iret =  (((unsigned char *) list.raddr)[0] << 8)
+                |  ((unsigned char *) list.raddr)[1];
+        } else
+        if (list.rsize == 3) {
+          iret =  (((unsigned char *) list.raddr)[0] << 16)
+                | (((unsigned char *) list.raddr)[1] << 8)
+                |  ((unsigned char *) list.raddr)[2];
+        } else
+        if (list.rsize == 4) {
+          iret =  (((unsigned char *) list.raddr)[0] << 24)
+                | (((unsigned char *) list.raddr)[1] << 16)
+                | (((unsigned char *) list.raddr)[2] << 8)
+                |  ((unsigned char *) list.raddr)[3];
+        } else
+        if (list.rsize == 5) {
+          iret1 =   ((unsigned char *) list.raddr)[0];
+          iret2 =  (((unsigned char *) list.raddr)[1] << 24)
+                 | (((unsigned char *) list.raddr)[2] << 16)
+                 | (((unsigned char *) list.raddr)[3] << 8)
+                 |  ((unsigned char *) list.raddr)[4];
+        } else
+        if (list.rsize == 6) {
+          iret1 =  (((unsigned char *) list.raddr)[0] << 8)
+                 |  ((unsigned char *) list.raddr)[1];
+          iret2 =  (((unsigned char *) list.raddr)[2] << 24)
+                 | (((unsigned char *) list.raddr)[3] << 16)
+                 | (((unsigned char *) list.raddr)[4] << 8)
+                 |  ((unsigned char *) list.raddr)[5];
+        } else
+        if (list.rsize == 7) {
+          iret1 =  (((unsigned char *) list.raddr)[0] << 16)
+                 | (((unsigned char *) list.raddr)[1] << 8)
+                 |  ((unsigned char *) list.raddr)[2];
+          iret2 =  (((unsigned char *) list.raddr)[3] << 24)
+                 | (((unsigned char *) list.raddr)[4] << 16)
+                 | (((unsigned char *) list.raddr)[5] << 8)
+                 |  ((unsigned char *) list.raddr)[6];
+        } else
+        if (list.rsize == 8) {
+          iret1 =  (((unsigned char *) list.raddr)[0] << 24)
+                 | (((unsigned char *) list.raddr)[1] << 16)
+                 | (((unsigned char *) list.raddr)[2] << 8)
+                 |  ((unsigned char *) list.raddr)[3];
+          iret2 =  (((unsigned char *) list.raddr)[4] << 24)
+                 | (((unsigned char *) list.raddr)[5] << 16)
+                 | (((unsigned char *) list.raddr)[6] << 8)
+                 |  ((unsigned char *) list.raddr)[7];
+        }
+        #else /* Optimized: fewer conditional jumps, fewer memory accesses */
+        uintptr_t count = list.rsize; /* > 0, ≤ 2*sizeof(__varword) */
+        __varword* wordaddr = (__varword*)((uintptr_t)list.raddr & ~(uintptr_t)(sizeof(__varword)-1));
+        uintptr_t start_offset = (uintptr_t)list.raddr & (uintptr_t)(sizeof(__varword)-1); /* ≥ 0, < sizeof(__varword) */
+        uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__varword) */
+        if (count <= sizeof(__varword)) {
+          /* Assign iret. */
+          __varword mask0 = ((__varword)2 << (sizeof(__varword)*8-start_offset*8-1)) - 1;
+          if (end_offset <= sizeof(__varword)) {
+            /* 0 < end_offset ≤ sizeof(__varword) */
+            iret = (wordaddr[0] & mask0) >> (sizeof(__varword)*8-end_offset*8);
+          } else {
+            /* sizeof(__varword) < end_offset < 2*sizeof(__varword), start_offset > 0 */
+            iret = ((wordaddr[0] & mask0) << (end_offset*8-sizeof(__varword)*8))
+                   | (wordaddr[1] >> (2*sizeof(__varword)*8-end_offset*8));
+          }
+        } else {
+          /* Assign iret, iret2. */
+          __varword mask0 = ((__varword)2 << (sizeof(__varword)*8-start_offset*8-1)) - 1;
+          if (end_offset <= 2*sizeof(__varword)) {
+            /* sizeof(__varword) < end_offset ≤ 2*sizeof(__varword) */
+            iret = (wordaddr[0] & mask0) >> (2*sizeof(__varword)*8-end_offset*8);
+            iret2 = ((wordaddr[0] & mask0) << (end_offset*4-sizeof(__varword)*4) << (end_offset*4-sizeof(__varword)*4))
+                    | (wordaddr[1] >> (2*sizeof(__varword)*8-end_offset*8));
+          } else {
+            /* 2*sizeof(__varword) < end_offset < 3*sizeof(__varword), start_offset > 0 */
+            iret = ((wordaddr[0] & mask0) << (end_offset*8-2*sizeof(__varword)*8))
+                   | (wordaddr[1] >> (3*sizeof(__varword)*8-end_offset*8));
+            iret2 = (wordaddr[1] << (end_offset*8-2*sizeof(__varword)*8))
+                    | (wordaddr[2] >> (3*sizeof(__varword)*8-end_offset*8));
+          }
+        }
+        #endif
       }
     }
   }

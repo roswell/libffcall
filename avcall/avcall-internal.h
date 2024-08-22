@@ -1,6 +1,6 @@
 /*
  * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2022 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,11 +192,16 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
   ((LIST).flags |= __AV_REGISTER_STRUCT_RETURN, 0)
 #endif
 #if (defined(__i386__) && !defined(_WIN32)) || defined(__m68k__) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__s390__) && !defined(__s390x__))
+#if (defined(__powerpc__) && !defined(__powerpc64__) && (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__)))
+#define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
+  ((TYPE_SIZE) <= 8)
+#else
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
   ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4		\
    || ((TYPE_SIZE) == 8 && (TYPE_SPLITTABLE)				\
        && ((LIST).flags & __AV_GCC_STRUCT_RETURN)			\
   )   )
+#endif
 /* Turn on __AV_REGISTER_STRUCT_RETURN if __AV_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers.
  */

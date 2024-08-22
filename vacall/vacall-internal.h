@@ -1,5 +1,5 @@
 /*
- * Copyright 1995-2022 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -280,11 +280,16 @@ typedef struct vacall_alist
   ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN, 0)
 #endif
 #if (defined(__i386__) && !defined(_WIN32)) || defined(__m68k__) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__s390__) && !defined(__s390x__))
+#if (defined(__powerpc__) && !defined(__powerpc64__) && (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__)))
+#define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
+  ((TYPE_SIZE) <= 8)
+#else
 #define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
   ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4		\
    || ((TYPE_SIZE) == 8 && (TYPE_SPLITTABLE)				\
        && ((LIST)->flags & __VA_GCC_STRUCT_RETURN)			\
   )   )
+#endif
 /* Turn on __VA_REGISTER_STRUCT_RETURN if __VA_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers.
  */
