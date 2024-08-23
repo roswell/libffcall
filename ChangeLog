@@ -1,3 +1,15 @@
+2024-08-23  Bruno Haible  <bruno@clisp.org>
+
+	Add support for FreeBSD 14/powerpc64le.
+	FreeBSD 14 breaks the long-standing convention that, on powerpc64,
+	_BIG_ENDIAN is defined on big-endian machines only and _LITTLE_ENDIAN
+	is defined on little-endian machines only.
+	* avcall/avcall-internal.h: On powerpc64, test __BIG_ENDIAN__ or
+	__LITTLE_ENDIAN__, not _BIG_ENDIAN or _LITTLE_ENDIAN, as FreeBSD 14
+	breaks the latter.
+	* vacall/vacall-internal.h: Likewise.
+	* NEWS: Mention the new port.
+
 2024-08-21  Bruno Haible  <bruno@clisp.org>
 
 	Add support for FreeBSD/powerpc and NetBSD/powerpc.

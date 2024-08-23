@@ -5,6 +5,7 @@ New in 2.5:
   - loongarch64: Linux with lp64d ABI.
   - riscv64: Linux with musl libc.
   - powerpc: FreeBSD, NetBSD.
+  - powerpc64le: FreeBSD.
   - arm: Android.
 * Simplified the environmental requirements (the library no longer allocates
   a temporary file in /tmp) on the following platforms:

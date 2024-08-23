@@ -574,12 +574,12 @@ typedef struct vacall_alist
 		  )							\
   )
 #endif
-#if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || ((defined(__arm__) || defined(__armhf__)) && defined(__ARMEL__)) || defined(__ia64__) || (defined(__powerpc64__) && defined(_LITTLE_ENDIAN)) || defined(__x86_64_ms__)
+#if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || ((defined(__arm__) || defined(__armhf__)) && defined(__ARMEL__)) || defined(__ia64__) || (defined(__powerpc64__) && defined(__LITTLE_ENDIAN__)) || defined(__x86_64_ms__)
 /* little endian -> small args < 1 word are adjusted to the left */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
 #endif
-#if defined(__m68k__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEB)) || defined(__sparc__) || defined(__sparc64__) || defined(__hppa__) || defined(__hppa64__) || ((defined(__arm__) || defined(__armhf__)) && !defined(__ARMEL__)) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__powerpc64__) && defined(_BIG_ENDIAN))
+#if defined(__m68k__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEB)) || defined(__sparc__) || defined(__sparc64__) || defined(__hppa__) || defined(__hppa64__) || ((defined(__arm__) || defined(__armhf__)) && !defined(__ARMEL__)) || (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__powerpc64__) && defined(__BIG_ENDIAN__))
 /* big endian -> small args < 1 word are adjusted to the right */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)
@@ -941,7 +941,7 @@ typedef struct vacall_alist
     ? (float) (LIST)->farg[(LIST)->fanum++]				\
     : ((float*)(LIST)->aptr)[(LIST)->flags & __VA_AIXCC_FLOAT_ARGS ? -2 : -1] \
   ))
-#elif defined(_LITTLE_ENDIAN)
+#elif defined(__LITTLE_ENDIAN__)
 #define _va_arg_float(LIST)  \
   ((LIST)->aptr += sizeof(__vaword),					\
    ((LIST)->fanum < __VA_FARG_NUM					\

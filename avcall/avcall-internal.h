@@ -939,7 +939,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
     ((float*)(LIST).aptr)[(LIST).flags & __AV_AIXCC_FLOAT_ARGS ? -2 : -1] = (float)(VAL), \
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
-#elif defined(_LITTLE_ENDIAN)
+#elif defined(__LITTLE_ENDIAN__)
 #define _av_float(LIST,VAL)						\
   ((LIST).aptr >= (LIST).eptr						\
    ? -1 :								\
@@ -1292,7 +1292,7 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
    ((LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
     0))
-#if (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__powerpc64__) && defined(_BIG_ENDIAN))
+#if (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__powerpc64__) && defined(__BIG_ENDIAN__))
 #define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
   ((LIST).flags & __AV_AIXCC_STRUCT_ARGS				\
    ? /* AIX cc and xlc pass small structures left-adjusted, although big-endian! */\
@@ -1300,7 +1300,7 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
    : /* gcc passes small structures right-adjusted. */			\
      __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL))
 #endif
-#if (defined(__powerpc64__) && defined(_LITTLE_ENDIAN))
+#if (defined(__powerpc64__) && defined(__LITTLE_ENDIAN__))
 #define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
   __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)
 #endif
