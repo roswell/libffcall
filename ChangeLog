@@ -1,5 +1,19 @@
 2024-08-23  Bruno Haible  <bruno@clisp.org>
 
+	Add support for FreeBSD 14/powerpc64.
+	This is the first big-endian powerpc64-ELFv2 platform.
+	* avcall/avcall-powerpc64.c (avcall_call): Add big-endian variant of the
+	small-struct return handling code.
+	* vacall/vacall-powerpc64.c (vacall_receiver): Likewise.
+	* avcall/Makefile.devel (avcall-powerpc64-elfv2-linux.S): Include the
+	code for both little-endian and big-endian platforms.
+	* vacall/Makefile.devel (vacall-powerpc64-elfv2-linux.S): Likewise.
+	* callback/vacall_r/Makefile.devel (vacall-powerpc64-elfv2-linux.S):
+	Likewise.
+	* NEWS: Mention the new port.
+
+2024-08-23  Bruno Haible  <bruno@clisp.org>
+
 	Add support for FreeBSD 14/powerpc64le.
 	FreeBSD 14 breaks the long-standing convention that, on powerpc64,
 	_BIG_ENDIAN is defined on big-endian machines only and _LITTLE_ENDIAN

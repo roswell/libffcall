@@ -188,8 +188,7 @@ vacall-powerpc64-linux.S : ../../vacall/vacall-powerpc64.c ../../vacall/vacall-i
 vacall-powerpc64-elfv2-linux.S : ../../vacall/vacall-powerpc64.c ../../vacall/vacall-internal.h vacall_r.h ../../common/asm-powerpc.sh ../../common/noexecstack.h $(THISFILE)
 	$(CROSS_TOOL) powerpc64le-linux gcc-5.4.0 -mabi=elfv2 -mcpu=power4 -mlittle-endian $(GCCFLAGS) -D__powerpc64__ -D__powerpc64_elfv2__ -S ../../vacall/vacall-powerpc64.c -I../../vacall -I. -o vacall-powerpc64-elfv2-linux-le.s
 	$(CROSS_TOOL) powerpc64le-linux gcc-5.4.0 -mabi=elfv2 -mcpu=power4 -mbig-endian $(GCCFLAGS) -D__powerpc64__ -D__powerpc64_elfv2__ -S ../../vacall/vacall-powerpc64.c -I../../vacall -I. -o vacall-powerpc64-elfv2-linux-be.s
-# vacall-powerpc64-linux-be.s contains endianness specific optimizations.
-	(../../common/asm-powerpc.sh < vacall-powerpc64-elfv2-linux-le.s ; cat ../../common/noexecstack.h) > vacall-powerpc64-elfv2-linux.S
+	(echo '#ifdef __LITTLE_ENDIAN__' ; ../../common/asm-powerpc.sh < vacall-powerpc64-elfv2-linux-le.s ; echo '#else' ; ../../common/asm-powerpc.sh < vacall-powerpc64-elfv2-linux-be.s ; echo '#endif' ; cat ../../common/noexecstack.h) > vacall-powerpc64-elfv2-linux.S
 	$(RM) vacall-powerpc64-elfv2-linux-le.s vacall-powerpc64-elfv2-linux-be.s
 
 

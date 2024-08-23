@@ -1,6 +1,6 @@
 /**
   Copyright 1993 Bill Triggs <Bill.Triggs@inrialpes.fr>
-  Copyright 1995-2021 Bruno Haible <bruno@clisp.org>
+  Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
   Copyright 2000 Adam Fedor <fedor@gnu.org>
   Copyright 2004 Paul Guyot <pguyot@kallisys.net>
 
@@ -178,6 +178,7 @@ avcall_call(av_alist* list)
       /* In the ELFv2 ABI, gcc returns structs of size <= 16 in registers. */
       if (l->rsize > 0 && l->rsize <= 16) {
         void* raddr = l->raddr;
+        #if defined(__LITTLE_ENDIAN__)
         #if 0 /* Unoptimized */
         if (l->rsize == 1) {
           ((unsigned char *)raddr)[0] = (unsigned char)(iret);
@@ -318,6 +319,151 @@ avcall_call(av_alist* list)
             wordaddr[2] ^= (wordaddr[2] ^ (iret2 >> (sizeof(__avrword)*8-start_offset*8))) & mask2;
           }
         }
+        #endif
+        #endif
+        #if defined(__BIG_ENDIAN__)
+        #if 0 /* Unoptimized */
+        if (l->rsize == 1) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 2) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 3) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 4) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>24);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 5) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>32);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>24);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[4] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 6) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>40);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>32);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret>>24);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[4] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[5] = (unsigned char)(iret);
+        } else
+        if (l->rsize == 7) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>48);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>40);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret>>32);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret>>24);
+          ((unsigned char *)raddr)[4] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[5] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[6] = (unsigned char)(iret);
+        } else
+        if (l->rsize >= 8 && l->rsize <= 16) {
+          ((unsigned char *)raddr)[0] = (unsigned char)(iret>>56);
+          ((unsigned char *)raddr)[1] = (unsigned char)(iret>>48);
+          ((unsigned char *)raddr)[2] = (unsigned char)(iret>>40);
+          ((unsigned char *)raddr)[3] = (unsigned char)(iret>>32);
+          ((unsigned char *)raddr)[4] = (unsigned char)(iret>>24);
+          ((unsigned char *)raddr)[5] = (unsigned char)(iret>>16);
+          ((unsigned char *)raddr)[6] = (unsigned char)(iret>>8);
+          ((unsigned char *)raddr)[7] = (unsigned char)(iret);
+          if (l->rsize == 8) {
+          } else
+          if (l->rsize == 9) {
+            ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2>>56);
+          } else
+          if (l->rsize == 10) {
+            ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2>>56);
+            ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>48);
+          } else
+          if (l->rsize == 11) {
+            ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2>>56);
+            ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>48);
+            ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>40);
+          } else
+          if (l->rsize == 12) {
+            ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2>>56);
+            ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>48);
+            ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>40);
+            ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>32);
+          } else
+          if (l->rsize == 13) {
+            ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2>>56);
+            ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>48);
+            ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>40);
+            ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>32);
+            ((unsigned char *)raddr)[8+4] = (unsigned char)(iret2>>24);
+          } else
+          if (l->rsize == 14) {
+            ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2>>56);
+            ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>48);
+            ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>40);
+            ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>32);
+            ((unsigned char *)raddr)[8+4] = (unsigned char)(iret2>>24);
+            ((unsigned char *)raddr)[8+5] = (unsigned char)(iret2>>16);
+          } else
+          if (l->rsize == 15) {
+            ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2>>56);
+            ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>48);
+            ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>40);
+            ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>32);
+            ((unsigned char *)raddr)[8+4] = (unsigned char)(iret2>>24);
+            ((unsigned char *)raddr)[8+5] = (unsigned char)(iret2>>16);
+            ((unsigned char *)raddr)[8+6] = (unsigned char)(iret2>>8);
+          } else
+          if (l->rsize == 16) {
+            ((unsigned char *)raddr)[8+0] = (unsigned char)(iret2>>56);
+            ((unsigned char *)raddr)[8+1] = (unsigned char)(iret2>>48);
+            ((unsigned char *)raddr)[8+2] = (unsigned char)(iret2>>40);
+            ((unsigned char *)raddr)[8+3] = (unsigned char)(iret2>>32);
+            ((unsigned char *)raddr)[8+4] = (unsigned char)(iret2>>24);
+            ((unsigned char *)raddr)[8+5] = (unsigned char)(iret2>>16);
+            ((unsigned char *)raddr)[8+6] = (unsigned char)(iret2>>8);
+            ((unsigned char *)raddr)[8+7] = (unsigned char)(iret2);
+          }
+        }
+        #else /* Optimized: fewer conditional jumps, fewer memory accesses */
+        uintptr_t count = l->rsize; /* > 0, ≤ 2*sizeof(__avrword) */
+        __avrword* wordaddr = (__avrword*)((uintptr_t)raddr & ~(uintptr_t)(sizeof(__avrword)-1));
+        uintptr_t start_offset = (uintptr_t)raddr & (uintptr_t)(sizeof(__avrword)-1); /* ≥ 0, < sizeof(__avrword) */
+        uintptr_t end_offset = start_offset + count; /* > 0, < 3*sizeof(__avrword) */
+        if (count <= sizeof(__avrword)) {
+          /* Use iret. */
+          if (end_offset <= sizeof(__avrword)) {
+            /* 0 < end_offset ≤ sizeof(__avrword) */
+            __avrword mask0 = ((__avrword)2 << (sizeof(__avrword)*8-start_offset*8-1)) - ((__avrword)1 << (sizeof(__avrword)*8-end_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret << (sizeof(__avrword)*8-end_offset*8))) & mask0;
+          } else {
+            /* sizeof(__avrword) < end_offset < 2*sizeof(__avrword), start_offset > 0 */
+            __avrword mask0 = ((__avrword)2 << (sizeof(__avrword)*8-start_offset*8-1)) - 1;
+            __avrword mask1 = - ((__avrword)1 << (2*sizeof(__avrword)*8-end_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret >> (end_offset*8-sizeof(__avrword)*8))) & mask0;
+            wordaddr[1] ^= (wordaddr[1] ^ (iret << (2*sizeof(__avrword)*8-end_offset*8))) & mask1;
+          }
+        } else {
+          /* Use iret, iret2. */
+          __avrword mask0 = ((__avrword)2 << (sizeof(__avrword)*8-start_offset*8-1)) - 1;
+          if (end_offset <= 2*sizeof(__avrword)) {
+            /* sizeof(__avrword) < end_offset ≤ 2*sizeof(__avrword) */
+            __avrword mask1 = - ((__avrword)1 << (2*sizeof(__avrword)*8-end_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret >> (start_offset*8))) & mask0;
+            wordaddr[1] ^= (wordaddr[1] ^ ((iret << (sizeof(__avrword)*4-start_offset*4) << (sizeof(__avrword)*4-start_offset*4)) | (iret2 >> (start_offset*8)))) & mask1;
+          } else {
+            /* 2*sizeof(__avrword) < end_offset < 3*sizeof(__avrword), start_offset > 0 */
+            __avrword mask2 = - ((__avrword)1 << (3*sizeof(__avrword)*8-end_offset*8));
+            wordaddr[0] ^= (wordaddr[0] ^ (iret >> (start_offset*8))) & mask0;
+            wordaddr[1] = (iret << (sizeof(__avrword)*4-start_offset*4) << (sizeof(__avrword)*4-start_offset*4)) | (iret2 >> (start_offset*8));
+            wordaddr[2] ^= (wordaddr[2] ^ (iret2 << (sizeof(__avrword)*4-start_offset*4) << (sizeof(__avrword)*4-start_offset*4))) & mask2;
+          }
+        }
+        #endif
         #endif
       }
     }
