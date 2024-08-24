@@ -12,4 +12,7 @@ wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtoo
 wget https://lists.gnu.org/archive/html/bug-hurd/2023-05/msg00086.html
 
 : "Fix shared library support on Android"
-wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-android.diff 'https://savannah.gnu.org/patch/download.php?file_id=55144'
+wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-android.diff 'https://file.savannah.gnu.org/file/0001-Fix-shared-library-support-on-Android.patch?file_id=55144'
+
+: "Fix shared library support in 32-bit mode on FreeBSD/powerpc64."
+wget --execute netrc=off --no-verbose --retry-connrefused --timeout=60 -O libtool-freebsd-biarch.diff 'https://file.savannah.gnu.org/file/freebsd-biarch.diff?file_id=56379'

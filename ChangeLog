@@ -1,3 +1,11 @@
+2024-08-24  Bruno Haible  <bruno@clisp.org>
+
+	Fix shared library support in 32-bit mode on FreeBSD/powerpc64.
+	* libtool-patches/libtool-freebsd-biarch.diff: New file, from
+	<https://savannah.gnu.org/patch/index.php?10469>.
+	* libtool-patches/README: Mention it.
+	* Makefile.maint (libtool-imported-files): Apply it.
+
 2024-08-23  Bruno Haible  <bruno@clisp.org>
 
 	Add support for FreeBSD 14/powerpc64.
