@@ -1,3 +1,12 @@
+2024-08-25  Bruno Haible  <bruno@clisp.org>
+
+	Fix the support for Linux/ia64.
+	In avcall, the l_l6J and l_l4K tests were failing.
+	* avcall/avcall-ia64.c (avcall_call): Remove argframe variable. Don't
+	make side effects on sp = r12. Instead, force the compiler to build a
+	stack frame for up to 256 arguments.
+	* NEWS: Mention the fix.
+
 2024-08-24  Bruno Haible  <bruno@clisp.org>
 
 	Fix shared library support in 32-bit mode on FreeBSD/powerpc64.

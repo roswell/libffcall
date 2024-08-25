@@ -8,6 +8,11 @@ New in 2.5:
   - powerpc64: FreeBSD.
   - powerpc64le: FreeBSD.
   - arm: Android.
+
+* Fixed support for the following platforms:
+  (Previously, a build on these platforms appeared to succeed but was buggy.)
+  ia64: Linux.
+
 * Simplified the environmental requirements (the library no longer allocates
   a temporary file in /tmp) on the following platforms:
   - Linux.
