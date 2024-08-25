@@ -127,8 +127,11 @@ vacall-alpha-macro.S : vacall-alpha-linux.s ../common/asm-alpha.sh ../common/noe
 vacall-hppa-linux.s : vacall-hppa.c vacall-internal.h vacall.h $(THISFILE)
 	$(CROSS_TOOL) hppa-linux gcc -V 3.1 $(GCCFLAGS) -D__hppa__ -S vacall-hppa.c -o vacall-hppa-linux.s
 
-vacall-hppa-macro.S : vacall-hppa-linux.s ../common/asm-hppa.sh ../common/noexecstack.h $(THISFILE)
-	(echo '#include "asm-hppa.h"' ; ../common/asm-hppa.sh < vacall-hppa-linux.s ; echo 'IMPORT_DATA(vacall_function)' ; cat ../common/noexecstack.h) > vacall-hppa-macro.S
+vacall-hppa-linux-pic.s : vacall-hppa.c vacall-internal.h vacall.h $(THISFILE)
+	$(CROSS_TOOL) hppa-linux gcc -V 3.1 $(GCCFLAGS) -fPIC -D__hppa__ -S vacall-hppa.c -o vacall-hppa-linux-pic.s
+
+vacall-hppa-macro.S : vacall-hppa-linux.s vacall-hppa-linux-pic.s ../common/asm-hppa.sh ../common/noexecstack.h $(THISFILE)
+	(echo '#include "asm-hppa.h"' ; echo '#ifdef __PIC__' ; ../common/asm-hppa.sh < vacall-hppa-linux-pic.s ; echo '#else' ; ../common/asm-hppa.sh < vacall-hppa-linux.s ; echo 'IMPORT_DATA(vacall_function)' ; echo '#endif' ; cat ../common/noexecstack.h) > vacall-hppa-macro.S
 
 vacall-hppa64-linux.s : vacall-hppa64.c vacall-internal.h vacall.h $(THISFILE)
 	$(CROSS_TOOL) hppa64-linux gcc -V 3.1 $(GCCFLAGS) -D__hppa64__ -S vacall-hppa64.c -o vacall-hppa64-linux.s

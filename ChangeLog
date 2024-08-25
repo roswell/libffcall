@@ -1,5 +1,12 @@
 2024-08-25  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Fix build failure on Linux/hppa.
+	* vacall/Makefile.devel (vacall-hppa-linux-pic.s): New rule.
+	(vacall-hppa-macro.S): Combine the PIC and non-PIC code in a single
+	file.
+
+2024-08-25  Bruno Haible  <bruno@clisp.org>
+
 	A simpler fix for Linux/ia64.
 	* avcall/avcall-ia64.c (avcall_call): Revert last change. Use
 	__builtin_alloca to allocate the stack frame.

@@ -123,6 +123,7 @@
 /vacall/vacall-arm64-macro.S
 /vacall/vacall-arm64-macos-macro.S
 /vacall/vacall-hppa-linux.s
+/vacall/vacall-hppa-linux-pic.s
 /vacall/vacall-hppa-macro.S
 /vacall/vacall-hppa64-linux.s
 /vacall/vacall-hppa64-macro.S
