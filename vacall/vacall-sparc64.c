@@ -22,50 +22,50 @@
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *	env	__asm__("%g5");
+         *      env     __asm__("%g5");
 #endif
-register __vaword* fp	__asm__("%fp");	/* our %fp, caller's %sp */
-register __vaword* ret	__asm__("%i7");	/* %i7+8 = return address */
-register float	farg0	__asm__("%f1");
-register float	farg1	__asm__("%f3");
-register float	farg2	__asm__("%f5");
-register float	farg3	__asm__("%f7");
-register float	farg4	__asm__("%f9");
-register float	farg5	__asm__("%f11");
-register float	farg6	__asm__("%f13");
-register float	farg7	__asm__("%f15");
-register float	farg8	__asm__("%f17");
-register float	farg9	__asm__("%f19");
-register float	farg10	__asm__("%f21");
-register float	farg11	__asm__("%f23");
-register float	farg12	__asm__("%f25");
-register float	farg13	__asm__("%f27");
-register float	farg14	__asm__("%f29");
-register float	farg15	__asm__("%f31");
-register double	darg0	__asm__("%f0");
-register double	darg1	__asm__("%f2");
-register double	darg2	__asm__("%f4");
-register double	darg3	__asm__("%f6");
-register double	darg4	__asm__("%f8");
-register double	darg5	__asm__("%f10");
-register double	darg6	__asm__("%f12");
-register double	darg7	__asm__("%f14");
-register double	darg8	__asm__("%f16");
-register double	darg9	__asm__("%f18");
-register double	darg10	__asm__("%f20");
-register double	darg11	__asm__("%f22");
-register double	darg12	__asm__("%f24");
-register double	darg13	__asm__("%f26");
-register double	darg14	__asm__("%f28");
-register double	darg15	__asm__("%f30");
-register __varword iret	__asm__("%i0");
-register __varword o1	__asm__("%i1");
-register __varword o2	__asm__("%i2");
-register __varword o3	__asm__("%i3");
-register __varword o4	__asm__("%i4");
-register __varword o5	__asm__("%i5");
-register float	fret	__asm__("%f0");	/* %f0 */
-register double	dret	__asm__("%f0");	/* %f0,%f1 */
+register __vaword* fp   __asm__("%fp"); /* our %fp, caller's %sp */
+register __vaword* ret  __asm__("%i7"); /* %i7+8 = return address */
+register float  farg0   __asm__("%f1");
+register float  farg1   __asm__("%f3");
+register float  farg2   __asm__("%f5");
+register float  farg3   __asm__("%f7");
+register float  farg4   __asm__("%f9");
+register float  farg5   __asm__("%f11");
+register float  farg6   __asm__("%f13");
+register float  farg7   __asm__("%f15");
+register float  farg8   __asm__("%f17");
+register float  farg9   __asm__("%f19");
+register float  farg10  __asm__("%f21");
+register float  farg11  __asm__("%f23");
+register float  farg12  __asm__("%f25");
+register float  farg13  __asm__("%f27");
+register float  farg14  __asm__("%f29");
+register float  farg15  __asm__("%f31");
+register double darg0   __asm__("%f0");
+register double darg1   __asm__("%f2");
+register double darg2   __asm__("%f4");
+register double darg3   __asm__("%f6");
+register double darg4   __asm__("%f8");
+register double darg5   __asm__("%f10");
+register double darg6   __asm__("%f12");
+register double darg7   __asm__("%f14");
+register double darg8   __asm__("%f16");
+register double darg9   __asm__("%f18");
+register double darg10  __asm__("%f20");
+register double darg11  __asm__("%f22");
+register double darg12  __asm__("%f24");
+register double darg13  __asm__("%f26");
+register double darg14  __asm__("%f28");
+register double darg15  __asm__("%f30");
+register __varword iret __asm__("%i0");
+register __varword o1   __asm__("%i1");
+register __varword o2   __asm__("%i2");
+register __varword o3   __asm__("%i3");
+register __varword o4   __asm__("%i4");
+register __varword o5   __asm__("%i5");
+register float  fret    __asm__("%f0"); /* %f0 */
+register double dret    __asm__("%f0"); /* %f0,%f1 */
 
 void /* the return type is variable, not void! */
 vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,

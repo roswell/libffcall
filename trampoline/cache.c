@@ -57,15 +57,15 @@ __TR_clear_cache (beg, end)
   if (! initialized)
     {
       int ptr = (((int) array + INSN_CACHE_LINE_WIDTH - 1)
-		 & -INSN_CACHE_LINE_WIDTH);
+                 & -INSN_CACHE_LINE_WIDTH);
       int end_ptr = ptr + INSN_CACHE_SIZE;
 
       while (ptr < end_ptr)
-	{
-	  *(INSTRUCTION_TYPE *)ptr
-	    = JUMP_AHEAD_INSTRUCTION + INSN_CACHE_LINE_WIDTH;
-	  ptr += INSN_CACHE_LINE_WIDTH;
-	}
+        {
+          *(INSTRUCTION_TYPE *)ptr
+            = JUMP_AHEAD_INSTRUCTION + INSN_CACHE_LINE_WIDTH;
+          ptr += INSN_CACHE_LINE_WIDTH;
+        }
       *(INSTRUCTION_TYPE *)(ptr - INSN_CACHE_LINE_WIDTH) = RETURN_INSTRUCTION;
 
       initialized = 1;
@@ -73,7 +73,7 @@ __TR_clear_cache (beg, end)
 
   /* Call the beginning of the sequence.  */
   (((function_ptr) (((int) array + INSN_CACHE_LINE_WIDTH - 1)
-		    & -INSN_CACHE_LINE_WIDTH))
+                    & -INSN_CACHE_LINE_WIDTH))
    ());
 
 #else /* Cache is large.  */
@@ -81,13 +81,13 @@ __TR_clear_cache (beg, end)
   if (! initialized)
     {
       int ptr = (((int) array + INSN_CACHE_LINE_WIDTH - 1)
-		 & -INSN_CACHE_LINE_WIDTH);
+                 & -INSN_CACHE_LINE_WIDTH);
 
       while (ptr < (int) array + sizeof array)
-	{
-	  *(INSTRUCTION_TYPE *)ptr = RETURN_INSTRUCTION;
-	  ptr += INSN_CACHE_LINE_WIDTH;
-	}
+        {
+          *(INSTRUCTION_TYPE *)ptr = RETURN_INSTRUCTION;
+          ptr += INSN_CACHE_LINE_WIDTH;
+        }
 
       initialized = 1;
     }
@@ -96,8 +96,8 @@ __TR_clear_cache (beg, end)
 
   offset = ((int) beg & -INSN_CACHE_LINE_WIDTH) & (INSN_CACHE_PLANE_SIZE - 1);
   start_addr = (((int) (array + INSN_CACHE_PLANE_SIZE - 1)
-		 & -INSN_CACHE_PLANE_SIZE)
-		+ offset);
+                 & -INSN_CACHE_PLANE_SIZE)
+                + offset);
 
   /* Compute the cache alignment of the place to stop clearing.  */
 #if 0  /* This is not needed for gcc's purposes.  */
@@ -106,8 +106,8 @@ __TR_clear_cache (beg, end)
   if (end < beg + INSN_CACHE_PLANE_SIZE)
 #endif
     offset = (((int) (end + INSN_CACHE_LINE_WIDTH - 1)
-	       & -INSN_CACHE_LINE_WIDTH)
-	      & (INSN_CACHE_PLANE_SIZE - 1));
+               & -INSN_CACHE_LINE_WIDTH)
+              & (INSN_CACHE_PLANE_SIZE - 1));
 
 #if INSN_CACHE_DEPTH > 1
   end_addr = (start_addr & -INSN_CACHE_PLANE_SIZE) + offset;
@@ -120,12 +120,12 @@ __TR_clear_cache (beg, end)
       int stop = end_addr + plane * INSN_CACHE_PLANE_SIZE;
 
       while (addr != stop)
-	{
-	  /* Call the return instruction at ADDR.  */
-	  ((function_ptr) addr) ();
+        {
+          /* Call the return instruction at ADDR.  */
+          ((function_ptr) addr) ();
 
-	  addr += INSN_CACHE_LINE_WIDTH;
-	}
+          addr += INSN_CACHE_LINE_WIDTH;
+        }
     }
 #else /* just one plane */
   do

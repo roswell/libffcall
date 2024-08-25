@@ -60,30 +60,30 @@
 #define STACK_OFFSET 2
 #endif
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
-register double farg1	__asm__("fr1");
-register double farg2	__asm__("fr2");
-register double farg3	__asm__("fr3");
-register double farg4	__asm__("fr4");
-register double farg5	__asm__("fr5");
-register double farg6	__asm__("fr6");
-register double farg7	__asm__("fr7");
-register double farg8	__asm__("fr8");
-register double farg9	__asm__("fr9");
-register double farg10	__asm__("fr10");
-register double farg11	__asm__("fr11");
-register double farg12	__asm__("fr12");
-register double farg13	__asm__("fr13");
+register double farg1   __asm__("fr1");
+register double farg2   __asm__("fr2");
+register double farg3   __asm__("fr3");
+register double farg4   __asm__("fr4");
+register double farg5   __asm__("fr5");
+register double farg6   __asm__("fr6");
+register double farg7   __asm__("fr7");
+register double farg8   __asm__("fr8");
+register double farg9   __asm__("fr9");
+register double farg10  __asm__("fr10");
+register double farg11  __asm__("fr11");
+register double farg12  __asm__("fr12");
+register double farg13  __asm__("fr13");
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("r1");  /* C names for registers */
-/*register __avrword	iret	__asm__("r3"); */
-  register __avrword	iret2	__asm__("r4");
-  register float	fret	__asm__("fr1");
-  register double	dret	__asm__("fr1");
+  register __avword*    sp      __asm__("r1");  /* C names for registers */
+/*register __avrword    iret    __asm__("r3"); */
+  register __avrword    iret2   __asm__("r4");
+  register float        fret    __asm__("fr1");
+  register double       dret    __asm__("fr1");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -140,12 +140,12 @@ avcall_call(av_alist* list)
   fargs0: ;
 
 #if defined(_AIX) || (defined(__MACH__) && defined(__APPLE__)) /* __powerpc_aix__ */
-				/* call function, pass 8 args in registers */
+                                /* call function, pass 8 args in registers */
   iret = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3],
-		    l->args[4], l->args[5], l->args[6], l->args[7]);
+                    l->args[4], l->args[5], l->args[6], l->args[7]);
 #else /* __powerpc_sysv4__ */
   iret = (*l->func)(l->iargs[0], l->iargs[1], l->iargs[2], l->iargs[3],
-		    l->iargs[4], l->iargs[5], l->iargs[6], l->iargs[7]);
+                    l->iargs[4], l->iargs[5], l->iargs[6], l->iargs[7]);
 #endif
 
   /* save return value */

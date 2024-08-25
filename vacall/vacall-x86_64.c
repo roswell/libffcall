@@ -22,7 +22,7 @@
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *		env	__asm__("r10");
+         *              env     __asm__("r10");
 #endif
 
 /*register __varword iarg1 __asm__("rdi");*/
@@ -51,9 +51,9 @@ register double dret __asm__("xmm0");
  * This ensures that the return sequence does not need to restore registers
  * from the stack.
  */
-register void*	dummy1	__asm__("%rbx");
+register void*  dummy1  __asm__("%rbx");
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 9)
-register void*	dummy2	__asm__("%rbp");
+register void*  dummy2  __asm__("%rbp");
 #endif
 
 #ifdef REENTRANT

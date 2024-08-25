@@ -50,10 +50,10 @@ register double darg4   __asm__("d4"); /* overlaps s8,s9 */
 register double darg5   __asm__("d5"); /* overlaps s10,s11 */
 register double darg6   __asm__("d6"); /* overlaps s12,s13 */
 register double darg7   __asm__("d7"); /* overlaps s14,s15 */
-register __varword	iret	__asm__("r0");
-register __varword	iret2	__asm__("r1");
-register float		fret	__asm__("s0");
-register double		dret	__asm__("d0");
+register __varword      iret    __asm__("r0");
+register __varword      iret2   __asm__("r1");
+register float          fret    __asm__("s0");
+register double         dret    __asm__("d0");
 
 #ifndef REENTRANT
 /* The ARM ABI requires that the first 4 general-purpose argument words are

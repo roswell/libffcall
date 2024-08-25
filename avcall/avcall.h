@@ -126,14 +126,14 @@ enum __AV_alist_flags
    *     DEFAULT_PCC_STRUCT_RETURN is defined to 0 in the machine description)
    *     method r.
    */
-  __AV_SMALL_STRUCT_RETURN	= 1<<1,	/* r: special case for small structs */
-  __AV_GCC_STRUCT_RETURN	= 1<<2,	/* consider 8 byte structs as small */
+  __AV_SMALL_STRUCT_RETURN      = 1<<1, /* r: special case for small structs */
+  __AV_GCC_STRUCT_RETURN        = 1<<2, /* consider 8 byte structs as small */
 #if defined(__sparc__) && !defined(__sparc64__)
-  __AV_SUNCC_STRUCT_RETURN	= 1<<3,
-  __AV_SUNPROCC_STRUCT_RETURN	= 1<<4,
+  __AV_SUNCC_STRUCT_RETURN      = 1<<3,
+  __AV_SUNPROCC_STRUCT_RETURN   = 1<<4,
 #endif
 #if defined(__i386__)
-  __AV_MSVC_STRUCT_RETURN	= 1<<4,
+  __AV_MSVC_STRUCT_RETURN       = 1<<4,
 #endif
   /* the default way to return structs */
   /* This choice here is based on the assumption that the function you are
@@ -144,29 +144,29 @@ enum __AV_alist_flags
    * before or after #including <avcall.h>.
    */
 #ifndef __AV_STRUCT_RETURN
-  __AV_STRUCT_RETURN		=
+  __AV_STRUCT_RETURN            =
 #if defined(__sparc__) && !defined(__sparc64__) && defined(__sun) && (defined(__SUNPRO_C) || defined(__SUNPRO_CC)) /* SUNWspro cc or CC */
-				  __AV_SUNPROCC_STRUCT_RETURN,
+                                  __AV_SUNPROCC_STRUCT_RETURN,
 #else
 #if (defined(__i386__) && (defined(_WIN32) || defined(__CYGWIN__) || (defined(__MACH__) && defined(__APPLE__)) || defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__))) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__hppa__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || (defined(__powerpc__) && !defined(__powerpc64__) && (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__))) || defined(__powerpc64_elfv2__) || defined(__ia64__) || defined(__x86_64__) || defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
-				  __AV_SMALL_STRUCT_RETURN |
+                                  __AV_SMALL_STRUCT_RETURN |
 #endif
 #if defined(__GNUC__) && !((defined(__mipsn32__) || defined(__mips64__)) && ((__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)))
-				  __AV_GCC_STRUCT_RETURN |
+                                  __AV_GCC_STRUCT_RETURN |
 #endif
 #if defined(__i386__) && defined(_WIN32) && !defined(__CYGWIN__) /* native Windows */
-				  __AV_MSVC_STRUCT_RETURN |
+                                  __AV_MSVC_STRUCT_RETURN |
 #endif
-				  0,
+                                  0,
 #endif
 #endif
 
   /* how to return floats */
 #if defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))
-  __AV_SUNCC_FLOAT_RETURN	= 1<<5,
+  __AV_SUNCC_FLOAT_RETURN       = 1<<5,
 #endif
 #if defined(__m68k__)
-  __AV_FREG_FLOAT_RETURN	= 1<<6,
+  __AV_FREG_FLOAT_RETURN        = 1<<6,
 #endif
   /* the default way to return floats */
   /* This choice here is based on the assumption that the function you are
@@ -178,23 +178,23 @@ enum __AV_alist_flags
    */
 #ifndef __AV_FLOAT_RETURN
 #if (defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))) && !defined(__GNUC__) && defined(__sun) && !(defined(__SUNPRO_C) || defined(__SUNPRO_CC))  /* Sun cc or CC */
-  __AV_FLOAT_RETURN		= __AV_SUNCC_FLOAT_RETURN,
+  __AV_FLOAT_RETURN             = __AV_SUNCC_FLOAT_RETURN,
 #elif defined(__m68k__)
-  __AV_FLOAT_RETURN		= __AV_FREG_FLOAT_RETURN,
+  __AV_FLOAT_RETURN             = __AV_FREG_FLOAT_RETURN,
 #else
-  __AV_FLOAT_RETURN		= 0,
+  __AV_FLOAT_RETURN             = 0,
 #endif
 #endif
 
   /* how to pass structs */
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
-  __AV_SGICC_STRUCT_ARGS	= 1<<7,
+  __AV_SGICC_STRUCT_ARGS        = 1<<7,
 #endif
 #if defined(__powerpc__) || defined(__powerpc64__)
-  __AV_AIXCC_STRUCT_ARGS	= 1<<7,
+  __AV_AIXCC_STRUCT_ARGS        = 1<<7,
 #endif
 #if defined(__ia64__)
-  __AV_OLDGCC_STRUCT_ARGS	= 1<<7,
+  __AV_OLDGCC_STRUCT_ARGS       = 1<<7,
 #endif
   /* the default way to pass structs */
   /* This choice here is based on the assumption that the function you are
@@ -206,21 +206,21 @@ enum __AV_alist_flags
    */
 #ifndef __AV_STRUCT_ARGS
 #if (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) && !defined(__GNUC__) /* SGI mips cc */
-  __AV_STRUCT_ARGS		= __AV_SGICC_STRUCT_ARGS,
+  __AV_STRUCT_ARGS              = __AV_SGICC_STRUCT_ARGS,
 #else
 #if (defined(__mipsn32__) || defined(__mips64__)) && (!defined(__GNUC__) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)) /* SGI mips cc or gcc >= 3.4 */
-  __AV_STRUCT_ARGS		= __AV_SGICC_STRUCT_ARGS,
+  __AV_STRUCT_ARGS              = __AV_SGICC_STRUCT_ARGS,
 #else
 #if defined(__powerpc__) && !defined(__powerpc64__) && defined(_AIX) && !defined(__GNUC__) /* AIX 32-bit cc, xlc */
-  __AV_STRUCT_ARGS		= __AV_AIXCC_STRUCT_ARGS,
+  __AV_STRUCT_ARGS              = __AV_AIXCC_STRUCT_ARGS,
 #else
 #if defined(__powerpc64__) && defined(_AIX) /* AIX 64-bit cc, xlc, gcc, xlclang */
-  __AV_STRUCT_ARGS		= __AV_AIXCC_STRUCT_ARGS,
+  __AV_STRUCT_ARGS              = __AV_AIXCC_STRUCT_ARGS,
 #else
 #if defined(__ia64__) && !(defined(__GNUC__) && (__GNUC__ >= 3))
-  __AV_STRUCT_ARGS		= __AV_OLDGCC_STRUCT_ARGS,
+  __AV_STRUCT_ARGS              = __AV_OLDGCC_STRUCT_ARGS,
 #else
-  __AV_STRUCT_ARGS		= 0,
+  __AV_STRUCT_ARGS              = 0,
 #endif
 #endif
 #endif
@@ -245,28 +245,28 @@ enum __AV_alist_flags
    */
 #ifndef __AV_FLOAT_ARGS
 #if defined(__powerpc64__) && defined(_AIX) && (defined(__ibmxl__) || !defined(__GNUC__)) /* AIX 64-bit xlc, xlclang */
-  __AV_FLOAT_ARGS		= __AV_AIXCC_FLOAT_ARGS,
+  __AV_FLOAT_ARGS               = __AV_AIXCC_FLOAT_ARGS,
 #else
-  __AV_FLOAT_ARGS		= 0,
+  __AV_FLOAT_ARGS               = 0,
 #endif
 #endif
 
   /* how to pass and return small integer arguments */
-  __AV_ANSI_INTEGERS		= 0, /* no promotions */
-  __AV_TRADITIONAL_INTEGERS	= 0, /* promote [u]char, [u]short to [u]int */
+  __AV_ANSI_INTEGERS            = 0, /* no promotions */
+  __AV_TRADITIONAL_INTEGERS     = 0, /* promote [u]char, [u]short to [u]int */
   /* Fortunately these two methods are compatible. Our macros work with both. */
 
   /* stack cleanup policy */
-  __AV_CDECL_CLEANUP		= 0, /* caller pops args after return */
-  __AV_STDCALL_CLEANUP		= 0, /* callee pops args before return */
-				     /* currently only supported on __i386__ */
+  __AV_CDECL_CLEANUP            = 0, /* caller pops args after return */
+  __AV_STDCALL_CLEANUP          = 0, /* callee pops args before return */
+                                     /* currently only supported on __i386__ */
 #ifndef __AV_CLEANUP
-  __AV_CLEANUP			= __AV_CDECL_CLEANUP,
+  __AV_CLEANUP                  = __AV_CDECL_CLEANUP,
 #endif
 
   /* These are for internal use only */
 #if defined(__i386__) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__) || (defined(__s390__) && !defined(__s390x__)) || defined(__riscv64__) || defined(__loongarch64__)
-  __AV_REGISTER_STRUCT_RETURN	= 1<<9,
+  __AV_REGISTER_STRUCT_RETURN   = 1<<9,
 #endif
 
   __AV_flag_for_broken_compilers_that_dont_like_trailing_commas
@@ -334,43 +334,43 @@ extern int avcall_overflown (av_alist* /* LIST */);
 
 extern void avcall_start (av_alist* /* LIST */, __avword* /* LIST_ARGS */, __avword* /* LIST_ARGS_END */, __avrword(* /* FUNC */)(), void* /* RADDR */, int /* RETTYPE */, int /* FLAGS */);
 
-#define av_start_void(LIST,FUNC)					\
+#define av_start_void(LIST,FUNC)                                        \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),0,    __AVvoid,     __AV_START_FLAGS)
-#define av_start_char(LIST,FUNC,RADDR)					\
+#define av_start_char(LIST,FUNC,RADDR)                                  \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVchar,     __AV_START_FLAGS)
-#define av_start_schar(LIST,FUNC,RADDR)					\
+#define av_start_schar(LIST,FUNC,RADDR)                                 \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVschar,    __AV_START_FLAGS)
-#define av_start_uchar(LIST,FUNC,RADDR)					\
+#define av_start_uchar(LIST,FUNC,RADDR)                                 \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVuchar,    __AV_START_FLAGS)
-#define av_start_short(LIST,FUNC,RADDR)					\
+#define av_start_short(LIST,FUNC,RADDR)                                 \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVshort,    __AV_START_FLAGS)
-#define av_start_ushort(LIST,FUNC,RADDR)				\
+#define av_start_ushort(LIST,FUNC,RADDR)                                \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVushort,   __AV_START_FLAGS)
-#define av_start_int(LIST,FUNC,RADDR)					\
+#define av_start_int(LIST,FUNC,RADDR)                                   \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVint,      __AV_START_FLAGS)
-#define av_start_uint(LIST,FUNC,RADDR)					\
+#define av_start_uint(LIST,FUNC,RADDR)                                  \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVuint,     __AV_START_FLAGS)
-#define av_start_long(LIST,FUNC,RADDR)					\
+#define av_start_long(LIST,FUNC,RADDR)                                  \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVlong,     __AV_START_FLAGS)
-#define av_start_ulong(LIST,FUNC,RADDR)					\
+#define av_start_ulong(LIST,FUNC,RADDR)                                 \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVulong,    __AV_START_FLAGS)
-#define av_start_longlong(LIST,FUNC,RADDR)				\
+#define av_start_longlong(LIST,FUNC,RADDR)                              \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVlonglong, __AV_START_FLAGS)
-#define av_start_ulonglong(LIST,FUNC,RADDR)				\
+#define av_start_ulonglong(LIST,FUNC,RADDR)                             \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVulonglong,__AV_START_FLAGS)
-#define av_start_float(LIST,FUNC,RADDR)					\
+#define av_start_float(LIST,FUNC,RADDR)                                 \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVfloat,    __AV_START_FLAGS)
-#define av_start_double(LIST,FUNC,RADDR)				\
+#define av_start_double(LIST,FUNC,RADDR)                                \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVdouble,   __AV_START_FLAGS)
-#define av_start_ptr(LIST,FUNC,TYPE,RADDR)				\
+#define av_start_ptr(LIST,FUNC,TYPE,RADDR)                              \
   avcall_start(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),RADDR,__AVvoidp,    __AV_START_FLAGS)
 
 extern void avcall_start_struct (av_alist* /* LIST */, __avword* /* LIST_ARGS */, __avword* /* LIST_ARGS_END */, __avrword(* /* FUNC */)(), size_t /* TYPE_SIZE */, int /* TYPE_SPLITTABLE */, void* /* RADDR */, int /* FLAGS */);
 
-#define av_start_struct(LIST,FUNC,TYPE,TYPE_SPLITTABLE,RADDR)		\
+#define av_start_struct(LIST,FUNC,TYPE,TYPE_SPLITTABLE,RADDR)           \
   _av_start_struct(LIST,FUNC,sizeof(TYPE),TYPE_SPLITTABLE,RADDR)
 /* Undocumented, but used by GNU clisp. */
-#define _av_start_struct(LIST,FUNC,TYPE_SIZE,TYPE_SPLITTABLE,RADDR)	\
+#define _av_start_struct(LIST,FUNC,TYPE_SIZE,TYPE_SPLITTABLE,RADDR)     \
   avcall_start_struct(&(LIST),(LIST)._av_alist_flexarray._av_m_args,&(LIST)._av_alist_flexarray._av_m_args[__AV_ALIST_WORDS],(__avrword(*)())(FUNC),TYPE_SIZE,TYPE_SPLITTABLE,RADDR,__AV_START_FLAGS)
 
 
@@ -383,37 +383,37 @@ extern void avcall_start_struct (av_alist* /* LIST */, __avword* /* LIST_ARGS */
 extern int avcall_arg_int (av_alist* /* LIST */, int /* VAL */);
 extern int avcall_arg_uint (av_alist* /* LIST */, unsigned int /* VAL */);
 
-#define av_char(LIST,VAL)	avcall_arg_int(&(LIST),(char)(VAL))
-#define av_schar(LIST,VAL)	avcall_arg_int(&(LIST),(signed char)(VAL))
-#define av_short(LIST,VAL)	avcall_arg_int(&(LIST),(short)(VAL))
-#define av_int(LIST,VAL)	avcall_arg_int(&(LIST),(int)(VAL))
-#define av_uchar(LIST,VAL)	avcall_arg_uint(&(LIST),(unsigned char)(VAL))
-#define av_ushort(LIST,VAL)	avcall_arg_uint(&(LIST),(unsigned short)(VAL))
-#define av_uint(LIST,VAL)	avcall_arg_uint(&(LIST),(unsigned int)(VAL))
+#define av_char(LIST,VAL)       avcall_arg_int(&(LIST),(char)(VAL))
+#define av_schar(LIST,VAL)      avcall_arg_int(&(LIST),(signed char)(VAL))
+#define av_short(LIST,VAL)      avcall_arg_int(&(LIST),(short)(VAL))
+#define av_int(LIST,VAL)        avcall_arg_int(&(LIST),(int)(VAL))
+#define av_uchar(LIST,VAL)      avcall_arg_uint(&(LIST),(unsigned char)(VAL))
+#define av_ushort(LIST,VAL)     avcall_arg_uint(&(LIST),(unsigned short)(VAL))
+#define av_uint(LIST,VAL)       avcall_arg_uint(&(LIST),(unsigned int)(VAL))
 
 extern int avcall_arg_long (av_alist* /* LIST */, long /* VAL */);
 extern int avcall_arg_ulong (av_alist* /* LIST */, unsigned long /* VAL */);
 
-#define av_long(LIST,VAL)	avcall_arg_long(&(LIST),(long)(VAL))
-#define av_ulong(LIST,VAL)	avcall_arg_ulong(&(LIST),(unsigned long)(VAL))
+#define av_long(LIST,VAL)       avcall_arg_long(&(LIST),(long)(VAL))
+#define av_ulong(LIST,VAL)      avcall_arg_ulong(&(LIST),(unsigned long)(VAL))
 
 extern int avcall_arg_ptr (av_alist* /* LIST */, void* /* VAL */);
 
-#define av_ptr(LIST,TYPE,VAL)	avcall_arg_ptr(&(LIST),(TYPE)(VAL))
+#define av_ptr(LIST,TYPE,VAL)   avcall_arg_ptr(&(LIST),(TYPE)(VAL))
 
 extern int avcall_arg_longlong (av_alist* /* LIST */, long long /* VAL */);
 extern int avcall_arg_ulonglong (av_alist* /* LIST */, unsigned long long /* VAL */);
 
-#define av_longlong(LIST,VAL)	avcall_arg_longlong(&(LIST),VAL)
-#define av_ulonglong(LIST,VAL)	avcall_arg_ulonglong(&(LIST),VAL)
+#define av_longlong(LIST,VAL)   avcall_arg_longlong(&(LIST),VAL)
+#define av_ulonglong(LIST,VAL)  avcall_arg_ulonglong(&(LIST),VAL)
 
 /* floating-point argument types */
 
 extern int avcall_arg_float (av_alist* /* LIST */, float /* VAL */);
-#define av_float(LIST,VAL)	avcall_arg_float(&(LIST),VAL)
+#define av_float(LIST,VAL)      avcall_arg_float(&(LIST),VAL)
 
 extern int avcall_arg_double (av_alist* /* LIST */, double /* VAL */);
-#define av_double(LIST,VAL)	avcall_arg_double(&(LIST),VAL)
+#define av_double(LIST,VAL)     avcall_arg_double(&(LIST),VAL)
 
 /*
  * structure argument types
@@ -421,13 +421,13 @@ extern int avcall_arg_double (av_alist* /* LIST */, double /* VAL */);
 
 extern int avcall_arg_struct (av_alist* /* LIST */, size_t /* TYPE_SIZE */, size_t /* TYPE_ALIGN */, const void* /* VAL_ADDR */);
 
-#define av_struct(LIST,TYPE,VAL)					\
+#define av_struct(LIST,TYPE,VAL)                                        \
   avcall_arg_struct(&(LIST),sizeof(TYPE),__AV_alignof(TYPE),&(VAL))
 /* _av_struct() is like av_struct(), except that you pass the type's size and alignment
  * and the value's address instead of the type and the value themselves.
  * Undocumented, but used by GNU clisp.
  */
-#define _av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)			\
+#define _av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)                  \
   avcall_arg_struct(&(LIST),TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)
 
 /*

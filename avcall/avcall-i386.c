@@ -50,14 +50,14 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("sp");	/* C names for registers */
-/*register __avrword	iret	__asm__("eax"); */
-  register __avrword	iret2	__asm__("edx");
+  register __avword*    sp      __asm__("sp");  /* C names for registers */
+/*register __avrword    iret    __asm__("eax"); */
+  register __avrword    iret2   __asm__("edx");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -65,7 +65,7 @@ avcall_call(av_alist* list)
   int arglen = l->aptr - l->args;
   __avrword i;
 
-  for (i = 0; i < arglen; i++)		/* push function args onto stack */
+  for (i = 0; i < arglen; i++)          /* push function args onto stack */
     argframe[i] = l->args[i];
 
   /* call function */

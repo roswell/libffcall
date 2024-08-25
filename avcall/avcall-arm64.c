@@ -44,7 +44,7 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 register __avword* sret __asm__("x8");  /* structure return pointer */
 
@@ -78,10 +78,10 @@ register double darg8 __asm__("d7");
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("sp");	/* C names for registers */
-  register __avrword	iretreg	 __asm__("x0");
-  register __avrword	iret2reg __asm__("x1");
-  register double	dret	__asm__("d0");
+  register __avword*    sp      __asm__("sp");  /* C names for registers */
+  register __avrword    iretreg  __asm__("x0");
+  register __avrword    iret2reg __asm__("x1");
+  register double       dret    __asm__("d0");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -93,7 +93,7 @@ avcall_call(av_alist* list)
 
   {
     int i;
-    for (i = 0; i < arglen; i++)	/* push function args onto stack */
+    for (i = 0; i < arglen; i++)        /* push function args onto stack */
       argframe[i] = l->args[i];
   }
 

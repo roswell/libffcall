@@ -36,19 +36,19 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("sp");  /* C names for registers */
-  register __avword*	sret	__asm__("a1");	/* structure return pointer */
-/*register __avrword	iret	__asm__("d0"); */
-  register __avrword	iret2	__asm__("d1");
-  register float	fret	__asm__("d0");	/* d0 */
-  register double	dret	__asm__("d0");	/* d0,d1 */
-  register float	fp_fret	__asm__("fp0");
-  register double	fp_dret	__asm__("fp0");
+  register __avword*    sp      __asm__("sp");  /* C names for registers */
+  register __avword*    sret    __asm__("a1");  /* structure return pointer */
+/*register __avrword    iret    __asm__("d0"); */
+  register __avrword    iret2   __asm__("d1");
+  register float        fret    __asm__("d0");  /* d0 */
+  register double       dret    __asm__("d0");  /* d0,d1 */
+  register float        fp_fret __asm__("fp0");
+  register double       fp_dret __asm__("fp0");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -57,13 +57,13 @@ avcall_call(av_alist* list)
   __avrword i;
   __avrword i2;
 
-  for (i = 0; i < arglen; i++)		/* push function args onto stack */
+  for (i = 0; i < arglen; i++)          /* push function args onto stack */
     argframe[i] = l->args[i];
 
-  if (l->rtype == __AVstruct)		/* push struct return address */
+  if (l->rtype == __AVstruct)           /* push struct return address */
     __asm__("move%.l %0,%/a1" : : "g" (l->raddr));
 
-  i = (*l->func)();			/* call function */
+  i = (*l->func)();                     /* call function */
   i2 = iret2;
 
   /* save return value */

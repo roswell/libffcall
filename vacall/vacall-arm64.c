@@ -22,7 +22,7 @@
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *		env	__asm__("x18");
+         *              env     __asm__("x18");
 #endif
 
 register __vaword* sret __asm__("x8");  /* structure return pointer */

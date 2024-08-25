@@ -46,24 +46,24 @@
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *	env	__asm__("%r29");
+         *      env     __asm__("%r29");
 #endif
-register void*		sret	__asm__("%r28");
-register __varword	arg1	__asm__("%r26");
-register __varword	arg2	__asm__("%r25");
-register __varword	arg3	__asm__("%r24");
-register __varword	arg4	__asm__("%r23");
-register float		farg1	__asm__("%fr4"); /* fr4L */
-register float		farg2	__asm__("%fr5"); /* fr5L */
-register float		farg3	__asm__("%fr6"); /* fr6L */
-register float		farg4	__asm__("%fr7"); /* fr7L */
-register double		darg1	__asm__("%fr5");
-register double		darg2	__asm__("%fr7");
-register int		iret	__asm__("%r28");
-register float		fret	__asm__("%fr4"); /* fr4L */
-register double		dret	__asm__("%fr4");
-register __varword	iret1	__asm__("%r28");
-register __varword	iret2	__asm__("%r29");
+register void*          sret    __asm__("%r28");
+register __varword      arg1    __asm__("%r26");
+register __varword      arg2    __asm__("%r25");
+register __varword      arg3    __asm__("%r24");
+register __varword      arg4    __asm__("%r23");
+register float          farg1   __asm__("%fr4"); /* fr4L */
+register float          farg2   __asm__("%fr5"); /* fr5L */
+register float          farg3   __asm__("%fr6"); /* fr6L */
+register float          farg4   __asm__("%fr7"); /* fr7L */
+register double         darg1   __asm__("%fr5");
+register double         darg2   __asm__("%fr7");
+register int            iret    __asm__("%r28");
+register float          fret    __asm__("%fr4"); /* fr4L */
+register double         dret    __asm__("%fr4");
+register __varword      iret1   __asm__("%r28");
+register __varword      iret2   __asm__("%r29");
 
 #ifdef REENTRANT
 static

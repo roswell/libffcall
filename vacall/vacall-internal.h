@@ -238,40 +238,40 @@ typedef struct vacall_alist
  */
 
 #define __va_start(LIST,RETTYPE,FLAGS)  \
-  ((LIST)->flags = (FLAGS),						\
-   (LIST)->rtype = (RETTYPE)						\
+  ((LIST)->flags = (FLAGS),                                             \
+   (LIST)->rtype = (RETTYPE)                                            \
   )
 
 /*
  * va_start_struct: Preparing structure return.
  */
 #define __va_start_struct(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE,FLAGS)  \
-  (__va_start(LIST,__VAstruct,FLAGS),					\
-   (LIST)->rsize = (TYPE_SIZE),						\
-   ((LIST)->flags & __VA_SUNPROCC_STRUCT_RETURN				\
-    ? __va_start_struct2(LIST)						\
-    : ((LIST)->flags & __VA_SUNCC_STRUCT_RETURN				\
+  (__va_start(LIST,__VAstruct,FLAGS),                                   \
+   (LIST)->rsize = (TYPE_SIZE),                                         \
+   ((LIST)->flags & __VA_SUNPROCC_STRUCT_RETURN                         \
+    ? __va_start_struct2(LIST)                                          \
+    : ((LIST)->flags & __VA_SUNCC_STRUCT_RETURN                         \
        ? ((TYPE_SIZE) <= sizeof(vacall_struct_buffer) || (vacall_error_struct_too_large(TYPE_SIZE), 0), \
-          (LIST)->raddr = &vacall_struct_buffer,			\
-          0								\
-         )								\
-       : (((LIST)->flags & __VA_SMALL_STRUCT_RETURN)			\
-          && __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)	\
-          ? ((LIST)->raddr = &(LIST)->tmp,				\
+          (LIST)->raddr = &vacall_struct_buffer,                        \
+          0                                                             \
+         )                                                              \
+       : (((LIST)->flags & __VA_SMALL_STRUCT_RETURN)                    \
+          && __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)     \
+          ? ((LIST)->raddr = &(LIST)->tmp,                              \
              __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE) \
-            )								\
-          : __va_start_struct2(LIST)					\
+            )                                                           \
+          : __va_start_struct2(LIST)                                    \
   ))  )  )
 /* Determines whether a structure is returned in registers,
  * depending on its size and its word-splittable flag.
  */
 #if (defined(__i386__) && defined(_WIN32))
 #define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4		\
-   || ((TYPE_SIZE) == 8							\
-       && (((LIST)->flags & __VA_MSVC_STRUCT_RETURN)			\
-           || ((TYPE_SPLITTABLE)					\
-               && ((LIST)->flags & __VA_GCC_STRUCT_RETURN)		\
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4             \
+   || ((TYPE_SIZE) == 8                                                 \
+       && (((LIST)->flags & __VA_MSVC_STRUCT_RETURN)                    \
+           || ((TYPE_SPLITTABLE)                                        \
+               && ((LIST)->flags & __VA_GCC_STRUCT_RETURN)              \
   )   )   )   )
 /* Turn on __VA_REGISTER_STRUCT_RETURN if __VA_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers.
@@ -285,9 +285,9 @@ typedef struct vacall_alist
   ((TYPE_SIZE) <= 8)
 #else
 #define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4		\
-   || ((TYPE_SIZE) == 8 && (TYPE_SPLITTABLE)				\
-       && ((LIST)->flags & __VA_GCC_STRUCT_RETURN)			\
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4             \
+   || ((TYPE_SIZE) == 8 && (TYPE_SPLITTABLE)                            \
+       && ((LIST)->flags & __VA_GCC_STRUCT_RETURN)                      \
   )   )
 #endif
 /* Turn on __VA_REGISTER_STRUCT_RETURN if __VA_SMALL_STRUCT_RETURN was set
@@ -308,9 +308,9 @@ typedef struct vacall_alist
 #endif
 #if defined(__alpha__)
 #define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8	\
-   || ((TYPE_SIZE) == 16 && (TYPE_SPLITTABLE)				\
-       && ((LIST)->flags & __VA_GCC_STRUCT_RETURN)			\
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8 \
+   || ((TYPE_SIZE) == 16 && (TYPE_SPLITTABLE)                           \
+       && ((LIST)->flags & __VA_GCC_STRUCT_RETURN)                      \
   )   )
 /* Turn on __VA_REGISTER_STRUCT_RETURN if __VA_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers.
@@ -331,8 +331,8 @@ typedef struct vacall_alist
 /* Test __VA_SMALL_STRUCT_RETURN instead of __VA_REGISTER_STRUCT_RETURN. */
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
-  ((LIST)->anum++,							\
-   0									\
+  ((LIST)->anum++,                                                      \
+   0                                                                    \
   )
 #else
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
@@ -341,9 +341,9 @@ typedef struct vacall_alist
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
 #define __va_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((LIST)->flags & __VA_GCC_STRUCT_RETURN				\
+  ((LIST)->flags & __VA_GCC_STRUCT_RETURN                               \
    ? ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8) \
-   : ((TYPE_SIZE) <= 16)						\
+   : ((TYPE_SIZE) <= 16)                                                \
   )
 /* Turn on __VA_REGISTER_STRUCT_RETURN if __VA_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers. Also turn on
@@ -351,13 +351,13 @@ typedef struct vacall_alist
  * the struct will be returned in floating-point registers.
  */
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
-  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,				\
-   (TYPE_ALIGN) == sizeof(float) && (TYPE_SPLITTABLE)				\
-    && ((TYPE_SIZE) == sizeof(float) || (TYPE_SIZE) == 2*sizeof(float))		\
-    && ((LIST)->flags |= __VA_REGISTER_FLOATSTRUCT_RETURN),			\
-   (TYPE_ALIGN) == sizeof(double) && (TYPE_SPLITTABLE)				\
-    && ((TYPE_SIZE) == sizeof(double) || (TYPE_SIZE) == 2*sizeof(double))	\
-    && ((LIST)->flags |= __VA_REGISTER_DOUBLESTRUCT_RETURN),			\
+  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,                                \
+   (TYPE_ALIGN) == sizeof(float) && (TYPE_SPLITTABLE)                           \
+    && ((TYPE_SIZE) == sizeof(float) || (TYPE_SIZE) == 2*sizeof(float))         \
+    && ((LIST)->flags |= __VA_REGISTER_FLOATSTRUCT_RETURN),                     \
+   (TYPE_ALIGN) == sizeof(double) && (TYPE_SPLITTABLE)                          \
+    && ((TYPE_SIZE) == sizeof(double) || (TYPE_SIZE) == 2*sizeof(double))       \
+    && ((LIST)->flags |= __VA_REGISTER_DOUBLESTRUCT_RETURN),                    \
    0)
 #endif
 #if (defined(__powerpc64__) && !defined(__powerpc64_elfv2__)) || defined(__s390x__)
@@ -373,7 +373,7 @@ typedef struct vacall_alist
  * and the struct will actually be returned in registers.
  */
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
-  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,			\
+  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,                        \
    0)
 #endif
 #if defined(__hppa64__) || defined(__arm64__) || (defined(__powerpc64__) && defined(__powerpc64_elfv2__)) || defined(__x86_64_sysv__) || defined(__riscv64__) || defined(__loongarch64__)
@@ -383,7 +383,7 @@ typedef struct vacall_alist
  * and the struct will actually be returned in registers.
  */
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
-  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,			\
+  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,                        \
    0)
 #endif
 #if defined(__x86_64_ms__)
@@ -393,7 +393,7 @@ typedef struct vacall_alist
  * and the struct will actually be returned in registers.
  */
 #define __va_start_struct1(LIST,TYPE_SIZE,TYPE_ALIGN,TYPE_SPLITTABLE)  \
-  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,			\
+  ((LIST)->flags |= __VA_REGISTER_STRUCT_RETURN,                        \
    0)
 #endif
 /*
@@ -402,33 +402,33 @@ typedef struct vacall_alist
 #if defined(__i386__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__powerpc_aix__) || defined(__powerpc64__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
-  ((LIST)->raddr = *(void* *)((LIST)->aptr),				\
-   (LIST)->aptr += sizeof(void*),					\
-   0									\
+  ((LIST)->raddr = *(void* *)((LIST)->aptr),                            \
+   (LIST)->aptr += sizeof(void*),                                       \
+   0                                                                    \
   )
 #endif
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__x86_64_ms__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
-  ((LIST)->raddr = *(void* *)((LIST)->aptr),				\
-   (LIST)->aptr += sizeof(void*),					\
-   (LIST)->anum++,							\
-   0									\
+  ((LIST)->raddr = *(void* *)((LIST)->aptr),                            \
+   (LIST)->aptr += sizeof(void*),                                       \
+   (LIST)->anum++,                                                      \
+   0                                                                    \
   )
 #endif
 #if defined(__armhf__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
-  ((LIST)->raddr = (void*)(LIST)->iarg[(LIST)->ianum],			\
-   (LIST)->ianum++,							\
-   0									\
+  ((LIST)->raddr = (void*)(LIST)->iarg[(LIST)->ianum],                  \
+   (LIST)->ianum++,                                                     \
+   0                                                                    \
   )
 #endif
 #if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__) || defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
 /* Return structure pointer is passed as first arg. */
 #define __va_start_struct2(LIST)  \
-  ((LIST)->raddr = (void*)((LIST)->iarg[(LIST)->ianum++]),		\
-   0									\
+  ((LIST)->raddr = (void*)((LIST)->iarg[(LIST)->ianum++]),              \
+   0                                                                    \
   )
 #endif
 #if defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__hppa__) || defined(__hppa64__) || defined(__arm64__) || defined(__ia64__)
@@ -449,15 +449,15 @@ typedef struct vacall_alist
 /* args grow up */
 /* small structures < 1 word are adjusted depending on compiler */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->aptr += __va_argsize(TYPE_SIZE),				\
-   (LIST)->aptr - __va_argsize(TYPE_SIZE)				\
+  ((LIST)->aptr += __va_argsize(TYPE_SIZE),                             \
+   (LIST)->aptr - __va_argsize(TYPE_SIZE)                               \
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->aptr += __va_argsize(TYPE_SIZE),				\
-   (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)			\
-		   ? (TYPE_SIZE)					\
-		   : __va_argsize(TYPE_SIZE)				\
-		  )							\
+  ((LIST)->aptr += __va_argsize(TYPE_SIZE),                             \
+   (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)                       \
+                   ? (TYPE_SIZE)                                        \
+                   : __va_argsize(TYPE_SIZE)                            \
+                  )                                                     \
   )
 #endif
 #if defined(__armhf__)
@@ -466,38 +466,38 @@ typedef struct vacall_alist
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (((LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM \
-    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__vaword),	\
-       (char*)&(LIST)->iarg[(LIST)->ianum]				\
-      )									\
-    : (((LIST)->aptr == (uintptr_t)&(LIST)->iarg[__VA_IARG_NUM]		\
-        ? /* split case */						\
+    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__vaword),     \
+       (char*)&(LIST)->iarg[(LIST)->ianum]                              \
+      )                                                                 \
+    : (((LIST)->aptr == (uintptr_t)&(LIST)->iarg[__VA_IARG_NUM]         \
+        ? /* split case */                                              \
           ((LIST)->aptr = (uintptr_t)&(LIST)->iarg[(LIST)->ianum] + __va_argsize(TYPE_SIZE), \
-           0)								\
-        : ((LIST)->aptr += __va_argsize(TYPE_SIZE),			\
-           0)),								\
-       (LIST)->ianum = __VA_IARG_NUM,					\
-       (char*)(LIST)->aptr						\
-   )  )									\
-   - __va_argsize(TYPE_SIZE)						\
+           0)                                                           \
+        : ((LIST)->aptr += __va_argsize(TYPE_SIZE),                     \
+           0)),                                                         \
+       (LIST)->ianum = __VA_IARG_NUM,                                   \
+       (char*)(LIST)->aptr                                              \
+   )  )                                                                 \
+   - __va_argsize(TYPE_SIZE)                                            \
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (((LIST)->ianum + ((TYPE_SIZE) + sizeof(__vaword)-1) / sizeof(__vaword) <= __VA_IARG_NUM \
-    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__vaword),	\
-       (char*)&(LIST)->iarg[(LIST)->ianum]				\
-      )									\
-    : (((LIST)->aptr == (uintptr_t)&(LIST)->iarg[__VA_IARG_NUM]		\
-        ? /* split case */						\
+    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__vaword),     \
+       (char*)&(LIST)->iarg[(LIST)->ianum]                              \
+      )                                                                 \
+    : (((LIST)->aptr == (uintptr_t)&(LIST)->iarg[__VA_IARG_NUM]         \
+        ? /* split case */                                              \
           ((LIST)->aptr = (uintptr_t)&(LIST)->iarg[(LIST)->ianum] + __va_argsize(TYPE_SIZE), \
-           0)								\
-        : ((LIST)->aptr += __va_argsize(TYPE_SIZE),			\
-           0)),								\
-       (LIST)->ianum = __VA_IARG_NUM,					\
-       (char*)(LIST)->aptr						\
-   )  )									\
-   - ((TYPE_SIZE) < sizeof(__vaword)					\
-      ? (TYPE_SIZE)							\
-      : __va_argsize(TYPE_SIZE)						\
-     )									\
+           0)                                                           \
+        : ((LIST)->aptr += __va_argsize(TYPE_SIZE),                     \
+           0)),                                                         \
+       (LIST)->ianum = __VA_IARG_NUM,                                   \
+       (char*)(LIST)->aptr                                              \
+   )  )                                                                 \
+   - ((TYPE_SIZE) < sizeof(__vaword)                                    \
+      ? (TYPE_SIZE)                                                     \
+      : __va_argsize(TYPE_SIZE)                                         \
+     )                                                                  \
   )
 #endif
 #if defined(__powerpc_sysv4__)
@@ -506,72 +506,72 @@ typedef struct vacall_alist
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
-    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__varword),	\
-       (char*)&(LIST)->iarg[(LIST)->ianum]				\
-      )									\
-    : ((LIST)->aptr += __va_argsize(TYPE_SIZE),				\
-       (char*)(LIST)->aptr						\
-   )  )									\
-   - __va_argsize(TYPE_SIZE)						\
+    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__varword),    \
+       (char*)&(LIST)->iarg[(LIST)->ianum]                              \
+      )                                                                 \
+    : ((LIST)->aptr += __va_argsize(TYPE_SIZE),                         \
+       (char*)(LIST)->aptr                                              \
+   )  )                                                                 \
+   - __va_argsize(TYPE_SIZE)                                            \
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   (((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
-    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__varword),	\
-       (char*)&(LIST)->iarg[(LIST)->ianum]				\
-      )									\
-    : ((LIST)->aptr += __va_argsize(TYPE_SIZE),				\
-       (char*)(LIST)->aptr						\
-   )  )									\
-   - ((TYPE_SIZE) < sizeof(__vaword)					\
-      ? (TYPE_SIZE)							\
-      : __va_argsize(TYPE_SIZE)						\
-     )									\
+    ? ((LIST)->ianum += __va_argsize(TYPE_SIZE) / sizeof(__varword),    \
+       (char*)&(LIST)->iarg[(LIST)->ianum]                              \
+      )                                                                 \
+    : ((LIST)->aptr += __va_argsize(TYPE_SIZE),                         \
+       (char*)(LIST)->aptr                                              \
+   )  )                                                                 \
+   - ((TYPE_SIZE) < sizeof(__vaword)                                    \
+      ? (TYPE_SIZE)                                                     \
+      : __va_argsize(TYPE_SIZE)                                         \
+     )                                                                  \
   )
 #endif
 #if defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__x86_64_ms__)
 /* args grow up */
 /* small structures < 1 word are adjusted depending on compiler */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->anum += __va_argsize(TYPE_SIZE)/sizeof(__vaword),		\
-   (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
-   (LIST)->aptr - __va_argsize(TYPE_SIZE)				\
+  ((LIST)->anum += __va_argsize(TYPE_SIZE)/sizeof(__vaword),            \
+   (LIST)->aptr += __va_argsize(TYPE_SIZE),                             \
+   (LIST)->aptr - __va_argsize(TYPE_SIZE)                               \
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->anum += __va_argsize(TYPE_SIZE)/sizeof(__vaword),		\
-   (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
-   (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)			\
-		   ? (TYPE_SIZE)					\
-		   : __va_argsize(TYPE_SIZE)				\
-		  )							\
+  ((LIST)->anum += __va_argsize(TYPE_SIZE)/sizeof(__vaword),            \
+   (LIST)->aptr += __va_argsize(TYPE_SIZE),                             \
+   (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)                       \
+                   ? (TYPE_SIZE)                                        \
+                   : __va_argsize(TYPE_SIZE)                            \
+                  )                                                     \
   )
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
 /* args grow down */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->aptr = (LIST)->aptr - __va_argsize(TYPE_SIZE),		\
-   ((TYPE_SIZE) > 4 && ((LIST)->aptr &= -8)),				\
-   (LIST)->aptr								\
+  ((LIST)->aptr = (LIST)->aptr - __va_argsize(TYPE_SIZE),               \
+   ((TYPE_SIZE) > 4 && ((LIST)->aptr &= -8)),                           \
+   (LIST)->aptr                                                         \
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->aptr = (LIST)->aptr - __va_argsize(TYPE_SIZE),		\
-   ((TYPE_SIZE) > 4 && ((LIST)->aptr &= -8)),				\
-   (LIST)->aptr + ((-(TYPE_SIZE)) & 3)					\
+  ((LIST)->aptr = (LIST)->aptr - __va_argsize(TYPE_SIZE),               \
+   ((TYPE_SIZE) > 4 && ((LIST)->aptr &= -8)),                           \
+   (LIST)->aptr + ((-(TYPE_SIZE)) & 3)                                  \
   )
 #endif
 #if defined(__hppa64__)
 /* args grow up */
 #define __va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (((TYPE_SIZE) > 8 && ((LIST)->aptr = (((LIST)->aptr +15) & -16))),	\
-   (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
-   (LIST)->aptr - __va_argsize(TYPE_SIZE)				\
+  (((TYPE_SIZE) > 8 && ((LIST)->aptr = (((LIST)->aptr +15) & -16))),    \
+   (LIST)->aptr += __va_argsize(TYPE_SIZE),                             \
+   (LIST)->aptr - __va_argsize(TYPE_SIZE)                               \
   )
 #define __va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (((TYPE_SIZE) > 8 && ((LIST)->aptr = (((LIST)->aptr +15) & -16))),	\
-   (LIST)->aptr += __va_argsize(TYPE_SIZE),				\
-   (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)			\
-		   ? (TYPE_SIZE)					\
-		   : __va_argsize(TYPE_SIZE)				\
-		  )							\
+  (((TYPE_SIZE) > 8 && ((LIST)->aptr = (((LIST)->aptr +15) & -16))),    \
+   (LIST)->aptr += __va_argsize(TYPE_SIZE),                             \
+   (LIST)->aptr - ((TYPE_SIZE) < sizeof(__vaword)                       \
+                   ? (TYPE_SIZE)                                        \
+                   : __va_argsize(TYPE_SIZE)                            \
+                  )                                                     \
   )
 #endif
 #if defined(__i386__) || ((defined(__mipsn32__) || defined(__mips64__)) && defined(_MIPSEL)) || defined(__alpha__) || ((defined(__arm__) || defined(__armhf__)) && defined(__ARMEL__)) || defined(__ia64__) || (defined(__powerpc64__) && defined(__LITTLE_ENDIAN__)) || defined(__x86_64_ms__)
@@ -588,12 +588,12 @@ typedef struct vacall_alist
 #ifdef _MIPSEB
 /* big endian -> small args < 1 word are adjusted to the right */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->anum++,							\
+  ((LIST)->anum++,                                                      \
    (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))
 #else /* _MIPSEL */
 /* little endian -> small args < 1 word are adjusted to the left */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((LIST)->anum++,							\
+  ((LIST)->anum++,                                                      \
    (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))
 #endif
 #endif
@@ -603,20 +603,20 @@ typedef struct vacall_alist
   ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
    ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword), \
       &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword)] \
-     )									\
-   : ((LIST)->ianum = __VA_IARG_NUM,					\
-      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+     )                                                                  \
+   : ((LIST)->ianum = __VA_IARG_NUM,                                    \
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)           \
   )  )
 #endif
 #if defined(__x86_64_sysv__)
 /* the first __VA_IARG_NUM argument words are passed in registers */
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (((TYPE_SIZE) <= 2*sizeof(__varword)					\
+  (((TYPE_SIZE) <= 2*sizeof(__varword)                                  \
     && (LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM) \
    ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword), \
       &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword)] \
-     )									\
-   : (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+     )                                                                  \
+   : (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)            \
   )
 #endif
 #if defined(__s390__) || defined(__s390x__)
@@ -624,10 +624,10 @@ typedef struct vacall_alist
 #define __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
    ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword), \
-      (void*)((uintptr_t)&(LIST)->iarg[(LIST)->ianum] - (TYPE_SIZE))	\
-     )									\
-   : ((LIST)->ianum = __VA_IARG_NUM,					\
-      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+      (void*)((uintptr_t)&(LIST)->iarg[(LIST)->ianum] - (TYPE_SIZE))    \
+     )                                                                  \
+   : ((LIST)->ianum = __VA_IARG_NUM,                                    \
+      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)          \
   )  )
 #endif
 #if defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
@@ -636,13 +636,13 @@ typedef struct vacall_alist
   ((LIST)->ianum + ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword) <= __VA_IARG_NUM \
    ? ((LIST)->ianum += ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword), \
       &(LIST)->iarg[(LIST)->ianum - ((TYPE_SIZE) + sizeof(__varword)-1) / sizeof(__varword)] \
-     )									\
-   : (((LIST)->ianum < __VA_IARG_NUM					\
+     )                                                                  \
+   : (((LIST)->ianum < __VA_IARG_NUM                                    \
        ? ((LIST)->aptr -= (__VA_IARG_NUM - (LIST)->ianum) * sizeof(__vaword), \
-          (LIST)->ianum = __VA_IARG_NUM,				\
-          0)								\
-       : 0),								\
-      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+          (LIST)->ianum = __VA_IARG_NUM,                                \
+          0)                                                            \
+       : 0),                                                            \
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)           \
   )  )
 #endif
 #define __va_arg(LIST,TYPE)  \
@@ -650,74 +650,74 @@ typedef struct vacall_alist
 
 /* Integer arguments. */
 
-#define _va_arg_char(LIST)	__va_arg(LIST,char)
-#define _va_arg_schar(LIST)	__va_arg(LIST,signed char)
-#define _va_arg_uchar(LIST)	__va_arg(LIST,unsigned char)
-#define _va_arg_short(LIST)	__va_arg(LIST,short)
-#define _va_arg_ushort(LIST)	__va_arg(LIST,unsigned short)
-#define _va_arg_int(LIST)	__va_arg(LIST,int)
-#define _va_arg_uint(LIST)	__va_arg(LIST,unsigned int)
-#define _va_arg_long(LIST)	__va_arg(LIST,long)
-#define _va_arg_ulong(LIST)	__va_arg(LIST,unsigned long)
+#define _va_arg_char(LIST)      __va_arg(LIST,char)
+#define _va_arg_schar(LIST)     __va_arg(LIST,signed char)
+#define _va_arg_uchar(LIST)     __va_arg(LIST,unsigned char)
+#define _va_arg_short(LIST)     __va_arg(LIST,short)
+#define _va_arg_ushort(LIST)    __va_arg(LIST,unsigned short)
+#define _va_arg_int(LIST)       __va_arg(LIST,int)
+#define _va_arg_uint(LIST)      __va_arg(LIST,unsigned int)
+#define _va_arg_long(LIST)      __va_arg(LIST,long)
+#define _va_arg_ulong(LIST)     __va_arg(LIST,unsigned long)
 
 #if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__VA_LLP64)) || defined(__s390x__) || defined(__riscv64__) || defined(__loongarch64__)
 /* ‘long long’ and ‘long’ are identical. */
-#define _va_arg_longlong	_va_arg_long
-#define _va_arg_ulonglong	_va_arg_ulong
+#define _va_arg_longlong        _va_arg_long
+#define _va_arg_ulonglong       _va_arg_ulong
 #elif defined(__mipsn32__) || defined(__x86_64_x32__) || (defined(__x86_64__) && defined(__VA_LLP64))
 /* ‘long long’ fits in __vaword. */
-#define _va_arg_longlong(LIST)	__va_arg(LIST,long long)
-#define _va_arg_ulonglong(LIST)	__va_arg(LIST,unsigned long long)
+#define _va_arg_longlong(LIST)  __va_arg(LIST,long long)
+#define _va_arg_ulonglong(LIST) __va_arg(LIST,unsigned long long)
 #elif defined(__i386__) || defined(__m68k__) || defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || (defined(__s390__) && !defined(__s390x__)) || defined(__riscv32__)
 /* ‘long long’s are passed embedded on the arg stack. */
-#define _va_arg_longlong(LIST)	__va_arg_longlong(LIST,long long)
-#define _va_arg_ulonglong(LIST)	__va_arg_longlong(LIST,unsigned long long)
+#define _va_arg_longlong(LIST)  __va_arg_longlong(LIST,long long)
+#define _va_arg_ulonglong(LIST) __va_arg_longlong(LIST,unsigned long long)
 #if defined(__i386__) || defined(__m68k__) || defined(__powerpc_aix__)
 /* ‘long long’s are (at most) word-aligned. */
-#define __va_arg_longlong(LIST,TYPE)	__va_arg(LIST,TYPE)
+#define __va_arg_longlong(LIST,TYPE)    __va_arg(LIST,TYPE)
 #endif
 #if defined(__mips__) || defined(__arm__)
 /* ‘long long’s have alignment 8. */
-#define __va_arg_longlong(LIST,TYPE)					\
+#define __va_arg_longlong(LIST,TYPE)                                    \
   ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(intptr_t)__VA_alignof(TYPE)), \
    __va_arg(LIST,TYPE))
 #endif
 #if defined(__armhf__)
 /* ‘long long’s have alignment 8. */
-#define __va_arg_longlong(LIST,TYPE)					\
-  (((LIST)->ianum < __VA_IARG_NUM					\
+#define __va_arg_longlong(LIST,TYPE)                                    \
+  (((LIST)->ianum < __VA_IARG_NUM                                       \
     ? ((LIST)->ianum = (((LIST)->ianum+__VA_alignof(TYPE)/sizeof(__vaword)-1) & -(intptr_t)(__VA_alignof(TYPE)/sizeof(__vaword))), 0) \
     : ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(intptr_t)__VA_alignof(TYPE)), 0) \
-   ),									\
+   ),                                                                   \
    __va_arg(LIST,TYPE))
 #endif
 #if defined(__powerpc_sysv4__)
 /* ‘long long’s have alignment 8. */
-#define __va_arg_longlong(LIST,TYPE)					\
-  (((LIST)->ianum < __VA_IARG_NUM					\
+#define __va_arg_longlong(LIST,TYPE)                                    \
+  (((LIST)->ianum < __VA_IARG_NUM                                       \
     ? ((LIST)->ianum = (((LIST)->ianum+__VA_alignof(TYPE)/sizeof(__varword)-1) & -(intptr_t)(__VA_alignof(TYPE)/sizeof(__varword))), 0) \
     : ((LIST)->aptr = (((LIST)->aptr+__VA_alignof(TYPE)-1) & -(intptr_t)__VA_alignof(TYPE)), 0) \
-   ),									\
+   ),                                                                   \
    __va_arg(LIST,TYPE))
 #endif
 #if (defined(__s390__) && !defined(__s390x__)) || defined(__riscv32__)
 /* Within the arg stack, the alignment is only 4, not 8. */
-#define __va_arg_longlong(LIST,TYPE)	__va_arg(LIST,TYPE)
+#define __va_arg_longlong(LIST,TYPE)    __va_arg(LIST,TYPE)
 #endif
 #if (defined(__sparc__) && !defined(__sparc64__))
 /* Within the arg stack, the alignment is only 4, not 8. */
 /* Beware against unaligned accesses! */
-#define __va_arg_longlong(LIST,TYPE)					\
-  ((LIST)->tmp._words[0] = ((__vaword*)((LIST)->aptr))[0],		\
-   (LIST)->tmp._words[1] = ((__vaword*)((LIST)->aptr))[1],		\
-   (LIST)->aptr += sizeof(TYPE),					\
-   (TYPE)((LIST)->tmp._longlong)					\
+#define __va_arg_longlong(LIST,TYPE)                                    \
+  ((LIST)->tmp._words[0] = ((__vaword*)((LIST)->aptr))[0],              \
+   (LIST)->tmp._words[1] = ((__vaword*)((LIST)->aptr))[1],              \
+   (LIST)->aptr += sizeof(TYPE),                                        \
+   (TYPE)((LIST)->tmp._longlong)                                        \
   )
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
 /* ‘long long’s have alignment 8. */
-#define __va_arg_longlong(LIST,TYPE)					\
-  ((LIST)->aptr = ((LIST)->aptr & -(intptr_t)__VA_alignof(TYPE)),	\
+#define __va_arg_longlong(LIST,TYPE)                                    \
+  ((LIST)->aptr = ((LIST)->aptr & -(intptr_t)__VA_alignof(TYPE)),       \
    __va_arg(LIST,TYPE))
 #endif
 #endif
@@ -740,29 +740,29 @@ typedef struct vacall_alist
 #if defined(__sparc__) && !defined(__sparc64__)
 /* Beware against unaligned ‘double’ accesses! */
 #define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->tmp._words[0] = ((__vaword*)((LIST)->aptr))[0],		\
-   (LIST)->tmp._words[1] = ((__vaword*)((LIST)->aptr))[1],		\
-   (LIST)->aptr += sizeof(double),					\
-   (LIST)->tmp._double							\
+  (__va_align_double(LIST)                                              \
+   (LIST)->tmp._words[0] = ((__vaword*)((LIST)->aptr))[0],              \
+   (LIST)->tmp._words[1] = ((__vaword*)((LIST)->aptr))[1],              \
+   (LIST)->aptr += sizeof(double),                                      \
+   (LIST)->tmp._double                                                  \
   )
 #endif
 #if defined(__alpha__)
 /* The first 6 floating point registers have been stored in another place. */
 #define _va_arg_double(LIST)  \
-  (((LIST)->aptr += sizeof(double)) <= (LIST)->memargptr		\
-   ? *(double*)((LIST)->aptr - sizeof(double) + (LIST)->farg_offset)	\
-   : *(double*)((LIST)->aptr - sizeof(double))				\
+  (((LIST)->aptr += sizeof(double)) <= (LIST)->memargptr                \
+   ? *(double*)((LIST)->aptr - sizeof(double) + (LIST)->farg_offset)    \
+   : *(double*)((LIST)->aptr - sizeof(double))                          \
   )
 #define _va_arg_float(LIST)  \
-  (((LIST)->aptr += sizeof(double)) <= (LIST)->memargptr		\
+  (((LIST)->aptr += sizeof(double)) <= (LIST)->memargptr                \
    ? /* The first 6 args have been put into memory by "stt" instructions */\
-     /* (see vacall-alpha.s!). Therefore load them as doubles. */	\
-     /* When viewed as floats, the value will be the correct one. */	\
+     /* (see vacall-alpha.s!). Therefore load them as doubles. */       \
+     /* When viewed as floats, the value will be the correct one. */    \
      (float)*(double*)((LIST)->aptr - sizeof(double) + (LIST)->farg_offset) \
-   : /* These args have been put into memory by "sts" instructions, */	\
-     /* therefore load them as floats. */				\
-     *(float*)((LIST)->aptr - sizeof(double))				\
+   : /* These args have been put into memory by "sts" instructions, */  \
+     /* therefore load them as floats. */                               \
+     *(float*)((LIST)->aptr - sizeof(double))                           \
   )
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
@@ -779,17 +779,17 @@ typedef struct vacall_alist
  * Therefore we need to take the values from the floating-point registers.
  */
 #define _va_arg_float(LIST)  \
-  (((LIST)->aptr -= sizeof(float)) >= (LIST)->memargptr			\
-   ? /* The first 4 float args are stored separately. */		\
-     *(float*)((LIST)->aptr + (LIST)->farg_offset)			\
-   : *(float*)((LIST)->aptr)						\
+  (((LIST)->aptr -= sizeof(float)) >= (LIST)->memargptr                 \
+   ? /* The first 4 float args are stored separately. */                \
+     *(float*)((LIST)->aptr + (LIST)->farg_offset)                      \
+   : *(float*)((LIST)->aptr)                                            \
   )
 #define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   (((LIST)->aptr -= sizeof(double)) >= (LIST)->memargptr		\
-    ? /* The first 2 double args are stored separately. */		\
-      *(double*)((LIST)->aptr + (LIST)->darg_offset)			\
-    : *(double*)((LIST)->aptr)						\
+  (__va_align_double(LIST)                                              \
+   (((LIST)->aptr -= sizeof(double)) >= (LIST)->memargptr               \
+    ? /* The first 2 double args are stored separately. */              \
+      *(double*)((LIST)->aptr + (LIST)->darg_offset)                    \
+    : *(double*)((LIST)->aptr)                                          \
   ))
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
@@ -797,23 +797,23 @@ typedef struct vacall_alist
  * parameters.
  */
 #define _va_arg_float(LIST)  \
-  ((LIST)->aptr += sizeof(float),					\
-   (LIST)->anum++,							\
-   (LIST)->fanum++,							\
-   ((LIST)->anum == (LIST)->fanum && (LIST)->fanum <= __VA_FARG_NUM	\
-    ? /* only floating-point arguments so far */			\
-      (LIST)->farg[(LIST)->fanum - 1]					\
-    : *(float*)((LIST)->aptr - sizeof(float))				\
+  ((LIST)->aptr += sizeof(float),                                       \
+   (LIST)->anum++,                                                      \
+   (LIST)->fanum++,                                                     \
+   ((LIST)->anum == (LIST)->fanum && (LIST)->fanum <= __VA_FARG_NUM     \
+    ? /* only floating-point arguments so far */                        \
+      (LIST)->farg[(LIST)->fanum - 1]                                   \
+    : *(float*)((LIST)->aptr - sizeof(float))                           \
   ))
 #define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->aptr += sizeof(double),					\
-   (LIST)->anum++,							\
-   (LIST)->fanum++,							\
-   ((LIST)->anum == (LIST)->fanum && (LIST)->fanum <= __VA_FARG_NUM	\
-    ? /* only floating-point arguments so far */			\
-      (LIST)->darg[(LIST)->fanum - 1]					\
-    : *(double*)((LIST)->aptr - sizeof(double))				\
+  (__va_align_double(LIST)                                              \
+   (LIST)->aptr += sizeof(double),                                      \
+   (LIST)->anum++,                                                      \
+   (LIST)->fanum++,                                                     \
+   ((LIST)->anum == (LIST)->fanum && (LIST)->fanum <= __VA_FARG_NUM     \
+    ? /* only floating-point arguments so far */                        \
+      (LIST)->darg[(LIST)->fanum - 1]                                   \
+    : *(double*)((LIST)->aptr - sizeof(double))                         \
   ))
 #endif
 #if defined(__mipsn32__) || defined(__mips64__) || defined(__x86_64_ms__)
@@ -821,18 +821,18 @@ typedef struct vacall_alist
  * parameters.
  */
 #define _va_arg_float(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->aptr += sizeof(double),					\
-   (++(LIST)->anum <= __VA_FARG_NUM					\
-    ? (LIST)->farg[(LIST)->anum - 1]					\
-    : *(float*)((LIST)->aptr - sizeof(double))				\
+  (__va_align_double(LIST)                                              \
+   (LIST)->aptr += sizeof(double),                                      \
+   (++(LIST)->anum <= __VA_FARG_NUM                                     \
+    ? (LIST)->farg[(LIST)->anum - 1]                                    \
+    : *(float*)((LIST)->aptr - sizeof(double))                          \
   ))
 #define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->aptr += sizeof(double),					\
-   (++(LIST)->anum <= __VA_FARG_NUM					\
-    ? (LIST)->darg[(LIST)->anum - 1]					\
-    : *(double*)((LIST)->aptr - sizeof(double))				\
+  (__va_align_double(LIST)                                              \
+   (LIST)->aptr += sizeof(double),                                      \
+   (++(LIST)->anum <= __VA_FARG_NUM                                     \
+    ? (LIST)->darg[(LIST)->anum - 1]                                    \
+    : *(double*)((LIST)->aptr - sizeof(double))                         \
   ))
 #endif
 #if defined(__sparc64__)
@@ -840,191 +840,191 @@ typedef struct vacall_alist
  * parameters.
  */
 #define _va_arg_float(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->aptr += sizeof(double),					\
-   (++(LIST)->anum <= 16						\
-    ? (LIST)->farg[(LIST)->anum - 1]					\
-    : *(float*)((LIST)->aptr - sizeof(float))				\
+  (__va_align_double(LIST)                                              \
+   (LIST)->aptr += sizeof(double),                                      \
+   (++(LIST)->anum <= 16                                                \
+    ? (LIST)->farg[(LIST)->anum - 1]                                    \
+    : *(float*)((LIST)->aptr - sizeof(float))                           \
   ))
 #define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->aptr += sizeof(double),					\
-   (++(LIST)->anum <= 16						\
-    ? (LIST)->darg[(LIST)->anum - 1]					\
-    : *(double*)((LIST)->aptr - sizeof(double))				\
+  (__va_align_double(LIST)                                              \
+   (LIST)->aptr += sizeof(double),                                      \
+   (++(LIST)->anum <= 16                                                \
+    ? (LIST)->darg[(LIST)->anum - 1]                                    \
+    : *(double*)((LIST)->aptr - sizeof(double))                         \
   ))
 #endif
 #if defined(__hppa64__)
 /* The floating-point arguments among the first 8 argument words have been
    stored elsewhere. */
 #define _va_arg_float(LIST)  \
-  ((LIST)->aptr += sizeof(double),					\
-   ((LIST)->aptr <= (LIST)->memargptr					\
+  ((LIST)->aptr += sizeof(double),                                      \
+   ((LIST)->aptr <= (LIST)->memargptr                                   \
     ? (LIST)->farg[__VA_FARG_NUM-1-((LIST)->memargptr - (LIST)->aptr)/sizeof(__vaword)] \
-    : ((float*)(LIST)->aptr)[-1]					\
+    : ((float*)(LIST)->aptr)[-1]                                        \
   ))
 #define _va_arg_double(LIST)  \
-  ((LIST)->aptr += sizeof(double),					\
-   ((LIST)->aptr <= (LIST)->memargptr					\
+  ((LIST)->aptr += sizeof(double),                                      \
+   ((LIST)->aptr <= (LIST)->memargptr                                   \
     ? (LIST)->darg[__VA_FARG_NUM-1-((LIST)->memargptr - (LIST)->aptr)/sizeof(__vaword)] \
-    : ((double*)(LIST)->aptr)[-1]					\
+    : ((double*)(LIST)->aptr)[-1]                                       \
   ))
 #endif
 #if defined(__armhf__)
 #define _va_arg_float(LIST)  \
-  ((LIST)->fanum <= 15							\
-   ? (LIST)->farg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(float),					\
-      *(float*)((LIST)->aptr - sizeof(float))				\
+  ((LIST)->fanum <= 15                                                  \
+   ? (LIST)->farg[(LIST)->fanum++]                                      \
+   : ((LIST)->aptr += sizeof(float),                                    \
+      *(float*)((LIST)->aptr - sizeof(float))                           \
   )  )
 #define _va_arg_double(LIST)  \
-  (((LIST)->fanum % 2 ? (LIST)->fanum++ : 0),				\
-   ((LIST)->fanum <= 14							\
-    ? ((LIST)->fanum += 2, (LIST)->darg[(LIST)->fanum / 2 - 1])		\
-    : ((LIST)->aptr += sizeof(double),					\
-       *(double*)((LIST)->aptr - sizeof(double))			\
+  (((LIST)->fanum % 2 ? (LIST)->fanum++ : 0),                           \
+   ((LIST)->fanum <= 14                                                 \
+    ? ((LIST)->fanum += 2, (LIST)->darg[(LIST)->fanum / 2 - 1])         \
+    : ((LIST)->aptr += sizeof(double),                                  \
+       *(double*)((LIST)->aptr - sizeof(double))                        \
   ))  )
 #endif
 #if defined(__arm64__)
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define _va_arg_float(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->farg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(__vaword),					\
-      *(float*)((LIST)->aptr - sizeof(__vaword))			\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (LIST)->farg[(LIST)->fanum++]                                      \
+   : ((LIST)->aptr += sizeof(__vaword),                                 \
+      *(float*)((LIST)->aptr - sizeof(__vaword))                        \
   )  )
 #define _va_arg_double(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->darg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(double),					\
-      *(double*)((LIST)->aptr - sizeof(double))				\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (LIST)->darg[(LIST)->fanum++]                                      \
+   : ((LIST)->aptr += sizeof(double),                                   \
+      *(double*)((LIST)->aptr - sizeof(double))                         \
   )  )
 #endif
 #if defined(__powerpc_aix__)
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define _va_arg_float(LIST)  \
-  ((LIST)->aptr += sizeof(float),					\
-   ((LIST)->fanum < __VA_FARG_NUM					\
-    ? (float) (LIST)->farg[(LIST)->fanum++]				\
-    : *(float*)((LIST)->aptr - sizeof(float))				\
+  ((LIST)->aptr += sizeof(float),                                       \
+   ((LIST)->fanum < __VA_FARG_NUM                                       \
+    ? (float) (LIST)->farg[(LIST)->fanum++]                             \
+    : *(float*)((LIST)->aptr - sizeof(float))                           \
   ))
 #define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->aptr += sizeof(double),					\
-   ((LIST)->fanum < __VA_FARG_NUM					\
-    ? (LIST)->farg[(LIST)->fanum++]					\
-    : *(double*)((LIST)->aptr - sizeof(double))				\
+  (__va_align_double(LIST)                                              \
+   (LIST)->aptr += sizeof(double),                                      \
+   ((LIST)->fanum < __VA_FARG_NUM                                       \
+    ? (LIST)->farg[(LIST)->fanum++]                                     \
+    : *(double*)((LIST)->aptr - sizeof(double))                         \
   ))
 #endif
 #if defined(__powerpc_sysv4__)
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define _va_arg_float(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (float) (LIST)->farg[(LIST)->fanum++]				\
-   : ((LIST)->aptr += sizeof(float),					\
-      *(float*)((LIST)->aptr - sizeof(float))				\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (float) (LIST)->farg[(LIST)->fanum++]                              \
+   : ((LIST)->aptr += sizeof(float),                                    \
+      *(float*)((LIST)->aptr - sizeof(float))                           \
   )  )
 #define _va_arg_double(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->farg[(LIST)->fanum++]					\
-   : (__va_align_double(LIST)						\
-      (LIST)->aptr += sizeof(double),					\
-      *(double*)((LIST)->aptr - sizeof(double))				\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (LIST)->farg[(LIST)->fanum++]                                      \
+   : (__va_align_double(LIST)                                           \
+      (LIST)->aptr += sizeof(double),                                   \
+      *(double*)((LIST)->aptr - sizeof(double))                         \
   )  )
 #endif
 #if defined(__powerpc64__)
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #if defined(_AIX)
 #define _va_arg_float(LIST)  \
-  ((LIST)->aptr += sizeof(__vaword),					\
-   ((LIST)->fanum < __VA_FARG_NUM					\
-    ? (float) (LIST)->farg[(LIST)->fanum++]				\
+  ((LIST)->aptr += sizeof(__vaword),                                    \
+   ((LIST)->fanum < __VA_FARG_NUM                                       \
+    ? (float) (LIST)->farg[(LIST)->fanum++]                             \
     : ((float*)(LIST)->aptr)[(LIST)->flags & __VA_AIXCC_FLOAT_ARGS ? -2 : -1] \
   ))
 #elif defined(__LITTLE_ENDIAN__)
 #define _va_arg_float(LIST)  \
-  ((LIST)->aptr += sizeof(__vaword),					\
-   ((LIST)->fanum < __VA_FARG_NUM					\
-    ? (float) (LIST)->farg[(LIST)->fanum++]				\
-    : ((float*)(LIST)->aptr)[-2]					\
+  ((LIST)->aptr += sizeof(__vaword),                                    \
+   ((LIST)->fanum < __VA_FARG_NUM                                       \
+    ? (float) (LIST)->farg[(LIST)->fanum++]                             \
+    : ((float*)(LIST)->aptr)[-2]                                        \
   ))
 #else /* _BIG_ENDIAN */
 #define _va_arg_float(LIST)  \
-  ((LIST)->aptr += sizeof(__vaword),					\
-   ((LIST)->fanum < __VA_FARG_NUM					\
-    ? (float) (LIST)->farg[(LIST)->fanum++]				\
-    : ((float*)(LIST)->aptr)[-1]					\
+  ((LIST)->aptr += sizeof(__vaword),                                    \
+   ((LIST)->fanum < __VA_FARG_NUM                                       \
+    ? (float) (LIST)->farg[(LIST)->fanum++]                             \
+    : ((float*)(LIST)->aptr)[-1]                                        \
   ))
 #endif
 #define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->aptr += sizeof(double),					\
-   ((LIST)->fanum < __VA_FARG_NUM					\
-    ? (LIST)->farg[(LIST)->fanum++]					\
-    : *(double*)((LIST)->aptr - sizeof(double))				\
+  (__va_align_double(LIST)                                              \
+   (LIST)->aptr += sizeof(double),                                      \
+   ((LIST)->fanum < __VA_FARG_NUM                                       \
+    ? (LIST)->farg[(LIST)->fanum++]                                     \
+    : *(double*)((LIST)->aptr - sizeof(double))                         \
   ))
 #endif
 #if defined(__ia64__)
 /* The first 8 floating-point args have been stored elsewhere. */
 #define _va_arg_float(LIST)  \
-  ((LIST)->aptr += sizeof(__vaword),					\
-   ((LIST)->fanum < __VA_FARG_NUM					\
-    ? (float) (LIST)->farg[(LIST)->fanum++]				\
-    : *(float*)((LIST)->aptr - sizeof(__vaword))			\
+  ((LIST)->aptr += sizeof(__vaword),                                    \
+   ((LIST)->fanum < __VA_FARG_NUM                                       \
+    ? (float) (LIST)->farg[(LIST)->fanum++]                             \
+    : *(float*)((LIST)->aptr - sizeof(__vaword))                        \
   ))
 #define _va_arg_double(LIST)  \
-  (__va_align_double(LIST)						\
-   (LIST)->aptr += sizeof(double),					\
-   ((LIST)->fanum < __VA_FARG_NUM					\
-    ? (LIST)->farg[(LIST)->fanum++]					\
-    : *(double*)((LIST)->aptr - sizeof(double))				\
+  (__va_align_double(LIST)                                              \
+   (LIST)->aptr += sizeof(double),                                      \
+   ((LIST)->fanum < __VA_FARG_NUM                                       \
+    ? (LIST)->farg[(LIST)->fanum++]                                     \
+    : *(double*)((LIST)->aptr - sizeof(double))                         \
   ))
 #endif
 #if defined(__x86_64_sysv__)
 /* The first 8 floating-point args have been stored elsewhere. */
 #define _va_arg_float(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? *(float*)&(LIST)->farg[(LIST)->fanum++]				\
-   : ((LIST)->aptr += sizeof(__vaword),					\
-      *(float*)((LIST)->aptr - sizeof(__vaword))			\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? *(float*)&(LIST)->farg[(LIST)->fanum++]                            \
+   : ((LIST)->aptr += sizeof(__vaword),                                 \
+      *(float*)((LIST)->aptr - sizeof(__vaword))                        \
   )  )
 #define _va_arg_double(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->farg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(__vaword),					\
-      *(double*)((LIST)->aptr - sizeof(__vaword))			\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (LIST)->farg[(LIST)->fanum++]                                      \
+   : ((LIST)->aptr += sizeof(__vaword),                                 \
+      *(double*)((LIST)->aptr - sizeof(__vaword))                       \
   )  )
 #endif
 #if defined(__s390__) || defined(__s390x__)
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define _va_arg_float(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->farg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(__vaword),					\
-      ((float*)(LIST)->aptr)[-1]					\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (LIST)->farg[(LIST)->fanum++]                                      \
+   : ((LIST)->aptr += sizeof(__vaword),                                 \
+      ((float*)(LIST)->aptr)[-1]                                        \
   )  )
 #define _va_arg_double(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->darg[(LIST)->fanum++]					\
-   : ((LIST)->aptr += sizeof(double),					\
-      *(double*)((LIST)->aptr - sizeof(double))				\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (LIST)->darg[(LIST)->fanum++]                                      \
+   : ((LIST)->aptr += sizeof(double),                                   \
+      *(double*)((LIST)->aptr - sizeof(double))                         \
   )  )
 #endif
 #if defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
 /* The first __VA_FARG_NUM floating-point args have been stored elsewhere. */
 #define _va_arg_float(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->farg[(LIST)->fanum++]					\
-   : __va_arg((LIST),float)						\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (LIST)->farg[(LIST)->fanum++]                                      \
+   : __va_arg((LIST),float)                                             \
   )
 #define _va_arg_double(LIST)  \
-  ((LIST)->fanum < __VA_FARG_NUM					\
-   ? (LIST)->darg[(LIST)->fanum++]					\
-   : __va_arg((LIST),double)						\
+  ((LIST)->fanum < __VA_FARG_NUM                                        \
+   ? (LIST)->darg[(LIST)->fanum++]                                      \
+   : __va_arg((LIST),double)                                            \
   )
 #endif
 #ifndef _va_arg_float
-#define _va_arg_float(LIST)	__va_arg(LIST,float)
+#define _va_arg_float(LIST)     __va_arg(LIST,float)
 #endif
 #ifndef _va_arg_double
 #define _va_arg_double(LIST)  \
@@ -1032,7 +1032,7 @@ typedef struct vacall_alist
 #endif
 
 /* Pointer arguments. */
-#define _va_arg_ptr(LIST)	__va_arg(LIST,void*)
+#define _va_arg_ptr(LIST)       __va_arg(LIST,void*)
 
 /* Structure arguments. */
 /* Structure argument alignment. */
@@ -1051,46 +1051,46 @@ typedef struct vacall_alist
   (LIST)->aptr = ((LIST)->aptr + __va_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__va_struct_alignment(TYPE_ALIGN),
 #if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || defined(__arm__) || defined(__armhf__) || (defined(__powerpc64__) && !defined(_AIX)) || defined(__x86_64_sysv__)
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
-   __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)				\
+  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)                         \
+   __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)                         \
   )
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
 /* small structures < 1 word are adjusted depending on compiler */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
-   ((LIST)->flags & __VA_SGICC_STRUCT_ARGS				\
+  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)                         \
+   ((LIST)->flags & __VA_SGICC_STRUCT_ARGS                              \
     ? /* SGI MIPS cc passes small structures left-adjusted, although big-endian! */\
-      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
-    : /* SGI MIPS gcc passes small structures within the first four words left-	   \
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)           \
+    : /* SGI MIPS gcc passes small structures within the first four words left-    \
        * adjusted, for compatibility with cc. But structures in memory are passed  \
-       * right-adjusted!! See gcc-2.6.3/config/mips/mips.c:function_arg().	   \
-       */									   \
-      ((LIST)->aptr < (LIST)->memargptr					\
-       ? (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)	\
-       : (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)	\
+       * right-adjusted!! See gcc-2.6.3/config/mips/mips.c:function_arg().         \
+       */                                                                          \
+      ((LIST)->aptr < (LIST)->memargptr                                 \
+       ? (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)        \
+       : (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)       \
   ))  )
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
 /* small structures < 1 word are adjusted depending on compiler */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
-   ((LIST)->flags & __VA_SGICC_STRUCT_ARGS				\
+  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)                         \
+   ((LIST)->flags & __VA_SGICC_STRUCT_ARGS                              \
     ? /* SGI MIPS cc and gcc >= 3.4 passes small structures left-adjusted, although big-endian! */\
-      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
-    : /* SGI MIPS gcc < 3.4 passes small structures right-adjusted. */	\
-      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)           \
+    : /* SGI MIPS gcc < 3.4 passes small structures right-adjusted. */  \
+      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)          \
   ))
 #endif
 #if defined(__powerpc_aix__) || (defined(__powerpc64__) && defined(_AIX))
 /* small structures < 1 word are adjusted depending on compiler */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
-   ((LIST)->flags & __VA_AIXCC_STRUCT_ARGS				\
+  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)                         \
+   ((LIST)->flags & __VA_AIXCC_STRUCT_ARGS                              \
     ? /* AIX cc and xlc pass small structures left-adjusted, although big-endian! */\
-      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
-    : /* gcc passes small structures right-adjusted. */			\
-      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)           \
+    : /* gcc passes small structures right-adjusted. */                 \
+      (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)          \
   ))
 #endif
 #if defined(__powerpc_sysv4__)
@@ -1107,26 +1107,26 @@ typedef struct vacall_alist
 /* Small structures are passed left-adjusted, although big-endian! */
 /* Big structures are passed as pointers to caller-made local copies. */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((TYPE_SIZE) <= 16							\
-   ? (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)			\
-      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))		\
-   : va_arg_ptr(LIST,void*)						\
+  ((TYPE_SIZE) <= 16                                                    \
+   ? (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)                      \
+      (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN))          \
+   : va_arg_ptr(LIST,void*)                                             \
   )
 #endif
 #if defined(__hppa64__)
 /* Structures are passed left-adjusted (although big-endian!). */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
-   (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)                         \
+   (void*)__va_arg_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)              \
   )
 #endif
 #if defined(__arm64__) || defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
 /* Small structures are passed in registers or on the stack. */
 /* Big structures are passed as pointers to caller-made local copies. */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((TYPE_SIZE) <= 2*sizeof(__varword)					\
-   ? (void*)__va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
-   : va_arg_ptr(LIST,void*)						\
+  ((TYPE_SIZE) <= 2*sizeof(__varword)                                   \
+   ? (void*)__va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)                \
+   : va_arg_ptr(LIST,void*)                                             \
   )
 #endif
 #if defined(__x86_64_ms__) || defined(__s390__) || defined(__s390x__)
@@ -1135,8 +1135,8 @@ typedef struct vacall_alist
  */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
   ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8 \
-   ? (void*)__va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
-   : va_arg_ptr(LIST,void*)						\
+   ? (void*)__va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)                \
+   : va_arg_ptr(LIST,void*)                                             \
   )
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
@@ -1145,18 +1145,18 @@ typedef struct vacall_alist
  * with GCC >= 8, without copy otherwise).
  */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  ((TYPE_SIZE) > 8							\
-   ? va_arg_ptr(LIST,void*)						\
+  ((TYPE_SIZE) > 8                                                      \
+   ? va_arg_ptr(LIST,void*)                                             \
    : /* FIXME: gcc-2.6.3 passes structures <= 4 bytes in memory left-adjusted! ?? */\
-     (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)		\
+     (void*)__va_arg_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN)           \
   )
 #endif
 #if defined(__ia64__)
 /* With GCC < 3, types larger than a word have 2-word alignment. */
 #define __va_arg_struct(LIST,TYPE_SIZE,TYPE_ALIGN)  \
-  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)				\
+  (__va_align_struct(LIST,TYPE_SIZE,TYPE_ALIGN)                         \
    (((LIST)->flags & __VA_OLDGCC_STRUCT_ARGS) && (TYPE_SIZE) > sizeof(__vaword) && (((__vaword*)(LIST)->aptr - (LIST)->saptr) & 1) ? (LIST)->aptr += sizeof(__vaword) : 0), \
-   __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)				\
+   __va_arg_adjusted(LIST,TYPE_SIZE,TYPE_ALIGN)                         \
   )
 #endif
 
@@ -1204,7 +1204,7 @@ typedef struct vacall_alist
 #define _va_return_ptr(LIST,VAL)  \
   (__va_return(LIST,__VAvoidp), (LIST)->tmp._ptr = (VAL))
 #define __va_return_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL_ADDR)  \
-  (__va_return(LIST,__VAstruct),					\
+  (__va_return(LIST,__VAstruct),                                        \
    vacall_structcpy((void*)((LIST)->raddr),VAL_ADDR,TYPE_SIZE,TYPE_ALIGN) \
   )
 

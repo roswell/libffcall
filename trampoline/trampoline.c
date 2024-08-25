@@ -756,8 +756,8 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
   /* 2. Fill out the trampoline */
 #ifdef __i386__
   /* function:
-   *    movl $<data>,<variable>		C7 05 <variable> <data>
-   *    jmp <address>			E9 <address>-<here>
+   *    movl $<data>,<variable>         C7 05 <variable> <data>
+   *    jmp <address>                   E9 <address>-<here>
    * here:
    */
   *(short *) (function + 0) = 0x05C7;
@@ -777,9 +777,9 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __m68k__
   /* function:
-   *    movel #<data>,<variable>	23 FC <data> <variable>
-   *    jmp <address>			4E F9 <address>
-   *    nop				4E 71
+   *    movel #<data>,<variable>        23 FC <data> <variable>
+   *    jmp <address>                   4E F9 <address>
+   *    nop                             4E 71
    */
   *(short *) (function + 0) = 0x23FC;
   *(long *)  (function + 2) = (long) data;
@@ -800,14 +800,14 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #if defined(__mipsold__) && !defined(__mipsn32__)
   /* function:
-   *    li $2,<data>&0xffff0000		3C 02 hi16(<data>)
-   *    ori $2,$2,<data>&0xffff		34 42 lo16(<data>)
-   *    sw $2,<variable>		3C 01 hi16(<variable>)
-   *    				AC 22 lo16(<variable>)
-   *    li $25,<address>&0xffff0000	3C 19 hi16(<address>)
-   *    ori $25,$25,<address>&0xffff	37 39 lo16(<address>)
-   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
-   *    nop				00 00 00 00
+   *    li $2,<data>&0xffff0000         3C 02 hi16(<data>)
+   *    ori $2,$2,<data>&0xffff         34 42 lo16(<data>)
+   *    sw $2,<variable>                3C 01 hi16(<variable>)
+   *                                    AC 22 lo16(<variable>)
+   *    li $25,<address>&0xffff0000     3C 19 hi16(<address>)
+   *    ori $25,$25,<address>&0xffff    37 39 lo16(<address>)
+   *    jal $0,$25                      03 20 00 09  was:  j $25   03 20 00 08
+   *    nop                             00 00 00 00
    */
   /* What about big endian / little endian ?? */
   *(short *) (function + 0) = 0x3C02;
@@ -844,15 +844,15 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #if (defined(__mips__) || defined(__mipsn32__)) && !defined(__mips64__)
   /* function:
-   *    lw $2,24($25)			8F 22 00 18
-   *    lw $3,28($25)			8F 23 00 1C
-   *    sw $3,0($2)			AC 43 00 00
-   *    lw $25,32($25)			8F 39 00 20
-   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
-   *    nop				00 00 00 00
-   *    .word <variable>		<variable>
-   *    .word <data>			<data>
-   *    .word <address>			<address>
+   *    lw $2,24($25)                   8F 22 00 18
+   *    lw $3,28($25)                   8F 23 00 1C
+   *    sw $3,0($2)                     AC 43 00 00
+   *    lw $25,32($25)                  8F 39 00 20
+   *    jal $0,$25                      03 20 00 09  was:  j $25   03 20 00 08
+   *    nop                             00 00 00 00
+   *    .word <variable>                <variable>
+   *    .word <data>                    <data>
+   *    .word <address>                 <address>
    */
   *(unsigned int *) (function + 0) = 0x8F220018;
   *(unsigned int *) (function + 4) = 0x8F23001C;
@@ -880,27 +880,27 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __mips64old__
   /* function:
-   *    dli $2,<variable>		3C 02 hi16(hi32(<variable>))
-   *					34 42 lo16(hi32(<variable>))
-   *					00 02 14 38
-   *					34 42 hi16(lo32(<variable>))
-   *					00 02 14 38
-   *					34 42 lo16(lo32(<variable>))
-   *    dli $3,<data>			3C 03 hi16(hi32(<data>))
-   *					34 63 lo16(hi32(<data>))
-   *					00 03 1C 38
-   *					34 63 hi16(lo32(<data>))
-   *					00 03 1C 38
-   *					34 63 lo16(lo32(<data>))
-   *    sd $3,0($2)			FC 43 00 00
-   *    dli $25,<address>		3C 19 hi16(hi32(<address>))
-   *					37 39 lo16(hi32(<address>))
-   *					00 19 CC 38
-   *					37 39 hi16(lo32(<address>))
-   *					00 19 CC 38
-   *					37 39 lo16(lo32(<address>))
-   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
-   *    nop				00 00 00 00
+   *    dli $2,<variable>               3C 02 hi16(hi32(<variable>))
+   *                                    34 42 lo16(hi32(<variable>))
+   *                                    00 02 14 38
+   *                                    34 42 hi16(lo32(<variable>))
+   *                                    00 02 14 38
+   *                                    34 42 lo16(lo32(<variable>))
+   *    dli $3,<data>                   3C 03 hi16(hi32(<data>))
+   *                                    34 63 lo16(hi32(<data>))
+   *                                    00 03 1C 38
+   *                                    34 63 hi16(lo32(<data>))
+   *                                    00 03 1C 38
+   *                                    34 63 lo16(lo32(<data>))
+   *    sd $3,0($2)                     FC 43 00 00
+   *    dli $25,<address>               3C 19 hi16(hi32(<address>))
+   *                                    37 39 lo16(hi32(<address>))
+   *                                    00 19 CC 38
+   *                                    37 39 hi16(lo32(<address>))
+   *                                    00 19 CC 38
+   *                                    37 39 lo16(lo32(<address>))
+   *    jal $0,$25                      03 20 00 09  was:  j $25   03 20 00 08
+   *    nop                             00 00 00 00
    */
   /* What about big endian / little endian ?? */
   *(short *) (function + 0) = 0x3C02;
@@ -979,15 +979,15 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __mips64__
   /* function:
-   *    ld $2,24($25)			DF 22 00 18
-   *    ld $3,32($25)			DF 23 00 20
-   *    sd $3,0($2)			FC 43 00 00
-   *    ld $25,40($25)			DF 39 00 28
-   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
-   *    nop				00 00 00 00
-   *    .dword <variable>		<variable>
-   *    .dword <data>			<data>
-   *    .dword <address>		<address>
+   *    ld $2,24($25)                   DF 22 00 18
+   *    ld $3,32($25)                   DF 23 00 20
+   *    sd $3,0($2)                     FC 43 00 00
+   *    ld $25,40($25)                  DF 39 00 28
+   *    jal $0,$25                      03 20 00 09  was:  j $25   03 20 00 08
+   *    nop                             00 00 00 00
+   *    .dword <variable>               <variable>
+   *    .dword <data>                   <data>
+   *    .dword <address>                <address>
    */
   *(unsigned int *)  (function + 0) = 0xDF220018;
   *(unsigned int *)  (function + 4) = 0xDF230020;
@@ -1015,13 +1015,13 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #if defined(__sparc__) && !defined(__sparc64__)
   /* function:
-   *    sethi %hi(<variable>),%g1	03000000 | (<variable> >> 10)
-   *    sethi %hi(<data>),%g2		05000000 | (<data> >> 10)
-   *    or %g2,%lo(<data>),%g2		8410A000 | (<data> & 0x3ff)
-   *    st %g2,[%g1+%lo(<variable>)]	C4206000 | (<variable> & 0x3ff)
-   *    sethi %hi(<address>),%g1	03000000 | (<address> >> 10)
-   *    jmp %g1+%lo(<address>)		81C06000 | (<address> & 0x3ff)
-   *    nop				01000000
+   *    sethi %hi(<variable>),%g1       03000000 | (<variable> >> 10)
+   *    sethi %hi(<data>),%g2           05000000 | (<data> >> 10)
+   *    or %g2,%lo(<data>),%g2          8410A000 | (<data> & 0x3ff)
+   *    st %g2,[%g1+%lo(<variable>)]    C4206000 | (<variable> & 0x3ff)
+   *    sethi %hi(<address>),%g1        03000000 | (<address> >> 10)
+   *    jmp %g1+%lo(<address>)          81C06000 | (<address> & 0x3ff)
+   *    nop                             01000000
    */
 #define hi(word)  ((unsigned long) (word) >> 10)
 #define lo(word)  ((unsigned long) (word) & 0x3ff)
@@ -1050,18 +1050,18 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __sparc64__
   /* function:
-   *    rd %pc,%g1			83414000
-   *    ldx [%g1+24],%g2		C4586018
-   *    ldx [%g1+32],%g3		C6586020
-   *    ldx [%g1+40],%g1		C2586028
-   *    jmp %g1				81C04000
-   *    stx %g3,[%g2]			C6708000
-   *    .long high32(<variable>)	<variable> >> 32
-   *    .long low32(<variable>)		<variable> & 0xffffffff
-   *    .long high32(<data>)		<data> >> 32
-   *    .long low32(<data>)		<data> & 0xffffffff
-   *    .long high32(<address>)		<address> >> 32
-   *    .long low32(<address>)		<address> & 0xffffffff
+   *    rd %pc,%g1                      83414000
+   *    ldx [%g1+24],%g2                C4586018
+   *    ldx [%g1+32],%g3                C6586020
+   *    ldx [%g1+40],%g1                C2586028
+   *    jmp %g1                         81C04000
+   *    stx %g3,[%g2]                   C6708000
+   *    .long high32(<variable>)        <variable> >> 32
+   *    .long low32(<variable>)         <variable> & 0xffffffff
+   *    .long high32(<data>)            <data> >> 32
+   *    .long low32(<data>)             <data> & 0xffffffff
+   *    .long high32(<address>)         <address> >> 32
+   *    .long low32(<address>)          <address> & 0xffffffff
    */
   *(int *)  (function + 0) = 0x83414000;
   *(int *)  (function + 4) = 0xC4586018;
@@ -1089,16 +1089,16 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __alpha__
   /* function:
-   *    br $1,function..ng	00 00 20 C0
+   *    br $1,function..ng      00 00 20 C0
    * function..ng:
-   *    ldq $2,20($1)		14 00 41 A4
-   *    ldq $3,28($1)		1C 00 61 A4
-   *    ldq $27,36($1)		24 00 61 A7
-   *    stq $2,0($3)		00 00 43 B4
-   *    jmp $31,($27),0		00 00 FB 6B
-   *    .quad <data>		<data>
-   *    .quad <variable>	<variable>
-   *    .quad <address>		<address>
+   *    ldq $2,20($1)           14 00 41 A4
+   *    ldq $3,28($1)           1C 00 61 A4
+   *    ldq $27,36($1)          24 00 61 A7
+   *    stq $2,0($3)            00 00 43 B4
+   *    jmp $31,($27),0         00 00 FB 6B
+   *    .quad <data>            <data>
+   *    .quad <variable>        <variable>
+   *    .quad <address>         <address>
    */
   { static int code [6] =
       { 0xC0200000, 0xA4410014, 0xA461001C, 0xA7610024, 0xB4430000, 0x6BFB0000 };
@@ -1125,21 +1125,21 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __hppaold__
   /* function:
-   *    ldil L'<data>,%r20		22800000 | hi(<data>)
-   *    ldil L'<variable>,%r19		22600000 | hi(<variable>)
-   *    ldo R'<data>(%r20),%r20		36940000 | lo(<data>)
-   *    stw %r20,R'<variable>(%r19)	6A740000 | lo(<variable>)
-   *    ldil L'<address>,%r21		22A00000 | hi(<address>)
-   *    ldo R'<address>(%r21),%r21	36B50000 | lo(<address>)
-   *    bb,>=,n %r21,30,function2	C7D5C012
-   *    depi 0,31,2,%r21		D6A01C1E
-   *    ldw 4(0,%r21),%r19		4AB30008
-   *    ldw 0(0,%r21),%r21		4AB50000
+   *    ldil L'<data>,%r20              22800000 | hi(<data>)
+   *    ldil L'<variable>,%r19          22600000 | hi(<variable>)
+   *    ldo R'<data>(%r20),%r20         36940000 | lo(<data>)
+   *    stw %r20,R'<variable>(%r19)     6A740000 | lo(<variable>)
+   *    ldil L'<address>,%r21           22A00000 | hi(<address>)
+   *    ldo R'<address>(%r21),%r21      36B50000 | lo(<address>)
+   *    bb,>=,n %r21,30,function2       C7D5C012
+   *    depi 0,31,2,%r21                D6A01C1E
+   *    ldw 4(0,%r21),%r19              4AB30008
+   *    ldw 0(0,%r21),%r21              4AB50000
    * function2:
-   *    ldsid (0,%r21),%r1		02A010A1
-   *    mtsp %r1,%sr0			00011820
-   *    be,n 0(%sr0,%r21)		E2A00002
-   *    nop				08000240
+   *    ldsid (0,%r21),%r1              02A010A1
+   *    mtsp %r1,%sr0                   00011820
+   *    be,n 0(%sr0,%r21)               E2A00002
+   *    nop                             08000240
    */
   /* When decoding a 21-bit argument in an instruction, the hppa performs
    * the following bit manipulation:
@@ -1228,15 +1228,15 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __hppa64old__
   /* function:
-   *    mfia %r27			000014BB
-   *    ldd 40(%r27),%r31		537F0050
-   *    ldd 48(%r27),%r1		53610060
-   *    std %r1,0(%r31)			0FE112C0
-   *    ldd 56(%r27),%r27		537B0070
-   *    ldd 16(%r27),%r1		53610020
-   *    ldd 24(%r27),%r27		537B0030
-   *    bve (%r1)			E820D000
-   *     nop				08000240
+   *    mfia %r27                       000014BB
+   *    ldd 40(%r27),%r31               537F0050
+   *    ldd 48(%r27),%r1                53610060
+   *    std %r1,0(%r31)                 0FE112C0
+   *    ldd 56(%r27),%r27               537B0070
+   *    ldd 16(%r27),%r1                53610020
+   *    ldd 24(%r27),%r27               537B0030
+   *    bve (%r1)                       E820D000
+   *     nop                            08000240
    *    .align 8
    *    .dword <variable>
    *    .dword <data>
@@ -1312,18 +1312,18 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #if defined(__arm__) || defined(__armhf__)
   /* function:
-   *	stmfd	sp!,{r0}		E92D0001
-   * 	ldr	r0,[pc,#16]		E59F000C
-   *	ldr	ip,[pc,#16]		E59FC00C
-   *	str	r0,[ip]			E58C0000
-   *	ldmfd	sp!,{r0}		E8BD0001
-   *	ldr	pc,[pc,#4]		E59FF004
+   *    stmfd   sp!,{r0}                E92D0001
+   *    ldr     r0,[pc,#16]             E59F000C
+   *    ldr     ip,[pc,#16]             E59FC00C
+   *    str     r0,[ip]                 E58C0000
+   *    ldmfd   sp!,{r0}                E8BD0001
+   *    ldr     pc,[pc,#4]              E59FF004
    * _data:
-   *	.word	<data>
+   *    .word   <data>
    * _variable:
-   *	.word	<variable>
+   *    .word   <variable>
    * _address:
-   *	.word	<address>
+   *    .word   <address>
    */
   {
     ((long *) function)[0] = 0xE92D0001;
@@ -1353,15 +1353,15 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __arm64__
   /* function:
-   *    ldr x9,.+24		580000C9
-   *    ldr x10,.+28		580000EA
-   *    ldr x11,.+32		5800010B
-   *    str x9,[x10]		F9000149
-   *    br x11			D61F0160
-   *    nop			D503201F
-   *    .xword <data>		<data>
-   *    .xword <variable>	<variable>
-   *    .xword <address>	<address>
+   *    ldr x9,.+24             580000C9
+   *    ldr x10,.+28            580000EA
+   *    ldr x11,.+32            5800010B
+   *    str x9,[x10]            F9000149
+   *    br x11                  D61F0160
+   *    nop                     D503201F
+   *    .xword <data>           <data>
+   *    .xword <variable>       <variable>
+   *    .xword <address>        <address>
    */
   *(int *)   (function + 0) = 0x580000C9;
   *(int *)   (function + 4) = 0x580000EA;
@@ -1389,15 +1389,15 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __powerpcsysv4__
   /* function:
-   *    {liu|lis} 11,hi16(<variable>)		3D 60 hi16(<variable>)
-   *    {oril|ori} 11,11,lo16(<variable>)	61 6B lo16(<variable>)
-   *    {liu|lis} 12,hi16(<data>)		3D 80 hi16(<data>)
-   *    {oril|ori} 12,12,lo16(<data>)		61 8C lo16(<data>)
-   *    {st|stw} 12,0(11)			91 8B 00 00
-   *    {liu|lis} 0,hi16(<address>)		3C 00 hi16(<address>)
-   *    {oril|ori} 0,0,lo16(<address>)		60 00 lo16(<address>)
-   *    mtctr 0					7C 09 03 A6
-   *    bctr					4E 80 04 20
+   *    {liu|lis} 11,hi16(<variable>)           3D 60 hi16(<variable>)
+   *    {oril|ori} 11,11,lo16(<variable>)       61 6B lo16(<variable>)
+   *    {liu|lis} 12,hi16(<data>)               3D 80 hi16(<data>)
+   *    {oril|ori} 12,12,lo16(<data>)           61 8C lo16(<data>)
+   *    {st|stw} 12,0(11)                       91 8B 00 00
+   *    {liu|lis} 0,hi16(<address>)             3C 00 hi16(<address>)
+   *    {oril|ori} 0,0,lo16(<address>)          60 00 lo16(<address>)
+   *    mtctr 0                                 7C 09 03 A6
+   *    bctr                                    4E 80 04 20
    */
   *(short *) (function + 0) = 0x3D60;
   *(short *) (function + 2) = (unsigned long) variable >> 16;
@@ -1461,12 +1461,12 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __powerpc64_elfv2__
   /* function:
-   *    ld 11,24(12)		18 00 6C E9
-   *    ld 0,32(12)		20 00 0C E8
-   *    std 0,0(11)		00 00 0B F8
-   *    ld 12,40(12)		28 00 8C E9
-   *    mtctr 12		A6 03 89 7D
-   *    bctr			20 04 80 4E
+   *    ld 11,24(12)            18 00 6C E9
+   *    ld 0,32(12)             20 00 0C E8
+   *    std 0,0(11)             00 00 0B F8
+   *    ld 12,40(12)            28 00 8C E9
+   *    mtctr 12                A6 03 89 7D
+   *    bctr                    20 04 80 4E
    *    .quad <variable>
    *    .quad <data>
    *    .quad <address>
@@ -1548,9 +1548,9 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #ifdef __x86_64__
 #ifdef __x86_64_x32__
   /* function:
-   *    movl $<data>,<variable>		C7 04 25 <variable> <data>
-   *    movl $<address>,%eax		B8 <address>
-   *    jmp *%rax			FF E0
+   *    movl $<data>,<variable>         C7 04 25 <variable> <data>
+   *    movl $<address>,%eax            B8 <address>
+   *    jmp *%rax                       FF E0
    */
   *(int *)   (function + 0) = ((unsigned long) variable << 24) | 0x2504C7;
   *(int *)   (function + 4) = ((unsigned long) data << 24) | ((unsigned long) variable >> 8);
@@ -1571,10 +1571,10 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
    (*(unsigned long *) (function + 8) << 8))
 #else
   /* function:
-   *    movabsq $<data>,%rax		48 B8 <data>
-   *    movabsq %rax, <variable>	48 A3 <variable>
-   *    movabsq $<address>,%rax		48 B8 <address>
-   *    jmp *%rax			FF E0
+   *    movabsq $<data>,%rax            48 B8 <data>
+   *    movabsq %rax, <variable>        48 A3 <variable>
+   *    movabsq $<address>,%rax         48 B8 <address>
+   *    jmp *%rax                       FF E0
    */
   *(short *) (function + 0) = 0xB848;
   *(short *) (function + 2) = (unsigned long long) data & 0xffff;
@@ -1612,16 +1612,16 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #if defined(__s390__) && !defined(__s390x__)
   /* function:
-   *    bras %r1,.L1			A7150002
+   *    bras %r1,.L1                    A7150002
    * .L1:
-   *    l %r0,data-.L1(%r1)		58001018
-   *    l %r1,variable-.L1(%r1)		5810101C
-   *    st %r0,0(%r1)			50001000
-   *    bras %r1,.L2			A7150002
+   *    l %r0,data-.L1(%r1)             58001018
+   *    l %r1,variable-.L1(%r1)         5810101C
+   *    st %r0,0(%r1)                   50001000
+   *    bras %r1,.L2                    A7150002
    * .L2:
-   *    l %r1,function-.L2(%r1)		58101010
-   *    br %r1				07F1
-   *    nop				0707
+   *    l %r1,function-.L2(%r1)         58101010
+   *    br %r1                          07F1
+   *    nop                             0707
    * data:     .long <data>
    * variable: .long <variable>
    * address:  .long <address>
@@ -1654,16 +1654,16 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __s390x__
   /* function:
-   *    larl %r1,.L1			C01000000003
+   *    larl %r1,.L1                    C01000000003
    * .L1:
-   *    lg %r0,data-.L1(%r1)		E30010220004
-   *    lg %r1,variable-.L1(%r1)	E310102A0004
-   *    stg %r0,0(%r1)			E30010000024
-   *    larl %r1,.L2			C01000000003
+   *    lg %r0,data-.L1(%r1)            E30010220004
+   *    lg %r1,variable-.L1(%r1)        E310102A0004
+   *    stg %r0,0(%r1)                  E30010000024
+   *    larl %r1,.L2                    C01000000003
    * .L2:
-   *    lg %r1,function-.L2(%r1)	E310101A0004
-   *    br %r1				07F1
-   *    nop				0707
+   *    lg %r1,function-.L2(%r1)        E310101A0004
+   *    br %r1                          07F1
+   *    nop                             0707
    * data:     .quad <data>
    * variable: .quad <variable>
    * address:  .quad <address>
@@ -1702,12 +1702,12 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __riscv32__
   /* function:
-   *    auipc t3,0			00000E17
-   *    lw t0,24(t3)			018E2283
-   *    lw t1,28(t3)			01CE2303
-   *    lw t2,32(t3)			020E2383
-   *    sw t0,(t1)			00532023
-   *    jr t2				00038067
+   *    auipc t3,0                      00000E17
+   *    lw t0,24(t3)                    018E2283
+   *    lw t1,28(t3)                    01CE2303
+   *    lw t2,32(t3)                    020E2383
+   *    sw t0,(t1)                      00532023
+   *    jr t2                           00038067
    * data:     .word <data>
    * variable: .word <variable>
    * address:  .word <address>
@@ -1738,12 +1738,12 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __riscv64__
   /* function:
-   *    auipc t3,0			00000E17
-   *    ld t0,24(t3)			018E3283
-   *    ld t1,32(t3)			020E3303
-   *    ld t2,40(t3)			028E3383
-   *    sd t0,(t1)			00533023
-   *    jr t2				00038067
+   *    auipc t3,0                      00000E17
+   *    ld t0,24(t3)                    018E3283
+   *    ld t1,32(t3)                    020E3303
+   *    ld t2,40(t3)                    028E3383
+   *    sd t0,(t1)                      00533023
+   *    jr t2                           00038067
    * data:     .quad <data>
    * variable: .quad <variable>
    * address:  .quad <address>
@@ -1774,15 +1774,15 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #ifdef __loongarch64__
   /* function:
-   *    pcaddu12i $r12,0		1C00000C
-   *    ld.d $r13,$r12,24		28C0618D
-   *    ld.d $r14,$r12,32		28C0818E
-   *    st.d $r14,$r13,0		29C001AE
-   *    ld.d $r12,$r12,40		28C0A18C
-   *    jirl $r0,$r12,0			4C000180
-   *    .dword <variable>		<variable>
-   *    .dword <data>			<data>
-   *    .dword <address>		<address>
+   *    pcaddu12i $r12,0                1C00000C
+   *    ld.d $r13,$r12,24               28C0618D
+   *    ld.d $r14,$r12,32               28C0818E
+   *    st.d $r14,$r13,0                29C001AE
+   *    ld.d $r12,$r12,40               28C0A18C
+   *    jirl $r0,$r12,0                 4C000180
+   *    .dword <variable>               <variable>
+   *    .dword <data>                   <data>
+   *    .dword <address>                <address>
    */
   *(unsigned int *)  (function + 0) = 0x1C00000C;
   *(unsigned int *)  (function + 4) = 0x28C0618D;

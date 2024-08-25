@@ -150,17 +150,17 @@ enum __VA_alist_flags
    *     DEFAULT_PCC_STRUCT_RETURN is defined to 0 in the machine description)
    *     method r.
    */
-  __VA_SMALL_STRUCT_RETURN	= 1<<1,	/* r: special case for small structs */
-  __VA_GCC_STRUCT_RETURN	= 1<<2,	/* consider 8 byte structs as small */
+  __VA_SMALL_STRUCT_RETURN      = 1<<1, /* r: special case for small structs */
+  __VA_GCC_STRUCT_RETURN        = 1<<2, /* consider 8 byte structs as small */
 #if defined(__sparc__) && !defined(__sparc64__)
-  __VA_SUNCC_STRUCT_RETURN	= 1<<3,
-  __VA_SUNPROCC_STRUCT_RETURN	= 1<<4,
+  __VA_SUNCC_STRUCT_RETURN      = 1<<3,
+  __VA_SUNPROCC_STRUCT_RETURN   = 1<<4,
 #else
-  __VA_SUNCC_STRUCT_RETURN	= 0,
-  __VA_SUNPROCC_STRUCT_RETURN	= 0,
+  __VA_SUNCC_STRUCT_RETURN      = 0,
+  __VA_SUNPROCC_STRUCT_RETURN   = 0,
 #endif
 #if defined(__i386__)
-  __VA_MSVC_STRUCT_RETURN	= 1<<4,
+  __VA_MSVC_STRUCT_RETURN       = 1<<4,
 #endif
   /* the default way to return structs */
   /* This choice here is based on the assumption that the function you are
@@ -171,29 +171,29 @@ enum __VA_alist_flags
    * before or after #including <vacall_r.h>.
    */
 #ifndef __VA_STRUCT_RETURN
-  __VA_STRUCT_RETURN		=
+  __VA_STRUCT_RETURN            =
 #if defined(__sparc__) && !defined(__sparc64__) && defined(__sun) && (defined(__SUNPRO_C) || defined(__SUNPRO_CC)) /* SUNWspro cc or CC */
-				  __VA_SUNPROCC_STRUCT_RETURN,
+                                  __VA_SUNPROCC_STRUCT_RETURN,
 #else
 #if (defined(__i386__) && (defined(_WIN32) || defined(__CYGWIN__) || (defined(__MACH__) && defined(__APPLE__)) || defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__))) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__hppa__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || (defined(__powerpc__) && !defined(__powerpc64__) && (defined(__FreeBSD__) || defined(__DragonFly__) || defined(__NetBSD__))) || defined(__powerpc64_elfv2__) || defined(__ia64__) || defined(__x86_64__) || defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
-				  __VA_SMALL_STRUCT_RETURN |
+                                  __VA_SMALL_STRUCT_RETURN |
 #endif
 #if defined(__GNUC__) && !((defined(__mipsn32__) || defined(__mips64__)) && ((__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)))
-				  __VA_GCC_STRUCT_RETURN |
+                                  __VA_GCC_STRUCT_RETURN |
 #endif
 #if defined(__i386__) && defined(_WIN32) && !defined(__CYGWIN__) /* native Windows */
-				  __VA_MSVC_STRUCT_RETURN |
+                                  __VA_MSVC_STRUCT_RETURN |
 #endif
-				  0,
+                                  0,
 #endif
 #endif
 
   /* how to return floats */
 #if defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))
-  __VA_SUNCC_FLOAT_RETURN	= 1<<5,
+  __VA_SUNCC_FLOAT_RETURN       = 1<<5,
 #endif
 #if defined(__m68k__)
-  __VA_FREG_FLOAT_RETURN	= 1<<6,
+  __VA_FREG_FLOAT_RETURN        = 1<<6,
 #endif
   /* the default way to return floats */
   /* This choice here is based on the assumption that the function you are
@@ -205,23 +205,23 @@ enum __VA_alist_flags
    */
 #ifndef __VA_FLOAT_RETURN
 #if (defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))) && !defined(__GNUC__) && defined(__sun) && !(defined(__SUNPRO_C) || defined(__SUNPRO_CC))  /* Sun cc or CC */
-  __VA_FLOAT_RETURN		= __VA_SUNCC_FLOAT_RETURN,
+  __VA_FLOAT_RETURN             = __VA_SUNCC_FLOAT_RETURN,
 #elif defined(__m68k__)
-  __VA_FLOAT_RETURN		= __VA_FREG_FLOAT_RETURN,
+  __VA_FLOAT_RETURN             = __VA_FREG_FLOAT_RETURN,
 #else
-  __VA_FLOAT_RETURN		= 0,
+  __VA_FLOAT_RETURN             = 0,
 #endif
 #endif
 
   /* how to pass structs */
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__)
-  __VA_SGICC_STRUCT_ARGS	= 1<<7,
+  __VA_SGICC_STRUCT_ARGS        = 1<<7,
 #endif
 #if defined(__powerpc__) || defined(__powerpc64__)
-  __VA_AIXCC_STRUCT_ARGS	= 1<<7,
+  __VA_AIXCC_STRUCT_ARGS        = 1<<7,
 #endif
 #if defined(__ia64__)
-  __VA_OLDGCC_STRUCT_ARGS	= 1<<7,
+  __VA_OLDGCC_STRUCT_ARGS       = 1<<7,
 #endif
   /* the default way to pass structs */
   /* This choice here is based on the assumption that the function you are
@@ -233,21 +233,21 @@ enum __VA_alist_flags
    */
 #ifndef __VA_STRUCT_ARGS
 #if (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) && !defined(__GNUC__) /* SGI mips cc */
-  __VA_STRUCT_ARGS		= __VA_SGICC_STRUCT_ARGS,
+  __VA_STRUCT_ARGS              = __VA_SGICC_STRUCT_ARGS,
 #else
 #if (defined(__mipsn32__) || defined(__mips64__)) && (!defined(__GNUC__) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4) || (__GNUC__ > 3)) /* SGI mips cc or gcc >= 3.4 */
-  __VA_STRUCT_ARGS		= __VA_SGICC_STRUCT_ARGS,
+  __VA_STRUCT_ARGS              = __VA_SGICC_STRUCT_ARGS,
 #else
 #if defined(__powerpc__) && !defined(__powerpc64__) && defined(_AIX) && !defined(__GNUC__) /* AIX 32-bit cc, xlc */
-  __VA_STRUCT_ARGS		= __VA_AIXCC_STRUCT_ARGS,
+  __VA_STRUCT_ARGS              = __VA_AIXCC_STRUCT_ARGS,
 #else
 #if defined(__powerpc64__) && defined(_AIX) /* AIX 64-bit cc, xlc, gcc, xlclang */
-  __VA_STRUCT_ARGS		= __VA_AIXCC_STRUCT_ARGS,
+  __VA_STRUCT_ARGS              = __VA_AIXCC_STRUCT_ARGS,
 #else
 #if defined(__ia64__) && !(defined(__GNUC__) && (__GNUC__ >= 3))
-  __VA_STRUCT_ARGS		= __VA_OLDGCC_STRUCT_ARGS,
+  __VA_STRUCT_ARGS              = __VA_OLDGCC_STRUCT_ARGS,
 #else
-  __VA_STRUCT_ARGS		= 0,
+  __VA_STRUCT_ARGS              = 0,
 #endif
 #endif
 #endif
@@ -272,32 +272,32 @@ enum __VA_alist_flags
    */
 #ifndef __VA_FLOAT_ARGS
 #if defined(__powerpc64__) && defined(_AIX) && (defined(__ibmxl__) || !defined(__GNUC__)) /* AIX 64-bit xlc, xlclang */
-  __VA_FLOAT_ARGS		= __VA_AIXCC_FLOAT_ARGS,
+  __VA_FLOAT_ARGS               = __VA_AIXCC_FLOAT_ARGS,
 #else
-  __VA_FLOAT_ARGS		= 0,
+  __VA_FLOAT_ARGS               = 0,
 #endif
 #endif
 
   /* how to pass and return small integer arguments */
-  __VA_ANSI_INTEGERS		= 0, /* no promotions */
-  __VA_TRADITIONAL_INTEGERS	= 0, /* promote [u]char, [u]short to [u]int */
+  __VA_ANSI_INTEGERS            = 0, /* no promotions */
+  __VA_TRADITIONAL_INTEGERS     = 0, /* promote [u]char, [u]short to [u]int */
   /* Fortunately these two methods are compatible. Our macros work with both. */
 
   /* stack cleanup policy */
-  __VA_CDECL_CLEANUP		= 0, /* caller pops args after return */
-  __VA_STDCALL_CLEANUP		= 1<<9, /* callee pops args before return */
-				     /* currently only supported on __i386__ */
+  __VA_CDECL_CLEANUP            = 0, /* caller pops args after return */
+  __VA_STDCALL_CLEANUP          = 1<<9, /* callee pops args before return */
+                                     /* currently only supported on __i386__ */
 #ifndef __VA_CLEANUP
-  __VA_CLEANUP			= __VA_CDECL_CLEANUP,
+  __VA_CLEANUP                  = __VA_CDECL_CLEANUP,
 #endif
 
   /* These are for internal use only */
 #if defined(__i386__) || defined(__m68k__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm__) || defined(__armhf__) || defined(__arm64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64__) || (defined(__s390__) && !defined(__s390x__)) || defined(__riscv64__) || defined(__loongarch64__)
-  __VA_REGISTER_STRUCT_RETURN	= 1<<10,
+  __VA_REGISTER_STRUCT_RETURN   = 1<<10,
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
-  __VA_REGISTER_FLOATSTRUCT_RETURN	= 1<<11,
-  __VA_REGISTER_DOUBLESTRUCT_RETURN	= 1<<12,
+  __VA_REGISTER_FLOATSTRUCT_RETURN      = 1<<11,
+  __VA_REGISTER_DOUBLESTRUCT_RETURN     = 1<<12,
 #endif
 
   __VA_flag_for_broken_compilers_that_dont_like_trailing_commas
@@ -346,21 +346,21 @@ typedef struct vacall_alist * va_alist;
 
 extern void vacall_start (va_alist /* LIST */, int /* RETTYPE */, int /* FLAGS */);
 
-#define va_start_void(LIST)	 vacall_start(LIST,__VAvoid,     __VA_START_FLAGS)
-#define va_start_char(LIST)	 vacall_start(LIST,__VAchar,     __VA_START_FLAGS)
-#define va_start_schar(LIST)	 vacall_start(LIST,__VAschar,    __VA_START_FLAGS)
-#define va_start_uchar(LIST)	 vacall_start(LIST,__VAuchar,    __VA_START_FLAGS)
-#define va_start_short(LIST)	 vacall_start(LIST,__VAshort,    __VA_START_FLAGS)
-#define va_start_ushort(LIST)	 vacall_start(LIST,__VAushort,   __VA_START_FLAGS)
-#define va_start_int(LIST)	 vacall_start(LIST,__VAint,      __VA_START_FLAGS)
-#define va_start_uint(LIST)	 vacall_start(LIST,__VAuint,     __VA_START_FLAGS)
-#define va_start_long(LIST)	 vacall_start(LIST,__VAlong,     __VA_START_FLAGS)
-#define va_start_ulong(LIST)	 vacall_start(LIST,__VAulong,    __VA_START_FLAGS)
-#define va_start_longlong(LIST)	 vacall_start(LIST,__VAlonglong, __VA_START_FLAGS)
+#define va_start_void(LIST)      vacall_start(LIST,__VAvoid,     __VA_START_FLAGS)
+#define va_start_char(LIST)      vacall_start(LIST,__VAchar,     __VA_START_FLAGS)
+#define va_start_schar(LIST)     vacall_start(LIST,__VAschar,    __VA_START_FLAGS)
+#define va_start_uchar(LIST)     vacall_start(LIST,__VAuchar,    __VA_START_FLAGS)
+#define va_start_short(LIST)     vacall_start(LIST,__VAshort,    __VA_START_FLAGS)
+#define va_start_ushort(LIST)    vacall_start(LIST,__VAushort,   __VA_START_FLAGS)
+#define va_start_int(LIST)       vacall_start(LIST,__VAint,      __VA_START_FLAGS)
+#define va_start_uint(LIST)      vacall_start(LIST,__VAuint,     __VA_START_FLAGS)
+#define va_start_long(LIST)      vacall_start(LIST,__VAlong,     __VA_START_FLAGS)
+#define va_start_ulong(LIST)     vacall_start(LIST,__VAulong,    __VA_START_FLAGS)
+#define va_start_longlong(LIST)  vacall_start(LIST,__VAlonglong, __VA_START_FLAGS)
 #define va_start_ulonglong(LIST) vacall_start(LIST,__VAulonglong,__VA_START_FLAGS)
-#define va_start_float(LIST)	 vacall_start(LIST,__VAfloat,    __VA_START_FLAGS)
-#define va_start_double(LIST)	 vacall_start(LIST,__VAdouble,   __VA_START_FLAGS)
-#define va_start_ptr(LIST,TYPE)	 vacall_start(LIST,__VAvoidp,    __VA_START_FLAGS)
+#define va_start_float(LIST)     vacall_start(LIST,__VAfloat,    __VA_START_FLAGS)
+#define va_start_double(LIST)    vacall_start(LIST,__VAdouble,   __VA_START_FLAGS)
+#define va_start_ptr(LIST,TYPE)  vacall_start(LIST,__VAvoidp,    __VA_START_FLAGS)
 
 /*
  * va_start_struct: Preparing structure return.
@@ -391,34 +391,34 @@ extern unsigned int   vacall_arg_uint   (va_alist /* LIST */);
 extern long           vacall_arg_long   (va_alist /* LIST */);
 extern unsigned long  vacall_arg_ulong  (va_alist /* LIST */);
 
-#define va_arg_char(LIST)	vacall_arg_char(LIST)
-#define va_arg_schar(LIST)	vacall_arg_schar(LIST)
-#define va_arg_uchar(LIST)	vacall_arg_uchar(LIST)
-#define va_arg_short(LIST)	vacall_arg_short(LIST)
-#define va_arg_ushort(LIST)	vacall_arg_ushort(LIST)
-#define va_arg_int(LIST)	vacall_arg_int(LIST)
-#define va_arg_uint(LIST)	vacall_arg_uint(LIST)
-#define va_arg_long(LIST)	vacall_arg_long(LIST)
-#define va_arg_ulong(LIST)	vacall_arg_ulong(LIST)
+#define va_arg_char(LIST)       vacall_arg_char(LIST)
+#define va_arg_schar(LIST)      vacall_arg_schar(LIST)
+#define va_arg_uchar(LIST)      vacall_arg_uchar(LIST)
+#define va_arg_short(LIST)      vacall_arg_short(LIST)
+#define va_arg_ushort(LIST)     vacall_arg_ushort(LIST)
+#define va_arg_int(LIST)        vacall_arg_int(LIST)
+#define va_arg_uint(LIST)       vacall_arg_uint(LIST)
+#define va_arg_long(LIST)       vacall_arg_long(LIST)
+#define va_arg_ulong(LIST)      vacall_arg_ulong(LIST)
 
 extern long long          vacall_arg_longlong  (va_alist /* LIST */);
 extern unsigned long long vacall_arg_ulonglong (va_alist /* LIST */);
 
-#define va_arg_longlong(LIST)	vacall_arg_longlong(LIST)
-#define va_arg_ulonglong(LIST)	vacall_arg_ulonglong(LIST)
+#define va_arg_longlong(LIST)   vacall_arg_longlong(LIST)
+#define va_arg_ulonglong(LIST)  vacall_arg_ulonglong(LIST)
 
 /* Floating point arguments. */
 
 extern float  vacall_arg_float  (va_alist /* LIST */);
 extern double vacall_arg_double (va_alist /* LIST */);
 
-#define va_arg_float(LIST)	vacall_arg_float(LIST)
-#define va_arg_double(LIST)	vacall_arg_double(LIST)
+#define va_arg_float(LIST)      vacall_arg_float(LIST)
+#define va_arg_double(LIST)     vacall_arg_double(LIST)
 
 /* Pointer arguments. */
 
 extern void* vacall_arg_ptr (va_alist /* LIST */);
-#define va_arg_ptr(LIST,TYPE)	((TYPE)vacall_arg_ptr(LIST))
+#define va_arg_ptr(LIST,TYPE)   ((TYPE)vacall_arg_ptr(LIST))
 
 /* Structure arguments. */
 
@@ -440,7 +440,7 @@ extern void* vacall_arg_struct (va_alist /* LIST */, size_t /* TYPE_SIZE */, siz
  */
 
 extern void vacall_return_void (va_alist /* LIST */);
-#define va_return_void(LIST)		vacall_return_void(LIST)
+#define va_return_void(LIST)            vacall_return_void(LIST)
 
 extern void vacall_return_char (va_alist /* LIST */, char /* VAL */);
 extern void vacall_return_schar (va_alist /* LIST */, signed char /* VAL */);
@@ -451,28 +451,28 @@ extern void vacall_return_int (va_alist /* LIST */, int /* VAL */);
 extern void vacall_return_uint (va_alist /* LIST */, unsigned int /* VAL */);
 extern void vacall_return_long (va_alist /* LIST */, long /* VAL */);
 extern void vacall_return_ulong (va_alist /* LIST */, unsigned long /* VAL */);
-#define va_return_char(LIST,VAL)	vacall_return_char(LIST,VAL)
-#define va_return_schar(LIST,VAL)	vacall_return_schar(LIST,VAL)
-#define va_return_uchar(LIST,VAL)	vacall_return_uchar(LIST,VAL)
-#define va_return_short(LIST,VAL)	vacall_return_short(LIST,VAL)
-#define va_return_ushort(LIST,VAL)	vacall_return_ushort(LIST,VAL)
-#define va_return_int(LIST,VAL)		vacall_return_int(LIST,VAL)
-#define va_return_uint(LIST,VAL)	vacall_return_uint(LIST,VAL)
-#define va_return_long(LIST,VAL)	vacall_return_long(LIST,VAL)
-#define va_return_ulong(LIST,VAL)	vacall_return_ulong(LIST,VAL)
+#define va_return_char(LIST,VAL)        vacall_return_char(LIST,VAL)
+#define va_return_schar(LIST,VAL)       vacall_return_schar(LIST,VAL)
+#define va_return_uchar(LIST,VAL)       vacall_return_uchar(LIST,VAL)
+#define va_return_short(LIST,VAL)       vacall_return_short(LIST,VAL)
+#define va_return_ushort(LIST,VAL)      vacall_return_ushort(LIST,VAL)
+#define va_return_int(LIST,VAL)         vacall_return_int(LIST,VAL)
+#define va_return_uint(LIST,VAL)        vacall_return_uint(LIST,VAL)
+#define va_return_long(LIST,VAL)        vacall_return_long(LIST,VAL)
+#define va_return_ulong(LIST,VAL)       vacall_return_ulong(LIST,VAL)
 
 extern void vacall_return_longlong (va_alist /* LIST */, long long /* VAL */);
 extern void vacall_return_ulonglong (va_alist /* LIST */, unsigned long long /* VAL */);
-#define va_return_longlong(LIST,VAL)	vacall_return_longlong(LIST,VAL)
-#define va_return_ulonglong(LIST,VAL)	vacall_return_ulonglong(LIST,VAL)
+#define va_return_longlong(LIST,VAL)    vacall_return_longlong(LIST,VAL)
+#define va_return_ulonglong(LIST,VAL)   vacall_return_ulonglong(LIST,VAL)
 
 extern void vacall_return_float (va_alist /* LIST */, float /* VAL */);
 extern void vacall_return_double (va_alist /* LIST */, double /* VAL */);
-#define va_return_float(LIST,VAL)	vacall_return_float(LIST,VAL)
-#define va_return_double(LIST,VAL)	vacall_return_double(LIST,VAL)
+#define va_return_float(LIST,VAL)       vacall_return_float(LIST,VAL)
+#define va_return_double(LIST,VAL)      vacall_return_double(LIST,VAL)
 
 extern void vacall_return_ptr (va_alist /* LIST */, void* /* VAL */);
-#define va_return_ptr(LIST,TYPE,VAL)	vacall_return_ptr(LIST,(void*)(TYPE)(VAL))
+#define va_return_ptr(LIST,TYPE,VAL)    vacall_return_ptr(LIST,(void*)(TYPE)(VAL))
 
 extern void vacall_return_struct (va_alist /* LIST */, size_t /* TYPE_SIZE */, size_t /* TYPE_ALIGN */, const void* /* VAL_ADDR */);
 

@@ -760,11 +760,11 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    */
 #ifdef __i386__
   /* function:
-   *    movl $<data>,%ecx		B9 <data>
-   *    jmp <address>			E9 <address>-<here>
+   *    movl $<data>,%ecx               B9 <data>
+   *    jmp <address>                   E9 <address>-<here>
    * here:
-   *    nop				90
-   *    nop				90
+   *    nop                             90
+   *    nop                             90
    */
   *(char *)  (function + 0) = 0xB9;
   *(long *)  (function + 1) = (long) data;
@@ -781,9 +781,9 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __m68k__
   /* function:
-   *    movel #<data>,a0		20 7C <data>
-   *    jmp <address>			4E F9 <address>
-   *    nop				4E 71
+   *    movel #<data>,a0                20 7C <data>
+   *    jmp <address>                   4E F9 <address>
+   *    nop                             4E 71
    */
   *(short *) (function + 0) = 0x207C;
   *(long *)  (function + 2) = (long) data;
@@ -801,12 +801,12 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #if (defined(__mips__) || defined(__mipsn32__)) && !defined(__mips64__)
   /* function:
-   *    lw $2,16($25)			8F 22 00 10
-   *    lw $25,20($25)			8F 39 00 14
-   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
-   *    nop				00 00 00 00
-   *    .word <data>			<data>
-   *    .word <address>			<address>
+   *    lw $2,16($25)                   8F 22 00 10
+   *    lw $25,20($25)                  8F 39 00 14
+   *    jal $0,$25                      03 20 00 09  was:  j $25   03 20 00 08
+   *    nop                             00 00 00 00
+   *    .word <data>                    <data>
+   *    .word <address>                 <address>
    */
   *(unsigned int *) (function + 0) = 0x8F220010;
   *(unsigned int *) (function + 4) = 0x8F390014;
@@ -827,20 +827,20 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __mips64old__
   /* function:
-   *    dli $2,<data>			3C 02 hi16(hi32(<data>))
-   *					34 42 lo16(hi32(<data>))
-   *					00 02 14 38
-   *					34 42 hi16(lo32(<data>))
-   *					00 02 14 38
-   *					34 42 lo16(lo32(<data>))
-   *    dli $25,<address>		3C 19 hi16(hi32(<address>))
-   *					37 39 lo16(hi32(<address>))
-   *					00 19 CC 38
-   *					37 39 hi16(lo32(<address>))
-   *					00 19 CC 38
-   *					37 39 lo16(lo32(<address>))
-   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
-   *    nop				00 00 00 00
+   *    dli $2,<data>                   3C 02 hi16(hi32(<data>))
+   *                                    34 42 lo16(hi32(<data>))
+   *                                    00 02 14 38
+   *                                    34 42 hi16(lo32(<data>))
+   *                                    00 02 14 38
+   *                                    34 42 lo16(lo32(<data>))
+   *    dli $25,<address>               3C 19 hi16(hi32(<address>))
+   *                                    37 39 lo16(hi32(<address>))
+   *                                    00 19 CC 38
+   *                                    37 39 hi16(lo32(<address>))
+   *                                    00 19 CC 38
+   *                                    37 39 lo16(lo32(<address>))
+   *    jal $0,$25                      03 20 00 09  was:  j $25   03 20 00 08
+   *    nop                             00 00 00 00
    */
   /* What about big endian / little endian ?? */
   *(short *) (function + 0) = 0x3C02;
@@ -896,12 +896,12 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __mips64__
   /* function:
-   *    ld $2,16($25)			DF 22 00 10
-   *    ld $25,24($25)			DF 39 00 18
-   *    jal $0,$25			03 20 00 09  was:  j $25   03 20 00 08
-   *    nop				00 00 00 00
-   *    .dword <data>			<data>
-   *    .dword <address>		<address>
+   *    ld $2,16($25)                   DF 22 00 10
+   *    ld $25,24($25)                  DF 39 00 18
+   *    jal $0,$25                      03 20 00 09  was:  j $25   03 20 00 08
+   *    nop                             00 00 00 00
+   *    .dword <data>                   <data>
+   *    .dword <address>                <address>
    */
   *(unsigned int *)  (function + 0) = 0xDF220010;
   *(unsigned int *)  (function + 4) = 0xDF390018;
@@ -922,10 +922,10 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #if defined(__sparc__) && !defined(__sparc64__)
   /* function:
-   *    sethi %hi(<data>),%g2		05000000 | (<data> >> 10)
-   *    sethi %hi(<address>),%g1	03000000 | (<address> >> 10)
-   *    jmp %g1+%lo(<address>)		81C06000 | (<address> & 0x3ff)
-   *    or %g2,%lo(<data>),%g2		8410A000 | (<data> & 0x3ff)
+   *    sethi %hi(<data>),%g2           05000000 | (<data> >> 10)
+   *    sethi %hi(<address>),%g1        03000000 | (<address> >> 10)
+   *    jmp %g1+%lo(<address>)          81C06000 | (<address> & 0x3ff)
+   *    or %g2,%lo(<data>),%g2          8410A000 | (<data> & 0x3ff)
    */
 #define hi(word)  ((unsigned long) (word) >> 10)
 #define lo(word)  ((unsigned long) (word) & 0x3ff)
@@ -946,14 +946,14 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __sparc64__
   /* function:
-   *    rd %pc,%g1			83414000
-   *    ldx [%g1+24],%g2		C4586018
-   *    jmp %g2				81C08000
-   *    ldx [%g1+16],%g5		CA586010
-   *    .long high32(<data>)		<data> >> 32
-   *    .long low32(<data>)		<data> & 0xffffffff
-   *    .long high32(<address>)		<address> >> 32
-   *    .long low32(<address>)		<address> & 0xffffffff
+   *    rd %pc,%g1                      83414000
+   *    ldx [%g1+24],%g2                C4586018
+   *    jmp %g2                         81C08000
+   *    ldx [%g1+16],%g5                CA586010
+   *    .long high32(<data>)            <data> >> 32
+   *    .long low32(<data>)             <data> & 0xffffffff
+   *    .long high32(<address>)         <address> >> 32
+   *    .long low32(<address>)          <address> & 0xffffffff
    */
   *(int *)  (function + 0) = 0x83414000;
   *(int *)  (function + 4) = 0xC4586018;
@@ -974,13 +974,13 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __alpha__
   /* function:
-   *    br $1,function..ng	00 00 20 C0
+   *    br $1,function..ng      00 00 20 C0
    * function..ng:
-   *    ldq $27,20($1)		14 00 61 A7
-   *    ldq $1,12($1)		0C 00 21 A4
-   *    jmp $31,($27),0		00 00 FB 6B
-   *    .quad <data>		<data>
-   *    .quad <address>		<address>
+   *    ldq $27,20($1)          14 00 61 A7
+   *    ldq $1,12($1)           0C 00 21 A4
+   *    jmp $31,($27),0         00 00 FB 6B
+   *    .quad <data>            <data>
+   *    .quad <address>         <address>
    */
   { static int code [4] =
       { 0xC0200000, 0xA7610014, 0xA421000C, 0x6BFB0000 };
@@ -1002,19 +1002,19 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __hppaold__
   /* function:
-   *    ldil L'<data>,%r29		23A00000 | hi(<data>)
-   *    ldil L'<address>,%r21		22A00000 | hi(<address>)
-   *    ldo R'<data>(%r29),%r29		37BD0000 | lo(<data>)
-   *    ldo R'<address>(%r21),%r21	36B50000 | lo(<address>)
-   *    bb,>=,n %r21,30,function2	C7D5C012
-   *    depi 0,31,2,%r21		D6A01C1E
-   *    ldw 4(0,%r21),%r19		4AB30008
-   *    ldw 0(0,%r21),%r21		4AB50000
+   *    ldil L'<data>,%r29              23A00000 | hi(<data>)
+   *    ldil L'<address>,%r21           22A00000 | hi(<address>)
+   *    ldo R'<data>(%r29),%r29         37BD0000 | lo(<data>)
+   *    ldo R'<address>(%r21),%r21      36B50000 | lo(<address>)
+   *    bb,>=,n %r21,30,function2       C7D5C012
+   *    depi 0,31,2,%r21                D6A01C1E
+   *    ldw 4(0,%r21),%r19              4AB30008
+   *    ldw 0(0,%r21),%r21              4AB50000
    * function2:
-   *    ldsid (0,%r21),%r1		02A010A1
-   *    mtsp %r1,%sr0			00011820
-   *    be,n 0(%sr0,%r21)		E2A00002
-   *    nop				08000240
+   *    ldsid (0,%r21),%r1              02A010A1
+   *    mtsp %r1,%sr0                   00011820
+   *    be,n 0(%sr0,%r21)               E2A00002
+   *    nop                             08000240
    */
   /* When decoding a 21-bit argument in an instruction, the hppa performs
    * the following bit manipulation:
@@ -1093,13 +1093,13 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __hppa64old__
   /* function:
-   *    mfia %r27			000014BB
-   *    ldd 32(%r27),%r31		537F0040
-   *    ldd 40(%r27),%r27		537B0050
-   *    ldd 16(%r27),%r1		53610020
-   *    ldd 24(%r27),%r27		537B0030
-   *    bve (%r1)			E820D000
-   *     nop				08000240
+   *    mfia %r27                       000014BB
+   *    ldd 32(%r27),%r31               537F0040
+   *    ldd 40(%r27),%r27               537B0050
+   *    ldd 16(%r27),%r1                53610020
+   *    ldd 24(%r27),%r27               537B0030
+   *    bve (%r1)                       E820D000
+   *     nop                            08000240
    *    .align 8
    *    .dword <data>
    *    .dword <address>
@@ -1163,20 +1163,20 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #if defined(__arm__) || defined(__armhf__)
   /* function:
-   *	mov	ip,sp			E1A0C00D
-   *	stmdb	sp!,{r0,r1,r2,r3}	E92D000F
-   *	stmfd	sp!,{fp,ip,lr,pc}	E92DD800
-   *	sub	fp,ip,#20		E24CB014
-   *	sub	sp,sp,#8		E24DD008
-   *	ldr	ip,[pc,#12]		E59FC00C	@ Get <data>
-   *	str	ip,[sp,#0]		E58DC000	@ Put <data> on stack
-   *	mov	lr,pc			E1A0E00F	@ Prepare call (put return address in lr)
-   *	ldr	pc,[pc,#4]		E59FF004	@ Call <address> with the same args in registers
-   *	ldmea	fp,{fp,sp,pc}		E91BA800	@ Restore fp and sp, and return to return address.
+   *    mov     ip,sp                   E1A0C00D
+   *    stmdb   sp!,{r0,r1,r2,r3}       E92D000F
+   *    stmfd   sp!,{fp,ip,lr,pc}       E92DD800
+   *    sub     fp,ip,#20               E24CB014
+   *    sub     sp,sp,#8                E24DD008
+   *    ldr     ip,[pc,#12]             E59FC00C        @ Get <data>
+   *    str     ip,[sp,#0]              E58DC000        @ Put <data> on stack
+   *    mov     lr,pc                   E1A0E00F        @ Prepare call (put return address in lr)
+   *    ldr     pc,[pc,#4]              E59FF004        @ Call <address> with the same args in registers
+   *    ldmea   fp,{fp,sp,pc}           E91BA800        @ Restore fp and sp, and return to return address.
    * _data:
-   *	.word	<data>
+   *    .word   <data>
    * _address:
-   *	.word	<address>
+   *    .word   <address>
    */
   {
     ((long *) function)[0] = 0xE1A0C00D;
@@ -1211,12 +1211,12 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __arm64__
   /* function:
-   *    ldr x17,.+24		580000D1
-   *    ldr x18,.+12		58000072
-   *    br x17			D61F0220
-   *    nop			D503201F
-   *    .xword <data>		<data>
-   *    .xword <address>	<address>
+   *    ldr x17,.+24            580000D1
+   *    ldr x18,.+12            58000072
+   *    br x17                  D61F0220
+   *    nop                     D503201F
+   *    .xword <data>           <data>
+   *    .xword <address>        <address>
    */
   *(int *)   (function + 0) = 0x580000D1;
   *(int *)   (function + 4) = 0x58000072;
@@ -1237,12 +1237,12 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __powerpcsysv4__
   /* function:
-   *    {liu|lis} 11,hi16(<data>)		3D 60 hi16(<data>)
-   *    {oril|ori} 11,11,lo16(<data>)		61 6B lo16(<data>)
-   *    {liu|lis} 0,hi16(<address>)		3C 00 hi16(<address>)
-   *    {oril|ori} 0,0,lo16(<address>)		60 00 lo16(<address>)
-   *    mtctr 0					7C 09 03 A6
-   *    bctr					4E 80 04 20
+   *    {liu|lis} 11,hi16(<data>)               3D 60 hi16(<data>)
+   *    {oril|ori} 11,11,lo16(<data>)           61 6B lo16(<data>)
+   *    {liu|lis} 0,hi16(<address>)             3C 00 hi16(<address>)
+   *    {oril|ori} 0,0,lo16(<address>)          60 00 lo16(<address>)
+   *    mtctr 0                                 7C 09 03 A6
+   *    bctr                                    4E 80 04 20
    */
   *(short *) (function + 0) = 0x3D60;
   *(short *) (function + 2) = (unsigned long) data >> 16;
@@ -1292,10 +1292,10 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __powerpc64_elfv2__
   /* function:
-   *    ld 11,16(12)		10 00 6C E9
-   *    ld 12,24(12)		18 00 8C E9
-   *    mtctr 12		A6 03 89 7D
-   *    bctr			20 04 80 4E
+   *    ld 11,16(12)            10 00 6C E9
+   *    ld 12,24(12)            18 00 8C E9
+   *    mtctr 12                A6 03 89 7D
+   *    bctr                    20 04 80 4E
    *    .quad <data>
    *    .quad <address>
    */
@@ -1362,9 +1362,9 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #ifdef __x86_64__
 #ifdef __x86_64_x32__
   /* function:
-   *    movl $<data>,%r10d		41 BA <data>
-   *    movl $<address>,%rax		B8 <address>
-   *    jmp *%rax			FF E0
+   *    movl $<data>,%r10d              41 BA <data>
+   *    movl $<address>,%rax            B8 <address>
+   *    jmp *%rax                       FF E0
    */
   *(int *)   (function + 0) = ((unsigned long) data << 16) | 0xBA41;
   *(int *)   (function + 4) = ((unsigned long) address << 24) | 0xB80000 | ((unsigned long) data >> 16);
@@ -1383,9 +1383,9 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    (*(unsigned long *) (function + 4) << 16))
 #else
   /* function:
-   *    movabsq $<data>,%r10		49 BA <data>
-   *    movabsq $<address>,%rax		48 B8 <address>
-   *    jmp *%rax			FF E0
+   *    movabsq $<data>,%r10            49 BA <data>
+   *    movabsq $<address>,%rax         48 B8 <address>
+   *    jmp *%rax                       FF E0
    */
   *(short *) (function + 0) = 0xBA49;
   *(short *) (function + 2) = (unsigned long long) data & 0xffff;
@@ -1414,11 +1414,11 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #if defined(__s390__) && !defined(__s390x__)
   /* function:
-   *    bras %r1,.L1			A7150002
+   *    bras %r1,.L1                    A7150002
    * .L1:
-   *    lm %r0,%r1,data-.L1(%r1)	98011008
-   *    br %r1				07F1
-   *    nop				0707
+   *    lm %r0,%r1,data-.L1(%r1)        98011008
+   *    br %r1                          07F1
+   *    nop                             0707
    * data:    .long <data>
    * address: .long <address>
    */
@@ -1439,11 +1439,11 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __s390x__
   /* function:
-   *    larl %r1,.L1			C01000000003
+   *    larl %r1,.L1                    C01000000003
    * .L1:
-   *    lmg %r0,%r1,data-.L1(%r1)	EB01100A0004
-   *    br %r1				07F1
-   *    nop				0707
+   *    lmg %r0,%r1,data-.L1(%r1)       EB01100A0004
+   *    br %r1                          07F1
+   *    nop                             0707
    * data:    .quad <data>
    * address: .quad <address>
    */
@@ -1466,10 +1466,10 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __riscv32__
   /* function:
-   *    auipc t0,0			00000297
-   *    lw t1,20(t0)			0142A303
-   *    lw t2,16(t0)			0102A383
-   *    jr t1				00030067
+   *    auipc t0,0                      00000297
+   *    lw t1,20(t0)                    0142A303
+   *    lw t2,16(t0)                    0102A383
+   *    jr t1                           00030067
    * data:    .quad <data>
    * address: .quad <address>
    */
@@ -1492,10 +1492,10 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __riscv64__
   /* function:
-   *    auipc t0,0			00000297
-   *    ld t1,24(t0)			0182B303
-   *    ld t2,16(t0)			0102B383
-   *    jr t1				00030067
+   *    auipc t0,0                      00000297
+   *    ld t1,24(t0)                    0182B303
+   *    ld t2,16(t0)                    0102B383
+   *    jr t1                           00030067
    * data:    .quad <data>
    * address: .quad <address>
    */
@@ -1518,12 +1518,12 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
 #ifdef __loongarch64__
   /* function:
-   *    pcaddu12i $r12,0		1C00000C
-   *    ld.d $r20,$r12,16		28C04194
-   *    ld.d $r12,$r12,24		28C0618C
-   *    jirl $r0,$r12,0			4C000180
-   *    .dword <data>			<data>
-   *    .dword <address>		<address>
+   *    pcaddu12i $r12,0                1C00000C
+   *    ld.d $r20,$r12,16               28C04194
+   *    ld.d $r12,$r12,24               28C0618C
+   *    jirl $r0,$r12,0                 4C000180
+   *    .dword <data>                   <data>
+   *    .dword <address>                <address>
    */
   *(unsigned int *)  (function + 0) = 0x1C00000C;
   *(unsigned int *)  (function + 4) = 0x28C04194;
@@ -1544,8 +1544,8 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
 #endif
   /*
    * data:
-   *    <data0>				<data0>
-   *    <data1>				<data1>
+   *    <data0>                         <data0>
+   *    <data1>                         <data1>
    */
   *(void* *) (data + 0*sizeof(void*)) = data0;
   *(void* *) (data + 1*sizeof(void*)) = data1;

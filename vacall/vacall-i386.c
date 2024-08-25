@@ -22,11 +22,11 @@
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
 typedef struct { void (*vacall_function) (void*,va_alist); void* arg; } env_t;
-register env_t*	env	__asm__("%ecx");
+register env_t* env     __asm__("%ecx");
 #endif
-register void*	sp	__asm__("%esp");
-register void*	sret	__asm__("%ebx");
-register int	iret	__asm__("%eax");
+register void*  sp      __asm__("%esp");
+register void*  sret    __asm__("%ebx");
+register int    iret    __asm__("%eax");
 
 #ifdef REENTRANT
 static

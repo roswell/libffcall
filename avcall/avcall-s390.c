@@ -37,21 +37,21 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
-register float  farg1	__asm__("f0");
-register float  farg2	__asm__("f2");
-register double darg1	__asm__("f0");
-register double darg2	__asm__("f2");
+register float  farg1   __asm__("f0");
+register float  farg2   __asm__("f2");
+register double darg1   __asm__("f0");
+register double darg2   __asm__("f2");
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("r15");  /* C names for registers */
-/*register __avrword	iret	__asm__("r2"); */
-  register __avrword	iret2	__asm__("r3");
-  register float	fret	__asm__("f0");
-  register double	dret	__asm__("f0");
+  register __avword*    sp      __asm__("r15");  /* C names for registers */
+/*register __avrword    iret    __asm__("r2"); */
+  register __avrword    iret2   __asm__("r3");
+  register float        fret    __asm__("f0");
+  register double       dret    __asm__("f0");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -60,7 +60,7 @@ avcall_call(av_alist* list)
   unsigned int fanum = l->fanum;
   __avrword i;
 
-  for (i = 0; i < arglen; i++)		/* push function args onto stack */
+  for (i = 0; i < arglen; i++)          /* push function args onto stack */
    argframe[i] = l->args[i];
 
   /* Put upto 2 floating-point args into registers. */
@@ -73,9 +73,9 @@ avcall_call(av_alist* list)
     }
   }
 
-				/* call function, pass 5 args in registers */
+                                /* call function, pass 5 args in registers */
   i = (*l->func)(l->iargs[0], l->iargs[1], l->iargs[2], l->iargs[3],
-		 l->iargs[4]);
+                 l->iargs[4]);
 
   /* save return value */
   if (l->rtype == __AVvoid) {

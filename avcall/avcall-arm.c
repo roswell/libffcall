@@ -46,39 +46,39 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
 avcall_call(av_alist* list)
 {
-  register unsigned long sp	__asm__("r13");  /* C names for registers */
-/*register __avrword	iret	__asm__("r0"); */
-  register __avrword	iret2	__asm__("r1");
-  register float	fret	__asm__("r0");	/* r0 */
-  register double	dret	__asm__("r0");	/* r0,r1 */
+  register unsigned long sp     __asm__("r13");  /* C names for registers */
+/*register __avrword    iret    __asm__("r0"); */
+  register __avrword    iret2   __asm__("r1");
+  register float        fret    __asm__("r0");  /* r0 */
+  register double       dret    __asm__("r0");  /* r0,r1 */
 
   __av_alist* l = &AV_LIST_INNER(list);
 
 #if __GNUC__ >= 4
   __avword* argframe = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword)); /* make room for argument list */
 #else
-  __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
+  __avword space[__AV_ALIST_WORDS];     /* space for callee's stack frame */
 
   /* Enforce 8-bytes-alignment of the stack pointer.
      We need to do it this way because the old GCC that we use to compile
      this file does not support the option '-mabi=aapcs'. */
   sp &= -8;
 
-  __avword* argframe = (__avword*) sp;	/* stack offset for argument list */
+  __avword* argframe = (__avword*) sp;  /* stack offset for argument list */
 #endif
 
   int arglen = l->aptr - l->args;
   __avrword i;
 
-  for (i = 4; i < arglen; i++)		/* push function args onto stack */
+  for (i = 4; i < arglen; i++)          /* push function args onto stack */
     argframe[i-4] = l->args[i];
 
-				/* call function, pass 4 args in registers */
+                                /* call function, pass 4 args in registers */
   i = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3]);
 
   /* save return value */

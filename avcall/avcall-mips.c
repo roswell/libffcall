@@ -50,21 +50,21 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp __asm__("$sp");  /* C names for registers */
-  register __avrword	iret2 __asm__("$3");
-  register float	fret_tmp __asm__("$f0");
-  register double	dret_tmp __asm__("$f0");
+  register __avword*    sp __asm__("$sp");  /* C names for registers */
+  register __avrword    iret2 __asm__("$3");
+  register float        fret_tmp __asm__("$f0");
+  register double       dret_tmp __asm__("$f0");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
-  __avword *space = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword));	/* big space for child's stack frame */
-  __avword *argframe = sp;	/* stack offset for argument list is 0 */
+  __avword *space = __builtin_alloca(__AV_ALIST_WORDS * sizeof(__avword));      /* big space for child's stack frame */
+  __avword *argframe = sp;      /* stack offset for argument list is 0 */
   int arglen = l->aptr - l->args;
   int i;
   __avrword iret;
@@ -81,13 +81,13 @@ avcall_call(av_alist* list)
   if (l->darg_mask & (1 << 1))
     __asm__("l.d $f14,%1(%0)" : : "p" (l), "i" OFFSETOF(__av_alist,dargs[1]));
 
-  for (i = 4; i < arglen; i++)		/* push excess function args */
+  for (i = 4; i < arglen; i++)          /* push excess function args */
     argframe[i] = l->args[i];
 
   /* Note: The code of this call ought to put the address of the called function
      in register $25 before the call.  */
   iret = (*l->func)(l->args[0], l->args[1],  /* call function with 1st 4 args */
-		    l->args[2], l->args[3]);
+                    l->args[2], l->args[3]);
   fret = fret_tmp;
   dret = dret_tmp;
 

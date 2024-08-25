@@ -56,16 +56,16 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
 avcall_call(av_alist* list)
 {
-  register unsigned long sp	__asm__("r13");  /* C names for registers */
-/*register __avrword	iret	__asm__("r0"); */
-  register __avrword	iret2	__asm__("r1");
-  register float	fret	__asm__("s0");
-  register double	dret	__asm__("d0");
+  register unsigned long sp     __asm__("r13");  /* C names for registers */
+/*register __avrword    iret    __asm__("r0"); */
+  register __avrword    iret2   __asm__("r1");
+  register float        fret    __asm__("s0");
+  register double       dret    __asm__("d0");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -81,7 +81,7 @@ avcall_call(av_alist* list)
   int arglen = l->aptr - l->args;
   __avrword i;
 
-  for (i = 4; i < arglen; i++)		/* push function args onto stack */
+  for (i = 4; i < arglen; i++)          /* push function args onto stack */
     argframe[i-4] = l->args[i];
 
   /* load float values into floating-point registers */
@@ -136,7 +136,7 @@ avcall_call(av_alist* list)
   if ((l->darg_mask >> 7) & 1)
     __asm__ __volatile__ ("vldr.64 d7,%0" : : "m" (l->dargs[7]));
 
-				/* call function, pass 4 integer args in registers */
+                                /* call function, pass 4 integer args in registers */
   i = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3]);
 
   /* save return value */

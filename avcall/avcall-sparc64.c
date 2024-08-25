@@ -89,26 +89,26 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
-register __avrword o0	__asm__("%o0");
-register __avrword o1	__asm__("%o1");
-register __avrword o2	__asm__("%o2");
-register __avrword o3	__asm__("%o3");
-register __avrword o4	__asm__("%o4");
-register __avrword o5	__asm__("%o5");
+register __avrword o0   __asm__("%o0");
+register __avrword o1   __asm__("%o1");
+register __avrword o2   __asm__("%o2");
+register __avrword o3   __asm__("%o3");
+register __avrword o4   __asm__("%o4");
+register __avrword o5   __asm__("%o5");
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword* sp	__asm__("%sp");  /* C names for registers */
-  register float fret	__asm__("%f0");  /* %f0 */
-  register double dret	__asm__("%f0");  /* %f0,%f1 */
+  register __avword* sp __asm__("%sp");  /* C names for registers */
+  register float fret   __asm__("%f0");  /* %f0 */
+  register double dret  __asm__("%f0");  /* %f0,%f1 */
 
   __av_alist* l = &AV_LIST_INNER(list);
 
-  __avword trampoline[6];		/* room for a trampoline */
+  __avword trampoline[6];               /* room for a trampoline */
   int arglen = l->aptr - l->args;
   __avrword iret;
 
@@ -163,15 +163,15 @@ avcall_call(av_alist* list)
 #endif
 
     int i;
-    for (i = 6; i < arglen; i++)	/* push excess function args */
+    for (i = 6; i < arglen; i++)        /* push excess function args */
       argframe[i] = l->args[i];
   }
 
-					/* call function with 1st 6 args */
+                                        /* call function with 1st 6 args */
   iret = ({ register __avrword iretreg __asm__ ("%o0");
             iretreg = (*l->func)(l->args[0], l->args[1], l->args[2],
                                  l->args[3], l->args[4], l->args[5]);
-            asm __volatile__("nop");	/* struct returning functions skip this instruction */
+            asm __volatile__("nop");    /* struct returning functions skip this instruction */
             iretreg;
           });
 

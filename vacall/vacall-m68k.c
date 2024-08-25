@@ -22,16 +22,16 @@
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *	env	__asm__("a0");
+         *      env     __asm__("a0");
 #endif
-register void*		sret	__asm__("a1");
-register __varword	iret	__asm__("d0");
-register __varword	iret2	__asm__("d1");
-register __varword	pret	__asm__("a0");	/* some compilers return pointers in a0 */
-register float		fret	__asm__("d0");	/* d0 */
-register double		dret	__asm__("d0");	/* d0,d1 */
-register float		fp_fret	__asm__("fp0");
-register double		fp_dret	__asm__("fp0");
+register void*          sret    __asm__("a1");
+register __varword      iret    __asm__("d0");
+register __varword      iret2   __asm__("d1");
+register __varword      pret    __asm__("a0");  /* some compilers return pointers in a0 */
+register float          fret    __asm__("d0");  /* d0 */
+register double         dret    __asm__("d0");  /* d0,d1 */
+register float          fp_fret __asm__("fp0");
+register double         fp_dret __asm__("fp0");
 
 #ifdef REENTRANT
 static

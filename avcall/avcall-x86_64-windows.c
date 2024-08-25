@@ -57,7 +57,7 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 /*register __avrword iarg1 __asm__("rcx");*/
 /*register __avrword iarg2 __asm__("rdx");*/
@@ -77,10 +77,10 @@ register double darg4 __asm__("xmm3");
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("rsp");	/* C names for registers */
-  register __avrword	iret	__asm__("rax");
-  register float	fret	__asm__("xmm0");
-  register double	dret	__asm__("xmm0");
+  register __avword*    sp      __asm__("rsp"); /* C names for registers */
+  register __avrword    iret    __asm__("rax");
+  register float        fret    __asm__("xmm0");
+  register double       dret    __asm__("xmm0");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -88,7 +88,7 @@ avcall_call(av_alist* list)
   int arglen = l->aptr - l->args;
   int i;
 
-  for (i = 4; i < arglen; i++)		/* push function args onto stack */
+  for (i = 4; i < arglen; i++)          /* push function args onto stack */
     argframe[i-4] = l->args[i];
 
   /* put up to 4 float args into registers */

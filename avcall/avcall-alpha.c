@@ -42,27 +42,27 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("$30");  /* C names for registers */
-  register long		arg1	__asm__("$16");
-  register long		arg2	__asm__("$17");
-  register long		arg3	__asm__("$18");
-  register long		arg4	__asm__("$19");
-  register long		arg5	__asm__("$20");
-  register long		arg6	__asm__("$21");
-  register double	fret	__asm__("$f0");
-  register double	farg1	__asm__("$f16");
-  register double	farg2	__asm__("$f17");
-  register double	farg3	__asm__("$f18");
-  register double	farg4	__asm__("$f19");
-  register double	farg5	__asm__("$f20");
-  register double	farg6	__asm__("$f21");
-/*register __avrword	iret	__asm__("$0"); */
-  register __avrword	iret2	__asm__("$1");
+  register __avword*    sp      __asm__("$30");  /* C names for registers */
+  register long         arg1    __asm__("$16");
+  register long         arg2    __asm__("$17");
+  register long         arg3    __asm__("$18");
+  register long         arg4    __asm__("$19");
+  register long         arg5    __asm__("$20");
+  register long         arg6    __asm__("$21");
+  register double       fret    __asm__("$f0");
+  register double       farg1   __asm__("$f16");
+  register double       farg2   __asm__("$f17");
+  register double       farg3   __asm__("$f18");
+  register double       farg4   __asm__("$f19");
+  register double       farg5   __asm__("$f20");
+  register double       farg6   __asm__("$f21");
+/*register __avrword    iret    __asm__("$0"); */
+  register __avrword    iret2   __asm__("$1");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -70,10 +70,10 @@ avcall_call(av_alist* list)
   int arglen = ((unsigned long) l->aptr - (unsigned long) l->args) / sizeof (__avword);
   __avrword i, i2;
 
-  for (i = 6; i < arglen; i++)		/* push excess function args */
+  for (i = 6; i < arglen; i++)          /* push excess function args */
     argframe[i-6] = l->args[i];
 
-					/* call function with 1st 6 args */
+                                        /* call function with 1st 6 args */
   /* we pass the args both in the integer registers and the floating point
      registers, so we don't have to store the argument types. */
   __asm__ __volatile__ ("ldq $16,%0" : : "m" (l->args[0])); /* arg1 = l->args[0]; */
@@ -92,8 +92,8 @@ avcall_call(av_alist* list)
   i2 = iret2;
   /* this is apparently not needed, but better safe than sorry... */
   __asm__ __volatile__ ("" : : :
-			/* clobber */ "$16", "$17", "$18", "$19", "$20", "$21",
-				     "$f16","$f17","$f18","$f19","$f20","$f21");
+                        /* clobber */ "$16", "$17", "$18", "$19", "$20", "$21",
+                                     "$f16","$f17","$f18","$f19","$f20","$f21");
 
   /* save return value */
   if (l->rtype == __AVvoid) {

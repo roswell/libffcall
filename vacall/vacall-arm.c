@@ -25,11 +25,11 @@ typedef struct { void (*vacall_function) (void*,va_alist); void* arg; } env_t;
 #endif
 
 /* armel have only softvfp which uses generic registers */
-register __varword	iret	__asm__("r0");
-register __varword	iret2	__asm__("r1");
-register float		fret	__asm__("r0");
-register __varword	dret1	__asm__("r0");
-register __varword	dret2	__asm__("r1");
+register __varword      iret    __asm__("r0");
+register __varword      iret2   __asm__("r1");
+register float          fret    __asm__("r0");
+register __varword      dret1   __asm__("r0");
+register __varword      dret2   __asm__("r1");
 
 #ifndef REENTRANT
 /* The ARM ABI requires that the first 4 general-purpose argument words are

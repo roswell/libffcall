@@ -22,14 +22,14 @@
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *	env	__asm__("%g2");
+         *      env     __asm__("%g2");
 #endif
-register __vaword*	 fp	__asm__("%fp");	/* our %fp, caller's %sp */
-register __vaword* 	ret	__asm__("%i7");	/* %i7+8 = return address */
-register __varword	iret	__asm__("%i0");
-register __varword	iret2	__asm__("%i1");
-register float		fret	__asm__("%f0");	/* %f0 */
-register double		dret	__asm__("%f0");	/* %f0,%f1 */
+register __vaword*       fp     __asm__("%fp"); /* our %fp, caller's %sp */
+register __vaword*      ret     __asm__("%i7"); /* %i7+8 = return address */
+register __varword      iret    __asm__("%i0");
+register __varword      iret2   __asm__("%i1");
+register float          fret    __asm__("%f0"); /* %f0 */
+register double         dret    __asm__("%f0"); /* %f0,%f1 */
 
 void /* the return type is variable, not void! */
 vacall_receiver (__vaword word1, __vaword word2, __vaword word3, __vaword word4,

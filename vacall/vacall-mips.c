@@ -25,16 +25,16 @@ typedef void (*func_pointer)(va_alist);
 #define vacall_receiver callback_receiver
 typedef void (*func_pointer)(void*,va_alist);
 register struct { func_pointer vacall_function; void* arg; }
-         *	env	__asm__("$2");
+         *      env     __asm__("$2");
 #endif
-register float		farg1	__asm__("$f12");
-register float		farg2	__asm__("$f14");
-register double		darg1	__asm__("$f12");
-register double		darg2	__asm__("$f14");
-register __varword	iret	__asm__("$2");
-register __varword	iret2	__asm__("$3");
-register float		fret	__asm__("$f0");
-register double		dret	__asm__("$f0");
+register float          farg1   __asm__("$f12");
+register float          farg2   __asm__("$f14");
+register double         darg1   __asm__("$f12");
+register double         darg2   __asm__("$f14");
+register __varword      iret    __asm__("$2");
+register __varword      iret2   __asm__("$3");
+register float          fret    __asm__("$f0");
+register double         dret    __asm__("$f0");
 
 #ifdef REENTRANT
 static

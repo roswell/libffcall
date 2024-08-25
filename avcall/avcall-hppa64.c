@@ -62,10 +62,10 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 /* This declaration tells gcc not to modify %r28. */
-register __avword*	sret	__asm__("%r28");  /* structure return pointer */
+register __avword*      sret    __asm__("%r28");  /* structure return pointer */
 
 register __avrword arg1 __asm__("r26");
 register __avrword arg2 __asm__("r25");
@@ -97,9 +97,9 @@ register double darg8 __asm__("fr11");
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("%r30");  /* C names for registers */
-/*register __avrword	iret1	__asm__("%r28"); */
-  register __avrword	iret2	__asm__("%r29");
+  register __avword*    sp      __asm__("%r30");  /* C names for registers */
+/*register __avrword    iret1   __asm__("%r28"); */
+  register __avrword    iret2   __asm__("%r29");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -110,11 +110,11 @@ avcall_call(av_alist* list)
 
   {
     int i;
-    for (i = 8; i < arglen; i++)	/* push function args onto stack */
+    for (i = 8; i < arglen; i++)        /* push function args onto stack */
       argframe[i] = l->args[i];
   }
 
-  if (l->rtype == __AVstruct)		/* push struct return address */
+  if (l->rtype == __AVstruct)           /* push struct return address */
     sret = l->raddr;
 
   /* Put args in registers */

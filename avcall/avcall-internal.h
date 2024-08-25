@@ -46,120 +46,120 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  */
 
 #define __av_start(LIST,LIST_ARGS,LIST_ARGS_END,FUNC,RADDR,RETTYPE,FLAGS) \
-  ((LIST).func = (FUNC),						\
-   (LIST).raddr = (RADDR),						\
-   (LIST).rtype = (RETTYPE),						\
-   (LIST).args = (LIST_ARGS),						\
-   __av_start1(LIST,LIST_ARGS_END)					\
-   __av_start_init_eptr(LIST,LIST_ARGS_END)				\
+  ((LIST).func = (FUNC),                                                \
+   (LIST).raddr = (RADDR),                                              \
+   (LIST).rtype = (RETTYPE),                                            \
+   (LIST).args = (LIST_ARGS),                                           \
+   __av_start1(LIST,LIST_ARGS_END)                                      \
+   __av_start_init_eptr(LIST,LIST_ARGS_END)                             \
    (LIST).flags = (FLAGS))
 
 #if defined(__i386__) || defined(__m68k__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__))
-#define __av_start1(LIST,LIST_ARGS_END)					\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).anum = 0,							\
-   (LIST).fanum = 0,							\
-   (LIST).farg_mask = 0,						\
-   (LIST).darg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).anum = 0,                                                     \
+   (LIST).fanum = 0,                                                    \
+   (LIST).farg_mask = 0,                                                \
+   (LIST).darg_mask = 0,                                                \
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).anum = 0,							\
-   (LIST).farg_mask = 0,						\
-   (LIST).darg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).anum = 0,                                                     \
+   (LIST).farg_mask = 0,                                                \
+   (LIST).darg_mask = 0,                                                \
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__sparc__) && !defined(__sparc64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__sparc64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).anum = 0,							\
-   (LIST).darg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).anum = 0,                                                     \
+   (LIST).darg_mask = 0,                                                \
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).farg_mask = 0,						\
-   (LIST).darg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).farg_mask = 0,                                                \
+   (LIST).darg_mask = 0,                                                \
    (LIST).aptr = (LIST).args_end = (LIST_ARGS_END),
 #endif
 #if defined(__hppa64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).farg_mask = 0,						\
-   (LIST).darg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).farg_mask = 0,                                                \
+   (LIST).darg_mask = 0,                                                \
    (LIST).aptr = &(LIST).args[0],
 #endif
 #if defined(__armhf__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = &(LIST).args[__AV_IARG_NUM],				\
-   (LIST).ianum = 0,							\
-   (LIST).fanum = 0,							\
-   (LIST).farg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).aptr = &(LIST).args[__AV_IARG_NUM],                           \
+   (LIST).ianum = 0,                                                    \
+   (LIST).fanum = 0,                                                    \
+   (LIST).farg_mask = 0,                                                \
    (LIST).darg_mask = 0,
 #endif
 #if defined(__arm64__) || defined(__s390__) || defined(__s390x__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = &(LIST).args[0],					\
-   (LIST).ianum = 0,							\
-   (LIST).fanum = 0,							\
-   (LIST).farg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).aptr = &(LIST).args[0],                                       \
+   (LIST).ianum = 0,                                                    \
+   (LIST).fanum = 0,                                                    \
+   (LIST).farg_mask = 0,                                                \
    (LIST).darg_mask = 0,
 #endif
 #if defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = &(LIST).args[0],					\
-   (LIST).fanum = 0,							\
-   (LIST).farg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).aptr = &(LIST).args[0],                                       \
+   (LIST).fanum = 0,                                                    \
+   (LIST).farg_mask = 0,                                                \
    (LIST).darg_mask = 0,
 #endif
 #if defined(__powerpc_aix__) || defined(__powerpc64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = &(LIST).args[0],					\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).aptr = &(LIST).args[0],                                       \
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 #if defined(__powerpc_sysv4__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = &(LIST).args[0],					\
-   (LIST).ianum = 0,							\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).aptr = &(LIST).args[0],                                       \
+   (LIST).ianum = 0,                                                    \
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 #if defined(__ia64__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = &(LIST).args[0],					\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).aptr = &(LIST).args[0],                                       \
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 #if defined(__x86_64_sysv__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = &(LIST).args[0],					\
-   (LIST).ianum = 0,							\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).aptr = &(LIST).args[0],                                       \
+   (LIST).ianum = 0,                                                    \
    (LIST).faptr = &(LIST).fargs[0],
 #endif
 #if defined(__x86_64_ms__)
-#define __av_start1(LIST,LIST_ARGS_END)					\
-   (LIST).aptr = &(LIST).args[0],					\
-   (LIST).anum = 0,							\
-   (LIST).farg_mask = 0,						\
+#define __av_start1(LIST,LIST_ARGS_END)                                 \
+   (LIST).aptr = &(LIST).args[0],                                       \
+   (LIST).anum = 0,                                                     \
+   (LIST).farg_mask = 0,                                                \
    (LIST).darg_mask = 0,
 #endif
 
 #if defined(__hppa__) && !defined(__hppa64__)
-#define __av_start_init_eptr(LIST,LIST_ARGS_END)			\
+#define __av_start_init_eptr(LIST,LIST_ARGS_END)                        \
    (LIST).eptr = &(LIST).args[0],
 #else
-#define __av_start_init_eptr(LIST,LIST_ARGS_END)			\
+#define __av_start_init_eptr(LIST,LIST_ARGS_END)                        \
    (LIST).eptr = (LIST_ARGS_END),
 #endif
 
 #define __av_start_struct(LIST,LIST_ARGS,LIST_ARGS_END,FUNC,TYPE_SIZE,TYPE_SPLITTABLE,RADDR,FLAGS) \
   (__av_start(LIST,LIST_ARGS,LIST_ARGS_END,FUNC,RADDR,__AVstruct,FLAGS), \
-   (LIST).rsize = (TYPE_SIZE),						\
-   __av_start_struct2(LIST,TYPE_SIZE,TYPE_SPLITTABLE),			\
+   (LIST).rsize = (TYPE_SIZE),                                          \
+   __av_start_struct2(LIST,TYPE_SIZE,TYPE_SPLITTABLE),                  \
    0)
 
 #if (defined(__sparc__) && !defined(__sparc64__))
@@ -168,22 +168,22 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_start_struct2(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  0
 #else
 #define __av_start_struct2(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  (((LIST).flags & __AV_SMALL_STRUCT_RETURN)				\
-   && __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)		\
-   ? /* <= Word-sized structures are returned in a register. */		\
-     __av_start_struct3(LIST)						\
-   : __av_start_struct4(LIST,TYPE_SIZE)					\
+  (((LIST).flags & __AV_SMALL_STRUCT_RETURN)                            \
+   && __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)            \
+   ? /* <= Word-sized structures are returned in a register. */         \
+     __av_start_struct3(LIST)                                           \
+   : __av_start_struct4(LIST,TYPE_SIZE)                                 \
   )
 /* Determines whether a structure is returned in registers,
  * depending on its size and its word-splittable flag.
  */
 #if (defined(__i386__) && defined(_WIN32))
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4		\
-   || ((TYPE_SIZE) == 8							\
-       && (((LIST).flags & __AV_MSVC_STRUCT_RETURN)			\
-           || ((TYPE_SPLITTABLE)					\
-               && ((LIST).flags & __AV_GCC_STRUCT_RETURN)		\
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4             \
+   || ((TYPE_SIZE) == 8                                                 \
+       && (((LIST).flags & __AV_MSVC_STRUCT_RETURN)                     \
+           || ((TYPE_SPLITTABLE)                                        \
+               && ((LIST).flags & __AV_GCC_STRUCT_RETURN)               \
   )   )   )   )
 /* Turn on __AV_REGISTER_STRUCT_RETURN if __AV_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers.
@@ -197,9 +197,9 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
   ((TYPE_SIZE) <= 8)
 #else
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4		\
-   || ((TYPE_SIZE) == 8 && (TYPE_SPLITTABLE)				\
-       && ((LIST).flags & __AV_GCC_STRUCT_RETURN)			\
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4             \
+   || ((TYPE_SIZE) == 8 && (TYPE_SPLITTABLE)                            \
+       && ((LIST).flags & __AV_GCC_STRUCT_RETURN)                       \
   )   )
 #endif
 /* Turn on __AV_REGISTER_STRUCT_RETURN if __AV_SMALL_STRUCT_RETURN was set
@@ -216,9 +216,9 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #endif
 #if defined(__alpha__)
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8	\
-   || ((TYPE_SIZE) == 16 && (TYPE_SPLITTABLE)				\
-       && ((LIST).flags & __AV_GCC_STRUCT_RETURN)			\
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8 \
+   || ((TYPE_SIZE) == 16 && (TYPE_SPLITTABLE)                           \
+       && ((LIST).flags & __AV_GCC_STRUCT_RETURN)                       \
   )   )
 /* Turn on __AV_REGISTER_STRUCT_RETURN if __AV_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers.
@@ -242,9 +242,9 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
 #define __av_reg_struct_return(LIST,TYPE_SIZE,TYPE_SPLITTABLE)  \
-  ((LIST).flags & __AV_GCC_STRUCT_RETURN				\
+  ((LIST).flags & __AV_GCC_STRUCT_RETURN                                \
    ? ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8) \
-   : ((TYPE_SIZE) <= 16)						\
+   : ((TYPE_SIZE) <= 16)                                                \
   )
 /* Turn on __AV_REGISTER_STRUCT_RETURN if __AV_SMALL_STRUCT_RETURN was set
  * and the struct will actually be returned in registers.
@@ -293,28 +293,28 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 /* Return structure pointer is passed as first arg.
  */
 #if defined(__i386__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__)) || defined(__powerpc_aix__) || defined(__powerpc64__) || defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
-#define __av_start_struct4(LIST,TYPE_SIZE)				\
+#define __av_start_struct4(LIST,TYPE_SIZE)                              \
   (*(LIST).aptr++ = (__avword)((LIST).raddr), 0)
 #endif
 #if defined(__armhf__)
-#define __av_start_struct4(LIST,TYPE_SIZE)				\
+#define __av_start_struct4(LIST,TYPE_SIZE)                              \
   ((LIST).args[(LIST).ianum++] = (__avword)((LIST).raddr), 0)
 #endif
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__x86_64_ms__)
-#define __av_start_struct4(LIST,TYPE_SIZE)				\
-  (*(LIST).aptr++ = (__avword)((LIST).raddr),				\
-   (LIST).anum++,							\
-   0									\
+#define __av_start_struct4(LIST,TYPE_SIZE)                              \
+  (*(LIST).aptr++ = (__avword)((LIST).raddr),                           \
+   (LIST).anum++,                                                       \
+   0                                                                    \
   )
 #endif
 #if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 #if defined(__x86_64_x32__)
 /* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
    from 32 bits to 64 bits. */
-#define __av_start_struct4(LIST,TYPE_SIZE)				\
+#define __av_start_struct4(LIST,TYPE_SIZE)                              \
   ((LIST).iargs[(LIST).ianum++] = (unsigned long long)(unsigned long)((LIST).raddr), 0)
 #else
-#define __av_start_struct4(LIST,TYPE_SIZE)				\
+#define __av_start_struct4(LIST,TYPE_SIZE)                              \
   ((LIST).iargs[(LIST).ianum++] = (__avrword)((LIST).raddr), 0)
 #endif
 #endif
@@ -339,43 +339,43 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 /* Floats and all integer types are passed as words,
  * doubles as two words (on 32-bit platforms) or one word (on 64-bit platforms).
  */
-#define __av_word(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((LIST).aptr)[-1] = (__avword)(VAL),				\
+#define __av_word(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((LIST).aptr)[-1] = (__avword)(VAL),                                \
     0))
 #endif
 #if defined(__mips__) || defined(__mipsn32__) || defined(__mips64__) || defined(__sparc64__) || defined(__x86_64_ms__)
 /* Most things are passed as integers:
  */
-#define __av_word(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((LIST).aptr)[-1] = (__avword)(VAL),				\
-    (LIST).anum++,							\
+#define __av_word(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((LIST).aptr)[-1] = (__avword)(VAL),                                \
+    (LIST).anum++,                                                      \
     0))
 #endif
 #if defined(__hppa__) && !defined(__hppa64__)
 /* Floats and all integer types are passed as words,
  * doubles as two words.
  */
-#define __av_word(LIST,VAL)						\
-  ((LIST).aptr <= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr--,							\
-    *(LIST).aptr = (__avword)(VAL),					\
+#define __av_word(LIST,VAL)                                             \
+  ((LIST).aptr <= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr--,                                                      \
+    *(LIST).aptr = (__avword)(VAL),                                     \
     0))
 #endif
 #if defined(__armhf__)
-#define __av_word(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).args[(LIST).ianum++] = (__avword)(VAL), 0)			\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr++,							\
-       ((LIST).aptr)[-1] = (__avword)(VAL),				\
+#define __av_word(LIST,VAL)                                             \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).args[(LIST).ianum++] = (__avword)(VAL), 0)                 \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((LIST).aptr++,                                                   \
+       ((LIST).aptr)[-1] = (__avword)(VAL),                             \
        0)))
 #endif
 
@@ -383,62 +383,62 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define __av_int(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (int)(VAL), 0)			\
+#define __av_int(LIST,VAL)                                              \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (int)(VAL), 0)                     \
    : __av_word(LIST,(int)(VAL)))
 #else
-#define __av_int(LIST,VAL)	__av_word(LIST,(int)(VAL))
+#define __av_int(LIST,VAL)      __av_word(LIST,(int)(VAL))
 #endif
 
 #if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define __av_uint(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (unsigned int)(VAL), 0)		\
+#define __av_uint(LIST,VAL)                                             \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned int)(VAL), 0)            \
    : __av_word(LIST,(unsigned int)(VAL)))
 #else
-#define __av_uint(LIST,VAL)	__av_word(LIST,(unsigned int)(VAL))
+#define __av_uint(LIST,VAL)     __av_word(LIST,(unsigned int)(VAL))
 #endif
 
 #if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define __av_long(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)			\
+#define __av_long(LIST,VAL)                                             \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)                    \
    : __av_word(LIST,(long)(VAL)))
 #elif defined(__arm64__) && defined(__APPLE__) && defined(__MACH__)
-#define __av_long(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)			\
-   : ((LIST).aptr + 2 > (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr += 2,						\
-       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(long)(VAL),	\
+#define __av_long(LIST,VAL)                                             \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (long)(VAL), 0)                    \
+   : ((LIST).aptr + 2 > (LIST).eptr                                     \
+      ? -1 :                                                            \
+      ((LIST).aptr += 2,                                                \
+       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(long)(VAL),    \
        ((LIST).aptr)[-1] = (unsigned int)((unsigned long)(long)(VAL) >> 32), \
        0)))
 #else
-#define __av_long(LIST,VAL)	__av_word(LIST,(long)(VAL))
+#define __av_long(LIST,VAL)     __av_word(LIST,(long)(VAL))
 #endif
 
 #if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define __av_ulong(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
+#define __av_ulong(LIST,VAL)                                            \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)           \
    : __av_word(LIST,(unsigned long)(VAL)))
 #elif defined(__arm64__) && defined(__APPLE__) && defined(__MACH__)
-#define __av_ulong(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
-   : ((LIST).aptr + 2 > (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr += 2,						\
-       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(VAL),		\
-       ((LIST).aptr)[-1] = (unsigned int)((unsigned long)(VAL) >> 32),	\
+#define __av_ulong(LIST,VAL)                                            \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)           \
+   : ((LIST).aptr + 2 > (LIST).eptr                                     \
+      ? -1 :                                                            \
+      ((LIST).aptr += 2,                                                \
+       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(VAL),          \
+       ((LIST).aptr)[-1] = (unsigned int)((unsigned long)(VAL) >> 32),  \
        0)))
 #else
-#define __av_ulong(LIST,VAL)	__av_word(LIST,(unsigned long)(VAL))
+#define __av_ulong(LIST,VAL)    __av_word(LIST,(unsigned long)(VAL))
 #endif
 
 #if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
@@ -446,152 +446,152 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #if defined(__x86_64_x32__)
 /* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
    from 32 bits to 64 bits. */
-#define __av_ptr(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
+#define __av_ptr(LIST,VAL)                                              \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
    ? ((LIST).iargs[(LIST).ianum++] = (unsigned long long)(unsigned long)(VAL), 0) \
    : __av_word(LIST,(unsigned long long)(unsigned long)(VAL)))
 #else
-#define __av_ptr(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (__avrword)(VAL), 0)		\
+#define __av_ptr(LIST,VAL)                                              \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (__avrword)(VAL), 0)               \
    : __av_word(LIST,VAL))
 #endif
 #elif defined(__arm64__) && defined(__APPLE__) && defined(__MACH__)
-#define __av_ptr(LIST,VAL)						\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)		\
-   : ((LIST).aptr + 2 > (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr += 2,						\
-       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(VAL),		\
-       ((LIST).aptr)[-1] = (unsigned int)((unsigned long)(VAL) >> 32),	\
+#define __av_ptr(LIST,VAL)                                              \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long)(VAL), 0)           \
+   : ((LIST).aptr + 2 > (LIST).eptr                                     \
+      ? -1 :                                                            \
+      ((LIST).aptr += 2,                                                \
+       ((LIST).aptr)[-2] = (unsigned int)(unsigned long)(VAL),          \
+       ((LIST).aptr)[-1] = (unsigned int)((unsigned long)(VAL) >> 32),  \
        0)))
 #else
-#define __av_ptr(LIST,VAL)	__av_word(LIST,VAL)
+#define __av_ptr(LIST,VAL)      __av_word(LIST,VAL)
 #endif
 
 #if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__AV_LLP64)) || defined(__s390x__) || defined(__riscv64__) || defined(__loongarch64__)
 /* ‘long long’ and ‘long’ are identical. */
-#define __av_longlong		__av_long
-#define __av_ulonglong		__av_ulong
+#define __av_longlong           __av_long
+#define __av_ulonglong          __av_ulong
 #elif defined(__mipsn32__) || (defined(__x86_64__) && defined(__AV_LLP64))
 /* ‘long long’ fits in __avword. */
-#define __av_longlong			__av_word
-#define __av_ulonglong(LIST,VAL)	__av_word(LIST,(unsigned long long)(VAL))
+#define __av_longlong                   __av_word
+#define __av_ulonglong(LIST,VAL)        __av_word(LIST,(unsigned long long)(VAL))
 #elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__)) || defined(__riscv32__)
 /* ‘long long’s are passed embedded on the arg stack. */
-#define __av_longlong(LIST,VAL)		__av_arg_longlong(LIST,long long,VAL)
-#define __av_ulonglong(LIST,VAL)	__av_arg_longlong(LIST,unsigned long long,VAL)
+#define __av_longlong(LIST,VAL)         __av_arg_longlong(LIST,long long,VAL)
+#define __av_ulonglong(LIST,VAL)        __av_arg_longlong(LIST,unsigned long long,VAL)
 #if defined(__i386__) || defined(__m68k__) || defined(__powerpc_aix__)
 /* ‘long long’s are (at most) word-aligned. */
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
-  ((LIST).aptr + sizeof(TYPE)/sizeof(__avword) > (LIST).eptr		\
-   ? -1 :								\
-   ((LIST).aptr += sizeof(TYPE)/sizeof(__avword),			\
-    ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
+  ((LIST).aptr + sizeof(TYPE)/sizeof(__avword) > (LIST).eptr            \
+   ? -1 :                                                               \
+   ((LIST).aptr += sizeof(TYPE)/sizeof(__avword),                       \
+    ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),                             \
     0))
 #endif
 #if defined(__mips__) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || defined(__powerpc_sysv4__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__)) || defined(__riscv32__)
 /* ‘long long’s have alignment 4 or 8. */
 #if defined(__mips__)
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
   ((__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    (((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE))), \
-    ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
-    (LIST).anum++,							\
+    ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),                             \
+    (LIST).anum++,                                                      \
     0))
 #endif
 #if defined(__sparc__) && !defined(__sparc64__)
 /* Within the arg stack, the alignment is only 4, not 8. */
 /* This assumes sizeof(long long) == 2*sizeof(__avword). */
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
-  ((LIST).aptr + sizeof(TYPE)/sizeof(__avword) > (LIST).eptr		\
-   ? -1 :								\
-   ((LIST).aptr += sizeof(TYPE)/sizeof(__avword),			\
-    (LIST).tmp._longlong = (TYPE)(VAL),					\
-    (LIST).aptr[-2] = (LIST).tmp.words[0],				\
-    (LIST).aptr[-1] = (LIST).tmp.words[1],				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
+  ((LIST).aptr + sizeof(TYPE)/sizeof(__avword) > (LIST).eptr            \
+   ? -1 :                                                               \
+   ((LIST).aptr += sizeof(TYPE)/sizeof(__avword),                       \
+    (LIST).tmp._longlong = (TYPE)(VAL),                                 \
+    (LIST).aptr[-2] = (LIST).tmp.words[0],                              \
+    (LIST).aptr[-1] = (LIST).tmp.words[1],                              \
     0))
 #endif
 #if (defined(__hppa__) && !defined(__hppa64__))
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
   ((__avword*)(((uintptr_t)(LIST).aptr & -(intptr_t)__AV_alignof(TYPE)) - sizeof(TYPE)) < (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr & -(intptr_t)__AV_alignof(TYPE)) - sizeof(TYPE)), \
-    *(TYPE*)(LIST).aptr = (TYPE)(VAL),					\
+    *(TYPE*)(LIST).aptr = (TYPE)(VAL),                                  \
     0))
 #endif
 #if defined(__arm__) && !defined(__armhf__)
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
   ((__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)), \
-    ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
+    ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),                             \
     0))
 #endif
 #if defined(__armhf__)
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
   ((((LIST).ianum + sizeof(TYPE)/sizeof(__avword)+__AV_alignof(TYPE)/sizeof(__avword)-1) & -(intptr_t)(__AV_alignof(TYPE)/sizeof(__avword))) <= __AV_IARG_NUM \
    ? ((LIST).ianum = (((LIST).ianum + sizeof(TYPE)/sizeof(__avword)+__AV_alignof(TYPE)/sizeof(__avword)-1) & -(intptr_t)(__AV_alignof(TYPE)/sizeof(__avword))), \
-      ((TYPE*)&(LIST).args[(LIST).ianum])[-1] = (TYPE)(VAL),		\
-      0)								\
-   : ((LIST).aptr == &(LIST).args[__AV_IARG_NUM]			\
-      ? /* split case */						\
+      ((TYPE*)&(LIST).args[(LIST).ianum])[-1] = (TYPE)(VAL),            \
+      0)                                                                \
+   : ((LIST).aptr == &(LIST).args[__AV_IARG_NUM]                        \
+      ? /* split case */                                                \
         ((__avword*)(((uintptr_t)&(LIST).args[(LIST).ianum]+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)) > (LIST).eptr \
-         ? -1 :								\
+         ? -1 :                                                         \
          ((LIST).aptr = (__avword*)(((uintptr_t)&(LIST).args[(LIST).ianum]+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)), \
-          ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),			\
-          (LIST).ianum = __AV_IARG_NUM,					\
-          0))								\
+          ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),                       \
+          (LIST).ianum = __AV_IARG_NUM,                                 \
+          0))                                                           \
       : ((__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)) > (LIST).eptr \
-         ? -1 :								\
+         ? -1 :                                                         \
          ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)), \
-          ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),			\
-          (LIST).ianum = __AV_IARG_NUM,					\
+          ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),                       \
+          (LIST).ianum = __AV_IARG_NUM,                                 \
           0))))
 #endif
 #if defined(__powerpc_sysv4__)
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
   ((((LIST).ianum + sizeof(TYPE)/sizeof(__avrword)+__AV_alignof(TYPE)/sizeof(__avrword)-1) & -(intptr_t)(__AV_alignof(TYPE)/sizeof(__avrword))) <= __AV_IARG_NUM \
    ? ((LIST).ianum = (((LIST).ianum + sizeof(TYPE)/sizeof(__avrword)+__AV_alignof(TYPE)/sizeof(__avrword)-1) & -(intptr_t)(__AV_alignof(TYPE)/sizeof(__avrword))), \
-      ((TYPE*)&(LIST).iargs[(LIST).ianum])[-1] = (TYPE)(VAL),		\
-      0)								\
-   : ((LIST).ianum = __AV_IARG_NUM,					\
+      ((TYPE*)&(LIST).iargs[(LIST).ianum])[-1] = (TYPE)(VAL),           \
+      0)                                                                \
+   : ((LIST).ianum = __AV_IARG_NUM,                                     \
       ((__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)) > (LIST).eptr \
-       ? -1 :								\
+       ? -1 :                                                           \
        ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+__AV_alignof(TYPE)-1) & -(intptr_t)__AV_alignof(TYPE)), \
-        ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
+        ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),                         \
         0))))
 #endif
 #if defined(__x86_64_x32__)
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
-  ((LIST).ianum < __AV_IARG_NUM						\
-   ? ((LIST).iargs[(LIST).ianum++] = (__avrword)(TYPE)(VAL), 0)		\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (__avrword)(TYPE)(VAL), 0)         \
    : __av_word(LIST,(TYPE)(VAL)))
 #endif
 #if (defined(__s390__) && !defined(__s390x__))
 /* Within the arg stack, the alignment is only 4, not 8. */
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
   ((LIST).ianum + (sizeof(TYPE)+sizeof(__avrword)-1)/sizeof(__avrword) <= __AV_IARG_NUM \
    ? ((LIST).ianum += (sizeof(TYPE)+sizeof(__avrword)-1)/sizeof(__avrword), \
-      ((TYPE*)&(LIST).iargs[(LIST).ianum])[-1] = (TYPE)(VAL),		\
-      0)								\
-   : ((LIST).ianum = __AV_IARG_NUM,					\
+      ((TYPE*)&(LIST).iargs[(LIST).ianum])[-1] = (TYPE)(VAL),           \
+      0)                                                                \
+   : ((LIST).ianum = __AV_IARG_NUM,                                     \
       ((__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-       ? -1 :								\
+       ? -1 :                                                           \
        ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-        ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
+        ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),                         \
         0))))
 #endif
 #if defined(__riscv32__)
 /* Within the arg stack, the alignment is only 4, not 8. Also, the argument
    may be put into one word in registers and one word on the stack. */
-#define __av_arg_longlong(LIST,TYPE,VAL)				\
+#define __av_arg_longlong(LIST,TYPE,VAL)                                \
   (((__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-    ? -1 :								\
+    ? -1 :                                                              \
     ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(TYPE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-     ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),				\
+     ((TYPE*)(LIST).aptr)[-1] = (TYPE)(VAL),                            \
      0)))
 #endif
 #endif
@@ -601,21 +601,21 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 #if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__))
 
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((float*)(LIST).aptr)[-1] = (float)(VAL),                           \
     0))
 
 /* This assumes sizeof(double) == 2*sizeof(__avword). */
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr + 2 > (LIST).eptr					\
-   ? -1 :								\
-   ((LIST).aptr += 2,							\
-    (LIST).tmp._double = (double)(VAL),					\
-    (LIST).aptr[-2] = (LIST).tmp.words[0],				\
-    (LIST).aptr[-1] = (LIST).tmp.words[1],				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr + 2 > (LIST).eptr                                        \
+   ? -1 :                                                               \
+   ((LIST).aptr += 2,                                                   \
+    (LIST).tmp._double = (double)(VAL),                                 \
+    (LIST).aptr[-2] = (LIST).tmp.words[0],                              \
+    (LIST).aptr[-1] = (LIST).tmp.words[1],                              \
     0))
 
 #endif
@@ -627,34 +627,34 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * registers in case of varargs. For doubles we need to align the aptr
  * to an even boundary.
  */
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((LIST).anum == (LIST).fanum && (LIST).fanum < __AV_FARG_NUM	\
-     ? /* only floating-point arguments so far */			\
-       ((LIST).farg_mask |= (unsigned int) 1 << (LIST).fanum,		\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((LIST).anum == (LIST).fanum && (LIST).fanum < __AV_FARG_NUM        \
+     ? /* only floating-point arguments so far */                       \
+       ((LIST).farg_mask |= (unsigned int) 1 << (LIST).fanum,           \
         (LIST).fargs[(LIST).fanum] = ((float*)(LIST).aptr)[-1] = (float)(VAL), \
-        (LIST).fanum++,							\
-        0)								\
-     : (((float*)(LIST).aptr)[-1] = (float)(VAL),			\
-        0)),								\
-    (LIST).anum++,							\
+        (LIST).fanum++,                                                 \
+        0)                                                              \
+     : (((float*)(LIST).aptr)[-1] = (float)(VAL),                       \
+        0)),                                                            \
+    (LIST).anum++,                                                      \
     0))
 
-#define _av_double(LIST,VAL)						\
-  ((__avword*)(((uintptr_t)(LIST).aptr+15)&-8) > (LIST).eptr		\
-   ? -1 :								\
-   ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+15)&-8),		\
-    ((LIST).anum == (LIST).fanum && (LIST).fanum < __AV_FARG_NUM	\
-     ? /* only floating-point arguments so far */			\
-       ((LIST).darg_mask |= (unsigned int) 1 << (LIST).fanum,		\
+#define _av_double(LIST,VAL)                                            \
+  ((__avword*)(((uintptr_t)(LIST).aptr+15)&-8) > (LIST).eptr            \
+   ? -1 :                                                               \
+   ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+15)&-8),          \
+    ((LIST).anum == (LIST).fanum && (LIST).fanum < __AV_FARG_NUM        \
+     ? /* only floating-point arguments so far */                       \
+       ((LIST).darg_mask |= (unsigned int) 1 << (LIST).fanum,           \
         (LIST).dargs[(LIST).fanum] = ((double*)(LIST).aptr)[-1] = (double)(VAL), \
-        (LIST).fanum++,							\
-        0)								\
-     : (((double*)(LIST).aptr)[-1] = (double)(VAL),			\
-        0)),								\
-    (LIST).anum++,							\
+        (LIST).fanum++,                                                 \
+        0)                                                              \
+     : (((double*)(LIST).aptr)[-1] = (double)(VAL),                     \
+        0)),                                                            \
+    (LIST).anum++,                                                      \
     0))
 
 #endif
@@ -665,24 +665,24 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * float registers, but we also push them into the corresponding int
  * registers in case of varargs.
  */
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   (((LIST).anum < 8							\
-     ? ((LIST).farg_mask |= (1 << (LIST).anum),				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   (((LIST).anum < 8                                                    \
+     ? ((LIST).farg_mask |= (1 << (LIST).anum),                         \
         (LIST).fargs[(LIST).anum] = *(float*)(LIST).aptr = (float)(VAL)) \
-     : (*(float*)(LIST).aptr = (float)(VAL))),				\
-    (LIST).anum++,							\
-    (LIST).aptr++,							\
+     : (*(float*)(LIST).aptr = (float)(VAL))),                          \
+    (LIST).anum++,                                                      \
+    (LIST).aptr++,                                                      \
     0))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   (((LIST).anum < 8 && ((LIST).darg_mask |= (1 << (LIST).anum))),	\
-    *(double*)(LIST).aptr = (double)(VAL),				\
-    (LIST).anum++,							\
-    (LIST).aptr++,							\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   (((LIST).anum < 8 && ((LIST).darg_mask |= (1 << (LIST).anum))),      \
+    *(double*)(LIST).aptr = (double)(VAL),                              \
+    (LIST).anum++,                                                      \
+    (LIST).aptr++,                                                      \
     0))
 
 #endif
@@ -693,115 +693,115 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * float registers, but we also push them into the corresponding int
  * registers in case of varargs.
  */
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((LIST).anum < 16 && ((LIST).darg_mask |= (1 << (LIST).anum))),	\
-    (((float*)(LIST).aptr)[-1] = (float)(VAL)),				\
-    (LIST).anum++,							\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((LIST).anum < 16 && ((LIST).darg_mask |= (1 << (LIST).anum))),     \
+    (((float*)(LIST).aptr)[-1] = (float)(VAL)),                         \
+    (LIST).anum++,                                                      \
     0))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((LIST).anum < 16 && ((LIST).darg_mask |= (1 << (LIST).anum))),	\
-    ((double*)(LIST).aptr)[-1] = (double)(VAL),				\
-    (LIST).anum++,							\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((LIST).anum < 16 && ((LIST).darg_mask |= (1 << (LIST).anum))),     \
+    ((double*)(LIST).aptr)[-1] = (double)(VAL),                         \
+    (LIST).anum++,                                                      \
     0))
 
 #endif
 
 #if defined(__alpha__)
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((double*)(LIST).aptr)[-1] = (double)(VAL),				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((double*)(LIST).aptr)[-1] = (double)(VAL),                         \
     0))
 
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1									\
-   : ((LIST).aptr++,							\
-      ((LIST).aptr > &(LIST).args[6]					\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1                                                                 \
+   : ((LIST).aptr++,                                                    \
+      ((LIST).aptr > &(LIST).args[6]                                    \
        ? /* These args will be fetched from memory using "lds" instructions */ \
-         /* therefore store them as floats */				\
-         (*(float*)((LIST).aptr-1) = (float)(VAL))			\
+         /* therefore store them as floats */                           \
+         (*(float*)((LIST).aptr-1) = (float)(VAL))                      \
        : /* The first 6 args will be put into registers by "ldt" instructions */ \
-         /* (see avcall-alpha.c!). Therefore store them as doubles. */	\
+         /* (see avcall-alpha.c!). Therefore store them as doubles. */  \
          /* When viewed as floats, the value will be the correct one. */\
-         (*(double*)((LIST).aptr-1) = (double)(float)(VAL))),		\
+         (*(double*)((LIST).aptr-1) = (double)(float)(VAL))),           \
       0))
 
 #endif
 
 #if defined(__hppa__) && !defined(__hppa64__)
 
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr <= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr--,							\
-    ((LIST).aptr >= &(LIST).args_end[-4]				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr <= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr--,                                                      \
+    ((LIST).aptr >= &(LIST).args_end[-4]                                \
      ? ((LIST).farg_mask |= (unsigned int)1 << ((LIST).args_end - (LIST).aptr - 1), 0) \
-     : 0),								\
-    *(float*)(LIST).aptr = (float)(VAL),				\
+     : 0),                                                              \
+    *(float*)(LIST).aptr = (float)(VAL),                                \
     0))
 
-#define _av_double(LIST,VAL)						\
+#define _av_double(LIST,VAL)                                            \
   ((__avword*)(((uintptr_t)(LIST).aptr-sizeof(double)) & -(intptr_t)sizeof(double)) < (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr-sizeof(double)) & -(intptr_t)sizeof(double)), \
-    ((LIST).aptr >= &(LIST).args_end[-4]				\
+    ((LIST).aptr >= &(LIST).args_end[-4]                                \
      ? ((LIST).darg_mask |= (unsigned int)1 << ((LIST).args_end - (LIST).aptr - 1), 0) \
-     : 0),								\
-    *(double*)(LIST).aptr = (double)(VAL),				\
+     : 0),                                                              \
+    *(double*)(LIST).aptr = (double)(VAL),                              \
     0))
 
 #endif
 
 #if defined(__hppa64__)
 
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   (((LIST).aptr < &(LIST).args[8]					\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   (((LIST).aptr < &(LIST).args[8]                                      \
      ? ((LIST).farg_mask |= (unsigned int)1 << ((LIST).aptr - (LIST).args), 0) \
-     : 0),								\
-    (LIST).aptr++,							\
-    ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
+     : 0),                                                              \
+    (LIST).aptr++,                                                      \
+    ((float*)(LIST).aptr)[-1] = (float)(VAL),                           \
     0))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   (((LIST).aptr < &(LIST).args[8]					\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   (((LIST).aptr < &(LIST).args[8]                                      \
      ? ((LIST).darg_mask |= (unsigned int)1 << ((LIST).aptr - (LIST).args), 0) \
-     : 0),								\
-    (LIST).aptr++,							\
-    ((double*)(LIST).aptr)[-1] = (double)(VAL),				\
+     : 0),                                                              \
+    (LIST).aptr++,                                                      \
+    ((double*)(LIST).aptr)[-1] = (double)(VAL),                         \
     0))
 
 #endif
 
 #if defined(__arm__) && !defined(__armhf__)
 
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((float*)(LIST).aptr)[-1] = (float)(VAL),                           \
     0))
 
-#define _av_double(LIST,VAL)						\
-  ((__avword*)(((uintptr_t)(LIST).aptr + 15) & -8) > (LIST).eptr	\
-   ? -1 :								\
-   ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr + 15) & -8),	\
-    (LIST).tmp._double = (double)(VAL),					\
-    (LIST).aptr[-2] = (LIST).tmp.words[0],				\
-    (LIST).aptr[-1] = (LIST).tmp.words[1],				\
+#define _av_double(LIST,VAL)                                            \
+  ((__avword*)(((uintptr_t)(LIST).aptr + 15) & -8) > (LIST).eptr        \
+   ? -1 :                                                               \
+   ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr + 15) & -8),      \
+    (LIST).tmp._double = (double)(VAL),                                 \
+    (LIST).aptr[-2] = (LIST).tmp.words[0],                              \
+    (LIST).aptr[-1] = (LIST).tmp.words[1],                              \
     0))
 
 #endif
@@ -811,29 +811,29 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 /* Up to 16 float or up to 8 double args can be passed in float registers.
  * But they overlap: {s0,s1} = d0, {s2,s3} = d1, and so on.
  */
-#define _av_float(LIST,VAL)						\
-  ((LIST).fanum <= 15							\
-   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
-      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-      (LIST).fanum++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((*(float*)(LIST).aptr = (float)(VAL)),				\
-       (LIST).aptr++,							\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).fanum <= 15                                                   \
+   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),                        \
+      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,           \
+      (LIST).fanum++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((*(float*)(LIST).aptr = (float)(VAL)),                           \
+       (LIST).aptr++,                                                   \
        0)))
 
-#define _av_double(LIST,VAL)						\
-  (((LIST).fanum % 2 ? ((LIST).fanum++, 0) : 0),			\
-   ((LIST).fanum <= 14							\
-    ? ((LIST).dargs[(LIST).fanum / 2] = (double)(VAL),			\
-       (LIST).darg_mask |= ((unsigned int) 1) << ((LIST).fanum / 2),	\
-       (LIST).fanum += 2,						\
-       0)								\
-    : ((LIST).aptr + 2 > (LIST).eptr					\
-       ? -1 :								\
-       ((*(double*)(LIST).aptr = (double)(VAL)),			\
-        (LIST).aptr += 2,						\
+#define _av_double(LIST,VAL)                                            \
+  (((LIST).fanum % 2 ? ((LIST).fanum++, 0) : 0),                        \
+   ((LIST).fanum <= 14                                                  \
+    ? ((LIST).dargs[(LIST).fanum / 2] = (double)(VAL),                  \
+       (LIST).darg_mask |= ((unsigned int) 1) << ((LIST).fanum / 2),    \
+       (LIST).fanum += 2,                                               \
+       0)                                                               \
+    : ((LIST).aptr + 2 > (LIST).eptr                                    \
+       ? -1 :                                                           \
+       ((*(double*)(LIST).aptr = (double)(VAL)),                        \
+        (LIST).aptr += 2,                                               \
         0))))
 
 #endif
@@ -843,28 +843,28 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 /* Up to __AV_FARG_NUM float or double args can be passed in float registers.
    The remaining float or double args are passed in the general-purpose
    argument sequence (first the integer registers, then the stack.) */
-#define _av_float(LIST,VAL)						\
-  ((LIST).fanum < __AV_FARG_NUM						\
-   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
-      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-      (LIST).fanum++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((*(float*)(LIST).aptr = (float)(VAL)),				\
-       (LIST).aptr++,							\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).fanum < __AV_FARG_NUM                                         \
+   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),                        \
+      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,           \
+      (LIST).fanum++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((*(float*)(LIST).aptr = (float)(VAL)),                           \
+       (LIST).aptr++,                                                   \
        0)))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).fanum < __AV_FARG_NUM						\
-   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
-      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-      (LIST).fanum++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((*(double*)(LIST).aptr = (double)(VAL)),				\
-       (LIST).aptr += sizeof(double)/sizeof(__avword),			\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).fanum < __AV_FARG_NUM                                         \
+   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),                       \
+      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,           \
+      (LIST).fanum++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((*(double*)(LIST).aptr = (double)(VAL)),                         \
+       (LIST).aptr += sizeof(double)/sizeof(__avword),                  \
        0)))
 
 #endif
@@ -876,21 +876,21 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * registers in case of varargs.
  */
 
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((float*)(LIST).aptr)[-1] = (float)(VAL),                           \
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr + 2 > (LIST).eptr					\
-   ? -1 :								\
-   ((LIST).aptr += 2,							\
-    (LIST).tmp._double = (double)(VAL),					\
-    (LIST).aptr[-2] = (LIST).tmp.words[0],				\
-    (LIST).aptr[-1] = (LIST).tmp.words[1],				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr + 2 > (LIST).eptr                                        \
+   ? -1 :                                                               \
+   ((LIST).aptr += 2,                                                   \
+    (LIST).tmp._double = (double)(VAL),                                 \
+    (LIST).aptr[-2] = (LIST).tmp.words[0],                              \
+    (LIST).aptr[-1] = (LIST).tmp.words[1],                              \
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (LIST).tmp._double), \
     0))
 
@@ -902,24 +902,24 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * float registers, without occupying space in the general registers.
  */
 
-#define _av_float(LIST,VAL)						\
-  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
-   ? ((*(LIST).faptr++ = (double)(float)(VAL)), 0)			\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr++,							\
-       ((float*)(LIST).aptr)[-1] = (float)(VAL),			\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]                          \
+   ? ((*(LIST).faptr++ = (double)(float)(VAL)), 0)                      \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((LIST).aptr++,                                                   \
+       ((float*)(LIST).aptr)[-1] = (float)(VAL),                        \
        0)))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
-   ? ((*(LIST).faptr++ = (double)(VAL)), 0)				\
-   : ((LIST).aptr + 2 > (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr += 2,						\
-       (LIST).tmp._double = (double)(VAL),				\
-       (LIST).aptr[-2] = (LIST).tmp.words[0],				\
-       (LIST).aptr[-1] = (LIST).tmp.words[1],				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]                          \
+   ? ((*(LIST).faptr++ = (double)(VAL)), 0)                             \
+   : ((LIST).aptr + 2 > (LIST).eptr                                     \
+      ? -1 :                                                            \
+      ((LIST).aptr += 2,                                                \
+       (LIST).tmp._double = (double)(VAL),                              \
+       (LIST).aptr[-2] = (LIST).tmp.words[0],                           \
+       (LIST).aptr[-1] = (LIST).tmp.words[1],                           \
        0)))
 
 #endif
@@ -932,36 +932,36 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  */
 
 #if defined(_AIX)
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
     ((float*)(LIST).aptr)[(LIST).flags & __AV_AIXCC_FLOAT_ARGS ? -2 : -1] = (float)(VAL), \
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 #elif defined(__LITTLE_ENDIAN__)
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((float*)(LIST).aptr)[-2] = (float)(VAL),				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((float*)(LIST).aptr)[-2] = (float)(VAL),                           \
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 #else /* _BIG_ENDIAN */
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((float*)(LIST).aptr)[-1] = (float)(VAL),				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((float*)(LIST).aptr)[-1] = (float)(VAL),                           \
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(float)(VAL)), \
     0))
 #endif
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((LIST).aptr++,							\
-    ((double*)(LIST).aptr)[-1] = (double)(VAL),				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((LIST).aptr++,                                                      \
+    ((double*)(LIST).aptr)[-1] = (double)(VAL),                         \
     (LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr++ = (double)(VAL)), \
     0))
 
@@ -973,20 +973,20 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * float registers, but we also push them into the corresponding int
  * registers in case of varargs.
  */
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   ((*(float*)(LIST).aptr = (float)(VAL)),				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   ((*(float*)(LIST).aptr = (float)(VAL)),                              \
     ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr = *(float*)(LIST).aptr, (LIST).faptr++)), \
-    (LIST).aptr++,							\
+    (LIST).aptr++,                                                      \
     0))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   (*(double*)(LIST).aptr = (double)(VAL),				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   (*(double*)(LIST).aptr = (double)(VAL),                              \
     ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM] && (*(LIST).faptr = *(double*)(LIST).aptr, (LIST).faptr++)), \
-    (LIST).aptr++,							\
+    (LIST).aptr++,                                                      \
     0))
 
 #endif
@@ -995,26 +995,26 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 /* Up to 8 leading float or double args can be passed in float registers.
  */
-#define _av_float(LIST,VAL)						\
-  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
-   ? (*(LIST).faptr = 0.0, *(float*)(LIST).faptr = (float)(VAL),	\
-      (LIST).faptr++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((*(float*)(LIST).aptr = (float)(VAL)),				\
-       (LIST).aptr++,							\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]                          \
+   ? (*(LIST).faptr = 0.0, *(float*)(LIST).faptr = (float)(VAL),        \
+      (LIST).faptr++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((*(float*)(LIST).aptr = (float)(VAL)),                           \
+       (LIST).aptr++,                                                   \
        0)))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]				\
-   ? (*(LIST).faptr = (double)(VAL),					\
-      (LIST).faptr++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((*(double*)(LIST).aptr = (double)(VAL)),				\
-       (LIST).aptr++,							\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).faptr < &(LIST).fargs[__AV_FARG_NUM]                          \
+   ? (*(LIST).faptr = (double)(VAL),                                    \
+      (LIST).faptr++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((*(double*)(LIST).aptr = (double)(VAL)),                         \
+       (LIST).aptr++,                                                   \
        0)))
 
 #endif
@@ -1025,26 +1025,26 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * in floating-point registers, but we also push them into the
  * corresponding integer registers in case of varargs.
  */
-#define _av_float(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   (((LIST).anum < 4							\
-     ? ((LIST).farg_mask |= (1 << (LIST).anum),				\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   (((LIST).anum < 4                                                    \
+     ? ((LIST).farg_mask |= (1 << (LIST).anum),                         \
         (LIST).fargs[(LIST).anum] = *(float*)(LIST).aptr = (float)(VAL)) \
-     : (*(float*)(LIST).aptr = (float)(VAL))),				\
-    (LIST).anum++,							\
-    (LIST).aptr++,							\
+     : (*(float*)(LIST).aptr = (float)(VAL))),                          \
+    (LIST).anum++,                                                      \
+    (LIST).aptr++,                                                      \
     0))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).aptr >= (LIST).eptr						\
-   ? -1 :								\
-   (((LIST).anum < 4							\
-     ? ((LIST).darg_mask |= (1 << (LIST).anum),				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).aptr >= (LIST).eptr                                           \
+   ? -1 :                                                               \
+   (((LIST).anum < 4                                                    \
+     ? ((LIST).darg_mask |= (1 << (LIST).anum),                         \
         (LIST).dargs[(LIST).anum] = *(double*)(LIST).aptr = (double)(VAL)) \
-     : (*(double*)(LIST).aptr = (double)(VAL))),			\
-    (LIST).anum++,							\
-    (LIST).aptr++,							\
+     : (*(double*)(LIST).aptr = (double)(VAL))),                        \
+    (LIST).anum++,                                                      \
+    (LIST).aptr++,                                                      \
     0))
 
 #endif
@@ -1055,30 +1055,30 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * float registers, without occupying space in the general registers.
  */
 
-#define _av_float(LIST,VAL)						\
-  ((LIST).fanum < __AV_FARG_NUM						\
-   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
-      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-      (LIST).fanum++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr++,							\
-       ((float*)(LIST).aptr)[-1] = (float)(VAL),			\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).fanum < __AV_FARG_NUM                                         \
+   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),                        \
+      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,           \
+      (LIST).fanum++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((LIST).aptr++,                                                   \
+       ((float*)(LIST).aptr)[-1] = (float)(VAL),                        \
        0)))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).fanum < __AV_FARG_NUM						\
-   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
-       (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-       (LIST).fanum++,							\
-       0)								\
-   : ((LIST).aptr + 2 > (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr += 2,						\
-       (LIST).tmp._double = (double)(VAL),				\
-       (LIST).aptr[-2] = (LIST).tmp.words[0],				\
-       (LIST).aptr[-1] = (LIST).tmp.words[1],				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).fanum < __AV_FARG_NUM                                         \
+   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),                       \
+       (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,          \
+       (LIST).fanum++,                                                  \
+       0)                                                               \
+   : ((LIST).aptr + 2 > (LIST).eptr                                     \
+      ? -1 :                                                            \
+      ((LIST).aptr += 2,                                                \
+       (LIST).tmp._double = (double)(VAL),                              \
+       (LIST).aptr[-2] = (LIST).tmp.words[0],                           \
+       (LIST).aptr[-1] = (LIST).tmp.words[1],                           \
        0)))
 
 #endif
@@ -1086,28 +1086,28 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #if defined(__s390x__)
 
 /* Up to __AV_FARG_NUM float or double args can be passed in float registers. */
-#define _av_float(LIST,VAL)						\
-  ((LIST).fanum < __AV_FARG_NUM						\
-   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
-      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-      (LIST).fanum++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr++,							\
-       ((float*)(LIST).aptr)[-1] = (float)(VAL),			\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).fanum < __AV_FARG_NUM                                         \
+   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),                        \
+      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,           \
+      (LIST).fanum++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((LIST).aptr++,                                                   \
+       ((float*)(LIST).aptr)[-1] = (float)(VAL),                        \
        0)))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).fanum < __AV_FARG_NUM						\
-   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
-      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-      (LIST).fanum++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((*(double*)(LIST).aptr = (double)(VAL)),				\
-       (LIST).aptr++,							\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).fanum < __AV_FARG_NUM                                         \
+   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),                       \
+      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,           \
+      (LIST).fanum++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((*(double*)(LIST).aptr = (double)(VAL)),                         \
+       (LIST).aptr++,                                                   \
        0)))
 
 #endif
@@ -1117,30 +1117,30 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 /* Up to __AV_FARG_NUM float or double args can be passed in float registers.
    The remaining float or double args are passed in the general-purpose
    argument sequence (first the integer registers, then the stack.) */
-#define _av_float(LIST,VAL)						\
-  ((LIST).fanum < __AV_FARG_NUM						\
-   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),			\
-      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-      (LIST).fanum++,							\
-      0)								\
-   : ((LIST).aptr >= (LIST).eptr					\
-      ? -1 :								\
-      ((*(float*)(LIST).aptr) = (float)(VAL),				\
-       (LIST).aptr++,							\
+#define _av_float(LIST,VAL)                                             \
+  ((LIST).fanum < __AV_FARG_NUM                                         \
+   ? ((LIST).fargs[(LIST).fanum] = (float)(VAL),                        \
+      (LIST).farg_mask |= ((unsigned int) 1) << (LIST).fanum,           \
+      (LIST).fanum++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((*(float*)(LIST).aptr) = (float)(VAL),                           \
+       (LIST).aptr++,                                                   \
        0)))
 
-#define _av_double(LIST,VAL)						\
-  ((LIST).fanum < __AV_FARG_NUM						\
-   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),			\
-      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,		\
-      (LIST).fanum++,							\
-      0)								\
-   : ((LIST).aptr + 2 > (LIST).eptr					\
-      ? -1 :								\
-      ((LIST).aptr += 2,						\
-       (LIST).tmp._double = (double)(VAL),				\
-       (LIST).aptr[-2] = (LIST).tmp.words[0],				\
-       (LIST).aptr[-1] = (LIST).tmp.words[1],				\
+#define _av_double(LIST,VAL)                                            \
+  ((LIST).fanum < __AV_FARG_NUM                                         \
+   ? ((LIST).dargs[(LIST).fanum] = (double)(VAL),                       \
+      (LIST).darg_mask |= ((unsigned int) 1) << (LIST).fanum,           \
+      (LIST).fanum++,                                                   \
+      0)                                                                \
+   : ((LIST).aptr + 2 > (LIST).eptr                                     \
+      ? -1 :                                                            \
+      ((LIST).aptr += 2,                                                \
+       (LIST).tmp._double = (double)(VAL),                              \
+       (LIST).aptr[-2] = (LIST).tmp.words[0],                           \
+       (LIST).aptr[-1] = (LIST).tmp.words[1],                           \
        0)))
 
 #endif
@@ -1151,7 +1151,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 
 extern void avcall_structcpy (void* dest, const void* src, unsigned long size, unsigned long alignment);
 
-#define __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,PLACE,VAL_ADDR)		\
+#define __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,PLACE,VAL_ADDR)           \
   avcall_structcpy(PLACE,VAL_ADDR,TYPE_SIZE,TYPE_ALIGN)
 
 /* Structure argument alignment. */
@@ -1174,56 +1174,56 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
  */
 /* little endian -> small structures < 1 word are adjusted to the left (i.e. occupy the low bits of the word) */
 #if defined(__i386__) || defined(__alpha__) || (defined(__arm__) && !defined(__armhf__) && defined(__ARMEL__))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
     (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     0))
 #endif
 #if defined(__ia64__)
 /* With GCC < 3, types larger than a word have 2-word alignment. */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  (((LIST).flags & __AV_OLDGCC_STRUCT_ARGS)				\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  (((LIST).flags & __AV_OLDGCC_STRUCT_ARGS)                             \
    ? ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN)), \
       ((TYPE_SIZE) > sizeof(__avword) && (((LIST).aptr - &(LIST).args[0]) & 1) ? ++(LIST).aptr : 0), \
-      ((LIST).aptr > (LIST).eptr					\
-       ? -1 :								\
+      ((LIST).aptr > (LIST).eptr                                        \
+       ? -1 :                                                           \
        (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
         (LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-        0)))								\
+        0)))                                                            \
    : ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN)) > (LIST).eptr \
-      ? -1 :								\
+      ? -1 :                                                            \
       (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
        (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
        0)))
 #endif
 /* small structures < 1 word are adjusted depending on compiler */
 #if defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)
-#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
+#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)         \
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
-   ? -1 :								\
-   (++(LIST).anum,							\
+   ? -1 :                                                               \
+   (++(LIST).anum,                                                      \
     __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
     (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     0))
-#define __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)	\
+#define __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)        \
   ((__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    ((LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-    ++(LIST).anum,						\
+    ++(LIST).anum,                                              \
     __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL),\
     0))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((LIST).flags & __AV_SGICC_STRUCT_ARGS				\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((LIST).flags & __AV_SGICC_STRUCT_ARGS                                \
    ? /* SGI MIPS cc passes small structures left-adjusted, although big-endian! */\
-     __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
-   : /* SGI MIPS gcc passes small structures within the first four words left-	  \
+     __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)            \
+   : /* SGI MIPS gcc passes small structures within the first four words left-    \
       * adjusted, for compatibility with cc. But structures in memory are passed  \
-      * right-adjusted!! See gcc-2.6.3/config/mips/mips.c:function_arg().	  \
-      */									  \
-     ((LIST).aptr < &(LIST).args[4]					\
-      ? __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
+      * right-adjusted!! See gcc-2.6.3/config/mips/mips.c:function_arg().         \
+      */                                                                          \
+     ((LIST).aptr < &(LIST).args[4]                                     \
+      ? __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)         \
       : __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)))
 #endif
 #if defined(__mipsn32__) || defined(__mips64__)
@@ -1233,126 +1233,126 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
  * always pass the structure in both the integer and the floating point
  * registers.
  */
-#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
+#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)         \
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
     (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-    ((LIST).anum < 8 && ((LIST).darg_mask |= (-1 << (LIST).anum))),	\
+    ((LIST).anum < 8 && ((LIST).darg_mask |= (-1 << (LIST).anum))),     \
     (LIST).anum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))/sizeof(__avword), \
     (LIST).darg_mask &= (1 << ((LIST).anum < 8 ? (LIST).anum : 8)) - 1, \
     0))
-#define __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)	\
+#define __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)        \
   ((__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    ((LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-    ((LIST).anum < 8 && ((LIST).darg_mask |= (-1 << (LIST).anum))),	\
+    ((LIST).anum < 8 && ((LIST).darg_mask |= (-1 << (LIST).anum))),     \
     (LIST).anum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))/sizeof(__avword), \
     (LIST).darg_mask &= (1 << ((LIST).anum < 8 ? (LIST).anum : 8)) - 1, \
     0))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((LIST).flags & __AV_SGICC_STRUCT_ARGS				\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((LIST).flags & __AV_SGICC_STRUCT_ARGS                                \
    ? /* SGI MIPS cc and gcc >= 3.4 passes small structures left-adjusted, although big-endian! */\
-     __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
-   : /* SGI MIPS gcc < 3.4 passes small structures right-adjusted. */	\
+     __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)            \
+   : /* SGI MIPS gcc < 3.4 passes small structures right-adjusted. */   \
      __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL))
 #endif
 #if (defined(__armhf__) && defined(__ARMEL__))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
   ((((LIST).ianum*sizeof(__avword)+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) <= __AV_IARG_NUM*sizeof(__avword) \
    ? ((LIST).ianum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))/sizeof(__avword), \
       __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)&(LIST).args[(LIST).ianum]-(TYPE_SIZE)),VAL), \
-      0)								\
-   : ((LIST).aptr == &(LIST).args[__AV_IARG_NUM]			\
-      ? /* split case */						\
+      0)                                                                \
+   : ((LIST).aptr == &(LIST).args[__AV_IARG_NUM]                        \
+      ? /* split case */                                                \
         ((__avword*)(((((uintptr_t)&(LIST).args[(LIST).ianum]+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-         ? -1 :								\
+         ? -1 :                                                         \
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)&(LIST).args[(LIST).ianum]+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
           (LIST).aptr = (__avword*)(((((uintptr_t)&(LIST).args[(LIST).ianum]+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-          (LIST).ianum = __AV_IARG_NUM,					\
-          0))								\
+          (LIST).ianum = __AV_IARG_NUM,                                 \
+          0))                                                           \
       : ((__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-         ? -1 :								\
+         ? -1 :                                                         \
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
           (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-          (LIST).ianum = __AV_IARG_NUM,					\
+          (LIST).ianum = __AV_IARG_NUM,                                 \
           0))))
 #endif
 #if defined(__powerpc__) || defined(__powerpc64__)
-#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
+#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)         \
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
     (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     0))
-#define __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)	\
+#define __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)        \
   ((__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    ((LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
     0))
 #if (defined(__powerpc__) && !defined(__powerpc64__)) || (defined(__powerpc64__) && defined(__BIG_ENDIAN__))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((LIST).flags & __AV_AIXCC_STRUCT_ARGS				\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((LIST).flags & __AV_AIXCC_STRUCT_ARGS                                \
    ? /* AIX cc and xlc pass small structures left-adjusted, although big-endian! */\
-     __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
-   : /* gcc passes small structures right-adjusted. */			\
+     __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)            \
+   : /* gcc passes small structures right-adjusted. */                  \
      __av_struct_rightadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL))
 #endif
 #if (defined(__powerpc64__) && defined(__LITTLE_ENDIAN__))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
   __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)
 #endif
 #endif
 /* big endian -> small structures < 1 word are adjusted to the right (i.e. occupy the high bits of the word) */
 #if (defined(__arm__) && !defined(__armhf__) && !defined(__ARMEL__))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
   ((__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    ((LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
     0))
 #endif
 #if (defined(__armhf__) && !defined(__ARMEL__))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
   ((((LIST).ianum*sizeof(__avword)+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) <= __AV_IARG_NUM*sizeof(__avword) \
    ? ((LIST).ianum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))/sizeof(__avword), \
       __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)&(LIST).args[(LIST).ianum]-(TYPE_SIZE)),VAL), \
-      0)								\
-   : ((LIST).aptr == &(LIST).args[__AV_IARG_NUM]			\
-      ? /* split case */						\
+      0)                                                                \
+   : ((LIST).aptr == &(LIST).args[__AV_IARG_NUM]                        \
+      ? /* split case */                                                \
         ((__avword*)(((((uintptr_t)&(LIST).args[(LIST).ianum]+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-         ? -1 :								\
+         ? -1 :                                                         \
          ((LIST).aptr = (__avword*)(((((uintptr_t)&(LIST).args[(LIST).ianum]+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
           __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-          (LIST).ianum = __AV_IARG_NUM,					\
-          0))								\
+          (LIST).ianum = __AV_IARG_NUM,                                 \
+          0))                                                           \
       : ((__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-         ? -1 :								\
+         ? -1 :                                                         \
          ((LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
           __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL), \
-          (LIST).ianum = __AV_IARG_NUM,					\
+          (LIST).ianum = __AV_IARG_NUM,                                 \
           0))))
 #endif
 #if defined(__hppa64__)
 /* Structures are passed left-adjusted (although big-endian!). */
-#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)		\
+#define __av_struct_leftadjusted(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)         \
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
-   ? -1 :								\
+   ? -1 :                                                               \
    (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
     (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
     0))
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
   __av_struct_leftadjusted(LIST,TYPE_SIZE,(TYPE_SIZE)>sizeof(__avword)?2*sizeof(__avword):(TYPE_ALIGN),VAL)
 #endif
 #endif
 #if defined(__m68k__)
 /* Structures are passed as embedded copies on the arg stack.
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
   ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)) > (LIST).eptr \
-    ? -1 :								\
+    ? -1 :                                                              \
     ((LIST).aptr = (__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
      __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr-(TYPE_SIZE)),VAL),\
      0))
@@ -1362,12 +1362,12 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
  * grab space for the copies from the end of the argument list space
  * and always use maximal (double) alignment.
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-   (++(LIST).aptr							\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+   (++(LIST).aptr                                                       \
     > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-    ? -1 :								\
-    (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
-     (LIST).aptr[-1] = (__avword)(LIST).eptr,				\
+    ? -1 :                                                              \
+    (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),     \
+     (LIST).aptr[-1] = (__avword)(LIST).eptr,                           \
      0))
 #endif
 #if defined(__sparc64__)
@@ -1381,19 +1381,19 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
  * Big structures are passed as pointers to caller-made local copies.
  * FIXME: Shouldn't (LIST).anum be incremented in sync with (LIST).aptr ?
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((TYPE_SIZE) > 16							\
-   ? (++(LIST).aptr							\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((TYPE_SIZE) > 16                                                     \
+   ? (++(LIST).aptr                                                     \
       > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-      ? -1 :								\
-      (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
-       (LIST).aptr[-1] = (__avword)(LIST).eptr,				\
-       0))								\
+      ? -1 :                                                            \
+      (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),   \
+       (LIST).aptr[-1] = (__avword)(LIST).eptr,                         \
+       0))                                                              \
    : ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
-      ? -1 :								\
+      ? -1 :                                                            \
       (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
        (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-       ((LIST).anum < 16 && ((LIST).darg_mask |= (-1 << (LIST).anum))),	\
+       ((LIST).anum < 16 && ((LIST).darg_mask |= (-1 << (LIST).anum))), \
        (LIST).anum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))/sizeof(__avword), \
        (LIST).darg_mask &= (1 << ((LIST).anum < 16 ? (LIST).anum : 16)) - 1, \
        0)))
@@ -1403,55 +1403,55 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
  * Big structures are passed as pointers (to caller-made local copies
  * with GCC >= 8, without copy otherwise).
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((TYPE_SIZE) > 8							\
-   ? (--(LIST).aptr							\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((TYPE_SIZE) > 8                                                      \
+   ? (--(LIST).aptr                                                     \
       < ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr + (((TYPE_SIZE) + 7) & -8))) \
-      ? -1								\
+      ? -1                                                              \
       : (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE) + 7) & -8)), VAL), \
          *(LIST).aptr = (__avword)((uintptr_t)(LIST).eptr - (((TYPE_SIZE) + 7) & -8)), \
-         0))								\
-   : ((TYPE_SIZE) > 4							\
+         0))                                                            \
+   : ((TYPE_SIZE) > 4                                                   \
       ? ((__avword*)((((uintptr_t)(LIST).aptr & -8) - (intptr_t)(TYPE_SIZE)) & -8) < (LIST).eptr \
-         ? -1 :								\
+         ? -1 :                                                         \
          ((LIST).aptr = (__avword*)((((uintptr_t)(LIST).aptr & -8) - (intptr_t)(TYPE_SIZE)) & -8), \
           __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).aptr,VAL), \
-          0))								\
+          0))                                                           \
       : /* FIXME: gcc-2.6.3 passes structures <= 4 bytes in memory left-adjusted! ?? */\
         ((__avword*)(((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)) < (LIST).eptr \
-         ? -1 :								\
+         ? -1 :                                                         \
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)),VAL), \
-          (LIST).aptr = (__avword*)((((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)) & -4),	\
+          (LIST).aptr = (__avword*)((((uintptr_t)(LIST).aptr & -4) - (intptr_t)(TYPE_SIZE)) & -4),      \
           0))))
 #endif
 #if defined(__arm64__)
 /* Structures <= 16 bytes are passed as embedded copies on the arg stack.
  * Big structures are passed as pointers to caller-made local copies.
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((TYPE_SIZE) <= 16							\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((TYPE_SIZE) <= 16                                                    \
    ? ((((LIST).ianum*sizeof(__avrword)+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) <= __AV_IARG_NUM*sizeof(__avrword) \
       ? (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)&(LIST).iargs[(LIST).ianum],VAL), \
          (LIST).ianum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avrword)-1) & -(intptr_t)sizeof(__avrword))/sizeof(__avrword), \
-         0)								\
+         0)                                                             \
       : ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
-         ? -1 :								\
-         ((LIST).ianum = __AV_IARG_NUM,					\
+         ? -1 :                                                         \
+         ((LIST).ianum = __AV_IARG_NUM,                                 \
           __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
           (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-          0)))								\
-   : ((LIST).ianum < __AV_IARG_NUM					\
-      ? ((LIST).aptr							\
+          0)))                                                          \
+   : ((LIST).ianum < __AV_IARG_NUM                                      \
+      ? ((LIST).aptr                                                    \
          > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-         ? -1 :								\
+         ? -1 :                                                         \
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL), \
-          (LIST).iargs[(LIST).ianum++] = (__avrword)(LIST).eptr,	\
-          0))								\
-      : (((LIST).aptr += sizeof(void*)/sizeof(__avword))		\
+          (LIST).iargs[(LIST).ianum++] = (__avrword)(LIST).eptr,        \
+          0))                                                           \
+      : (((LIST).aptr += sizeof(void*)/sizeof(__avword))                \
          > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-         ? -1 :								\
+         ? -1 :                                                         \
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL), \
-          ((void**)(LIST).aptr)[-1] = (LIST).eptr,			\
+          ((void**)(LIST).aptr)[-1] = (LIST).eptr,                      \
           0))))
 #endif
 #if defined(__powerpc_sysv4__)
@@ -1459,19 +1459,19 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
  * grab space for the copies from the end of the argument list space
  * and always use maximal (double) alignment.
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-   ((LIST).ianum < __AV_IARG_NUM					\
-    ? ((LIST).aptr							\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+   ((LIST).ianum < __AV_IARG_NUM                                        \
+    ? ((LIST).aptr                                                      \
        > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-       ? -1 :								\
-       (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
-        (LIST).iargs[(LIST).ianum++] = (__avrword)(LIST).eptr,		\
-        0))								\
-    : (++(LIST).aptr							\
+       ? -1 :                                                           \
+       (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),  \
+        (LIST).iargs[(LIST).ianum++] = (__avrword)(LIST).eptr,          \
+        0))                                                             \
+    : (++(LIST).aptr                                                    \
        > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-       ? -1 :								\
-       (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
-        (LIST).aptr[-1] = (__avword)(LIST).eptr,			\
+       ? -1 :                                                           \
+       (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),  \
+        (LIST).aptr[-1] = (__avword)(LIST).eptr,                        \
         0)))
 #endif
 #if defined(__x86_64_sysv__)
@@ -1480,14 +1480,14 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
    in the corresponding iargs/fargs block. We can't distinguish the two cases
    and support only passing in integer registers. Other structures are passed
    on the arg stack. */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)				\
-  (((TYPE_SIZE) <= 2*sizeof(__avword)						\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                              \
+  (((TYPE_SIZE) <= 2*sizeof(__avword)                                           \
     && (LIST).ianum + ((TYPE_SIZE) + sizeof(__avrword)-1) / sizeof(__avrword) <= __AV_IARG_NUM) \
    ? (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)&(LIST).iargs[(LIST).ianum],VAL), \
-      (LIST).ianum += ((TYPE_SIZE) + sizeof(__avrword)-1) / sizeof(__avrword),	\
-      0)									\
+      (LIST).ianum += ((TYPE_SIZE) + sizeof(__avrword)-1) / sizeof(__avrword),  \
+      0)                                                                        \
    : ((__avword*)((uintptr_t)(LIST).aptr + (((TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN))) > (LIST).eptr \
-      ? -1 :									\
+      ? -1 :                                                                    \
       ((LIST).aptr = (__avword*)((uintptr_t)(LIST).aptr + (((TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN))), \
        __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr - (((TYPE_SIZE)+__av_struct_alignment(TYPE_ALIGN)-1) & -(intptr_t)__av_struct_alignment(TYPE_ALIGN))),VAL), \
        0)))
@@ -1496,66 +1496,66 @@ extern void avcall_structcpy (void* dest, const void* src, unsigned long size, u
 /* Structures of 1, 2, 4, 8 bytes are passed as embedded copies on the arg stack.
  * Big structures are passed as pointers to caller-made local copies.
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8	\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8 \
    ? ((__avword*)((uintptr_t)(LIST).aptr + (((TYPE_SIZE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))) > (LIST).eptr \
-      ? -1 :								\
+      ? -1 :                                                            \
       ((LIST).aptr = (__avword*)((uintptr_t)(LIST).aptr + (((TYPE_SIZE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))), \
        __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)(LIST).aptr - (((TYPE_SIZE)+sizeof(__avword)-1) & -(intptr_t)sizeof(__avword))),VAL), \
-       0))								\
-   : (++(LIST).aptr							\
+       0))                                                              \
+   : (++(LIST).aptr                                                     \
       > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-      ? -1 :								\
-      (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
-       (LIST).aptr[-1] = (__avword)(LIST).eptr,				\
+      ? -1 :                                                            \
+      (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),   \
+       (LIST).aptr[-1] = (__avword)(LIST).eptr,                         \
        0)))
 #endif
 #if defined(__s390__) || defined(__s390x__)
 /* Structures of 1, 2, 4, 8 bytes are passed as embedded copies on the arg stack.
  * Big structures are passed as pointers to caller-made local copies.
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8	\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((TYPE_SIZE) == 1 || (TYPE_SIZE) == 2 || (TYPE_SIZE) == 4 || (TYPE_SIZE) == 8 \
    ? ((((LIST).ianum*sizeof(__avrword)+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) <= __AV_IARG_NUM*sizeof(__avrword) \
       ? ((LIST).ianum += (((((TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) + sizeof(__avrword)-1) & -(intptr_t)sizeof(__avrword))/sizeof(__avrword), \
          __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((uintptr_t)&(LIST).iargs[(LIST).ianum]-(TYPE_SIZE)),VAL), \
-         0)								\
+         0)                                                             \
       : ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
-         ? -1 :								\
-         ((LIST).ianum = __AV_IARG_NUM,					\
+         ? -1 :                                                         \
+         ((LIST).ianum = __AV_IARG_NUM,                                 \
           __av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
           (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-          0)))								\
-   : ((LIST).ianum < __AV_IARG_NUM					\
-      ? ((LIST).aptr							\
+          0)))                                                          \
+   : ((LIST).ianum < __AV_IARG_NUM                                      \
+      ? ((LIST).aptr                                                    \
          > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-         ? -1 :								\
+         ? -1 :                                                         \
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL), \
-          (LIST).iargs[(LIST).ianum++] = (__avrword)(LIST).eptr,	\
-          0))								\
-      : (++(LIST).aptr							\
+          (LIST).iargs[(LIST).ianum++] = (__avrword)(LIST).eptr,        \
+          0))                                                           \
+      : (++(LIST).aptr                                                  \
          > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-         ? -1 :								\
+         ? -1 :                                                         \
          (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL), \
-          (LIST).aptr[-1] = (__avword)(LIST).eptr,			\
+          (LIST).aptr[-1] = (__avword)(LIST).eptr,                      \
           0))))
 #endif
 #if defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
 /* Structures <= 16 bytes are passed as embedded copies on the arg stack.
  * Big structures are passed as pointers to caller-made local copies.
  */
-#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)			\
-  ((TYPE_SIZE) <= 2*sizeof(__avword)					\
+#define __av_struct(LIST,TYPE_SIZE,TYPE_ALIGN,VAL)                      \
+  ((TYPE_SIZE) <= 2*sizeof(__avword)                                    \
    ? ((__avword*)(((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) > (LIST).eptr \
-      ? -1 :								\
+      ? -1 :                                                            \
       (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) - (TYPE_SIZE)),VAL), \
        (LIST).aptr = (__avword*)(((((uintptr_t)(LIST).aptr+(TYPE_SIZE)+(TYPE_ALIGN)-1) & -(intptr_t)(TYPE_ALIGN)) +sizeof(__avword)-1) & -(intptr_t)sizeof(__avword)), \
-       0))								\
-   : (++(LIST).aptr							\
+       0))                                                              \
+   : (++(LIST).aptr                                                     \
       > ((LIST).eptr = (__avword*)((uintptr_t)(LIST).eptr - (((TYPE_SIZE)+7)&-8)))\
-      ? -1 :								\
-      (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),	\
-       (LIST).aptr[-1] = (__avword)(LIST).eptr,				\
+      ? -1 :                                                            \
+      (__av_struct_copy(TYPE_SIZE,TYPE_ALIGN,(void*)(LIST).eptr,VAL),   \
+       (LIST).aptr[-1] = (__avword)(LIST).eptr,                         \
        0)))
 #endif
 

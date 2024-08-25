@@ -52,17 +52,17 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 #define OFFSETOF(struct,member) ((int)&(((struct*)0)->member))
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("$sp");  /* C names for registers */
-  register float	fret	__asm__("$f0");
-  register double	dret	__asm__("$f0");
-/*register __avrword	iret1	__asm__("$2"); */
-  register __avrword	iret2	__asm__("$3");
+  register __avword*    sp      __asm__("$sp");  /* C names for registers */
+  register float        fret    __asm__("$f0");
+  register double       dret    __asm__("$f0");
+/*register __avrword    iret1   __asm__("$2"); */
+  register __avrword    iret2   __asm__("$3");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -111,10 +111,10 @@ avcall_call(av_alist* list)
         __asm__("ldc1 $f19,%1(%0)" : : "p" (a), "i" (7 * sizeof (__avword)));
     }
 
-  for (i = 8; i < arglen; i++)		/* push excess function args */
+  for (i = 8; i < arglen; i++)          /* push excess function args */
     argframe[i-8] = l->args[i];
 
-					/* call function with 1st 8 args */
+                                        /* call function with 1st 8 args */
   __asm__ __volatile__ ("ld $4,%0" : : "m" (l->args[0]) : "$4"); /* arg1 = l->args[0]; */
   __asm__ __volatile__ ("ld $5,%0" : : "m" (l->args[1]) : "$5"); /* arg1 = l->args[1]; */
   __asm__ __volatile__ ("ld $6,%0" : : "m" (l->args[2]) : "$6"); /* arg1 = l->args[2]; */

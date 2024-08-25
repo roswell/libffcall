@@ -58,38 +58,38 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
-register void* callee	__asm__("%g2");  /* any global or local register */
-register __avrword o0	__asm__("%o0");
-register __avrword o1	__asm__("%o1");
-register __avrword o2	__asm__("%o2");
-register __avrword o3	__asm__("%o3");
-register __avrword o4	__asm__("%o4");
-register __avrword o5	__asm__("%o5");
+register void* callee   __asm__("%g2");  /* any global or local register */
+register __avrword o0   __asm__("%o0");
+register __avrword o1   __asm__("%o1");
+register __avrword o2   __asm__("%o2");
+register __avrword o3   __asm__("%o3");
+register __avrword o4   __asm__("%o4");
+register __avrword o5   __asm__("%o5");
 
 int
 avcall_call(av_alist* list)
 {
   /*?? We probably need to make space for Sun cc
     struct return somewhere here. */
-  register __avword* sp	__asm__("%sp");  /* C names for registers */
-  register float fret	__asm__("%f0");  /* %f0 */
-  register double dret	__asm__("%f0");  /* %f0,%f1 */
+  register __avword* sp __asm__("%sp");  /* C names for registers */
+  register float fret   __asm__("%f0");  /* %f0 */
+  register double dret  __asm__("%f0");  /* %f0,%f1 */
 
   __av_alist* l = &AV_LIST_INNER(list);
 
-  __avword space[__AV_ALIST_WORDS];	/* space for callee's stack frame */
-  __avword *argframe = sp + 17;		/* stack offset for argument list */
+  __avword space[__AV_ALIST_WORDS];     /* space for callee's stack frame */
+  __avword *argframe = sp + 17;         /* stack offset for argument list */
   int arglen = l->aptr - l->args;
   __avrword i;
 
   if (l->rtype == __AVstruct)
-    argframe[-1] = (__avword)l->raddr;	/* push struct return address */
+    argframe[-1] = (__avword)l->raddr;  /* push struct return address */
 
   {
     int i;
-    for (i = 6; i < arglen; i++)	/* push excess function args */
+    for (i = 6; i < arglen; i++)        /* push excess function args */
       argframe[i] = l->args[i];
   }
 
@@ -4241,11 +4241,11 @@ avcall_call(av_alist* list)
     }
 #endif
 
-					/* call function with 1st 6 args */
+                                        /* call function with 1st 6 args */
   i = ({ register __avrword iret __asm__("%o0");
          iret = (*l->func)(l->args[0], l->args[1], l->args[2],
-			   l->args[3], l->args[4], l->args[5]);
-         asm ("nop");	/* struct returning functions skip this instruction */
+                           l->args[3], l->args[4], l->args[5]);
+         asm ("nop");   /* struct returning functions skip this instruction */
          iret;
        });
 

@@ -57,7 +57,7 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 register __avrword iarg1 __asm__("r2");
 register __avrword iarg2 __asm__("r3");
@@ -78,9 +78,9 @@ register double darg4 __asm__("f6");
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("r15");	/* C names for registers */
-  register __avrword	iretreg	__asm__("r2");
-  register double	dret	__asm__("f0");
+  register __avword*    sp      __asm__("r15"); /* C names for registers */
+  register __avrword    iretreg __asm__("r2");
+  register double       dret    __asm__("f0");
 
   /* We need to put a value in r6, but it's a call-saved register. */
   __avrword saved_iarg5 = iarg5;
@@ -94,7 +94,7 @@ avcall_call(av_alist* list)
 
   {
     int i;
-    for (i = 0; i < arglen; i++)	/* push function args onto stack */
+    for (i = 0; i < arglen; i++)        /* push function args onto stack */
       argframe[i] = l->args[i];
   }
 

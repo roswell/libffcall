@@ -22,24 +22,24 @@
 #ifdef REENTRANT
 #define vacall_receiver callback_receiver
 register struct { void (*vacall_function) (void*,va_alist); void* arg; }
-         *		env	__asm__("$1");
+         *              env     __asm__("$1");
 #endif
-register __varword	arg1	__asm__("$16");
-register __varword	arg2	__asm__("$17");
-register __varword	arg3	__asm__("$18");
-register __varword	arg4	__asm__("$19");
-register __varword	arg5	__asm__("$20");
-register __varword	arg6	__asm__("$21");
-register double		farg1	__asm__("$f16");
-register double		farg2	__asm__("$f17");
-register double		farg3	__asm__("$f18");
-register double		farg4	__asm__("$f19");
-register double		farg5	__asm__("$f20");
-register double		farg6	__asm__("$f21");
-register __varword	iret	__asm__("$0");
-register __varword	iret2	__asm__("$1");
-register float		fret	__asm__("$f0");
-register double		dret	__asm__("$f0");
+register __varword      arg1    __asm__("$16");
+register __varword      arg2    __asm__("$17");
+register __varword      arg3    __asm__("$18");
+register __varword      arg4    __asm__("$19");
+register __varword      arg5    __asm__("$20");
+register __varword      arg6    __asm__("$21");
+register double         farg1   __asm__("$f16");
+register double         farg2   __asm__("$f17");
+register double         farg3   __asm__("$f18");
+register double         farg4   __asm__("$f19");
+register double         farg5   __asm__("$f20");
+register double         farg6   __asm__("$f21");
+register __varword      iret    __asm__("$0");
+register __varword      iret2   __asm__("$1");
+register float          fret    __asm__("$f0");
+register double         dret    __asm__("$f0");
 
 /* The ABI requires that the first 6 general-purpose argument words are
    being passed in registers, even if these words belong to a struct. No room

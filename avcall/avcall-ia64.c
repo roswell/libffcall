@@ -45,28 +45,28 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
-register __avword*	sret	__asm__("r8");  /* structure return pointer */
-/*register __avrword	iret	__asm__("r8");*/
-register __avrword	iret2	__asm__("r9");
-register __avrword	iret3	__asm__("r10");
-register __avrword	iret4	__asm__("r11");
-/*register float	fret	__asm__("f8");*/
-/*register double	dret	__asm__("f8");*/
-register double		farg1	__asm__("f8");
-register double		farg2	__asm__("f9");
-register double		farg3	__asm__("f10");
-register double		farg4	__asm__("f11");
-register double		farg5	__asm__("f12");
-register double		farg6	__asm__("f13");
-register double		farg7	__asm__("f14");
-register double		farg8	__asm__("f15");
+register __avword*      sret    __asm__("r8");  /* structure return pointer */
+/*register __avrword    iret    __asm__("r8");*/
+register __avrword      iret2   __asm__("r9");
+register __avrword      iret3   __asm__("r10");
+register __avrword      iret4   __asm__("r11");
+/*register float        fret    __asm__("f8");*/
+/*register double       dret    __asm__("f8");*/
+register double         farg1   __asm__("f8");
+register double         farg2   __asm__("f9");
+register double         farg3   __asm__("f10");
+register double         farg4   __asm__("f11");
+register double         farg5   __asm__("f12");
+register double         farg6   __asm__("f13");
+register double         farg7   __asm__("f14");
+register double         farg8   __asm__("f15");
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("r12"); /* C names for registers */
+  register __avword*    sp      __asm__("r12"); /* C names for registers */
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -77,7 +77,7 @@ avcall_call(av_alist* list)
 
   {
     int i;
-    for (i = 8; i < arglen; i++)	/* push function args onto stack */
+    for (i = 8; i < arglen; i++)        /* push function args onto stack */
       argframe[i-8] = l->args[i];
   }
 
@@ -113,18 +113,18 @@ avcall_call(av_alist* list)
   /* call function, pass 8 integer and 8 double args in registers */
   if (l->rtype == __AVfloat) {
     *(float*)l->raddr = (*(float(*)())l->func)(l->args[0], l->args[1],
-					       l->args[2], l->args[3],
-					       l->args[4], l->args[5],
-					       l->args[6], l->args[7]);
+                                               l->args[2], l->args[3],
+                                               l->args[4], l->args[5],
+                                               l->args[6], l->args[7]);
   } else
   if (l->rtype == __AVdouble) {
     *(double*)l->raddr = (*(double(*)())l->func)(l->args[0], l->args[1],
-						 l->args[2], l->args[3],
-						 l->args[4], l->args[5],
-						 l->args[6], l->args[7]);
+                                                 l->args[2], l->args[3],
+                                                 l->args[4], l->args[5],
+                                                 l->args[6], l->args[7]);
   } else {
     iret = (*l->func)(l->args[0], l->args[1], l->args[2], l->args[3],
-		      l->args[4], l->args[5], l->args[6], l->args[7]);
+                      l->args[4], l->args[5], l->args[6], l->args[7]);
 
     /* save return value */
     if (l->rtype == __AVvoid) {

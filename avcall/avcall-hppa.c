@@ -54,26 +54,26 @@
   ----------------------------------------------------------------------*/
 #include "avcall-internal.h"
 
-#define RETURN(TYPE,VAL)	(*(TYPE*)l->raddr = (TYPE)(VAL))
+#define RETURN(TYPE,VAL)        (*(TYPE*)l->raddr = (TYPE)(VAL))
 
 /* This declaration tells gcc not to modify %r28. */
-register __avword*	sret	__asm__("%r28");  /* structure return pointer */
+register __avword*      sret    __asm__("%r28");  /* structure return pointer */
 
-register float  farg1	__asm__("%fr4"); /* fr4L */
-register float  farg2	__asm__("%fr5"); /* fr5L */
-register float  farg3	__asm__("%fr6"); /* fr6L */
-register float  farg4	__asm__("%fr7"); /* fr7L */
-register double darg1	__asm__("%fr5");
-register double darg2	__asm__("%fr7");
+register float  farg1   __asm__("%fr4"); /* fr4L */
+register float  farg2   __asm__("%fr5"); /* fr5L */
+register float  farg3   __asm__("%fr6"); /* fr6L */
+register float  farg4   __asm__("%fr7"); /* fr7L */
+register double darg1   __asm__("%fr5");
+register double darg2   __asm__("%fr7");
 
 int
 avcall_call(av_alist* list)
 {
-  register __avword*	sp	__asm__("%r30");  /* C names for registers */
-  register float	fret	__asm__("%fr4");
-  register double	dret	__asm__("%fr4");
-/*register __avrword	iret1	__asm__("%r28"); */
-  register __avrword	iret2	__asm__("%r29");
+  register __avword*    sp      __asm__("%r30");  /* C names for registers */
+  register float        fret    __asm__("%fr4");
+  register double       dret    __asm__("%fr4");
+/*register __avrword    iret1   __asm__("%r28"); */
+  register __avrword    iret2   __asm__("%r29");
 
   __av_alist* l = &AV_LIST_INNER(list);
 
@@ -84,11 +84,11 @@ avcall_call(av_alist* list)
 
   {
     int i;
-    for (i = -arglen; i < -4; i++)	/* push function args onto stack */
+    for (i = -arglen; i < -4; i++)      /* push function args onto stack */
       argframe[i] = l->args_end[i];
   }
 
-  if (l->rtype == __AVstruct)		/* push struct return address */
+  if (l->rtype == __AVstruct)           /* push struct return address */
     sret = l->raddr;
 
   /* The floats and doubles among the first 4 argument words are passed
@@ -123,7 +123,7 @@ avcall_call(av_alist* list)
   }
   /* call function, pass first 4 arg words in general registers */
   iret = (*l->func)(l->args_end[-1], l->args_end[-2],
-		    l->args_end[-3], l->args_end[-4]);
+                    l->args_end[-3], l->args_end[-4]);
 
   /* save return value */
   if (l->rtype == __AVvoid) {
