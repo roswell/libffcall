@@ -1076,8 +1076,9 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    *    .long   <data>
    *    .long   <address>
    */
-  { /* work around a bug in gcc 3.* */
-    void* tramp_r_address = &tramp_r;
+  { /* The 'volatile' below works around GCC bug
+       <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116481>. */
+    void* volatile tramp_r_address = &tramp_r;
     *(long *) (function + 0) = ((long *) ((char*)tramp_r_address-2))[0];
     *(long *) (function + 4) = (long) (function + 8);
     *(long *) (function + 8) = (long) data;
@@ -1728,7 +1729,9 @@ int is_trampoline_r (void* function)
 {
 #if defined(is_tramp) && defined(tramp_data)
 #ifdef __hppanew__
-  void* tramp_r_address = &tramp_r;
+  /* The 'volatile' below works around GCC bug
+     <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116481>. */
+  void* volatile tramp_r_address = &tramp_r;
   if (!(((uintptr_t)function & 3) == (TRAMP_BIAS & 3))) return 0;
 #endif
   if (is_tramp(((char*)function - TRAMP_BIAS)))

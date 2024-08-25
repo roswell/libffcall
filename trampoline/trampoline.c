@@ -1208,8 +1208,9 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
    *    .long   <data>
    *    .long   <address>
    */
-  { /* work around a bug in gcc 3.* */
-    void* tramp_address = &tramp;
+  { /* The 'volatile' below works around GCC bug
+       <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116481>. */
+    void* volatile tramp_address = &tramp;
     *(long *) (function + 0) = ((long *) ((char*)tramp_address-2))[0];
     *(long *) (function + 4) = (long) (function + 8);
     *(long *) (function + 8) = (long) variable;
@@ -1987,7 +1988,9 @@ int is_trampoline (void* function)
 {
 #ifdef is_tramp
 #ifdef __hppanew__
-  void* tramp_address = &tramp;
+  /* The 'volatile' below works around GCC bug
+     <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116481>. */
+  void* volatile tramp_address = &tramp;
   if (!(((uintptr_t)function & 3) == (TRAMP_BIAS & 3))) return 0;
 #endif
   return ((is_tramp(((char*)function - TRAMP_BIAS))) ? 1 : 0);
