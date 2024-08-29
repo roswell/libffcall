@@ -253,6 +253,9 @@ extern void __TR_clear_cache();
 #include "clean-temp-simple.h"
 #endif
 
+/* Support for testing the protection of a memory range.  */
+#include "vma-prot.h"
+
 #if !defined(CODE_EXECUTABLE) && defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
 
 /* Opens a file descriptor and attempts to make it non-inheritable. */
@@ -1733,6 +1736,17 @@ int is_trampoline_r (void* function)
      <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116481>. */
   void* volatile tramp_r_address = &tramp_r;
   if (!(((uintptr_t)function & 3) == (TRAMP_BIAS & 3))) return 0;
+#endif
+#ifdef __OpenBSD__
+  /* OpenBSD mmaps code VMAs with protection PROT_EXEC, not PROT_READ|PROT_EXEC.
+     Therefore is_tramp may crash if given the address of a normal function.
+     Seen on OpenBSD 7.5/arm64. */
+  int prot = get_vma_prot (function, 1);
+  if (prot != -1
+      && (prot & VMA_PROT_READ) == 0)
+    /* Memory of the given function is not readable. Therefore it cannot be
+       a trampoline. */
+    return 0;
 #endif
   if (is_tramp(((char*)function - TRAMP_BIAS)))
     {

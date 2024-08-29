@@ -72,7 +72,8 @@ GNULIB_MODULES = \
   lock \
   nocrash \
   stdint \
-  stdnoreturn
+  stdnoreturn \
+  vma-prot
 
 gnulib-m4/gnulib-cache.m4 :
 	if test -n "$$GNULIB_TOOL"; then \

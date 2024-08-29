@@ -1,5 +1,17 @@
 2024-08-29  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Fix test failure on OpenBSD/arm64.
+	* Makefile.maint (GNULIB_MODULES): Add vma-prot.
+	* trampoline/trampoline.c: Include vma-prot.h.
+	(is_trampoline): On OpenBSD, test first whether the function's code is
+	readable.
+	* callback/trampoline_r/trampoline.c: Include vma-prot.h.
+	(is_trampoline_r): On OpenBSD, test first whether the function's code is
+	readable.
+	* NEWS: Mention the improvement.
+
+2024-08-29  Bruno Haible  <bruno@clisp.org>
+
 	build: Verify the license of imported gnulib modules.
 	* Makefile.maint (gnulib-m4/gnulib-cache.m4): Pass option --gpl=2 to
 	gnulib-tool.

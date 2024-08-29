@@ -13,6 +13,7 @@ New in 2.5:
 * Fixed support for the following platforms:
   (Previously, a build on these platforms appeared to succeed but was buggy.)
   ia64: Linux.
+  arm64: OpenBSD.
 
 * Simplified the environmental requirements (the library no longer allocates
   a temporary file in /tmp) on the following platforms:
