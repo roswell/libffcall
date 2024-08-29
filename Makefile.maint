@@ -76,7 +76,7 @@ GNULIB_MODULES = \
 
 gnulib-m4/gnulib-cache.m4 :
 	if test -n "$$GNULIB_TOOL"; then \
-	  $$GNULIB_TOOL --source-base=gnulib-lib --m4-base=gnulib-m4 --aux-dir=build-aux --libtool --no-changelog \
+	  $$GNULIB_TOOL --source-base=gnulib-lib --m4-base=gnulib-m4 --aux-dir=build-aux --gpl=2 --libtool --no-changelog \
 	    --import $(GNULIB_MODULES); \
 	fi
 

@@ -1,3 +1,9 @@
+2024-08-29  Bruno Haible  <bruno@clisp.org>
+
+	build: Verify the license of imported gnulib modules.
+	* Makefile.maint (gnulib-m4/gnulib-cache.m4): Pass option --gpl=2 to
+	gnulib-tool.
+
 2024-08-25  Bruno Haible  <bruno@clisp.org>
 
 	trampoline: Fix compilation error on Linux/hppa.
