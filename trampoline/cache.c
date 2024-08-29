@@ -1,6 +1,6 @@
 /* This file is derived from gcc-2.6.3/libgcc2.c, section L_clear_cache */
 
-/* Copyright (C) 1989-2017 Free Software Foundation, Inc.
+/* Copyright (C) 1989-2024 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,8 +34,7 @@
 #endif
 
 void
-__TR_clear_cache (beg, end)
-     char *beg, *end;
+__TR_clear_cache (char *beg, char *end)
 {
 #ifdef CLEAR_INSN_CACHE 
   CLEAR_INSN_CACHE (beg, end);

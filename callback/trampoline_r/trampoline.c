@@ -235,12 +235,17 @@ extern int __riscv_flush_icache (void *start, void *end, unsigned long flags);
 #endif
 #endif
 /* Inline assembly function for instruction cache flush. */
-#if defined(__sparc__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppaold__) || defined(__hppa64old__) || defined(__powerpcsysv4__) || defined(__powerpc64_elfv2__)
 #if defined(__sparc__) || defined(__sparc64__)
-extern void __TR_clear_cache_2();
-#else
-extern void __TR_clear_cache();
+extern void __TR_clear_cache_2 (char* first_addr, char* last_addr);
 #endif
+#if defined(__alpha__)
+extern void __TR_clear_cache (void);
+#endif
+#if defined(__hppaold__) || defined(__hppa64old__)
+extern void __TR_clear_cache (char* first_addr, char* last_addr);
+#endif
+#if defined(__powerpcsysv4__) || defined(__powerpc64_elfv2__)
+extern void __TR_clear_cache (char* first_addr);
 #endif
 #endif
 

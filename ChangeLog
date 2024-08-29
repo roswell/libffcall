@@ -1,5 +1,14 @@
 2024-08-29  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Drop support for K&R C compilers.
+	* trampoline/cache.c (__TR_clear_cache): Use ANSI C syntax.
+	* trampoline/trampoline.c (__TR_clear_cache_4, __TR_clear_cache):
+	Declare with parameters.
+	* callback/trampoline_r/trampoline.c (__TR_clear_cache_2,
+	__TR_clear_cache): Likewise.
+
+2024-08-29  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Simplify code structure.
 	* trampoline/trampoline.c (alloc_trampoline): Do the final mprotect call
 	before filling out the trampoline.
