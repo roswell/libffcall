@@ -747,6 +747,21 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
   }
 #endif
 
+  /* Set memory protection to "executable". */
+#if !defined(CODE_EXECUTABLE)
+#if defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_THEN_MPROTECT)
+  /* Call mprotect on the pages that contain the range. */
+  { uintptr_t start_addr = (uintptr_t) function;
+    uintptr_t end_addr = (uintptr_t) (function + TRAMP_LENGTH);
+    start_addr = start_addr & -pagesize;
+    end_addr = (end_addr + pagesize-1) & -pagesize;
+   {uintptr_t len = end_addr - start_addr;
+    if (mprotect((void*)start_addr, len, PROT_READ|PROT_WRITE|PROT_EXEC) < 0)
+      { fprintf(stderr,"trampoline: cannot make memory executable\n"); abort(); }
+  }}
+#endif
+#endif
+
 #if !defined(CODE_EXECUTABLE) && (defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS) || defined(EXECUTABLE_VIA_MMAP_SHARED_NETBSD) || defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX))
   /* Find the executable address corresponding to the writable address. */
   { uintptr_t page = (uintptr_t) function & -(intptr_t)pagesize;
@@ -1813,23 +1828,7 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
   *(unsigned long *) (function +32)
 #endif
 
-  /* 3. Set memory protection to "executable" */
-
-#if !defined(CODE_EXECUTABLE)
-#if defined(EXECUTABLE_VIA_MALLOC_THEN_MPROTECT) || defined(EXECUTABLE_VIA_MMAP_THEN_MPROTECT)
-  /* Call mprotect on the pages that contain the range. */
-  { uintptr_t start_addr = (uintptr_t) function;
-    uintptr_t end_addr = (uintptr_t) (function + TRAMP_LENGTH);
-    start_addr = start_addr & -pagesize;
-    end_addr = (end_addr + pagesize-1) & -pagesize;
-   {uintptr_t len = end_addr - start_addr;
-    if (mprotect((void*)start_addr, len, PROT_READ|PROT_WRITE|PROT_EXEC) < 0)
-      { fprintf(stderr,"trampoline: cannot make memory executable\n"); abort(); }
-  }}
-#endif
-#endif
-
-  /* 4. Flush instruction cache */
+  /* 3. Flush instruction cache */
   /* We need this because some CPUs have separate data cache and instruction
    * cache. The freshly built trampoline is visible to the data cache, but not
    * maybe not to the instruction cache. This is hairy.
@@ -1962,7 +1961,7 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #endif
 
-  /* 5. Return. */
+  /* 4. Return. */
   return (trampoline_function_t) (function_x + TRAMP_BIAS);
 }
 

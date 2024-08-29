@@ -1,5 +1,12 @@
 2024-08-29  Bruno Haible  <bruno@clisp.org>
 
+	trampoline: Simplify code structure.
+	* trampoline/trampoline.c (alloc_trampoline): Do the final mprotect call
+	before filling out the trampoline.
+	* callback/trampoline_r/trampoline.c (alloc_trampoline_r): Likewise.
+
+2024-08-29  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Fix test failure on OpenBSD/arm64.
 	* Makefile.maint (GNULIB_MODULES): Add vma-prot.
 	* trampoline/trampoline.c: Include vma-prot.h.
