@@ -1,5 +1,21 @@
 2024-08-29  Bruno Haible  <bruno@clisp.org>
 
+	Avoid collision of different functions with the same name.
+	* trampoline/cache-powerpc.c (__TR_clear_cache_3): Renamed from
+	__TR_clear_cache.
+	* trampoline/cache-powerpc64.c (__TR_clear_cache_3): Renamed from
+	__TR_clear_cache.
+	* trampoline/trampoline.c: On powerpc*, use __TR_clear_cache_3 instead
+	of __TR_clear_cache.
+	* callback/trampoline_r/cache-powerpc.c (__TR_clear_cache_2): Renamed
+	from __TR_clear_cache.
+	* callback/trampoline_r/cache-powerpc64.c (__TR_clear_cache_2): Renamed
+	from __TR_clear_cache.
+	* callback/trampoline_r/trampoline.c: On powerpc*, use
+	__TR_clear_cache_2 instead of __TR_clear_cache.
+
+2024-08-29  Bruno Haible  <bruno@clisp.org>
+
 	trampoline: Drop support for K&R C compilers.
 	* trampoline/cache.c (__TR_clear_cache): Use ANSI C syntax.
 	* trampoline/trampoline.c (__TR_clear_cache_4, __TR_clear_cache):

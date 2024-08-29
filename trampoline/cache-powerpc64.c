@@ -1,7 +1,7 @@
 /* Instruction cache flushing for powerpc64, not the AIX ABI */
 
 /*
- * Copyright 1997-2017 Bruno Haible <bruno@clisp.org>
+ * Copyright 1997-2024 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-void __TR_clear_cache (char* first_addr)
+void __TR_clear_cache_3 (char* first_addr)
 {
   /* Taken from egcs-1.1.2/gcc/config/rs6000/tramp.asm. */
   /* The number of asm statements here depends on the value of TRAMP_LENGTH-3*8

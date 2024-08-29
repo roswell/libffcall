@@ -245,7 +245,7 @@ extern void __TR_clear_cache (void);
 extern void __TR_clear_cache (char* first_addr, char* last_addr);
 #endif
 #if defined(__powerpcsysv4__) || defined(__powerpc64_elfv2__)
-extern void __TR_clear_cache (char* first_addr);
+extern void __TR_clear_cache_3 (char* first_addr);
 #endif
 #endif
 
@@ -1949,7 +1949,7 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
 #endif
 #endif
 #if defined(__powerpc__) || defined(__powerpc64__)
-  __TR_clear_cache(function_x);
+  __TR_clear_cache_3(function_x);
 #endif
 #if defined(__riscv32__) || defined(__riscv64__)
 #if defined(__linux__)
