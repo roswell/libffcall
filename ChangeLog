@@ -1,5 +1,12 @@
 2024-09-02  Bruno Haible  <bruno@clisp.org>
 
+	vacall: Generalize OpenBSD/x86_64 and Haiku/x86_64 fix.
+	* vacall/Makefile.devel (vacall-x86_64-macro.S): Test __PIC__, like for
+	i386, sparc, sparc64, hppa, arm-old, arm-eabi, armhf-eabi,
+	riscv32-ilp32d, riscv64-lp64d.
+
+2024-09-02  Bruno Haible  <bruno@clisp.org>
+
 	Prepare for 2.5 release.
 	* VERSION: Set to 2.5.
 	* NEWS: Update.

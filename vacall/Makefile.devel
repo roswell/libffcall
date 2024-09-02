@@ -260,7 +260,7 @@ vacall-x86_64-linux-pic.s : vacall-x86_64.c vacall-internal.h vacall.h $(THISFIL
 	$(CROSS_TOOL) x86_64-linux gcc-4.0.2 $(GCCFLAGS) -fPIC -D__x86_64__ -S vacall-x86_64.c -o vacall-x86_64-linux-pic.s
 
 vacall-x86_64-macro.S : vacall-x86_64-linux.s vacall-x86_64-linux-pic.s ../common/asm-x86_64.sh ../common/noexecstack.h $(THISFILE)
-	(echo '#include "asm-x86_64.h"' ; echo '#if defined __OpenBSD__ || defined __HAIKU__' ; ../common/asm-x86_64.sh < vacall-x86_64-linux-pic.s ; echo '#else' ; ../common/asm-x86_64.sh < vacall-x86_64-linux.s ; echo '#endif' ; cat ../common/noexecstack.h) > vacall-x86_64-macro.S
+	(echo '#include "asm-x86_64.h"' ; echo '#if defined __PIC__' ; ../common/asm-x86_64.sh < vacall-x86_64-linux-pic.s ; echo '#else' ; ../common/asm-x86_64.sh < vacall-x86_64-linux.s ; echo '#endif' ; cat ../common/noexecstack.h) > vacall-x86_64-macro.S
 
 vacall-x86_64-x32-linux.s : vacall-x86_64.c vacall-internal.h vacall.h $(THISFILE)
 	$(CROSS_TOOL) x86_64-linux gcc-5.4.0 -mx32 $(GCCFLAGS) -D__x86_64__ -D__x86_64_x32__ -S vacall-x86_64.c -o vacall-x86_64-x32-linux.s
