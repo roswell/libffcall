@@ -66,18 +66,18 @@ libtool-clean : force
 
 GNULIB_MODULES = \
   ansi-c++-opt \
-  clean-temp-simple \
-  hasmntopt \
   host-cpu-c-abi \
-  lock \
   nocrash \
   stdint \
   stdnoreturn \
-  vma-prot
+  libffcall-imports
 
 gnulib-m4/gnulib-cache.m4 :
 	if test -n "$$GNULIB_TOOL"; then \
-	  $$GNULIB_TOOL --source-base=gnulib-lib --m4-base=gnulib-m4 --aux-dir=build-aux --gpl=2 --libtool --no-changelog \
+	  $$GNULIB_TOOL \
+	    --local-dir=gnulib-local \
+	    --source-base=gnulib-lib --m4-base=gnulib-m4 --aux-dir=build-aux \
+	    --gpl=2 --libtool --conditional-dependencies --no-changelog \
 	    --import $(GNULIB_MODULES); \
 	fi
 

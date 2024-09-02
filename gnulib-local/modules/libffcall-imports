@@ -1,0 +1,22 @@
+Description:
+Imports code from gnulib, with conditional dependencies.
+
+Files:
+
+Depends-on:
+clean-temp-simple [case "$host_os" in darwin*) true;; *) false;; esac]
+hasmntopt         [case "$host_os" in linux*) true;; *) false;; esac]
+lock
+vma-prot          [case "$host_os" in openbsd*) true;; *) false;; esac]
+
+configure.ac:
+AC_REQUIRE([AC_CANONICAL_HOST])
+
+Makefile.am:
+
+Include:
+
+License:
+GPLv2+
+
+Maintainer:

@@ -1,5 +1,14 @@
 2024-09-02  Bruno Haible  <bruno@clisp.org>
 
+	build: Trim the code size of gnulib dependencies.
+	* gnulib-local/modules/libffcall-imports: New file.
+	* Makefile.maint (GNULIB_MODULES): Remove clean-temp-simple, hasmntopt,
+	lock, vma-prot. Add libffcall-imports.
+	(gnulib-m4/gnulib-cache.m4): Pass the options --local-dir and
+	--conditional-dependencies to gnulib-tool.
+
+2024-09-02  Bruno Haible  <bruno@clisp.org>
+
 	vacall: Fix build failure on Haiku (x86_64).
 	* vacall/Makefile.devel (vacall-x86_64-macro.S): On Haiku as well, use
 	the variant compiled with -fPIC. Needed because without -fPIC, the .text
