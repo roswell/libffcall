@@ -1,5 +1,11 @@
 2024-09-02  Bruno Haible  <bruno@clisp.org>
 
+	Prepare for 2.5 release.
+	* VERSION: Set to 2.5.
+	* NEWS: Update.
+
+2024-09-02  Bruno Haible  <bruno@clisp.org>
+
 	Bump shared library version numbers.
 	* Makefile.in (LIBFFCALL_VERSION_INFO): Bump to 1:1:1.
 	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): Bump to 2:1:1.
