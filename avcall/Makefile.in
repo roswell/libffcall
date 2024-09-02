@@ -66,7 +66,7 @@ LIBAVCALL_EXPORTED_SYMBOLS_REGEX = '^avcall_|^__builtin_avcall$$'
 
 # Before making a release, change this according to the libtool documentation,
 # section "Library interface versions".
-LIBAVCALL_VERSION_INFO = 2:0:1
+LIBAVCALL_VERSION_INFO = 2:1:1
 
 all : $(OBJECTS) libavcall.la $(srcdir)/avcall.3 $(srcdir)/avcall.html
 

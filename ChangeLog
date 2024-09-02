@@ -1,5 +1,13 @@
 2024-09-02  Bruno Haible  <bruno@clisp.org>
 
+	Bump shared library version numbers.
+	* Makefile.in (LIBFFCALL_VERSION_INFO): Bump to 1:1:1.
+	* avcall/Makefile.in (LIBAVCALL_VERSION_INFO): Bump to 2:1:1.
+	* trampoline/Makefile.in (LIBTRAMPOLINE_VERSION_INFO): Bump to 1:4:0.
+	* callback/Makefile.in (LIBCALLBACK_VERSION_INFO): Bump to 1:5:0.
+
+2024-09-02  Bruno Haible  <bruno@clisp.org>
+
 	build: Trim the code size of gnulib dependencies.
 	* gnulib-local/modules/libffcall-imports: New file.
 	* Makefile.maint (GNULIB_MODULES): Remove clean-temp-simple, hasmntopt,

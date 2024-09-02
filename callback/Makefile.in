@@ -63,7 +63,7 @@ LIBCALLBACK_EXPORTED_SYMBOLS_REGEX = '^callback_|_callback$$|^trampoline_r_data0
 
 # Before making a release, change this according to the libtool documentation,
 # section "Library interface versions".
-LIBCALLBACK_VERSION_INFO = 1:4:0
+LIBCALLBACK_VERSION_INFO = 1:5:0
 
 all : all-subdirs libcallback.la $(srcdir)/callback.3 $(srcdir)/callback.html
 
