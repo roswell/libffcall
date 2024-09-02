@@ -1,3 +1,10 @@
+2024-09-02  Bruno Haible  <bruno@clisp.org>
+
+	vacall: Fix build failure on Haiku (x86_64).
+	* vacall/Makefile.devel (vacall-x86_64-macro.S): On Haiku as well, use
+	the variant compiled with -fPIC. Needed because without -fPIC, the .text
+	section has a R_X86_64_PC32 relocation.
+
 2024-08-29  Bruno Haible  <bruno@clisp.org>
 
 	Avoid collision of different functions with the same name.
