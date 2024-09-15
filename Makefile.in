@@ -233,3 +233,7 @@ dist : force
 
 force :
 
+# This Makefile contains rules which don't work with parallel make.
+# See <https://savannah.gnu.org/bugs/?66220>.
+# So, turn off parallel execution in this Makefile.
+.NOTPARALLEL:

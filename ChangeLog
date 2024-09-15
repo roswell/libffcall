@@ -1,3 +1,11 @@
+2024-09-15  Bruno Haible  <bruno@clisp.org>
+
+	build: Avoid build failure caused by GNU Make's parallel make.
+	Reported by Thomas Klausner <wiz@netbsd.org>
+	at <https://savannah.gnu.org/bugs/?66220>.
+	* Makefile.in (.NOTPARALLEL): New target.
+	* callback/Makefile.in (.NOTPARALLEL): New target.
+
 2024-09-02  Bruno Haible  <bruno@clisp.org>
 
 	vacall: Generalize OpenBSD/x86_64 and Haiku/x86_64 fix.
