@@ -1,3 +1,14 @@
+2024-09-26  Bruno Haible  <bruno@clisp.org>
+
+	Switch to libtool 2.5.3.
+	* autopull.sh (LIBTOOL_VERSION): Set to 2.5.3.
+	* libtool-patches/libtool-android.diff: Remove file.
+	* libtool-patches/libtool-freebsd-biarch.diff: Remove file.
+	* libtool-patches/libtool-hurd-64.diff: Remove file.
+	* libtool-patches/libtool-solaris11-fix.diff: Remove file.
+	* libtool-patches/README: Don't mention them.
+	* Makefile.maint (libtool-imported-files): Don't apply them.
+
 2024-09-15  Bruno Haible  <bruno@clisp.org>
 
 	build: Avoid build failure caused by GNU Make's parallel make.

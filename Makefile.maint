@@ -50,11 +50,6 @@ libtool-imported-files : force
 	rm -rf libtool.tmp
 	chmod u+w build-aux/ltmain.sh
 	patch build-aux/ltmain.sh < libtool-patches/libtool-allow-static.diff
-	chmod u+w m4/libtool.m4
-	patch -p1 < libtool-patches/libtool-solaris11-fix.diff
-	patch -p1 < libtool-patches/libtool-hurd-64.diff
-	patch -p1 < libtool-patches/libtool-android.diff
-	patch -p0 < libtool-patches/libtool-freebsd-biarch.diff
 	chmod u+w build-aux/ltmain.sh m4/libtool.m4
 
 .PHONY : libtool-clean
