@@ -45,7 +45,7 @@ done
 ./gitsub.sh pull $shallow || exit 1
 
 # The newest libtool release version.
-LIBTOOL_VERSION=2.5.3
+LIBTOOL_VERSION=2.5.4
 
 file="libtool-${LIBTOOL_VERSION}.tar.gz"
 if test -n "$LIBTOOL_RELEASES_DIR"; then
