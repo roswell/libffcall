@@ -1,3 +1,13 @@
+2024-11-27  Bruno Haible  <bruno@clisp.org>
+
+	Add installation information for the tarball users and from a git checkout.
+	* Makefile.maint (gnulib-imported-files): Import INSTALL.generic from
+	gnulib.
+	* INSTALL: New file, based on poke/INSTALL.
+	* HACKING: Renamed from README-hacking.
+	* Makefile.in (SOURCE_FILES): Add INSTALL, INSTALL.generic, HACKING.
+	Remove README-hacking.
+
 2024-11-22  Bruno Haible  <bruno@clisp.org>
 
 	Switch to libtool 2.5.4.

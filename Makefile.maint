@@ -100,6 +100,10 @@ gnulib-imported-files : force
 	    chmod a+x build-aux/$$file || exit $$?; \
 	  done; \
 	fi
+# Get up-to-date version of INSTALL.generic.
+	if test -n "$$GNULIB_TOOL"; then \
+	  $$GNULIB_TOOL --copy-file doc/INSTALL.UTF-8 INSTALL.generic || exit $$?; \
+	fi
 
 .PHONY : gnulib-clean
 gnulib-clean : force

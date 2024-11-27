@@ -133,8 +133,10 @@ maintainer-clean : force
 
 # List of source files (committed in version control).
 SOURCE_FILES = \
-  COPYING DEPENDENCIES INSTALL.os2 INSTALL.windows NEWS PLATFORMS README \
-  README-hacking JOIN-GNU \
+  COPYING \
+  INSTALL DEPENDENCIES INSTALL.generic INSTALL.os2 INSTALL.windows HACKING \
+  NEWS PLATFORMS README \
+  JOIN-GNU \
   ChangeLog \
   VERSION \
   autogen.sh \

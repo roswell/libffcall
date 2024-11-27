@@ -20,6 +20,7 @@
 /m4/lt~obsolete.m4
 
 # Files brought in by gnulib-tool:
+/INSTALL.generic
 /build-aux/ar-lib
 /build-aux/compile
 /build-aux/config.guess
