@@ -63,8 +63,8 @@ GNULIB_MODULES = \
   ansi-c++-opt \
   host-cpu-c-abi \
   nocrash \
-  stdint \
-  stdnoreturn \
+  stdint-h \
+  stdnoreturn-h \
   libffcall-imports
 
 gnulib-m4/gnulib-cache.m4 :

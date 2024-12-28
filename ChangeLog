@@ -1,3 +1,9 @@
+2024-12-28  Bruno Haible  <bruno@clisp.org>
+
+	Update after gnulib changed.
+	* Makefile.maint (GNULIB_MODULES): Use the new names of renamed gnulib
+	modules.
+
 2024-11-27  Bruno Haible  <bruno@clisp.org>
 
 	Add installation information for the tarball users and from a git checkout.
