@@ -1,3 +1,9 @@
+2025-04-15  Bruno Haible  <bruno@clisp.org>
+
+	Fix cross-compilation.
+	* m4/codeexec.m4 (FFCALL_CODEEXEC): Assume that a shared mmap with
+	NetBSD primitives works only on NetBSD.
+
 2024-12-28  Bruno Haible  <bruno@clisp.org>
 
 	Update after gnulib changed.

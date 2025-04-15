@@ -1,5 +1,5 @@
 dnl -*- Autoconf -*-
-dnl Copyright (C) 1993-2024 Free Software Foundation, Inc.
+dnl Copyright (C) 1993-2025 Free Software Foundation, Inc.
 dnl This file is free software, distributed under the terms of the GNU
 dnl General Public License as published by the Free Software Foundation;
 dnl either version 2 of the License, or (at your option) any later version.
@@ -686,9 +686,11 @@ AC_DEFUN([FFCALL_CODEEXEC],
                        ],
                        [ffcall_cv_mmap_shared_netbsd_can_exec=yes],
                        [ffcall_cv_mmap_shared_netbsd_can_exec=no],
-                       [dnl When cross-compiling, assume yes, since this is the result
-                        dnl on all the platforms where we have tested it.
-                        ffcall_cv_mmap_shared_netbsd_can_exec="guessing yes"
+                       [dnl When cross-compiling, assume yes on NetBSD.
+                        case "$host_os" in
+                          netbsd*) ffcall_cv_mmap_shared_netbsd_can_exec="guessing yes" ;;
+                          *)       ffcall_cv_mmap_shared_netbsd_can_exec="guessing no" ;;
+                        esac
                        ])
                     ])
                   case "$ffcall_cv_mmap_shared_netbsd_can_exec" in
