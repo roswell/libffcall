@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2025 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1979,7 +1979,7 @@ void free_trampoline (trampoline_function_t function)
 #if defined(EXECUTABLE_VIA_MMAP_SHARED_MACOS) || defined(EXECUTABLE_VIA_MMAP_SHARED_NETBSD) || defined(EXECUTABLE_VIA_MMAP_SHARED_MEMFD) || defined(EXECUTABLE_VIA_MMAP_SHARED_POSIX)
   /* Find the writable address corresponding to the executable address. */
   { uintptr_t page_x = (uintptr_t) function & -(intptr_t)pagesize;
-    function -= ((intptr_t*)page_x)[0];
+    function = (trampoline_function_t)((char*)function - ((intptr_t*)page_x)[0]);
   }
 #endif
   gl_lock_lock(freelist_lock);

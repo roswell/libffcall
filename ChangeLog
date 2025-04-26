@@ -1,3 +1,11 @@
+2025-04-26  Bruno Haible  <bruno@clisp.org>
+
+	Fix gcc warnings "pointer to a function used in arithmetic".
+	* trampoline/trampoline.c (free_trampoline): Cast to 'char*' before
+	performing pointer arithmetic.
+	* callback/trampoline_r/trampoline.c (free_trampoline_r,
+	is_trampoline_r): Likewise.
+
 2025-04-16  Bruno Haible  <bruno@clisp.org>
 
 	Update after gnulib changed.
