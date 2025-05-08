@@ -52,7 +52,7 @@ Makefile.devel will find it.
 
 Alternatively, if you are running Linux/x86_64, you can use a premade Docker
 image that contains these cross-compilers. The command to fetch and use it is:
-docker run --rm -t -i registry.gitlab.com/gnu-libffcall/ci-buildtools:ubuntu1604
+docker run --rm -t -i registry.gitlab.com/gnu-libffcall/ci-buildtools:ubuntu2004
 
 
 Building off the git repository
