@@ -1,3 +1,9 @@
+2025-08-01  Bruno Haible  <bruno@clisp.org>
+
+	vacall: Fix build on macOS <= 13 (regression 2024-09-02).
+	* vacall/Makefile.devel (vacall-x86_64-macro.S): Don't use the PIC code
+	on macOS (that does not support _GOTPCREL).
+
 2025-05-31  Bruno Haible  <bruno@clisp.org>
 
 	Mark automake 1.18 as supported.
