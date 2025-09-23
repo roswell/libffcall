@@ -1,5 +1,5 @@
 dnl AUTOCONF configuration for LIBFFCALL
-dnl Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
+dnl Copyright 1995-2025 Bruno Haible <bruno@clisp.org>
 dnl Copyright 2003-2010 Sam Steingold <sds@gnu.org>
 dnl
 dnl This program is free software: you can redistribute it and/or modify
@@ -117,6 +117,7 @@ FFCALL_ENDIANNESS
 
 PACKAGE=libffcall
 LT_INIT([win32-dll])
+LT_LANG([ML64])
 
 dnl Checks for trampoline, trampoline_r.
 AC_CHECK_HEADERS([unistd.h])

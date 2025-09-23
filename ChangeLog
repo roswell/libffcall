@@ -1,3 +1,12 @@
+2025-09-23  Bruno Haible  <bruno@clisp.org>
+
+	Upgrade to libtool 2.6.0.
+	* autopull.sh (LIBTOOL_VERSION): Bump to 2.6.0.
+	* configure.ac: Configure libtool for use with ml64.
+	* avcall/Makefile.in (avcall-x86_64.lo) [IF_MSVC]: Use libtool with ml64
+	again.
+	* callback/vacall_r/Makefile.in (vacall-x86_64.lo) [IF_MSVC]: Likewise.
+
 2025-08-01  Bruno Haible  <bruno@clisp.org>
 
 	vacall: Fix build on macOS <= 13 (regression 2024-09-02).

@@ -8,7 +8,7 @@
 #   - a copy of the newest libtool-x.y.z.tar.gz in the current directory, or
 #   - the wget program in the PATH and an internet connection.
 
-# Copyright (C) 2016-2024 Bruno Haible.
+# Copyright (C) 2016-2025 Bruno Haible.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ done
 ./gitsub.sh pull $shallow || exit 1
 
 # The newest libtool release version.
-LIBTOOL_VERSION=2.5.4
+LIBTOOL_VERSION=2.6.0
 
 file="libtool-${LIBTOOL_VERSION}.tar.gz"
 if test -n "$LIBTOOL_RELEASES_DIR"; then
