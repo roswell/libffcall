@@ -8,7 +8,7 @@
 #   - a copy of the newest libtool-x.y.z.tar.gz in the current directory, or
 #   - the wget program in the PATH and an internet connection.
 
-# Copyright (C) 2016-2025 Bruno Haible.
+# Copyright (C) 2016-2026 Bruno Haible.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ if test -n "$LIBTOOL_RELEASES_DIR"; then
   else
     ( echo "File ${file} not found in ${LIBTOOL_RELEASES_DIR} ."
       echo "Download it, through"
-      echo "  wget -q --timeout=5 -O ${LIBTOOL_RELEASES_DIR}/${file} https://ftp.gnu.org/gnu/libtool/${file}"
+      echo "  wget -q --timeout=5 -O ${LIBTOOL_RELEASES_DIR}/${file} https://alpha.gnu.org/gnu/libtool/${file}"
       echo "then retry this script again."
     ) 1>&2
     exit 1
@@ -64,7 +64,7 @@ else
     :
   else
     echo "$0: getting $file..."
-    wget -q --timeout=5 -O ${file}.tmp https://ftp.gnu.org/gnu/libtool/${file} \
+    wget -q --timeout=5 -O ${file}.tmp https://alpha.gnu.org/gnu/libtool/${file} \
       && mv ${file}.tmp ${file}
     retval=$?
     rm -f ${file}.tmp
