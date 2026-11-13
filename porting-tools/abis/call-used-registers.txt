@@ -23,7 +23,7 @@ powerpc      0,3-12                      3-10                  -                
 powerpc64    0,3-12                      3-10                  -                 0,11-12
 ia64         r2-r3,r8-r11,r14-r31        r32-r39               r8                r14-r31,r9-r11,r2-r3
 x86_64       rax,rdx,rcx,rsi,rdi,r8-r11  rdi,rsi,rdx,rcx,r8,r9 -                 rax,r10,r11
-x86_64-ms    rax,rdx,rcx,r8-r11          rdx,rcx,r8,r9         -                 rax,r10,r11
+x86_64-ms    rax,rdx,rcx,r8-r11          rcx,rdx,r8,r9         -                 rax,r10,r11
 s390,s390x   r0-r5                       r2-r6                 -                 r0-r1
 riscv{32,64} t0-t2,a0-a7,t3-t6           a0-a7                 -                 t0-t2,t3-t6
 loongarch64  r4-r20                      r4-r11                -                 r12-r20
