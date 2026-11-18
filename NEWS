@@ -1,3 +1,5 @@
+* Added support for the following platforms:
+  - arm64: Windows.
 * Fixed support for the following platforms:
   - arm64: macOS 26 (callbacks were not working right).
 

@@ -1,6 +1,6 @@
 /*
  * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2026 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,7 +40,7 @@
 
 /* Determine whether the current ABI is LLP64
    ('long' = 32-bit, 'long long' = 'void*' = 64-bit). */
-#if defined(__x86_64__) && defined(_WIN32) && !defined(__CYGWIN__)
+#if (defined(__arm64__) || defined(__x86_64__)) && defined(_WIN32) && !defined(__CYGWIN__) /* _WIN64 */
 #define __AV_LLP64 1
 #endif
 

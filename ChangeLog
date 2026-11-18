@@ -1,3 +1,40 @@
+2026-11-18  Bruno Haible  <bruno@clisp.org>
+
+	Add support for Windows/arm64.
+	* common/asm-arm64.sh: Introduce macros GLOBL, P2ALIGN, FILEEND. Remove
+	.cpu, .align directives.
+	* common/asm-arm64.h (LDEF, IMPORT_DATA, TEXT, P2ALIGN, GLOBL, FILEEND):
+	New macros.
+	(L, GOTPAGE, GOTPAGEOFF, GOTINDIR, PAGE, PAGEOFF): Define differently
+	for MSVC.
+	(DECLARE_FUNCTION, FUNBEGIN, FUNEND): Define differently on Windows.
+	* ffcall-stdint.h (ff_intptr_t, ff_uintptr_t): Define as 64-bit also on
+	Windows/arm64.
+	* avcall/avcall.h (__AV_LLP64): Define also on Windows/arm64.
+	* avcall/avcall-internal.h (__av_longlong, __av_ulonglong): On
+	Windows/arm64, define differently.
+	* avcall/Makefile.in (avcall-arm64.lo): On Windows with the MSVC
+	toolchain, use armasm64.
+	* vacall/vacall.h (__VA_LLP64): Define also on Windows/arm64.
+	* vacall/vacall-internal.h (struct vacall_alist): Enable the _longlong,
+	_ulonglong union members also on arm64.
+	(_va_arg_longlong, _va_arg_ulonglong, _va_return_longlong,
+	_va_return_ulonglong): On Windows/arm64, define differently.
+	* vacall/Makefile.devel (vacall-arm64-windows-macro.S): New rule.
+	* vacall/Makefile.in (vacall-arm64.@OBJEXT@): On Windows with the MSVC
+	toolchain, use armasm64.
+	(vacall-arm64.s): On Windows, use vacall-arm64-windows-macro.S.
+	(SOURCE_FILES): Add vacall-arm64-windows-macro.S.
+	* trampoline/trampoline.c (alloc_trampoline): For the arm64 trampoline,
+	use 'long long' instead of 'long'.
+	* callback/vacall_r/vacall_r.h (__VA_LLP64): Define also on
+	Windows/arm64.
+	* callback/vacall_r/Makefile.in (vacall-arm64.lo): On Windows with the
+	MSVC toolchain, use armasm64.
+	* callback/trampoline_r/trampoline.c (alloc_trampoline_r): For the arm64
+	trampoline, use 'long long' instead of 'long'.
+	* NEWS: Mention the change.
+
 2026-11-13  Bruno Haible  <bruno@clisp.org>
 
 	Fix documentation about x86_64-ms ABI.

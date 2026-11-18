@@ -160,8 +160,15 @@ avcall-armhf-eabi.lo : avcall-armhf-eabi.s
 avcall-armhf-eabi.s : $(srcdir)/avcall-armhf-eabi-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/avcall-armhf-eabi-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > avcall-armhf-eabi.s
 
-avcall-arm64.lo : avcall-arm64.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm64.s
+avcall-arm64.lo : avcall-arm64.s avcall-libapi.lo
+	if test '@OBJEXT@' = obj; then \
+	  armasm64 -o avcall-arm64.@OBJEXT@ avcall-arm64.s \
+	  && mkdir -p .libs \
+	  && cp avcall-arm64.@OBJEXT@ .libs/avcall-arm64.@OBJEXT@ \
+	  && sed -e 's/avcall-libapi/avcall-arm64/g' < avcall-libapi.lo > avcall-arm64.lo; \
+	else \
+	  $(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c avcall-arm64.s; \
+	fi
 
 avcall-arm64.s : $(srcdir)/avcall-arm64-macro.S $(srcdir)/avcall-arm64-macos-macro.S
 	case "$(OS)" in \

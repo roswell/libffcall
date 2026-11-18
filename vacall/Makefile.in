@@ -141,11 +141,16 @@ vacall-armhf-eabi.s : $(srcdir)/vacall-armhf-eabi-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/vacall-armhf-eabi-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-armhf-eabi.s
 
 vacall-arm64.@OBJEXT@ : vacall-arm64.s
-	$(CC) @GCC_X_NONE@ -c vacall-arm64.s
+	if test '@OBJEXT@' = obj; then \
+	  armasm64 -o vacall-arm64.@OBJEXT@ vacall-arm64.s; \
+	else \
+	  $(CC) @GCC_X_NONE@ -c vacall-arm64.s; \
+	fi
 
-vacall-arm64.s : $(srcdir)/vacall-arm64-macro.S $(srcdir)/vacall-arm64-macos-macro.S
+vacall-arm64.s : $(srcdir)/vacall-arm64-macro.S $(srcdir)/vacall-arm64-macos-macro.S $(srcdir)/vacall-arm64-windows-macro.S
 	case "$(OS)" in \
 	  macos* | darwin*) input=vacall-arm64-macos-macro.S ;; \
+	  mingw* | windows*) input=vacall-arm64-windows-macro.S ;; \
 	  *) input=vacall-arm64-macro.S ;; \
 	esac; \
 	$(CPP) $(ASPFLAGS) -I$(srcdir)/../common $(srcdir)/$${input} | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-arm64.s
@@ -353,7 +358,7 @@ SOURCE_FILES = \
   vacall-alpha.c vacall-alpha-linux.s vacall-alpha-macro.S \
   vacall-arm.c vacall-arm-old-linux.s vacall-arm-old-linux-pic.s vacall-arm-old-macro.S vacall-arm-eabi-linux.s vacall-arm-eabi-linux-pic.s vacall-arm-eabi-macro.S \
   vacall-armhf.c vacall-armhf-eabi-linux.s vacall-armhf-eabi-linux-pic.s vacall-armhf-eabi-macro.S \
-  vacall-arm64.c vacall-arm64-macro.S vacall-arm64-macos-macro.S \
+  vacall-arm64.c vacall-arm64-macro.S vacall-arm64-macos-macro.S vacall-arm64-windows-macro.S \
   vacall-hppa.c vacall-hppa-linux.s vacall-hppa-macro.S \
   vacall-hppa64.c vacall-hppa64-linux.s vacall-hppa64-macro.S \
   vacall-i386.c vacall-i386-linux.s vacall-i386-linux-pic.s vacall-i386-macro.S \

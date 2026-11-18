@@ -1243,12 +1243,12 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
    *    .xword <data>           <data>
    *    .xword <address>        <address>
    */
-  *(int *)   (function + 0) = 0x580000D0;
-  *(int *)   (function + 4) = 0x58000071;
-  *(int *)   (function + 8) = 0xD61F0200;
-  *(int *)   (function +12) = 0xD503201F;
-  *(long *)  (function +16) = (unsigned long) data;
-  *(long *)  (function +24) = (unsigned long) address;
+  *(int *)       (function + 0) = 0x580000D0;
+  *(int *)       (function + 4) = 0x58000071;
+  *(int *)       (function + 8) = 0xD61F0200;
+  *(int *)       (function +12) = 0xD503201F;
+  *(long long *) (function +16) = (unsigned long long) data;
+  *(long long *) (function +24) = (unsigned long long) address;
 #define TRAMP_CODE_LENGTH  16
 #define is_tramp(function)  \
   *(unsigned int *) (function + 0) == 0x580000D0 && \
@@ -1256,9 +1256,9 @@ __TR_function alloc_trampoline_r (__TR_function address, void* data0, void* data
   *(unsigned int *) (function + 8) == 0xD61F0200 && \
   *(unsigned int *) (function +12) == 0xD503201F
 #define tramp_address(function)  \
-  (*(unsigned long *) (function +24))
+  (*(unsigned long long *) (function +24))
 #define tramp_data(function)  \
-  (*(unsigned long *) (function +16))
+  (*(unsigned long long *) (function +16))
 #else /* plain arm64 ABI */
   /* function:
    *    ldr x17,.+24            580000D1

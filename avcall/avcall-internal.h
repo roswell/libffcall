@@ -1,6 +1,6 @@
 /*
  * Copyright 1993-1995 Bill Triggs <Bill.Triggs@inrialpes.fr>
- * Copyright 1995-2024 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2026 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -470,14 +470,26 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_ptr(LIST,VAL)      __av_word(LIST,VAL)
 #endif
 
-#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || defined(__arm64__) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__AV_LLP64)) || defined(__s390x__) || defined(__riscv64__) || defined(__loongarch64__)
+#if defined(__mips64__) || defined(__sparc64__) || defined(__alpha__) || defined(__hppa64__) || (defined(__arm64__) && !defined(__AV_LLP64)) || defined(__powerpc64__) || defined(__ia64__) || (defined(__x86_64__) && !defined(__x86_64_x32__) && !defined(__AV_LLP64)) || defined(__s390x__) || defined(__riscv64__) || defined(__loongarch64__)
 /* ‘long long’ and ‘long’ are identical. */
 #define __av_longlong           __av_long
 #define __av_ulonglong          __av_ulong
-#elif defined(__mipsn32__) || (defined(__x86_64__) && defined(__AV_LLP64))
+#elif defined(__mipsn32__) || (defined(__arm64__) && defined(__AV_LLP64)) || (defined(__x86_64__) && defined(__AV_LLP64))
 /* ‘long long’ fits in __avword. */
-#define __av_longlong                   __av_word
+#if defined(__arm64__)
+/* The first __AV_IARG_NUM integer arguments are passed in registers. */
+#define __av_longlong(LIST,VAL)                                         \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (long long)(VAL), 0)               \
+   : __av_word(LIST,(long long)(VAL)))
+#define __av_ulonglong(LIST,VAL)                                        \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long long)(VAL), 0)      \
+   : __av_word(LIST,(unsigned long long)(VAL)))
+#else
+#define __av_longlong(LIST,VAL)         __av_word(LIST,(long long)(VAL))
 #define __av_ulonglong(LIST,VAL)        __av_word(LIST,(unsigned long long)(VAL))
+#endif
 #elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__)) || defined(__riscv32__)
 /* ‘long long’s are passed embedded on the arg stack. */
 #define __av_longlong(LIST,VAL)         __av_arg_longlong(LIST,long long,VAL)

@@ -1,7 +1,7 @@
 /* Trampoline construction */
 
 /*
- * Copyright 1995-2025 Bruno Haible <bruno@clisp.org>
+ * Copyright 1995-2026 Bruno Haible <bruno@clisp.org>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1387,15 +1387,15 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
    *    .xword <variable>       <variable>
    *    .xword <address>        <address>
    */
-  *(int *)   (function + 0) = 0x580000C9;
-  *(int *)   (function + 4) = 0x580000EA;
-  *(int *)   (function + 8) = 0x5800010B;
-  *(int *)   (function +12) = 0xF9000149;
-  *(int *)   (function +16) = 0xD61F0160;
-  *(int *)   (function +20) = 0xD503201F;
-  *(long *)  (function +24) = (unsigned long) data;
-  *(long *)  (function +32) = (unsigned long) variable;
-  *(long *)  (function +40) = (unsigned long) address;
+  *(int *)       (function + 0) = 0x580000C9;
+  *(int *)       (function + 4) = 0x580000EA;
+  *(int *)       (function + 8) = 0x5800010B;
+  *(int *)       (function +12) = 0xF9000149;
+  *(int *)       (function +16) = 0xD61F0160;
+  *(int *)       (function +20) = 0xD503201F;
+  *(long long *) (function +24) = (unsigned long long) data;
+  *(long long *) (function +32) = (unsigned long long) variable;
+  *(long long *) (function +40) = (unsigned long long) address;
 #define TRAMP_CODE_LENGTH  24
 #define is_tramp(function)  \
   *(unsigned int *) (function + 0) == 0x580000C9 && \
@@ -1405,11 +1405,11 @@ trampoline_function_t alloc_trampoline (trampoline_function_t address, void** va
   *(unsigned int *) (function +16) == 0xD61F0160 && \
   *(unsigned int *) (function +20) == 0xD503201F
 #define tramp_address(function)  \
-  (*(unsigned long *) (function +40))
+  (*(unsigned long long *) (function +40))
 #define tramp_variable(function)  \
-  (*(unsigned long *) (function +32))
+  (*(unsigned long long *) (function +32))
 #define tramp_data(function)  \
-  (*(unsigned long *) (function +24))
+  (*(unsigned long long *) (function +24))
 #endif
 #ifdef __powerpcsysv4__
   /* function:

@@ -144,8 +144,15 @@ vacall-armhf-eabi.lo : vacall-armhf-eabi.s
 vacall-armhf-eabi.s : $(srcdir)/vacall-armhf-eabi-macro.S
 	$(CPP) $(ASPFLAGS) -I$(srcdir) -I$(srcdir)/../../common $(srcdir)/vacall-armhf-eabi-macro.S | grep -v '^ *#line' | grep -v '^#' | sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$$,#,g' > vacall-armhf-eabi.s
 
-vacall-arm64.lo : vacall-arm64.s
-	$(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-arm64.s
+vacall-arm64.lo : vacall-arm64.s vacall-libapi.lo
+	if test '@OBJEXT@' = obj; then \
+	  armasm64 -o vacall-arm64.@OBJEXT@ vacall-arm64.s \
+	  && mkdir -p .libs \
+	  && cp vacall-arm64.@OBJEXT@ .libs/vacall-arm64.@OBJEXT@ \
+	  && sed -e 's/vacall-libapi/vacall-arm64/g' < vacall-libapi.lo > vacall-arm64.lo; \
+	else \
+	  $(LIBTOOL_COMPILE) $(CC) @GCC_X_NONE@ -c vacall-arm64.s; \
+	fi
 
 vacall-arm64.s : $(srcdir)/vacall-arm64-macro.S $(srcdir)/vacall-arm64-macos-macro.S $(srcdir)/vacall-arm64-windows-macro.S
 	case "$(OS)" in \

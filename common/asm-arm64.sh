@@ -6,7 +6,7 @@
 #   2. grep -v '^ *#line' | grep -v '^#'
 #   3. sed -e 's,% ,%,g' -e 's,//,@,g' -e 's,\$,#,g'
 
-# Copyright (C) 1999-2022 Bruno Haible <bruno@clisp.org>
+# Copyright (C) 1999-2026 Bruno Haible <bruno@clisp.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,11 +41,19 @@ s,@,//,g
 s,#,\$,g
 # ----------- Global symbols depends on ASM_UNDERSCORE
 s/^\([A-Za-z0-9_]\+\)/C(\1)/
+s/\.L\([A-Za-z0-9_]\+\):/LDEF(\1)/
 s/\.L\([A-Za-z0-9_]\+\)/L(\1)/
-s/\.global[ 	]\([A-Za-z0-9_]*\)/.global C(\1)/
+s/\.global[ 	]\([A-Za-z0-9_]*\)/GLOBL(C(\1))/
 # ----------- Introduce macro syntax for assembler pseudo-ops
 /\.file\([ 	]\+\)/d
+/\.cpu\([ 	]\+\)/d
+s/\.text/TEXT()/
+s/\.p2align \([^,]*\),,\(.*\)/P2ALIGN(\1,\2)/
+s/\.p2align 2$/P2ALIGN(2,3)/
+s/\.p2align 3$/P2ALIGN(3,7)/
+/\.align\([ 	]\+\)/d
 /\.section\([ 	]\+\).*GNU-stack/d
+# ----------- Declare global symbols as functions (we have no variables)
 s/^C(\([A-Za-z0-9_]*\)):/FUNBEGIN(\1)/
 # ----------- Massage the beginning of functions
 /\.type/{
@@ -68,5 +76,7 @@ EOF
 sed -f $tmpscript1 | \
 sed -f $tmpscript2 | \
 sed -f $tmpscript3
+
+echo '	FILEEND()'
 
 eval "$tmpremove"
