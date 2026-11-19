@@ -1,5 +1,11 @@
 2026-11-19  Bruno Haible  <bruno@clisp.org>
 
+	Update distributed file list.
+	* vacall/Makefile.in (SOURCE_FILES): Add vacall-hppa-linux-pic.s,
+	vacall-x86_64-linux-pic.s.
+
+2026-11-19  Bruno Haible  <bruno@clisp.org>
+
 	avcall: Refactor arm64 code.
 	* avcall/avcall-internal.h (__av_word) [arm64]: Include the handling of
 	the first __AV_IARG_NUM words here.
