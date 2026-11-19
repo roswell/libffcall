@@ -1,3 +1,11 @@
+2026-11-19  Bruno Haible  <bruno@clisp.org>
+
+	avcall: Refactor arm64 code.
+	* avcall/avcall-internal.h (__av_word) [arm64]: Include the handling of
+	the first __AV_IARG_NUM words here.
+	(__av_int, __av_uint, __av_long, __av_ulong, __av_ptr, __av_longlong,
+	__av_ulonglong) [arm64]: Don't include it here.
+
 2026-11-18  Bruno Haible  <bruno@clisp.org>
 
 	Add support for Windows/arm64.

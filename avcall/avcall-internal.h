@@ -335,7 +335,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
  * scalar argument types
  */
 
-#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || defined(__hppa64__) || (defined(__arm__) && !defined(__armhf__)) || defined(__arm64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__) || defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
+#if defined(__i386__) || defined(__m68k__) || (defined(__sparc__) && !defined(__sparc64__)) || defined(__alpha__) || defined(__hppa64__) || (defined(__arm__) && !defined(__armhf__)) || defined(__powerpc__) || defined(__powerpc64__) || defined(__ia64__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__) || defined(__riscv32__) || defined(__riscv64__) || defined(__loongarch64__)
 /* Floats and all integer types are passed as words,
  * doubles as two words (on 32-bit platforms) or one word (on 64-bit platforms).
  */
@@ -378,10 +378,20 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
        ((LIST).aptr)[-1] = (__avword)(VAL),                             \
        0)))
 #endif
+#if defined(__arm64__)
+#define __av_word(LIST,VAL)                                             \
+  ((LIST).ianum < __AV_IARG_NUM                                         \
+   ? ((LIST).iargs[(LIST).ianum++] = (__avword)(VAL), 0)                \
+   : ((LIST).aptr >= (LIST).eptr                                        \
+      ? -1 :                                                            \
+      ((LIST).aptr++,                                                   \
+       ((LIST).aptr)[-1] = (__avword)(VAL),                             \
+       0)))
+#endif
 
 /* integer argument types */
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define __av_int(LIST,VAL)                                              \
   ((LIST).ianum < __AV_IARG_NUM                                         \
@@ -391,7 +401,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_int(LIST,VAL)      __av_word(LIST,(int)(VAL))
 #endif
 
-#if defined(__arm64__) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define __av_uint(LIST,VAL)                                             \
   ((LIST).ianum < __AV_IARG_NUM                                         \
@@ -401,7 +411,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_uint(LIST,VAL)     __av_word(LIST,(unsigned int)(VAL))
 #endif
 
-#if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define __av_long(LIST,VAL)                                             \
   ((LIST).ianum < __AV_IARG_NUM                                         \
@@ -421,7 +431,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_long(LIST,VAL)     __av_word(LIST,(long)(VAL))
 #endif
 
-#if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #define __av_ulong(LIST,VAL)                                            \
   ((LIST).ianum < __AV_IARG_NUM                                         \
@@ -441,7 +451,7 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_ulong(LIST,VAL)    __av_word(LIST,(unsigned long)(VAL))
 #endif
 
-#if (defined(__arm64__) && !(defined(__APPLE__) && defined(__MACH__))) || defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
+#if defined(__powerpc_sysv4__) || defined(__x86_64_sysv__) || defined(__s390__) || defined(__s390x__)
 /* The first __AV_IARG_NUM integer arguments are passed in registers. */
 #if defined(__x86_64_x32__)
 /* The x86_64 ABI, section 10.1, specifies that pointers are zero-extended
@@ -476,20 +486,8 @@ typedef int __av_alist_verify[2*(__AV_ALIST_SIZE_BOUND - (int)sizeof(__av_alist)
 #define __av_ulonglong          __av_ulong
 #elif defined(__mipsn32__) || (defined(__arm64__) && defined(__AV_LLP64)) || (defined(__x86_64__) && defined(__AV_LLP64))
 /* ‘long long’ fits in __avword. */
-#if defined(__arm64__)
-/* The first __AV_IARG_NUM integer arguments are passed in registers. */
-#define __av_longlong(LIST,VAL)                                         \
-  ((LIST).ianum < __AV_IARG_NUM                                         \
-   ? ((LIST).iargs[(LIST).ianum++] = (long long)(VAL), 0)               \
-   : __av_word(LIST,(long long)(VAL)))
-#define __av_ulonglong(LIST,VAL)                                        \
-  ((LIST).ianum < __AV_IARG_NUM                                         \
-   ? ((LIST).iargs[(LIST).ianum++] = (unsigned long long)(VAL), 0)      \
-   : __av_word(LIST,(unsigned long long)(VAL)))
-#else
 #define __av_longlong(LIST,VAL)         __av_word(LIST,(long long)(VAL))
 #define __av_ulonglong(LIST,VAL)        __av_word(LIST,(unsigned long long)(VAL))
-#endif
 #elif defined(__i386__) || defined(__m68k__) || (defined(__mips__) && !defined(__mipsn32__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__sparc64__)) || (defined(__hppa__) && !defined(__hppa64__)) || defined(__arm__) || defined(__armhf__) || defined(__powerpc__) || defined(__x86_64_x32__) || (defined(__s390__) && !defined(__s390x__)) || defined(__riscv32__)
 /* ‘long long’s are passed embedded on the arg stack. */
 #define __av_longlong(LIST,VAL)         __av_arg_longlong(LIST,long long,VAL)
